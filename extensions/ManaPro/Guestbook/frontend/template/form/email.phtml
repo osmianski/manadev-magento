@@ -1,0 +1,20 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php if (Mage::getStoreConfigFlag('manapro_guestbook/email/is_enabled')) : ?>
+<?php $_required = Mage::getStoreConfigFlag('manapro_guestbook/email/is_required'); ?>
+    <label for="email" <?php if ($_required) : ?>class="required"<?php endif; ?>>
+        <?php if ($_required) : ?><em>*</em><?php endif; ?><?php echo $this->__('Email') ?>
+    </label>
+    <div class="input-box">
+        <input name="email" id="email" title="<?php echo $this->__('Email') ?>"
+            value="<?php echo $this->escapeHtml($this->helper('contacts')->getUserEmail()) ?>"
+            class="input-text <?php if ($_required) : ?>required-entry <?php endif; ?>validate-email" type="text" />
+    </div>
+<?php endif; ?>

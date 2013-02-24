@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterShowMore
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterShowMore>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>13.02.07.16</version>
+		</ManaPro_FilterShowMore>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterShowMore_Helper_Data
+		class is accessible through Mage::helper('manapro_filtershowmore') call, other ManaPro_FilterShowMore_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filtershowmore/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filtershowmore>
+				<!-- This says that string 'manapro_filtershowmore' corresponds to ManaPro_FilterShowMore_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterShowMore_Helper</class>
+			</manapro_filtershowmore>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterShowMore_Model_XXX_YYY classes are accessible as 
+		'manapro_filtershowmore/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filtershowmore' corresponds to ManaPro_FilterShowMore_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filtershowmore>
+				<class>ManaPro_FilterShowMore_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_filtershowmore_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_filtershowmore_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_filtershowmore>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_filtershowmore' corresponds to ManaPro_FilterShowMore_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_filtershowmore_resources>
+				<class>ManaPro_FilterShowMore_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_filtershowmore_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in ManaPro_FilterShowMore_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of ManaPro_FilterShowMore_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<mana_filters_process_items><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>limitNumberOfVisibleItems</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</mana_filters_process_items>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_is_config_changed><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>isConfigChanged</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_is_config_changed>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_update_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareUpdateColumns</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_update_columns>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_update_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processUpdate</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_update_process>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_insert_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareInsertColumns</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_insert_columns>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_insert_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processInsert</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_insert_process>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_crud_form><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addFields</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_crud_form>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_add_edited_data><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addEditedData</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_add_edited_data>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_validate><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtershowmore>
+						<class>manapro_filtershowmore/observer</class> <!-- model name of class containing event handler methods -->
+						<method>validate</method> <!-- event handler method name -->
+					</manapro_filtershowmore>
+				</observers>
+			</m_db_validate>
+            <controller_action_predispatch><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filtershowmore>
+                        <class>manapro_filtershowmore/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>ajaxPopup</method>
+                        <!-- event handler method name -->
+                    </manapro_filtershowmore>
+                </observers>
+            </controller_action_predispatch>
+		</events>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/manapro_filtershowmore_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<manapro_filtershowmore_setup>
+				<setup>
+					<module>ManaPro_FilterShowMore</module>
+					<class>ManaPro_FilterShowMore_Resource_Setup</class>
+				</setup>
+			</manapro_filtershowmore_setup>
+		</resources>
+        <!-- This section registers block classes ManaPro_FilterShowMore_Block_XXX_YYY to be accessible through
+              'manapro_filtershowmore/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_filtershowmore' corresponds to ManaPro_FilterShowMore_Block pseudo-namespace. -->
+            <manapro_filtershowmore>
+                <class>ManaPro_FilterShowMore_Block</class>
+            </manapro_filtershowmore>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Translation support/Frontend (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during frontend request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterShowMore>
+					<files>
+						<default>ManaPro_FilterShowMore.csv</default>
+					</files>
+				</ManaPro_FilterShowMore>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filtershowmore>
+					<file>manapro_filtershowmore.xml</file>
+				</manapro_filtershowmore>
+			</updates>
+		</layout>
+        <!-- This section registers controllers of module ManaPro_FilterAjax to be accessible by URI "manapro_filterajax". When
+          Magento gets request to process (be it full page rendering, partial AJAX refresh, AJAX server call or
+          other), it decides which controller class should process the request (this process is known as
+          request dispatching). Standard way of dispatching to parse URI as
+          .../index.php/<module>/<controller>/<action> and then to find corresponding Magento module, controller
+          and action method. Magento module is sought in global configuration merged from etc/config.xml files of
+          all modules, where frontend/routers/*/args/frontName is equal to <module> part of URI. This is what
+          this section is for - to define correspondence between <module> URI and this module. -->
+        <routers>
+            <manapro_filtershowmore>
+                <use>standard</use>
+                <args>
+                    <module>ManaPro_FilterShowMore</module>
+                    <frontName>manapro_filtershowmore</frontName>
+                </args>
+            </manapro_filtershowmore>
+        </routers>
+
+    </frontend>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+	
+	<!-- This section provides defaults for values normally configurable through global system configuration 
+	UI in admin area. -->
+	<default>
+		<mana_filters>
+			<display>
+				<show_more_item_count>4</show_more_item_count>
+				<show_more_preload>1</show_more_preload>
+				<show_more_time>200</show_more_time>
+				<show_more_method></show_more_method>
+			</display>
+			<seo>
+				<show_all_suffix>-show-all</show_all_suffix>
+			</seo>
+			<show_more_popup>
+			    <action>click</action>
+                <max_rows>20</max_rows>
+                <max_columns>4</max_columns>
+                <progress>0</progress>
+                <debug>0</debug>
+			</show_more_popup>
+		</mana_filters>
+	</default>
+	
+	<!-- This section extends Mana_Filters module functionality --> 
+	<mana_filters>
+		<markup><!-- named visual extension points -->
+			<after_items> <!-- visual extension point name -->
+				<show_more>
+					<template>manapro/filtershowmore/actions.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>100</sort_order><!-- Position in rendered markup. -->
+				</show_more>
+			</after_items>
+		</markup>
+	</mana_filters>
+</config>

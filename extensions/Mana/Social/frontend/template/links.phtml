@@ -1,0 +1,23 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Social_Block_Links */
+?>
+<?php if($this->getCount()) : ?>
+<ul class="m-social-links">
+    <?php foreach ($this->getLinks() as $link) : ?>
+    <li>
+        <a href="<?php echo $link->getUrl() ?>" title="<?php echo $link->getTitle() ?>"
+            class="<?php echo $link->getCss() ?>"
+            <?php if ($link->getOpenInNewWindow()): ?>target="_blank"<?php endif ?>
+        >
+            <?php echo $link->getLabel() ?>
+        </a>
+    </li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_AttributePage
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_AttributePage>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.10.18.11</version>
+        </Mana_AttributePage>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_AttributePage_Helper_Data
+		class is accessible through Mage::helper('mana_attributepage') call, other Mana_AttributePage_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_attributepage/xxx_yyy') call. -->
+        <helpers>
+            <mana_attributepage>
+                <!-- This says that string 'mana_attributepage' corresponds to Mana_AttributePage_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_AttributePage_Helper</class>
+            </mana_attributepage>
+        </helpers>
+        <!-- This section registers block classes Mana_AttributePage_Block_XXX_YYY to be accessible through
+            'mana_attributepage/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'mana_attributepage' corresponds to Mana_AttributePage_Block pseudo-namespace. -->
+            <mana_attributepage>
+                <class>Mana_AttributePage_Block</class>
+            </mana_attributepage>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, Mana_AttributePage_Model_XXX_YYY classes are accessible as
+            'mana_attributepage/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'mana_attributepage' corresponds to Mana_AttributePage_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <mana_attributepage>
+                <class>Mana_AttributePage_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </mana_attributepage>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <Mana_AttributePage>
+                    <files>
+                        <default>Mana_AttributePage.csv</default>
+                    </files>
+                </Mana_AttributePage>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <mana_attributepage>
+                    <file>mana_attributepage.xml</file>
+                </mana_attributepage>
+            </updates>
+        </layout>
+        <!-- This section registers event handlers of this module defined in Mana_AttributePage_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of Mana_AttributePage_Model_Observer class gets called. -->
+        <events>
+            <controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_attributepage>
+                        <class>mana_attributepage/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>loadDynamicMenuItems</method>
+                        <!-- event handler method name -->
+                    </mana_attributepage>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+        </events>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+     method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+     it will expect Mana_AttributePage_Adminhtml_AController class, and in class it will expect bAction() method. In most cases,
+     when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_attributepage before="Mage_Adminhtml">Mana_AttributePage_Adminhtml</mana_attributepage>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

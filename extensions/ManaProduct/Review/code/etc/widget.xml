@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaProduct_Review
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <manaproduct_review_random type="manaproduct_review/random" translate="name description" module="manaproduct_review">
+        <name>Random Product Review (MANAdev)</name>
+        <description type="desc">Displays arbitrary review of a random product</description>
+        <parameters>
+            <title translate="label value">
+                <required>1</required>
+                <visible>1</visible>
+                <value>Product Reviews</value>
+                <label>Block Title</label>
+                <type>text</type>
+            </title>
+            <review_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Number of Reviews</label>
+                <type>text</type>
+            </review_count>
+            <character_count translate="label description">
+                <required>0</required>
+                <visible>1</visible>
+                <value></value>
+                <label>Maximum Number of Characters</label>
+                <description>Leave empty to show full text</description>
+                <type>text</type>
+            </character_count>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>manaproduct/review/random.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>manaproduct/review/random.phtml</value>
+                        <label>Default</label>
+                    </default>
+                </values>
+            </template>
+        </parameters>
+    </manaproduct_review_random>
+</widgets>

@@ -1,0 +1,22 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Payment_Method */
+?>
+<div class="m-payment-method">
+    <div class="section-title">
+        <div class="number">3</div>
+        <h2><?php echo $this->__('Payment Method') ?></h2>
+    </div>
+    <fieldset>
+        <?php echo $this->getChildHtml('methods') ?>
+    </fieldset>
+</div>

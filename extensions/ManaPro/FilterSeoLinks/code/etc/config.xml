@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterSeoLinks
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterSeoLinks>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>13.02.21.22</version>
+		</ManaPro_FilterSeoLinks>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterSeoLinks_Helper_Data
+		class is accessible through Mage::helper('manapro_filterseolinks') call, other ManaPro_FilterSeoLinks_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterseolinks/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filterseolinks>
+				<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterSeoLinks_Helper</class>
+			</manapro_filterseolinks>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterSeoLinks_Model_XXX_YYY classes are accessible as 
+		'manapro_filterseolinks/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filterseolinks>
+				<class>ManaPro_FilterSeoLinks_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_filterseolinks_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_filterseolinks_resources</resourceModel>
+			</manapro_filterseolinks>
+			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
+			<!-- This declares that current module will rewrite some model types in module shortnamed 'core'. -->
+			<core>
+				<rewrite>
+					<url>ManaPro_FilterSeoLinks_Model_Url</url>
+					<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>
+					<store>ManaPro_FilterSeoLinks_Model_Store</store>
+					<!-- INSERT HERE: individual type rewrites -->
+				</rewrite>
+			</core>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_filterseolinks_resources>
+				<class>ManaPro_FilterSeoLinks_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_filterseolinks_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+        <!-- This section registers event handlers of this module defined in ManaPro_FilterSeoLinks_Model_Observer with 
+              events defined in other module throughout the system. So when some code in other module invokes an event 
+              mentioned in this section, handler method of ManaPro_FilterSeoLinks_Model_Observer class gets called. -->
+        <events>
+            <controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addAppliedFiltersToTitle</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </controller_action_layout_generate_blocks_after>        
+
+            <controller_action_layout_render_before_catalog_category_view><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks_noindex>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>noindexCategoryView</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks_noindex>
+                </observers>
+            </controller_action_layout_render_before_catalog_category_view>
+            <controller_action_layout_render_before_catalogsearch_result_index><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks_noindex>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>noindexSearchResult</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks_noindex>
+                </observers>
+            </controller_action_layout_render_before_catalogsearch_result_index>
+            <controller_action_layout_render_before_cms_page_view><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks_noindex>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>noindexCmsPage</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks_noindex>
+                </observers>
+            </controller_action_layout_render_before_cms_page_view>
+            <controller_action_layout_render_before_cms_index_index><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks_noindex>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>noindexCmsIndex</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks_noindex>
+                </observers>
+            </controller_action_layout_render_before_cms_index_index>
+            <m_before_load_filter_collection><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addLowerCaseNameColumnToFilterCollection</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_before_load_filter_collection>
+        </events><!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterSeoLinks>
+					<files>
+						<default>ManaPro_FilterSeoLinks.csv</default>
+					</files>
+				</ManaPro_FilterSeoLinks>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+
+	<!-- This section provides defaults for values normally configurable through global system configuration 
+	UI in admin area. -->
+	<default>
+		<mana_filters>
+			<seo>
+				<conditional_word>where</conditional_word>
+				<dash>--to-</dash>
+				<space>-</space>
+				<slash>--per-</slash>
+				<plus>--plus-</plus>
+				<underscore>--uscore-</underscore>
+				<quote>--qt-</quote>
+				<double_quote>--dqt-</double_quote>
+                <hash>--no-</hash>
+                <percent>--percent-</percent>
+                <ampersand>--and-</ampersand>
+            </seo>
+		</mana_filters>
+	</default>
+	<manapro_filterseolinks>
+        <noindex>
+            <empty translate="title" module="manapro_filterseolinks">
+                <title></title>
+                <model>manapro_filterseolinks/noindex_empty</model>
+            </empty>
+            <several_filters translate="title" module="manapro_filterseolinks">
+                <title>2 or more filters applied</title>
+                <model>manapro_filterseolinks/noindex_filters</model>
+            </several_filters>
+            <several_options translate="title" module="manapro_filterseolinks">
+                <title>2 or more options in the same filter applied</title>
+                <model>manapro_filterseolinks/noindex_options</model>
+            </several_options>
+            <slider translate="title" module="manapro_filterseolinks">
+                <title>Slider filter applied</title>
+                <model>manapro_filterseolinks/noindex_slider</model>
+            </slider>
+            <any translate="title" module="manapro_filterseolinks">
+                <title>Any filter applied</title>
+                <model>manapro_filterseolinks/noindex_any</model>
+            </any>
+        </noindex>
+	</manapro_filterseolinks>
+</config>

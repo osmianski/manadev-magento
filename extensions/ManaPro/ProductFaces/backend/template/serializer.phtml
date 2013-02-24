@@ -1,0 +1,36 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_ProductFaces
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<?php
+/**
+ * @var $this Mage_Adminhtml_Block_Widget_Grid_Serializer
+ */
+?>
+<?php $_id = 'id_' . md5(microtime()) ?>
+<input type="hidden" name="<?php echo $this->getInputElementName()?>"  value="" id="<?php echo $_id?>" />
+<div id="m_product_chooser_container" class="hidden"></div>
+<script type="text/javascript">
+	jQuery(document).trigger('m-productfaces-ready', [{
+		hiddenGridDataHolder: '<?php echo $_id ?>', 
+		predefinedGridData: <?php echo $this->getDataAsJSON() ?>, 
+		gridInputsToManage: <?php echo $this->getColumnInputNames(true) ?>, 
+		grid: <?php echo $this->getGridBlock()->getJsObjectName() ?>, 
+		reloadParamName: '<?php echo $this->getReloadParamName()?>',
+		recalculateAutomatically: 1, //<?php echo Mage::getStoreConfigFlag('manapro_productfaces/general/auto') ? '1' : '0' ?>,
+		updateUrl: '<?php echo $this->getGridBlock()->getUrl('adminhtml/representing_products/update', array('_current' => true)) ?>',
+		hideWarningUrl: '<?php echo $this->getGridBlock()->getUrl('adminhtml/representing_products/hideWarning', array('_current' => true)) ?>',
+		navigationWarning: "<?php echo $this->__("You are about to leave this product's page. All data that hasn't been saved will be lost.") ?>",
+		chooserUrl: "<?php echo $this->getGridBlock()->getUrl('adminhtml/representing_products/chooser', array('uniq_id' => 'm_product_chooser', 'use_massaction' => true))?>",
+		chooserConfig: <?php echo '{"buttons":{"open":"'.Mage::helper('catalog')->__('Select Product...').'","close":"'.Mage::helper('catalog')->__('Close').'"}}' ?>,
+		productDataUrl: "<?php echo $this->getGridBlock()->getUrl('adminhtml/representing_products/productData', array('_current' => true)) ?>",
+		noItemsSelectedMsg: "<?php echo Mage::helper('manapro_productfaces')->__('Please select one or more products or perform this action upon.') ?>",
+		confirmOverrideMsg: "<?php echo Mage::helper('manapro_productfaces')->__('Please confirm that all atributes of added products will be overridden.') ?>",
+		productId: "<?php echo Mage::registry('current_product')->getId() ?>",
+		productAlreadyAddedMsg: "<?php echo Mage::helper('manapro_productfaces')->__('This product is already in the list.') ?>"
+	}]);
+</script>

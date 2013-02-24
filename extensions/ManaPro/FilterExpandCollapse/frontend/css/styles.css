@@ -1,0 +1,12 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterExpandCollapse
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.block-layered-nav .m-collapseable { cursor: pointer; }
+/*.block-layered-nav .m-collapseable.m-expanded { background: url(../images/manapro_filterexpandcollapse/bkg_layered-down.gif) 9px 11px no-repeat; }*/
+.block-layered-nav .m-filter-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; }
+.block-layered-nav .m-filter-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+.block-layered-nav .m-expanded .m-filter-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterexpandcollapse/m-expanded.png) 0 0 no-repeat; }
+.block-layered-nav .m-collapsed .m-filter-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterexpandcollapse/m-collapsed.png) 0 0 no-repeat; }

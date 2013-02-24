@@ -1,0 +1,52 @@
+/**
+ * @category    Mana
+ * @package     Mana_Admin
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+.m-helper { display: none; position: absolute; background: #FAFAFA; border: 1px solid; border-color: #C8C8C8 #AAA #AAA #C8C8C8; padding: 10px; }
+tr .m-helper-host { background: #F6F6F6; }
+tr.even .m-helper-host { background: white; }
+#m-image-helper input[type="file"] { z-index: 10; }
+
+.m-button	{ display: inline-block; border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502;
+	padding:0 7px 1px 7px; background:#ffac47 url(../images/btn_bg.gif) repeat-x 0 100%; color:#fff; 
+	font:bold 12px arial, helvetica, sans-serif; cursor:pointer; text-align:center !important; white-space:nowrap; overflow: hidden; }
+.m-button:hover { background:#f77c16 url(../images/btn_over_bg.gif) repeat-x 0 0; }
+.m-button:active { background:#f77c16 url(../images/btn_on_bg.gif) repeat-x 0 0; }
+.m-button span { line-height:1.35em; background-repeat:no-repeat; background-position:0 50%;  }
+.m-button.add	{ padding-left:6px; }
+.m-button.add span { background-image:url(../images/add_btn_icon.gif); padding-left:20px; }
+.m-button.delete { border-color:#d24403 #a92000 #a92000 #d24403; background-image:url(../images/cancel_btn_bg.gif); background-color:#fcaf81; color:#fff; }
+.m-button.delete:hover { background-image:url(../images/cancel_btn_over_bg.gif); }
+.m-button.delete:active { background-image:url(../images/cancel_btn_active_bg.gif); background-color:#e0612f; }
+.m-button.delete span { background-image:url(../images/cancel_btn_icon.gif); padding-left:20px; }
+.mfi-default { display: inline-block; }
+.m-hidden { display: none; }
+.ct-color, .ct-image { cursor: pointer; }
+
+/* COLOR PICKER */
+.m-color-picker { width: 194px; height: 184px; margin-top: 5px; }
+.mc-palette { height: 128px; width: 192px; cursor: crosshair; background-image: url(../images/mana_admin/mColorPicker/colorpicker.png); }
+.mc-gray { height: 8px; width: 192px; cursor: crosshair; background-image: url(../images/mana_admin/mColorPicker/graybar.jpg); }
+.mc-predefined { overflow:  hidden; }
+.mc-predefined li { cursor: pointer; height: 17px; width: 17px; border-top: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; float: left; }
+.mcp-0 { background: #ffffff; }
+.mcp-1 { background: #ffff00; }
+.mcp-2 { background: #00ff00; }
+.mcp-3 { background: #00ffff; }
+.mcp-4 { background: #0000ff; }
+.mcp-5 { background: #ff00ff; }
+.mcp-6 { background: #ff0000; }
+.mcp-7 { background: #4c2b11; }
+.mcp-8 { background: #3b3b3b; }
+.mcp-9 { background: #000000; width: 29px !important; }
+.mc-footer {overflow:  hidden; }
+.mc-footer li { float: left; margin: 5px; border: 1px solid black; }
+.mcf-manual { margin-left: 0 !important; }
+.mcf-manual input { width: 80px; height: 20px; color: black; border:  0; }
+.mcf-transparent { margin-right: 0 !important; width: 98px; height: 20px; cursor: pointer; background-image: url(../images/mana_admin/mColorPicker/grid.gif); }
+td div.input-color { margin:  0 auto; }
+
+/* IMAGE PICKER*/
+td div.input-image { margin:  0 auto; }

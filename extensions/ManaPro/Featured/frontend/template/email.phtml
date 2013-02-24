@@ -1,0 +1,50 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Featured
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* @var $this ManaPro_Featured_Block_List */
+$_helper = $this->helper('catalog/output');
+?>
+<?php if (($_productCollection = $this->getCollection()) && count($_productCollection->getItems())) : ?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th><?php echo $this->__('Product') ?></th>
+            <th><?php echo $this->__('Price') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php $_iterator = 0; foreach ($_productCollection->getItems() as $_product) : ?>
+        <tr>
+            <td>
+                <a href="<?php echo $_product->getProductUrl() ?>"
+                   title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"
+                   class="product-image"><img
+                        src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>"
+                        width="135" height="135"
+                        alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/></a>
+            </td>
+            <td>
+                <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>"
+                                            title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?></a>
+                </h2>
+                <?php if ($_description = $_helper->productAttribute($_product, $_product->getMFeaturedDescription(), 'm_featured_description')) : ?>
+                <?php echo $_description ?>
+                <?php else : ?>
+                <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php echo $this->getPriceHtml($_product, true) ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php endif; ?>

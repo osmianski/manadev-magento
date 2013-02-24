@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Slider
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <manapro_slider type="manapro_slider/slider" translate="name description" module="manapro_slider">
+        <name>Banner (MANAdev)</name>
+        <description type="desc">Adds slider with products and CMS blocks</description>
+    </manapro_slider>
+</widgets>

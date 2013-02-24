@@ -1,0 +1,15 @@
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+
+.m-checkout .m-columns { display: hidden; }
+.m-checkout .m-columns > li { float:left; }
+.m-checkout-columns > .column1 { width: 290px; }
+.m-checkout-columns > .column2 { width: 290px; }
+.m-checkout-columns > .column3 { width: 290px; }
+.m-checkout label.disabled, .m-checkout input.disabled, .m-checkout textarea.disabled { color: #aaaaaa; }
+.agreement-popup-content { width: 600px; height: 400px; overflow-y: auto; }

@@ -1,0 +1,60 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Message */
+?>
+<div class="m-message">
+    <fieldset class="form-list">
+        <ul>
+            <li class="fields">
+                <div class="control">
+                    <input type="checkbox" name="message[send]" id="message:send"
+                           value="1"
+                           title="<?php echo $this->__("I'd like to add a personal message") ?>"
+                           class="checkbox message-send"/><label
+                        for="message:send"><?php echo $this->__("I'd like to add a personal message") ?></label>
+                </div>
+            </li>
+        </ul>
+        <ul class="message-form" style="display: none;">
+            <li class="fields">
+                <div class="field message-to">
+                    <label for="message:to" class="required"><em>*</em><?php echo $this->__('To') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" name="message[to]" value="" id="message:to"
+                               title="<?php echo $this->__('To') ?>" class="input-text required-entry"/>
+                    </div>
+                </div>
+                <div class="field message-from">
+                    <label for="message:from" class="required"><em>*</em><?php echo $this->__('From') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" name="message[from]" value="" id="message:from"
+                               title="<?php echo $this->__('From') ?>" class="input-text required-entry" />
+                    </div>
+                </div>
+
+            </li>
+            <li class="fields message-text">
+                <label for="message:text" class="required"><em>*</em><?php echo $this->__('Message') ?>
+                </label>
+
+                <div class="input-box">
+                    <textarea name="message[text]" value="" id="message:text" cols="40" rows="5"
+                           title="<?php echo $this->__('Message') ?>" class="input-text required-entry"></textarea>
+                </div>
+            </li>
+        </ul>
+    </fieldset>
+</div>

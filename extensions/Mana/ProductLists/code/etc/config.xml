@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_ProductLists
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<Mana_ProductLists>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.01.15.14</version>
+		</Mana_ProductLists>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_ProductLists_Helper_Data
+		class is accessible through Mage::helper('mana_productlists') call, other Mana_ProductLists_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_productlists/xxx_yyy') call. -->
+		<helpers>
+			<mana_productlists>
+				<!-- This says that string 'mana_productlists' corresponds to Mana_ProductLists_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>Mana_ProductLists_Helper</class>
+			</mana_productlists>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, Mana_ProductLists_Model_XXX_YYY classes are accessible as 
+		'mana_productlists/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'mana_productlists' corresponds to Mana_ProductLists_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<mana_productlists>
+				<class>Mana_ProductLists_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/mana_productlists_resources sections and register
+				resource model information from there -->
+				<resourceModel>mana_productlists_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</mana_productlists>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'mana_productlists' corresponds to Mana_ProductLists_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<mana_productlists_resources>
+				<class>Mana_ProductLists_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</mana_productlists_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in Mana_ProductLists_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of Mana_ProductLists_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<core_block_abstract_prepare_layout_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_productlists>
+						<class>mana_productlists/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addProductTabs</method> <!-- event handler method name -->
+					</mana_productlists>
+				</observers>
+			</core_block_abstract_prepare_layout_after>
+			<catalog_product_prepare_save><!-- this is event name this module listens for -->
+				<observers>
+					<mana_productlists>
+						<class>mana_productlists/observer</class> <!-- model name of class containing event handler methods -->
+						<method>deserializeProductLinks</method> <!-- event handler method name -->
+					</mana_productlists>
+				</observers>
+			</catalog_product_prepare_save>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_validate_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_productlists>
+						<class>mana_productlists/observer</class> <!-- model name of class containing event handler methods -->
+						<method>validateProductLinks</method> <!-- event handler method name -->
+					</mana_productlists>
+				</observers>
+			</catalog_product_validate_after><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_save_before><!-- this is event name this module listens for -->
+				<observers>
+					<mana_productlists>
+						<class>mana_productlists/observer</class> <!-- model name of class containing event handler methods -->
+						<method>validateProductLinks</method> <!-- event handler method name -->
+					</mana_productlists>
+				</observers>
+			</catalog_product_save_before><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_save_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_productlists>
+						<class>mana_productlists/observer</class> <!-- model name of class containing event handler methods -->
+						<method>saveProductLinks</method> <!-- event handler method name -->
+					</mana_productlists>
+				</observers>
+			</catalog_product_save_after>
+			
+		</events>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<Mana_ProductLists>
+					<files>
+						<default>Mana_ProductLists.csv</default>
+					</files>
+				</Mana_ProductLists>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Translation support/Frontend (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during frontend request processing -->
+		<translate>
+			<modules>
+				<Mana_ProductLists>
+					<files>
+						<default>Mana_ProductLists.csv</default>
+					</files>
+				</Mana_ProductLists>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

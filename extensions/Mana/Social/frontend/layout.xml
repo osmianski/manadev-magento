@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Social
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_social.css</stylesheet></action>
+        </reference>
+        <reference name="header">
+            <block type="mana_social/links" name="m_social_links" as="m_social_links" />
+        </reference>
+    </default>
+    <m_facebook>
+        <reference name="after_body_start">
+            <block type="mana_social/facebook_sdk" name="m_facebook_sdk"/>
+        </reference>
+    </m_facebook>
+    <cms_page>
+        <update handle="m_facebook"/>
+    </cms_page>
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="mana_social/share_product" name="m_share_product" as="m_share_product">
+    			<action method="setFacebookLikeSortOrder"><value>10</value></action>
+    			<action method="setTwitterTweetSortOrder"><value>20</value></action>
+            </block>
+        </reference>
+    </catalog_product_view>
+</layout>

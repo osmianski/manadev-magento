@@ -1,0 +1,15 @@
+/**
+ * @category    Mana
+ * @package     Mana_Ajax
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-overlay {
+    position: absolute;
+    background: white; /*url('../images/manapro_filterajax/overlay.gif');*/
+    filter:alpha(opacity=0);/* percent */
+    -moz-opacity:0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 10000;
+}

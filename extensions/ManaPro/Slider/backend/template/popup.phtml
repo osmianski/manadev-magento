@@ -1,0 +1,17 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_Slider
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaPro_Slider_Block_Popup_Container */
+?>
+<div class="m-slider-popup-options columns">
+    <div class="side-col"><?php echo $this->getChildHtml('popup_left') ?></div>
+    <div class="main-col"><?php echo $this->getChildHtml('popup_content') ?></div>
+</div>
+<script type="text/javascript">
+    m_slider_popup_tabsJsTabs.moveTabContentInDest();
+    jQuery.mInitSliderWidgetPopupShowHide();
+</script>

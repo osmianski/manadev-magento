@@ -1,0 +1,426 @@
+<?xml version="1.0"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductFaces
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <tabs>
+        <mana>
+            <label>MANAdev</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <manapro_productfaces translate="label" module="manapro_productfaces">
+            <label>Representing Products</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label" module="manapro_productfaces">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <show_sku_in_grid translate="label comment">
+                            <label>Show Represented Product SKU in Product List</label>
+                            <comment>Adds column to catalog product list in Admin Panel.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_sku_in_grid>
+                    </fields>
+                </general>
+                <cloning translate="label" module="manapro_productfaces">
+                    <label>Product Cloning Process Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <status translate="label">
+                            <label>Status</label>
+                            <comment>Initial Product Status of Cloned Products</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_status</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </status>
+                        <sku_suffix translate="label">
+                            <label>SKU Suffix</label>
+                            <comment>SKU of cloned products is SKU of represented product with added SKU suffix (this field) and some unique number</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sku_suffix>
+                        <override translate="label">
+                            <label>Override Existing Product Attributes</label>
+                            <comment>If set, attributes of an existing product added as a representing product will be overridden (if confirmed).</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </override>
+                    </fields>
+                </cloning>
+                <not_cloned translate="label comment" module="manapro_productfaces">
+                    <label>Attributes Excluded from Product Cloning Process</label>
+                    <comment>During cloning process of represented product attributes specified below are not copied from represented product. Instead, default values are assigned.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <attribute0 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute0>
+                        <attribute1 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute1>
+                        <attribute2 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute2>
+                        <attribute3 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute3>
+                        <attribute4 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute4>
+                        <attribute5 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute5>
+                        <attribute6 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute6>
+                        <attribute7 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute7>
+                        <attribute8 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute8>
+                        <attribute9 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute9>
+                    </fields>
+                </not_cloned>
+                <not_overridden translate="label comment" module="manapro_productfaces">
+                    <label>Attributes Excluded from Product Overriding Process</label>
+                    <comment>If you agree to override existing product attributes while adding it as representing product attributes specified below are not copied from represented product. Instead, existing values are preserved.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>350</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <attribute0 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute0>
+                        <attribute1 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute1>
+                        <attribute2 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute2>
+                        <attribute3 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute3>
+                        <attribute4 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute4>
+                        <attribute5 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute5>
+                        <attribute6 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute6>
+                        <attribute7 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute7>
+                        <attribute8 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute8>
+                        <attribute9 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute</source_model>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute9>
+                    </fields>
+                </not_overridden>
+                <quick_edit translate="label comment" module="manapro_productfaces">
+                    <label>Additional Columns in Representing Products List</label>
+                    <comment>Columns specified below appear in table of representing products as a quick editing feature. Please note that this list of columns may vary from store to store. When no store specified on product editing page, the only columns shown are those specified under Default Config scope on this page. When specific store is specified on product editing page, representing product list includes columns specified under that store scope on this page.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <attribute0 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute0>
+                        <attribute1 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute1>
+                        <attribute2 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute2>
+                        <attribute3 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute3>
+                        <attribute4 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute4>
+                        <attribute5 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute5>
+                        <attribute6 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute6>
+                        <attribute7 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute7>
+                        <attribute8 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute8>
+                        <attribute9 translate="label">
+                            <label>Attribute</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_productfaces/source_attribute_editable</source_model>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute9>
+                    </fields>
+                </quick_edit>
+                <schedule translate="label" module="manapro_productfaces">
+                    <label>Scheduled Inventory Update</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <cron_expr translate="label comment">
+                            <label>Cron Expression</label>
+                            <comment>If empty, scheduled process will not run. Must be in form m h D M W, for example 0 5 * * *. Abbreviations: m - minute, h - hour D - day, M - month, W - day of week. Each abbreviation can contain number, series of numbers separated by comma, or asterisk (*) for any value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_expr>
+                        <error_email translate="label">
+                            <label>Error Email Recipient</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </error_email>
+                        <error_email_identity translate="label">
+                            <label>Error Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </error_email_identity>
+                    </fields>
+                </schedule>
+            </groups>
+        </manapro_productfaces>
+    </sections>
+</config>

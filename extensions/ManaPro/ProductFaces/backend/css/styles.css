@@ -1,0 +1,11 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_ProductFaces
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+#product_info_tabs_m_representing_content td.editable input.input-text {
+	width: 80% !important;
+}
+#m_product_chooser_dialog .buttons { padding-bottom: 8px; margin-bottom: 8px; border-bottom: solid 1px #DADFE0; }
+#m_product_chooser_dialog .side-col { padding-top: 0; }

@@ -1,0 +1,127 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Shipping */
+?>
+<div class="m-shipping">
+    <div class="section-title">
+        <div class="number">2</div>
+        <h2><?php echo $this->__('Shipping') ?></h2>
+    </div>
+    <p><strong><?php echo $this->__('ALREADY DONE!') ?></strong></p>
+    <p><strong><?php echo $this->__('Your package will arrive on') ?></strong></p>
+    <span class="no-display"><input name="shipping_method" type="radio" value="freeshipping_freeshipping" checked="checked"/></span>
+    <p><?php echo $this->__('With') ?> <span class="fedex">Fedex</span> <?php echo $this->__('free shipping.') ?></p>
+
+    <fieldset class="form-list shipping-address-form" <?php if(Mage::helper('mana_checkout')->getIsSameShippingAddress()) : ?>style="display:none;"<?php endif ?>>
+        <input type="hidden" name="shipping[address_id]" value="<?php echo $this->getAddress()->getId() ?>"
+               id="shipping:address_id"/>
+        <ul>
+            <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress())->setFieldIdFormat('shipping:%s')->setFieldNameFormat('shipping[%s]')->toHtml() ?></li>
+            <li class="fields">
+                <div class="field">
+                    <label for="shipping:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="shipping[street][]"
+                               id="shipping:street1"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>"
+                               class="input-text required-entry"/>
+                    </div>
+                </div>
+                <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                <div class="field">
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>"
+                               name="shipping[street][]" id="shipping:street<?php echo $_i?>"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>"
+                               class="input-text"/>
+                    </div>
+                </div>
+                <?php endfor ?>
+                <div class="field">
+                    <label for="shipping:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <?php echo $this->getCountryHtmlSelect('shipping') ?>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="shipping:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>"
+                               class="input-text required-entry" id="shipping:city"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Zip') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Zip') ?>" name="shipping[postcode]"
+                               id="shipping:postcode"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>"
+                               class="input-text validate-zip-international required-entry"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="shipping:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <select id="shipping:region_id" name="shipping[region_id]"
+                                title="<?php echo $this->__('State') ?>" class="validate-select"
+                                style="display:none;">
+                            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                        </select>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            $('shipping:region_id').setAttribute('defaultValue', "<?php echo $this->getAddress()->getRegionId() ?>");
+                            //]]>
+                        </script>
+                        <input type="text" id="shipping:region" name="shipping[region]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"
+                               title="<?php echo $this->__('State') ?>" class="input-text" style="display:none;"
+                                />
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field">
+                    <label for="shipping:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" name="shipping[telephone]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="shipping:telephone"/>
+                        <input type="text" name="shipping[telephone2]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="shipping:telephone2"/>
+                        <input type="text" name="shipping[telephone3]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="shipping:telephone3"/>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id',
+            countryRegions, undefined, 'shipping:postcode');
+</script>

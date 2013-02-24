@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterShowMore
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana_filters>
+            <groups>
+                <seo translate="label" module="manapro_filtershowmore">
+                    <label>Search Engine Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>250</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_all_suffix translate="label">
+                            <label>'Show More' URL suffix</label>
+							<comment>Injected into SEO friendly layered navigation URLs to indicate that filter shows all items.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_all_suffix>
+                    </fields>
+                </seo>
+                <display>
+                    <fields>
+                        <show_more_item_count translate="label comment" module="manapro_filtershowmore">
+                            <label>Item Limit</label>
+							<comment>In case filter has more than specified number of items, only first items are displayed, as well as 'Show More' and 'Show Less' actions.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_more_item_count>
+                        <!--<show_more_preload translate="label comment" module="manapro_filtershowmore">
+                            <label>Preload All Items</label>
+							<comment>If enabled, all filter items are preloaded, 'Show More' and 'Show Less' actions do not reload the page and are very fast.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_more_preload>-->
+                        <show_more_time translate="label comment" module="manapro_filtershowmore">
+                            <label>Expand/Collapse Time in Milliseconds</label>
+							<comment>Applied to 'Show More' and 'Show Less' actions when 'Preload All Items' parameter is enabled.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_more_time>
+                        <show_more_method translate="label" module="manapro_filtershowmore">
+                            <label>Method of Showing All Items</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filtershowmore/source_method</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_more_method>
+                    </fields>
+                </display>
+                <show_more_popup translate="label" module="manapro_filtershowmore">
+                    <label>Show More Popup</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>600</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!--<action translate="label">
+                            <label>Show Popup On</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filtershowmore/source_popup</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </action>-->
+                        <max_rows translate="label">
+                            <label>Number of Rows in Popup</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_rows>
+                        <max_columns translate="label">
+                            <label>Number of Columns in Popup</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_columns>
+                        <progress translate="label">
+                            <label>Show 'Please Wait'</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </progress>
+                        <debug translate="label">
+                            <label>Show Network Errors in Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debug>
+                    </fields>
+                </show_more_popup>
+            </groups>
+        </mana_filters>
+    </sections>
+</config>

@@ -1,0 +1,11 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_SuperProductName
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+?>
+<?php echo $_helper->productAttribute($_product, $_product->getNameWysiwyg(), 'name_wysiwig') ?>

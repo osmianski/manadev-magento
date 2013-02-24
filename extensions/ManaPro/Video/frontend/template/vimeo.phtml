@@ -1,0 +1,21 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_Video
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<iframe src="http://player.vimeo.com/video/<?php echo $this->getVideoId().
+        '?title='.(Mage::getStoreConfigFlag('manapro_video/vimeo/title') ? '1' : '0').
+        '&byline=' . (Mage::getStoreConfigFlag('manapro_video/vimeo/byline') ? '1' : '0') .
+        '&portrait=' . (Mage::getStoreConfigFlag('manapro_video/vimeo/portrait') ? '1' : '0') .
+        '&color=' . Mage::getStoreConfig('manapro_video/vimeo/color') .
+        '&autoplay=' . (Mage::getStoreConfigFlag('manapro_video/vimeo/autoplay') ? '1' : '0') .
+        '&loop=' . (Mage::getStoreConfigFlag('manapro_video/vimeo/loop') ? '1' : '0')
+?>"
+        width="<?php echo $this->getWidth() ?><"
+        height="<?php echo $this->getHeight() ?>"
+        frameborder="<?php echo $this->getBorder() ?>"
+        <?php if(Mage::getStoreConfigFlag('manapro_video/vimeo/fullscreen')) : ?>webkitAllowFullScreen mozallowfullscreen allowFullScreen<?php endif; ?> >
+</iframe>

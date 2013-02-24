@@ -1,0 +1,29 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Page
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Page_Block_Widget */
+?>
+<?php if (($_products = $this->getProductCollection()->load()) && $_products->getSize()): ?>
+<div class="widget widget-<?php echo $this->getType() ?>">
+    <div class="block block-list">
+        <div class="block-title">
+            <strong><span><?php echo $this->getBlockTitle() ?></span></strong>
+        </div>
+        <div class="block-content">
+            <?php $suffix = $this->getNameInLayout(); ?>
+            <ol id="widget-<?php echo $this->getType() ?>-<?php echo $suffix; ?>">
+            <?php foreach ($_products as $_product): ?>
+                <li class="item">
+                   <p class="product-name"><a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->helper('catalog/output')->productAttribute($_product, $_product->getName() , 'name') ?></a></p>
+                </li>
+            <?php endforeach; ?>
+            </ol>
+            <script type="text/javascript">decorateList('widget-<?php echo $this->getType() ?>-<?php echo $suffix; ?>', 'none-recursive')</script>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

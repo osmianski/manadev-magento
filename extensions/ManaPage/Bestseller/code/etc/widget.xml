@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaPage_Bestseller
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <m_bestsellers type="manapage_bestseller/widget" translate="name description" module="manapage_bestseller">
+        <name>Bestseller Products (MANAdev)</name>
+        <description>List of products that are most often sold</description>
+        <is_email_compatible>1</is_email_compatible>
+        <parameters>
+            <block_title translate="label value">
+                <required>0</required>
+                <visible>1</visible>
+                <value>Bestsellers</value>
+                <label>Block Title</label>
+                <type>text</type>
+            </block_title>
+            <products_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Products to Display</label>
+                <type>text</type>
+            </products_count>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>manapage/bestseller/grid.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>manapage/bestseller/grid.phtml</value>
+                        <label>Grid</label>
+                    </default>
+                    <list translate="label">
+                        <value>manapage/bestseller/list.phtml</value>
+                        <label>List</label>
+                    </list>
+                </values>
+            </template>
+        </parameters>
+    </m_bestsellers>
+</widgets>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaPage_Sale
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <m_sale type="manapage_sale/widget" translate="name description" module="manapage_sale">
+        <name>Products on Sale (MANAdev)</name>
+        <description>List of products with special price</description>
+        <is_email_compatible>1</is_email_compatible>
+        <parameters>
+            <block_title translate="label value">
+                <required>0</required>
+                <visible>1</visible>
+                <value>On Sale</value>
+                <label>Block Title</label>
+                <type>text</type>
+            </block_title>
+            <products_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Products to Display</label>
+                <type>text</type>
+            </products_count>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>manapage/sale/grid.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>manapage/sale/grid.phtml</value>
+                        <label>Grid</label>
+                    </default>
+                    <list translate="label">
+                        <value>manapage/sale/list.phtml</value>
+                        <label>List</label>
+                    </list>
+                </values>
+            </template>
+        </parameters>
+    </m_sale>
+</widgets>

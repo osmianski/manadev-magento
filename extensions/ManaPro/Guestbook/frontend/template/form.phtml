@@ -1,0 +1,51 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaPro_Guestbook_Block_Form */
+?>
+<p class="m-write-comment"><?php echo $this->__('What do you think of us? Please %s. It is important to us!',
+    '<a id="form-collapse-expand" href="#">'.$this->__('share').'</a>') ?></p>
+<div id="form-container" class="hidden">
+<form action="<?php echo $this->getFormAction(); ?>" id="form" method="post">
+    <div class="fieldset">
+        <ul class="form-list">
+        <?php $_open = false; ?>
+        <?php foreach (Mage::helper('manapro_guestbook')->getVisibleFields() as $field) : ?>
+            <?php if ($field == 'text') : ?>
+                <?php if ($_open) : $_open = false; ?>
+                    </li>
+                <?php endif; ?>
+                <li class="wide"><?php echo $this->getChildHtml($field) ?></li>
+            <?php else : ?>
+                <?php if ($_open) : $_open = false; ?>
+                    <div class="field"><?php echo $this->getChildHtml($field) ?></div>
+                    </li>
+                <?php else : $_open = true; ?>
+                    <li class="fields">
+                    <div class="field"><?php echo $this->getChildHtml($field) ?></div>
+                <?php endif; ?>
+            <?php endif; ?>
+
+        <?php endforeach; ?>
+        <?php if ($_open) : $_open = false; ?>
+            </li>
+        <?php endif; ?>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <input type="text" name="hideit" id="hideit" value="hideit" style="display:none !important;" />
+        <input type="hidden" name="store_id" value="<?php echo Mage::app()->getStore()->getId() ?>" />
+        <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var mGuestbookForm = new VarienForm('form', true);
+//]]>
+</script>
+</div>

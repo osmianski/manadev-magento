@@ -1,0 +1,17 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Admin
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+?>
+<script type="text/javascript">(function($) {
+	$(document).trigger('m-grid-reset', [
+	    '<?php echo $this->getGrid()->getId() ?>_table', 
+	    <?php echo $this->getGrid()->getJsObjectName() ?>,
+	   	<?php echo $this->getInfo() ?>,
+	    <?php echo $this->getEdit() ?>
+	]);
+})(jQuery);</script>

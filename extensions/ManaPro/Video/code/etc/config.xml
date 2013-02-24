@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Video
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_Video>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.22.12</version>
+        </ManaPro_Video>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_Video_Helper_Data
+		class is accessible through Mage::helper('manapro_video') call, other ManaPro_Video_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_video/xxx_yyy') call. -->
+        <helpers>
+            <manapro_video>
+                <!-- This says that string 'manapro_video' corresponds to ManaPro_Video_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_Video_Helper</class>
+            </manapro_video>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_Video_Model_XXX_YYY classes are accessible as
+            'manapro_video/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_video' corresponds to ManaPro_Video_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_video>
+                <class>ManaPro_Video_Model</class>
+                <!-- This tells Magento to read config/global/models/manapro_video_resources sections and register
+                    resource model information from there -->
+                <resourceModel>manapro_video_resources</resourceModel>
+            </manapro_video>
+            <!-- This says that string 'manapro_video' corresponds to ManaPro_Video_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <manapro_video_resources>
+                <class>ManaPro_Video_Resource</class>
+                <entities>
+                    <video><table>m_product_video</table><replicable>1</replicable></video>
+                    <video_store><table>m_product_video_store</table><replicable>1</replicable></video_store>
+                </entities>
+            </manapro_video_resources>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This section registers block classes ManaPro_video_Block_XXX_YYY to be accessible through
+            'manapro_video/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_video' corresponds to ManaPro_video_Block pseudo-namespace. -->
+            <manapro_video>
+                <class>ManaPro_video_Block</class>
+            </manapro_video>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers event handlers of this module defined in ManaPro_Video_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_Video_Model_Observer class gets called. -->
+        <events>
+            <core_block_abstract_prepare_layout_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addVideoTab</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+            <core_block_abstract_to_html_before><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                            <method>beginEditingSession</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <catalog_product_prepare_save><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addEditedVideos</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </catalog_product_prepare_save>
+            <catalog_product_validate_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>validateVideos</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </catalog_product_validate_after>
+            <catalog_product_save_before><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>validateVideos</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </catalog_product_save_before>
+            <catalog_product_save_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_video>
+                        <class>manapro_video/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>saveVideos</method>
+                        <!-- event handler method name -->
+                    </manapro_video>
+                </observers>
+            </catalog_product_save_after>
+        </events>
+
+        <!-- This tells Magento to analyze sql/manapro_video_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_video_setup>
+                <setup>
+                    <module>ManaPro_Video</module>
+                </setup>
+            </manapro_video_setup>
+        </resources>
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_Video>
+                    <files>
+                        <default>ManaPro_Video.csv</default>
+                    </files>
+                </ManaPro_Video>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_video>
+                    <file>manapro_video.xml</file>
+                </manapro_video>
+            </updates>
+        </layout>
+    </adminhtml>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_Video>
+                    <files>
+                        <default>ManaPro_Video.csv</default>
+                    </files>
+                </ManaPro_Video>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_video>
+                    <file>manapro_video.xml</file>
+                </manapro_video>
+            </updates>
+        </layout>
+        <routers>
+            <manapro_video>
+                <use>standard</use>
+                <args>
+                    <module>ManaPro_Video</module>
+                    <frontName>m-video</frontName>
+                </args>
+            </manapro_video>
+        </routers>
+    </frontend>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+     method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+     it will expect ManaPro_Video_AController class, and in class it will expect bAction() method. In most cases,
+     when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <manapro_video before="Mage_Adminhtml">ManaPro_Video</manapro_video>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <manapro_video>
+        <service>
+            <vimeo translate="title" module="manapro_video">
+                <title>vimeo.com</title>
+                <model>manapro_video/service_vimeo</model>
+            </vimeo>
+        </service>
+    </manapro_video>
+    <default>
+        <manapro_video>
+            <display>
+                <media>tabs</media>
+            </display>
+            <popup>
+                <large_width>650</large_width>
+                <large_height>650</large_height>
+                <small_width>156</small_width>
+                <small_height>156</small_height>
+            </popup>
+            <vimeo>
+                <color>00adef</color>
+            </vimeo>
+        </manapro_video>
+    </default>
+</config>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterDropdown
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterDropdown>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>13.02.13.14</version>
+		</ManaPro_FilterDropdown>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterDropdown_Helper_Data
+		class is accessible through Mage::helper('manapro_filterdropdown') call, other ManaPro_FilterDropdown_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterdropdown/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filterdropdown>
+				<!-- This says that string 'manapro_filterdropdown' corresponds to ManaPro_FilterDropdown_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterDropdown_Helper</class>
+			</manapro_filterdropdown>
+		</helpers>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterDropdown>
+					<files>
+						<default>ManaPro_FilterDropdown.csv</default>
+					</files>
+				</ManaPro_FilterDropdown>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filterdropdown>
+					<file>manapro_filterdropdown.xml</file>
+				</manapro_filterdropdown>
+			</updates>
+		</layout>
+		<!-- This section registers additional translation file with our module-specific strings to be loaded
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterDropdown>
+					<files>
+						<default>ManaPro_FilterDropdown.csv</default>
+					</files>
+				</ManaPro_FilterDropdown>
+			</modules>
+		</translate>
+	</frontend>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+	<!-- This section extends Mana_Filters module functionality --> 
+	<mana_filters>
+		<display><!-- display options for individual filters -->
+			<attribute> <!-- available display options for attribute-based filters -->
+				<dropdown translate="title" module="manapro_filterdropdown">
+					<title>Drop Down</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+					<model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+					<and_resource>mana_filters/filter_and_attribute</and_resource>
+					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+					<template>manapro/filterdropdown/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>500</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</dropdown>
+			</attribute>
+			<price> <!-- available display options for price filter -->
+				<dropdown translate="title" module="manapro_filterdropdown">
+					<title>Drop Down</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+					<model>mana_filters/filter_price</model>
+					<solr_model>mana_filters/solr_price</solr_model>
+					<solr_reverse_model>mana_filters/solr_reverse_price</solr_reverse_model>
+					<resource>mana_filters/filter_price</resource>
+					<reverse_resource>mana_filters/filter_reverse_price</reverse_resource>
+					<template>manapro/filterdropdown/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>500</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</dropdown>
+			</price>
+			<category> <!-- available display options for category filter -->
+				<dropdown translate="title" module="manapro_filterdropdown">
+					<title>Drop Down</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+					<model>mana_filters/filter_category</model>
+					<solr_model>mana_filters/solr_category</solr_model>
+					<template>manapro/filterdropdown/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>500</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</dropdown>
+			</category>
+			<decimal> <!-- available display options for price filter -->
+				<dropdown translate="title" module="manapro_filterdropdown">
+					<title>Drop Down</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+                    <model>mana_filters/filter_decimal</model>
+                    <solr_model>mana_filters/solr_decimal</solr_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_decimal</solr_reverse_model>
+                    <resource>mana_filters/filter_decimal</resource>
+                    <reverse_resource>mana_filters/filter_reverse_decimal</reverse_resource>
+					<template>manapro/filterdropdown/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>500</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</dropdown>
+			</decimal>
+		</display>
+	</mana_filters>
+</config>

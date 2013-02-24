@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductFaces
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_ProductFaces>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.12.07.14</version>
+		</ManaPro_ProductFaces>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_ProductFaces_Helper_Data
+		class is accessible through Mage::helper('manapro_productfaces') call, other ManaPro_ProductFaces_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_productfaces/xxx_yyy') call. -->
+		<helpers>
+			<manapro_productfaces>
+				<!-- This says that string 'manapro_productfaces' corresponds to ManaPro_ProductFaces_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_ProductFaces_Helper</class>
+			</manapro_productfaces>
+		</helpers>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		ManaPro_ProductFaces_Block_XXX_YYY classes are accessible as 'manapro_productfaces/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'manapro_productfaces' corresponds to ManaPro_ProductFaces_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<manapro_productfaces>
+				<class>ManaPro_ProductFaces_Block</class>
+			</manapro_productfaces>
+		</blocks>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_ProductFaces_Model_XXX_YYY classes are accessible as 
+		'manapro_productfaces/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_productfaces' corresponds to ManaPro_ProductFaces_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_productfaces>
+				<class>ManaPro_ProductFaces_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_productfaces_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_productfaces_resources</resourceModel>
+			</manapro_productfaces>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_productfaces' corresponds to Manapro_ProductFaces_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_productfaces_resources>
+				<class>ManaPro_ProductFaces_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_productfaces_resources>
+			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
+			<!-- This declares that current module will rewrite some model types in module shortnamed 'cataloginventory'. -->
+			<cataloginventory>
+				<rewrite>
+					<stock_item>ManaPro_ProductFaces_Model_Item</stock_item>
+					<stock>ManaPro_ProductFaces_Model_Stock</stock>
+					<!-- INSERT HERE: individual type rewrites -->
+				</rewrite>
+			</cataloginventory>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/manapro_productfaces_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<manapro_productfaces_setup>
+				<setup>
+					<module>ManaPro_ProductFaces</module>
+					<class>ManaPro_ProductFaces_Resource_Setup</class>
+				</setup>
+			</manapro_productfaces_setup>
+		</resources>
+<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in ManaPro_ProductFaces_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of ManaPro_ProductFaces_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<core_block_abstract_prepare_layout_after><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>addRepresentingProductsTab</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</core_block_abstract_prepare_layout_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<core_block_abstract_to_html_before><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>addProductGridColumn</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</core_block_abstract_to_html_before><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_flat_prepare_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>addFlatColumns</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_flat_prepare_columns><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_collection_load_before><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>addProductCollectionColumn</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_collection_load_before>
+			<catalog_product_prepare_save><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>deserializeRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_prepare_save>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_validate_after><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>validateRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_validate_after><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_save_before><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>validateRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_save_before><!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_product_save_after><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>saveRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_save_after>
+			<catalog_product_delete_before><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>beforeDeleteRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_delete_before>
+			<catalog_product_delete_after><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>deleteRepresentingProducts</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</catalog_product_delete_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<controller_action_predispatch><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_productfaces>
+						<class>manapro_productfaces/observer_link</class> <!-- model name of class containing event handler methods -->
+						<method>afterUpgrade</method> <!-- event handler method name -->
+					</manapro_productfaces>
+				</observers>
+			</controller_action_predispatch>
+			<!-- INVENTORY RELATED EVENTS -->
+			
+            <!-- <checkout_submit_all_after>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateFromQuote</method>
+                    </manapro_productfaces>
+                </observers>
+            </checkout_submit_all_after> -->
+            <!-- 
+            <sales_model_service_quote_submit_before>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateFromQuote</method>
+                    </manapro_productfaces>
+                </observers>
+            </sales_model_service_quote_submit_before>
+            <sales_model_service_quote_submit_failure>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>restoreFromQuote</method>
+                    </manapro_productfaces>
+                </observers>
+            </sales_model_service_quote_submit_failure>
+            <sales_order_item_cancel>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateFromOrderItem</method>
+                    </manapro_productfaces>
+                </observers>
+            </sales_order_item_cancel>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateFromCreditMemo</method>
+                    </manapro_productfaces>
+                </observers>
+            </sales_order_creditmemo_save_after>
+             -->
+            <admin_system_config_changed_section_cataloginventory>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateAll</method>
+                    </manapro_productfaces>
+                </observers>
+            </admin_system_config_changed_section_cataloginventory>
+            <admin_system_config_changed_section_manapro_productfaces>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>updateAll</method>
+                    </manapro_productfaces>
+                </observers>
+            </admin_system_config_changed_section_manapro_productfaces>
+		</events>
+        <index>
+            <indexer>
+                <manapro_productfaces_update_all>
+                    <model>manapro_productfaces/indexer</model>
+                </manapro_productfaces_update_all>
+            </indexer>
+        </index>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_ProductFaces>
+					<files>
+						<default>ManaPro_ProductFaces.csv</default>
+					</files>
+				</ManaPro_ProductFaces>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_productfaces>
+					<file>manapro_productfaces.xml</file>
+				</manapro_productfaces>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Controllers/Subscribe to adminhtml router (config.xml) -->
+	<!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action 
+	method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+	it will expect ManaPro_ProductFaces_AController class, and in class it will expect bAction() method. In most cases, 
+	when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<manapro_productfaces before="Mage_Adminhtml">ManaPro_ProductFaces</manapro_productfaces>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+
+    <default>
+        <manapro_productfaces>
+        	<general>
+        		<show_sku_in_grid>1</show_sku_in_grid>
+        	</general>
+        	<cloning>
+        		<status>2</status>
+        		<sku_suffix>_</sku_suffix>
+        	</cloning>
+        	<quick_edit>
+        		<attribute0>price</attribute0>
+        	</quick_edit>
+            <schedule>
+                <cron_expr></cron_expr>
+                <error_email></error_email>
+                <error_email_identity>general</error_email_identity>
+            </schedule>
+        </manapro_productfaces>
+    </default>
+    <crontab>
+        <jobs>
+            <manapro_productfaces_update_all>
+            	<schedule>
+                    <config_path>manapro_productfaces/schedule/cron_expr</config_path>
+            	</schedule>
+                <run>
+                    <model>manapro_productfaces/indexer::runCronjob</model>
+                </run>
+            </manapro_productfaces_update_all>
+        </jobs>
+    </crontab>
+</config>

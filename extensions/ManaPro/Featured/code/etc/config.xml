@@ -1,0 +1,1366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Featured
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_Featured>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.02.20.20</version>
+        </ManaPro_Featured>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_Featured_Helper_Data
+		class is accessible through Mage::helper('manapro_featured') call, other ManaPro_Featured_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_featured/xxx_yyy') call. -->
+        <helpers>
+            <manapro_featured>
+                <!-- This says that string 'manapro_featured' corresponds to ManaPro_Featured_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_Featured_Helper</class>
+            </manapro_featured>
+        </helpers>
+        <!-- This section registers block classes ManaPro_Featured_Block_XXX_YYY to be accessible through 
+            'manapro_featured/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_featured' corresponds to ManaPro_Featured_Block pseudo-namespace. -->
+            <manapro_featured>
+                <class>ManaPro_Featured_Block</class>
+            </manapro_featured>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_Featured_Model_XXX_YYY classes are accessible as
+            'manapro_featured/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_featured' corresponds to ManaPro_Featured_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_featured>
+                <class>ManaPro_Featured_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_featured>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This tells Magento to analyze sql/manapro_featured_setup directory for install/upgrade scripts. 
+            Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_featured_setup>
+                <setup>
+                    <module>ManaPro_Featured</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+            </manapro_featured_setup>
+        </resources>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_featured>
+                    <file>manapro_featured.xml</file>
+                </manapro_featured>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_Featured>
+                    <files>
+                        <default>ManaPro_Featured.csv</default>
+                    </files>
+                </ManaPro_Featured>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_featured>
+                    <file>manapro_featured.xml</file>
+                </manapro_featured>
+            </updates>
+        </layout>
+    </adminhtml>
+    <mana_featured>
+        <category>
+            <carousel translate="title" module="manapro_featured">
+                <title>Carousel</title>
+                <block>manapro_featured/carousel</block>
+                <template>manapro/featured/carousel.phtml</template>
+            </carousel>
+        </category>
+        <carousel_effect>
+            <blind translate="title" module="manapro_featured">
+                <title>Blind - Blinds the element away or shows it by blinding it in</title>
+                <hide>1</hide>
+                <show>1</show>
+                <random>1</random>
+                <model>manapro_featured/effect_blind</model>
+            </blind>
+            <clip translate="title" module="manapro_featured">
+                <title>Clip - Clips the element on or off, vertically or horizontally</title>
+                <hide>1</hide>
+                <show>1</show>
+                <random>1</random>
+                <model>manapro_featured/effect_clip</model>
+            </clip>
+            <drop translate="title" module="manapro_featured">
+                <title>Drop - Drops the element away or shows it by dropping it in</title>
+                <hide>1</hide>
+                <show>1</show>
+                <random>1</random>
+                <model>manapro_featured/effect_drop</model>
+            </drop>
+            <fade translate="title" module="manapro_featured">
+                <title>Fade - Fades the element, by gradually changing its opacity</title>
+                <hide>1</hide>
+                <show>1</show>
+                <random>1</random>
+            </fade>
+            <slide translate="title" module="manapro_featured">
+                <title>Slide - Slides the element out of the viewport</title>
+                <hide>1</hide>
+            </slide>
+        </carousel_effect>
+        <carousel_decoration>
+            <top_left>
+                <white_on_black_corner translate="title" module="manapro_featured">
+                    <title>Black Corner with White Text</title>
+                    <css_class>m-white-on-black-corner</css_class>
+                </white_on_black_corner>
+                <white_on_black_ribbon translate="title" module="manapro_featured">
+                    <title>Black Ribbon with White Text</title>
+                    <css_class>m-white-on-black-ribbon</css_class>
+                </white_on_black_ribbon>
+
+                <white_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with White Text</title>
+                    <css_class>m-white-on-blue-corner</css_class>
+                </white_on_blue_corner>
+                <white_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with White Text</title>
+                    <css_class>m-white-on-blue-ribbon</css_class>
+                </white_on_blue_ribbon>
+                <black_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with Black Text</title>
+                    <css_class>m-black-on-blue-corner</css_class>
+                </black_on_blue_corner>
+                <black_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with Black Text</title>
+                    <css_class>m-black-on-blue-ribbon</css_class>
+                </black_on_blue_ribbon>
+
+                <white_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with White Text</title>
+                    <css_class>m-white-on-burgundy-corner</css_class>
+                </white_on_burgundy_corner>
+                <white_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with White Text</title>
+                    <css_class>m-white-on-burgundy-ribbon</css_class>
+                </white_on_burgundy_ribbon>
+                <black_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with Black Text</title>
+                    <css_class>m-black-on-burgundy-corner</css_class>
+                </black_on_burgundy_corner>
+                <black_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with Black Text</title>
+                    <css_class>m-black-on-burgundy-ribbon</css_class>
+                </black_on_burgundy_ribbon>
+
+                <white_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with White Text</title>
+                    <css_class>m-white-on-green-corner</css_class>
+                </white_on_green_corner>
+                <white_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with White Text</title>
+                    <css_class>m-white-on-green-ribbon</css_class>
+                </white_on_green_ribbon>
+                <black_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with Black Text</title>
+                    <css_class>m-black-on-green-corner</css_class>
+                </black_on_green_corner>
+                <black_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with Black Text</title>
+                    <css_class>m-black-on-green-ribbon</css_class>
+                </black_on_green_ribbon>
+
+                <white_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with White Text</title>
+                    <css_class>m-white-on-grey-corner</css_class>
+                </white_on_grey_corner>
+                <white_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with White Text</title>
+                    <css_class>m-white-on-grey-ribbon</css_class>
+                </white_on_grey_ribbon>
+                <black_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with Black Text</title>
+                    <css_class>m-black-on-grey-corner</css_class>
+                </black_on_grey_corner>
+                <black_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with Black Text</title>
+                    <css_class>m-black-on-grey-ribbon</css_class>
+                </black_on_grey_ribbon>
+
+                <white_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with White Text</title>
+                    <css_class>m-white-on-yellow-corner</css_class>
+                </white_on_yellow_corner>
+                <white_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with White Text</title>
+                    <css_class>m-white-on-yellow-ribbon</css_class>
+                </white_on_yellow_ribbon>
+                <black_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with Black Text</title>
+                    <css_class>m-black-on-yellow-corner</css_class>
+                </black_on_yellow_corner>
+                <black_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with Black Text</title>
+                    <css_class>m-black-on-yellow-ribbon</css_class>
+                </black_on_yellow_ribbon>
+
+                <white_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with White Text</title>
+                    <css_class>m-white-on-navy-corner</css_class>
+                </white_on_navy_corner>
+                <white_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with White Text</title>
+                    <css_class>m-white-on-navy-ribbon</css_class>
+                </white_on_navy_ribbon>
+                <black_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with Black Text</title>
+                    <css_class>m-black-on-navy-corner</css_class>
+                </black_on_navy_corner>
+                <black_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with Black Text</title>
+                    <css_class>m-black-on-navy-ribbon</css_class>
+                </black_on_navy_ribbon>
+
+                <white_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with White Text</title>
+                    <css_class>m-white-on-orange-corner</css_class>
+                </white_on_orange_corner>
+                <white_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with White Text</title>
+                    <css_class>m-white-on-orange-ribbon</css_class>
+                </white_on_orange_ribbon>
+                <black_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with Black Text</title>
+                    <css_class>m-black-on-orange-corner</css_class>
+                </black_on_orange_corner>
+                <black_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with Black Text</title>
+                    <css_class>m-black-on-orange-ribbon</css_class>
+                </black_on_orange_ribbon>
+
+                <white_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with White Text</title>
+                    <css_class>m-white-on-pink-corner</css_class>
+                </white_on_pink_corner>
+                <white_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with White Text</title>
+                    <css_class>m-white-on-pink-ribbon</css_class>
+                </white_on_pink_ribbon>
+                <black_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with Black Text</title>
+                    <css_class>m-black-on-pink-corner</css_class>
+                </black_on_pink_corner>
+                <black_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with Black Text</title>
+                    <css_class>m-black-on-pink-ribbon</css_class>
+                </black_on_pink_ribbon>
+
+                <white_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with White Text</title>
+                    <css_class>m-white-on-red-corner</css_class>
+                </white_on_red_corner>
+                <white_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with White Text</title>
+                    <css_class>m-white-on-red-ribbon</css_class>
+                </white_on_red_ribbon>
+                <black_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with Black Text</title>
+                    <css_class>m-black-on-red-corner</css_class>
+                </black_on_red_corner>
+                <black_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with Black Text</title>
+                    <css_class>m-black-on-red-ribbon</css_class>
+                </black_on_red_ribbon>
+
+                <white_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with White Text</title>
+                    <css_class>m-white-on-white-corner</css_class>
+                </white_on_white_corner>
+                <white_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with White Text</title>
+                    <css_class>m-white-on-white-ribbon</css_class>
+                </white_on_white_ribbon>
+                <black_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with Black Text</title>
+                    <css_class>m-black-on-white-corner</css_class>
+                </black_on_white_corner>
+                <black_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with Black Text</title>
+                    <css_class>m-black-on-white-ribbon</css_class>
+                </black_on_white_ribbon>
+            </top_left>
+            <top>
+                <white_on_black_clip translate="title" module="manapro_featured">
+                    <title>Black Clip with White Text</title>
+                    <css_class>m-white-on-black-clip</css_class>
+                </white_on_black_clip>
+
+                <white_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with White Text</title>
+                    <css_class>m-white-on-blue-clip</css_class>
+                </white_on_blue_clip>
+                <black_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with Black Text</title>
+                    <css_class>m-black-on-blue-clip</css_class>
+                </black_on_blue_clip>
+
+                <white_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with White Text</title>
+                    <css_class>m-white-on-burgundy-clip</css_class>
+                </white_on_burgundy_clip>
+                <black_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with Black Text</title>
+                    <css_class>m-black-on-burgundy-clip</css_class>
+                </black_on_burgundy_clip>
+
+                <white_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with White Text</title>
+                    <css_class>m-white-on-green-clip</css_class>
+                </white_on_green_clip>
+                <black_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with Black Text</title>
+                    <css_class>m-black-on-green-clip</css_class>
+                </black_on_green_clip>
+
+                <white_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with White Text</title>
+                    <css_class>m-white-on-grey-clip</css_class>
+                </white_on_grey_clip>
+                <black_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with Black Text</title>
+                    <css_class>m-black-on-grey-clip</css_class>
+                </black_on_grey_clip>
+
+                <white_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with White Text</title>
+                    <css_class>m-white-on-yellow-clip</css_class>
+                </white_on_yellow_clip>
+                <black_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with Black Text</title>
+                    <css_class>m-black-on-yellow-clip</css_class>
+                </black_on_yellow_clip>
+
+                <white_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with White Text</title>
+                    <css_class>m-white-on-navy-clip</css_class>
+                </white_on_navy_clip>
+                <black_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with Black Text</title>
+                    <css_class>m-black-on-navy-clip</css_class>
+                </black_on_navy_clip>
+
+                <white_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with White Text</title>
+                    <css_class>m-white-on-orange-clip</css_class>
+                </white_on_orange_clip>
+                <black_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with Black Text</title>
+                    <css_class>m-black-on-orange-clip</css_class>
+                </black_on_orange_clip>
+
+                <white_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with White Text</title>
+                    <css_class>m-white-on-pink-clip</css_class>
+                </white_on_pink_clip>
+                <black_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with Black Text</title>
+                    <css_class>m-black-on-pink-clip</css_class>
+                </black_on_pink_clip>
+
+                <white_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with White Text</title>
+                    <css_class>m-white-on-red-clip</css_class>
+                </white_on_red_clip>
+                <black_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with Black Text</title>
+                    <css_class>m-black-on-red-clip</css_class>
+                </black_on_red_clip>
+
+                <white_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with White Text</title>
+                    <css_class>m-white-on-white-clip</css_class>
+                </white_on_white_clip>
+                <black_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with Black Text</title>
+                    <css_class>m-black-on-white-clip</css_class>
+                </black_on_white_clip>
+            </top>
+            <top_right>
+                <white_on_black_corner translate="title" module="manapro_featured">
+                    <title>Black Corner with White Text</title>
+                    <css_class>m-white-on-black-corner</css_class>
+                </white_on_black_corner>
+                <white_on_black_ribbon translate="title" module="manapro_featured">
+                    <title>Black Ribbon with White Text</title>
+                    <css_class>m-white-on-black-ribbon</css_class>
+                </white_on_black_ribbon>
+
+                <white_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with White Text</title>
+                    <css_class>m-white-on-blue-corner</css_class>
+                </white_on_blue_corner>
+                <white_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with White Text</title>
+                    <css_class>m-white-on-blue-ribbon</css_class>
+                </white_on_blue_ribbon>
+                <black_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with Black Text</title>
+                    <css_class>m-black-on-blue-corner</css_class>
+                </black_on_blue_corner>
+                <black_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with Black Text</title>
+                    <css_class>m-black-on-blue-ribbon</css_class>
+                </black_on_blue_ribbon>
+
+                <white_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with White Text</title>
+                    <css_class>m-white-on-burgundy-corner</css_class>
+                </white_on_burgundy_corner>
+                <white_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with White Text</title>
+                    <css_class>m-white-on-burgundy-ribbon</css_class>
+                </white_on_burgundy_ribbon>
+                <black_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with Black Text</title>
+                    <css_class>m-black-on-burgundy-corner</css_class>
+                </black_on_burgundy_corner>
+                <black_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with Black Text</title>
+                    <css_class>m-black-on-burgundy-ribbon</css_class>
+                </black_on_burgundy_ribbon>
+
+                <white_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with White Text</title>
+                    <css_class>m-white-on-green-corner</css_class>
+                </white_on_green_corner>
+                <white_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with White Text</title>
+                    <css_class>m-white-on-green-ribbon</css_class>
+                </white_on_green_ribbon>
+                <black_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with Black Text</title>
+                    <css_class>m-black-on-green-corner</css_class>
+                </black_on_green_corner>
+                <black_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with Black Text</title>
+                    <css_class>m-black-on-green-ribbon</css_class>
+                </black_on_green_ribbon>
+
+                <white_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with White Text</title>
+                    <css_class>m-white-on-grey-corner</css_class>
+                </white_on_grey_corner>
+                <white_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with White Text</title>
+                    <css_class>m-white-on-grey-ribbon</css_class>
+                </white_on_grey_ribbon>
+                <black_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with Black Text</title>
+                    <css_class>m-black-on-grey-corner</css_class>
+                </black_on_grey_corner>
+                <black_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with Black Text</title>
+                    <css_class>m-black-on-grey-ribbon</css_class>
+                </black_on_grey_ribbon>
+
+                <white_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with White Text</title>
+                    <css_class>m-white-on-yellow-corner</css_class>
+                </white_on_yellow_corner>
+                <white_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with White Text</title>
+                    <css_class>m-white-on-yellow-ribbon</css_class>
+                </white_on_yellow_ribbon>
+                <black_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with Black Text</title>
+                    <css_class>m-black-on-yellow-corner</css_class>
+                </black_on_yellow_corner>
+                <black_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with Black Text</title>
+                    <css_class>m-black-on-yellow-ribbon</css_class>
+                </black_on_yellow_ribbon>
+
+                <white_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with White Text</title>
+                    <css_class>m-white-on-navy-corner</css_class>
+                </white_on_navy_corner>
+                <white_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with White Text</title>
+                    <css_class>m-white-on-navy-ribbon</css_class>
+                </white_on_navy_ribbon>
+                <black_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with Black Text</title>
+                    <css_class>m-black-on-navy-corner</css_class>
+                </black_on_navy_corner>
+                <black_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with Black Text</title>
+                    <css_class>m-black-on-navy-ribbon</css_class>
+                </black_on_navy_ribbon>
+
+                <white_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with White Text</title>
+                    <css_class>m-white-on-orange-corner</css_class>
+                </white_on_orange_corner>
+                <white_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with White Text</title>
+                    <css_class>m-white-on-orange-ribbon</css_class>
+                </white_on_orange_ribbon>
+                <black_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with Black Text</title>
+                    <css_class>m-black-on-orange-corner</css_class>
+                </black_on_orange_corner>
+                <black_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with Black Text</title>
+                    <css_class>m-black-on-orange-ribbon</css_class>
+                </black_on_orange_ribbon>
+
+                <white_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with White Text</title>
+                    <css_class>m-white-on-pink-corner</css_class>
+                </white_on_pink_corner>
+                <white_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with White Text</title>
+                    <css_class>m-white-on-pink-ribbon</css_class>
+                </white_on_pink_ribbon>
+                <black_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with Black Text</title>
+                    <css_class>m-black-on-pink-corner</css_class>
+                </black_on_pink_corner>
+                <black_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with Black Text</title>
+                    <css_class>m-black-on-pink-ribbon</css_class>
+                </black_on_pink_ribbon>
+
+                <white_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with White Text</title>
+                    <css_class>m-white-on-red-corner</css_class>
+                </white_on_red_corner>
+                <white_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with White Text</title>
+                    <css_class>m-white-on-red-ribbon</css_class>
+                </white_on_red_ribbon>
+                <black_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with Black Text</title>
+                    <css_class>m-black-on-red-corner</css_class>
+                </black_on_red_corner>
+                <black_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with Black Text</title>
+                    <css_class>m-black-on-red-ribbon</css_class>
+                </black_on_red_ribbon>
+
+                <white_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with White Text</title>
+                    <css_class>m-white-on-white-corner</css_class>
+                </white_on_white_corner>
+                <white_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with White Text</title>
+                    <css_class>m-white-on-white-ribbon</css_class>
+                </white_on_white_ribbon>
+                <black_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with Black Text</title>
+                    <css_class>m-black-on-white-corner</css_class>
+                </black_on_white_corner>
+                <black_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with Black Text</title>
+                    <css_class>m-black-on-white-ribbon</css_class>
+                </black_on_white_ribbon>
+            </top_right>
+            <right>
+                <white_on_black_clip translate="title" module="manapro_featured">
+                    <title>Black Clip with White Text</title>
+                    <css_class>m-white-on-black-clip</css_class>
+                </white_on_black_clip>
+
+                <white_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with White Text</title>
+                    <css_class>m-white-on-blue-clip</css_class>
+                </white_on_blue_clip>
+                <black_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with Black Text</title>
+                    <css_class>m-black-on-blue-clip</css_class>
+                </black_on_blue_clip>
+
+                <white_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with White Text</title>
+                    <css_class>m-white-on-burgundy-clip</css_class>
+                </white_on_burgundy_clip>
+                <black_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with Black Text</title>
+                    <css_class>m-black-on-burgundy-clip</css_class>
+                </black_on_burgundy_clip>
+
+                <white_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with White Text</title>
+                    <css_class>m-white-on-green-clip</css_class>
+                </white_on_green_clip>
+                <black_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with Black Text</title>
+                    <css_class>m-black-on-green-clip</css_class>
+                </black_on_green_clip>
+
+                <white_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with White Text</title>
+                    <css_class>m-white-on-grey-clip</css_class>
+                </white_on_grey_clip>
+                <black_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with Black Text</title>
+                    <css_class>m-black-on-grey-clip</css_class>
+                </black_on_grey_clip>
+
+                <white_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with White Text</title>
+                    <css_class>m-white-on-yellow-clip</css_class>
+                </white_on_yellow_clip>
+                <black_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with Black Text</title>
+                    <css_class>m-black-on-yellow-clip</css_class>
+                </black_on_yellow_clip>
+
+                <white_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with White Text</title>
+                    <css_class>m-white-on-navy-clip</css_class>
+                </white_on_navy_clip>
+                <black_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with Black Text</title>
+                    <css_class>m-black-on-navy-clip</css_class>
+                </black_on_navy_clip>
+
+                <white_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with White Text</title>
+                    <css_class>m-white-on-orange-clip</css_class>
+                </white_on_orange_clip>
+                <black_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with Black Text</title>
+                    <css_class>m-black-on-orange-clip</css_class>
+                </black_on_orange_clip>
+
+                <white_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with White Text</title>
+                    <css_class>m-white-on-pink-clip</css_class>
+                </white_on_pink_clip>
+                <black_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with Black Text</title>
+                    <css_class>m-black-on-pink-clip</css_class>
+                </black_on_pink_clip>
+
+                <white_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with White Text</title>
+                    <css_class>m-white-on-red-clip</css_class>
+                </white_on_red_clip>
+                <black_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with Black Text</title>
+                    <css_class>m-black-on-red-clip</css_class>
+                </black_on_red_clip>
+
+                <white_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with White Text</title>
+                    <css_class>m-white-on-white-clip</css_class>
+                </white_on_white_clip>
+                <black_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with Black Text</title>
+                    <css_class>m-black-on-white-clip</css_class>
+                </black_on_white_clip>
+            </right>
+            <bottom_right>
+                <white_on_black_corner translate="title" module="manapro_featured">
+                    <title>Black Corner with White Text</title>
+                    <css_class>m-white-on-black-corner</css_class>
+                </white_on_black_corner>
+                <white_on_black_ribbon translate="title" module="manapro_featured">
+                    <title>Black Ribbon with White Text</title>
+                    <css_class>m-white-on-black-ribbon</css_class>
+                </white_on_black_ribbon>
+
+                <white_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with White Text</title>
+                    <css_class>m-white-on-blue-corner</css_class>
+                </white_on_blue_corner>
+                <white_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with White Text</title>
+                    <css_class>m-white-on-blue-ribbon</css_class>
+                </white_on_blue_ribbon>
+                <black_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with Black Text</title>
+                    <css_class>m-black-on-blue-corner</css_class>
+                </black_on_blue_corner>
+                <black_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with Black Text</title>
+                    <css_class>m-black-on-blue-ribbon</css_class>
+                </black_on_blue_ribbon>
+
+                <white_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with White Text</title>
+                    <css_class>m-white-on-burgundy-corner</css_class>
+                </white_on_burgundy_corner>
+                <white_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with White Text</title>
+                    <css_class>m-white-on-burgundy-ribbon</css_class>
+                </white_on_burgundy_ribbon>
+                <black_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with Black Text</title>
+                    <css_class>m-black-on-burgundy-corner</css_class>
+                </black_on_burgundy_corner>
+                <black_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with Black Text</title>
+                    <css_class>m-black-on-burgundy-ribbon</css_class>
+                </black_on_burgundy_ribbon>
+
+                <white_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with White Text</title>
+                    <css_class>m-white-on-green-corner</css_class>
+                </white_on_green_corner>
+                <white_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with White Text</title>
+                    <css_class>m-white-on-green-ribbon</css_class>
+                </white_on_green_ribbon>
+                <black_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with Black Text</title>
+                    <css_class>m-black-on-green-corner</css_class>
+                </black_on_green_corner>
+                <black_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with Black Text</title>
+                    <css_class>m-black-on-green-ribbon</css_class>
+                </black_on_green_ribbon>
+
+                <white_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with White Text</title>
+                    <css_class>m-white-on-grey-corner</css_class>
+                </white_on_grey_corner>
+                <white_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with White Text</title>
+                    <css_class>m-white-on-grey-ribbon</css_class>
+                </white_on_grey_ribbon>
+                <black_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with Black Text</title>
+                    <css_class>m-black-on-grey-corner</css_class>
+                </black_on_grey_corner>
+                <black_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with Black Text</title>
+                    <css_class>m-black-on-grey-ribbon</css_class>
+                </black_on_grey_ribbon>
+
+                <white_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with White Text</title>
+                    <css_class>m-white-on-yellow-corner</css_class>
+                </white_on_yellow_corner>
+                <white_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with White Text</title>
+                    <css_class>m-white-on-yellow-ribbon</css_class>
+                </white_on_yellow_ribbon>
+                <black_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with Black Text</title>
+                    <css_class>m-black-on-yellow-corner</css_class>
+                </black_on_yellow_corner>
+                <black_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with Black Text</title>
+                    <css_class>m-black-on-yellow-ribbon</css_class>
+                </black_on_yellow_ribbon>
+
+                <white_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with White Text</title>
+                    <css_class>m-white-on-navy-corner</css_class>
+                </white_on_navy_corner>
+                <white_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with White Text</title>
+                    <css_class>m-white-on-navy-ribbon</css_class>
+                </white_on_navy_ribbon>
+                <black_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with Black Text</title>
+                    <css_class>m-black-on-navy-corner</css_class>
+                </black_on_navy_corner>
+                <black_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with Black Text</title>
+                    <css_class>m-black-on-navy-ribbon</css_class>
+                </black_on_navy_ribbon>
+
+                <white_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with White Text</title>
+                    <css_class>m-white-on-orange-corner</css_class>
+                </white_on_orange_corner>
+                <white_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with White Text</title>
+                    <css_class>m-white-on-orange-ribbon</css_class>
+                </white_on_orange_ribbon>
+                <black_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with Black Text</title>
+                    <css_class>m-black-on-orange-corner</css_class>
+                </black_on_orange_corner>
+                <black_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with Black Text</title>
+                    <css_class>m-black-on-orange-ribbon</css_class>
+                </black_on_orange_ribbon>
+
+                <white_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with White Text</title>
+                    <css_class>m-white-on-pink-corner</css_class>
+                </white_on_pink_corner>
+                <white_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with White Text</title>
+                    <css_class>m-white-on-pink-ribbon</css_class>
+                </white_on_pink_ribbon>
+                <black_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with Black Text</title>
+                    <css_class>m-black-on-pink-corner</css_class>
+                </black_on_pink_corner>
+                <black_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with Black Text</title>
+                    <css_class>m-black-on-pink-ribbon</css_class>
+                </black_on_pink_ribbon>
+
+                <white_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with White Text</title>
+                    <css_class>m-white-on-red-corner</css_class>
+                </white_on_red_corner>
+                <white_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with White Text</title>
+                    <css_class>m-white-on-red-ribbon</css_class>
+                </white_on_red_ribbon>
+                <black_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with Black Text</title>
+                    <css_class>m-black-on-red-corner</css_class>
+                </black_on_red_corner>
+                <black_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with Black Text</title>
+                    <css_class>m-black-on-red-ribbon</css_class>
+                </black_on_red_ribbon>
+
+                <white_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with White Text</title>
+                    <css_class>m-white-on-white-corner</css_class>
+                </white_on_white_corner>
+                <white_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with White Text</title>
+                    <css_class>m-white-on-white-ribbon</css_class>
+                </white_on_white_ribbon>
+                <black_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with Black Text</title>
+                    <css_class>m-black-on-white-corner</css_class>
+                </black_on_white_corner>
+                <black_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with Black Text</title>
+                    <css_class>m-black-on-white-ribbon</css_class>
+                </black_on_white_ribbon>
+            </bottom_right>
+            <bottom>
+                <white_on_black_clip translate="title" module="manapro_featured">
+                    <title>Black Clip with White Text</title>
+                    <css_class>m-white-on-black-clip</css_class>
+                </white_on_black_clip>
+
+                <white_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with White Text</title>
+                    <css_class>m-white-on-blue-clip</css_class>
+                </white_on_blue_clip>
+                <black_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with Black Text</title>
+                    <css_class>m-black-on-blue-clip</css_class>
+                </black_on_blue_clip>
+
+                <white_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with White Text</title>
+                    <css_class>m-white-on-burgundy-clip</css_class>
+                </white_on_burgundy_clip>
+                <black_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with Black Text</title>
+                    <css_class>m-black-on-burgundy-clip</css_class>
+                </black_on_burgundy_clip>
+
+                <white_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with White Text</title>
+                    <css_class>m-white-on-green-clip</css_class>
+                </white_on_green_clip>
+                <black_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with Black Text</title>
+                    <css_class>m-black-on-green-clip</css_class>
+                </black_on_green_clip>
+
+                <white_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with White Text</title>
+                    <css_class>m-white-on-grey-clip</css_class>
+                </white_on_grey_clip>
+                <black_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with Black Text</title>
+                    <css_class>m-black-on-grey-clip</css_class>
+                </black_on_grey_clip>
+
+                <white_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with White Text</title>
+                    <css_class>m-white-on-yellow-clip</css_class>
+                </white_on_yellow_clip>
+                <black_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with Black Text</title>
+                    <css_class>m-black-on-yellow-clip</css_class>
+                </black_on_yellow_clip>
+
+                <white_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with White Text</title>
+                    <css_class>m-white-on-navy-clip</css_class>
+                </white_on_navy_clip>
+                <black_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with Black Text</title>
+                    <css_class>m-black-on-navy-clip</css_class>
+                </black_on_navy_clip>
+
+                <white_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with White Text</title>
+                    <css_class>m-white-on-orange-clip</css_class>
+                </white_on_orange_clip>
+                <black_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with Black Text</title>
+                    <css_class>m-black-on-orange-clip</css_class>
+                </black_on_orange_clip>
+
+                <white_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with White Text</title>
+                    <css_class>m-white-on-pink-clip</css_class>
+                </white_on_pink_clip>
+                <black_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with Black Text</title>
+                    <css_class>m-black-on-pink-clip</css_class>
+                </black_on_pink_clip>
+
+                <white_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with White Text</title>
+                    <css_class>m-white-on-red-clip</css_class>
+                </white_on_red_clip>
+                <black_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with Black Text</title>
+                    <css_class>m-black-on-red-clip</css_class>
+                </black_on_red_clip>
+
+                <white_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with White Text</title>
+                    <css_class>m-white-on-white-clip</css_class>
+                </white_on_white_clip>
+                <black_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with Black Text</title>
+                    <css_class>m-black-on-white-clip</css_class>
+                </black_on_white_clip>
+            </bottom>
+            <bottom_left>
+                <white_on_black_corner translate="title" module="manapro_featured">
+                    <title>Black Corner with White Text</title>
+                    <css_class>m-white-on-black-corner</css_class>
+                </white_on_black_corner>
+                <white_on_black_ribbon translate="title" module="manapro_featured">
+                    <title>Black Ribbon with White Text</title>
+                    <css_class>m-white-on-black-ribbon</css_class>
+                </white_on_black_ribbon>
+
+                <white_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with White Text</title>
+                    <css_class>m-white-on-blue-corner</css_class>
+                </white_on_blue_corner>
+                <white_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with White Text</title>
+                    <css_class>m-white-on-blue-ribbon</css_class>
+                </white_on_blue_ribbon>
+                <black_on_blue_corner translate="title" module="manapro_featured">
+                    <title>Blue Corner with Black Text</title>
+                    <css_class>m-black-on-blue-corner</css_class>
+                </black_on_blue_corner>
+                <black_on_blue_ribbon translate="title" module="manapro_featured">
+                    <title>Blue Ribbon with Black Text</title>
+                    <css_class>m-black-on-blue-ribbon</css_class>
+                </black_on_blue_ribbon>
+
+                <white_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with White Text</title>
+                    <css_class>m-white-on-burgundy-corner</css_class>
+                </white_on_burgundy_corner>
+                <white_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with White Text</title>
+                    <css_class>m-white-on-burgundy-ribbon</css_class>
+                </white_on_burgundy_ribbon>
+                <black_on_burgundy_corner translate="title" module="manapro_featured">
+                    <title>Burgundy Corner with Black Text</title>
+                    <css_class>m-black-on-burgundy-corner</css_class>
+                </black_on_burgundy_corner>
+                <black_on_burgundy_ribbon translate="title" module="manapro_featured">
+                    <title>Burgundy Ribbon with Black Text</title>
+                    <css_class>m-black-on-burgundy-ribbon</css_class>
+                </black_on_burgundy_ribbon>
+
+                <white_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with White Text</title>
+                    <css_class>m-white-on-green-corner</css_class>
+                </white_on_green_corner>
+                <white_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with White Text</title>
+                    <css_class>m-white-on-green-ribbon</css_class>
+                </white_on_green_ribbon>
+                <black_on_green_corner translate="title" module="manapro_featured">
+                    <title>Green Corner with Black Text</title>
+                    <css_class>m-black-on-green-corner</css_class>
+                </black_on_green_corner>
+                <black_on_green_ribbon translate="title" module="manapro_featured">
+                    <title>Green Ribbon with Black Text</title>
+                    <css_class>m-black-on-green-ribbon</css_class>
+                </black_on_green_ribbon>
+
+                <white_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with White Text</title>
+                    <css_class>m-white-on-grey-corner</css_class>
+                </white_on_grey_corner>
+                <white_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with White Text</title>
+                    <css_class>m-white-on-grey-ribbon</css_class>
+                </white_on_grey_ribbon>
+                <black_on_grey_corner translate="title" module="manapro_featured">
+                    <title>Grey Corner with Black Text</title>
+                    <css_class>m-black-on-grey-corner</css_class>
+                </black_on_grey_corner>
+                <black_on_grey_ribbon translate="title" module="manapro_featured">
+                    <title>Grey Ribbon with Black Text</title>
+                    <css_class>m-black-on-grey-ribbon</css_class>
+                </black_on_grey_ribbon>
+
+                <white_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with White Text</title>
+                    <css_class>m-white-on-yellow-corner</css_class>
+                </white_on_yellow_corner>
+                <white_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with White Text</title>
+                    <css_class>m-white-on-yellow-ribbon</css_class>
+                </white_on_yellow_ribbon>
+                <black_on_yellow_corner translate="title" module="manapro_featured">
+                    <title>Yellow Corner with Black Text</title>
+                    <css_class>m-black-on-yellow-corner</css_class>
+                </black_on_yellow_corner>
+                <black_on_yellow_ribbon translate="title" module="manapro_featured">
+                    <title>Yellow Ribbon with Black Text</title>
+                    <css_class>m-black-on-yellow-ribbon</css_class>
+                </black_on_yellow_ribbon>
+
+                <white_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with White Text</title>
+                    <css_class>m-white-on-navy-corner</css_class>
+                </white_on_navy_corner>
+                <white_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with White Text</title>
+                    <css_class>m-white-on-navy-ribbon</css_class>
+                </white_on_navy_ribbon>
+                <black_on_navy_corner translate="title" module="manapro_featured">
+                    <title>Navy Corner with Black Text</title>
+                    <css_class>m-black-on-navy-corner</css_class>
+                </black_on_navy_corner>
+                <black_on_navy_ribbon translate="title" module="manapro_featured">
+                    <title>Navy Ribbon with Black Text</title>
+                    <css_class>m-black-on-navy-ribbon</css_class>
+                </black_on_navy_ribbon>
+
+                <white_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with White Text</title>
+                    <css_class>m-white-on-orange-corner</css_class>
+                </white_on_orange_corner>
+                <white_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with White Text</title>
+                    <css_class>m-white-on-orange-ribbon</css_class>
+                </white_on_orange_ribbon>
+                <black_on_orange_corner translate="title" module="manapro_featured">
+                    <title>Orange Corner with Black Text</title>
+                    <css_class>m-black-on-orange-corner</css_class>
+                </black_on_orange_corner>
+                <black_on_orange_ribbon translate="title" module="manapro_featured">
+                    <title>Orange Ribbon with Black Text</title>
+                    <css_class>m-black-on-orange-ribbon</css_class>
+                </black_on_orange_ribbon>
+
+                <white_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with White Text</title>
+                    <css_class>m-white-on-pink-corner</css_class>
+                </white_on_pink_corner>
+                <white_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with White Text</title>
+                    <css_class>m-white-on-pink-ribbon</css_class>
+                </white_on_pink_ribbon>
+                <black_on_pink_corner translate="title" module="manapro_featured">
+                    <title>Pink Corner with Black Text</title>
+                    <css_class>m-black-on-pink-corner</css_class>
+                </black_on_pink_corner>
+                <black_on_pink_ribbon translate="title" module="manapro_featured">
+                    <title>Pink Ribbon with Black Text</title>
+                    <css_class>m-black-on-pink-ribbon</css_class>
+                </black_on_pink_ribbon>
+
+                <white_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with White Text</title>
+                    <css_class>m-white-on-red-corner</css_class>
+                </white_on_red_corner>
+                <white_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with White Text</title>
+                    <css_class>m-white-on-red-ribbon</css_class>
+                </white_on_red_ribbon>
+                <black_on_red_corner translate="title" module="manapro_featured">
+                    <title>Red Corner with Black Text</title>
+                    <css_class>m-black-on-red-corner</css_class>
+                </black_on_red_corner>
+                <black_on_red_ribbon translate="title" module="manapro_featured">
+                    <title>Red Ribbon with Black Text</title>
+                    <css_class>m-black-on-red-ribbon</css_class>
+                </black_on_red_ribbon>
+
+                <white_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with White Text</title>
+                    <css_class>m-white-on-white-corner</css_class>
+                </white_on_white_corner>
+                <white_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with White Text</title>
+                    <css_class>m-white-on-white-ribbon</css_class>
+                </white_on_white_ribbon>
+                <black_on_white_corner translate="title" module="manapro_featured">
+                    <title>White Corner with Black Text</title>
+                    <css_class>m-black-on-white-corner</css_class>
+                </black_on_white_corner>
+                <black_on_white_ribbon translate="title" module="manapro_featured">
+                    <title>White Ribbon with Black Text</title>
+                    <css_class>m-black-on-white-ribbon</css_class>
+                </black_on_white_ribbon>
+            </bottom_left>
+            <left>
+                <white_on_black_clip translate="title" module="manapro_featured">
+                    <title>Black Clip with White Text</title>
+                    <css_class>m-white-on-black-clip</css_class>
+                </white_on_black_clip>
+
+                <white_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with White Text</title>
+                    <css_class>m-white-on-blue-clip</css_class>
+                </white_on_blue_clip>
+                <black_on_blue_clip translate="title" module="manapro_featured">
+                    <title>Blue Clip with Black Text</title>
+                    <css_class>m-black-on-blue-clip</css_class>
+                </black_on_blue_clip>
+
+                <white_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with White Text</title>
+                    <css_class>m-white-on-burgundy-clip</css_class>
+                </white_on_burgundy_clip>
+                <black_on_burgundy_clip translate="title" module="manapro_featured">
+                    <title>Burgundy Clip with Black Text</title>
+                    <css_class>m-black-on-burgundy-clip</css_class>
+                </black_on_burgundy_clip>
+
+                <white_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with White Text</title>
+                    <css_class>m-white-on-green-clip</css_class>
+                </white_on_green_clip>
+                <black_on_green_clip translate="title" module="manapro_featured">
+                    <title>Green Clip with Black Text</title>
+                    <css_class>m-black-on-green-clip</css_class>
+                </black_on_green_clip>
+
+                <white_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with White Text</title>
+                    <css_class>m-white-on-grey-clip</css_class>
+                </white_on_grey_clip>
+                <black_on_grey_clip translate="title" module="manapro_featured">
+                    <title>Grey Clip with Black Text</title>
+                    <css_class>m-black-on-grey-clip</css_class>
+                </black_on_grey_clip>
+
+                <white_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with White Text</title>
+                    <css_class>m-white-on-yellow-clip</css_class>
+                </white_on_yellow_clip>
+                <black_on_yellow_clip translate="title" module="manapro_featured">
+                    <title>Yellow Clip with Black Text</title>
+                    <css_class>m-black-on-yellow-clip</css_class>
+                </black_on_yellow_clip>
+
+                <white_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with White Text</title>
+                    <css_class>m-white-on-navy-clip</css_class>
+                </white_on_navy_clip>
+                <black_on_navy_clip translate="title" module="manapro_featured">
+                    <title>Navy Clip with Black Text</title>
+                    <css_class>m-black-on-navy-clip</css_class>
+                </black_on_navy_clip>
+
+                <white_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with White Text</title>
+                    <css_class>m-white-on-orange-clip</css_class>
+                </white_on_orange_clip>
+                <black_on_orange_clip translate="title" module="manapro_featured">
+                    <title>Orange Clip with Black Text</title>
+                    <css_class>m-black-on-orange-clip</css_class>
+                </black_on_orange_clip>
+
+                <white_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with White Text</title>
+                    <css_class>m-white-on-pink-clip</css_class>
+                </white_on_pink_clip>
+                <black_on_pink_clip translate="title" module="manapro_featured">
+                    <title>Pink Clip with Black Text</title>
+                    <css_class>m-black-on-pink-clip</css_class>
+                </black_on_pink_clip>
+
+                <white_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with White Text</title>
+                    <css_class>m-white-on-red-clip</css_class>
+                </white_on_red_clip>
+                <black_on_red_clip translate="title" module="manapro_featured">
+                    <title>Red Clip with Black Text</title>
+                    <css_class>m-black-on-red-clip</css_class>
+                </black_on_red_clip>
+
+                <white_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with White Text</title>
+                    <css_class>m-white-on-white-clip</css_class>
+                </white_on_white_clip>
+                <black_on_white_clip translate="title" module="manapro_featured">
+                    <title>White Clip with Black Text</title>
+                    <css_class>m-black-on-white-clip</css_class>
+                </black_on_white_clip>
+            </left>
+            <shadow>
+                <lifted translate="title" module="manapro_featured">
+                    <title>Lifted Corners</title>
+                    <css_class>m-lifted</css_class>
+                </lifted>
+                <curled translate="title" module="manapro_featured">
+                    <title>Curled corners</title>
+                    <css_class>m-curled</css_class>
+                </curled>
+                <perspective translate="title" module="manapro_featured">
+                    <title>Perspective</title>
+                    <css_class>m-perspective</css_class>
+                </perspective>
+                <raised translate="title" module="manapro_featured">
+                    <title>Raised box</title>
+                    <css_class>m-raised</css_class>
+                </raised>
+                <curved_left translate="title" module="manapro_featured">
+                    <title>Left vertical curve</title>
+                    <css_class>m-curved m-left</css_class>
+                </curved_left>
+                <curved_left_right translate="title" module="manapro_featured">
+                    <title>Vertical curves</title>
+                    <css_class>m-curved m-left m-right</css_class>
+                </curved_left_right>
+                <curved_bottom translate="title" module="manapro_featured">
+                    <title>Bottom horizontal curve</title>
+                    <css_class>m-curved m-bottom</css_class>
+                </curved_bottom>
+                <curved_top_bottom translate="title" module="manapro_featured">
+                    <title>Horizontal curves</title>
+                    <css_class>m-curved m-bottom m-top</css_class>
+                </curved_top_bottom>
+                <!--<rotated_lifted translate="title" module="manapro_featured">
+                    <title>Rotated box with lifted corners</title>
+                    <css_class>m-lifted m-rotated</css_class>
+                </rotated_lifted>-->
+            </shadow>
+        </carousel_decoration>
+        <carousel_helper>
+            <numbers translate="title" module="manapro_featured">
+                <title>Numbers</title>
+                <template>manapro/featured/carousel_helper/numbers.phtml</template>
+            </numbers>
+            <bullets translate="title" module="manapro_featured">
+                <title>Bullets</title>
+                <template>manapro/featured/carousel_helper/bullets.phtml</template>
+            </bullets>
+        </carousel_helper>
+        <carousel_navigation>
+            <arrows translate="title" module="manapro_featured">
+                <title>Arrows</title>
+                <template_prev>manapro/featured/carousel_navigation/arrow_prev.phtml</template_prev>
+                <template_next>manapro/featured/carousel_navigation/arrow_next.phtml</template_next>
+            </arrows>
+        </carousel_navigation>
+    </mana_featured>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <default>
+        <mana_featured>
+            <category>
+                <template>carousel</template>
+                <show>all</show>
+                <count>7</count>
+                <sort>position_asc</sort>
+            </category>
+            <category_carousel_fields>
+                <name>1</name>
+                <description>1</description>
+                <price>1</price>
+                <cart>1</cart>
+                <links>1</links>
+                <rating>1</rating>
+            </category_carousel_fields>
+            <category_carousel_effect>
+                <rotation_interval>5000</rotation_interval>
+                <hide>fade</hide>
+                <hide_interval>1000</hide_interval>
+                <hide_blind_direction>vertical</hide_blind_direction>
+                <hide_clip_direction>vertical</hide_clip_direction>
+                <hide_drop_direction>left</hide_drop_direction>
+                <show>none</show>
+                <show_interval>1000</show_interval>
+                <show_blind_direction>vertical</show_blind_direction>
+                <show_clip_direction>vertical</show_clip_direction>
+                <show_drop_direction>left</show_drop_direction>
+            </category_carousel_effect>
+            <category_carousel_decoration>
+                <top_left>none</top_left>
+                <top>none</top>
+                <top_right>none</top_right>
+                <right>none</right>
+                <bottom_right>none</bottom_right>
+                <bottom>none</bottom>
+                <bottom_left>none</bottom_left>
+                <left>none</left>
+                <shadow>none</shadow>
+            </category_carousel_decoration>
+            <category_carousel_si_decoration>
+                <top_left>none</top_left>
+                <top>none</top>
+                <top_right>none</top_right>
+                <right>none</right>
+                <bottom_right>none</bottom_right>
+                <bottom>none</bottom>
+                <bottom_left>none</bottom_left>
+                <left>none</left>
+            </category_carousel_si_decoration>
+            <category_carousel_helper>
+                <template>numbers</template>
+                <position>bottom</position>
+                <interaction>mouseover</interaction>
+            </category_carousel_helper>
+            <category_carousel_navigation>
+                <template>arrows</template>
+            </category_carousel_navigation>
+            <category_carousel_other>
+                <auto_start>1</auto_start>
+            </category_carousel_other>
+        </mana_featured>
+    </default>
+</config>

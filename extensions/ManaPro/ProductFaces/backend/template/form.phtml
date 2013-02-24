@@ -1,0 +1,18 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_ProductFaces
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<?php
+/**
+ * @var $this Mage_Core_Block_Template
+ */
+?>
+<script type="text/javascript">
+	jQuery(document).trigger('m-productfaces-backform-ready', [{
+		navigationWarning: "<?php echo $this->__("You are about to leave this product's page. All data that hasn't been saved will be lost.") ?>"
+	}]);
+</script>

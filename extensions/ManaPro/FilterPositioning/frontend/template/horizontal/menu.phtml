@@ -1,0 +1,49 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterPositioning
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @see Mage_Catalog_Block_Layer_View
+ */
+?>
+<?php if($this->canShowBlock()): ?>
+<div class="block block-layered-nav m-topmenu">
+    <div class="block-content">
+        <?php echo $this->getStateHtml() ?>
+        <?php if($this->canShowOptions()): ?>
+            <div id="narrow-by-list">
+            <?php if (Mage::getStoreConfigFlag('mana_filters/positioning/shop_by_title')) : ?>
+            <dl>
+              <dt class="block-subtitle">
+                      <strong><span><?php echo $this->__('Shop By') ?></span></strong>
+              </dt>
+              <dd class="hidden"></dd>
+            </dl>
+            <?php endif; ?>
+
+                <?php $_filters = $this->getFilters() ?>
+                <?php foreach ($_filters as $_filter): ?>
+                <?php if($_filter->getItemsCount()): ?>
+                    <?php $_visible = Mage::helper('mana_filters')->renderHtml($this, 'menu_visible', array('filter' => $_filter)); ?>
+                <dl <?php if($_filter->getFilterOptions()) : ?>class="m-<?php echo $_filter->getFilterOptions()->getDisplay() ?> <?php Mage::helper('mana_filters')->renderHtml($this, 'menu_container_css', array('filter' => $_filter)); ?>"<?php endif; ?>>
+                    <dt class="m-ln">
+                        <?php Mage::helper('mana_filters')->renderHtml($this, 'menu_name_before', array('filter' => $_filter)); ?>
+                        <?php echo $this->__($_filter->getName()) ?>
+                    </dt>
+                    <dd class="<?php if(!$_visible): ?>hidden<?php endif?> m-ln" data-max-width="<?php echo Mage::getStoreConfig('mana_filters/positioning_menu/width') ?>"><?php echo $_filter->getHtml() ?></dd>
+                </dl>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+            <script type="text/javascript">decorateDataList('narrow-by-list')</script>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

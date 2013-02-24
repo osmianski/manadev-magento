@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_DeveloperTools
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_DeveloperTools>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.24.14</version>
+        </Mana_DeveloperTools>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_DeveloperTools_Helper_Data
+		class is accessible through Mage::helper('mana_developertools') call, other Mana_DeveloperTools_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_developertools/xxx_yyy') call. -->
+        <helpers>
+            <mana_developertools>
+                <!-- This says that string 'mana_developertools' corresponds to Mana_DeveloperTools_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_DeveloperTools_Helper</class>
+            </mana_developertools>
+        </helpers>
+        <!-- This section registers block classes Mana_DeveloperTools_Block_XXX_YYY to be accessible through
+            'mana_developertools/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'mana_developertools' corresponds to Mana_DeveloperTools_Block pseudo-namespace. -->
+            <mana_developertools>
+                <class>Mana_DeveloperTools_Block</class>
+            </mana_developertools>
+        </blocks>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Guestbook
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <menu>
+        <mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+            <children>
+                <guestbook translate="title" module="manapro_guestbook">
+                    <title>Guest Book</title>
+                    <action>adminhtml/manapro_guestbook/</action>
+                    <sort_order>200</sort_order>
+                </guestbook>
+            </children>
+        </mana>
+    </menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+                    <mana translate="title" module="mana_core">
+                        <title>Configure Mana Extensions</title>
+                        <sort_order>79</sort_order>
+                        <children>
+                            <filters translate="title" module="manapro_guestbook">
+                                <title>Guest Book</title>
+                                <sort_order>200</sort_order>
+                            </filters>
+                        </children>
+                    </mana>
+					<system>
+						<children>
+							<config>
+								<children>
+									<manapro_guestbook translate="title" module="manapro_guestbook">
+										<title>MANAdev Guest Book Configuration</title>
+									</manapro_guestbook>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

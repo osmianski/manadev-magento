@@ -1,0 +1,9 @@
+/**
+ * @category    Mana
+ * @package     ManaProduct_Review
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.block-random-review .product .product-details { margin-left: 65px; }
+.block-random-review .product .product-image { float: left; margin-right: -65px; }
+.block-random-review .product .written-by { text-align: right; font-style: italic; margin-top: 5px; }

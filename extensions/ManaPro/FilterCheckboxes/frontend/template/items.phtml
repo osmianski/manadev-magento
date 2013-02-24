@@ -1,0 +1,32 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterCheckboxes
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/** 
+ * Template for showing options for filter as a list of checkboxes 
+ * @author Mana Team
+ * Injected instead of standard catalog/layer/filter.phtml in Mana_Filters_Block_Filter_Attribute init() method.
+ * This template is overridden by copying (template body was pasted from catalog/layer/filter.phtml 
+ * and modified as needed). All changes are marked with comments.
+ */
+/* @var $this Mana_Filters_Block_Filter_Attribute */
+?>
+<ol class="m-filter-checkboxes <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
+<?php foreach ($this->getItems() as $_item): ?>
+    <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+        <?php // MANA BEGIN ?>
+		<input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
+			onClick="setLocation('<?php echo $this->urlEscape($_item->getMSelected() ? $_item->getRemoveUrl() : $_item->getUrl()) ?>');" />
+		<label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMShowSelected()): ?>class="m-selected-checkbox-item"<?php endif; ?>
+                title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+        <?php // MANA END ?>
+        <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
+            (<?php echo $_item->getCount() ?>)
+        <?php endif; ?>
+    </li>
+<?php endforeach ?>
+</ol>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'after_items', array('block' => $this)) ?>

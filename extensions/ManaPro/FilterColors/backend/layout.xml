@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterColors
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: Static Visuals/Empty layout file -->
+<!-- This file defines the rules which should be applied when module manapro_filtercolors is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+	<adminhtml_mana_filters_edit>
+		<update handle="mana_admin_grid_editing" />
+		<reference name="head">
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filtercolors.js</name><params/></action>
+		</reference>
+		<reference name="tabs">
+			<block type="manapro_filtercolors/tab" name="colors" as="colors">
+				<block type="manapro_filtercolors/header" name="colors_header" as="colors_header" />
+				<block type="manapro_filtercolors/grid" name="colors_grid" as="colors_grid">
+					<action method="setRenderScripts"><grid>1</grid></action>
+				</block>
+				<block type="manapro_filtercolors/serializer" name="colors_serializer" as="colors_serializer">
+					<action method="setGrid"><grid>colors_grid</grid></action>
+				</block>
+			</block>
+		</reference>
+	</adminhtml_mana_filters_edit>
+	<adminhtml_mana_filters_tabcolors>
+		<block type="adminhtml/text_list" name="root" output="toHtml">
+			<block type="manapro_filtercolors/tab" name="colors" as="colors">
+				<block type="manapro_filtercolors/header" name="colors_header" as="colors_header" />
+				<block type="manapro_filtercolors/grid" name="colors_grid" as="colors_grid">
+					<action method="setRenderScripts"><grid>1</grid></action>
+				</block>
+				<block type="manapro_filtercolors/serializer" name="colors_serializer" as="colors_serializer">
+					<action method="setGrid"><grid>colors_grid</grid></action>
+				</block>
+			</block>
+			<block type="mana_core/js" name="m_js" template="mana/core/js.phtml" />
+		</block>
+	</adminhtml_mana_filters_tabcolors>
+	<adminhtml_mana_filters_tabcolorsgrid>
+		<block type="adminhtml/text_list" name="root" output="toHtml">
+			<block type="manapro_filtercolors/grid" name="colors_grid" as="colors_grid" />
+            <block type="manapro_filtercolors/serializer" name="colors_serializer" as="colors_serializer">
+                <action method="setGrid"><grid>colors_grid</grid></action>
+            </block>
+			<block type="mana_core/js" name="m_js" template="mana/core/js.phtml" />
+		</block>
+	</adminhtml_mana_filters_tabcolorsgrid>
+</layout>

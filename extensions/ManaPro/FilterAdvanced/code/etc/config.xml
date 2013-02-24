@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAdvanced
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_FilterAdvanced>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.10.30.23</version>
+        </ManaPro_FilterAdvanced>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterAdvanced_Helper_Data
+		class is accessible through Mage::helper('manapro_filteradvanced') call, other ManaPro_FilterAdvanced_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filteradvanced/xxx_yyy') call. -->
+        <helpers>
+            <manapro_filteradvanced>
+                <!-- This says that string 'manapro_filteradvanced' corresponds to ManaPro_FilterAdvanced_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_FilterAdvanced_Helper</class>
+            </manapro_filteradvanced>
+        </helpers>
+        <!-- This section registers block classes ManaPro_FilterAdvanced_Block_XXX_YYY to be accessible through
+            'manapro_filteradvanced/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_filteradvanced' corresponds to ManaPro_FilterAdvanced_Block pseudo-namespace. -->
+            <manapro_filteradvanced>
+                <class>ManaPro_FilterAdvanced_Block</class>
+            </manapro_filteradvanced>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterAdvanced_Model_XXX_YYY classes are accessible as
+            'manapro_filteradvanced/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_filteradvanced' corresponds to ManaPro_FilterAdvanced_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_filteradvanced>
+                <class>ManaPro_FilterAdvanced_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_filteradvanced>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+     method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+     it will expect ManaPro_FilterAdvanced_AController class, and in class it will expect bAction() method. In most cases,
+     when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <manapro_filteradvanced before="Mage_Adminhtml">ManaPro_FilterAdvanced</manapro_filteradvanced>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_filteradvanced>
+                    <file>manapro_filteradvanced.xml</file>
+                </manapro_filteradvanced>
+            </updates>
+        </layout>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterAdvanced>
+                    <files>
+                        <default>ManaPro_FilterAdvanced.csv</default>
+                    </files>
+                </ManaPro_FilterAdvanced>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_filteradvanced>
+                    <file>manapro_filteradvanced.xml</file>
+                </manapro_filteradvanced>
+            </updates>
+        </layout>
+        <!-- This section registers event handlers of this module defined in ManaPro_FilterAdvanced_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_FilterAdvanced_Model_Observer class gets called. -->
+        <events>
+            <m_advanced_filter_name_before><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filteradvanced>
+                        <class>manapro_filteradvanced/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderActions</method>
+                        <!-- event handler method name -->
+                    </manapro_filteradvanced>
+                </observers>
+            </m_advanced_filter_name_before>
+            <m_advanced_filter_group_before><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filteradvanced>
+                        <class>manapro_filteradvanced/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderGroupActions</method>
+                        <!-- event handler method name -->
+                    </manapro_filteradvanced>
+                </observers>
+            </m_advanced_filter_group_before>
+        </events>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <default>
+        <mana_filters>
+            <advanced>
+                <enabled>1</enabled>
+            </advanced>
+        </mana_filters>
+    </default>
+</config>

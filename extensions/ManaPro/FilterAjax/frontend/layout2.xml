@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAjax
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: Static Visuals/Empty layout file -->
+<!-- This file defines the rules which should be applied when module manapro_filterajax is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+	<catalog_category_layered> <!-- find all category pages with layered navigation -->
+		<update handle="mana_ajax" />
+		<reference name="head">
+            <action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
+            <action method="addJs"><script>jquery/history.js</script></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filterajax.js</name><params/></action>
+		</reference>
+		<reference name="m_ajax_update">
+            <action method="addBlock"><block>category.products</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalog.leftnav</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalog.rightnav</block><on>filter</on></action>
+		</reference>
+	</catalog_category_layered>
+	<catalogsearch_result_index> <!-- find all catalog search result page -->
+		<update handle="mana_ajax" />
+		<reference name="head">
+			<action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
+            <action method="addJs"><script>jquery/history.js</script></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filterajax.js</name><params/></action>
+		</reference>
+        <reference name="m_ajax_update">
+            <action method="addBlock"><block>search.result</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalogsearch.leftnav</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalogsearch.rightnav</block><on>filter</on></action>
+		</reference>
+	</catalogsearch_result_index>
+    <cms_page_layered>
+		<update handle="mana_ajax" />
+		<reference name="head">
+            <action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
+            <action method="addJs"><script>jquery/history.js</script></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filterajax.js</name><params/></action>
+		</reference>
+		<reference name="m_ajax_update">
+            <action method="addBlock"><block>cms.products</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalog.leftnav</block><on>filter</on></action>
+            <action method="addBlock"><block>mana.catalog.rightnav</block><on>filter</on></action>
+		</reference>
+    </cms_page_layered>
+</layout>

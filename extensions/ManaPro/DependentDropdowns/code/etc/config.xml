@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_DependentDropdowns
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_DependentDropdowns>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.02.23.16</version>
+        </ManaPro_DependentDropdowns>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_DependentDropdowns_Helper_Data
+		class is accessible through Mage::helper('manapro_dependentdropdowns') call, other ManaPro_DependentDropdowns_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_dependentdropdowns/xxx_yyy') call. -->
+        <helpers>
+            <manapro_dependentdropdowns>
+                <!-- This says that string 'manapro_dependentdropdowns' corresponds to ManaPro_DependentDropdowns_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_DependentDropdowns_Helper</class>
+            </manapro_dependentdropdowns>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_DependentDropdowns_Model_XXX_YYY classes are accessible as
+            'manapro_dependentdropdowns/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_dependentdropdowns' corresponds to ManaPro_DependentDropdowns_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_dependentdropdowns>
+                <class>ManaPro_DependentDropdowns_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_dependentdropdowns>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This section registers event handlers of this module defined in ManaPro_DependentDropdowns_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_DependentDropdowns_Model_Observer class gets called. -->
+        <events>
+            <adminhtml_catalog_product_attribute_edit_prepare_form><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_dependentdropdowns>
+                        <class>manapro_dependentdropdowns/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>extendAttributeForm</method>
+                        <!-- event handler method name -->
+                    </manapro_dependentdropdowns>
+                </observers>
+            </adminhtml_catalog_product_attribute_edit_prepare_form>
+        </events>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_DependentDropdowns>
+                    <files>
+                        <default>ManaPro_DependentDropdowns.csv</default>
+                    </files>
+                </ManaPro_DependentDropdowns>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_dependentdropdowns>
+                    <file>manapro_dependentdropdowns.xml</file>
+                </manapro_dependentdropdowns>
+            </updates>
+        </layout>
+    </adminhtml>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

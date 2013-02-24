@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     Mana_Social
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <m_facebook_likebox type="mana_social/facebook_likebox" translate="name description" module="mana_social">
+        <name>Facebook Like Box (MANAdev)</name>
+        <description>Enables users to see how many users already like this Page, and which of their friends like it too, read recent posts from the Page, like the Page with one click, without needing to visit the Page</description>
+        <is_email_compatible>0</is_email_compatible>
+        <parameters>
+            <page_url translate="label comment">
+                <required>0</required>
+                <visible>1</visible>
+                <value>http://www.facebook.com/platform</value>
+                <label>Facebook Page URL</label>
+                <comment>The URL of the Facebook Page for this Like box</comment>
+                <type>text</type>
+            </page_url>
+            <width translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <value>292</value>
+                <label>Width</label>
+                <comment>The width of the plugin in pixels</comment>
+                <type>text</type>
+            </width>
+            <height translate="label comment">
+                <required>0</required>
+                <visible>1</visible>
+                <label>Height</label>
+                <comment>The height of the plugin in pixels</comment>
+                <type>text</type>
+            </height>
+            <show_faces translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Show Faces</label>
+                <comment>Show profile photos in the plugin</comment>
+                <type>select</type>
+                <source_model>mana_core/source_yesno</source_model>
+            </show_faces>
+            <show_stream translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Show Stream</label>
+                <comment>Show the profile stream for the public profile</comment>
+                <type>select</type>
+                <source_model>mana_core/source_yesno</source_model>
+            </show_stream>
+            <show_header translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Show Header</label>
+                <comment>Show the 'Find us on Facebook' bar at top. Only shown when either stream or faces are present.</comment>
+                <type>select</type>
+                <source_model>mana_core/source_yesno</source_model>
+            </show_header>
+            <color_scheme translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Color Scheme</label>
+                <comment>The color scheme of the plugin. Note that the background is always transparent to match your background color. This setting changes the foreground colors to work well on light or dark backgrounds.</comment>
+                <type>select</type>
+                <source_model>mana_social/source_facebook_color</source_model>
+            </color_scheme>
+            <border_color translate="label comment">
+                <required>0</required>
+                <visible>1</visible>
+                <label>Border Color</label>
+                <comment>The border color of the plugin</comment>
+                <type>text</type>
+            </border_color>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>mana/social/facebook/likebox.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>mana/social/facebook/likebox.phtml</value>
+                        <label>Default</label>
+                    </default>
+                </values>
+            </template>
+        </parameters>
+    </m_facebook_likebox>
+</widgets>

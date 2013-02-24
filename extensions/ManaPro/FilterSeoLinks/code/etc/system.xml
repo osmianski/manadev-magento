@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterSeoLinks
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana_filters>
+            <groups>
+                <seo translate="label" module="manapro_filterseolinks">
+                    <label>Search Engine Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>250</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <conditional_word translate="label comment">
+                            <label>Conditional Word</label>
+							<comment>Injected into SEO friendly layered navigation URLs to separate category name from applied filters. For example, in "{{base_url}}/apparel/shoes/where/category/mens.html" conditional word is "where".</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </conditional_word>
+                        <no_index translate="label">
+                            <label>Search Engines Do Not Index Any of These Pages</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>manapro_filterseolinks/source_noindex</source_model>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </no_index>
+                        <use_label translate="label">
+                            <label>Use Attribute Label in URL</label>
+                            <comment>If 'No', attribute code is used instead</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>175</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_label>
+                        <dash translate="label comment">
+                            <label>Attribute Value Dash ('-') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of dashes ('-'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dash>
+                        <slash translate="label comment">
+                            <label>Attribute Value Slash ('/') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of slashes ('/'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </slash>
+                        <plus translate="label comment">
+                            <label>Attribute Value Plus ('+') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of pluses ('+'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </plus>
+                        <underscore translate="label comment">
+                            <label>Attribute Value Underscore ('_') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of underscores ('-'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </underscore>
+                        <quote translate="label comment">
+                            <label>Attribute Value Quote (') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of quotes ('). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </quote>
+                        <double_quote translate="label comment">
+                            <label>Attribute Value Double Quote Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of double quotes. Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>385</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </double_quote>
+                        <percent translate="label comment">
+                            <label>Attribute Value Percent (%) Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of quotes (%). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </percent>
+                        <hash translate="label comment">
+                            <label>Attribute Value Hash ('#') Symbol Shown in URL As</label>
+                            <comment>Injected into SEO friendly layered navigation URLs instead of hashes ('#'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hash>
+                        <ampersand translate="label comment">
+                            <label>Attribute Value Ampersand ('&amp;') Symbol Shown in URL As</label>
+                            <comment>Injected into SEO friendly layered navigation URLs instead of ampersands ('&amp;'). Must be uniquely recognizable when system converts URL back to attribute value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </ampersand>
+                        <space translate="label comment">
+                            <label>Attribute Value Space (' ') Symbol Shown in URL As</label>
+							<comment>Injected into SEO friendly layered navigation URLs instead of spaces (' '). Must be uniquely recognizable when system converts URL back to attribute value. Always processed after all other special symbols.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </space>
+                    </fields>
+                </seo>
+            </groups>
+        </mana_filters>
+    </sections>
+</config>

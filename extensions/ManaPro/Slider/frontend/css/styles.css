@@ -1,0 +1,80 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Slider
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* Geberal banner styles */
+.m-slider-banner { background: transparent; position: relative; margin-bottom: 20px; }
+
+.m-slider-banner .desc {  }
+.col-main .m-slider-banner .desc { line-height: 22px; margin-bottom: 20px; }
+
+.m-slider-banner .m-visible-content { overflow: hidden; position: relative; }
+.m-slider-banner .m-content { overflow: hidden; position: absolute; }
+.m-slider-banner .m-content>li { display: none; float: left; border: 0; width: 100%; }
+.m-slider-banner .m-visible-content,
+.m-slider-banner .m-content>li {  background: transparent;}
+
+/* Navigation styles */
+.m-slider-banner .m-switch { text-align: center; height: 30px;}
+.m-slider-banner .m-switch ol { display: inline-block; overflow: hidden; margin: 5px auto 0; }
+.m-slider-banner .m-switch li { float: left; padding: 2px; }
+/* Numbers */
+.m-slider-banner .m-switch.m-numbers li { background: #d8d8d8;  border-radius: 5px; min-width: 18px; margin-right: 4px; padding: 2px 6px; }
+.m-slider-banner .m-switch.m-numbers li.alrHelperActiveItem { background: #26B1ED; color: white; }
+.m-slider-banner .m-switch.m-numbers li:hover { cursor: pointer;  }
+/* Bullets */
+.m-slider-banner .m-switch.m-bullets li { background: #eee; border: 1px solid #A0B3C3; border-radius: 5px; width: 5px; height: 5px; margin-top: 5px; margin-right: 5px; }
+.m-slider-banner .m-switch.m-bullets li.alrHelperActiveItem { background: #c5deea; /* Old browsers */
+background: -moz-linear-gradient(top,  #c5deea 0%, #26b1ed 46%, #2092c4 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c5deea), color-stop(46%,#26b1ed), color-stop(100%,#2092c4)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #c5deea 0%,#26b1ed 46%,#2092c4 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #c5deea 0%,#26b1ed 46%,#2092c4 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #c5deea 0%,#26b1ed 46%,#2092c4 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #c5deea 0%,#26b1ed 46%,#2092c4 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c5deea', endColorstr='#2092c4',GradientType=0 ); /* IE6-9 */
+ }
+.m-slider-banner .m-switch.m-bullets li:hover { cursor: pointer; }
+/* Arrows */
+.m-slider-banner .m-navigation-next, .m-slider-banner .m-navigation-prev {
+    cursor: pointer; position: absolute; margin: 5px 0 0; height: 100%;  width: 70px; top:0; opacity:0.4; filter:alpha(opacity=40); /* For IE8 and earlier */}
+.m-slider-banner .m-navigation-next { background: url(../images/manapro_slider/i-next.png) 100% 40% no-repeat;
+    right: 0; }
+.m-slider-banner .m-navigation-next:hover { background-image: url(../images/manapro_slider/i-next-over.png); opacity:1; }
+.m-slider-banner .m-navigation-next:active { background-image: url(../images/manapro_slider/i-next-active.png); opacity:1; }
+.m-slider-banner .m-navigation-prev { background: url(../images/manapro_slider/i-prev.png) 0 40% no-repeat;
+    left: 0; }
+.m-slider-banner .m-navigation-prev:hover { background-image: url(../images/manapro_slider/i-prev-over.png); opacity:1; }
+.m-slider-banner .m-navigation-prev:active { background-image: url(../images/manapro_slider/i-prev-active.png); opacity:1; }
+
+/* Product on the banner view col-main */
+.m-slider-banner .products-list li.item { background: none; position: relative; }
+.col-main .m-slider-banner .products-list li.item { padding: 0 70px; }
+.col-main .m-slider-banner .products-list .product-name { font-size: 22px; }
+.m-slider-banner .products-list .product-image { position: absolute; z-index: 1; box-shadow: none !important; }
+.m-slider-banner .products-list .product-shop { position: absolute; z-index: 2; overflow: hidden; margin: 0; box-shadow: none; }
+.m-slider-banner .products-list .price-box { position: static; text-align: left; }
+.m-slider-banner .products-list .btn-cart, 
+.m-slider-banner .products-list .add-to-links { position: static; float: left; }
+.m-slider-banner .products-list .btn-cart,
+.m-slider-banner .products-list .add-to-links li { float: left; margin: 0 5px 0 0; }
+.col-main .m-slider-banner .price-from,
+.col-main .m-slider-banner .price { font-size:30px; }
+.col-main .m-slider-banner .price-to .price { font-size:12px; }
+.m-slider-banner .button { float: left; }
+.m-slider-banner .add-to-links { white-space: nowrap; }
+.m-slider-banner .add-to-links li a { margin:0; }
+/* Product on the banner view sidebar */
+.sidebar .m-slider-banner .products-list li.item { padding: 0 10px; }
+.sidebar .m-slider-banner .products-list .product-name { font-size: 11px; }
+.sidebar .m-slider-banner .products-list .desc { font-size: 11px; padding: 0; }
+.sidebar .m-slider-banner .products-list .product-shop { padding-right: 5px; }
+.sidebar .m-slider-banner .rating-links { font-size: 9px; }
+
+
+
+
+
+

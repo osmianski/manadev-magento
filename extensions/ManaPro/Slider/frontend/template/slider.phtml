@@ -1,0 +1,43 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Slider
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* @var $this ManaPro_Slider_Block_Slider */
+$_contentBlocks = $this->getContentBlocks();
+?>
+<?php if (count($_contentBlocks)) :?>
+<?php if ($_shadowCss = $this->getDecorationCssClasses('shadow')) : ?>
+    <div class="m-shadow-container">
+<?php endif ?>
+<div id="<?php echo $this->getSliderId() ?>" class="m-slider-banner <?php echo $this->getData('css_class') ?> <?php if ($_shadowCss) : ?>m-shadow <?php echo $_shadowCss ?><?php endif ?> <?php if ($this->getFastSwitch() != 'none'): ?>m-fast-switch-<?php echo $this->getFastSwitchPosition() ?><?php endif; ?>">
+    <?php foreach (array('top_left', 'top', 'top_right', 'right', 'bottom_right', 'bottom', 'bottom_left', 'left') as $_position) : ?>
+    <?php if ($_decorationCssClasses = $this->getDecorationCssClasses($_position)) : ?>
+        <div class="m-tag <?php echo $_decorationCssClasses ?>"></div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+    <?php echo Mage::helper('mana_core')->getChildGroupHtml($this, 'top') ?>
+    <div class="m-visible-content" style="height: <?php echo $this->getData('height') ?>px;">
+        <ul class="m-content">
+            <?php foreach ($_contentBlocks as $_contentBlock) : ?>
+                <?php /* @var $_contentBlock ManaPro_Slider_Block_Abstract */ ?>
+                <li><?php echo $_contentBlock->toHtml() ?></li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+
+    <?php echo Mage::helper('mana_core')->getChildGroupHtml($this, 'bottom') ?>
+    <?php echo Mage::helper('mana_core')->getChildGroupHtml($this, 'floating') ?>
+
+</div>
+<?php if ($_shadowCss) : ?>
+    </div>
+<?php endif ?>
+<script type="text/javascript">(function ($) {
+    $('#<?php echo $this->getSliderId() ?>').mSlider(<?php echo $this->getConfigJson() ?>);
+})(jQuery);</script>
+<?php endif ?>

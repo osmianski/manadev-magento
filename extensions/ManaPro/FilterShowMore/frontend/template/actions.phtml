@@ -1,0 +1,56 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterShowMore
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/** 
+ * Template for showing Show More / Show less actions 
+ * @author Mana Team
+ * Injected in designated place in filter items template used. In default template, designated place is right 
+ * under list of items
+ */
+/* @var $block Mana_Filters_Block_Filter */
+?>
+<?php /* @var $_helper ManaPro_FilterShowMore_Helper_Data */ $_helper = Mage::helper(strtolower('ManaPro_FilterShowMore'));?>
+<?php /* @var $_core Mana_Core_Helper_Data */ $_core = Mage::helper(strtolower('Mana_Core'));?>
+<?php /* @var $_filter Mana_Filters_Model_Filter_Attribute */ $_filter = $block->getFilter();?>
+<?php if ($_filter->getMIsShowMoreApplied() && !$_helper->isMethodDisabled($block, $_filter)) : ?>
+<?php $method = $_helper->getMethod($block, $_filter) ?>
+<div class="m-more-less" id="m-more-less-<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>">
+    <?php if ($method == 'scrollbar') : ?>
+    <script type="text/javascript">(function ($) {
+        $(document).trigger('m-filter-scroll-reset', [
+            '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
+            <?php echo $_filter->getFilterOptions()->getShowMoreItemCount() ?>
+        ]);
+    })(jQuery);</script>
+    <?php elseif ($method == 'popup') : ?>
+    <a href="#" class="m-show-more-popup-action"><?php echo $block->__('Show More') ?></a>
+    <script type="text/javascript">(function ($) {
+        $(document).trigger('m-show-more-popup-reset', [
+            '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
+            '<?php echo $_helper->getPopupUrl($_filter) ?>',
+            '<?php echo $_helper->getPopupTargetUrl($_filter) ?>',
+            '<?php echo $block->getSelectedSeoValues() ?>',
+            '<?php echo Mage::getStoreConfig('mana_filters/show_more_popup/action') ?>',
+            <?php echo Mage::getStoreConfigFlag('mana_filters/show_more_popup/progress') ? 'true' : 'false' ?>,
+            <?php echo Mage::getStoreConfigFlag('mana_filters/show_more_popup/debug') ? 'true' : 'false' ?>
+        ]);
+    })(jQuery);</script>
+    <?php else : ?>
+    <a class="m-show-less-action" href="#"><?php echo $block->__('Show Less') ?></a>
+    <a class="m-show-more-action" href="#"><?php echo $block->__('Show More') ?></a>
+    <script type="text/javascript">(function($) {
+        $(document).trigger('m-show-more-reset', [
+            '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
+            <?php echo $_filter->getFilterOptions()->getShowMoreItemCount() ?>,
+            <?php echo $_helper->isShowAllRequested($_filter) ? 'true' : 'false' ?>,
+            <?php echo Mage::getStoreConfig('mana_filters/display/show_more_time') ?>
+        ]);
+    })(jQuery);</script>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+

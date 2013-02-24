@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPage_New
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPage_New>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.01.19.23</version>
+        </ManaPage_New>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPage_New_Helper_Data
+		class is accessible through Mage::helper('manapage_new') call, other ManaPage_New_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapage_new/xxx_yyy') call. -->
+        <helpers>
+            <manapage_new>
+                <!-- This says that string 'manapage_new' corresponds to ManaPage_New_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPage_New_Helper</class>
+            </manapage_new>
+        </helpers>
+        <!-- This section registers block classes ManaPage_New_Block_XXX_YYY to be accessible through
+            'manapage_new/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapage_new' corresponds to ManaPage_New_Block pseudo-namespace. -->
+            <manapage_new>
+                <class>ManaPage_New_Block</class>
+            </manapage_new>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

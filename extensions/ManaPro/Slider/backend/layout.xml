@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Slider
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- This file defines the rules which should be applied when module manapro_slider is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+    <editor>
+        <update handle="mana_admin"/>
+        <update handle="mana_admin_grid_editing"/>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_slider.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_slider.js</name><params/></action>
+        </reference>
+    </editor>
+
+    <adminhtml_widget_instance_edit>
+        <update handle="mana_admin"/>
+        <update handle="mana_admin_grid_editing"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/manapro_slider.js</name><params/></action>
+        </reference>
+        <reference name="widget_instance_edit_tabs">
+            <block type="manapro_slider/tab_slider" name="m_slider_slider_tab" />
+            <action method="addTab"><name>m_slider_slider_section</name><block>m_slider_slider_tab</block></action>
+
+            <block type="manapro_slider/tab_navigation" name="m_slider_navigation_tab" />
+            <action method="addTab"><name>m_slider_navigation_section</name><block>m_slider_navigation_tab</block></action>
+
+            <block type="manapro_slider/tab_effects" name="m_slider_effects_tab" />
+            <action method="addTab"><name>m_slider_effects_section</name><block>m_slider_effects_tab</block></action>
+
+            <block type="manapro_slider/tab_products" name="m_slider_products_tab">
+                <block type="manapro_slider/product_grid" name="m_slider_product_grid" as="m_slider_product_grid">
+                    <action method="setRenderScripts"><grid>1</grid></action>
+                </block>
+                <block type="manapro_slider/product_serializer" name="m_slider_product_serializer" as="m_slider_product_serializer">
+                    <action method="setGrid"><grid>m_slider_product_grid</grid></action>
+                </block>
+            </block>
+            <action method="addTab"><name>m_slider_products_section</name><block>m_slider_products_tab</block></action>
+
+            <block type="manapro_slider/tab_cmsblocks" name="m_slider_cmsblocks_tab">
+                <block type="manapro_slider/cmsblock_grid" name="m_slider_cmsblock_grid" as="m_slider_cmsblock_grid">
+                    <action method="setRenderScripts"><grid>1</grid></action>
+                </block>
+                <block type="manapro_slider/cmsblock_serializer" name="m_slider_cmsblock_serializer" as="m_slider_cmsblock_serializer">
+                    <action method="setGrid"><grid>m_slider_cmsblock_grid</grid></action>
+                </block>
+            </block>
+            <action method="addTab"><name>m_slider_cmsblocks_section</name><block>m_slider_cmsblocks_tab</block></action>
+
+            <block type="manapro_slider/tab_htmlblocks" name="m_slider_htmlblocks_tab">
+                <block type="manapro_slider/htmlblock_grid" name="m_slider_htmlblock_grid" as="m_slider_htmlblock_grid">
+                    <action method="setRenderScripts"><grid>1</grid></action>
+                </block>
+                <block type="manapro_slider/htmlblock_serializer" name="m_slider_htmlblock_serializer" as="m_slider_htmlblock_serializer">
+                    <action method="setGrid"><grid>m_slider_htmlblock_grid</grid></action>
+                </block>
+            </block>
+            <action method="addTab"><name>m_slider_htmlblocks_section</name><block>m_slider_htmlblocks_tab</block></action>
+
+            <block type="manapro_slider/tab_productappearance" name="m_slider_productappearance_tab" />
+            <action method="addTab"><name>m_slider_productappearance_section</name><block>m_slider_productappearance_tab</block></action>
+
+        </reference>
+    </adminhtml_widget_instance_edit>
+    <adminhtml_mana_slider_productgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_slider/product_grid" name="m_slider_product_grid" as="m_slider_product_grid" />
+            <block type="manapro_slider/product_serializer" name="m_slider_product_serializer" as="m_slider_product_serializer">
+                <action method="setGrid"><grid>m_slider_product_grid</grid></action>
+            </block>
+            <block type="mana_core/js" name="m_js" template="mana/core/js.phtml"/>
+        </block>
+    </adminhtml_mana_slider_productgrid>
+    <adminhtml_mana_slider_cmsblockgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_slider/cmsblock_grid" name="m_slider_cmsblock_grid" as="m_slider_cmsblock_grid" />
+            <block type="manapro_slider/cmsblock_serializer" name="m_slider_cmsblock_serializer" as="m_slider_cmsblock_serializer">
+                <action method="setGrid"><grid>m_slider_cmsblock_grid</grid></action>
+            </block>
+            <block type="mana_core/js" name="m_js" template="mana/core/js.phtml"/>
+        </block>
+    </adminhtml_mana_slider_cmsblockgrid>
+    <adminhtml_mana_slider_htmlblockgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_slider/htmlblock_grid" name="m_slider_htmlblock_grid" as="m_slider_htmlblock_grid" />
+            <block type="manapro_slider/htmlblock_serializer" name="m_slider_htmlblock_serializer" as="m_slider_htmlblock_serializer">
+                <action method="setGrid"><grid>m_slider_htmlblock_grid</grid></action>
+            </block>
+            <block type="mana_core/js" name="m_js" template="mana/core/js.phtml"/>
+        </block>
+    </adminhtml_mana_slider_htmlblockgrid>
+
+    <adminhtml_widget_loadoptions>
+        <block name="manapro_slider_popup" type="manapro_slider/popup_container" output="toHtml">
+            <block type="core/text_list" name="manapro_slider_popup_left" as="popup_left">
+                <block type="manapro_slider/popup_tabs" name="manapro_slider_popup_tabs">
+                    <block type="manapro_slider/tab_slider" name="m_slider_slider_tab" />
+                    <action method="addTab"><name>m_slider_slider_section</name><block>m_slider_slider_tab</block></action>
+
+                    <block type="manapro_slider/tab_navigation" name="m_slider_navigation_tab" />
+                    <action method="addTab"><name>m_slider_navigation_section</name><block>m_slider_navigation_tab</block></action>
+
+                    <block type="manapro_slider/tab_effects" name="m_slider_effects_tab" />
+                    <action method="addTab"><name>m_slider_effects_section</name><block>m_slider_effects_tab</block></action>
+
+                    <block type="manapro_slider/tab_products" name="m_slider_products_tab">
+                        <block type="manapro_slider/product_grid" name="m_slider_product_grid" as="m_slider_product_grid">
+                            <action method="setRenderScripts"><grid>1</grid></action>
+                        </block>
+                        <block type="manapro_slider/product_serializer" name="m_slider_product_serializer" as="m_slider_product_serializer">
+                            <action method="setGrid"><grid>m_slider_product_grid</grid></action>
+                        </block>
+                    </block>
+                    <action method="addTab"><name>m_slider_products_section</name><block>m_slider_products_tab</block></action>
+
+                    <block type="manapro_slider/tab_cmsblocks" name="m_slider_cmsblocks_tab">
+                        <block type="manapro_slider/cmsblock_grid" name="m_slider_cmsblock_grid" as="m_slider_cmsblock_grid">
+                            <action method="setRenderScripts"><grid>1</grid></action>
+                        </block>
+                        <block type="manapro_slider/cmsblock_serializer" name="m_slider_cmsblock_serializer" as="m_slider_cmsblock_serializer">
+                            <action method="setGrid"><grid>m_slider_cmsblock_grid</grid></action>
+                        </block>
+                    </block>
+                    <action method="addTab"><name>m_slider_cmsblocks_section</name><block>m_slider_cmsblocks_tab</block></action>
+
+                    <block type="manapro_slider/tab_htmlblocks" name="m_slider_htmlblocks_tab">
+                        <block type="manapro_slider/htmlblock_grid" name="m_slider_htmlblock_grid" as="m_slider_htmlblock_grid">
+                            <action method="setRenderScripts"><grid>1</grid></action>
+                        </block>
+                        <block type="manapro_slider/htmlblock_serializer" name="m_slider_htmlblock_serializer" as="m_slider_htmlblock_serializer">
+                            <action method="setGrid"><grid>m_slider_htmlblock_grid</grid></action>
+                        </block>
+                    </block>
+                    <action method="addTab"><name>m_slider_htmlblocks_section</name><block>m_slider_htmlblocks_tab</block></action>
+
+                    <block type="manapro_slider/tab_productappearance" name="m_slider_productappearance_tab" />
+                    <action method="addTab"><name>m_slider_productappearance_section</name><block>m_slider_productappearance_tab</block></action>
+
+                </block>
+            </block>
+            <block type="core/text_list" name="manapro_slider_popup_content" as="popup_content">
+                <block type="manapro_slider/popup_edit" name="manapro_slider_popup_edit"/>
+            </block>
+        </block>
+        <block type="mana_core/js" name="m_js" template="mana/core/js.phtml" output="toHtml"/>
+    </adminhtml_widget_loadoptions>
+
+</layout>

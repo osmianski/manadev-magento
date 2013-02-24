@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_SuperProductName
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_SuperProductName>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.24.23</version>
+        </ManaPro_SuperProductName>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_SuperProductName_Helper_Data
+		class is accessible through Mage::helper('manapro_superproductname') call, other ManaPro_SuperProductName_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_superproductname/xxx_yyy') call. -->
+        <helpers>
+            <manapro_superproductname>
+                <!-- This says that string 'manapro_superproductname' corresponds to ManaPro_SuperProductName_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_SuperProductName_Helper</class>
+            </manapro_superproductname>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_SuperProductName_Model_XXX_YYY classes are accessible as
+            'manapro_superproductname/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_superproductname' corresponds to ManaPro_SuperProductName_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_superproductname>
+                <class>ManaPro_SuperProductName_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_superproductname>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <resources>
+            <superproductname_setup>
+                <setup>
+                    <module>ManaPro_SuperProductName</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </superproductname_setup>
+        </resources>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <adminhtml>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_superproductname>
+                    <file>manapro_superproductname.xml</file>
+                </manapro_superproductname>
+            </updates>
+        </layout>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_SuperProductName>
+                    <files>
+                        <default>ManaPro_SuperProductName.csv</default>
+                    </files>
+                </ManaPro_SuperProductName>
+            </modules>
+        </translate>
+        <!-- This section registers event handlers of this module defined in ManaPro_SuperProductName_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_SuperProductName_Model_Observer class gets called. -->
+        <events>
+            <controller_action_layout_render_before_adminhtml_catalog_product_new><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_superproductname>
+                        <class>manapro_superproductname/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderSuperProductNameOptionsInBackend</method>
+                        <!-- event handler method name -->
+                    </manapro_superproductname>
+                </observers>
+            </controller_action_layout_render_before_adminhtml_catalog_product_new>
+            <controller_action_layout_render_before_adminhtml_catalog_product_edit><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_superproductname>
+                        <class>manapro_superproductname/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderSuperProductNameOptionsInBackend</method>
+                        <!-- event handler method name -->
+                    </manapro_superproductname>
+                </observers>
+            </controller_action_layout_render_before_adminhtml_catalog_product_edit>
+        </events>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_superproductname>
+                    <file>manapro_superproductname.xml</file>
+                </manapro_superproductname>
+            </updates>
+        </layout>
+        <!-- This section registers event handlers of this module defined in ManaPro_SuperProductName_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_SuperProductName_Model_Observer class gets called. -->
+        <events>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_superproductname>
+                        <class>manapro_superproductname/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderSuperProductName</method>
+                        <!-- event handler method name -->
+                    </manapro_superproductname>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <default>
+        <manapro_superproductname>
+            <general>
+                <template_format><![CDATA[<h1>{{name}}</h1>]]></template_format>
+            </general>
+        </manapro_superproductname>
+    </default>
+</config>

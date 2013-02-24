@@ -1,0 +1,12 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterHelp
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-help { cursor: help; display: inline-block; position: relative; }
+.m-help a.dots { cursor: help; }
+.m-help a.details { cursor: help; }
+.m-help .m-text { position: absolute; top: 5px; z-index: 999; background: #F8F7F5; border: 1px #ccc solid; width: 180px; padding: 10px; text-transform:none; }
+.col-left .m-help .m-text { left: 5px; }
+.col-right .m-help .m-text { right: 5px; }

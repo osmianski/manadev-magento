@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAdmin
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: Static Visuals/Empty layout file -->
+<!-- This file defines the rules which should be applied when module manapro_filteradmin is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+	<adminhtml_mana_filters_index>
+		<update handle="mana_admin" />
+		<reference name="content">
+			<block type="manapro_filteradmin/list_container" name="container" as="container">
+				<block type="manapro_filteradmin/list_grid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+					<action method="setRenderScripts"><grid>1</grid></action>
+				</block>
+			</block>
+		</reference>
+	</adminhtml_mana_filters_index>
+	<adminhtml_mana_filters_grid>
+		<block type="adminhtml/text_list" name="root" output="toHtml">
+			<block type="manapro_filteradmin/list_grid" name="grid" as="grid">
+				<action method="setRenderScripts"><grid>1</grid></action>
+			</block>
+		</block>
+	</adminhtml_mana_filters_grid>
+	<adminhtml_mana_filters_edit>
+		<update handle="mana_admin" />
+		<reference name="left">
+			<block type="manapro_filteradmin/card_tabs" name="tabs" as="tabs">
+				<action method="setId"><value>tabs</value></action>
+				<block type="manapro_filteradmin/card_general" name="general" as="general" />
+			</block>
+		</reference>
+		<reference name="content">
+			<block type="manapro_filteradmin/card_container" name="container" as="container">
+				<block type="mana_admin/dynamic" name="tab_content" as="tab_content">
+					<action method="setDynamicId"><value>tab_content</value></action>
+					<action method="setForceRender"><value>1</value></action>
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+	</adminhtml_mana_filters_edit>
+	<adminhtml_mana_filters_tabgeneral>
+		<block type="adminhtml/text_list" name="root" output="toHtml">
+			<block type="manapro_filteradmin/card_general" name="general" as="general" />
+			<block type="mana_core/js" name="m_js" template="mana/core/js.phtml" />
+		</block>
+	</adminhtml_mana_filters_tabgeneral>
+</layout>

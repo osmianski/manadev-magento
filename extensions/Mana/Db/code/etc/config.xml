@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Db
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<Mana_Db>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.04.16.22</version>
+		</Mana_Db>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Db_Helper_Data
+		class is accessible through Mage::helper('mana_db') call, other Mana_Db_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_db/xxx_yyy') call. -->
+		<helpers>
+			<mana_db>
+				<!-- This says that string 'mana_db' corresponds to Mana_Db_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>Mana_Db_Helper</class>
+			</mana_db>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, Mana_Db_Model_XXX_YYY classes are accessible as 
+		'mana_db/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'mana_db' corresponds to Mana_Db_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<mana_db>
+				<class>Mana_Db_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/mana_db_resources sections and register
+				resource model information from there -->
+				<resourceModel>mana_db_resources</resourceModel>
+			</mana_db>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'mana_db' corresponds to Mana_Db_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<mana_db_resources>
+				<class>Mana_Db_Resource</class>
+				<entities>
+					<db><table>m_db</table></db>
+					<log><table>m_db_log</table></log>
+					<edit_session><table>m_edit_session</table></edit_session>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</mana_db_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/mana_db_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<mana_db_setup>
+				<setup>
+					<module>Mana_Db</module>
+				</setup>
+			</mana_db_setup>
+		</resources>
+		<index>
+            <indexer>
+                <mana_db_replicator>
+                    <model>mana_db/indexer</model>
+                </mana_db_replicator>
+            </indexer>
+        </index>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in Mana_Db_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of Mana_Db_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<controller_action_predispatch><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>replicateAllIfPending</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</controller_action_predispatch>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<store_save_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>replicateAllIfPending</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</store_save_commit_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<store_delete_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>afterStoreDelete</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</store_delete_commit_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_entity_attribute_save_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>afterCatalogAttributeSave</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</catalog_entity_attribute_save_commit_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<catalog_entity_attribute_delete_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>afterCatalogAttributeDelete</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</catalog_entity_attribute_delete_commit_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<core_config_data_save_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>replicateAllIfPending</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</core_config_data_save_commit_after>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<model_save_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_db>
+						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
+						<method>afterConfigSave</method> <!-- event handler method name -->
+					</mana_db>
+				</observers>
+			</model_save_commit_after>
+		</events>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<Mana_Db>
+					<files>
+						<default>Mana_Db.csv</default>
+					</files>
+				</Mana_Db>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Translation support/Frontend (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during frontend request processing -->
+		<translate>
+			<modules>
+				<Mana_Db>
+					<files>
+						<default>Mana_Db.csv</default>
+					</files>
+				</Mana_Db>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

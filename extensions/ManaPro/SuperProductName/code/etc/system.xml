@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- 
+@category    Mana
+@package     ManaPro_SuperProductName
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <tabs>
+        <mana>
+            <label>MANAdev</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <manapro_superproductname translate="label" module="manapro_superproductname">
+            <label>Super Product Name</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>700</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template_format translate="label comment">
+                            <label>Name Format</label>
+                            <comment>Most themes use default format. If product name is rendered in your theme differently, put its HTML code here.</comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template_format>
+                    </fields>
+                </general>
+            </groups>
+        </manapro_superproductname>
+    </sections>
+</config>

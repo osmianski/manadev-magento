@@ -1,0 +1,46 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Container */
+?>
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<div class="m-checkout">
+    <div class="page-title">
+        <h1><?php echo $this->__('Simple & Secure Checkout') ?></h1>
+        <?php if (!$this->isCustomerLoggedIn()) : ?>
+        <p class="login-link">
+            <?php echo $this->__('Already registered?') ?>
+            <a href="#" class="login-link" title="<?php echo $this->__('Login') ?>"><?php echo $this->__('Login') ?></a>
+            <script type="text/javascript">(function($) {
+                $('.login-link').mPopup('login-form');
+            })(jQuery);</script>
+        </p>
+        <?php endif ?>
+    </div>
+    <form id="checkout-form" method="post" action="<?php //echo $this->getUrl('checkout/ajax/save') ?>">
+    <ul class="m-columns m-checkout-columns">
+        <li class="column1 first">
+            <?php echo $this->getChildHtml('billing_address') ?>
+        </li>
+        <li class="column2">
+            <?php echo $this->getChildHtml('shipping') ?>
+            <?php echo $this->getChildHtml('payment_method') ?>
+        </li>
+        <li class="column3 last">
+            <?php echo $this->getChildHtml('order_review') ?>
+        </li>
+    </ul>
+    </form>
+    <?php if (!$this->isCustomerLoggedIn()) : ?>
+    <?php echo $this->getChildHtml('login') ?>
+    <?php endif ?>
+    <?php echo $this->getChildHtml('payment_cvv') ?>
+</div>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Ajax
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section activates module in Magento system. -->
+    <modules>
+        <Mana_Ajax>
+            <!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
+        	in this case Magento will behave as if module does not exist). -->
+            <active>true</active>
+            <!-- This instructs Magento to search for module code in app/code/local directory. -->
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Cms />
+                <Mage_Catalog />
+                <Mana_Core />
+            </depends>
+        </Mana_Ajax>
+    </modules>
+</config>

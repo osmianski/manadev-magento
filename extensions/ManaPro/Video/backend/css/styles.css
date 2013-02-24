@@ -1,0 +1,7 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Video
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+#mVideoGrid .c-thumbnail .input-image { background-size: 100%; background-origin: padding; background-repeat: no-repeat; }

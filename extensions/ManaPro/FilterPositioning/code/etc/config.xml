@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterPositioning
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_FilterPositioning>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.01.19.23</version>
+        </ManaPro_FilterPositioning>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterPositioning_Helper_Data
+		class is accessible through Mage::helper('manapro_filterpositioning') call, other ManaPro_FilterPositioning_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterpositioning/xxx_yyy') call. -->
+        <helpers>
+            <manapro_filterpositioning>
+                <!-- This says that string 'manapro_filterpositioning' corresponds to ManaPro_FilterPositioning_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_FilterPositioning_Helper</class>
+            </manapro_filterpositioning>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterPositioning_Model_XXX_YYY classes are accessible as
+            'manapro_filterpositioning/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_filterpositioning' corresponds to ManaPro_FilterPositioning_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_filterpositioning>
+                <class>ManaPro_FilterPositioning_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_filterpositioning>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This tells Magento to analyze sql/manapro_filterpositioning_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterpositioning_setup>
+                <setup>
+                    <module>ManaPro_FilterPositioning</module>
+                </setup>
+            </manapro_filterpositioning_setup>
+        </resources>
+        <!-- This section registers event handlers of this module defined in ManaPro_FilterPositioning_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of ManaPro_FilterPositioning_Model_Observer class gets called. -->
+        <events>
+			<m_db_is_config_changed><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>isConfigChanged</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_is_config_changed>
+			<m_db_update_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareUpdateColumns</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_update_columns>
+			<m_db_update_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processUpdate</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_update_process>
+			<m_db_insert_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareInsertColumns</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_insert_columns>
+			<m_db_insert_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processInsert</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_insert_process>
+			<m_crud_form><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addFields</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_crud_form>
+			<m_db_add_edited_data><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterpositioning>
+						<class>manapro_filterpositioning/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addEditedData</method> <!-- event handler method name -->
+					</manapro_filterpositioning>
+				</observers>
+			</m_db_add_edited_data>
+            <m_crud_grid_collection><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterpositioning>
+                        <class>manapro_filterpositioning/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareGridCollection</method>
+                        <!-- event handler method name -->
+                    </manapro_filterpositioning>
+                </observers>
+            </m_crud_grid_collection>
+            <m_crud_grid_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterpositioning>
+                        <class>manapro_filterpositioning/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareGridColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterpositioning>
+                </observers>
+            </m_crud_grid_columns>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterpositioning>
+                        <class>manapro_filterpositioning/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderLayeredNavigationAboveProductList</method>
+                        <!-- event handler method name -->
+                    </manapro_filterpositioning>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <m_advanced_filter_currently_shopping_by><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterpositioning>
+                        <class>manapro_filterpositioning/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>showCurrentlyShoppingBy</method>
+                        <!-- event handler method name -->
+                    </manapro_filterpositioning>
+                </observers>
+            </m_advanced_filter_currently_shopping_by>
+        </events>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterPositioning>
+                    <files>
+                        <default>ManaPro_FilterPositioning.csv</default>
+                    </files>
+                </ManaPro_FilterPositioning>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_filterpositioning>
+                    <file>manapro_filterpositioning.xml</file>
+                </manapro_filterpositioning>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <default>
+        <mana_filters>
+            <positioning>
+                <show_in>left</show_in>
+                <show_state_left>all</show_state_left>
+                <above_products>manapro/filterpositioning/horizontal/view.phtml</above_products>
+                <shop_by_title>1</shop_by_title>
+                <currently_shopping_by_title>1</currently_shopping_by_title>
+                <categories>none</categories>
+            </positioning>
+            <positioning_menu>
+                <width>200</width>
+            </positioning_menu>
+            <positioning_horizontal>
+                <height>100</height>
+            </positioning_horizontal>
+        </mana_filters>
+    </default>
+    <mana_filters>
+        <positioning>
+            <above_products>
+                <default>
+                    <template />
+                    <label>Defined in Current Theme</label>
+                </default>
+                <view>
+                    <template>manapro/filterpositioning/horizontal/view.phtml</template>
+                    <label>Horizontally Laid Filters</label>
+                </view>
+                <menu>
+                    <template>manapro/filterpositioning/horizontal/menu.phtml</template>
+                    <show_more_disabled>1</show_more_disabled>
+                    <show_more_scrollbar_disabled>1</show_more_scrollbar_disabled>
+                    <label>Drop Down Menu</label>
+                </menu>
+            </above_products>
+        </positioning>
+    </mana_filters>
+	<m_layout>
+		<catalog_category_layered>
+			<m_catalog_category_layered_category_right action="addAfter" handle="m_catalog_category_layered_category_right" if="valueEquals">
+				<param>mana_filters/positioning/categories</param>
+				<value>right</value>
+			</m_catalog_category_layered_category_right>
+			<m_catalog_category_layered_category_left action="addAfter" handle="m_catalog_category_layered_category_left" if="valueEquals">
+				<param>mana_filters/positioning/categories</param>
+				<value>left</value>
+			</m_catalog_category_layered_category_left>
+		</catalog_category_layered>
+	</m_layout>
+</config>

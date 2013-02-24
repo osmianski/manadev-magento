@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Featured
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <tabs>
+        <mana>
+            <label>MANAdev</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <mana_featured translate="label" module="manapro_featured">
+            <label>Product Slider</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <category translate="label">
+                    <label>Category Page: Display Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template translate="label">
+                            <label>Display Featured Product List As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_category</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                        <custom translate="label comment">
+                            <label>Custom Template File</label>
+                            <comment>File should be in app/design/frontend/[package]/[theme]/template directory with '.phtml' extension</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom>
+                        <show translate="label">
+                            <label>Show</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_show</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show>
+                        <count translate="label">
+                            <label>Maximum Number of Product to Show</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </count>
+                        <subcategory translate="label">
+                            <label>Include Subcategory Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </subcategory>
+                        <sort translate="label">
+                            <label>Sort Products By</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_sort</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort>
+                        <!--<layout_xml translate="label">
+                            <label>Custom Layout XML</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </layout_xml>-->
+                    </fields>
+                </category>
+                <category_carousel_fields translate="label">
+                    <label>Category Page: Carousel Fields</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Show Product Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <description translate="label">
+                            <label>Show Product Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <price translate="label">
+                            <label>Show Product Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <cart translate="label">
+                            <label>Show 'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <links translate="label">
+                            <label>Show Other 'Add to ...' Links</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </links>
+                        <rating translate="label">
+                            <label>Show Product Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                    </fields>
+                </category_carousel_fields>
+                <category_carousel_effect translate="label">
+                    <label>Category Page: Carousel Effect</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <rotation_interval translate="label comment">
+                            <label>Rotate Products Each</label>
+                            <comment>millisecond(s)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rotation_interval>
+                        <hide translate="label">
+                            <label>Hide Effect</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_effect_hide</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide>
+                        <hide_custom translate="label comment">
+                            <label>Custom Hide Effect Name</label>
+                            <comment>Include jQuery plugin containing this effect</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_custom>
+                        <hide_random translate="label comment">
+                            <label>Use These Hide Effects in Random Sequence</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>manapro_featured/source_carousel_random</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_random>
+                        <hide_blind_direction translate="label comment">
+                            <label>Blind Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_direction</source_model>
+                            <sort_order>401</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_blind_direction>
+                        <hide_clip_direction translate="label comment">
+                            <label>Clip Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_direction</source_model>
+                            <sort_order>402</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_clip_direction>
+                        <hide_drop_direction translate="label comment">
+                            <label>Drop Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_side</source_model>
+                            <sort_order>403</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_drop_direction>
+                        <hide_interval translate="label comment">
+                            <label>Play Hide Effect For</label>
+                            <comment>millisecond(s)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_interval>
+                        <show translate="label comment">
+                            <label>Show Effect</label>
+                            <comment>Ignored if hide effect is Slider</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_effect_show</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show>
+                        <show_custom translate="label comment">
+                            <label>Custom Show Effect Name</label>
+                            <comment>Include jQuery plugin containing this effect</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_custom>
+                        <show_random translate="label comment">
+                            <label>Use These Show Effects in Random Sequence</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>manapro_featured/source_carousel_random</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_random>
+                        <show_blind_direction translate="label comment">
+                            <label>Blind Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_direction</source_model>
+                            <sort_order>801</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_blind_direction>
+                        <show_clip_direction translate="label comment">
+                            <label>Clip Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_direction</source_model>
+                            <sort_order>802</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_clip_direction>
+                        <show_drop_direction translate="label comment">
+                            <label>Drop Effect Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_side</source_model>
+                            <sort_order>803</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_drop_direction>
+                        <show_interval translate="label comment">
+                            <label>Play Show Effect For</label>
+                            <comment>millisecond(s)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_interval>
+                    </fields>
+                </category_carousel_effect>
+                <category_carousel_decoration translate="label">
+                    <label>Category Page: Carousel Decorations</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>450</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <top_left translate="label">
+                            <label>Top Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_topleft</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_left>
+                        <top_left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_left_custom>
+                        <top translate="label">
+                            <label>Top</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_top</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top>
+                        <top_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_custom>
+                        <top_right translate="label">
+                            <label>Top Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_topright</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_right>
+                        <top_right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_right_custom>
+                        <right translate="label">
+                            <label>Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_right</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </right>
+                        <right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>450</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </right_custom>
+                        <bottom_right translate="label">
+                            <label>Bottom Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottomright</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_right>
+                        <bottom_right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>550</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_right_custom>
+                        <bottom translate="label">
+                            <label>Bottom</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottom</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom>
+                        <bottom_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>650</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_custom>
+                        <bottom_left translate="label">
+                            <label>Bottom Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottomleft</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_left>
+                        <bottom_left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>750</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_left_custom>
+                        <left translate="label">
+                            <label>Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_left</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </left>
+                        <left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>850</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </left_custom>
+                        <shadow translate="label">
+                            <label>Shadow</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_shadow</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shadow>
+                        <shadow_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>950</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shadow_custom>
+                    </fields>
+                </category_carousel_decoration>
+                <category_carousel_si_decoration translate="label">
+                    <label>Category Page: Small Image Decorations</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>470</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <top_left translate="label">
+                            <label>Top Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_topleft</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_left>
+                        <top_left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_left_custom>
+                        <top translate="label">
+                            <label>Top</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_top</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top>
+                        <top_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_custom>
+                        <top_right translate="label">
+                            <label>Top Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_topright</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_right>
+                        <top_right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </top_right_custom>
+                        <right translate="label">
+                            <label>Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_right</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </right>
+                        <right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>450</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </right_custom>
+                        <bottom_right translate="label">
+                            <label>Bottom Right</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottomright</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_right>
+                        <bottom_right_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>550</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_right_custom>
+                        <bottom translate="label">
+                            <label>Bottom</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottom</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom>
+                        <bottom_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>650</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_custom>
+                        <bottom_left translate="label">
+                            <label>Bottom Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_bottomleft</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_left>
+                        <bottom_left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>750</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bottom_left_custom>
+                        <left translate="label">
+                            <label>Left</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_decoration_left</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </left>
+                        <left_custom translate="label comment">
+                            <label>CSS Class Name</label>
+                            <comment>without preceding dot (.), define CSS class under the same name in one of your theme CSS files</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>850</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </left_custom>
+                    </fields>
+                </category_carousel_si_decoration>
+                <category_carousel_helper translate="label">
+                    <label>Category Page: Carousel Helper</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template translate="label">
+                            <label>Display As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_helper</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                        <custom translate="label comment">
+                            <label>Custom Template File</label>
+                            <comment>File should be in app/design/frontend/[package]/[theme]/template directory with '.phtml' extension</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom>
+                        <position translate="label">
+                            <label>Position</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_position</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </position>
+                        <interaction translate="label">
+                            <label>Activate Product On</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_interaction</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </interaction>
+                    </fields>
+                </category_carousel_helper>
+                <category_carousel_navigation translate="label">
+                    <label>Category Page: Carousel Navigation</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template translate="label">
+                            <label>Display As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_featured/source_carousel_navigation</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                        <custom_prev translate="label comment">
+                            <label>Custom Template File for 'Previous' Action</label>
+                            <comment>File should be in app/design/frontend/[package]/[theme]/template directory with '.phtml' extension</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom_prev>
+                        <custom_next translate="label comment">
+                            <label>Custom Template File for 'Next' Action</label>
+                            <comment>File should be in app/design/frontend/[package]/[theme]/template directory with '.phtml' extension</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom_next>
+                    </fields>
+                </category_carousel_navigation>
+                <category_carousel_other translate="label">
+                    <label>Category Page: Other Carousel Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>600</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <shuffle translate="label">
+                            <label>Shuffle</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shuffle>
+                        <random_start translate="label">
+                            <label>Random Start</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </random_start>
+                        <auto_start translate="label">
+                            <label>Auto Start</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </auto_start>
+                    </fields>
+                </category_carousel_other>
+            </groups>
+        </mana_featured>
+    </sections>
+</config>

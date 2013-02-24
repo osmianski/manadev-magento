@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAdmin
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <tabs>
+        <mana>
+            <label>MANAdev</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <mana_filters translate="label" module="manapro_filteradmin">
+            <label>Layered Navigation</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <display translate="label" module="manapro_filteradmin">
+                    <label>Display Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <category translate="label">
+                            <label>Show Category Filter As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_filters/source_display_category</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </category>
+                        <price translate="label comment">
+                            <label>Show Price Filter As</label>
+                            <comment>Applied to system attribute 'price'</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_filters/source_display_price</source_model>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </price>
+                        <decimal translate="label comment">
+                            <label>Show Filters of Type 'Price' As</label>
+                            <comment>Applied to all other attributes of price type</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_filters/source_display_decimal</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </decimal>
+                        <attribute translate="label">
+                            <label>Show All Other Filters As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_filters/source_display_attribute</source_model>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute>
+                        <sort_method translate="label comment">
+                            <label>Sort Items By</label>
+                            <comment>Not applicable to category and price filters</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_filters/sort</source_model>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_method>
+                        <count translate="label comment">
+                            <label>Show Product Count</label>
+                            <comment>Not applicable to sliders</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>375</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </count>
+                    </fields>
+                </display>
+                <session translate="label" module="manapro_filteradmin">
+                    <label>Session Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <save_applied_filters translate="label comment">
+                            <label>Remember Applied Category Filters</label>
+                            <comment>If set, system remembers filters applied to each category so when customer navigates to a category to which he/she had applied filters earlier, those filtered are still applied.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </save_applied_filters>
+                        <save_applied_search_filters translate="label comment">
+                            <label>Remember Applied Search Filters</label>
+                            <comment>If set, system remembers filters applied on search page so when customer uses search, those filtered are still applied.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </save_applied_search_filters>
+                        <save_applied_cms_filters translate="label comment">
+                            <label>Remember Applied CMS Page Filters</label>
+                            <comment>If set, system remembers filters applied to each CMS page containing layered navigation, so when customer navigates to a CMS page to which he/she had applied filters earlier, those filtered are still applied.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </save_applied_cms_filters>
+                        <globally_applied_filters translate="label comment">
+                            <label>Globally Applied Filters</label>
+                            <comment>One or more attribute codes separated by comma (','). If not empty, specified filters are remembered globally across different categories, CMS pages and search.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </globally_applied_filters>
+                    </fields>
+                </session>
+            </groups>
+        </mana_filters>
+    </sections>
+</config>

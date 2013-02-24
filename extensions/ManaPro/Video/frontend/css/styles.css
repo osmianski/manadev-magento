@@ -1,0 +1,19 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Video
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+#m-video-tabs { background: transparent; }
+#m-video-tabs .m-tabs { margin: 0; background: transparent; border-width: 0 0 1px 0; border-radius: 0; }
+#m-video-tabs .m-tabs li { margin: 0 .2em 1px 0; }
+#m-video-tabs .m-tabs li a { width: auto; height: auto; border: 0;  }
+.m-video-popup .m-content { overflow: hidden; }
+.m-video-popup .m-large-image { float: left; }
+.m-video-popup .m-small-images { float: left; overflow-x: hidden; overflow-y: auto; padding: 5px; }
+.m-video-popup .m-small-images ul { overflow: hidden; }
+.m-video-popup .m-small-images li { float: left; margin: 5px;}
+.m-video-popup .m-buttons { overflow: hidden; }
+.m-video-popup .m-buttons button { float: left; margin: 5px 10px; }
+.m-video-popup .m-buttons button.m-btn-close { float: right; }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductFaces
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: Static Visuals/Empty layout file -->
+<!-- This file defines the rules which should be applied when module manapro_productfaces is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+	<!-- Add CSS and JS to every product editing page -->
+	<adminhtml_catalog_product_new>
+		<update handle="jquery_core" />
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_productfaces.css</stylesheet></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_productfaces.js</name><params/></action>
+		</reference>
+	</adminhtml_catalog_product_new>
+	<adminhtml_catalog_product_edit>
+		<update handle="jquery_core" />
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_productfaces.css</stylesheet></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_productfaces.js</name><params/></action>
+		</reference>
+	</adminhtml_catalog_product_edit>
+	
+	<!-- layout for "Representing Products" tab when currently edited product does not represent any other product
+	(does not "have parent product") -->
+    <adminhtml_representing_products_tab_representing>
+        <block type="core/template" name="root" output="toHtml" template="manapro/productfaces/tab.phtml">
+	    	<!-- placeholder for dynamic messages. Messages can appear when tab is first rendered or later, while editing -->
+        	<block type="manapro_productfaces/wrapper" name="m_representing_messages_wrapper" as="m_representing_messages_wrapper">
+        		<action method="setId">
+        			<value>m_representing_messages_wrapper</value>
+        		</action>
+        		<block type="core/messages" name="m_representing_messages" as="m_representing_messages" />
+        	</block>
+
+			<!-- fieldset with general info on total quantity, whether qty sharing is enabled, etc -->
+        	<block type="manapro_productfaces/header" name="catalog.product.edit.tab.m_representing_header" />
+        	
+        	<!-- grid with products representing this product. This grid can not be empty. However is is hidden
+        	until qty sharing is enabled for this product -->
+            <block type="manapro_productfaces/grid" name="catalog.product.edit.tab.m_representing"/>
+            
+            <!-- hidden field holding all last edited values from the grid and JS object which enfoces data 
+            sync from grid to hidden field -->
+            <block type="adminhtml/widget_grid_serializer" name="m_representing_grid_serializer" template="manapro/productfaces/serializer.phtml">
+                <action method="initSerializerBlock">
+                    <grid_block_name>catalog.product.edit.tab.m_representing</grid_block_name>
+                    <data_callback>getSelectedMRepresentingProducts</data_callback>
+                    <hidden_input_name>links[m_representing]</hidden_input_name>
+                    <reload_param_name>products_m_representing</reload_param_name>
+                </action>
+                <action method="addColumnInputName">
+                    <input_name>m_parts</input_name>
+                    <input_name>m_unit</input_name>
+                    <input_name>position</input_name>
+                </action>
+            </block>
+        </block>
+    </adminhtml_representing_products_tab_representing>
+    
+    <!-- layout used to render changed grid during AJAX call -->
+    <adminhtml_representing_products_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="manapro_productfaces/grid" name="catalog.product.edit.tab.m_representing"/>
+        </block>
+    </adminhtml_representing_products_grid>
+    
+    <!-- obsolete. Use "adminhtml_representing_products_grid" instead -->
+    <adminhtml_representing_products_addcopy>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="manapro_productfaces/grid" name="catalog.product.edit.tab.m_representing"/>
+        </block>
+    </adminhtml_representing_products_addcopy>
+    
+    <!-- layout used to render represented (or "child") product. Simple form is shown with links to 
+    product being represented ("parent" product)  -->
+    <adminhtml_representing_products_tab_represented>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="manapro_productfaces/form" name="catalog.product.edit.tab.m_represented"/>
+            <block type="core/template" name="m_representing_form_scripts" template="manapro/productfaces/form.phtml" />
+        </block>
+    </adminhtml_representing_products_tab_represented>
+    
+    <!-- layout used to render warning messages during qty recalculation -->
+    <adminhtml_representing_products_update>
+        <block type="core/text_list" name="root" output="toHtml">
+			<block type="core/messages" name="m_representing_messages" as="m_representing_messages" />
+        </block>
+    </adminhtml_representing_products_update>
+</layout>

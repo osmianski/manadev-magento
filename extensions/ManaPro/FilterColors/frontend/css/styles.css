@@ -1,0 +1,14 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterColors
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-filter-colors {overflow: hidden; width: 100%; margin-bottom: 10px;}
+.horizontal .m-color {float: left; margin: 2px;}
+.m-filter-colors.vertical li { margin:  4px 0 0; }
+.state.m-color { display:  inline-block; margin-left: 3px; }
+
+.m-filter-colors.labels li { overflow: hidden; margin: 4px 0 0; }
+.m-filter-colors.labels .m-color { float: left; margin: 0 4px 0; }
+.m-filter-colors.labels li a { text-decoration: none; }

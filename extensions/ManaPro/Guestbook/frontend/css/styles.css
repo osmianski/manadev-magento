@@ -1,0 +1,20 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+.m-guest-book {}
+.m-guest-book blockquote {
+  font: 14px/22px normal helvetica, sans-serif;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  padding-left: 15px;
+  border-left: 3px solid #ccc;
+}
+.m-guest-book p { margin: 20px; }
+.m-guest-book .guest-date { color: #aaa; }
+.m-guest-book .guest-name { font-weight: bold; }
+.m-write-comment { Font-size: medium; margin-top: 50px; }

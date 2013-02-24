@@ -1,0 +1,38 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Admin
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/* @var $this Mana_Admin_Block_Form_Field */
+$_element = $this->getElement();
+$_note    = $_element->getNote();
+$_trId    = $_element->getHtmlContainerId();
+$_class   = $_element->getFieldsetHtmlClass();
+$this->checkFieldDisable();
+?>
+<?php if (!$_element->getNoDisplay()): ?>
+<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?>>
+    <?php if ($_element->getType()=='hidden'): ?>
+    <td colspan="3" class="hidden"><?php echo trim($_element->getElementHtml()) ?></td>
+    <?php else: ?>
+    <td class="label<?php echo $_class ? " {$_class}-label" : ''?>"><?php echo trim($_element->getLabelHtml()) ?></td>
+    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value' ?><?php echo $_class ? " {$_class}-value" : ''?>">
+        <?php echo trim($_element->getElementHtml()) ?>
+        <?php if ($_element->getWysiwyg()): ?>
+            <button type="button" class="scalable m-wysiwyg"><span><?php echo $this->__('WYSIWYG Editor') ?></span></button>
+        <?php endif; ?>
+        <?php if ($_note): ?>
+            <p class="note<?php echo $_class ? " {$_class}-note" : ''?>" id="note_<?php echo $_element->getId()?>"><span><?php echo $_note ?></span></p>
+        <?php endif ?>
+    </td>
+    <td class="value use-default">
+    	<?php if ($this->getDisplayUseDefault()) : ?>
+        <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
+        <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
+        <?php endif; ?>
+    </td>
+    <?php endif; ?>
+</tr>
+<?php endif; ?>

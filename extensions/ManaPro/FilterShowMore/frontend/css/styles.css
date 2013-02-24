@@ -1,0 +1,17 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterShowMore
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-more-less { font-size: 11px; text-align: right; }
+.m-expandable-filter { overflow: hidden; }
+.m-scrollable-filter { overflow-x: hidden !important; overflow-y: scroll !important; border: 1px solid #ccc; padding: 2px 0 2px 5px; background: rgba(255,255,255,0.5); }
+.m-scrollable-filter li { white-space: nowrap; }
+
+.m-filter-popup { padding: 10px; }
+.m-filter-popup .m-columns { overflow: hidden; }
+.m-filter-popup .m-columns > li { float: left; width: 200px; text-align: left; }
+.m-filter-popup .buttons-set { margin: 8px 0 0; }
+.m-filter-popup .m-filter-colors { margin: 0; }
+.m-showmore-popup-container { box-shadow : 15px 15px 25px 5px rgba( 0, 0, 0, 0.4 ); }

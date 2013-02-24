@@ -1,0 +1,8 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_ProductPlusProduct
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ * 
+ * Translated by Matthijs de Graaf, contact@matthijsdegraaf.nl, http://www.matthijsdegraaf.nl  
+ */

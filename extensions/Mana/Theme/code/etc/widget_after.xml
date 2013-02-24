@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     Mana_Theme
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <new_products>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </new_products>
+    <recently_viewed>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </recently_viewed>
+    <recently_compared>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </recently_compared>
+    <m_attribute_option>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </m_attribute_option>
+    <m_bestsellers>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </m_bestsellers>
+    <m_sale>
+        <parameters>
+            <column_count translate="label" module="mana_theme">
+                <required>0</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Grid Columns</label>
+                <type>text</type>
+            </column_count>
+        </parameters>
+    </m_sale>
+</widgets>

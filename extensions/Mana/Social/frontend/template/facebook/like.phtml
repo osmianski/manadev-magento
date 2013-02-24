@@ -1,0 +1,20 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Social_Block_Facebook_Like */
+?>
+<div class="fb-like"
+    data-href="<?php echo $this->getPageUrl() ?>"
+    data-width="<?php echo $this->getWidth() ?>"
+    data-send="<?php echo $this->getShowSend() ? 'true' : 'false' ?>"
+    data-show-faces="<?php echo $this->getShowFaces() ? 'true' : 'false' ?>"
+    data-font="<?php echo $this->getFontFamily() ?>"
+    data-colorscheme="<?php echo $this->getColorScheme() ?>"
+    data-action="<?php echo $this->getFbAction() ?>"
+>
+</div>
+

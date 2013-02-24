@@ -1,0 +1,178 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Billing_Address */
+?>
+<div class="m-billing-address">
+    <div class="section-title">
+        <div class="number">1</div>
+        <h2><?php echo $this->__('Billing Address') ?></h2>
+    </div>
+    <fieldset class="form-list">
+        <input type="hidden" name="billing[address_id]" value="<?php echo $this->getAddress()->getId() ?>"
+               id="billing:address_id"/>
+        <ul class="billing-address-form">
+            <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
+            <li class="fields">
+                <div class="field">
+                    <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]"
+                               id="billing:street1"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>"
+                               class="input-text required-entry"/>
+                    </div>
+                </div>
+                <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                <div class="field">
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>"
+                               name="billing[street][]" id="billing:street<?php echo $_i?>"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>"
+                               class="input-text"/>
+                    </div>
+                </div>
+                <?php endfor ?>
+                <div class="field">
+                    <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <?php echo $this->getCountryHtmlSelect('billing') ?>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>"
+                               class="input-text required-entry" id="billing:city"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" title="<?php echo $this->__('Zip') ?>" name="billing[postcode]"
+                               id="billing:postcode"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>"
+                               class="input-text validate-zip-international required-entry"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <select id="billing:region_id" name="billing[region_id]"
+                                title="<?php echo $this->__('State') ?>" class="validate-select"
+                                style="display:none;">
+                            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                        </select>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            $('billing:region_id').setAttribute('defaultValue', "<?php echo $this->getAddress()->getRegionId() ?>");
+                            //]]>
+                        </script>
+                        <input type="text" id="billing:region" name="billing[region]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"
+                               title="<?php echo $this->__('State/Province') ?>" class="input-text"
+                               style="display:none;"
+                               />
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field">
+                    <label for="billing:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" name="billing[telephone]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="billing:telephone"/>
+                        <input type="text" name="billing[telephone2]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone2()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="billing:telephone2"/>
+                        <input type="text" name="billing[telephone3]"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone3()) ?>"
+                               title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry"
+                               id="billing:telephone3"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?>
+                    </label>
+
+                    <div class="input-box">
+                        <input type="text" name="billing[email]" id="billing:email"
+                               value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>"
+                               title="<?php echo $this->__('Email Address') ?>"
+                               class="input-text validate-email required-entry"/>
+                    </div>
+                </div>
+            </li>
+            <li class="no-display"><input type="hidden" name="billing[save_in_address_book]" value="1"/></li>
+            <li class="fields">
+                <div class="control">
+                    <input type="checkbox" name="billing[use_for_shipping]" id="billing:use_for_shipping"
+                           value="1"<?php if ($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?>
+                           title="<?php echo $this->__('Ship to the same address') ?>"
+                           class="checkbox billing-use-for-shipping"/><label for="billing:use_for_shipping"><?php echo $this->__('Ship to the same address') ?></label>
+                </div>
+                <div class="control">
+                    <?php if (!$this->isCustomerLoggedIn()) : ?>
+                    <input type="checkbox" name="billing[create_account]" value="1"
+                           title="<?php echo $this->__('Create an account that stores this information') ?>" id="billing:create_account"
+                           <?php if ($this->getAddress()->getSaveInAddressBook()): ?>
+                           checked="checked"<?php endif;?> class="checkbox billing-create-account"/><label
+                        for="billing:create_account"><?php echo $this->__('Create an account that stores this information') ?></label>
+                   <?php else : ?>
+                    <span class="no-display"><input type="checkbox" name="billing[create_account]" value="1" /></span>
+                    <?php endif ?>
+                </div>
+            </li>
+        </ul>
+        <ul class="create-account-form" style="display: none;"  >
+            <li class="fields" id="register-customer-password">
+                <div class="field">
+                    <label for="billing:customer_password"
+                           class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+
+                    <div class="input-box">
+                        <input type="password" name="billing[customer_password]" id="billing:customer_password"
+                               title="<?php echo $this->__('Password') ?>"
+                               class="input-text required-entry validate-password"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="billing:confirm_password"
+                           class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
+
+                    <div class="input-box">
+                        <input type="password" name="billing[confirm_password]"
+                               title="<?php echo $this->__('Confirm Password') ?>" id="billing:confirm_password"
+                               class="input-text required-entry validate-cpassword"/>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id',
+        countryRegions, undefined, 'billing:postcode');
+</script>

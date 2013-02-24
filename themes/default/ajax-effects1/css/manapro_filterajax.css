@@ -1,0 +1,18 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterAjax
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity = 80); /* percent */
+    -moz-opacity: 0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+    z-index: 10000;
+}
+.m-overlay-0 { background: white url(../images/loader.gif) 50% 10% no-repeat; }
+.m-overlay-1 { background: white url(../images/loader.gif) 50% 50% no-repeat; }

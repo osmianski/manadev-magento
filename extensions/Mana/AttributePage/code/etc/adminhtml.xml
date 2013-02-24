@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_AttributePage
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <shopby translate="title" module="mana_attributepage">
+                    <title>Shop By</title>
+                    <sort_order>500</sort_order>
+                    <children>
+                        <new translate="title" module="mana_attributepage">
+                            <title>Enable 'Shop By' Feature For Attribute ...</title>
+                            <action>adminhtml/mana_attributepage/new</action>
+                            <sort_order>100</sort_order>
+                        </new>
+                    </children>
+                </shopby>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana translate="title" module="mana_attributepage">
+                        <title>Configure Mana Extensions</title>
+                        <sort_order>79</sort_order>
+						<children>
+							<shopby translate="title" module="mana_attributepage">
+								<title>Shop By</title>
+		                        <sort_order>500</sort_order>
+							</shopby>
+						</children>
+					</mana>
+                    <!--<system>
+                        <children>
+                            <config>
+                                <children>
+                                    <mana_attributepage translate="title" module="mana_attributepage">
+                                        <title>MANAdev Shop By Attribute</title>
+                                    </mana_attributepage>
+                                </children>
+                            </config>
+                        </children>
+                    </system>-->
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

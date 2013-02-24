@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterHelp
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_FilterHelp>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.10.30.23</version>
+        </ManaPro_FilterHelp>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterHelp_Helper_Data
+		class is accessible through Mage::helper('manapro_filterhelp') call, other ManaPro_FilterHelp_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterhelp/xxx_yyy') call. -->
+        <helpers>
+            <manapro_filterhelp>
+                <!-- This says that string 'manapro_filterhelp' corresponds to ManaPro_FilterHelp_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_FilterHelp_Helper</class>
+            </manapro_filterhelp>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterHelp_Model_XXX_YYY classes are accessible as 
+            'manapro_filterhelp/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_filterhelp' corresponds to ManaPro_FilterHelp_Model pseudo-namespace in 
+                getModel() and getSingleton() calls. -->
+            <manapro_filterhelp>
+                <class>ManaPro_FilterHelp_Model</class>
+                <!-- INSERT HERE: resource section name -->
+            </manapro_filterhelp>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This section registers block classes ManaPro_FilterHelp_Block_XXX_YYY to be accessible through
+            'manapro_filterhelp/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_filterhelp' corresponds to ManaPro_FilterHelp_Block pseudo-namespace. -->
+            <manapro_filterhelp>
+                <class>ManaPro_FilterHelp_Block</class>
+            </manapro_filterhelp>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers event handlers of this module defined in ManaPro_FilterHelp_Model_Observer with 
+            events defined in other module throughout the system. So when some code in other module invokes an event 
+            mentioned in this section, handler method of ManaPro_FilterHelp_Model_Observer class gets called. -->
+        <events>
+			<m_db_is_config_changed><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterhelp>
+						<class>manapro_filterhelp/observer</class> <!-- model name of class containing event handler methods -->
+						<method>isConfigChanged</method> <!-- event handler method name -->
+					</manapro_filterhelp>
+				</observers>
+			</m_db_is_config_changed>
+            <m_db_update_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareUpdateColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_db_update_columns>
+            <m_db_update_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processUpdate</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_db_update_process>
+            <m_db_insert_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareInsertColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_db_insert_columns>
+            <m_db_insert_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processInsert</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_db_insert_process>
+            <m_db_add_edited_data><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addEditedData</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_db_add_edited_data>
+            <m_crud_form><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addFields</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_crud_form>
+            <m_advanced_filter_name_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterhelp>
+                        <class>manapro_filterhelp/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>render</method>
+                        <!-- event handler method name -->
+                    </manapro_filterhelp>
+                </observers>
+            </m_advanced_filter_name_after>
+        </events>
+        <!-- This tells Magento to analyze sql/manapro_filterhelp_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterhelp_setup>
+                <setup>
+                    <module>ManaPro_FilterHelp</module>
+                </setup>
+            </manapro_filterhelp_setup>
+        </resources>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterHelp>
+                    <files>
+                        <default>ManaPro_FilterHelp.csv</default>
+                    </files>
+                </ManaPro_FilterHelp>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manapro_filterhelp>
+                    <file>manapro_filterhelp.xml</file>
+                </manapro_filterhelp>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <default>
+        <mana_filters>
+            <advanced>
+                <help_width>180</help_width>
+            </advanced>
+        </mana_filters>
+    </default>
+</config>

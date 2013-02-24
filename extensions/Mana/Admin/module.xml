@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Admin
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/modules/<module>.xml -->
+<config>
+	<!-- This section activates module in Magento system. -->
+    <modules>
+        <Mana_Admin>
+        	<!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
+        	in this case Magento will behave as if module does not exist). -->
+            <active>true</active>
+            <!-- This instructs Magento to search for module code in app/code/local directory. -->
+            <codePool>local</codePool>
+			<depends>
+				<Mana_Core />
+			</depends>
+        </Mana_Admin>
+    </modules>
+</config>

@@ -1,0 +1,604 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Featured
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* CHANGE THIS: block height, colors and borders */
+.m-featured .m-carousel { height: 160px; }
+.m-featured { background: white; border-radius: 10px; border: 5px solid white; box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+    position: relative; margin-bottom: 20px; }
+.m-featured .desc { max-height: 50px; overflow: hidden; }
+.m-tag { position: absolute; width: 100px; height: 100px; z-index: 2; }
+.m-tag.m-top-left { top: -18px; left: -16px; transform:rotate(-90deg); -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); 
+  -webkit-transform:rotate(-90deg); -o-transform:rotate(-90deg); }  
+.m-tag.m-top { height: 50px; top: -10px; right: 90px; }  
+.m-tag.m-top-right { top: -16px; right: -18px; }
+.m-tag.m-right { height: 50px; top: 100px; right: -35px; transform:rotate(90deg); -ms-transform:rotate(90deg); -moz-transform:rotate(90deg); 
+  -webkit-transform:rotate(90deg); -o-transform:rotate(90deg); }  
+.m-tag.m-bottom-right { bottom: -19px; right: -11px; }  
+.m-tag.m-bottom { height: 50px; bottom: -10px; right: 90px; }  
+.m-tag.m-bottom-left { bottom: -11px; left: -18px; transform:rotate(90deg); -ms-transform:rotate(90deg); -moz-transform:rotate(90deg); 
+  -webkit-transform:rotate(90deg); -o-transform:rotate(90deg); }  
+.m-tag.m-left { height: 50px; top: 100px; left: -35px; transform:rotate(-90deg); -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); 
+  -webkit-transform:rotate(-90deg); -o-transform:rotate(-90deg); }
+
+.m-small-image-tag-container { overflow: visible; float: left; position: relative; border: 1px solid #CCCCCC; }
+.m-small-image-tag-container .m-tag.m-top-left { top: -13px; left: -12px; }
+.m-small-image-tag-container .m-tag.m-top { top: -4px; right: 4px; }
+.m-small-image-tag-container .m-tag.m-top-right { top: -12px; right: -13px; }
+.m-small-image-tag-container .m-tag.m-right { top: 30px; right: -29px; }
+.m-small-image-tag-container .m-tag.m-bottom-right { bottom: -12px; right: -6px; }
+.m-small-image-tag-container .m-tag.m-bottom { bottom: -4px; right: 4px; }
+.m-small-image-tag-container .m-tag.m-bottom-left { bottom: -6px; left: -13px; }
+.m-small-image-tag-container .m-tag.m-left { top: 30px; left: -29px; }
+/*
+.m-small-image-tag-container .m-tag { position: absolute; width: 50px; height: 50px; z-index: 2; }
+.m-small-image-tag-container .m-tag.m-top-left { top: -7px; left: -6px; }
+.m-small-image-tag-container .m-tag.m-top { height: 25px; top: -3px; right: 4px; }
+.m-small-image-tag-container .m-tag.m-top-right { top: -6px; right: -7px; }
+.m-small-image-tag-container .m-tag.m-right { height: 25px; top: 30px; right: -15px; }
+.m-small-image-tag-container .m-tag.m-bottom-right { bottom: -4px; right: -4px; }
+.m-small-image-tag-container .m-tag.m-bottom { height: 25px; bottom: -3px; right: 4px; }
+.m-small-image-tag-container .m-tag.m-bottom-left { bottom: -4px; left: -4px; }
+.m-small-image-tag-container .m-tag.m-left { height: 25px; top: 30px; left: -15px; }
+*/
+/* large tags */
+
+.m-tag.m-white-on-black-corner.m-top-right, .m-tag.m-white-on-black-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-black2.png) top right no-repeat; }
+.m-tag.m-white-on-black-corner.m-bottom-right, .m-tag.m-white-on-black-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-black2.png) top right no-repeat; }
+
+.m-tag.m-black-on-blue-corner.m-top-right, .m-tag.m-black-on-blue-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-blue.png) top right no-repeat; }
+.m-tag.m-black-on-blue-corner.m-bottom-right, .m-tag.m-black-on-blue-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-blue.png) top right no-repeat; }
+.m-tag.m-white-on-blue-corner.m-top-right, .m-tag.m-white-on-blue-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-blue2.png) top right no-repeat; }
+.m-tag.m-white-on-blue-corner.m-bottom-right, .m-tag.m-white-on-blue-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-blue2.png) top right no-repeat; }
+
+.m-tag.m-black-on-burgundy-corner.m-top-right, .m-tag.m-black-on-burgundy-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-burgundy.png) top right no-repeat; }
+.m-tag.m-black-on-burgundy-corner.m-bottom-right, .m-tag.m-black-on-burgundy-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-burgundy.png) top right no-repeat; }
+.m-tag.m-white-on-burgundy-corner.m-top-right, .m-tag.m-white-on-burgundy-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-burgundy2.png) top right no-repeat; }
+.m-tag.m-white-on-burgundy-corner.m-bottom-right, .m-tag.m-white-on-burgundy-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-burgundy2.png) top right no-repeat; }
+
+.m-tag.m-black-on-green-corner.m-top-right, .m-tag.m-black-on-green-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-green.png) top right no-repeat; }
+.m-tag.m-black-on-green-corner.m-bottom-right, .m-tag.m-black-on-green-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-green.png) top right no-repeat; }
+.m-tag.m-white-on-green-corner.m-top-right, .m-tag.m-white-on-green-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-green2.png) top right no-repeat; }
+.m-tag.m-white-on-green-corner.m-bottom-right, .m-tag.m-white-on-green-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-green2.png) top right no-repeat; }
+
+.m-tag.m-black-on-grey-corner.m-top-right, .m-tag.m-black-on-grey-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-grey.png) top right no-repeat; }
+.m-tag.m-black-on-grey-corner.m-bottom-right, .m-tag.m-black-on-grey-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-grey.png) top right no-repeat; }
+.m-tag.m-white-on-grey-corner.m-top-right, .m-tag.m-white-on-grey-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-grey2.png) top right no-repeat; }
+.m-tag.m-white-on-grey-corner.m-bottom-right, .m-tag.m-white-on-grey-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-grey2.png) top right no-repeat; }
+
+.m-tag.m-black-on-yellow-corner.m-top-right, .m-tag.m-black-on-yellow-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-yellow.png) top right no-repeat; }
+.m-tag.m-black-on-yellow-corner.m-bottom-right, .m-tag.m-black-on-yellow-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-yellow.png) top right no-repeat; }
+.m-tag.m-white-on-yellow-corner.m-top-right, .m-tag.m-white-on-yellow-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-yellow2.png) top right no-repeat; }
+.m-tag.m-white-on-yellow-corner.m-bottom-right, .m-tag.m-white-on-yellow-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-yellow2.png) top right no-repeat; }
+
+.m-tag.m-black-on-navy-corner.m-top-right, .m-tag.m-black-on-navy-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-navy.png) top right no-repeat; }
+.m-tag.m-black-on-navy-corner.m-bottom-right, .m-tag.m-black-on-navy-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-navy.png) top right no-repeat; }
+.m-tag.m-white-on-navy-corner.m-top-right, .m-tag.m-white-on-navy-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-navy2.png) top right no-repeat; }
+.m-tag.m-white-on-navy-corner.m-bottom-right, .m-tag.m-white-on-navy-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-navy2.png) top right no-repeat; }
+
+.m-tag.m-black-on-orange-corner.m-top-right, .m-tag.m-black-on-orange-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-orange.png) top right no-repeat; }
+.m-tag.m-black-on-orange-corner.m-bottom-right, .m-tag.m-black-on-orange-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-orange.png) top right no-repeat; }
+.m-tag.m-white-on-orange-corner.m-top-right, .m-tag.m-white-on-orange-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-orange2.png) top right no-repeat; }
+.m-tag.m-white-on-orange-corner.m-bottom-right, .m-tag.m-white-on-orange-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-orange2.png) top right no-repeat; }
+
+.m-tag.m-black-on-pink-corner.m-top-right, .m-tag.m-black-on-pink-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-pink.png) top right no-repeat; }
+.m-tag.m-black-on-pink-corner.m-bottom-right, .m-tag.m-black-on-pink-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-pink.png) top right no-repeat; }
+.m-tag.m-white-on-pink-corner.m-top-right, .m-tag.m-white-on-pink-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-pink2.png) top right no-repeat; }
+.m-tag.m-white-on-pink-corner.m-bottom-right, .m-tag.m-white-on-pink-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-pink2.png) top right no-repeat; }
+
+.m-tag.m-black-on-red-corner.m-top-right, .m-tag.m-black-on-red-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-red.png) top right no-repeat; }
+.m-tag.m-black-on-red-corner.m-bottom-right, .m-tag.m-black-on-red-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-red.png) top right no-repeat; }
+.m-tag.m-white-on-red-corner.m-top-right, .m-tag.m-white-on-red-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-red2.png) top right no-repeat; }
+.m-tag.m-white-on-red-corner.m-bottom-right, .m-tag.m-white-on-red-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-red2.png) top right no-repeat; }
+
+.m-tag.m-black-on-white-corner.m-top-right, .m-tag.m-black-on-white-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-white.png) top right no-repeat; }
+.m-tag.m-black-on-white-corner.m-bottom-right, .m-tag.m-black-on-white-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-white.png) top right no-repeat; }
+.m-tag.m-white-on-white-corner.m-top-right, .m-tag.m-white-on-white-corner.m-top-left 
+  { background: transparent url(../images/manapro_featured/c-tr-white2.png) top right no-repeat; }
+.m-tag.m-white-on-white-corner.m-bottom-right, .m-tag.m-white-on-white-corner.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/c-br-white2.png) top right no-repeat; }
+
+.m-tag.m-white-on-black-ribbon.m-top-right, .m-tag.m-white-on-black-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-black2.png) top right no-repeat; }
+.m-tag.m-white-on-black-ribbon.m-bottom-right, .m-tag.m-white-on-black-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-black2.png) top right no-repeat; }
+
+.m-tag.m-black-on-blue-ribbon.m-top-right, .m-tag.m-black-on-blue-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-blue.png) top right no-repeat; }
+.m-tag.m-black-on-blue-ribbon.m-bottom-right, .m-tag.m-black-on-blue-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-blue.png) top right no-repeat; }
+.m-tag.m-white-on-blue-ribbon.m-top-right, .m-tag.m-white-on-blue-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-blue2.png) top right no-repeat; }
+.m-tag.m-white-on-blue-ribbon.m-bottom-right, .m-tag.m-white-on-blue-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-blue2.png) top right no-repeat; }
+
+.m-tag.m-black-on-burgundy-ribbon.m-top-right, .m-tag.m-black-on-burgundy-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-burgundy.png) top right no-repeat; }
+.m-tag.m-black-on-burgundy-ribbon.m-bottom-right, .m-tag.m-black-on-burgundy-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-burgundy.png) top right no-repeat; }
+.m-tag.m-white-on-burgundy-ribbon.m-top-right, .m-tag.m-white-on-burgundy-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-burgundy2.png) top right no-repeat; }
+.m-tag.m-white-on-burgundy-ribbon.m-bottom-right, .m-tag.m-white-on-burgundy-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-burgundy2.png) top right no-repeat; }
+
+.m-tag.m-black-on-green-ribbon.m-top-right, .m-tag.m-black-on-green-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-green.png) top right no-repeat; }
+.m-tag.m-black-on-green-ribbon.m-bottom-right, .m-tag.m-black-on-green-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-green.png) top right no-repeat; }
+.m-tag.m-white-on-green-ribbon.m-top-right, .m-tag.m-white-on-green-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-green2.png) top right no-repeat; }
+.m-tag.m-white-on-green-ribbon.m-bottom-right, .m-tag.m-white-on-green-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-green2.png) top right no-repeat; }
+
+.m-tag.m-black-on-grey-ribbon.m-top-right, .m-tag.m-black-on-grey-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-grey.png) top right no-repeat; }
+.m-tag.m-black-on-grey-ribbon.m-bottom-right, .m-tag.m-black-on-grey-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-grey.png) top right no-repeat; }
+.m-tag.m-white-on-grey-ribbon.m-top-right, .m-tag.m-white-on-grey-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-grey2.png) top right no-repeat; }
+.m-tag.m-white-on-grey-ribbon.m-bottom-right, .m-tag.m-white-on-grey-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-grey2.png) top right no-repeat; }
+
+.m-tag.m-black-on-yellow-ribbon.m-top-right, .m-tag.m-black-on-yellow-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-yellow.png) top right no-repeat; }
+.m-tag.m-black-on-yellow-ribbon.m-bottom-right, .m-tag.m-black-on-yellow-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-yellow.png) top right no-repeat; }
+.m-tag.m-white-on-yellow-ribbon.m-top-right, .m-tag.m-white-on-yellow-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-yellow2.png) top right no-repeat; }
+.m-tag.m-white-on-yellow-ribbon.m-bottom-right, .m-tag.m-white-on-yellow-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-yellow2.png) top right no-repeat; }
+
+.m-tag.m-black-on-navy-ribbon.m-top-right, .m-tag.m-black-on-navy-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-navy.png) top right no-repeat; }
+.m-tag.m-black-on-navy-ribbon.m-bottom-right, .m-tag.m-black-on-navy-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-navy.png) top right no-repeat; }
+.m-tag.m-white-on-navy-ribbon.m-top-right, .m-tag.m-white-on-navy-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-navy2.png) top right no-repeat; }
+.m-tag.m-white-on-navy-ribbon.m-bottom-right, .m-tag.m-white-on-navy-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-navy2.png) top right no-repeat; }
+
+.m-tag.m-black-on-orange-ribbon.m-top-right, .m-tag.m-black-on-orange-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-orange.png) top right no-repeat; }
+.m-tag.m-black-on-orange-ribbon.m-bottom-right, .m-tag.m-black-on-orange-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-orange.png) top right no-repeat; }
+.m-tag.m-white-on-orange-ribbon.m-top-right, .m-tag.m-white-on-orange-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-orange2.png) top right no-repeat; }
+.m-tag.m-white-on-orange-ribbon.m-bottom-right, .m-tag.m-white-on-orange-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-orange2.png) top right no-repeat; }
+
+.m-tag.m-black-on-pink-ribbon.m-top-right, .m-tag.m-black-on-pink-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-pink.png) top right no-repeat; }
+.m-tag.m-black-on-pink-ribbon.m-bottom-right, .m-tag.m-black-on-pink-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-pink.png) top right no-repeat; }
+.m-tag.m-white-on-pink-ribbon.m-top-right, .m-tag.m-white-on-pink-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-pink2.png) top right no-repeat; }
+.m-tag.m-white-on-pink-ribbon.m-bottom-right, .m-tag.m-white-on-pink-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-pink2.png) top right no-repeat; }
+
+.m-tag.m-black-on-red-ribbon.m-top-right, .m-tag.m-black-on-red-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-red.png) top right no-repeat; }
+.m-tag.m-black-on-red-ribbon.m-bottom-right, .m-tag.m-black-on-red-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-red.png) top right no-repeat; }
+.m-tag.m-white-on-red-ribbon.m-top-right, .m-tag.m-white-on-red-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-red2.png) top right no-repeat; }
+.m-tag.m-white-on-red-ribbon.m-bottom-right, .m-tag.m-white-on-red-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-red2.png) top right no-repeat; }
+
+.m-tag.m-black-on-white-ribbon.m-top-right, .m-tag.m-black-on-white-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-white.png) top right no-repeat; }
+.m-tag.m-black-on-white-ribbon.m-bottom-right, .m-tag.m-black-on-white-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-white.png) top right no-repeat; }
+.m-tag.m-white-on-white-ribbon.m-top-right, .m-tag.m-white-on-white-ribbon.m-top-left 
+  { background: transparent url(../images/manapro_featured/r-tr-white2.png) top right no-repeat; }
+.m-tag.m-white-on-white-ribbon.m-bottom-right, .m-tag.m-white-on-white-ribbon.m-bottom-left 
+  { background: transparent url(../images/manapro_featured/r-br-white2.png) top right no-repeat; }
+
+.m-tag.m-white-on-black-clip.m-top, .m-tag.m-white-on-black-clip.m-right, .m-tag.m-white-on-black-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-black2.png) top right no-repeat; }
+.m-tag.m-white-on-black-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-black2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-blue-clip.m-top, .m-tag.m-black-on-blue-clip.m-right, .m-tag.m-black-on-blue-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-blue2.png) top right no-repeat; }
+.m-tag.m-black-on-blue-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-blue2.png) bottom right no-repeat; }
+.m-tag.m-white-on-blue-clip.m-top, .m-tag.m-white-on-blue-clip.m-right, .m-tag.m-white-on-blue-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-blue2.png) top right no-repeat; }
+.m-tag.m-white-on-blue-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-blue2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-burgundy-clip.m-top, .m-tag.m-black-on-burgundy-clip.m-right, .m-tag.m-black-on-burgundy-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-burgundy2.png) top right no-repeat; }
+.m-tag.m-black-on-burgundy-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-burgundy2.png) bottom right no-repeat; }
+.m-tag.m-white-on-burgundy-clip.m-top, .m-tag.m-white-on-burgundy-clip.m-right, .m-tag.m-white-on-burgundy-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-burgundy2.png) top right no-repeat; }
+.m-tag.m-white-on-burgundy-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-burgundy2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-green-clip.m-top, .m-tag.m-black-on-green-clip.m-right, .m-tag.m-black-on-green-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-green2.png) top right no-repeat; }
+.m-tag.m-black-on-green-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-green2.png) bottom right no-repeat; }
+.m-tag.m-white-on-green-clip.m-top, .m-tag.m-white-on-green-clip.m-right, .m-tag.m-white-on-green-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-green2.png) top right no-repeat; }
+.m-tag.m-white-on-green-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-green2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-grey-clip.m-top, .m-tag.m-black-on-grey-clip.m-right, .m-tag.m-black-on-grey-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-grey2.png) top right no-repeat; }
+.m-tag.m-black-on-grey-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-grey2.png) bottom right no-repeat; }
+.m-tag.m-white-on-grey-clip.m-top, .m-tag.m-white-on-grey-clip.m-right, .m-tag.m-white-on-grey-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-grey2.png) top right no-repeat; }
+.m-tag.m-white-on-grey-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-grey2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-yellow-clip.m-top, .m-tag.m-black-on-yellow-clip.m-right, .m-tag.m-black-on-yellow-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-yellow2.png) top right no-repeat; }
+.m-tag.m-black-on-yellow-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-yellow2.png) bottom right no-repeat; }
+.m-tag.m-white-on-yellow-clip.m-top, .m-tag.m-white-on-yellow-clip.m-right, .m-tag.m-white-on-yellow-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-yellow2.png) top right no-repeat; }
+.m-tag.m-white-on-yellow-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-yellow2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-navy-clip.m-top, .m-tag.m-black-on-navy-clip.m-right, .m-tag.m-black-on-navy-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-navy2.png) top right no-repeat; }
+.m-tag.m-black-on-navy-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-navy2.png) bottom right no-repeat; }
+.m-tag.m-white-on-navy-clip.m-top, .m-tag.m-white-on-navy-clip.m-right, .m-tag.m-white-on-navy-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-navy2.png) top right no-repeat; }
+.m-tag.m-white-on-navy-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-navy2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-orange-clip.m-top, .m-tag.m-black-on-orange-clip.m-right, .m-tag.m-black-on-orange-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-orange2.png) top right no-repeat; }
+.m-tag.m-black-on-orange-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-orange2.png) bottom right no-repeat; }
+.m-tag.m-white-on-orange-clip.m-top, .m-tag.m-white-on-orange-clip.m-right, .m-tag.m-white-on-orange-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-orange2.png) top right no-repeat; }
+.m-tag.m-white-on-orange-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-orange2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-pink-clip.m-top, .m-tag.m-black-on-pink-clip.m-right, .m-tag.m-black-on-pink-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-pink2.png) top right no-repeat; }
+.m-tag.m-black-on-pink-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-pink2.png) bottom right no-repeat; }
+.m-tag.m-white-on-pink-clip.m-top, .m-tag.m-white-on-pink-clip.m-right, .m-tag.m-white-on-pink-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-pink2.png) top right no-repeat; }
+.m-tag.m-white-on-pink-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-pink2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-red-clip.m-top, .m-tag.m-black-on-red-clip.m-right, .m-tag.m-black-on-red-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-red2.png) top right no-repeat; }
+.m-tag.m-black-on-red-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-red2.png) bottom right no-repeat; }
+.m-tag.m-white-on-red-clip.m-top, .m-tag.m-white-on-red-clip.m-right, .m-tag.m-white-on-red-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-red2.png) top right no-repeat; }
+.m-tag.m-white-on-red-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-red2.png) bottom right no-repeat; }
+
+.m-tag.m-black-on-white-clip.m-top, .m-tag.m-black-on-white-clip.m-right, .m-tag.m-black-on-white-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-white2.png) top right no-repeat; }
+.m-tag.m-black-on-white-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-white2.png) bottom right no-repeat; }
+.m-tag.m-white-on-white-clip.m-top, .m-tag.m-white-on-white-clip.m-right, .m-tag.m-white-on-white-clip.m-left  
+  { background: transparent url(../images/manapro_featured/clip-t-white2.png) top right no-repeat; }
+.m-tag.m-white-on-white-clip.m-bottom
+  { background: transparent url(../images/manapro_featured/clip-b-white2.png) bottom right no-repeat; }
+
+/* small tags */
+/*
+.m-small-image-tag-container .m-tag.m-white-on-black-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-black-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-black2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-black-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-black-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-black2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-blue-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-blue-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-blue.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-blue-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-blue-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-blue.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-blue-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-blue2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-blue-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-blue2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-burgundy-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-burgundy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-burgundy-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-burgundy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-burgundy-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-burgundy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-burgundy-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-burgundy2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-green-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-green-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-green.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-green-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-green-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-green.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-green-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-green2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-green-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-green2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-grey-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-grey-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-grey.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-grey-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-grey-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-grey.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-grey-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-grey2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-grey-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-grey2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-yellow-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-yellow-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-yellow.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-yellow-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-yellow-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-yellow.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-yellow-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-yellow2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-yellow-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-yellow2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-navy-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-navy-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-navy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-navy-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-navy-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-navy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-navy-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-navy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-navy-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-navy2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-orange-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-orange-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-orange.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-orange-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-orange-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-orange.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-orange-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-orange2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-orange-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-orange2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-pink-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-pink-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-pink.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-pink-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-pink-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-pink.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-pink-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-pink2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-pink-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-pink2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-red-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-red-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-red.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-red-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-red-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-red.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-red-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-red2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-red-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-red2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-white-corner.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-white-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-white.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-white-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-white-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-white.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-corner.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-white-corner.m-top-left { background: transparent url(../images/manapro_featured/small/c-tr-white2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-corner.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-white-corner.m-bottom-left { background: transparent url(../images/manapro_featured/small/c-br-white2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-white-on-black-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-black-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-black2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-black-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-black-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-black2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-blue-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-blue-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-blue.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-blue-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-blue-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-blue.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-blue-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-blue2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-blue-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-blue2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-burgundy-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-burgundy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-burgundy-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-burgundy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-burgundy-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-burgundy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-burgundy-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-burgundy2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-green-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-green-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-green.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-green-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-green-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-green.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-green-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-green2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-green-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-green2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-grey-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-grey-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-grey.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-grey-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-grey-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-grey.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-grey-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-grey2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-grey-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-grey2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-yellow-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-yellow-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-yellow.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-yellow-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-yellow-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-yellow.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-yellow-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-yellow2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-yellow-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-yellow2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-navy-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-navy-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-navy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-navy-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-navy-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-navy.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-navy-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-navy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-navy-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-navy2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-orange-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-orange-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-orange.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-orange-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-orange-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-orange.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-orange-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-orange2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-orange-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-orange2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-pink-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-pink-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-pink.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-pink-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-pink-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-pink.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-pink-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-pink2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-pink-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-pink2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-red-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-red-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-red.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-red-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-red-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-red.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-red-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-red2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-red-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-red2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-white-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-black-on-white-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-white.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-white-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-black-on-white-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-white.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-ribbon.m-top-right, .m-small-image-tag-container .m-tag.m-white-on-white-ribbon.m-top-left { background: transparent url(../images/manapro_featured/small/r-tr-white2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-ribbon.m-bottom-right, .m-small-image-tag-container .m-tag.m-white-on-white-ribbon.m-bottom-left { background: transparent url(../images/manapro_featured/small/r-br-white2.png) top right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-white-on-black-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-black-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-black-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-black2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-black-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-black2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-blue-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-blue-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-blue-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-blue2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-blue-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-blue2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-blue-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-blue-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-blue2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-blue-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-blue2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-burgundy-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-burgundy-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-burgundy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-burgundy-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-burgundy2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-burgundy-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-burgundy-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-burgundy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-burgundy-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-burgundy2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-green-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-green-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-green-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-green2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-green-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-green2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-green-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-green-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-green2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-green-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-green2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-grey-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-grey-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-grey-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-grey2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-grey-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-grey2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-grey-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-grey-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-grey2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-grey-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-grey2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-yellow-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-yellow-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-yellow-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-yellow2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-yellow-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-yellow2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-yellow-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-yellow-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-yellow2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-yellow-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-yellow2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-navy-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-navy-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-navy-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-navy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-navy-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-navy2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-navy-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-navy-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-navy2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-navy-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-navy2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-orange-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-orange-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-orange-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-orange2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-orange-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-orange2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-orange-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-orange-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-orange2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-orange-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-orange2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-pink-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-pink-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-pink-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-pink2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-pink-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-pink2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-pink-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-pink-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-pink2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-pink-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-pink2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-red-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-red-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-red-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-red2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-red-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-red2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-red-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-red-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-red2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-red-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-red2.png) bottom right no-repeat; }
+
+.m-small-image-tag-container .m-tag.m-black-on-white-clip.m-top, .m-small-image-tag-container .m-tag.m-black-on-white-clip.m-right, .m-small-image-tag-container .m-tag.m-black-on-white-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-white2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-black-on-white-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-white2.png) bottom right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-clip.m-top, .m-small-image-tag-container .m-tag.m-white-on-white-clip.m-right, .m-small-image-tag-container .m-tag.m-white-on-white-clip.m-left { background: transparent url(../images/manapro_featured/small/clip-t-white2.png) top right no-repeat; }
+.m-small-image-tag-container .m-tag.m-white-on-white-clip.m-bottom { background: transparent url(../images/manapro_featured/small/clip-b-white2.png) bottom right no-repeat; }
+*/
+.m-featured .m-carousel, .m-featured .m-carousel ol>li {  background: #efefef;
+background-image: linear-gradient(bottom, rgb(247,247,247) 20%, rgb(242,242,242) 60%);
+background-image: -o-linear-gradient(bottom, rgb(247,247,247) 20%, rgb(242,242,242) 60%);
+background-image: -moz-linear-gradient(bottom, rgb(247,247,247) 20%, rgb(242,242,242) 60%);
+background-image: -webkit-linear-gradient(bottom, rgb(247,247,247) 20%, rgb(242,242,242) 60%);
+background-image: -ms-linear-gradient(bottom, rgb(247,247,247) 20%, rgb(242,242,242) 60%);
+
+background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.2, rgb(247,247,247)),
+	color-stop(0.6, rgb(242,242,242))
+);
+}
+.m-featured .m-carousel-helper-numbers li { background: #eee; border: 1px solid #A0B3C3; border-radius: 12px; min-width: 18px; margin-right: 4px; }
+.m-featured .m-carousel-helper-numbers li.alrHelperActiveItem { background: #ddd; }
+.m-featured .m-carousel-helper-numbers li:hover { cursor: pointer;  }
+.m-featured .m-carousel-helper-bullets li { background: #eee; border: 1px solid #A0B3C3; border-radius: 5px; width: 5px; height: 5px; margin-top: 5px; margin-right: 5px; }
+.m-featured .m-carousel-helper-bullets li.alrHelperActiveItem { background: #ddd; }
+.m-featured .m-carousel-helper-bullets li:hover { cursor: pointer; }
+
+.m-featured .m-carousel-navigation-next { background: url(../images/manapro_featured/next.png) 0 0 no-repeat;
+    right: 0; bottom: 0; width: 26px; height: 26px; }
+.m-featured .m-carousel-navigation-next:hover { background-image: url(../images/manapro_featured/next-over.png); }
+.m-featured .m-carousel-navigation-next:active { background-image: url(../images/manapro_featured/next-active.png); }
+.m-featured .m-carousel-navigation-prev { background: url(../images/manapro_featured/prev.png) 0 0 no-repeat;
+    left: 0; bottom: 0; width: 26px; height: 26px; }
+.m-featured .m-carousel-navigation-prev:hover { background-image: url(../images/manapro_featured/prev-over.png); }
+.m-featured .m-carousel-navigation-prev:active { background-image: url(../images/manapro_featured/prev-active.png); }
+
+/* other carousel styles, some needed by scripts */
+.m-featured { position: relative; }
+.m-featured .m-carousel { overflow: hidden; position: relative; }
+.m-featured .m-carousel ol { overflow: hidden; position: absolute; }
+.m-featured .m-carousel ol>li { display: none; float: left; border: 0; width: 100%; }
+
+.m-featured .m-carousel-helper { text-align: center; height: 30px;}
+.m-featured .m-carousel-helper ol { display: inline-block; overflow: hidden; margin: 0 auto; margin-top: 5px; }
+.m-featured .m-carousel-helper li { float: left; padding: 2px; }
+
+.m-featured .m-carousel-navigation-next, .m-featured .m-carousel-navigation-prev {
+    cursor: pointer; position: absolute; margin: 5px 0 0; }
+
+/* shadows */
+.m-shadow-container { position: relative; z-index: 1; }
+.m-shadow {
+    /*-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;*/
+}
+.m-shadow:before,
+.m-shadow:after { content: ""; position: absolute; z-index: -2; }
+.m-shadow.m-lifted { }
+.m-shadow.m-lifted:before,
+.m-shadow.m-lifted:after { bottom: 10px; left: 10px; width: 50%; height: 20%; max-width: 300px;
+    -webkit-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7); -moz-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7); box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+    -webkit-transform: rotate(-3deg); -moz-transform: rotate(-3deg); -ms-transform: rotate(-3deg); -o-transform: rotate(-3deg); transform: rotate(-3deg);
+}
+.m-shadow.m-lifted:after { right: 10px; left: auto;
+    -webkit-transform: rotate(3deg); -moz-transform: rotate(3deg); -ms-transform: rotate(3deg); -o-transform: rotate(3deg); ransform: rotate(3deg);
+}
+.m-shadow.m-curled { border: 1px solid #efefef; -moz-border-radius: 0 0 120px 120px / 0 0 6px 6px; border-radius: 0 0 120px 120px / 0 0 6px 6px; }
+.m-shadow.m-curled:before,
+.m-shadow.m-curled:after { bottom: 12px; left: 10px; width: 50%; height: 55%; max-width: 200px;
+    -webkit-box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5); -moz-box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5); box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+    -webkit-transform: skew(-8deg) rotate(-3deg); -moz-transform: skew(-8deg) rotate(-3deg); -ms-transform: skew(-8deg) rotate(-3deg);
+    -o-transform: skew(-8deg) rotate(-3deg); transform: skew(-8deg) rotate(-3deg);
+}
+.m-shadow.m-curled:after { right: 10px; left: auto;
+    -webkit-transform: skew(8deg) rotate(3deg); -moz-transform: skew(8deg) rotate(3deg); -ms-transform: skew(8deg) rotate(3deg);
+    -o-transform: skew(8deg) rotate(3deg); transform: skew(8deg) rotate(3deg);
+}
+.m-shadow.m-perspective { margin-left: 65px; }
+.m-shadow.m-perspective:before { left: 80px; bottom: 5px; width: 50%; height: 35%; max-width: 200px;
+    -webkit-box-shadow: -80px 0 8px rgba(0, 0, 0, 0.4); -moz-box-shadow: -80px 0 8px rgba(0, 0, 0, 0.4); box-shadow: -80px 0 8px rgba(0, 0, 0, 0.4);
+    -webkit-transform: skew(50deg); -moz-transform: skew(50deg); -ms-transform: skew(50deg);
+    -o-transform: skew(50deg); transform: skew(50deg);
+    -webkit-transform-origin: 0 100%; -moz-transform-origin: 0 100%; -ms-transform-origin: 0 100%;
+    -o-transform-origin: 0 100%; transform-origin: 0 100%;
+}
+.m-shadow.m-perspective:after { display: none; }
+.m-shadow.m-raised {
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+.m-shadow.m-curved:before { top: 10px; bottom: 10px; left: 50%; right: 50%;
+    -webkit-box-shadow: 0 0 23px rgba(0, 0, 0, 0.8); -moz-box-shadow: 0 0 23px rgba(0, 0, 0, 0.8); box-shadow: 0 0 23px rgba(0, 0, 0, 0.8);
+    -moz-border-radius: 10px / 100px; border-radius: 10px / 100px;
+}
+.m-shadow.m-curved.m-left:before { left: 0; }
+.m-shadow.m-curved.m-right:before { right: 0; }
+.m-shadow.m-curved.m-bottom:before { top: 50%; bottom: 0; left: 10px; right: 10px;
+    -moz-border-radius: 100px / 10px; border-radius: 100px / 10px;
+}
+.m-shadow.m-curved.m-bottom.m-top:before { top: 0; bottom: 0; left: 10px; right: 10px;
+    -moz-border-radius: 100px / 10px; border-radius: 100px / 10px;
+}
+.m-shadow.m-rotated {
+    -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;
+    -webkit-transform: rotate(-3deg); -moz-transform: rotate(-3deg); -ms-transform: rotate(-3deg);
+    -o-transform: rotate(-3deg); transform: rotate(-3deg);
+}
+.m-shadow.m-rotated > :first-child:before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 0; right: 0; background: #fff;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+

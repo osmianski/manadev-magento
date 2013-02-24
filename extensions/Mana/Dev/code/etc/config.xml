@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Dev
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_Dev>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.24.14</version>
+        </Mana_Dev>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Dev_Helper_Data
+		class is accessible through Mage::helper('mana_dev') call, other Mana_Dev_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_dev/xxx_yyy') call. -->
+        <helpers>
+            <mana_dev>
+                <!-- This says that string 'mana_dev' corresponds to Mana_Dev_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_Dev_Helper</class>
+            </mana_dev>
+        </helpers>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <Mana_Dev>
+                    <files>
+                        <default>Mana_Dev.csv</default>
+                    </files>
+                </Mana_Dev>
+            </modules>
+        </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <mana_dev>
+                    <file>mana_dev.xml</file>
+                </mana_dev>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+    method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+    it will expect Mana_Dev_AController class, and in class it will expect bAction() method. In most cases,
+    when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_dev before="Mage_Adminhtml">Mana_Dev</mana_dev>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

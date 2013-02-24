@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaPage_AttributeOption
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <m_attribute_option type="manapage_attributeoption/widget" translate="name description" module="manapage_attributeoption">
+        <name>Products With Specified Attribute Option (MANAdev)</name>
+        <description>List of products having specified attribute option assigned</description>
+        <is_email_compatible>1</is_email_compatible>
+        <parameters>
+            <block_title translate="label value">
+                <required>0</required>
+                <visible>1</visible>
+                <value>Featured Products</value>
+                <label>Block Title</label>
+                <type>text</type>
+            </block_title>
+            <products_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Products to Display</label>
+                <type>text</type>
+            </products_count>
+            <attribute_code translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value></value>
+                <label>Attribute Code</label>
+                <type>text</type>
+            </attribute_code>
+            <attribute_value translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value></value>
+                <label>Attribute Value</label>
+                <type>text</type>
+            </attribute_value>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>manapage/attributeoption/grid.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>manapage/attributeoption/grid.phtml</value>
+                        <label>Grid</label>
+                    </default>
+                    <list translate="label">
+                        <value>manapage/attributeoption/list.phtml</value>
+                        <label>List</label>
+                    </list>
+                </values>
+            </template>
+        </parameters>
+    </m_attribute_option>
+</widgets>

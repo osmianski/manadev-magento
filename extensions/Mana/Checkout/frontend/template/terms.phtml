@@ -1,0 +1,42 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Terms */
+?>
+<?php if (!$this->getAgreements()) return; ?>
+<div class="m-terms">
+    <fieldset class="form-list">
+        <ul>
+        <?php foreach ($this->getAgreements() as $_a): ?>
+            <li class="fields">
+                <div class="control">
+                    <input type="checkbox" name="agreement[<?php echo $_a->getId()?>]" id="agreement-<?php echo $_a->getId()?>"
+                           value="1"
+                           title="<?php echo $this->__('I accept') ?> <?php echo $this->htmlEscape($_a->getCheckboxText()) ?>"
+                           class="checkbox"/><label
+                        for="agreement-<?php echo $_a->getId()?>"><?php echo $this->__('I accept') ?> <a href="#" class="agreement-<?php echo $_a->getId()?>"><?php echo $this->htmlEscape($_a->getCheckboxText()) ?></a></label>
+                    <script type="text/javascript">(function ($) {
+                        $('.agreement-<?php echo $_a->getId()?>').mPopup('agreement-<?php echo $_a->getId()?>');
+                    })(jQuery);</script>
+                </div>
+                <div class="agreement-<?php echo $_a->getId()?>-text" style="display:none;">
+                    <div>
+                        <div class="btn-close"><a href="#" class="m-close-popup"
+                                                  title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a>
+                        </div>
+                        <div class="agreement-popup-content"><?php echo $_a->getContent() ?></div>
+                    </div>
+                </div>
+            </li>
+        <?php endforeach ?>
+        </ul>
+    </fieldset>
+</div>

@@ -1,0 +1,34 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterRadios
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/** 
+ * Template for showing options for filter as a list of radio buttons 
+ * @author Mana Team
+ * Injected instead of standard catalog/layer/filter.phtml in Mana_Filters_Block_Filter_Attribute init() method.
+ * This template is overridden by copying (template body was pasted from catalog/layer/filter.phtml 
+ * and modified as needed). All changes are marked with comments.
+ */
+/* @var $this Mana_Filters_Block_Filter_Attribute */
+/* @var $filters Mana_Filters_Helper_Data */ $filters = Mage::helper(strtolower('Mana_Filters'));
+?>
+<ol class="m-filter-radios">
+<?php foreach ($this->getItems() as $_item): ?>
+    <li <?php if ($_item->getMSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+        <?php // MANA BEGIN ?>
+		<input type="radio" id="<?php echo $_item->getUniqueId($this) ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
+			value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMSelected()): ?>checked="checked"<?php else : ?> 
+			onClick="setLocation('<?php echo $this->urlEscape($_item->getReplaceUrl()) ?>');"<?php endif; ?> />
+		<label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMSelected()): ?>class="m-selected-radio-button"<?php endif; ?>
+                title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+        <?php // MANA END ?>
+        <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
+            (<?php echo $_item->getCount() ?>)
+        <?php endif; ?>
+    </li>
+<?php endforeach ?>
+</ol>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'after_items', array('block' => $this)) ?>

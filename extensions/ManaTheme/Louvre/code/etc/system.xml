@@ -1,0 +1,1312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaTheme_Louvre
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <tabs>
+        <mana>
+            <label>MANAdev</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <mana_louvre translate="label" module="manatheme_louvre">
+            <label>Louvre Theme</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!--<list_mode translate="label comment">
+                            <label>List Mode</label>
+                            <comment><![CDATA[In this theme, Catalog->Frontend->List Mode setting is ignored; this setting is used instead]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manatheme_louvre/source_listmode</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list_mode>
+                        <two_column_per_page_values translate="label comment">
+                            <label>Products per Page on Two Column List Allowed Values</label>
+                            <comment>Comma-separated.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </two_column_per_page_values>
+                        <two_column_per_page translate="label comment">
+                            <label>Products per Page on Two Column List Default Value</label>
+                            <comment>Must be in the allowed values list.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </two_column_per_page>-->
+                        <image_ratio translate="label comment">
+                            <label>Image Aspect Ratio</label>
+                            <comment>Enter two numbers (width and height) separated by colon like 3:4, 1:1, etc. In this theme image width is preset, but height will be adjusted according to this setting</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </image_ratio>
+                        <show_compare_link translate="label comment">
+                            <label>Show 'Compare' Link</label>
+                            <comment>This options adds 'Compare' action to top links if there are at least 2 products to be compared</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_compare_link>
+                    </fields>
+                </general>
+                <css translate="label comment">
+                    <label>Sidebar Blocks</label>
+                    <comment>Change appearance of various blocks by entering one of predefined style names or even your own. This theme supports 'm-transparent', 'm-pink', 'm-lightgrey' and 'm-darkgrey', 'm-blue', 'm-line', 'm-shadow', 'm-top-shadow', 'm-right-shadow', 'm-bottom-shadow', 'm-left-shadow'. You may enter several style names separated by space.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <layered_navigation translate="label">
+                            <label>Layered Navigation</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </layered_navigation>
+                        <poll translate="label">
+                            <label>Poll</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </poll>
+                        <cart translate="label">
+                            <label>Cart</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <tags translate="label">
+                            <label>Tags</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tags>
+                        <wishlist translate="label">
+                            <label>Wishlist</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>Compare</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <related translate="label">
+                            <label>Related Products</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </related>
+                        <my_account translate="label comment">
+                            <label>My Account</label>
+                            <comment>Navigation block in My Account</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </my_account>
+                        <opc_progress translate="label comment">
+                            <label>Checkout Progress</label>
+                            <comment>Onepage checkout progress block</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </opc_progress>
+                        <login translate="label">
+                            <label>Login</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </login>
+                        <currency translate="label">
+                            <label>Currency</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </currency>
+                        <subscribe translate="label">
+                            <label>Subscribe</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </subscribe>
+                        <compared translate="label comment">
+                            <label>Recently Compared Products</label>
+                            <comment>Applies to Recently Compared Products Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compared>
+                        <viewed translate="label comment">
+                            <label>Recently Viewed Products</label>
+                            <comment>Applies to Recently Viewed Products Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </viewed>
+                        <orders translate="label">
+                            <label>Orders</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </orders>
+                        <new_products translate="label comment">
+                            <label>New Products</label>
+                            <comment>Applies to New Products Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </new_products>
+                        <facebook_likebox translate="label comment">
+                            <label>Facebook Like Box</label>
+                            <comment>Applies to Facebook Like Box Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </facebook_likebox>
+                        <random_guest_post translate="label comment">
+                            <label>Random Guest Post</label>
+                            <comment>Applies to Random Guest Post Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </random_guest_post>
+                        <random_review translate="label comment">
+                            <label>Random Product Review</label>
+                            <comment>Applies to Random Product Review Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </random_review>
+                        <manapage_bestseller translate="label comment">
+                            <label>Bestsellers</label>
+                            <comment>Applies to Bestsellers Widget in Sidebar only</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2000</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </manapage_bestseller>
+                    </fields>
+                </css>
+                <show_in_product translate="label">
+                    <label>Product View Page</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>150</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_button</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_button</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_button</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                    </fields>
+                </show_in_product>
+                <show_in_grid translate="label">
+                    <label>Grid View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <css translate="label comment">
+                            <label>Style</label>
+                            <comment>This theme supports 'm-transparent', 'm-pink', 'm-lightgrey' and 'm-darkgrey', 'm-blue', 'm-line', 'm-shadow', 'm-top-shadow', 'm-right-shadow', 'm-bottom-shadow', 'm-left-shadow' style names. You may enter several style names separated by space.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </css>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                            
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_grid>
+                <show_in_list translate="label">
+                    <label>List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_list>
+                <!--<show_in_two_column translate="label">
+                    <label>2 Column List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_two_column>-->
+                <show_in_new_grid translate="label">
+                    <label>New Products - Grid View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_new_grid>
+                <show_in_new_list translate="label">
+                    <label>New Products - List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>600</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_new_list>
+                <show_in_compared_grid translate="label">
+                    <label>Recently Compared Products - Grid View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>700</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_compared_grid>
+                <show_in_compared_list translate="label">
+                    <label>Recently Compared Products - List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>800</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_compared_list>
+                <show_in_viewed_grid translate="label">
+                    <label>Recently Viewed Products - Grid View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>900</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_viewed_grid>
+                <show_in_viewed_list translate="label">
+                    <label>Recently Viewed Products - List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_viewed_list>
+                <show_in_bestseller_grid translate="label">
+                    <label>Bestseller Products - Grid View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_bestseller_grid>
+                <show_in_bestseller_list translate="label">
+                    <label>Bestseller Products - List View</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <price translate="label">
+                            <label>Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price>
+                        <rating translate="label">
+                            <label>Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rating>
+                        <description translate="label">
+                            <label>Short Description</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <read_more translate="label">
+                            <label>'Learn More' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </read_more>
+                        <wishlist translate="label">
+                            <label>'Add to Wishlist' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </wishlist>
+                        <compare translate="label">
+                            <label>'Add to Compare' Link</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </compare>
+                        <cart translate="label">
+                            <label>'Add to Cart' Button</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>mana_theme/source_buttonicon</source_model>
+                            <sort_order>800</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart>
+                        <out_of_stock translate="label">
+                            <label>'Out of stock' Notice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </out_of_stock>
+                    </fields>
+                </show_in_bestseller_list>
+            </groups>
+        </mana_louvre>
+    </sections>
+</config>

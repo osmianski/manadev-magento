@@ -1,0 +1,50 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaProduct_Review
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaProduct_Review_Block_List */
+?>
+<?php $_items = $this->getReviewsCollection()->getItems();?>
+<?php if (count($_items)):?>
+    <?php echo $this->getChildHtml('toolbar') ?>
+<dl class="m-bottom-shadow">
+    <?php foreach ($_items as $_review):?>
+
+            <dt><h3><?php echo $this->htmlEscape($_review->getTitle()) ?></h3>
+               <p class="review-author""><?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?> <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small></p>
+            </dt>
+            <dd>
+    <dl class="review-content">
+        <dt>
+            <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+        </dt>
+        <dd>
+            <?php $_votes = $_review->getRatingVotes(); ?>
+            <?php if (count($_votes)): ?>
+            <table class="ratings-table">
+                <col width="1" />
+                <col />
+                <tbody>
+                    <?php foreach ($_votes as $_vote): ?>
+                    <tr>
+                        <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
+                        <td>
+                            <div class="rating-box">
+                                <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php endif; ?>
+        </dd>
+      </dl>
+      </dd>
+     <?php endforeach; ?>
+</dl>
+
+<?php endif;?>

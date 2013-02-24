@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductFaces
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+
+<!-- BASED ON SNIPPET: New Module/etc/modules/<module>.xml -->
+<config>
+	<!-- This section activates module in Magento system. -->
+    <modules>
+        <ManaPro_ProductFaces>
+        	<!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
+        	in this case Magento will behave as if module does not exist). -->
+            <active>true</active>
+            <!-- This instructs Magento to search for module code in app/code/local directory. -->
+            <codePool>local</codePool>
+			<depends>
+				<Mage_Catalog />
+				<Mage_CatalogInventory />
+				<Mana_Core />
+			</depends>
+        </ManaPro_ProductFaces>
+    </modules>
+</config>

@@ -1,0 +1,15 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterAdvanced
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.block-layered-nav .m-filter-group { position: relative; }
+.block-layered-nav .m-filter-actions, .block-layered-nav .m-group-actions
+    { position: absolute; right: 4px; margin: 0; }
+.block-layered-nav .m-filter-actions { top: 9px; }
+.block-layered-nav .m-group-actions { top: 6px; }
+.block-layered-nav .m-filter-actions:after, .block-layered-nav .m-group-actions:after
+    { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+.block-layered-nav .m-filter-actions > div, .block-layered-nav .m-group-actions > div
+    { margin-left: 4px; }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterSlider
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterSlider>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.08.13.17</version>
+		</ManaPro_FilterSlider>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterSlider_Helper_Data
+		class is accessible through Mage::helper('manapro_filterslider') call, other ManaPro_FilterSlider_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterslider/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filterslider>
+				<!-- This says that string 'manapro_filterslider' corresponds to ManaPro_FilterSlider_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterSlider_Helper</class>
+			</manapro_filterslider>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterSlider_Model_XXX_YYY classes are accessible as 
+		'manapro_filterslider/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filterslider' corresponds to ManaPro_FilterSlider_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filterslider>
+				<class>ManaPro_FilterSlider_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_filterslider_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_filterslider_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_filterslider>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_filterslider' corresponds to ManaPro_FilterSlider_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_filterslider_resources>
+				<class>ManaPro_FilterSlider_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_filterslider_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterSlider>
+					<files>
+						<default>ManaPro_FilterSlider.csv</default>
+					</files>
+				</ManaPro_FilterSlider>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filterslider>
+					<file>manapro_filterslider.xml</file>
+				</manapro_filterslider>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<ManaPro_FilterSlider>
+					<files>
+						<default>ManaPro_FilterSlider.csv</default>
+					</files>
+				</ManaPro_FilterSlider>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+
+	<!-- This section extends Mana_Filters module functionality --> 
+	<mana_filters>
+		<display><!-- display options for individual filters -->
+			<price> <!-- available display options for price filter -->
+				<slider translate="title" module="manapro_filterslider">
+					<title>Slider</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+					<model>mana_filters/filter_price</model>
+					<resource>manapro_filterslider/price</resource>
+					<template>manapro/filterslider/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</slider>
+			</price>
+			<decimal> <!-- available display options for price filter -->
+				<slider translate="title" module="manapro_filterslider">
+					<title>Slider</title><!-- this one is displayed in admin -->
+					<block>mana_filters/filter</block>
+					<model>mana_filters/filter_decimal</model>
+					<resource>manapro_filterslider/decimal</resource>
+					<template>manapro/filterslider/items.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</slider>
+			</decimal>
+		</display>
+	
+	</mana_filters>
+    <default>
+        <mana_filters>
+            <display>
+                <price>slider</price>
+                <decimal>slider</decimal>
+            </display>
+        </mana_filters>
+    </default>
+</config>

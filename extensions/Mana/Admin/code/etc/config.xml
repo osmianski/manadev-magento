@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Admin
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<Mana_Admin>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.10.25.17</version>
+		</Mana_Admin>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Admin_Helper_Data
+		class is accessible through Mage::helper('mana_admin') call, other Mana_Admin_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_admin/xxx_yyy') call. -->
+		<helpers>
+			<mana_admin>
+				<!-- This says that string 'mana_admin' corresponds to Mana_Admin_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>Mana_Admin_Helper</class>
+			</mana_admin>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, Mana_Admin_Model_XXX_YYY classes are accessible as 
+		'mana_àdmin/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'mana_admin' corresponds to Mana_Admin_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<mana_admin>
+				<class>Mana_Admin_Model</class>
+				<!-- INSERT HERE: resource section name -->
+			</mana_admin>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		Mana_Admin_Block_XXX_YYY classes are accessible as 'mana_admin/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'mana_admin' corresponds to Mana_Admin_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<mana_admin>
+				<class>Mana_Admin_Block</class>
+			</mana_admin>
+		</blocks>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<Mana_Admin>
+					<files>
+						<default>Mana_Admin.csv</default>
+					</files>
+				</Mana_Admin>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<mana_admin>
+					<file>mana_admin.xml</file>
+				</mana_admin>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+        method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+        it will expect Mana_Admin_AController class, and in class it will expect bAction() method. In most cases,
+        when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_admin before="Mage_Adminhtml">Mana_Admin</mana_admin>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

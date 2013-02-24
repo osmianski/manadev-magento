@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterColors
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana_filters>
+            <groups>
+                <colors translate="label" module="manapro_filtercolors">
+                    <label>Colors and Images</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <image_width translate="label">
+                            <label>Width (Picker)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </image_width>
+                        <image_height translate="label">
+                            <label>Height (Picker)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </image_height>
+                        <image_border_radius translate="label">
+                            <label>Border Radius (Picker)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </image_border_radius>
+                        <state_width translate="label">
+                            <label>Width (State)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </state_width>
+                        <state_height translate="label">
+                            <label>Height (State)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </state_height>
+                        <state_border_radius translate="label">
+                            <label>Border Radius (State)</label>
+                            <comment>pixels</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </state_border_radius>
+                    </fields>
+                </colors>
+            </groups>
+        </mana_filters>
+    </sections>
+</config>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductPlusProduct
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_ProductPlusProduct>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.06.19.02</version>
+		</ManaPro_ProductPlusProduct>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_ProductPlusProduct_Helper_Data
+		class is accessible through Mage::helper('manapro_productplusproduct') call, other ManaPro_ProductPlusProduct_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_productplusproduct/xxx_yyy') call. -->
+		<helpers>
+			<manapro_productplusproduct>
+				<!-- This says that string 'manapro_productplusproduct' corresponds to ManaPro_ProductPlusProduct_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_ProductPlusProduct_Helper</class>
+			</manapro_productplusproduct>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_ProductPlusProduct_Model_XXX_YYY classes are accessible as 
+		'manapro_productplusproduct/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_productplusproduct' corresponds to ManaPro_ProductPlusProduct_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_productplusproduct>
+				<class>ManaPro_ProductPlusProduct_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_productplusproduct_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_productplusproduct_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_productplusproduct>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_productplusproduct' corresponds to ManaPro_ProductPlusProduct_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_productplusproduct_resources>
+				<class>ManaPro_ProductPlusProduct_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_productplusproduct_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/manapro_productplusproduct_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<manapro_productplusproduct_setup>
+				<setup>
+					<module>ManaPro_ProductPlusProduct</module>
+					<class>ManaPro_ProductPlusProduct_Resource_Setup</class>
+				</setup>
+			</manapro_productplusproduct_setup>
+		</resources>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		ManaPro_ProductPlusProduct_Block_XXX_YYY classes are accessible as 'manapro_productplusproduct/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'manapro_productplusproduct' corresponds to ManaPro_ProductPlusProduct_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<manapro_productplusproduct>
+				<class>ManaPro_ProductPlusProduct_Block</class>
+			</manapro_productplusproduct>
+		</blocks>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_ProductPlusProduct>
+					<files>
+						<default>ManaPro_ProductPlusProduct.csv</default>
+					</files>
+				</ManaPro_ProductPlusProduct>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_productplusproduct>
+					<file>manapro_productplusproduct.xml</file>
+				</manapro_productplusproduct>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Controllers/Subscribe to adminhtml router (config.xml) -->
+	<!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action 
+	method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+	it will expect ManaPro_ProductPlusProduct_AController class, and in class it will expect bAction() method. In most cases, 
+	when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<manapro_productplusproduct before="Mage_Adminhtml">ManaPro_ProductPlusProduct</manapro_productplusproduct>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Translation support/Frontend (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during frontend request processing -->
+		<translate>
+			<modules>
+				<ManaPro_ProductPlusProduct>
+					<files>
+						<default>ManaPro_ProductPlusProduct.csv</default>
+					</files>
+				</ManaPro_ProductPlusProduct>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_productplusproduct>
+					<file>manapro_productplusproduct.xml</file>
+				</manapro_productplusproduct>
+			</updates>
+		</layout>
+		<!-- BASED ON SNIPPET: Controllers/Module frontend URI (config.xml) -->
+		<!-- This section registers controllers of module ManaPro_ProductPlusProduct to be accessible by URI "m_boughttogether". When 
+		Magento gets request to process (be it full page rendering, partial AJAX refresh, AJAX server call or 
+		other), it decides which controller class should process the request (this process is known as 
+		request dispatching). Standard way of dispatching to parse URI as 
+		.../index.php/<module>/<controller>/<action> and then to find corresponding Magento module, controller
+		and action method. Magento module is sought in global configuration merged from etc/config.xml files of
+		all modules, where frontend/routers/*/args/frontName is equal to <module> part of URI. This is what
+		this section is for - to define correspondence between <module> URI and this module. -->
+		<routers>
+			<manapro_productplusproduct>
+				<use>standard</use>
+				<args>
+					<module>ManaPro_ProductPlusProduct</module>
+					<frontName>m-bought-together</frontName>
+				</args>
+			</manapro_productplusproduct>
+		</routers>
+		<secure_url>
+            <m_bought_together_addto_wishlist>m-bought-together/addto/wishlist</m_bought_together_addto_wishlist>
+        </secure_url>
+		
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	
+	<mana_productlists>
+		<types>
+			<m_productplusproduct translate="tab_title" module="manapro_productplusproduct">
+				<sort_order>100</sort_order>
+				<tab_title>Bought Together</tab_title>
+				<tab_action>adminhtml/bought_together/tab</tab_action>
+				<grid_action>adminhtml/bought_together/grid</grid_action>
+				<before_save_method>manapro_productplusproduct/link::beforeSave</before_save_method>
+				<validate_method>manapro_productplusproduct/link::validate</validate_method>
+				<collection_resource>manapro_productplusproduct/collection</collection_resource>
+			</m_productplusproduct>
+		</types>
+	</mana_productlists>
+	<default>
+		<mana_productlists>
+			<m_productplusproduct translate="title" module="manapro_productplusproduct">
+				<is_enabled>1</is_enabled>
+				<title>Frequently Bought Together</title>
+				<exclude_cart_products>1</exclude_cart_products>
+				<item_limit>3</item_limit>
+				<image_size>75</image_size>
+				<allow_qty>0</allow_qty>
+			</m_productplusproduct>
+		</mana_productlists>
+	</default>
+</config>

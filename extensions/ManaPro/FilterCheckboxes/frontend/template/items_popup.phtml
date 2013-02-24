@@ -1,0 +1,49 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterCheckboxes
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/** 
+ * @author Mana Team
+ */
+/* @var $this Mana_Filters_Block_Filter_Attribute */
+/* @var $filters Mana_Filters_Helper_Data */ $filters = Mage::helper(strtolower('Mana_Filters'));
+/* @var $showmore ManaPro_FilterShowMore_Helper_Data */ $showmore = Mage::helper(strtolower('ManaPro_FilterShowMore'));
+$MAX_ROW_COUNT = $showmore->getMaxRowCount(); // 20
+$MAX_COLUMN_COUNT = $showmore->getMaxColumnCount(); // 4
+$items = $this->getItems();
+list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_COUNT, $MAX_COLUMN_COUNT);
+?>
+<div class="m-filter-popup">
+<ol class="m-rows" data-max-rows="<?php echo $MAX_ROW_COUNT ?>">
+    <?php for($rowIndex = 0; $rowIndex < $rowCount; $rowIndex++) : ?>
+    <li>
+        <ol class="m-columns">
+            <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
+            <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
+            <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+                <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>"
+                       value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
+                       onClick="jQuery(this).parent().toggleClass('m-selected-ln-item'); jQuery.mShowMorePopupSelect('<?php echo $_item->getSeoValue() ?>', <?php echo $this->getFilterOptions()->getIsReverse() ? '!' : '' ?> jQuery(this).parent().hasClass('m-selected-ln-item'));"/>
+                <label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMShowSelected()): ?>class="m-selected-checkbox-item"<?php endif; ?>
+                        title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+                <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
+                    (<?php echo $_item->getCount() ?>)
+                <?php endif; ?>
+            </li>
+            <?php endif; endfor; ?>
+        </ol>
+    </li>
+    <?php endfor; ?>
+</ol>
+<div class="buttons-set">
+    <button type="button" title="<?php echo $this->__('Close') ?>" class="button"
+            onclick="return jQuery.mClosePopup();">
+        <span><span><?php echo $this->__('Close') ?></span></span></button>
+    <button type="button" title="<?php echo $this->__('Apply') ?>" class="button"
+            onclick="return jQuery.mShowMorePopupApply();">
+        <span><span><?php echo $this->__('Apply') ?></span></span></button>
+</div>
+</div>

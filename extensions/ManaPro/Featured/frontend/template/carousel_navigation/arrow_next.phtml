@@ -1,0 +1,13 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Featured
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php if (($_productCollection = $this->getCollection()) && count($_productCollection->getItems()) > 1) : ?>
+<div class="m-carousel-navigation-next m-carousel-navigation-arrows"></div>
+<?php endif; ?>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Guestbook
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- This file defines the rules which should be applied when module manapro_guestbook is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+    <default>
+        <reference name="footer_links">
+            <action method="addLink" translate="label title" module="manapro_guestbook" ifconfig="manapro_guestbook/general/is_enabled">
+                <label>Guest Book</label>
+                <url>guest/book</url>
+                <title>Guest Book</title>
+                <prepare>true</prepare>
+            </action>
+        </reference>
+    </default>
+
+    <manapro_guestbook_book_index translate="label" module="manapro_guestbook">
+        <label>Guest Book</label>
+        <update handle="jquery_core" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/manapro_guestbook.js</name><params/></action>
+            <action method="addCss"><stylesheet>css/manapro_guestbook.css</stylesheet></action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="manapro_guestbook"><title>Guest Book</title></action>
+        </reference>
+        <reference name="content">
+            <block type="manapro_guestbook/posts" name="posts" as="posts" template="manapro/guestbook/posts.phtml"/>
+            <block type="manapro_guestbook/form" name="form" as="form" template="manapro/guestbook/form.phtml"/>
+        </reference>
+    </manapro_guestbook_book_index>
+</layout>

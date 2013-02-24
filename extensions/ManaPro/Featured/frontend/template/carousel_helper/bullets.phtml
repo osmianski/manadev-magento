@@ -1,0 +1,20 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Featured
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php if (count($this->getItems())) : ?>
+<div class="m-carousel-helper m-carousel-helper-bullets">
+    <ol>
+    	<?php $_iterator = 0; foreach ($this->getItems() as $_product) :  ?>
+            <li class="m-item-helper<?php if (++$_iterator == count($this->getItems())): ?> last<?php endif; ?>">
+            </li>
+    	<?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

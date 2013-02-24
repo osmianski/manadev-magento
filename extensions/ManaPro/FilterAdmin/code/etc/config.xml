@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAdmin
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterAdmin>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.11.14.01</version>
+		</ManaPro_FilterAdmin>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterAdmin_Helper_Data
+		class is accessible through Mage::helper('manapro_filteradmin') call, other ManaPro_FilterAdmin_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filteradmin/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filteradmin>
+				<!-- This says that string 'manapro_filteradmin' corresponds to ManaPro_FilterAdmin_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterAdmin_Helper</class>
+			</manapro_filteradmin>
+		</helpers>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		ManaPro_FilterAdmin_Block_XXX_YYY classes are accessible as 'manapro_filteradmin/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'manapro_filteradmin' corresponds to ManaPro_FilterAdmin_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<manapro_filteradmin>
+				<class>ManaPro_FilterAdmin_Block</class>
+			</manapro_filteradmin>
+		</blocks>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterAdmin_Model_XXX_YYY classes are accessible as 
+		'manapro_filteradmin/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filteradmin' corresponds to ManaPro_FilterAdmin_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filteradmin>
+				<class>ManaPro_FilterAdmin_Model</class>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_filteradmin>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in ManaPro_FilterAdmin_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of ManaPro_FilterAdmin_Model_Observer class gets called. -->
+		<events>
+			<controller_action_predispatch_catalog_category_view><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filteraadmin>
+						<class>manapro_filteradmin/session_observer</class> <!-- model name of class containing event handler methods -->
+						<method>rememberCategoryFilters</method> <!-- event handler method name -->
+					</manapro_filteraadmin>
+				</observers>
+			</controller_action_predispatch_catalog_category_view>
+            <controller_action_predispatch_catalogsearch_result_index><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filteraadmin>
+                        <class>manapro_filteradmin/session_observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>rememberSearchFilters</method>
+                        <!-- event handler method name -->
+                    </manapro_filteraadmin>
+                </observers>
+            </controller_action_predispatch_catalogsearch_result_index>
+            <controller_action_predispatch_cms_index_index><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filteraadmin>
+                        <class>manapro_filteradmin/session_observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>rememberHomeFilters</method>
+                        <!-- event handler method name -->
+                    </manapro_filteraadmin>
+                </observers>
+            </controller_action_predispatch_cms_index_index>
+            <controller_action_predispatch_cms_page_view><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filteraadmin>
+                        <class>manapro_filteradmin/session_observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>rememberCmsFilters</method>
+                        <!-- event handler method name -->
+                    </manapro_filteraadmin>
+                </observers>
+            </controller_action_predispatch_cms_page_view>
+        </events>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterAdmin>
+					<files>
+						<default>ManaPro_FilterAdmin.csv</default>
+					</files>
+				</ManaPro_FilterAdmin>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filteradmin>
+					<file>manapro_filteradmin.xml</file>
+				</manapro_filteradmin>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Controllers/Subscribe to adminhtml router (config.xml) -->
+	<!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action 
+	method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+	it will expect ManaPro_FilterAdmin_AController class, and in class it will expect bAction() method. In most cases, 
+	when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<manapro_filteradmin before="Mage_Adminhtml">ManaPro_FilterAdmin</manapro_filteradmin>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

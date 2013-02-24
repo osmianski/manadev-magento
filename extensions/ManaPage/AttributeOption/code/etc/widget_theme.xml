@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaPage_AttributeOption
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <m_attribute_option>
+        <parameters>
+            <template>
+                <values>
+                    <names_images translate="label">
+                        <value>manapage/attributeoption/names_images.phtml</value>
+                        <label>List of Names and Images</label>
+                    </names_images>
+                    <names translate="label">
+                        <value>manapage/attributeoption/names.phtml</value>
+                        <label>List of Names</label>
+                    </names>
+                    <images translate="label">
+                        <value>manapage/attributeoption/images.phtml</value>
+                        <label>List of Images</label>
+                    </images>
+                </values>
+            </template>
+        </parameters>
+        <supported_blocks>
+            <left_column>
+                <block_name>left</block_name>
+                <template>
+                    <default>names_images</default>
+                    <names>names</names>
+                    <images>images</images>
+                </template>
+            </left_column>
+            <main_content>
+                <block_name>content</block_name>
+                <template>
+                    <grid>default</grid>
+                    <list>list</list>
+                </template>
+            </main_content>
+            <right_column>
+                <block_name>right</block_name>
+                <template>
+                    <default>names_images</default>
+                    <names>names</names>
+                    <images>images</images>
+                </template>
+            </right_column>
+        </supported_blocks>
+    </m_attribute_option>
+</widgets>

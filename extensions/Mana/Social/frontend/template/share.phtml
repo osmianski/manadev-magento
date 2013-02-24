@@ -1,0 +1,16 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Social_Block_Share */
+?>
+<?php if($this->getCount()) : ?>
+<ul class="m-social-sharing">
+    <?php foreach ($this->getSharingActions() as $action) : ?>
+        <li><?php echo $action->toHtml() ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>

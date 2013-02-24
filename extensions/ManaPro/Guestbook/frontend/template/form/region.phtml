@@ -1,0 +1,31 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php
+    if (!($countryId = Mage::getStoreConfig('manapro_guestbook/country/default'))) {
+        $countryId = Mage::getStoreConfig('general/country/default');
+    }
+?>
+<?php if (Mage::getStoreConfigFlag('manapro_guestbook/region/is_enabled')) : ?>
+    <?php $_required = Mage::getStoreConfigFlag('manapro_guestbook/region/is_required'); ?>
+    <label for="region" <?php if ($_required) : ?>class="required"<?php endif; ?>>
+        <?php if ($_required) : ?><em>*</em><?php endif; ?><?php echo $this->__('State/Province') ?>
+    </label>
+    <div class="input-box">
+    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/region/is_freeform')): ?>
+        <input name="region" id="region" title="<?php echo $this->__('State/Province') ?>"
+            class="input-text <?php if ($_required) : ?>required-entry <?php endif; ?>" type="text" />
+    <?php else: ?>
+        <select id="region" name="region_id" title="<?php echo $this->__('State/Province') ?>"
+            <?php if ($_required) : ?>class="validate-select"<?php endif; ?>>
+            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+        </select>
+    <?php endif; ?>
+    </div>
+<?php endif; ?>

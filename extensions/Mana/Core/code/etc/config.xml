@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Core
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<Mana_Core>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>12.12.21.19</version>
+		</Mana_Core>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Core_Helper_Data
+		class is accessible through Mage::helper('mana_core') call, other Mana_Core_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_core/xxx_yyy') call. -->
+		<helpers>
+			<mana_core>
+				<!-- This says that string 'mana_core' corresponds to Mana_Core_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>Mana_Core_Helper</class>
+			</mana_core>
+            <catalog>
+                <rewrite>
+                    <image>Mana_Core_Helper_Image</image>
+                </rewrite>
+            </catalog>
+        </helpers>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		Mana_Core_Block_XXX_YYY classes are accessible as 'mana_core/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'mana_core' corresponds to Mana_Core_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<mana_core>
+				<class>Mana_Core_Block</class>
+			</mana_core>
+		</blocks>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, Mana_Core_Model_XXX_YYY classes are accessible as 
+		'mana_core/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'mana_core' corresponds to Mana_Core_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<mana_core>
+				<class>Mana_Core_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/mana_core_resources sections and register
+				resource model information from there -->
+				<resourceModel>mana_core_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</mana_core>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'mana_core' corresponds to Mana_Core_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<mana_core_resources>
+				<class>Mana_Core_Resource</class>
+				<entities>
+					<attribute><table>m_attribute</table></attribute>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</mana_core_resources>
+
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in Mana_Core_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of Mana_Core_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<controller_action_layout_load_before><!-- this is event name this module listens for -->
+				<observers>
+					<mana_core>
+						<class>mana_core/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addLayoutHandles</method> <!-- event handler method name -->
+					</mana_core>
+				</observers>
+			</controller_action_layout_load_before>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
+				<observers>
+					<mana_core>
+						<class>mana_core/observer</class> <!-- model name of class containing event handler methods -->
+						<method>postProcessBlocks</method> <!-- event handler method name -->
+					</mana_core>
+				</observers>
+			</controller_action_layout_generate_blocks_after>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>adhocCss</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <cms_page_render><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>handleUpdateInstructions</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </cms_page_render>
+            <controller_action_layout_generate_xml_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>loadBlockLayouts</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_action_layout_generate_xml_before>
+            <controller_action_layout_render_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>registerThatPageIsBeingRendered</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_action_layout_render_before>
+		</events>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<mana_core_setup>
+				<setup>
+					<module>Mana_Core</module>
+				</setup>
+			</mana_core_setup>
+		</resources>
+<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<mana_core>
+					<file>mana_core.xml</file>
+				</mana_core>
+			</updates>
+		</layout>
+        <translate>
+            <modules>
+                <Mana_Core>
+                    <files>
+                        <default>Mana_Core.csv</default>
+                    </files>
+                </Mana_Core>
+            </modules>
+        </translate>
+
+        <!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<Mana_Core>
+					<files>
+						<default>Mana_Core.csv</default>
+					</files>
+				</Mana_Core>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<mana_core>
+					<file>mana_core.xml</file>
+				</mana_core>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+	<default>
+        <mana_dev>
+            <debug>
+                <jquery_min>1</jquery_min>
+            </debug>
+        </mana_dev>
+	</default>
+</config>

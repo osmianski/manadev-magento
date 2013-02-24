@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterPositioning
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana_filters>
+            <groups>
+                <positioning translate="label" module="manapro_filterpositioning">
+                    <label>Filter Positioning</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>225</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_in translate="label">
+                            <label>Show Filters</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>manapro_filterpositioning/source_show_in</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_in>
+                        <show_state_left translate="label">
+                            <label>Show Applied Filters in Left Column</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_state</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_state_left>
+                        <show_state_right translate="label">
+                            <label>Show Applied Filters in Right Column</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_state</source_model>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_state_right>
+                        <show_state_above_products translate="label">
+                            <label>Show Applied Filters Above Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_state</source_model>
+                            <sort_order>240</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_state_above_products>
+                        <categories translate="label comment">
+                            <label>Categories Block Position</label>
+                            <comment>Applicable Only to Category Pages</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_category</source_model>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </categories>
+                        <above_products translate="label">
+                            <label>Show 'Above Products' Filters As</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_position_aboveproducts</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </above_products>
+                        <shop_by_title translate="label comment">
+                            <label>Show 'Shop By' Text</label>
+                            <comment>Applicable Only to Layered Navigation 'Above Products'</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shop_by_title>
+                        <currently_shopping_by_title translate="label comment">
+                            <label>Show 'Currently Shopping By' Text</label>
+                            <comment>Applicable Only to Layered Navigation 'Above Products'</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </currently_shopping_by_title>
+                    </fields>
+                </positioning>
+                <positioning_menu translate="label" module="manapro_filterpositioning">
+                    <label>'Above Products' Filters As Drop Down Menu Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>226</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <width translate="label comment">
+                            <label>Menu Width</label>
+                            <comment>Value in pixels (only number). Applied to a part with options which drops down.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </width>
+                    </fields>
+                </positioning_menu>
+                <positioning_horizontal translate="label" module="manapro_filterpositioning">
+                    <label>'Above Products' Filters As Horizontally Laid Filter Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>227</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <height translate="label comment">
+                            <label>Minimum Filter Height</label>
+                            <comment>Value in pixels (only number). Use it if your filters will wrap into two or more rows, so the second and other rows flow nicely. Leave blank if filters always fit into one row.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </height>
+                    </fields>
+                </positioning_horizontal>
+            </groups>
+        </mana_filters>
+    </sections>
+</config>

@@ -1,0 +1,10 @@
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-social-links { display: block; float:left; }
+.m-social-links li { display: inline; }
+
+/*.m-social-links:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }*/

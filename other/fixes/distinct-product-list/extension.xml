@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config>
+    <!-- Magento class rewrites (specific only to this module) -->
+    <sync extension-file="rewrite/Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection.php" project-file="app/code/local/Mage/Catalog/Model/Resource/Eav/Mysql4/Product/Collection.php"/>
+</config>

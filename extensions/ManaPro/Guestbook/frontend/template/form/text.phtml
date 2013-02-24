@@ -1,0 +1,19 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php if (Mage::getStoreConfigFlag('manapro_guestbook/text/is_enabled')) : ?>
+<?php $_required = Mage::getStoreConfigFlag('manapro_guestbook/text/is_required'); ?>
+<label for="text" <?php if ($_required) : ?>class="required"<?php endif; ?>>
+    <?php if ($_required) : ?><em>*</em><?php endif; ?><?php echo $this->__('Text') ?>
+</label>
+<div class="input-box">
+    <textarea name="text" id="text" title="<?php echo $this->__('Text') ?>"
+        class="<?php if ($_required) : ?>required-entry <?php endif; ?>input-text" cols="5" rows="3"></textarea>
+</div>
+<?php endif; ?>

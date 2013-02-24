@@ -1,0 +1,37 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php
+    if (!($countryId = Mage::getStoreConfig('manapro_guestbook/country/default'))) {
+        $countryId = Mage::getStoreConfig('general/country/default');
+    }
+?>
+<?php if (Mage::getStoreConfigFlag('manapro_guestbook/country/is_enabled')) : ?>
+<?php
+    $_required = Mage::getStoreConfigFlag('manapro_guestbook/country/is_required');
+    $select = $this->getLayout()->createBlock('core/html_select')
+        ->setName('country_id')
+        ->setId('country')
+        ->setTitle($this->__('Country'))
+        ->setValue($countryId)
+        ->setOptions(Mage::getSingleton('directory/country')->getResourceCollection()
+                ->loadByStore()->toOptionArray());
+    if ($_required) {
+        $select->setClass('validate-select');
+    }
+?>
+    <label for="country" <?php if ($_required) : ?>class="required"<?php endif; ?>>
+        <?php if ($_required) : ?><em>*</em><?php endif; ?><?php echo $this->__('Country') ?>
+    </label>
+    <div class="input-box">
+        <?php echo $select->toHtml() ?>
+    </div>
+<?php else: ?>
+    <input name="country_id" id="country" value="<?php echo $countryId ?>" type="hidden" />
+<?php endif; ?>

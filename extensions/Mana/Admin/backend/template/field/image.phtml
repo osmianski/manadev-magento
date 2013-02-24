@@ -1,0 +1,53 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Admin
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/* @var $this Mana_Admin_Block_Form_Field */
+$_element = $this->getElement();
+$_note    = $_element->getNote();
+$_trId    = Mage::helper('core')->uniqHash('id_');
+$_class   = $_element->getFieldsetHtmlClass();
+$this->checkFieldDisable();
+?>
+<?php if (!$_element->getNoDisplay()): ?>
+<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?>>
+    <td class="label<?php echo $_class ? " {$_class}-label" : ''?>"><?php echo trim($_element->getLabelHtml()) ?></td>
+    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value' ?><?php echo $_class ? " {$_class}-value" : ''?>">
+        <input type="hidden" id="<?php echo $_element->getHtmlId() ?>" name="<?php echo $_element->getName()?>"
+            value="<?php echo $_element->getEscapedValue() ?>" <?php echo $_element->serialize($_element->getHtmlAttributes()) ?> />
+        <div style="<?php echo $this->_getStyle()?>" class="field-image" id="image_<?php echo $_element->getHtmlId() ?>"></div>
+        <?php if ($_note): ?>
+            <p class="note<?php echo $_class ? " {$_class}-note" : ''?>" id="note_<?php echo $_element->getId()?>"><span><?php echo $_note ?></span></p>
+        <?php endif ?>
+    </td>
+    <td class="value use-default">
+        <ul class="mfi-buttons">
+            <?php if ($this->getDisplayUseDefault()) : ?>
+            <li class="mfi-default">
+                <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
+                <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
+            </li>
+            <?php endif; ?>
+            <li class="scalable add m-button">
+                <span><?php echo $this->__('Add') ?></span>
+            </li>
+            <li class="scalable change m-button">
+                <span><?php echo $this->__('Change') ?></span>
+            </li>
+            <li class="scalable delete m-button">
+                <span><?php echo $this->__('Remove') ?></span>
+            </li>
+        </ul>
+    </td>
+</tr>
+<?php if($_trId) : ?>
+<script type="text/javascript">(function($) {
+    $(document).trigger('m-image-field-reset', [
+        $('#<?php echo $_trId ?>')[0]
+    ]);
+})(jQuery);</script>
+<?php endif; ?>
+<?php endif; ?>

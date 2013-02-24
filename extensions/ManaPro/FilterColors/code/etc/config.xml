@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterColors
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterColors>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>13.02.13.14</version>
+		</ManaPro_FilterColors>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterColors_Helper_Data
+		class is accessible through Mage::helper('manapro_filtercolors') call, other ManaPro_FilterColors_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filtercolors/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filtercolors>
+				<!-- This says that string 'manapro_filtercolors' corresponds to ManaPro_FilterColors_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterColors_Helper</class>
+			</manapro_filtercolors>
+		</helpers>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		ManaPro_FilterColors_Block_XXX_YYY classes are accessible as 'manapro_filtercolors/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'manapro_filtercolors' corresponds to ManaPro_FilterColors_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<manapro_filtercolors>
+				<class>ManaPro_FilterColors_Block</class>
+			</manapro_filtercolors>
+		</blocks>
+		
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterColors_Model_XXX_YYY classes are accessible as 
+		'manapro_filtercolors/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filtercolors' corresponds to ManaPro_FilterColors_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filtercolors>
+				<class>ManaPro_FilterColors_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/manapro_filtercolors_resources sections and register
+				resource model information from there -->
+				<resourceModel>manapro_filtercolors_resources</resourceModel>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_filtercolors>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'manapro_filtercolors' corresponds to ManaPro_FilterColors_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<manapro_filtercolors_resources>
+				<class>ManaPro_FilterColors_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+				</entities>
+			</manapro_filtercolors_resources>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/manapro_filtercolors_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<manapro_filtercolors_setup>
+				<setup>
+					<module>ManaPro_FilterColors</module>
+				</setup>
+			</manapro_filtercolors_setup>
+		</resources>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in ManaPro_FilterColors_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of ManaPro_FilterColors_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_is_config_changed><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>isConfigChanged</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_is_config_changed>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_update_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareUpdateColumns</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_update_columns>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_update_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processUpdate</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_update_process>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_insert_columns><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareInsertColumns</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_insert_columns>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_insert_process><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>processInsert</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_insert_process>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_add_edited_data><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>addEditedData</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_add_edited_data>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<m_db_validate><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filtercolors>
+						<class>manapro_filtercolors/observer</class> <!-- model name of class containing event handler methods -->
+						<method>validate</method> <!-- event handler method name -->
+					</manapro_filtercolors>
+				</observers>
+			</m_db_validate>
+            <m_db_add_edited_details><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filtercolors>
+                        <class>manapro_filtercolors/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addGridData</method>
+                        <!-- event handler method name -->
+                    </manapro_filtercolors>
+                </observers>
+            </m_db_add_edited_details>
+            <model_save_commit_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filtercolors>
+                        <class>manapro_filtercolors/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>updateFiles</method>
+                        <!-- event handler method name -->
+                    </manapro_filtercolors>
+                </observers>
+            </model_save_commit_after>
+            <m_filter_value_html><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filtercolors>
+                        <class>manapro_filtercolors/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderValue</method>
+                        <!-- event handler method name -->
+                    </manapro_filtercolors>
+                </observers>
+            </m_filter_value_html>
+            <m_saved><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filtercolors>
+                        <class>manapro_filtercolors/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>generateCss</method>
+                        <!-- event handler method name -->
+                    </manapro_filtercolors>
+                </observers>
+            </m_saved>
+		</events>
+		<!-- INSERT HERE: blocks, models, ... -->
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterColors>
+					<files>
+						<default>ManaPro_FilterColors.csv</default>
+					</files>
+				</ManaPro_FilterColors>
+			</modules>
+		</translate>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filtercolors>
+					<file>manapro_filtercolors.xml</file>
+				</manapro_filtercolors>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Controllers/Subscribe to adminhtml router (config.xml) -->
+	<!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action 
+	method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+	it will expect ManaPro_FilterColors_AController class, and in class it will expect bAction() method. In most cases, 
+	when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<manapro_filtercolors before="Mage_Adminhtml">ManaPro_FilterColors</manapro_filtercolors>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filtercolors>
+					<file>manapro_filtercolors.xml</file>
+				</manapro_filtercolors>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<default>
+		<mana_filters>
+			<colors>
+				<image_width>60</image_width>
+				<image_height>30</image_height>
+				<image_border_radius>2</image_border_radius>
+                <state_width>20</state_width>
+                <state_height>10</state_height>
+                <state_border_radius>1</state_border_radius>
+			</colors>
+		</mana_filters>
+	</default>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+	<!-- This section extends Mana_Filters module functionality --> 
+	<mana_filters>
+		<display><!-- display options for individual filters -->
+			<attribute> <!-- available display options for attribute-based filters -->
+				<colors translate="title" module="manapro_filtercolors">
+					<title>Colors and Images (Horizontal)</title><!-- this one is displayed in admin -->
+					<block>manapro_filtercolors/filter</block>
+					<model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+					<and_resource>mana_filters/filter_and_attribute</and_resource>
+					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+					<template>manapro/filtercolors/horizontal.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+				</colors>
+                <colors_vertical translate="title" module="manapro_filtercolors">
+                    <title>Colors and Images (Vertical)</title><!-- this one is displayed in admin -->
+                    <block>manapro_filtercolors/filter</block>
+					<model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+					<and_resource>mana_filters/filter_and_attribute</and_resource>
+					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+                    <template>manapro/filtercolors/vertical.phtml</template><!-- PHTML to be rendered -->
+                    <sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+                </colors_vertical>
+                <colors_label translate="title" module="manapro_filtercolors">
+                    <title>Colors and Images (with Labels)</title>
+                    <!-- this one is displayed in admin -->
+                    <block>manapro_filtercolors/filter</block>
+					<model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+					<and_resource>mana_filters/filter_and_attribute</and_resource>
+					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+                    <template>manapro/filtercolors/label.phtml</template> <!-- PHTML to be rendered -->
+                    <sort_order>300</sort_order> <!-- Position in "Display as" list. The item with least position is the default one. -->
+                </colors_label>
+            </attribute>
+		</display>
+	</mana_filters>
+</config>

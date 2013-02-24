@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_ProductCollections
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_ProductCollections>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.11.02.11</version>
+        </ManaPro_ProductCollections>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_ProductCollections_Helper_Data
+		class is accessible through Mage::helper('manapro_productcollections') call, other ManaPro_ProductCollections_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_productcollections/xxx_yyy') call. -->
+        <helpers>
+            <manapro_productcollections>
+                <!-- This says that string 'manapro_productcollections' corresponds to ManaPro_ProductCollections_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_ProductCollections_Helper</class>
+            </manapro_productcollections>
+        </helpers>
+        <!-- This section registers block classes ManaPro_ProductCollections_Block_XXX_YYY to be accessible through
+            'manapro_productcollections/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manapro_productcollections' corresponds to ManaPro_ProductCollections_Block pseudo-namespace. -->
+            <manapro_productcollections>
+                <class>ManaPro_ProductCollections_Block</class>
+            </manapro_productcollections>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_ProductCollections_Model_XXX_YYY classes are accessible as 
+            'manapro_productcollections/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_productcollections' corresponds to ManaPro_ProductCollections_Model pseudo-namespace in 
+                getModel() and getSingleton() calls. -->
+            <manapro_productcollections>
+                <class>ManaPro_ProductCollections_Model</class>
+            </manapro_productcollections>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

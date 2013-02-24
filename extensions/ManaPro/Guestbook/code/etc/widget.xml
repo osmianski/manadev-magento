@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Guestbook
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <manapro_guestbook_random type="manapro_guestbook/random" translate="name description" module="manapro_guestbook">
+        <name>Random Guest Post (MANAdev)</name>
+        <description type="desc">Displays random guest post</description>
+        <parameters>
+            <title translate="label value">
+                <required>1</required>
+                <visible>1</visible>
+                <value>Guest Book</value>
+                <label>Block Title</label>
+                <type>text</type>
+            </title>
+            <post_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>1</value>
+                <label>Number of Posts</label>
+                <type>text</type>
+            </post_count>
+            <character_count translate="label description">
+                <required>0</required>
+                <visible>1</visible>
+                <value></value>
+                <label>Maximum Number of Characters</label>
+                <description>Leave empty to show full text</description>
+                <type>text</type>
+            </character_count>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>manapro/guestbook/random.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>manapro/guestbook/random.phtml</value>
+                        <label>Default</label>
+                    </default>
+                </values>
+            </template>
+        </parameters>
+    </manapro_guestbook_random>
+</widgets>

@@ -1,0 +1,21 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Slider
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/* @var $this Mage_Core_Block_Template */
+?>
+<?php if ($this->getParentBlock()->getItemCount()) : ?>
+<div class="m-switch m-numbers">
+    <ol>
+    	<?php for ($_i = 0; $_i < $this->getParentBlock()->getItemCount(); $_i++) :  ?>
+            <li class="m-item-helper<?php if ($_i == $this->getParentBlock()->getItemCount() - 1): ?> last<?php endif; ?>">
+                <?php echo $_i + 1 ?>
+            </li>
+    	<?php endfor; ?>
+    </ol>
+</div>
+<?php endif; ?>

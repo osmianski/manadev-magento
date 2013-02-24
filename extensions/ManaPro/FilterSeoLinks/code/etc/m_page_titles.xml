@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file titles for pages with applied layered navigation filters. It also defines rules of how
+    to join titles of several simultaneously applied filter values.	-->
+<m_page_titles>
+    <values as="value">
+        <apply pattern="{$value->title}" glued_by=", " last_glued_by=" and " prefix=": " />
+    </values>
+    <page pattern=" (Page {$page})" />
+    <finally>
+        <set title="{$title}{$values}{$page}" />
+    </finally>
+</m_page_titles>

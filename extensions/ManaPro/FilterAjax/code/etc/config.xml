@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAjax
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<ManaPro_FilterAjax>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+		    <version>13.01.16.16</version>
+		</ManaPro_FilterAjax>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterAjax_Helper_Data
+		class is accessible through Mage::helper('manapro_filterajax') call, other ManaPro_FilterAjax_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterajax/xxx_yyy') call. -->
+		<helpers>
+			<manapro_filterajax>
+				<!-- This says that string 'manapro_filterajax' corresponds to ManaPro_FilterAjax_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>ManaPro_FilterAjax_Helper</class>
+			</manapro_filterajax>
+		</helpers>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterAjax_Model_XXX_YYY classes are accessible as 
+		'manapro_filterajax/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'manapro_filterajax' corresponds to ManaPro_FilterAjax_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<manapro_filterajax>
+				<class>ManaPro_FilterAjax_Model</class>
+				<!-- INSERT HERE: resource section name -->
+			</manapro_filterajax>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+        <!-- This section registers event handlers of this module defined in ManaPro_FilterAjax_Model_Observer with
+              events defined in other module throughout the system. So when some code in other module invokes an event
+              mentioned in this section, handler method of ManaPro_FilterAjax_Model_Observer class gets called. -->
+        <events>
+            <m_ajax_options><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterajax>
+                        <class>manapro_filterajax/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderOptions</method>
+                        <!-- event handler method name -->
+                    </manapro_filterajax>
+                </observers>
+            </m_ajax_options>
+        </events>
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+		<!-- This section registers additional translation file with our module-specific strings to be loaded 
+		during admin area request processing -->
+		<translate>
+			<modules>
+				<ManaPro_FilterAjax>
+					<files>
+						<default>ManaPro_FilterAjax.csv</default>
+					</files>
+				</ManaPro_FilterAjax>
+			</modules>
+		</translate>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<manapro_filterajax>
+					<file>manapro_filterajax2.xml</file>
+				</manapro_filterajax>
+			</updates>
+		</layout>
+	</frontend>
+	<mana_ajax>
+        <allowed_actions>
+            <catalog_category_view>
+                <filter />
+            </catalog_category_view>
+            <catalogsearch_result_index>
+                <filter/>
+            </catalogsearch_result_index>
+            <cms_index_index>
+                <filter/>
+            </cms_index_index>
+            <cms_page_view>
+                <filter/>
+            </cms_page_view>
+        </allowed_actions>
+        <urls>
+            <catalog_category_view>
+                <class>ManaPro_FilterAjax_Model_Observer</class>
+                <method>getCategoryOptions</method>
+            </catalog_category_view>
+            <catalogsearch_result_index>
+                <class>ManaPro_FilterAjax_Model_Observer</class>
+                <method>getSearchOptions</method>
+            </catalogsearch_result_index>
+            <cms_index_index>
+                <class>ManaPro_FilterAjax_Model_Observer</class>
+                <method>getHomeOptions</method>
+            </cms_index_index>
+            <cms_page_view>
+                <class>ManaPro_FilterAjax_Model_Observer</class>
+                <method>getPageOptions</method>
+            </cms_page_view>
+        </urls>
+	</mana_ajax>
+	<default>
+		<mana>
+			<ajax>
+                <overlay_filter>1</overlay_filter>
+                <progress_filter>1</progress_filter>
+                <scroll_to_top_filter>1</scroll_to_top_filter>
+			</ajax>
+		</mana>
+	</default>
+</config>
