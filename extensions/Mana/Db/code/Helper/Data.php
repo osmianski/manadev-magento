@@ -11,9 +11,33 @@
  * @author Mana Team
  */
 class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
-	protected $_logQueries = true;
 	public function getLogQueries() {
-		return $this->_logQueries;
+		return Mage::getStoreConfig('mana_db/replicate/log_queries');
+	}
+	public function getLogActions() {
+		return Mage::getStoreConfig('mana_db/replicate/log_actions');
+	}
+	public function getSkipInserts() {
+		return Mage::getStoreConfig('mana_db/replicate/skip_inserts');
+	}
+	public function getSkipUpdates() {
+		return Mage::getStoreConfig('mana_db/replicate/skip_updates');
+	}
+	public function getSkipDeletes() {
+		return Mage::getStoreConfig('mana_db/replicate/skip_deletes');
+	}
+	public function getBatchSize() {
+    $result = Mage::getStoreConfig('mana_db/replicate/batch_size');
+		return $result ? $result : 10000;
+	}
+	public function getNoTransaction() {
+		return Mage::getStoreConfig('mana_db/replicate/no_transaction');
+	}
+	public function getMaxExecutionTime() {
+		return Mage::getStoreConfig('mana_db/replicate/max_execution_time');
+	}
+	public function getMemoryLimit() {
+		return Mage::getStoreConfig('mana_db/replicate/memory_limit');
 	}
 	public function logQuery($action, $query) {
 		if ($this->getLogQueries()) {
@@ -21,7 +45,7 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 	}
 	public function logAction($action, $object) {
-		if ($this->getLogQueries()) {
+		if ($this->getLogActions()) {
 			Mage::log($action.': '.$object->toJson(), Zend_Log::DEBUG, 'replicate.log');
 		}
 	}
@@ -47,7 +71,7 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 	public function joinLeft($select, $alias, $table, $condition) {
 		if (!array_key_exists($alias, $select->getPart(Zend_Db_Select::FROM))) {
-			$select->joinLeft(array($alias => $table), $condition, null);	
+			$select->joinLeft(array($alias => $table), $condition, null);
 		}
 		return $select;
 	}
@@ -102,11 +126,17 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
 		$options = array_merge(array(
 			'db' => Mage::getSingleton('core/resource')->getConnection('core/write'),
     		'trackKeys' => false,
-    		'transaction' => true,
+    		'transaction' => !$this->getNoTransaction(),
 			'filter' => array(),
-			'batchSize' => 10000,
-			'object' => null, 
+			'batchSize' => $this->getBatchSize(),
+			'object' => null,
 		), $options);
+    if ($this->getMaxExecutionTime()) {
+        ini_set('max_execution_time', $this->getMaxExecutionTime());
+    }
+    if ($this->getMemoryLimit()) {
+        ini_set('memory_limit', $this->getMemoryLimit());
+    }
 		if (count($options['filter']) == 0) {
 		    $options['db']->resetDdlCache();
         }
@@ -136,89 +166,93 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
 	    			$model = Mage::getResourceSingleton($entityName);
 	    			
 		    		// update existing rows
-					$target->setSelects(array())->setIsKeyFilterApplied(false);
-		    		$model->prepareReplicationUpdateSelects($target, $options);
-					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
-						foreach ($target->getSelects() as $select) {
-							$offset = 0;
-							$this->logQuery('UPDATE', $select);
-							do {
-								$sourceData = $options['db']->fetchAll($select->limit($options['batchSize'], $offset));
-								if ($sourceData && count($sourceData)) {
-									foreach ($sourceData as $values) {
-										if ($object = $model->processReplicationUpdate($values, $options)) {
-											if ($object != $options['object']) {
-												$this->logAction('UPDATE', $object);
-												$object->save();
-												if ($options['trackKeys']) {
-													$target->setSavedKey($object->getId(), $object->getId());
-												}
-											}
-											else {
-												$object->unsetData('_m_prevent_replication');
-											}
-										}
-									}
-								}
-								$offset += $options['batchSize'];
-							} while ($sourceData && count($sourceData));
-						}
+          if (!$this->getSkipUpdates()) {
+  					$target->setSelects(array())->setIsKeyFilterApplied(false);
+  		    		$model->prepareReplicationUpdateSelects($target, $options);
+  					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
+  						foreach ($target->getSelects() as $select) {
+  							$offset = 0;
+  							$this->logQuery('UPDATE', $select);
+  							do {
+  								$sourceData = $options['db']->fetchAll($select->limit($options['batchSize'], $offset));
+  								if ($sourceData && count($sourceData)) {
+  									foreach ($sourceData as $values) {
+  										if ($object = $model->processReplicationUpdate($values, $options)) {
+  											if ($object != $options['object']) {
+  												$this->logAction('UPDATE', $object);
+  												$object->save();
+  												if ($options['trackKeys']) {
+  													$target->setSavedKey($object->getId(), $object->getId());
+  												}
+  											}
+  											else {
+  												$object->unsetData('_m_prevent_replication');
+  											}
+  										}
+  									}
+  								}
+  								$offset += $options['batchSize'];
+  							} while ($sourceData && count($sourceData));
+  						}
+  					}
 					}
-					
 					// insert rows
-					$target->setSelects(array())->setIsKeyFilterApplied(false);
-		    		$model->prepareReplicationInsertSelects($target, $options);
-					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
-						foreach ($target->getSelects() as $select) {
-							$offset = 0;
-							$this->logQuery('INSERT', $select);
-							do {
-								$sourceData = $options['db']->fetchAll($select->limit($options['batchSize']));
-								if ($sourceData && count($sourceData)) {
-									foreach ($sourceData as $values) {
-										if ($object = $model->processReplicationInsert($values, $options)) {
-											if ($object != $options['object']) {
-												$this->logAction('INSERT', $object);
-												$object->save();
-												if ($options['trackKeys']) {
-													$target->setSavedKey($object->getId(), $object->getId());
-												}
-											}
-											else {
-												$object->unsetData('_m_prevent_replication');
-											}
-										}
-									}
-								}
-								$offset += $options['batchSize'];
-							} while ($sourceData && count($sourceData));
-						}
+          if (!$this->getSkipInserts()) {
+  					$target->setSelects(array())->setIsKeyFilterApplied(false);
+  		    		$model->prepareReplicationInsertSelects($target, $options);
+  					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
+  						foreach ($target->getSelects() as $select) {
+  							$offset = 0;
+  							$this->logQuery('INSERT', $select);
+  							do {
+  								$sourceData = $options['db']->fetchAll($select->limit($options['batchSize']));
+  								if ($sourceData && count($sourceData)) {
+  									foreach ($sourceData as $values) {
+  										if ($object = $model->processReplicationInsert($values, $options)) {
+  											if ($object != $options['object']) {
+  												$this->logAction('INSERT', $object);
+  												$object->save();
+  												if ($options['trackKeys']) {
+  													$target->setSavedKey($object->getId(), $object->getId());
+  												}
+  											}
+  											else {
+  												$object->unsetData('_m_prevent_replication');
+  											}
+  										}
+  									}
+  								}
+  								$offset += $options['batchSize'];
+  							} while ($sourceData && count($sourceData));
+  						}
+  					}
 					}
-					
 					// delete rows
-					$target->setSelects(array())->setIsKeyFilterApplied(false);
-		    		$model->prepareReplicationDeleteSelects($target, $options);
-					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
-						foreach ($target->getSelects() as $select) {
-							$offset = 0;
-							$this->logQuery('DELETE', $select);
-							do {
-								$ids = $options['db']->fetchCol($select->limit($options['batchSize']));
-								if ($ids && count($ids)) {
-									$model->processReplicationDelete($ids, $options);
-									if ($options['trackKeys']) {
-										foreach ($ids as $id) {
-											$target->setDeletedKey($id, $id);
-										}
-									}
-								}
-								$offset += $options['batchSize'];
-							} while ($ids && count($ids));
-						}
-					}
-	    		}
-	    	}
-			
+          if (!$this->getSkipDeletes()) {
+  					$target->setSelects(array())->setIsKeyFilterApplied(false);
+  		    		$model->prepareReplicationDeleteSelects($target, $options);
+  					if (count($target->getSelects()) && (!$options['trackKeys'] || $target->getIsKeyFilterApplied())) {
+  						foreach ($target->getSelects() as $select) {
+  							$offset = 0;
+  							$this->logQuery('DELETE', $select);
+  							do {
+  								$ids = $options['db']->fetchCol($select->limit($options['batchSize']));
+  								if ($ids && count($ids)) {
+  									$model->processReplicationDelete($ids, $options);
+  									if ($options['trackKeys']) {
+  										foreach ($ids as $id) {
+  											$target->setDeletedKey($id, $id);
+  										}
+  									}
+  								}
+  								$offset += $options['batchSize'];
+  							} while ($ids && count($ids));
+  						}
+  					}
+  	    		}
+  	    	}
+        }
+
 			if ($options['transaction']) {
 				$options['db']->commit();
 			}
@@ -359,5 +393,98 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
             'saved' => array(),
             'deleted' => array(),
         );
+    }
+
+    protected $_resourceSuffixes = array('_collection');
+    public function getSuffix ($entityName, $suffixes) {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper(strtolower('Mana_Core'));
+
+        foreach ($suffixes as $candidateSuffix) {
+            if ($core->endsWith($entityName, $candidateSuffix)) {
+                return $candidateSuffix;
+            }
+        }
+        return '';
+    }
+    public function getScopedName($entityName) {
+        if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
+            $entityName = substr($entityName, 0, strlen($entityName) - strlen($suffix));
+        }
+
+        $parts = explode('/', $entityName);
+        if (count($parts) > 2) {
+            if ($parts[2] == 'global') {
+                $entityName = "{$parts[0]}/{$parts[1]}";
+            }
+            else {
+                $entityName = "{$parts[0]}/{$parts[1]}_{$parts[2]}";
+            }
+        }
+        return $entityName . $suffix;
+    }
+    public function getResourceModel($entityName, $arguments = null) {
+        $resolvedEntityName = $this->getScopedName($entityName);
+        if ($this->resourceExists($resolvedEntityName)) {
+            return Mage::getResourceModel($resolvedEntityName, $arguments);
+        }
+        else {
+            if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
+                $entityName = substr($entityName, 0, strlen($entityName) - strlen($suffix));
+            }
+
+            return Mage::getResourceModel('mana_db/entity'. $suffix, array_merge(array(
+                'scope' => $entityName,
+            ), $arguments ? array('resource' => $arguments) : array()));
+        }
+    }
+
+    public function getModel($entityName, $arguments = array()) {
+        $resolvedEntityName = $this->getScopedName($entityName);
+        if ($this->modelExists($resolvedEntityName)) {
+            return Mage::getModel($resolvedEntityName, $arguments);
+        }
+        else {
+            return Mage::getModel('mana_db/entity', array_merge(array(
+                'scope' => $entityName,
+            ), $arguments));
+        }
+    }
+
+    public function resourceExists($entityName) {
+        if ($className = Mage::getConfig()->getResourceModelClassName($entityName)) {
+            return $this->classExists($className);
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public function modelExists($entityName) {
+        if ($className = Mage::getConfig()->getModelClassName($entityName)) {
+            return $this->classExists($className);
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public function classExists($class) {
+        if (defined('COMPILER_INCLUDE_PATH')) {
+            $classFile = $class;
+        }
+        else {
+            $classFile = str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ', $class)));
+        }
+        $classFile .= '.php';
+        foreach (explode(PS, get_include_path()) as $path) {
+            if (file_exists($path.DS.$classFile)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -20,16 +20,21 @@ class Mana_Ajax_Model_Observer {
      */
     public function ajaxifyPage($observer) {
         /* @var $controller Mage_Core_Controller_Varien_Action */ $controller = $observer->getEvent()->getControllerAction();
-        $actionName = $controller->getFullActionName();
-        if ($allowedAjaxActions = Mage::helper('mana_ajax')->getAllowedActions($actionName)) {
-            Mage::register('m_wrap_updatable_html_blocks', true);
-            if (($ajaxAction = $controller->getRequest()->getParam('m-ajax')) && in_array($ajaxAction, $allowedAjaxActions)) {
-                Mage::helper('mana_core')->updateRequestParameter('m-ajax', '', $ajaxAction);
-                Mage::helper('mana_core')->updateRequestParameter('no_cache', '', '1');
-                Mage::register('m_current_ajax_action', $ajaxAction);
+        if (Mage::registry('m_current_ajax_callback')) {
+            Mage::app()->getFrontController()->setNoRender(true);
+        }
+        else {
+            $actionName = $controller->getFullActionName();
+            if ($allowedAjaxActions = Mage::helper('mana_ajax')->getAllowedActions($actionName)) {
+                Mage::register('m_wrap_updatable_html_blocks', true);
+                if (($ajaxAction = $controller->getRequest()->getParam('m-ajax')) && in_array($ajaxAction, $allowedAjaxActions)) {
+                    Mage::helper('mana_core')->updateRequestParameter('m-ajax', '', $ajaxAction);
+                    Mage::helper('mana_core')->updateRequestParameter('no_cache', '', '1');
+                    Mage::register('m_current_ajax_action', $ajaxAction);
 
-                Mage::dispatchEvent('m_ajax_request');
-                Mage::app()->getFrontController()->setNoRender(true);
+                    Mage::dispatchEvent('m_ajax_request');
+                    Mage::app()->getFrontController()->setNoRender(true);
+                }
             }
         }
     }
@@ -56,7 +61,10 @@ class Mana_Ajax_Model_Observer {
      * @param Varien_Event_Observer $observer
      */
     public function renderAjaxResponse($observer) {
-        if ($action = Mage::registry('m_current_ajax_action')) {
+        if ($callback = Mage::registry('m_current_ajax_callback')) {
+            call_user_func($callback);
+        }
+        elseif ($action = Mage::registry('m_current_ajax_action')) {
             $response = new Varien_Object();
             Mage::dispatchEvent('m_ajax_response', compact('action', 'response'));
             if ($response->getIsHandled()) {

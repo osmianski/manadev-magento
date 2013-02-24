@@ -1,0 +1,26 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Admin
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+/**
+ * This template displays page content
+ */
+/* @var $this Mana_Admin_Block_Page */
+?>
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+		<td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
+        <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
+    </tr>
+</table>
+</div>
+<div>
+<?php foreach ($this->getChildGroup('content', 'getChildHtml') as $alias => $html): ?>
+	<?php echo $html; ?>
+<?php endforeach; ?>
+</div>

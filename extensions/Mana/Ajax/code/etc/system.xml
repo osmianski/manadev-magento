@@ -6,21 +6,8 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-    <tabs>
-        <mana>
-            <label>MANAdev</label>
-            <sort_order>250</sort_order>
-        </mana>
-    </tabs>
     <sections>
         <mana>
-            <label>General</label>
-            <tab>mana</tab>
-            <frontend_type>text</frontend_type>
-            <sort_order>50</sort_order>
-            <show_in_default>1</show_in_default>
-            <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
             <groups>
                 <ajax translate="label" module="mana_ajax">
                     <label>AJAX Settings</label>

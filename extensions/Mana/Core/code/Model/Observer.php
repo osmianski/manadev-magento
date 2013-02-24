@@ -58,13 +58,14 @@ class Mana_Core_Model_Observer {
         /* @var $layout Mage_Core_Model_Layout */
         $layout = $observer->getEvent()->getLayout();
 
+        // load javascript and css files if certain blocks are present
         if ($node = Mage::getConfig()->getNode('m_block_layout_handle')) {
             foreach ($node->children() as $ruleName => $ruleConfig) {
                 $if = $ruleConfig->if;
                 $handleName = (string)$ruleConfig->load_handle;
                 if ($type = (string)$if['type']) {
                     if ($this->_hasBlockInXml($type, $layout)) {
-                        $action->getLayout()->getUpdate()->fetchPackageLayoutUpdates((string)$handleName);
+                        $layout->getUpdate()->fetchPackageLayoutUpdates((string)$handleName);
                     }
                 }
             }
@@ -91,8 +92,10 @@ class Mana_Core_Model_Observer {
 		/* @var $action Mage_Core_Controller_Varien_Action */ $action = $observer->getEvent()->getAction();
 		/* @var $layout Mage_Core_Model_Layout */ $layout = $observer->getEvent()->getLayout();
 
+        // additional layout changes initiated by blocks when all their properties and children are already loaded
         Mage::helper('mana_core/layout')->prepareDelayedLayoutBlocks();
 
+        #region Obsolete, currently does nothing as there is no more m_blocks section in config.xml
 		if (Mage::getConfig()->getNode('m_blocks')) {
 			foreach (Mage::getConfig()->getNode('m_blocks')->children() as $name => $config) {
 				if (in_array($name, $layout->getUpdate()->getHandles())) {
@@ -118,6 +121,7 @@ class Mana_Core_Model_Observer {
 				}
 			}
 		}
+		#endregion
 	}
 	
 	
@@ -223,6 +227,61 @@ class Mana_Core_Model_Observer {
     public function registerThatPageIsBeingRendered($observer) {
         if (!Mage::registry('m_page_is_being_rendered')) {
             Mage::register('m_page_is_being_rendered', true);
+        }
+    }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_generate_blocks_before")
+     * @param Varien_Event_Observer $observer
+     */
+    public function processJsCssFiles($observer) {
+        /* @var $action Mage_Core_Controller_Varien_Action */
+        $action = $observer->getEvent()->getAction();
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = $observer->getEvent()->getLayout();
+
+        /* @var $helper Mana_Core_Helper_Js */
+        $helper = Mage::helper('mana_core/js');
+
+        $helper->processFiles($action, $layout);
+    }
+
+    /**
+     * wrap all blocks marked as client side blocks into container elements
+     * (handles event "core_block_abstract_to_html_after")
+     * @param Varien_Event_Observer $observer
+     */
+    public function addClientSideBlockMarkup($observer) {
+        /* @var $block Mage_Core_Block_Abstract */
+        $block = $observer->getEvent()->getBlock();
+        /* @var $transport Varien_Object */
+        $transport = $observer->getEvent()->getTransport();
+
+        /* @var $js Mana_Core_Helper_Js */
+        $js = Mage::helper('mana_core/js');
+        $transport->setHtml($js->wrapClientSideBlock($transport->getHtml(), $block));
+    }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "core_block_abstract_to_html_after")
+     * @param Varien_Event_Observer $observer
+     */
+    public function renderRequireSettings($observer) {
+        /* @var $block Mage_Core_Block_Abstract */
+        $block = $observer->getEvent()->getBlock();
+        /* @var $transport Varien_Object */
+        $transport = $observer->getEvent()->getTransport();
+
+        /* @var $js Mana_Core_Helper_Js */
+        $js = Mage::helper('mana_core/js');
+
+        if ($block->getNameInLayout() == 'head' && $js->pageContains('require')) {
+            $require = $block->getLayout()->createBlock('mana_core/require');
+            $html = $transport->getHtml();
+            $html = $require->toHtml(). $html;
+
+            // replace original content with wrapped one
+            $transport->setHtml($html);
         }
     }
 }
