@@ -9,6 +9,7 @@
     <adminhtml_mana_attribute_page_new type="page">
         <reference name="content">
             <block type="mana_admin/page" name="page">
+                <action method="setDataSource"><value>mana_attributepage/page</value></action>
                 <action method="setTitle" translate="value" module="mana_attributepage">
                     <value>Create Pages for Attribute(s)</value>
                 </action>
@@ -16,9 +17,9 @@
                 <action method="setMenu"><value>mana/attribute</value></action>
 
                 <block type="mana_admin/grid" name="grid">
+                    <action method="setDataSource"><value>mana_attributepage/page_attribute</value></action>
                     <action method="setDefaultSort"><value>attribute_id</value></action>
                     <action method="setDefaultDir"><value>asc</value></action>
-                    <action method="setDataSource"><value>mana_attributepage/page_attribute_collection</value></action>
                     <action method="setGridController"><value>mana_attribute_page_newGrid</value></action>
 
                     <!-- Columns -->

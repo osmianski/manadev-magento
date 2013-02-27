@@ -11,6 +11,8 @@
  * @author Mana Team
  */
 class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
+    protected $_resourceSingletons = array();
+
 	public function getLogQueries() {
 		return Mage::getStoreConfig('mana_db/replicate/log_queries');
 	}
@@ -445,6 +447,18 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function getResourceSingleton($entityName, $arguments = null) {
+        $resolvedEntityName = $this->getScopedName($entityName);
+        if ($this->resourceExists($resolvedEntityName)) {
+            return Mage::getResourceSingleton($resolvedEntityName, $arguments);
+        }
+        else {
+            if (!isset($this->_resourceSingletons[$resolvedEntityName])) {
+                $this->_resourceSingletons[$resolvedEntityName] = $this->getResourceModel($entityName, $arguments);
+            }
+            return $this->_resourceSingletons[$resolvedEntityName];
+        }
+    }
     /**
      * @param string $entityName
      * @param array $arguments

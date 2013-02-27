@@ -19,6 +19,7 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         if (is_array($data)) {
             if (isset($data['scope'])) {
                 $this->_scope = $data['scope'];
+                unset($data['scope']);
             }
         }
 
@@ -30,13 +31,23 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     }
 
     protected function _initScope() {
-
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
 
         $this->_init($db->getScopedName($this->_scope), 'id');
 
         return $this;
+    }
+
+    protected function _getResource() {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        if (empty($this->_resourceName)) {
+            Mage::throwException(Mage::helper('core')->__('Resource is not set.'));
+        }
+
+        return $db->getResourceSingleton($this->_resourceName);
     }
 
     public function assignDefaultValues() {

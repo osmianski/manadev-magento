@@ -47,10 +47,17 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
             /* @var $db Mana_Db_Helper_Data */
             $db = Mage::helper('mana_db');
 
-            $this->_resource = $db->getResourceModel($this->getResourceModelName());
+            $this->_resource = $db->getResourceSingleton($this->getResourceModelName());
         }
 
         return $this->_resource;
+    }
+
+    public function getNewEmptyItem() {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        return $db->getModel($this->_model);
     }
 
     public function setEditFilter($editFilter, $parentCondition = '') {
