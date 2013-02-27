@@ -13,8 +13,12 @@ class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
     protected function _prepareProductCollection() {
         /////////// Begin Special Price and Rule Filtering
         $todayDate = $this->getTodayDate();
-        /* @var $res Mage_Core_Model_Resource */ $res = Mage::getSingleton('core/resource');
+        /* @var $res Mage_Core_Model_Resource */
+        $res = Mage::getSingleton('core/resource');
+
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
         $db = $res->getConnection('read');
+
         $rules = Mage::getModel('catalogrule/rule')->getResourceCollection()
                 ->addFieldToFilter('is_active', 1)
                 ->addWebsiteFilter(Mage::getModel('core/store')->load(Mage::app()->getStore()->getId())->getWebsiteId())
@@ -35,18 +39,13 @@ class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
         }
         $promoids = array();
         if (!$this->getIgnorePromos()) {
-            foreach ($rules as /* @var $rule Mage_CatalogRule_Model_Rule */ $rule) {
-                if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7')) {
-                    if (!is_array($rule->getWebsiteIds())) {
-                        $rule->setWebsiteIds(explode(',', $rule->getWebsiteIds()));
-                    }
-                }
-                else {
-                    if (is_array($rule->getWebsiteIds())) {
-                        $rule->setWebsiteIds(implode(',', $rule->getWebsiteIds()));
-                    }
-                }
-                $promoids = array_merge($promoids, $rule->getMatchingProductIds());
+            $ruleIds = $rules->getAllIds();
+            if (count($ruleIds)) {
+                $select = $db->select()
+                    ->from(array('p' => $res->getTableName('catalogrule_product')), 'product_id')
+                    ->distinct()
+                    ->where('p.rule_id IN (?)', $ruleIds);
+                $promoids = array_merge($promoids, $db->fetchCol($select));
             }
         }
         $specialids = array();
