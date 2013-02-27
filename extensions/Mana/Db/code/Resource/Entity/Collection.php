@@ -11,6 +11,8 @@
  */
 class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
     protected $_scope;
+    protected $_editFilter = null;
+    protected $_parentCondition = '';
 
     public function __construct($resource = null) {
         if (is_array($resource)) {
@@ -42,9 +44,51 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
      */
     public function getResource() {
         if (empty($this->_resource)) {
-            $this->_resource = Mage::helper('mana_db')->getResourceModel($this->getResourceModelName());
+            /* @var $db Mana_Db_Helper_Data */
+            $db = Mage::helper('mana_db');
+
+            $this->_resource = $db->getResourceModel($this->getResourceModelName());
         }
 
         return $this->_resource;
+    }
+
+    public function setEditFilter($editFilter, $parentCondition = '') {
+        $this->_editFilter = $editFilter;
+        $this->_parentCondition = $parentCondition;
+
+        return $this;
+    }
+
+    protected function _beforeLoad() {
+        $this->_renderEditFilter();
+        parent::_beforeLoad();
+
+        return $this;
+    }
+
+    protected function _renderEditFilter() {
+        $alias = 'main_table';
+        if (is_array($this->_editFilter)) {
+            $sql = count($this->_editFilter['saved'])
+                ? $this->getConnection()->quoteInto("$alias.edit_status = 0 AND $alias.id NOT IN (?)", array_keys($this->_editFilter['saved']))
+                : "$alias.edit_status = 0";
+            if ($this->_parentCondition) {
+                $sql .= " AND ($alias.{$this->_parentCondition})";
+            }
+            if (count($this->_editFilter['saved'])) {
+                $sql = "($sql) OR ({$this->getConnection()->quoteInto(
+                    "$alias.edit_status <> 0 AND $alias.edit_session_id = ?", $this->_editFilter['sessionId'])})";
+            }
+            if (count($this->_editFilter['deleted'])) {
+                $sql = "($sql)" .
+                    " AND ({$this->getConnection()->quoteInto("$alias.id NOT IN (?)", $this->_editFilter['deleted'])})";
+                //" AND ({$this->getConnection()->quoteInto("$alias.edit_status NOT IN (?)", $this->_editFilter['deleted'])})";
+            }
+            $this->getSelect()->where($sql);
+        }
+        elseif ($this->_editFilter) {
+            $this->getSelect()->where("$alias.edit_status = 0");
+        }
     }
 }

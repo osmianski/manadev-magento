@@ -8,6 +8,11 @@
 /**
  * @author Mana Team
  * @method mixed getDataSource()
+ * @method array getEdit()
+ * @method Mana_Admin_Block_Grid setUseAjax(bool $value)
+ * @method array getMClientSideBlock()
+ * @method Mana_Admin_Block_Grid setMClientSideBlock(array $value)
+ * @method string getGridController()
  */
 class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     protected function _construct() {
@@ -16,26 +21,27 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     protected function _prepareLayout() {
         $this->setId(str_replace('_', '-', str_replace('.', '-', $this->getNameInLayout())));
 
-        $this->setChild('export_button',
-            $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.export")
-                ->setData(array(
-                'label' => Mage::helper('adminhtml')->__('Export'),
-                'class' => 'task'
-            ))
-        );
-        $this->setChild('reset_filter_button',
-            $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.reset")
-                ->setData(array(
-                'label' => Mage::helper('adminhtml')->__('Reset Filter'),
-            ))
-        );
-        $this->setChild('search_button',
-            $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.search")
-                ->setData(array(
-                'label' => Mage::helper('adminhtml')->__('Search'),
-                'class' => 'task'
-            ))
-        );
+        /* @var $button Mana_Admin_Block_Grid_Action */
+        $button = $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.export")
+            ->setData(array(
+            'label' => Mage::helper('adminhtml')->__('Export'),
+            'class' => 'task'
+        ));
+
+        $this->setChild('export_button', $button);
+
+        $button = $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.reset")
+            ->setData(array(
+            'label' => Mage::helper('adminhtml')->__('Reset Filter'),
+        ));
+        $this->setChild('reset_filter_button', $button);
+
+        $button = $this->getLayout()->createBlock('mana_admin/grid_action', "{$this->getNameInLayout()}.search")
+            ->setData(array(
+            'label' => Mage::helper('adminhtml')->__('Search'),
+            'class' => 'task'
+        ));
+        $this->setChild('search_button', $button);
 
         $this->setDefaultSort('id');
         $this->setDefaultDir('desc');
@@ -51,14 +57,12 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     }
 
     public function delayedPrepareLayout() {
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper(strtolower('Mana_Core'));
-
-        /* @var $layout Mage_Core_Model_Layout */
-        $layout = Mage::getSingleton('core/layout');
-
         $this->addToParentGroup('content');
 
+        /* @var $pageBlock Mana_Admin_Block_Page */
+        if ($pageBlock = $this->getLayout()->getBlock('page')) {
+            $pageBlock->setBeginEditingSession(true);
+        }
         // create client-side block
         $this->_prepareClientSideBlock();
 
@@ -66,9 +70,12 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     }
 
     protected function _prepareClientSideBlock() {
+        /* @var $urlTemplate Mana_Core_Helper_UrlTemplate */
+        $urlTemplate = Mage::helper('mana_core/urlTemplate');
+
         $this->setMClientSideBlock(array(
             'type' => 'Mana/Admin/Block/Grid',
-            'grid_url' => base64_encode($this->getGridUrl()),
+            'url' => $urlTemplate->encodeAttribute($this->getGridUrl()),
             'html' => array(
                 'id' => $this->getId(),
             ),
@@ -89,8 +96,10 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         );
     }
     protected function _prepareCollection() {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
         /* @var $collection Mage_Core_Model_Mysql4_Collection_Abstract */
-        $collection = Mage::helper('mana_db')->getResourceModel($this->getDataSource());
+        $collection = $db->getResourceModel($this->getDataSource());
 
         $this->setCollection($collection);
         Mage::dispatchEvent('m_entity_grid_collection', array('grid' => $this));
@@ -128,6 +137,11 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         return $this;
     }
 
+    /**
+     * @param string $columnId
+     * @param Mana_Admin_Block_Grid_Column $column
+     * @return Mana_Admin_Block_Grid
+     */
     public function addColumnBlock($columnId, $column) {
         $column
             ->setGrid($this)
@@ -178,9 +192,14 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
             ->_removeParam($params, $sourceKey);
     }
 
+    /**
+     * @param Varien_Object $a
+     * @param Varien_Object $b
+     * @return int
+     */
     protected function _compareBySortOrder($a, $b) {
-        if ($a->getSortOrder() < $b->getSortOrder()) return -1;
-        if ($a->getSortOrder() > $b->getSortOrder()) return 1;
+        if ($a->getData('sort_order') < $b->getData('sort_order')) return -1;
+        if ($a->getData('sort_order') > $b->getData('sort_order')) return 1;
         return 0;
     }
     public function canDisplayContainer() {
@@ -200,7 +219,75 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     }
 
     public function getGridUrl() {
-        return $this->getUrl('*/'.$this->getGridController().'/{action}');
+        return $this->_getUrlModel()->setNoSecret(1)->getUrl('*/'.$this->getGridController().'/{action}');
+    }
+
+    /**
+     * @return Mage_Core_Model_Abstract
+     */
+    public function getParentModel() {
+        return null;
+    }
+
+    /**
+     * @return Mana_Db_Model_Entity
+     */
+    public function createModel() {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        return $db->getModel($this->getDataSource());
+    }
+
+    /**
+     * @return Mana_Db_Model_Entity
+     */
+    public function loadModel($id) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        return $db->getModel($this->getDataSource())->load($id);
+    }
+
+    /**
+     * @return Mana_Db_Resource_Entity_Collection
+     */
+    public function loadModels($edit) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        $collection = $db->getResourceModel($this->getDataSource());
+        $collection
+            ->setEditFilter($edit)
+            ->addFieldToFilter('edit_massaction', 1);
+        return $collection;
+    }
+
+    /**
+     * @return Mana_Db_Model_Entity
+     */
+    public function loadEditedModel($id, $sessionId) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        return $db->getModel($this->getDataSource())->loadEdited($id, $sessionId);
+    }
+
+    public function setEdit($edit) {
+        /* @var $json Mana_Core_Helper_Json */
+        $json = Mage::helper('mana_core/json');
+
+        $this->setData('edit', $edit);
+
+        $clientSideBlock = $this->getMClientSideBlock();
+        if (!$clientSideBlock) {
+            $clientSideBlock = array();
+        }
+        $clientSideBlock = array_merge($clientSideBlock, array(
+            'edit' => $json->encodeAttribute($this->getEdit()),
+        ));
+        $this->setMClientSideBlock($clientSideBlock);
+        return $this;
     }
 
     #region Events
@@ -211,7 +298,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         return $this;
     }
     protected function _raiseGetRowUrl($row) {
-        /* @var $eventHelper Mana_Entity_Helper_Event */
+        /* @var $eventHelper Mana_Admin_Helper_Event */
         $eventHelper = Mage::helper('mana_admin/event');
 
         return $eventHelper->raise($this, $this->_onGetRowUrl, compact('row'));

@@ -5,7 +5,9 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 
-;var Mana = Mana || {};
+; // make JS merging easier
+
+var Mana = Mana || {};
 
 (function($, undefined) {
 
@@ -170,7 +172,236 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
 
             return result;
         },
-        base64Decode: function (data) {
+        // Array Remove - By John Resig (MIT Licensed)
+        arrayRemove:function (array, from, to) {
+            var rest = array.slice((to || from) + 1 || array.length);
+            array.length = from < 0 ? array.length + from : from;
+            return array.push.apply(array, rest);
+        },
+        getBlockAlias: function(parentId, childId) {
+            var pos;
+            if ((pos = childId.indexOf(parentId + '-')) === 0) {
+                return childId.substr((parentId + '-').length);
+            }
+            else {
+                return childId;
+            }
+        }
+    });
+});
+Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Json'], function ($, layout, json) {
+    return Mana.Object.extend('Mana/Core/Ajax', {
+        get:function (url, callback, options) {
+            var self = this;
+            options = this._before(options, url);
+            $.get(window.encodeURI(url))
+                .done(function (response) { self._done(response, callback, options, url); })
+                .fail(function (error) { self._fail(error, options, url)})
+                .complete(function () { self._complete(options, url); });
+        },
+        post:function (url, data, callback, options) {
+            var self = this;
+            options = this._before(options, url, data);
+            $.post(window.encodeURI(url), data)
+                .done(function (response) { self._done(response, callback, options, url, data); })
+                .fail(function (error) { self._fail(error, options, url, data)})
+                .complete(function () { self._complete(options, url, data); });
+        },
+        _before: function(options, url, data) {
+            var page = layout.getPageBlock();
+            options = $.extend({
+                showOverlay:page.getShowOverlay(),
+                showWait:page.getShowWait(),
+                showDebugMessages:page.getShowDebugMessages()
+            }, options);
+
+            if (options.showOverlay) {
+                page.showOverlay();
+            }
+            if (options.showWait) {
+                page.showWait();
+            }
+
+            return options;
+        },
+        _done:function (response, callback, options, url, data) {
+            try {
+                var content = response;
+                try {
+                    response = json.parse(response);
+                }
+                catch (e) {
+                    callback(content, { url:url});
+                    return;
+                }
+                if (!response) {
+                    if (options.showDebugMessages) {
+                        alert('No response.');
+                    }
+                }
+                else if (response.error) {
+                    if (options.showDebugMessages) {
+                        alert(response.error);
+                    }
+                }
+                else {
+                    callback(response, { url:url});
+                }
+            }
+            catch (error) {
+                if (options.showDebugMessages) {
+                    alert((typeof(error) == 'string' ? error : error.message) + "\n" +
+                        (response && typeof(response) == 'string' ? response : ''));
+                }
+            }
+        },
+        _fail:function (error, options, url, data) {
+            if (options.showDebugMessages) {
+                alert(error.status + (error.responseText ? ': ' + error.responseText : ''));
+            }
+        },
+        _complete:function (options, url, data) {
+            var page = layout.getPageBlock();
+            if (options.showOverlay) {
+                page.hideOverlay();
+            }
+            if (options.showWait) {
+                page.hideWait();
+            }
+        }
+    });
+});
+Mana.define('Mana/Core/Json', ['jquery'], function($) {
+    return Mana.Object.extend('Mana/Core/Json', {
+        parse: function(what) {
+            return $.parseJSON(what);
+        },
+        stringify: function(what) {
+            return Object.toJSON(what);
+        },
+        decodeAttribute: function(what) {
+            var encoded = what.split("\"");
+            var decoded = [];
+            $.each(encoded, function(key, value) {
+                decoded.push(value.replace(/'/g, "\""));
+            });
+            var result = decoded.join("'");
+            return this.parse(result);
+        }
+    });
+});
+Mana.define('Mana/Core/Utf8', [], function() {
+    return Mana.Object.extend('Mana/Core/Utf8', {
+        decode:function (str_data) {
+            // Converts a UTF-8 encoded string to ISO-8859-1
+            //
+            // version: 1109.2015
+            // discuss at: http://phpjs.org/functions/utf8_decode
+            // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+            // +      input by: Aman Gupta
+            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // +   improved by: Norman "zEh" Fuchs
+            // +   bugfixed by: hitwork
+            // +   bugfixed by: Onno Marsman
+            // +      input by: Brett Zamir (http://brett-zamir.me)
+            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // *     example 1: utf8_decode('Kevin van Zonneveld');
+            // *     returns 1: 'Kevin van Zonneveld'
+            var tmp_arr = [],
+                i = 0,
+                ac = 0,
+                c1 = 0,
+                c2 = 0,
+                c3 = 0;
+
+            str_data += '';
+
+            while (i < str_data.length) {
+                c1 = str_data.charCodeAt(i);
+                if (c1 < 128) {
+                    tmp_arr[ac++] = String.fromCharCode(c1);
+                    i++;
+                } else if (c1 > 191 && c1 < 224) {
+                    c2 = str_data.charCodeAt(i + 1);
+                    tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = str_data.charCodeAt(i + 1);
+                    c3 = str_data.charCodeAt(i + 2);
+                    tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+
+            return tmp_arr.join('');
+        }
+    });
+});
+Mana.define('Mana/Core/Base64', ['singleton:Mana/Core/Utf8'], function (utf8) {
+    return Mana.Object.extend('Mana/Core/Base64', {
+        encode:function (what) {
+            /*
+             * Caudium - An extensible World Wide Web server
+             * Copyright C 2002 The Caudium Group
+             *
+             * This program is free software; you can redistribute it and/or
+             * modify it under the terms of the GNU General Public License as
+             * published by the Free Software Foundation; either version 2 of the
+             * License, or (at your option) any later version.
+             *
+             * This program is distributed in the hope that it will be useful, but
+             * WITHOUT ANY WARRANTY; without even the implied warranty of
+             * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+             * General Public License for more details.
+             *
+             * You should have received a copy of the GNU General Public License
+             * along with this program; if not, write to the Free Software
+             * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+             *
+             */
+
+            /*
+             * base64.js - a JavaScript implementation of the base64 algorithm,
+             *             (mostly) as defined in RFC 2045.
+             *
+             * This is a direct JavaScript reimplementation of the original C code
+             * as found in the Exim mail transport agent, by Philip Hazel.
+             *
+             */
+            var base64_encodetable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            var result = "";
+            var len = what.length;
+            var x, y;
+            var ptr = 0;
+
+            while (len-- > 0) {
+                x = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( x >> 2 ) & 63);
+
+                if (len-- <= 0) {
+                    result += base64_encodetable.charAt(( x << 4 ) & 63);
+                    result += "==";
+                    break;
+                }
+
+                y = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( ( x << 4 ) | ( ( y >> 4 ) & 15 ) ) & 63);
+
+                if (len-- <= 0) {
+                    result += base64_encodetable.charAt(( y << 2 ) & 63);
+                    result += "=";
+                    break;
+                }
+
+                x = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( ( y << 2 ) | ( ( x >> 6 ) & 3 ) ) & 63);
+                result += base64_encodetable.charAt(x & 63);
+
+            }
+
+            return result;
+        },
+        decode:function (data) {
             // Decodes string using MIME base64 algorithm
             //
             // version: 1109.2015
@@ -226,152 +457,43 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
             } while (i < data.length);
 
             dec = tmp_arr.join('');
-            dec = this.utf8Decode(dec);
+            dec = utf8.decode(dec);
 
             return dec;
-        },
-        utf8Decode: function (str_data) {
-            // Converts a UTF-8 encoded string to ISO-8859-1
-            //
-            // version: 1109.2015
-            // discuss at: http://phpjs.org/functions/utf8_decode
-            // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
-            // +      input by: Aman Gupta
-            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // +   improved by: Norman "zEh" Fuchs
-            // +   bugfixed by: hitwork
-            // +   bugfixed by: Onno Marsman
-            // +      input by: Brett Zamir (http://brett-zamir.me)
-            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // *     example 1: utf8_decode('Kevin van Zonneveld');
-            // *     returns 1: 'Kevin van Zonneveld'
-            var tmp_arr = [],
-                i = 0,
-                ac = 0,
-                c1 = 0,
-                c2 = 0,
-                c3 = 0;
-
-            str_data += '';
-
-            while (i < str_data.length) {
-                c1 = str_data.charCodeAt(i);
-                if (c1 < 128) {
-                    tmp_arr[ac++] = String.fromCharCode(c1);
-                    i++;
-                } else if (c1 > 191 && c1 < 224) {
-                    c2 = str_data.charCodeAt(i + 1);
-                    tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
-                    i += 2;
-                } else {
-                    c2 = str_data.charCodeAt(i + 1);
-                    c3 = str_data.charCodeAt(i + 2);
-                    tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                    i += 3;
-                }
-            }
-
-            return tmp_arr.join('');
-        },
-        urlDecode: function(data) {
-            return this.base64Decode(data.replace('-', '+').replace('_', '/').replace(',', '='));
-        },
-        // Array Remove - By John Resig (MIT Licensed)
-        arrayRemove:function (array, from, to) {
-            var rest = array.slice((to || from) + 1 || array.length);
-            array.length = from < 0 ? array.length + from : from;
-            return array.push.apply(array, rest);
-        },
-        getBlockAlias: function(parentId, childId) {
-            var pos;
-            if ((pos = childId.indexOf(parentId + '-')) === 0) {
-                return childId.substr((parentId + '-').length);
+        }
+    });
+});
+Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:Mana/Core/Config'], function (base64, config) {
+    return Mana.Object.extend('Mana/Core/UrlTemplate', {
+        decodeAttribute:function (data) {
+            if (config.getData('debug')) {
+                return data;
             }
             else {
-                return childId;
+                return base64.decode(data.replace('-', '+').replace('_', '/').replace(',', '='));
             }
         }
     });
 });
-Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
-    return Mana.Object.extend('Mana/Core/Ajax', {
-        get:function (url, callback, options) {
-            var self = this;
-            options = this._before(options, url);
-            $.get(window.encodeURI(url))
-                .done(function (response) { self._done(response, callback, options, url); })
-                .fail(function (error) { self._fail(error, options, url)})
-                .complete(function () { self._complete(options, url); });
+Mana.define('Mana/Core/Config', ['jquery'], function($) {
+    return Mana.Object.extend('Mana/Core/Config', {
+        _init:function () {
+            this._data = {
+                debug:true,
+                showOverlay:true,
+                showWait:true
+            };
         },
-        post:function (url, data, callback, options) {
-            var self = this;
-            options = this._before(options, url, data);
-            $.post(window.encodeURI(url), data)
-                .done(function (response) { self._done(response, callback, options, url, data); })
-                .fail(function (error) { self._fail(error, options, url, data)})
-                .complete(function () { self._complete(options, url, data); });
+        getData:function (key) {
+            return this._data[key];
         },
-        _before: function(options, url, data) {
-            var page = layout.getPageBlock();
-            options = $.extend({
-                showOverlay:page.getShowOverlay(),
-                showWait:page.getShowWait(),
-                showDebugMessages:page.getShowDebugMessages()
-            }, options);
-
-            if (options.showOverlay) {
-                page.showOverlay();
-            }
-            if (options.showWait) {
-                page.showWait();
-            }
-
-            return options;
+        setData:function (key, value) {
+            this._data[key] = value;
+            return this;
         },
-        _done:function (response, callback, options, url, data) {
-            try {
-                var content = response;
-                try {
-                    response = $.parseJSON(response);
-                }
-                catch (e) {
-                    callback(content, { url:url});
-                    return;
-                }
-                if (!response) {
-                    if (options.showDebugMessages) {
-                        alert('No response.');
-                    }
-                }
-                else if (response.error) {
-                    if (options.showDebugMessages) {
-                        alert(response.error);
-                    }
-                }
-                else {
-                    callback(response, { url:url});
-                }
-            }
-            catch (error) {
-                if (options.showDebugMessages) {
-                    alert((typeof(error) == 'string' ? error : error.message) + "\n" +
-                        (response && typeof(response) == 'string' ? response : ''));
-                }
-            }
-        },
-        _fail:function (error, options, url, data) {
-            if (options.showDebugMessages) {
-                alert(error.status + (error.responseText ? ': ' + error.responseText : ''));
-            }
-        },
-        _complete:function (options, url, data) {
-            var page = layout.getPageBlock();
-            if (options.showOverlay) {
-                page.hideOverlay();
-            }
-            if (options.showWait) {
-                page.hideWait();
-            }
+        set: function(data) {
+            $.extend(this._data, data);
+            return this;
         }
     });
 });
@@ -385,6 +507,7 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
             this._namedChildren = {};
             this._isSelfContained = false;
             this._eventHandlers = {};
+            this._data = {};
             this._subscribeToHtmlEvents()._subscribeToBlockEvents();
         },
         _subscribeToHtmlEvents: function() {
@@ -529,14 +652,20 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
             layout.endGeneratingBlocks(vars);
 
             return this;
+        },
+        getData: function(key) {
+            return this._data[key];
+        },
+        setData: function(key, value) {
+            this._data[key] = value;
+            return this;
         }
     });
 });
-Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block'], function ($, Block, undefined) {
+Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Config'],
+function ($, Block, config)
+{
     return Block.extend('Mana/Core/PageBlock', {
-        _init: function() {
-            this._super();
-        },
         showOverlay: function() {
             var overlay = $('<div class="m-overlay"></div>');
             overlay.appendTo(this.getElement());
@@ -556,22 +685,13 @@ Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block'], function ($, B
             return this;
         },
         getShowDebugMessages: function() {
-            if (this._showDebugMessages === undefined) {
-                this._showDebugMessages = true;
-            }
-            return this._showDebugMessages;
+            return config.getData('debug');
         },
         getShowOverlay:function () {
-            if (this._showOverlay === undefined) {
-                this._showOverlay = true;
-            }
-            return this._showOverlay;
+            return config.getData('showOverlay');
         },
         getShowWait:function () {
-            if (this._showWait === undefined) {
-                this._showWait = true;
-            }
-            return this._showWait;
+            return config.getData('showWait');
         }
     });
 });

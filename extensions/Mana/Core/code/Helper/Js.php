@@ -411,6 +411,19 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             'opening_html', 'closing_html', 'class_html', 'style_html', 'attribute_html');
     }
 
+    public function setConfig($key, $value) {
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton(strtolower('Core/Layout'));
+        /* @var $jsBlock Mana_Core_Block_Js */
+        $jsBlock = $layout->getBlock('m_js');
+
+        if ($jsBlock) {
+            $jsBlock->setConfig($key, $value);
+        }
+
+        return $this;
+    }
+
     #endregion
     #region Deprecated API for $.options() and $.__() functions
     /**

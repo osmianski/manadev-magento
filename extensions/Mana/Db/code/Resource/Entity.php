@@ -34,4 +34,30 @@ class Mana_Db_Resource_Entity extends Mage_Core_Model_Mysql4_Abstract {
         $this->_init($db->getScopedName($this->_scope), 'id');
         return $this;
     }
+
+    /**
+     * @param Mana_Db_Model_Entity $object
+     * @param int $id
+     * @param int $sessionId
+     * @return Mana_Db_Resource_Entity
+     */
+    public function loadEdited($object, $id, $sessionId) {
+        $read = $this->_getReadAdapter();
+        if ($read = $this->_getReadAdapter()) {
+            $select = $this->_getReadAdapter()->select()
+                ->from($this->getMainTable())
+                ->where($this->getMainTable().'.`edit_status` = ?', $id)
+                ->where($this->getMainTable().'.`edit_session_id` = ?', $sessionId);
+            $data = $read->fetchRow($select);
+
+            if ($data) {
+                $object->setData($data);
+            }
+        }
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+
+        return $this;
+    }
 }

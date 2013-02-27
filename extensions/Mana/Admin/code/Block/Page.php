@@ -10,6 +10,8 @@
  * @method string getTitle()
  * @method string getTitleGroup()
  * @method string getMenu()
+ * @method bool getBeginEditingSession()
+ * @method Mana_Admin_Block_Page setBeginEditingSession(bool $value)
  */
 class Mana_Admin_Block_Page extends Mage_Adminhtml_Block_Widget_Container
 {
@@ -34,5 +36,4 @@ class Mana_Admin_Block_Page extends Mage_Adminhtml_Block_Widget_Container
 
         return $this;
     }
-
 }

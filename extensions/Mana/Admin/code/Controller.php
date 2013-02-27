@@ -14,6 +14,12 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
         /* @var $adminPageHelper Mana_Admin_Helper_Page */
         $adminPageHelper = Mage::helper('mana_admin/page');
 
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        /* @var $js Mana_Core_Helper_Js */
+        $js = Mage::helper('mana_core/js');
+
         // layout
         $update = $this->getLayout()->getUpdate();
         $update->addHandle('default');
@@ -27,7 +33,7 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
 
         // rendering
         if ($pageBlock = $this->getLayout()->getBlock('page')) {
-            /* @var $pageBlock Mana_Entity_Block_Adminhtml_Page */
+            /* @var $pageBlock Mana_Admin_Block_Page */
             if ($pageBlock->getTitleGroup()) {
                 $this->_title($pageBlock->getTitleGroup());
             }
@@ -36,6 +42,11 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
             }
             if ($pageBlock->getMenu()) {
                 $this->_setActiveMenu($pageBlock->getMenu());
+            }
+
+            if ($pageBlock->getBeginEditingSession() && !$db->getInEditing()) {
+                $db->setInEditing();
+                $js->setConfig('editSessionId', $db->beginEditing());
             }
         }
 

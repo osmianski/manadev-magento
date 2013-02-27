@@ -423,6 +423,12 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $entityName . $suffix;
     }
+
+    /**
+     * @param string $entityName
+     * @param array|null $arguments
+     * @return Mana_Db_Resource_Entity_Collection | Mana_Db_Resource_Entity
+     */
     public function getResourceModel($entityName, $arguments = null) {
         $resolvedEntityName = $this->getScopedName($entityName);
         if ($this->resourceExists($resolvedEntityName)) {
@@ -439,6 +445,11 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    /**
+     * @param string $entityName
+     * @param array $arguments
+     * @return Mana_Db_Model_Entity
+     */
     public function getModel($entityName, $arguments = array()) {
         $resolvedEntityName = $this->getScopedName($entityName);
         if ($this->modelExists($resolvedEntityName)) {

@@ -5,8 +5,12 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 
-Mana.define('Mana/Admin/Block/Grid', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core', 'singleton:Mana/Core/Ajax'],
-function ($, Block, core, ajax)
+; // make JS merging easier
+
+Mana.define('Mana/Admin/Block/Grid', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core',
+    'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Json', 'singleton:Mana/Core/Config',
+    'singleton:Mana/Core/Base64', 'singleton:Mana/Core/UrlTemplate'],
+function ($, Block, core, ajax, json, config, base64, urlTemplate)
 {
     var RewrittenVarienGrid = Class.create(varienGrid, {
         reload:function (url) {
@@ -29,17 +33,29 @@ function ($, Block, core, ajax)
         _init: function() {
             this._super();
             this._varienGrid = null;
-            this._gridUrl = '';
+            this._url = '';
+            this._edit = {
+                pending:{},
+                saved:{},
+                deleted:{}
+            };
         },
 
-        getGridUrl: function() {
-            if (!this._gridUrl) {
-                this._gridUrl = core.base64Decode($(this.getElement()).data('grid-url'));
+        getUrl: function() {
+            if (!this._url) {
+                this._url = urlTemplate.decodeAttribute($(this.getElement()).data('url'));
             }
-            return this._gridUrl;
+            return this._url;
         },
-        setGridUrl: function(value) {
-            this._gridUrl = value;
+        setUrl: function(value) {
+            this._url = value;
+            return this;
+        },
+        getEdit: function() {
+            return this._edit;
+        },
+        setEdit: function(value) {
+            this._edit = value;
             return this;
         },
 
@@ -50,10 +66,14 @@ function ($, Block, core, ajax)
                 .on('bind', this, function () {
                     //noinspection JSPotentiallyInvalidConstructorUsage
                     this._varienGrid = new RewrittenVarienGrid(this.getElement().id,
-                        this.getGridUrl().replace('{action}', 'index'), 'page', 'sort', 'dir', 'filter');
+                        this.getUrl().replace('{action}', 'index'), 'page', 'sort', 'dir', 'filter');
                     this._varienGrid.useAjax = true;
                     this._varienGrid._block = this;
 
+                    var edit = $(this.getElement()).data('edit');
+                    if (edit) {
+                        this._edit = json.decodeAttribute(edit);
+                    }
                 })
                 .on('unbind', this, function () {
                     this._varienGrid = null;
@@ -76,10 +96,12 @@ function ($, Block, core, ajax)
                 });
         },
         search: function() {
+            this._updateReloadParams();
             this._varienGrid.doFilter();
             return this;
         },
         reset: function() {
+            this._updateReloadParams();
             this._varienGrid.resetFilter();
             return this;
         },
@@ -95,9 +117,9 @@ function ($, Block, core, ajax)
         _call:function(action, args) {
             var gridUrl = this._varienGrid.url;
 
-            this._varienGrid.url = this.getGridUrl().replace('{action}', action);
+            this._varienGrid.url = this.getUrl().replace('{action}', action);
             if (args) {
-                this._varienGrid.addVarToUrl('args', encode_base64(Object.toJSON(args)));
+                this._varienGrid.addVarToUrl('args', base64.encode(json.stringify(args)));
             }
 
             var url = this._varienGrid.url;
@@ -111,8 +133,12 @@ function ($, Block, core, ajax)
             if (!this._varienGrid.reloadParams) {
                 this._varienGrid.reloadParams = {};
             }
+            this._varienGrid.reloadParams['edit'] = json.stringify($.extend(
+                { sessionId: config.getData('editSessionId') },
+                this.getEdit()
+            ));
+
             if ($.options('edit-form')) {
-                this._varienGrid.reloadParams['edit'] = {};
                 //noinspection JSJQueryEfficiency
                 if (!$('#' + id + 'SerializedData').length) {
                     $('#' + id).append('<input type="hidden" name="' + id + '" id="' + id + 'SerializedData" />');
@@ -123,7 +149,6 @@ function ($, Block, core, ajax)
         }
     });
 });
-
 Mana.define('Mana/Admin/Block/Action', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Block/Action', {
         _init: function() {
@@ -148,7 +173,6 @@ Mana.define('Mana/Admin/Block/Action', ['jquery', 'Mana/Core/Block'], function (
         //endregion
     });
 });
-
 Mana.define('Mana/Admin/Block/Grid/Column', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Block/Grid/Column', {
         _init:function () {
@@ -157,7 +181,6 @@ Mana.define('Mana/Admin/Block/Grid/Column', ['jquery', 'Mana/Core/Block'], funct
         }
     });
 });
-
 Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Block/Grid/Row', {
         _init:function () {
@@ -166,7 +189,6 @@ Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block'], function
         }
     });
 });
-
 Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Block/Grid/Cell', {
         _init:function () {
