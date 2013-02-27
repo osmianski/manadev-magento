@@ -16,10 +16,8 @@
  */
 class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     #region 3-phase construction
-    protected function _construct() {
-        $this->setTemplate('mana/admin/grid.phtml');
-    }
     protected function _prepareLayout() {
+        $this->setTemplate('mana/admin/grid.phtml');
         $this->setId(str_replace('_', '-', str_replace('.', '-', $this->getNameInLayout())));
 
         /* @var $button Mana_Admin_Block_Grid_Action */
@@ -89,6 +87,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     public function getRowClientSideBlock($index, $row) {
         return array(
             'type' => 'Mana/Admin/Block/Grid/Row',
+            'row_id' => $row->getId(),
         );
     }
 
@@ -149,7 +148,12 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         }
 
         Mage::dispatchEvent('m_entity_grid_columns', array('grid' => $this));
+
         parent::_prepareColumns();
+
+        foreach ($this->getColumns() as $column) {
+            $column->prepare();
+        }
 
         return $this;
     }

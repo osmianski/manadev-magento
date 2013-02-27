@@ -27,6 +27,7 @@
                         <action method="setTitle" translate="value" module="mana_attributepage">
                             <value>Attribute</value>
                         </action>
+                        <action method="setIsEditable"><value>1</value></action>
                         <action method="setColumnType"><value>options</value></action>
                         <action method="setSourceModel"><value>mana_attributepage/source_attribute</value></action>
                         <action method="setSortOrder"><value>100</value></action>
@@ -35,6 +36,7 @@
                         <action method="setTitle" translate="value" module="mana_attributepage">
                             <value>Position</value>
                         </action>
+                        <action method="setIsEditable"><value>1</value></action>
                         <action method="setWidth"><value>100px</value></action>
                         <action method="setAlign"><value>center</value></action>
                         <action method="setSortOrder"><value>200</value></action>
