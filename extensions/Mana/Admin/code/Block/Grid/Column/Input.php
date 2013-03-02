@@ -9,5 +9,5 @@
  * @author Mana Team
  *
  */
-class Mana_Admin_Block_Grid_Column_Text extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Text {
+class Mana_Admin_Block_Grid_Column_Input extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Input {
 }

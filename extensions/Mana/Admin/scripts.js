@@ -198,16 +198,11 @@ Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], functio
     });
 });
 
-Mana.define('Mana/Admin/Block/Grid/Column/Editable', ['jquery', 'Mana/Admin/Block/Grid/Column'], function ($, Column) {
-    return Column.extend('Mana/Admin/Block/Grid/Column/Editable', {
+Mana.define('Mana/Admin/Block/Grid/Cell/Select', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Block/Grid/Cell/Select', {
     });
 });
-
-Mana.define('Mana/Admin/Block/Grid/Column/Editable/Options', ['jquery', 'Mana/Admin/Block/Grid/Column/Editable'], function ($, Editable) {
-    return Editable.extend('Mana/Admin/Block/Grid/Column/Editable/Options', {
-    });
-});
-Mana.define('Mana/Admin/Block/Grid/Column/Editable/Text', ['jquery', 'Mana/Admin/Block/Grid/Column/Editable'], function ($, Editable) {
-    return Editable.extend('Mana/Admin/Block/Grid/Column/Editable/Text', {
+Mana.define('Mana/Admin/Block/Grid/Cell/Input', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Block/Grid/Cell/Select', {
     });
 });

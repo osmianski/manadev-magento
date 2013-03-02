@@ -91,10 +91,31 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         );
     }
 
+    /**
+     * @param Mana_Db_Model_Entity $row
+     * @param Mana_Admin_Block_Grid_Column $column
+     * @return array
+     */
     public function getCellClientSideBlock($row, $column) {
-        return array(
-            'type' => 'Mana/Admin/Block/Grid/Cell',
-        );
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+        $standardPrefix = 'adminhtml/widget_grid_column_renderer_';
+        $editablePrefix = 'mana_admin/grid_column_';
+
+        $rendererClass = $column->getData('renderer');
+        if (!$rendererClass) {
+            $rendererClass = $column->getRendererClass();
+        }
+
+        $type = 'Mana/Admin/Block/Grid/Cell';
+        if ($core->startsWith($rendererClass, $standardPrefix)) {
+            $type .= '/' . ucfirst(substr($rendererClass, strlen($standardPrefix)));
+        }
+        elseif ($core->startsWith($rendererClass, $editablePrefix)) {
+            $type .= '/' . ucfirst(substr($rendererClass, strlen($editablePrefix)));
+        }
+
+        return compact('type');
     }
     #endregion
     #region Enhanced column collection
@@ -114,8 +135,12 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     #endregion
     #region Overrides
     protected function _prepareCollection() {
-        /* @var $collection Mage_Core_Model_Mysql4_Collection_Abstract */
+        /* @var $collection Mana_Db_Resource_Entity_Collection */
         $collection = $this->createCollection();
+
+        if ($this->getEdit()) {
+            $collection->setEditFilter($this->getEdit(), "product_id = {$product->getId()}");
+        }
 
         $this->setCollection($collection);
         Mage::dispatchEvent('m_entity_grid_collection', array('grid' => $this));
@@ -150,10 +175,6 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         Mage::dispatchEvent('m_entity_grid_columns', array('grid' => $this));
 
         parent::_prepareColumns();
-
-        foreach ($this->getColumns() as $column) {
-            $column->prepare();
-        }
 
         return $this;
     }

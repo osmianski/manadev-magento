@@ -96,6 +96,9 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
         }
         elseif ($this->_editFilter) {
             $this->getSelect()->where("$alias.edit_status = 0");
+            if ($this->_parentCondition) {
+                $this->getSelect()->where("$alias.{$this->_parentCondition}");
+            }
         }
     }
 }

@@ -42,34 +42,6 @@ class Mana_Admin_Block_Grid_Column extends Mage_Adminhtml_Block_Widget_Grid_Colu
         return $this;
     }
 
-    public function prepare() {
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper('mana_core');
-        $standardPrefix = 'adminhtml/widget_grid_column_renderer_';
-        $editablePrefix = 'mana_admin/grid_column_';
-
-        $rendererClass = $this->getData('renderer');
-        if (!$rendererClass) {
-            $rendererClass = $this->_getRendererByType();
-        }
-
-        $type = '';
-        if ($core->startsWith($rendererClass, $standardPrefix)) {
-            $type = ucfirst(substr($rendererClass, strlen($standardPrefix)));
-        }
-        elseif ($core->startsWith($rendererClass, $editablePrefix)) {
-            $type = 'Editable/'.ucfirst(substr($rendererClass, strlen($editablePrefix)));
-        }
-
-        if ($type) {
-            $clientSideBlock = $this->getMClientSideBlock();
-            $clientSideBlock['type'] .= '/' . $type;
-            $this->setMClientSideBlock($clientSideBlock);
-        }
-
-        return $this;
-    }
-
     public function getHtmlProperty() {
         /* @var $js Mana_Core_Helper_Js */
         $js = Mage::helper('mana_core/js');
@@ -103,7 +75,7 @@ class Mana_Admin_Block_Grid_Column extends Mage_Adminhtml_Block_Widget_Grid_Colu
             return $renderers[$type];
         }
 
-        if (!$this->getIsEditable()) {
+        if ($this->getOriginalRenderer()) {
             return parent::_getRendererByType();        
         }
             
@@ -168,5 +140,9 @@ class Mana_Admin_Block_Grid_Column extends Mage_Adminhtml_Block_Widget_Grid_Colu
         }
 
         return $rendererClass;
+    }
+
+    public function getRendererClass() {
+        return $this->_getRendererByType();
     }
 }

@@ -250,8 +250,21 @@ Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleto
             }
             catch (error) {
                 if (options.showDebugMessages) {
-                    alert((typeof(error) == 'string' ? error : error.message) + "\n" +
-                        (response && typeof(response) == 'string' ? response : ''));
+                    var s = '';
+                    if (typeof(error) == 'string') {
+                        s += error;
+                    }
+                    else {
+                        s += error.message;
+                        if (error.fileName) {
+                            s += "\n    in " + error.fileName + " (" + error.lineNumber + ")";
+                        }
+                    }
+                    if (response) {
+                        s += "\n\n";
+                        s += typeof(response) == 'string' ? response : json.stringify(response);
+                    }
+                    alert(s);
                 }
             }
         },
@@ -772,7 +785,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         },
         _removeAnonymousBlocks: function(parentBlock) {
             var self = this, result = {};
-            $.each(parentBlock.getChildren(), function(key, block) {
+            $.each(parentBlock.getChildren().slice(0), function(key, block) {
                 if (block.getId()) {
                     result[block.getId()] = { parent: parentBlock, child: block};
                     self._removeAnonymousBlocks(block);
@@ -792,7 +805,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                 || $element.hasClass('m-block'))
             {
                 return {
-                    id: id || $element.attr('data-m-block') || element.id,
+                    id: id || element.id,
                     typeName: typeName || $element.attr('data-m-block')
                         || (id ? 'Mana/Core/NameBlock' : 'Mana/Core/Block')
                 };
