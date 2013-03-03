@@ -46,8 +46,8 @@ class Mana_Db_Resource_Entity extends Mage_Core_Model_Mysql4_Abstract {
         if ($read = $this->_getReadAdapter()) {
             $select = $this->_getReadAdapter()->select()
                 ->from($this->getMainTable())
-                ->where($this->getMainTable().'.`edit_status` = ?', $id)
-                ->where($this->getMainTable().'.`edit_session_id` = ?', $sessionId);
+                ->where("{$this->getMainTable()}.`edit_status` = ?", $id)
+                ->where("{$this->getMainTable()}.`edit_session_id` = ?", $sessionId);
             $data = $read->fetchRow($select);
 
             if ($data) {

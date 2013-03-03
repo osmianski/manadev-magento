@@ -7,10 +7,11 @@
 
 ; // make JS merging easier
 
-Mana.define('Mana/Admin/Block/Grid', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core',
+Mana.define('Mana/Admin/Block/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Row',
+    'Mana/Admin/Block/Grid/Column', 'singleton:Mana/Core',
     'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Json', 'singleton:Mana/Core/Config',
     'singleton:Mana/Core/Base64', 'singleton:Mana/Core/UrlTemplate'],
-function ($, Block, core, ajax, json, config, base64, urlTemplate)
+function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
 {
     var RewrittenVarienGrid = Class.create(varienGrid, {
         reload:function (url) {
@@ -21,6 +22,8 @@ function ($, Block, core, ajax, json, config, base64, urlTemplate)
                 this.reloadParams.form_key = FORM_KEY;
             }
             url = url || this.url;
+
+            this._block._updateReloadParams();
 
             var self = this;
             ajax.post(url, this.reloadParams || {}, function(response) {
@@ -96,12 +99,10 @@ function ($, Block, core, ajax, json, config, base64, urlTemplate)
                 });
         },
         search: function() {
-            this._updateReloadParams();
             this._varienGrid.doFilter();
             return this;
         },
         reset: function() {
-            this._updateReloadParams();
             this._varienGrid.resetFilter();
             return this;
         },
@@ -125,7 +126,6 @@ function ($, Block, core, ajax, json, config, base64, urlTemplate)
             var url = this._varienGrid.url;
             this._varienGrid.url = gridUrl;
 
-            this._updateReloadParams();
             this._varienGrid.reload(url);
         },
         _updateReloadParams: function() {
@@ -146,6 +146,35 @@ function ($, Block, core, ajax, json, config, base64, urlTemplate)
                 //noinspection JSJQueryEfficiency
                 $('#' + id + 'SerializedData').val(this._varienGrid.reloadParams['edit']);
             }
+        },
+        getRows: function() {
+            return this.getChildren(function (index, child) {
+                return child instanceof Row;
+            });
+        },
+        getColumns:function () {
+            return this.getChildren(function (index, child) {
+                return child instanceof Column;
+            });
+        },
+        getColumn: function (index) {
+            var columnIndex = -1;
+            return this.getChild(function (i, child) {
+                return child instanceof Column && ++columnIndex == index;
+            });
+        },
+        setCellValue: function(cell, compositeValue) {
+            var id = cell.getRow().getRowId();
+            var column = cell.getColumn().getColumnName();
+            if (!this._edit.pending[id]) {
+                this._edit.pending[id] = {};
+            }
+            if (!this._edit.pending[id][column]) {
+                this._edit.pending[id][column] = {};
+            }
+            $.extend(this._edit.pending[id][column], compositeValue);
+
+            return this;
         }
     });
 });
@@ -176,10 +205,15 @@ Mana.define('Mana/Admin/Block/Grid/Column', ['jquery', 'Mana/Core/Block'], funct
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
+        },
+        getColumnName: function() {
+            return this.getAlias().replace(/-/g, '_');
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Cell'],
+function ($, Block, Cell)
+{
     return Block.extend('Mana/Admin/Block/Grid/Row', {
         _init:function () {
             this._super();
@@ -187,12 +221,24 @@ Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block'], function
         },
         getGrid: function() {
             return this.getParent();
+        },
+        getCells:function () {
+            return this.getChildren(function (index, child) {
+                return child instanceof Cell;
+            });
+        },
+        getCell:function (index) {
+            var columnIndex = -1;
+            return this.getChild(function (i, child) {
+                return child instanceof Cell && ++columnIndex == index;
+            });
+        },
+        getRowId:function () {
+            return this.$().data('row-id');
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Column'],
-function ($, Block, Column)
-{
+Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Block/Grid/Cell', {
         _init:function () {
             this._super();
@@ -205,22 +251,59 @@ function ($, Block, Column)
             return this.getRow().getGrid();
         },
         getColumn: function() {
-            var cellIndex = $.inArray(this, this.getRow().getChildren());
-            var columnIndex = -1;
-            $.each(this.getGrid().getChildren(), function(index, column) {
-                if (column instanceof Column) {
-                    columnIndex++;
-                }
-            });
+            return this.getGrid().getColumn($.inArray(this, this.getRow().getChildren()));
         }
     });
 });
 
 Mana.define('Mana/Admin/Block/Grid/Cell/Select', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
     return Cell.extend('Mana/Admin/Block/Grid/Cell/Select', {
+        _subscribeToHtmlEvents: function() {
+            var self = this;
+            function _raiseChange() {
+                return self.onChange();
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function() {
+                    this.$input().on('change', _raiseChange);
+                })
+                .on('unbind', this, function () {
+                    this.$input().off('change', _raiseChange);
+                });
+        },
+        $input: function() {
+            return this.$().find('select');
+        },
+        onChange: function() {
+            this.getGrid().setCellValue(this, { value: this.$input().val() });
+        }
     });
 });
 Mana.define('Mana/Admin/Block/Grid/Cell/Input', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
-    return Cell.extend('Mana/Admin/Block/Grid/Cell/Select', {
+    return Cell.extend('Mana/Admin/Block/Grid/Cell/Input', {
+        _subscribeToHtmlEvents:function () {
+            var self = this;
+
+            function _raiseChange() {
+                return self.onChange();
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$input().on('change', _raiseChange);
+                })
+                .on('unbind', this, function () {
+                    this.$input().off('change', _raiseChange);
+                });
+        },
+        $input:function () {
+            return this.$().find('input');
+        },
+        onChange:function () {
+            this.getGrid().setCellValue(this, { value:this.$input().val() });
+        }
     });
 });

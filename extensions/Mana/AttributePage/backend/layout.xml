@@ -18,7 +18,7 @@
 
                 <block type="mana_admin/grid" name="grid">
                     <action method="setDataSource"><value>mana_attributepage/page_attribute</value></action>
-                    <action method="setDefaultSort"><value>attribute_id</value></action>
+                    <action method="setDefaultSort"><value>position</value></action>
                     <action method="setDefaultDir"><value>asc</value></action>
                     <action method="setGridController"><value>mana_attribute_page_newGrid</value></action>
 

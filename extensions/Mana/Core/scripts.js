@@ -186,6 +186,14 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
             else {
                 return childId;
             }
+        },
+
+        // from underscore.js
+        isFunction: function(obj) {
+            return !!(obj && obj.constructor && obj.call && obj.apply);
+        },
+        isString: function (obj) {
+            return Object.prototype.toString.call(obj) == '[object String]';
         }
     });
 });
@@ -532,6 +540,9 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
         getElement:function() {
             return this._element;
         },
+        $: function() {
+            return $(this.getElement());
+        },
         setElement:function (value) {
             this._element = value;
             return this;
@@ -572,11 +583,52 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
         getParent: function() {
             return this._parent;
         },
-        getChild: function(name) {
-            return this._namedChildren[name];
+        getChild: function(name, index) {
+            if (core.isFunction(name)) {
+                var result = null;
+                $.each(this._children, function (i, child) {
+                    if (name(i, child)) {
+                        result = child;
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                });
+                return result;
+            }
+            else {
+                return this._namedChildren[name];
+            }
         },
-        getChildren: function() {
-            return this._children;
+        getChildren: function(condition) {
+            if (condition === undefined) {
+                return this._children.slice(0);
+            }
+            else {
+                var result = [];
+                $.each(this._children, function (index, child) {
+                    if (condition(index, child)) {
+                        result.push(child);
+                    }
+                });
+                return result;
+            }
+        },
+        getAlias: function() {
+            var result = undefined;
+            var self = this;
+            $.each(this._parent._namedChildren, function(name, child) {
+                if (child === self) {
+                    result = name;
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+
+            return result;
         },
         _trigger: function(name, e) {
             if (!e.stopped && this._eventHandlers[name] !== undefined) {

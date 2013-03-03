@@ -84,6 +84,11 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         return $this;
     }
 
+    /**
+     * @param int $index
+     * @param Mana_Db_Model_Entity $row
+     * @return array
+     */
     public function getRowClientSideBlock($index, $row) {
         return array(
             'type' => 'Mana/Admin/Block/Grid/Row',
@@ -127,7 +132,8 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     public function addColumnBlock($columnId, $column) {
         $column
             ->setGrid($this)
-            ->setId($columnId);
+            ->setId($columnId)
+            ->setData('index', $columnId);
         $this->_columns[$columnId] = $column;
         $this->_lastColumnId = $columnId;
         return $this;
@@ -142,7 +148,44 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
         $this->setCollection($collection);
         Mage::dispatchEvent('m_entity_grid_collection', array('grid' => $this));
-        parent::_prepareCollection();
+
+        if ($this->getCollection()) {
+
+            $this->_preparePage();
+
+            $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
+            $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
+            $filter = $this->getParam($this->getVarNameFilter(), null);
+
+            if (is_null($filter)) {
+                $filter = $this->_defaultFilter;
+            }
+
+            if (is_string($filter)) {
+                $data = $this->helper('adminhtml')->prepareFilterString($filter);
+                $this->_setFilterValues($data);
+            }
+            else if ($filter && is_array($filter)) {
+                $this->_setFilterValues($filter);
+            }
+            else if (0 !== sizeof($this->_defaultFilter)) {
+                $this->_setFilterValues($this->_defaultFilter);
+            }
+
+            if (isset($this->_columns[$columnId]) && $this->_columns[$columnId]->getIndex()) {
+                $dir = (strtolower($dir) == 'desc') ? 'desc' : 'asc';
+                $this->_columns[$columnId]->setDir($dir);
+                $column = $this->_columns[$columnId]->getFilterIndex() ?
+                    $this->_columns[$columnId]->getFilterIndex() : $this->_columns[$columnId]->getIndex();
+
+                $this->_columns[$columnId]->setOrder($this->getCollection(), $column, $dir);
+            }
+
+            if (!$this->_isExport) {
+                $this->getCollection()->load();
+                $this->_afterLoadCollection();
+            }
+        }
 
         return $this;
     }
@@ -337,7 +380,8 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
 
-        return $db->getModel($this->getDataSource())->loadEdited($id, $sessionId);
+        $result = $db->getModel($this->getDataSource())->loadEdited($id, $sessionId);
+        return $result->getId() ? $result : null;
     }
 
     #endregion
