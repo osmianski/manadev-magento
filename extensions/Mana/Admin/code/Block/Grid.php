@@ -138,9 +138,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         /* @var $collection Mana_Db_Resource_Entity_Collection */
         $collection = $this->createCollection();
 
-        if ($this->getEdit()) {
-            $collection->setEditFilter($this->getEdit(), "product_id = {$product->getId()}");
-        }
+        $collection->setEditFilter($this->getEdit() ? $this->getEdit() : true, $this->getParentCondition());
 
         $this->setCollection($collection);
         Mage::dispatchEvent('m_entity_grid_collection', array('grid' => $this));
@@ -286,6 +284,10 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
      * @return Mage_Core_Model_Abstract
      */
     public function getParentModel() {
+        return null;
+    }
+
+    public function getParentCondition() {
         return null;
     }
 

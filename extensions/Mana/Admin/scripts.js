@@ -158,9 +158,7 @@ Mana.define('Mana/Admin/Block/Action', ['jquery', 'Mana/Core/Block'], function (
         //region Event handlers
         _subscribeToHtmlEvents:function () {
             var self = this;
-            var _raiseClick = function () {
-                self.trigger('click');
-            };
+            var _raiseClick = function () { self.trigger('click'); };
             return this
                 ._super()
                 .on('bind', this, function () {
@@ -186,14 +184,34 @@ Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block'], function
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
+        },
+        getGrid: function() {
+            return this.getParent();
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Column'],
+function ($, Block, Column)
+{
     return Block.extend('Mana/Admin/Block/Grid/Cell', {
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
+        },
+        getRow: function() {
+            return this.getParent();
+        },
+        getGrid: function() {
+            return this.getRow().getGrid();
+        },
+        getColumn: function() {
+            var cellIndex = $.inArray(this, this.getRow().getChildren());
+            var columnIndex = -1;
+            $.each(this.getGrid().getChildren(), function(index, column) {
+                if (column instanceof Column) {
+                    columnIndex++;
+                }
+            });
         }
     });
 });
