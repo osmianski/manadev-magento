@@ -107,12 +107,19 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
         return $this;
     }
 
-    protected function _processPendingEdits() {
+    protected function _processPendingEdits($checkIfExpired = false) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
         $parentModel = $this->_getParentModel();
         Mage::register('m_page_model', $parentModel);
         $edit = null;
         if ($edit = $this->getRequest()->getParam('edit')) {
             $edit = json_decode($edit, true);
+
+            if (($checkIfExpired || count($edit['pending'])) && $db->isEditingSessionExpired($edit['sessionId'])) {
+                throw new Mage_Core_Exception($db->__('Grid editing session is expired. Please reload the page.'));
+            }
 
             foreach ($edit['pending'] as $id => $cells) {
                 if (isset($edit['deleted'][$id])) {
@@ -166,7 +173,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
 
     public function _addResponse() {
         try {
-            $this->_processPendingEdits()->_add()->_render();
+            $this->_processPendingEdits(true)->_add()->_render();
         } catch (Mage_Core_exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }
@@ -178,7 +185,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
 
     public function _removeResponse() {
         try {
-            $this->_processPendingEdits()->_remove()->_render();
+            $this->_processPendingEdits(true)->_remove()->_render();
         } catch (Mage_Core_exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }

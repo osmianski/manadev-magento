@@ -307,3 +307,33 @@ Mana.define('Mana/Admin/Block/Grid/Cell/Input', ['jquery', 'Mana/Admin/Block/Gri
         }
     });
 });
+Mana.define('Mana/Admin/Block/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Block/Grid/Cell/Checkbox', {
+        _subscribeToHtmlEvents:function () {
+            var self = this;
+
+            function _raiseClick() {
+                return self.onClick();
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$input().on('click', _raiseClick);
+                })
+                .on('unbind', this, function () {
+                    this.$input().off('click', _raiseClick);
+                });
+        },
+        $input:function () {
+            return this.$().find('input');
+        },
+        onClick:function () {
+            this.getGrid().setCellValue(this, { value:this.$input().attr('checked') == 'checked' ? 1 : 0 });
+        }
+    });
+});
+Mana.define('Mana/Admin/Block/Grid/Cell/Massaction', ['jquery', 'Mana/Admin/Block/Grid/Cell/Checkbox'], function ($, Checkbox) {
+    return Checkbox.extend('Mana/Admin/Block/Grid/Cell/Massaction', {
+    });
+});

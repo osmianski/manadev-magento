@@ -363,6 +363,9 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         return $a < $b ? -1 : 1;
 	}
 
+    public function isEditingSessionExpired($editSessionId) {
+        return Mage::getResourceSingleton('mana_db/edit_session')->isExpired($editSessionId);
+    }
     protected $_inEditing = false;
     public function getInEditing() {
         return $this->_inEditing;

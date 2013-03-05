@@ -13,6 +13,8 @@
  * @method array getMClientSideBlock()
  * @method Mana_Admin_Block_Grid setMClientSideBlock(array $value)
  * @method string getGridController()
+ * @method bool getIsMassActionable()
+ * @method Mana_Admin_Block_Grid setIsMassActionable(bool $value)
  */
 class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     #region 3-phase construction
@@ -41,6 +43,17 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
             'class' => 'task'
         ));
         $this->setChild('search_button', $button);
+
+        $columnName = $this->getNameInLayout() . '.edit_massaction';
+        $column = $this->getLayout()->createBlock('mana_admin/grid_column', $columnName, array(
+            'title' => $this->__('Selected'),
+            'index' => 'edit_massaction',
+            'column_type' => 'massaction',
+            'width' => '50px',
+            'align' => 'center',
+            'sort_order' => -1,
+        ));
+        $this->insert($column);
 
         $this->setDefaultSort('id');
         $this->setDefaultDir('desc');
@@ -138,6 +151,42 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         $this->_lastColumnId = $columnId;
         return $this;
     }
+
+    /**
+     * Add column to grid
+     *
+     * @param   string $columnId
+     * @param   array || Varien_Object $column
+     * @return  Mage_Adminhtml_Block_Widget_Grid
+     */
+    public function addColumn($columnId, $column)
+    {
+        if (is_array($column)) {
+            $columnName = $this->getNameInLayout().'.'.$columnId;
+
+            /* @var $column Mana_Admin_Block_Grid_Column */
+            $column = $this->getLayout()->createBlock('mana_admin/grid_column', $columnName);
+
+            $this->setChild($columnName, $column);
+
+            $params = $column->getData();
+            $this
+                ->_removeParam($params, 'type')
+                ->_removeParam($params, 'sort_order')
+                ->_renameParam($params, 'column_type', 'type')
+                ->_copyParam($params, 'source_model', 'options')
+                ->_copyParam($params, 'title', 'header');
+
+            $column->setData($params);
+            $this->addColumnBlock($columnId, $column);
+        }
+        else {
+            throw new Exception(Mage::helper('adminhtml')->__('Wrong column format.'));
+        }
+
+        return $this;
+    }
+
     #endregion
     #region Overrides
     protected function _prepareCollection() {
@@ -197,11 +246,16 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         $columns = $this->getChildGroup('columns');
         uasort($columns, array($this, '_compareBySortOrder'));
         foreach ($columns as $alias => $column) {
+            if ($alias == 'edit_massaction' && !$this->getIsMassActionable()) {
+                continue;
+            }
+
             /* @var $column Mana_Admin_Block_Grid_Column */
 
             if ($alias == $column->getNameInLayout() && $core->startsWith($alias, $this->getNameInLayout() . '.')) {
                 $alias = substr($alias, strlen($this->getNameInLayout() . '.'));
             }
+
             $params = $column->getData();
             $this
                 ->_removeParam($params, 'type')
@@ -209,8 +263,9 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
                 ->_renameParam($params, 'column_type', 'type')
                 ->_copyParam($params, 'source_model', 'options')
                 ->_copyParam($params, 'title', 'header');
+            $column->setData($params);
 
-            $this->addColumnBlock($alias, $column->setData($params));
+            $this->addColumnBlock($alias, $column);
         }
 
         Mage::dispatchEvent('m_entity_grid_columns', array('grid' => $this));

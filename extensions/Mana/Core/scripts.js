@@ -249,7 +249,7 @@ Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleto
                 }
                 else if (response.error) {
                     if (options.showDebugMessages) {
-                        alert(response.error);
+                        alert(response.message || response.error);
                     }
                 }
                 else {
