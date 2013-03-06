@@ -87,7 +87,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         $urlTemplate = Mage::helper('mana_core/urlTemplate');
 
         $this->setMClientSideBlock(array(
-            'type' => 'Mana/Admin/Block/Grid',
+            'type' => 'Mana/Admin/Grid',
             'url' => $urlTemplate->encodeAttribute($this->getGridUrl()),
             'html' => array(
                 'id' => $this->getId(),
@@ -104,7 +104,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
      */
     public function getRowClientSideBlock($index, $row) {
         return array(
-            'type' => 'Mana/Admin/Block/Grid/Row',
+            'type' => 'Mana/Admin/Grid/Row',
             'row_id' => $row->getId(),
         );
     }
@@ -125,7 +125,7 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
             $rendererClass = $column->getRendererClass();
         }
 
-        $type = 'Mana/Admin/Block/Grid/Cell';
+        $type = 'Mana/Admin/Grid/Cell';
         if ($core->startsWith($rendererClass, $standardPrefix)) {
             $type .= '/' . ucfirst(substr($rendererClass, strlen($standardPrefix)));
         }
@@ -169,13 +169,16 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
             $this->setChild($columnName, $column);
 
+            /* @var $pageHelper Mana_Admin_Helper_Page */
+            $pageHelper = Mage::helper('mana_admin/page');
+
             $params = $column->getData();
-            $this
-                ->_removeParam($params, 'type')
-                ->_removeParam($params, 'sort_order')
-                ->_renameParam($params, 'column_type', 'type')
-                ->_copyParam($params, 'source_model', 'options')
-                ->_copyParam($params, 'title', 'header');
+            $pageHelper
+                ->removeParam($params, 'type')
+                ->removeParam($params, 'sort_order')
+                ->renameParam($params, 'column_type', 'type')
+                ->copyParam($params, 'source_model', 'options')
+                ->copyParam($params, 'title', 'header');
 
             $column->setData($params);
             $this->addColumnBlock($columnId, $column);
@@ -242,9 +245,11 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     protected function _prepareColumns() {
         /* @var $core Mana_Core_Helper_Data */
         $core = Mage::helper(strtolower('Mana_Core'));
+        /* @var $pageHelper Mana_Admin_Helper_Page */
+        $pageHelper = Mage::helper('mana_admin/page');
 
         $columns = $this->getChildGroup('columns');
-        uasort($columns, array($this, '_compareBySortOrder'));
+        uasort($columns, array($pageHelper, 'compareBySortOrder'));
         foreach ($columns as $alias => $column) {
             if ($alias == 'edit_massaction' && !$this->getIsMassActionable()) {
                 continue;
@@ -257,12 +262,12 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
             }
 
             $params = $column->getData();
-            $this
-                ->_removeParam($params, 'type')
-                ->_removeParam($params, 'sort_order')
-                ->_renameParam($params, 'column_type', 'type')
-                ->_copyParam($params, 'source_model', 'options')
-                ->_copyParam($params, 'title', 'header');
+            $pageHelper
+                ->removeParam($params, 'type')
+                ->removeParam($params, 'sort_order')
+                ->renameParam($params, 'column_type', 'type')
+                ->copyParam($params, 'source_model', 'options')
+                ->copyParam($params, 'title', 'header');
             $column->setData($params);
 
             $this->addColumnBlock($alias, $column);
@@ -276,22 +281,10 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     }
 
     public function getMainButtonsHtml() {
-        $html = '';
+        /* @var $pageHelper Mana_Admin_Helper_Page */
+        $pageHelper = Mage::helper('mana_admin/page');
 
-        $actions = $this->getChildGroup('actions');
-        uasort($actions, array($this, '_compareBySortOrder'));
-        foreach ($actions as $alias => $action) {
-            /* @var $action Mana_Admin_Block_Grid_Action */
-
-            $params = $action->getData();
-            $this->_copyParam($params, 'title', 'label');
-            $action->setData($params);
-
-            $html .= $this->getChildHtml($alias);
-        }
-
-        $html .= parent::getMainButtonsHtml();
-        return $html;
+        return $pageHelper->getActionHtml($this).parent::getMainButtonsHtml();
     }
 
     public function canDisplayContainer() {
@@ -316,41 +309,6 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
             ->setData('no_secret', 1);
         return $urlModel->getUrl('*/' . $this->getGridController() . '/{action}');
     }
-    #endregion
-    #region Parameter handling
-    protected function _removeParam(&$params, $key) {
-        if (isset($params[$key])) {
-            unset($params[$key]);
-        }
-
-        return $this;
-    }
-
-    protected function _copyParam(&$params, $sourceKey, $targetKey) {
-        if (isset($params[$sourceKey])) {
-            $params[$targetKey] = $params[$sourceKey];
-        }
-
-        return $this;
-    }
-
-    protected function _renameParam(&$params, $sourceKey, $targetKey) {
-        return $this
-            ->_copyParam($params, $sourceKey, $targetKey)
-            ->_removeParam($params, $sourceKey);
-    }
-
-    /**
-     * @param Varien_Object $a
-     * @param Varien_Object $b
-     * @return int
-     */
-    protected function _compareBySortOrder($a, $b) {
-        if ($a->getData('sort_order') < $b->getData('sort_order')) return -1;
-        if ($a->getData('sort_order') > $b->getData('sort_order')) return 1;
-        return 0;
-    }
-
     #endregion
     #region Handling of data edited in browser
     public function setEdit($edit) {

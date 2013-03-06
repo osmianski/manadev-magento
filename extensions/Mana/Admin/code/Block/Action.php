@@ -47,7 +47,7 @@ class Mana_Admin_Block_Action extends Mage_Adminhtml_Block_Widget_Button {
 
     protected function _prepareClientSideBlock() {
         $this->setMClientSideBlock(array(
-            'type' => 'Mana/Admin/Block/Action',
+            'type' => 'Mana/Admin/Action',
             'self_contained'=> true
         ));
 

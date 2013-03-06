@@ -7,8 +7,8 @@
 
 ; // make JS merging easier
 
-Mana.define('Mana/Admin/Block/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Row',
-    'Mana/Admin/Block/Grid/Column', 'singleton:Mana/Core',
+Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Row',
+    'Mana/Admin/Grid/Column', 'singleton:Mana/Core',
     'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Json', 'singleton:Mana/Core/Config',
     'singleton:Mana/Core/Base64', 'singleton:Mana/Core/UrlTemplate'],
 function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
@@ -32,7 +32,7 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
         }
     });
 
-    return Block.extend('Mana/Admin/Block/Grid', {
+    return Block.extend('Mana/Admin/Grid', {
         _init: function() {
             this._super();
             this._varienGrid = null;
@@ -90,12 +90,14 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
                     if (this.getChild('reset')) this.getChild('reset').on('click', this, this.reset);
                     if (this.getChild('add')) this.getChild('add').on('click', this, this.addRow);
                     if (this.getChild('remove')) this.getChild('remove').on('click', this, this.removeRow);
+                    this.on('post', this, this.post);
                 })
                 .on('unload', this, function () {
                     if (this.getChild('search')) this.getChild('search').off('click', this, this.search);
                     if (this.getChild('reset')) this.getChild('reset').off('click', this, this.reset);
                     if (this.getChild('add')) this.getChild('add').off('click', this, this.addRow);
                     if (this.getChild('remove')) this.getChild('remove').off('click', this, this.removeRow);
+                    this.off('post', this, this.post);
                 });
         },
         search: function() {
@@ -113,6 +115,11 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
         removeRow: function() {
             this._call('remove');
             return this;
+        },
+        post: function(e) {
+            if (e.target.getId() == 'page') {
+                e.result[this.getAlias()] = json.stringify(this.getEdit());
+            }
         },
         //endregion
         _call:function(action, args) {
@@ -137,15 +144,6 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
                 { sessionId: config.getData('editSessionId') },
                 this.getEdit()
             ));
-
-            if ($.options('edit-form')) {
-                //noinspection JSJQueryEfficiency
-                if (!$('#' + id + 'SerializedData').length) {
-                    $('#' + id).append('<input type="hidden" name="' + id + '" id="' + id + 'SerializedData" />');
-                }
-                //noinspection JSJQueryEfficiency
-                $('#' + id + 'SerializedData').val(this._varienGrid.reloadParams['edit']);
-            }
         },
         getRows: function() {
             return this.getChildren(function (index, child) {
@@ -178,8 +176,8 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
         }
     });
 });
-Mana.define('Mana/Admin/Block/Action', ['jquery', 'Mana/Core/Block'], function ($, Block) {
-    return Block.extend('Mana/Admin/Block/Action', {
+Mana.define('Mana/Admin/Action', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Action', {
         _init: function() {
             this._super();
             this.setIsSelfContained(true);
@@ -200,8 +198,8 @@ Mana.define('Mana/Admin/Block/Action', ['jquery', 'Mana/Core/Block'], function (
         //endregion
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Column', ['jquery', 'Mana/Core/Block'], function ($, Block) {
-    return Block.extend('Mana/Admin/Block/Grid/Column', {
+Mana.define('Mana/Admin/Grid/Column', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Grid/Column', {
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
@@ -211,10 +209,10 @@ Mana.define('Mana/Admin/Block/Grid/Column', ['jquery', 'Mana/Core/Block'], funct
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Row', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Block/Grid/Cell'],
+Mana.define('Mana/Admin/Grid/Row', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Cell'],
 function ($, Block, Cell)
 {
-    return Block.extend('Mana/Admin/Block/Grid/Row', {
+    return Block.extend('Mana/Admin/Grid/Row', {
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
@@ -238,8 +236,8 @@ function ($, Block, Cell)
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, Block) {
-    return Block.extend('Mana/Admin/Block/Grid/Cell', {
+Mana.define('Mana/Admin/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Grid/Cell', {
         _init:function () {
             this._super();
             this.setIsSelfContained(true);
@@ -256,8 +254,8 @@ Mana.define('Mana/Admin/Block/Grid/Cell', ['jquery', 'Mana/Core/Block'], functio
     });
 });
 
-Mana.define('Mana/Admin/Block/Grid/Cell/Select', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
-    return Cell.extend('Mana/Admin/Block/Grid/Cell/Select', {
+Mana.define('Mana/Admin/Grid/Cell/Select', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Select', {
         _subscribeToHtmlEvents: function() {
             var self = this;
             function _raiseChange() {
@@ -281,8 +279,8 @@ Mana.define('Mana/Admin/Block/Grid/Cell/Select', ['jquery', 'Mana/Admin/Block/Gr
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell/Input', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
-    return Cell.extend('Mana/Admin/Block/Grid/Cell/Input', {
+Mana.define('Mana/Admin/Grid/Cell/Input', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Input', {
         _subscribeToHtmlEvents:function () {
             var self = this;
 
@@ -307,8 +305,8 @@ Mana.define('Mana/Admin/Block/Grid/Cell/Input', ['jquery', 'Mana/Admin/Block/Gri
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Block/Grid/Cell'], function ($, Cell) {
-    return Cell.extend('Mana/Admin/Block/Grid/Cell/Checkbox', {
+Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Checkbox', {
         _subscribeToHtmlEvents:function () {
             var self = this;
 
@@ -333,7 +331,66 @@ Mana.define('Mana/Admin/Block/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Block/
         }
     });
 });
-Mana.define('Mana/Admin/Block/Grid/Cell/Massaction', ['jquery', 'Mana/Admin/Block/Grid/Cell/Checkbox'], function ($, Checkbox) {
-    return Checkbox.extend('Mana/Admin/Block/Grid/Cell/Massaction', {
+Mana.define('Mana/Admin/Grid/Cell/Massaction', ['jquery', 'Mana/Admin/Grid/Cell/Checkbox'], function ($, Checkbox) {
+    return Checkbox.extend('Mana/Admin/Grid/Cell/Massaction', {
+    });
+});
+Mana.define('Mana/Admin/Tab', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Tab', {
+    });
+});
+Mana.define('Mana/Admin/Page', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/UrlTemplate',
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Config'],
+function ($, Block, urlTemplate, layout, ajax, config)
+{
+    return Block.extend('Mana/Admin/Page', {
+        getUrl:function () {
+            if (!this._url) {
+                this._url = urlTemplate.decodeAttribute($(this.getElement()).data('url'));
+            }
+            return this._url;
+        },
+        setUrl:function (value) {
+            this._url = value;
+            return this;
+        },
+
+        _subscribeToBlockEvents:function () {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    if (this.getChild('close')) this.getChild('close').on('click', this, this.close);
+                    if (this.getChild('save')) this.getChild('save').on('click', this, this.save);
+                    if (this.getChild('saveAndClose')) this.getChild('saveAndClose').on('click', this, this.saveAndClose);
+                })
+                .on('unload', this, function () {
+                    if (this.getChild('close')) this.getChild('close').off('click', this, this.close);
+                    if (this.getChild('save')) this.getChild('save').off('click', this, this.save);
+                    if (this.getChild('saveAndClose')) this.getChild('saveAndClose').off('click', this, this.saveAndClose);
+                });
+        },
+        save: function(callback) {
+            var params = {
+                form_key:FORM_KEY,
+                sessionId:config.getData('editSessionId')
+            };
+            params = layout.getPageBlock().trigger('post', { target: this, result: params}, false, true);
+
+            ajax.post(this.getUrl().replace('{action}', 'save'), params, function(response) {
+                if (callback) {
+                    callback();
+                }
+            });
+        },
+        close: function() {
+            window.location = this.getUrl().replace('{action}', 'index');
+        },
+        saveAndClose: function() {
+            var self = this;
+            this.save(function() {
+                self.close();
+            });
+        }
+
     });
 });

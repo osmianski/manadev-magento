@@ -35,7 +35,7 @@ class Mana_Admin_Block_Grid_Column extends Mage_Adminhtml_Block_Widget_Grid_Colu
 
     protected function _prepareClientSideBlock() {
         $this->setMClientSideBlock(array(
-            'type' => 'Mana/Admin/Block/Grid/Column',
+            'type' => 'Mana/Admin/Grid/Column',
             'self_contained' => true
         ));
 

@@ -103,4 +103,64 @@ class Mana_Admin_Helper_Page extends Mage_Core_Helper_Abstract {
 
         return $this->_pageLayoutHandles;
     }
+
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     * @return string
+     */
+    public function getActionHtml($block) {
+        $html = '';
+
+        $actions = $block->getChildGroup('actions');
+        uasort($actions, array($this, 'compareBySortOrder'));
+        foreach ($actions as $alias => $action) {
+            /* @var $action Mana_Admin_Block_Action */
+
+            $params = $action->getData();
+            $this->copyParam($params, 'title', 'label');
+            $action->setData($params);
+
+            $html .= $block->getChildHtml($alias);
+        }
+
+        return $html;
+    }
+
+    #region Parameter handling
+    public function removeParam(&$params, $key) {
+        if (isset($params[$key])) {
+            unset($params[$key]);
+        }
+
+        return $this;
+    }
+
+    public function copyParam(&$params, $sourceKey, $targetKey) {
+        if (isset($params[$sourceKey])) {
+            $params[$targetKey] = $params[$sourceKey];
+        }
+
+        return $this;
+    }
+
+    public function renameParam(&$params, $sourceKey, $targetKey) {
+        return $this
+            ->copyParam($params, $sourceKey, $targetKey)
+            ->removeParam($params, $sourceKey);
+    }
+
+    /**
+     * @param Varien_Object $a
+     * @param Varien_Object $b
+     * @return int
+     */
+    public function compareBySortOrder($a, $b) {
+        if ($a->getData('sort_order') < $b->getData('sort_order')) return -1;
+        if ($a->getData('sort_order') > $b->getData('sort_order')) return 1;
+
+        return 0;
+    }
+
+    #endregion
+
 }

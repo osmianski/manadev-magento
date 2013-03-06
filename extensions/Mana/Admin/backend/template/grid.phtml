@@ -31,7 +31,7 @@ $js = Mage::helper('mana_core/js');
 
         <div id="<?php echo $this->getId() ?>">
     <?php else: ?>
-        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <?php //echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
 <?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
     <table cellspacing="0" class="actions">
