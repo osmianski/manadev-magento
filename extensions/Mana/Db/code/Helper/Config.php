@@ -231,4 +231,37 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     protected function _iterateFields($config, $callbacks, $args) {
         $this->_iterateLevel(self::FIELD_LEVEL, $config->fields, $callbacks, $args);
     }
+
+    /**
+     * @param string $fullEntityName
+     * @return Varien_Simplexml_Element | bool
+     */
+    public function getScopeXml($fullEntityName) {
+        $xml = $this->getXml();
+        list($module, $entity, $scope) = explode('/', $fullEntityName);
+        if (!$scope) {
+            $scope = 'global';
+        }
+        $scopeXml = $xml->getXpath("//modules/$module/entities/$entity/scopes/$scope");
+        if (empty($scopeXml) && $scope == 'global') {
+            $scopeXml = $xml->getXpath("//modules/$module/entities/$entity");
+        }
+        return empty($scopeXml) ? false : $scopeXml[0];
+    }
+    public function getForeignKey($parentEntity, $childEntity) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        $scopeXml = $this->getScopeXml($childEntity);
+
+        $resultXml = $scopeXml->xpath("fields/*[foreign/entity='$parentEntity' or ".
+            "foreign/entity='{$parentEntity}/global']");
+        if (empty($resultXml)) {
+            return false;
+        }
+
+        /* @var $fieldXml Varien_Simplexml_Element */
+        $fieldXml = $resultXml[0];
+        return $fieldXml->getName();
+    }
 }

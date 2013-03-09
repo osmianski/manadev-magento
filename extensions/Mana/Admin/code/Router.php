@@ -22,7 +22,7 @@ class Mana_Admin_Router extends Mage_Core_Controller_Varien_Router_Admin {
         }
 
 
-        if ($adminPageHelper->getPageLayout($request)) {
+        if ($adminPageHelper->hasPageController($request)) {
             $controller = $adminPageHelper->getRequestController($request);
             $action = $adminPageHelper->getRequestAction($request);
 

@@ -76,4 +76,33 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
             return parent::hasAction($action);
         }
     }
+
+    public function saveAction() {
+        $this->_loadLayout(array($this, '_saveResponse'));
+    }
+
+    public function _saveResponse() {
+        try {
+            $this->_save();
+        } catch (Mage_Core_Exception $e) {
+            $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
+        }
+    }
+
+    protected $_actionLayout;
+
+    protected function _loadLayout($callback, $action = null) {
+        /* @var $adminPageHelper Mana_Admin_Helper_Page */
+        $adminPageHelper = Mage::helper('mana_admin/page');
+        $this->_actionLayout = $adminPageHelper->getActionLayout($this->getRequest(), $action);
+
+        /* @var $ajax Mana_Ajax_Helper_Data */
+        $ajax = Mage::helper('mana_ajax');
+
+        $ajax->processPageWithoutRendering($this->_actionLayout['route'], $callback);
+    }
+
+    protected function _save() {
+        throw new Mage_Core_Exception('Not implemented');
+    }
 }

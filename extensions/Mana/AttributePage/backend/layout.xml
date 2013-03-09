@@ -9,13 +9,17 @@
     <adminhtml_mana_attribute_page_new type="page">
         <reference name="content">
             <block type="mana_admin/page" name="page">
-                <action method="setDataSource"><value>mana_attributepage/page</value></action>
                 <action method="setTitle" translate="value" module="mana_attributepage">
                     <value>Create Pages for Attribute(s)</value>
                 </action>
                 <action method="setTitleGroup"><value>MANAdev</value></action>
                 <action method="setMenu"><value>mana/attribute</value></action>
                 <action method="setFormUrl"><value>*/*/save</value></action>
+
+                <block type="mana_admin/data_entity" name="page.data_source">
+                    <action method="setEntity"><entity>mana_attributepage/page</entity></action>
+                    <action method="addEntity"><name>option_page_defaults</name><entity>mana_attributepage/option_page/default</entity></action>
+                </block>
 
                 <!-- Actions -->
                 <block type="mana_admin/page_action" name="page.close">
@@ -56,6 +60,10 @@
                         <action method="setDefaultSort"><value>position</value></action>
                         <action method="setDefaultDir"><value>asc</value></action>
                         <action method="setGridController"><value>mana_attribute_page_newGrid</value></action>
+
+                        <block type="mana_admin/data_collection" name="grid.data_source">
+                            <action method="setEntity"><entity>mana_attributepage/page_attribute</entity></action>
+                        </block>
 
                         <!-- Columns -->
                         <block type="mana_admin/grid_column" name="grid.attribute_id">

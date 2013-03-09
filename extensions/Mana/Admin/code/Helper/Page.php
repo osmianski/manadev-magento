@@ -23,20 +23,96 @@ class Mana_Admin_Helper_Page extends Mage_Core_Helper_Abstract {
         return isset($handles[$pageName]) ? $handles[$pageName] : null;
     }
 
+    public function hasPageController(Zend_Controller_Request_Http $request) {
+        $pageNames = array(
+            'adminhtml_' . $this->getRequestController($request) . '_' . $this->getRequestAction($request),
+            'adminhtml_' . $this->getRequestController($request) . '_new',
+            'adminhtml_' . $this->getRequestController($request) . '_edit'
+        );
+        foreach ($this->getPageLayoutHandles() as $handle) {
+            if (in_array($handle, $pageNames)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getGridLayout(Zend_Controller_Request_Http $request) {
         $controller = $this->getRequestController($request);
         $xml = $this->getLayoutXml();
         $actions = $xml->xpath('//action[@method="setGridController" and value="' . $controller . '"]');
-        if (count($actions) != 1) {
+        $handles = array();
+        foreach ($actions as $action) {
+            /* @var $action Mage_Core_Model_Layout_Element */
+            $action = $actions[0];
+            $block = $action->getParent();
+            $block = (string)$block['name'];
+
+            for ($handle = $action->getParent(); $handle->getParent() != $xml; $handle = $handle->getParent()) ;
+
+            $handles[] = array('handle' => $handle->getName(), 'block' => $block);
+        }
+
+        return $this->_getLayoutByHandles($request, $handles);
+    }
+
+    public function getActionLayout(Zend_Controller_Request_Http $request, $exactAction = false) {
+        $handles = $this->getPageLayoutHandles();
+        if ($exactAction) {
+            $pageName = 'adminhtml_' . $this->getRequestController($request) . '_' . $exactAction;
+        }
+        elseif ($request->getParam('id')) {
+            $pageName = 'adminhtml_' . $this->getRequestController($request) . '_edit';
+        }
+        else {
+            $pageName = 'adminhtml_' . $this->getRequestController($request) . '_new';
+        }
+
+        return isset($handles[$pageName]) ? $this->_getLayoutByHandles($request,
+            array(array('handle' => $handles[$pageName], 'block' => 'page'))) : null;
+
+    }
+
+    protected function _getLayoutByHandles(Zend_Controller_Request_Http $request, $handles) {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        if (count($handles) < 1 || count($handles) > 2) {
             return null;
         }
-        /* @var $action Mage_Core_Model_Layout_Element */
-        $action = $actions[0];
-        $block = $action->getParent();
-        $block = (string)$block['name'];
+        elseif (count($handles) == 1) {
+            $handle = $handles[0];
+        }
+        else {
+            if ($request->getParam('id')) {
+                if ($core->endsWith($handles[0]['handle'], '_edit')) {
+                    $handle = $core->endsWith($handles[1]['handle'], '_new') ? $handles[0] : null;
+                }
+                elseif ($core->endsWith($handles[1]['handle'], '_edit')) {
+                    $handle = $core->endsWith($handles[0]['handle'], '_new') ? $handles[1] : null;
+                }
+                else {
+                    return null;
+                }
+            }
+            else {
+                if ($core->endsWith($handles[0], '_new')) {
+                    $handle = $core->endsWith($handles[1], '_edit') ? $handles[0] : null;
+                }
+                elseif ($core->endsWith($handles[1], '_new')) {
+                    $handle = $core->endsWith($handles[0], '_edit') ? $handles[1] : null;
+                }
+                else {
+                    return null;
+                }
+            }
+            if (!$handle) {
+                return null;
+            }
+        }
 
-        for($handle = $action->getParent(); $handle->getParent() != $xml; $handle = $handle->getParent());
-        $controller = explode('_', $handle->getName());
+        $block = $handle['block'];
+        $controller = explode('_', $handle['handle']);
         $module = array_shift($controller);
         if ($module == 'adminhtml') {
             $module = (string)Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName');
@@ -44,9 +120,9 @@ class Mana_Admin_Helper_Page extends Mage_Core_Helper_Abstract {
         $action = array_pop($controller);
         $controller = implode('_', $controller);
         $route = compact('module', 'controller', 'action');
+
         return compact('route', 'block');
     }
-
     public function getRequestModule(Zend_Controller_Request_Http $request) {
         /* @var $core Mana_Core_Helper_Data */
         $core = Mage::helper('mana_core');

@@ -163,7 +163,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
         try {
             $this->_processPendingEdits()->_render();
         }
-        catch (Mage_Core_exception $e) {
+        catch (Mage_Core_Exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }
     }
@@ -174,7 +174,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
     public function _addResponse() {
         try {
             $this->_processPendingEdits(true)->_add()->_render();
-        } catch (Mage_Core_exception $e) {
+        } catch (Mage_Core_Exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }
     }
@@ -186,7 +186,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
     public function _removeResponse() {
         try {
             $this->_processPendingEdits(true)->_remove()->_render();
-        } catch (Mage_Core_exception $e) {
+        } catch (Mage_Core_Exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }
     }

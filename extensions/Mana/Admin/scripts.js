@@ -369,7 +369,7 @@ function ($, Block, urlTemplate, layout, ajax, config)
                     if (this.getChild('saveAndClose')) this.getChild('saveAndClose').off('click', this, this.saveAndClose);
                 });
         },
-        save: function(callback) {
+        save: function() {
             var params = {
                 form_key:FORM_KEY,
                 sessionId:config.getData('editSessionId')
@@ -377,9 +377,7 @@ function ($, Block, urlTemplate, layout, ajax, config)
             params = layout.getPageBlock().trigger('post', { target: this, result: params}, false, true);
 
             ajax.post(this.getUrl().replace('{action}', 'save'), params, function(response) {
-                if (callback) {
-                    callback();
-                }
+
             });
         },
         close: function() {
