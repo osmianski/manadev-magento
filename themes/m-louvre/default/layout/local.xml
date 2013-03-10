@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+<!-- Blocks =================================================================-->
+    <!-- Layered Navigation show/hide by setting category to anchor=yes -->
+
+    <!-- Categories Block (category anchor=no) -->
+    <catalog_category_default translate="label">
+        <remove name="catalog.leftnav" />
+    </catalog_category_default>
+
+    <!-- Log In/Out form in sidebar -->
+    <customer_logged_out>
+        <remove name="customer_form_mini_login" />
+    </customer_logged_out>
+
+    <!-- Cart Sidebar -->
+    <default>
+        <remove name="cart_sidebar" />
+   </default>
+    <!-- Compare -->
+
+<!-- Page Layouts ============================================================-->
+
+    <!-- Page Layouts -->
+    <customer_account_login translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+    </customer_account_login>
+
+</layout>
+
