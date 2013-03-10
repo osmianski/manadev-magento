@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <!-- server-side directories go to app/design -->
+    <sync extension-dir="layout" project-dir="app/design/adminhtml/{Extension/Name}/layout"/>
+    <sync extension-dir="template" project-dir="app/design/adminhtml/{Extension/Name}/template"/>
+    <sync extension-dir="etc" project-dir="app/design/adminhtml/{Extension/Name}/etc"/>
+
+    <!-- client-side directories go to skin -->
+    <sync extension-dir="css" project-dir="skin/adminhtml/{Extension/Name}/css"/>
+    <sync extension-dir="images" project-dir="skin/adminhtml/{Extension/Name}/images"/>
+    <sync extension-dir="js" project-dir="skin/adminhtml/{Extension/Name}/js"/>
+
+    <sync extension-file="boxes.css" project-file="skin/adminhtml/{Extension/Name}/boxes.css"/>
+    <sync extension-file="ie-css3.htc" project-file="skin/adminhtml/{Extension/Name}/ie-css3.htc"/>
+</config>
