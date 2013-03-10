@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Local_Demo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/modules/<module>.xml -->
+<config>
+	<!-- This section activates module in Magento system. -->
+    <modules>
+        <Local_Demo>
+        	<!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
+        	in this case Magento will behave as if module does not exist). -->
+            <active>true</active>
+            <!-- This instructs Magento to search for module code in app/code/local directory. -->
+            <codePool>local</codePool>
+			<!-- INSERT HERE: depends -->
+        </Local_Demo>
+    </modules>
+</config>
