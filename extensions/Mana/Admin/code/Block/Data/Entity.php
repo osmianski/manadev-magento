@@ -51,8 +51,11 @@ class Mana_Admin_Block_Data_Entity extends Mana_Admin_Block_Data {
                 $model = $db->getModel($entity);
 
                 $foreignKey = $dbConfig->getForeignKey($this->getEntity(), $entity);
-                if ($id = $this->loadModel()->getId()) {
+                if ($id = Mage::app()->getRequest()->getParam('id')) {
                     $model->load($id, $foreignKey);
+                }
+                elseif ($id = $this->loadModel()->getId()) {
+                    $model->setData($foreignKey, $id);
                 }
                 $this->_additionalModels[$key] = $model;
             }

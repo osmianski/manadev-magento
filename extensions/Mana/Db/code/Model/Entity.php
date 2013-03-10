@@ -14,6 +14,7 @@
  */
 class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     protected $_scope;
+    protected $_isIndexingDisabled = false;
 
     public function __construct($data = null) {
         if (is_array($data)) {
@@ -51,6 +52,7 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     }
 
     public function assignDefaultValues() {
+        $this->setDummy(true);
         return $this;
     }
 
@@ -74,4 +76,17 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         return $this;
     }
 
+    public function disableIndexing() {
+        $this->_isIndexingDisabled = true;
+        return $this;
+    }
+
+    public function enableIndexing() {
+        $this->_isIndexingDisabled = false;
+        return $this;
+    }
+
+    public function updateIndexes() {
+        return $this;
+    }
 }
