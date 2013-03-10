@@ -21,7 +21,6 @@ examples on what kind of actions can be applied to referenced blocks.
     <default>
         <update handle="jquery_core"/>
         <reference name="head">
-            <action method="addItem"><type>skin_js</type><name>js/bootstrap.js</name><params/></action>
             <action method="addItem"><type>skin_js</type><name>js/manatheme_louvre.js</name><params/></action>
         </reference>
         <reference name="top.links">

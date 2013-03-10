@@ -51,8 +51,10 @@
     ?>
     <?php $_collectionSize = $_productCollection->count() ?>
     <?php $_columnCount = $this->getColumnCount(); ?>
-    <ul class="products-grid">
     <?php $i=0; foreach ($_productCollection as $_product): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?> <?php echo $_theme->getListItemClass($this, $_product) ?>">
                 <?php echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product) ?>
                     <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="height: <?php echo $_theme->getHeight(155) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(155, $_theme->getHeight(155)); ?>" width="155" height="<?php echo $_theme->getHeight(155) ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
@@ -106,8 +108,10 @@
                 </div>
 
             </li>
-        <?php endforeach ?>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
         </ul>
+        <?php endif ?>
+        <?php endforeach ?>
         <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
 
     <div class="toolbar-bottom">

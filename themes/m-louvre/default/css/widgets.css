@@ -43,7 +43,7 @@
 .widget .mini-products-images-list .product-image { display:block; width:76px; height:76px; border:1px solid #a9a9a9; margin:0 auto; }
 .widget .mini-products-images-list li.item { float:left; width:77px; height:77px; }
 
-/* Widget: Proructs Grid and List */
+/* Widget: Proructs Grid */
 .widget-products .products-grid,
 .widget-products .products-list { margin-bottom: 0; }
 .widget-products .products-grid .actions { background: none; }
@@ -52,12 +52,13 @@
 .widget-products .products-list li.item { background-position: top; padding-bottom: 10px; }
 .widget-products .first.products-list li.item { background: none; }
 
-
 /* adjustments when not all buttons are present */
 .widget-products .with-0-btn.cart-icon button.btn-cart { bottom: 0; }
 .widget-products .products-grid li.with-0-btn .actions { border: 1px dashed #ddd; border-radius: 5px; }
 .widget-products .with-0-btn.compare-icon .add-to-links li a.link-compare,
 .widget-products .with-0-btn.wishlist-icon .add-to-links li a.link-wishlist { bottom: 9px; }
+
+
 
 .widget-products .products-grid li.with-0-btn { padding-bottom: 40px; }
 .widget-products .products-grid li.with-1-btn { padding-bottom: 65px; }
