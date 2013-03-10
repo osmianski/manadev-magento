@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaTheme_Ufizzi
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <system>
+        <configuration>
+            <section>mana_uffizi</section>
+        </configuration>
+        <no_cache>
+            <class>
+                <Mage_Page_Block_Html_Footer>1</Mage_Page_Block_Html_Footer>
+
+            </class>
+        </no_cache>
+    </system>
+    <catalog>
+        <product>
+            <list_modes>
+                <grid translate="label" module="m_theme">
+                    <label>Grid</label>
+                    <sort_order>100</sort_order>
+                    <default_per_page_config>catalog/frontend/grid_per_page</default_per_page_config>
+                    <per_page_values_config>catalog/frontend/grid_per_page_values</per_page_values_config>
+                    <default_block_field>default_grid_per_page</default_block_field>
+                    <template>catalog/product/list/grid.phtml</template>
+                </grid>
+                <list translate="label" module="m_theme">
+                    <label>List</label>
+                    <sort_order>200</sort_order>
+                    <default_per_page_config>catalog/frontend/list_per_page</default_per_page_config>
+                    <per_page_values_config>catalog/frontend/list_per_page_values</per_page_values_config>
+                    <default_block_field>default_list_per_page</default_block_field>
+                    <template>catalog/product/list/list.phtml</template>
+                </list>
+            </list_modes>
+        </product>
+    </catalog>
+</config>
