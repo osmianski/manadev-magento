@@ -16,6 +16,7 @@
                 <action method="setMenu"><value>mana/attribute</value></action>
                 <action method="setFormUrl"><value>*/*/save</value></action>
 
+                <!-- Data Source -->
                 <block type="mana_admin/data_entity" name="page.data_source">
                     <action method="setEntity"><entity>mana_attributepage/page</entity></action>
                     <action method="addEntity"><name>option_page_defaults</name><entity>mana_attributepage/option_page/default</entity></action>
@@ -56,11 +57,11 @@
 
                     <!-- Grid -->
                     <block type="mana_admin/grid" name="grid">
-                        <action method="setDataSource"><value>mana_attributepage/page_attribute</value></action>
                         <action method="setDefaultSort"><value>position</value></action>
                         <action method="setDefaultDir"><value>asc</value></action>
                         <action method="setGridController"><value>mana_attribute_page_newGrid</value></action>
 
+                        <!-- Data Source -->
                         <block type="mana_admin/data_collection" name="grid.data_source">
                             <action method="setEntity"><entity>mana_attributepage/page_attribute</entity></action>
                         </block>

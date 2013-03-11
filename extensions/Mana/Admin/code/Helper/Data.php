@@ -339,4 +339,18 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
     public function isAjax() {
         return Mage::app()->getRequest()->isXmlHttpRequest() || Mage::app()->getRequest()->getParam('isAjax');
     }
+
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     * @return Mana_Admin_Block_Data|null
+     */
+    public function getDataSource($block) {
+        foreach ($block->getChild() as $child) {
+            if ($child instanceof Mana_Admin_Block_Data) {
+                return $child;
+            }
+        }
+
+        return null;
+    }
 }

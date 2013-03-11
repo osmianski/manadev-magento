@@ -193,10 +193,15 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     #endregion
     #region Overrides
     protected function _prepareCollection() {
-        /* @var $collection Mana_Db_Resource_Entity_Collection */
-        $collection = $this->createCollection();
+        /* @var $admin Mana_Admin_Helper_Data */
+        $admin = Mage::helper('mana_admin');
+        /* @var $dataSource Mana_Admin_Block_Data_Collection */
+        $dataSource = $admin->getDataSource($this);
 
-        $collection->setEditFilter($this->getEdit() ? $this->getEdit() : true, $this->getParentCondition());
+        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        $collection = $dataSource->createCollection();
+
+        $collection->setEditFilter($this->getEdit() ? $this->getEdit() : true, $dataSource->getParentCondition());
 
         $this->setCollection($collection);
         Mage::dispatchEvent('m_entity_grid_collection', array('grid' => $this));
@@ -329,73 +334,6 @@ class Mana_Admin_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     }
     #endregion
     #region Data source operations
-    public function createCollection() {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
-
-        return $db->getResourceModel($this->getDataSource().'_collection');
-    }
-
-    /**
-     * @return Mage_Core_Model_Abstract
-     */
-    public function getParentModel() {
-        return null;
-    }
-
-    public function getParentCondition() {
-        return null;
-    }
-
-    /**
-     * @return Mana_Db_Model_Entity
-     */
-    public function createModel() {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
-
-        return $db->getModel($this->getDataSource());
-    }
-
-    /**
-     * @param $id
-     * @return Mana_Db_Model_Entity
-     */
-    public function loadModel($id) {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
-
-        return $db->getModel($this->getDataSource())->load($id);
-    }
-
-    /**
-     * @param $edit
-     * @return Mana_Db_Resource_Entity_Collection
-     */
-    public function loadModels($edit) {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
-        /* @var $collection Mana_Db_Resource_Entity_Collection */
-        $collection = $this->createCollection();
-        $collection
-            ->setEditFilter($edit)
-            ->addFieldToFilter('edit_massaction', 1);
-
-        return $collection;
-    }
-
-    /**
-     * @param $id
-     * @param $sessionId
-     * @return Mana_Db_Model_Entity
-     */
-    public function loadEditedModel($id, $sessionId) {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
-
-        $result = $db->getModel($this->getDataSource())->loadEdited($id, $sessionId);
-        return $result->getId() ? $result : null;
-    }
 
     #endregion
     #region Events

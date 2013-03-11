@@ -578,4 +578,15 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $path;
     }
 
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     */
+    public function getBlockAlias($block) {
+        if (($parent = $block->getParentBlock()) && $this->startsWith($block->getNameInLayout(), $parent->getNameInLayout().'.')) {
+            return substr($block->getNameInLayout(), strlen($parent->getNameInLayout() . '.'));
+        }
+        else {
+            return $block->getNameInLayout();
+        }
+    }
 }

@@ -83,7 +83,9 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
 
     public function _saveResponse() {
         try {
-            $this->_save();
+            $response = array();
+            $this->_save($response);
+            $this->getResponse()->setBody(json_encode($response));
         } catch (Mage_Core_Exception $e) {
             $this->getResponse()->setBody(json_encode(array('error' => true, 'message' => $e->getMessage())));
         }
@@ -102,7 +104,7 @@ class Mana_Admin_Controller extends Mage_Adminhtml_Controller_Action {
         $ajax->processPageWithoutRendering($this->_actionLayout['route'], $callback);
     }
 
-    protected function _save() {
+    protected function _save(&$response) {
         throw new Mage_Core_Exception('Not implemented');
     }
 }

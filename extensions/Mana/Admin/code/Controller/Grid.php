@@ -39,29 +39,19 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
         return $this->getLayout()->getBlock($this->_gridLayout['block']);
     }
 
-    protected function _getParentModel() {
-        return $this->_getBlock()->getParentModel();
-    }
+    /**
+     * @return Mana_Admin_Block_Data_Collection|null
+     */
+    protected function _getDataSource() {
+        /* @var $admin Mana_Admin_Helper_Data */
+        $admin = Mage::helper('mana_admin');
 
-    protected function _createModel() {
-        return $this->_getBlock()->createModel();
-    }
-
-    protected function _loadModel($id) {
-        return $this->_getBlock()->loadModel($id);
-    }
-
-    protected function _loadModels($edit) {
-        return $this->_getBlock()->loadModels($edit);
-    }
-
-    protected function _loadEditedModel($id, $sessionId) {
-        return $this->_getBlock()->loadEditedModel($id, $sessionId);
+        return $admin->getDataSource($this->_getBlock());
     }
 
     protected function _add() {
         if ($edit = &$this->_edit) {
-            $model = $this->_createModel();
+            $model = $this->_getDataSource()->createModel();
             $model->setEditStatus(-1)->setEditSessionId($edit['sessionId']);
             $model->assignDefaultValues();
             $model->save();
@@ -73,7 +63,7 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
 
     protected function _remove() {
         if ($edit = &$this->_edit) {
-            $models = $this->_loadModels($edit);
+            $models = $this->_getDataSource()->loadModels($edit);
             if (count($models)) {
                 foreach ($models as $model) {
                     /* @var $model Mana_Db_Model_Entity */
@@ -111,46 +101,13 @@ class Mana_Admin_Controller_Grid extends Mage_Adminhtml_Controller_Action {
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
 
-        $parentModel = $this->_getParentModel();
+        $parentModel = $this->_getDataSource()->getParentModel();
         Mage::register('m_page_model', $parentModel);
         $edit = null;
         if ($edit = $this->getRequest()->getParam('edit')) {
             $edit = json_decode($edit, true);
 
-            if (($checkIfExpired || count($edit['pending'])) && $db->isEditingSessionExpired($edit['sessionId'])) {
-                throw new Mage_Core_Exception($db->__('Grid editing session is expired. Please reload the page.'));
-            }
-
-            foreach ($edit['pending'] as $id => $cells) {
-                if (isset($edit['deleted'][$id])) {
-                    continue;
-                }
-
-                if (!($model = $this->_loadEditedModel($id, $edit['sessionId']))) {
-                    $model = $this->_loadModel($id);
-                }
-                else {
-                    $edit['saved'][$model->getEditStatus()] = $model->getId();
-                }
-
-                $isOriginal = false;
-                if (!$model->getEditStatus()) {
-                    $isOriginal = true;
-                    $data = $model->getData();
-                    $model = $this->_createModel();
-                    $status = $data['id'];
-                    unset($data['id']);
-                    $model->addData($data);
-                    $model->setEditStatus($status)->setEditSessionId($edit['sessionId']);
-                }
-
-                $model->addGridCellData($cells);
-                $model->save();
-                if ($isOriginal) {
-                    $edit['saved'][$id] = $model->getId();
-                }
-            }
-            $edit['pending'] = array();
+            $this->_getDataSource()->processPendingEdits($edit, $edit['sessionId'], $checkIfExpired);
         }
         $this->_edit = $edit;
         return $this;

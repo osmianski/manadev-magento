@@ -11,6 +11,7 @@
  * @method int getEditStatus()
  * @method Mana_Db_Model_Entity setEditStatus(int $value)
  * @method Mana_Db_Model_Entity setEditSessionId(int $value)
+ * @method Mana_Db_Model_Entity setEditMassaction(int $value)
  */
 class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     protected $_scope;
@@ -87,6 +88,14 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     }
 
     public function updateIndexes() {
+        return $this;
+    }
+
+    public function validate() {
+        return $this;
+    }
+
+    public function postValidate() {
         return $this;
     }
 }

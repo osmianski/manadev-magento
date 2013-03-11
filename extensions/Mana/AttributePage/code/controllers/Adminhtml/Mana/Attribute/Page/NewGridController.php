@@ -10,11 +10,4 @@
  *
  */
 class Mana_AttributePage_Adminhtml_Mana_Attribute_Page_NewGridController extends Mana_Admin_Controller_Grid {
-    public function addAction() {
-        parent::addAction();
-    }
-
-    public function removeAction() {
-        parent::removeAction();
-    }
 }
