@@ -197,7 +197,10 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
         }
     });
 });
-Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Json'], function ($, layout, json) {
+Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Json',
+    'singleton:Mana/Core'],
+function ($, layout, json, core)
+{
     return Mana.Object.extend('Mana/Core/Ajax', {
         get:function (url, callback, options) {
             var self = this;
@@ -214,6 +217,25 @@ Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleto
                 .done(function (response) { self._done(response, callback, options, url, data); })
                 .fail(function (error) { self._fail(error, options, url, data)})
                 .complete(function () { self._complete(options, url, data); });
+        },
+        response: function(block) {
+            return function (response) {
+                if (core.isString(response)) {
+                    block.setContent(response);
+                }
+                else {
+                    if (response.updates) {
+                        $.each(response.updates, function (selector, html) {
+                            $(selector).html(html);
+                        });
+                    }
+                    if (response.blocks) {
+                        $.each(response.blocks, function (block, html) {
+                            layout.getBlock(block).setContent(html);
+                        });
+                    }
+                }
+            };
         },
         _before: function(options, url, data) {
             var page = layout.getPageBlock();
@@ -247,7 +269,7 @@ Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleto
                         alert('No response.');
                     }
                 }
-                else if (response.error) {
+                else if (response.error && !response.customErrorDisplay) {
                     if (options.showDebugMessages) {
                         alert(response.message || response.error);
                     }
@@ -767,6 +789,21 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         },
         getPageBlock: function() {
             return this._pageBlock;
+        },
+        getBlock: function(blockName) {
+            return this._getBlockRecursively(this.getPageBlock(), blockName);
+        },
+        _getBlockRecursively: function(block, blockName) {
+            if (block.getId() == blockName) {
+                return block;
+            }
+
+            var self = this, result = null;
+            $.each(block.getChildren(), function(index, child) {
+                result = self._getBlockRecursively(child, blockName);
+                return result ? false : true;
+            });
+            return result;
         },
         beginGeneratingBlocks: function(parentBlock) {
             var vars = {

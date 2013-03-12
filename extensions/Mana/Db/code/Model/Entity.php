@@ -52,6 +52,10 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         return $db->getResourceSingleton($this->_resourceName);
     }
 
+    public function getScope() {
+        return $this->_scope;
+    }
+
     public function assignDefaultValues() {
         $this->setDummy(true);
         return $this;
@@ -91,11 +95,42 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         return $this;
     }
 
-    public function validate() {
+    public function validate($dataSource) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        foreach ($dbConfig->getScopeValidators($this->_scope) as $validator) {
+            call_user_func(array($this, $validator->getName()), $dataSource);
+        }
+
+        foreach ($dbConfig->getScopeFields($this->_scope) as $fieldXml) {
+            foreach ($dbConfig->getFieldValidators($fieldXml) as $validator) {
+                call_user_func(array($this, $validator->getName()), $dataSource, $fieldXml->getName());
+            }
+        }
         return $this;
     }
 
-    public function postValidate() {
+    public function postValidate($dataSource) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        foreach ($dbConfig->getScopePostValidators($this->_scope) as $validator) {
+            call_user_func(array($this, $validator->getName()), $dataSource);
+        }
+
+        foreach ($dbConfig->getScopeFields($this->_scope) as $fieldXml) {
+            foreach ($dbConfig->getFieldPostValidators($fieldXml) as $validator) {
+                call_user_func(array($this, $validator->getName()), $dataSource, $fieldXml->getName());
+            }
+        }
+
         return $this;
+    }
+
+    public function isNotEmpty($dataSource, $field) {
+        if (!$this->getData($field)) {
+            throw new Mana_Db_Exception_Validation(Mage::helper('mana_attributepage')->__("Please fill in '%s'.", $dataSource->getLabel($this->getScope(), $field)));
+        }
     }
 }

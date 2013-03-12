@@ -238,8 +238,12 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
      */
     public function getScopeXml($fullEntityName) {
         $xml = $this->getXml();
-        list($module, $entity, $scope) = explode('/', $fullEntityName);
-        if (!$scope) {
+        $parts = explode('/', $fullEntityName);
+        if (count($parts) > 2) {
+            list($module, $entity, $scope) = $parts;
+        }
+        else {
+            list($module, $entity) = $parts;
             $scope = 'global';
         }
         $scopeXml = $xml->getXpath("//modules/$module/entities/$entity/scopes/$scope");
@@ -248,6 +252,19 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
         }
         return empty($scopeXml) ? false : $scopeXml[0];
     }
+
+    /**
+     * @param string $entity
+     * @param string $field
+     * @return Varien_Simplexml_Element | bool
+     */
+    public function getFieldXml($entity, $field) {
+        $scopeXml = $this->getScopeXml($entity);
+
+        $resultXml = $scopeXml->xpath("fields/$field");
+        return empty($resultXml) ? false : $resultXml[0];
+    }
+
     public function getForeignKey($parentEntity, $childEntity) {
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
@@ -264,4 +281,56 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
         $fieldXml = $resultXml[0];
         return $fieldXml->getName();
     }
+
+    /**
+     * @param string $entity
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getScopeValidators($entity) {
+        $scopeXml = $this->getScopeXml($entity);
+        return $scopeXml->xpath("validation/*");
+    }
+
+    /**
+     * @param string $entity
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getScopeFields($entity) {
+        $scopeXml = $this->getScopeXml($entity);
+
+        return $scopeXml->xpath("fields/*");
+    }
+
+    /**
+     * @param string $entity
+     * @param string $field
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getFieldValidators($entity, $field = null) {
+        $fieldXml = $entity instanceof Varien_Simplexml_Element ? $entity : $this->getFieldXml($entity, $field);
+
+        return $fieldXml->xpath("validation/*");
+    }
+
+    /**
+     * @param string $entity
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getScopePostValidators($entity) {
+        $scopeXml = $this->getScopeXml($entity);
+
+        return $scopeXml->xpath("post_validation/*");
+    }
+
+    /**
+     * @param string $entity
+     * @param string $field
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getFieldPostValidators($entity, $field = null) {
+        $fieldXml = $entity instanceof Varien_Simplexml_Element ? $entity : $this->getFieldXml($entity, $field);
+
+        return $fieldXml->xpath("post_validation/*");
+    }
+
 }

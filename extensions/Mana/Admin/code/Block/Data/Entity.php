@@ -63,4 +63,8 @@ class Mana_Admin_Block_Data_Entity extends Mana_Admin_Block_Data {
 
         return $this->_additionalModels;
     }
+
+    public function getLabel($entity, $field) {
+        throw new Exception('not implemented');
+    }
 }

@@ -74,7 +74,10 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
         return $this;
     }
 
-    protected function _renderEditFilter() {
+    protected function _renderEditFilter($select = null) {
+        if (!$select) {
+            $select = $this->getSelect();
+        }
         $alias = 'main_table';
         if (is_array($this->_editFilter)) {
             $sql = count($this->_editFilter['saved'])
@@ -92,13 +95,21 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
                     " AND ({$this->getConnection()->quoteInto("$alias.id NOT IN (?)", $this->_editFilter['deleted'])})";
                 //" AND ({$this->getConnection()->quoteInto("$alias.edit_status NOT IN (?)", $this->_editFilter['deleted'])})";
             }
-            $this->getSelect()->where($sql);
+            $select->where($sql);
         }
         elseif ($this->_editFilter) {
-            $this->getSelect()->where("$alias.edit_status = 0");
+            $select->where("$alias.edit_status = 0");
             if ($this->_parentCondition) {
-                $this->getSelect()->where("$alias.{$this->_parentCondition}");
+                $select->where("$alias.{$this->_parentCondition}");
             }
         }
+
+        return $this;
+    }
+
+    public function getSelectCountSql() {
+        $sql = parent::getSelectCountSql();
+        $this->_renderEditFilter($sql);
+        return $sql;
     }
 }

@@ -10,7 +10,7 @@
  *
  */
 class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
-    public function processPendingEdits($edit = null, $sessionId = null, $checkIfExpired = false) {
+    public function processPendingEdits(&$edit, $sessionId = null, $checkIfExpired = false) {
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
 
@@ -18,7 +18,9 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
             $edit = mage::app()->getRequest()->getParam('edit');
         }
         if ($edit) {
-            $edit = json_decode($edit, true);
+            if (!is_array($edit)) {
+                $edit = json_decode($edit, true);
+            }
             if (!$sessionId) {
                 $sessionId = $edit['sessionId'];
             }
@@ -69,7 +71,12 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
      * @param callable|null $beforeSaveCallback
      * @return \Mana_Admin_Block_Data_Collection
      */
-    public function saveEditedData($sessionId, $edit, $disableIndexing = false, $beforeSaveCallback = null) {
+    public function saveEditedData($edit, $sessionId, $disableIndexing = false, $beforeSaveCallback = null) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        $foreignKey = $dbConfig->getForeignKey($this->getParentDataSource()->getEntity(), $this->getEntity());
+
         foreach ($edit['saved'] as $id => $editId) {
             if ($id != $editId) {
                 $editModel = $this->loadModel($editId);
@@ -86,11 +93,12 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
                 if ($disableIndexing) {
                     $model->disableIndexing();
                 }
-                $model->validate()->save();
+                $model->validate($this)->save();
                 $editModel->delete();
             }
             else {
                 $model = $this->loadModel($id);
+                $model->setData($foreignKey, $this->getParentModel()->getId());
                 $model->setEditStatus(0);
                 $model->setEditSessionId(0);
                 $model->setEditMassaction(0);
@@ -100,7 +108,7 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
                 if ($disableIndexing) {
                     $model->disableIndexing();
                 }
-                $model->validate()->save();
+                $model->validate($this)->save();
             }
         }
         foreach ($edit['deleted'] as $id) {
@@ -126,7 +134,18 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
     }
 
     public function getParentCondition() {
-        return null;
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        $foreignKey = $dbConfig->getForeignKey($this->getParentDataSource()->getEntity(), $this->getEntity());
+
+        $model = $this->getParentModel();
+        if ($model->getId()) {
+            return $foreignKey . ' = ' . $model->getId();
+        }
+        else {
+            return $foreignKey . ' IS NULL';
+        }
     }
 
     /**
@@ -180,4 +199,14 @@ class Mana_Admin_Block_Data_Collection extends Mana_Admin_Block_Data {
         return $result->getId() ? $result : null;
     }
 
+    public function getLabel($entity, $field) {
+        /* @var $grid Mana_Admin_Block_Grid */
+        $grid = $this->getParentBlock();
+        if ($column = $grid->getChild($grid->getNameinLayout().'.'.$field)) {
+            return $column->getTitle();
+        }
+        else {
+            return $field;
+        }
+    }
 }

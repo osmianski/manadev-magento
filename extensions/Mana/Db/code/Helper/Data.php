@@ -435,22 +435,38 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return Mana_Db_Resource_Entity_Collection | Mana_Db_Resource_Entity
      */
     public function getResourceModel($entityName, $arguments = null) {
+        if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
+            $entityNameWithoutSuffix = substr($entityName, 0, strlen($entityName) - strlen($suffix));
+        }
+        else {
+            $entityNameWithoutSuffix = $entityName;
+        }
+
+        $arguments = array_merge(array(
+            'scope' => $entityNameWithoutSuffix,
+        ), $arguments ? (is_array($arguments) ? $arguments : array('resource' => $arguments)) : array());
+
         $resolvedEntityName = $this->getScopedName($entityName);
         if ($this->resourceExists($resolvedEntityName)) {
             return Mage::getResourceModel($resolvedEntityName, $arguments);
         }
         else {
-            if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
-                $entityName = substr($entityName, 0, strlen($entityName) - strlen($suffix));
-            }
-
-            return Mage::getResourceModel('mana_db/entity'. $suffix, array_merge(array(
-                'scope' => $entityName,
-            ), $arguments ? array('resource' => $arguments) : array()));
+            return Mage::getResourceModel('mana_db/entity'. $suffix, $arguments);
         }
     }
 
     public function getResourceSingleton($entityName, $arguments = null) {
+        if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
+            $entityNameWithoutSuffix = substr($entityName, 0, strlen($entityName) - strlen($suffix));
+        }
+        else {
+            $entityNameWithoutSuffix = $entityName;
+        }
+
+        $arguments = array_merge(array(
+            'scope' => $entityNameWithoutSuffix,
+        ), $arguments ? (is_array($arguments) ? $arguments : array('resource' => $arguments)) : array());
+
         $resolvedEntityName = $this->getScopedName($entityName);
         if ($this->resourceExists($resolvedEntityName)) {
             return Mage::getResourceSingleton($resolvedEntityName, $arguments);
@@ -468,14 +484,14 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return Mana_Db_Model_Entity
      */
     public function getModel($entityName, $arguments = array()) {
+        $arguments = array_merge(array('scope' => $entityName), $arguments);
+
         $resolvedEntityName = $this->getScopedName($entityName);
         if ($this->modelExists($resolvedEntityName)) {
             return Mage::getModel($resolvedEntityName, $arguments);
         }
         else {
-            return Mage::getModel('mana_db/entity', array_merge(array(
-                'scope' => $entityName,
-            ), $arguments));
+            return Mage::getModel('mana_db/entity', $arguments);
         }
     }
 

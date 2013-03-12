@@ -25,10 +25,7 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
 
             this._block._updateReloadParams();
 
-            var self = this;
-            ajax.post(url, this.reloadParams || {}, function(response) {
-                self._block.setContent(response);
-            });
+            ajax.post(url, this.reloadParams || {}, ajax.response(this._block));
         }
     });
 
@@ -340,8 +337,8 @@ Mana.define('Mana/Admin/Tab', ['jquery', 'Mana/Core/Block'], function ($, Block)
     });
 });
 Mana.define('Mana/Admin/Page', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/UrlTemplate',
-    'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Config'],
-function ($, Block, urlTemplate, layout, ajax, config)
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Config', 'singleton:Mana/Core'],
+function ($, Block, urlTemplate, layout, ajax, config, core)
 {
     return Block.extend('Mana/Admin/Page', {
         getUrl:function () {
@@ -375,10 +372,9 @@ function ($, Block, urlTemplate, layout, ajax, config)
                 sessionId:config.getData('editSessionId')
             };
             params = layout.getPageBlock().trigger('post', { target: this, result: params}, false, true);
+            var self = this;
 
-            ajax.post(this.getUrl().replace('{action}', 'save'), params, function(response) {
-
-            });
+            ajax.post(this.getUrl().replace('{action}', 'save'), params, ajax.response(this));
         },
         close: function() {
             window.location = this.getUrl().replace('{action}', 'index');
