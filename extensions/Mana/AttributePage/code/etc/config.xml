@@ -78,6 +78,26 @@
                 </setup>
             </mana_attributepage_setup>
         </resources>
+        <index>
+            <indexer>
+                <mana_attribute_page>
+                    <model>mana_attributepage/indexer</model>
+                    <name>Attribute Pages (MANAdev)</name>
+                    <description>Recalculates final settings for attribute pages based on specified formulas</description>
+                    <targets>
+                        <page>
+                            <entity>mana_attributepage/page</entity>
+                        </page>
+                        <option_page>
+                            <entity>mana_attributepage/option_page</entity>
+                            <depends>
+                                <page />
+                            </depends>
+                        </option_page>
+                    </targets>
+                </mana_attribute_page>
+            </indexer>
+        </index>
         <!-- INSERT HERE: blocks, models, ... -->
     </global>
     <!-- This section enables static visual changes in admin area. -->

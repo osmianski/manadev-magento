@@ -233,6 +233,19 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     }
 
     /**
+     * @param string $entityName
+     * @return Varien_Simplexml_Element | bool
+     */
+    public function getEntityXml($entityName) {
+        $xml = $this->getXml();
+        $parts = explode('/', $entityName);
+        list($module, $entity) = $parts;
+        $entityXml = $xml->getXpath("//modules/$module/entities/$entity");
+
+        return empty($entityXml) ? false : $entityXml[0];
+    }
+
+    /**
      * @param string $fullEntityName
      * @return Varien_Simplexml_Element | bool
      */
