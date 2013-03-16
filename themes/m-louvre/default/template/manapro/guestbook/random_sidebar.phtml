@@ -1,0 +1,55 @@
+<?php
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<?php
+/* @var $this ManaPro_Guestbook_Block_Random */
+?>
+<?php if ($this->getPosts()) : ?>
+<div class="widget widget-random-guest-post">
+    <div class="block <?php echo Mage::helper('mana_theme')->getCssClass($this, 'random_guest_post') ?>">
+        <?php if ($this->getTitle()) :?>
+        <div class="block-title">
+            <strong><span><?php echo $this->getTitle() ?></span></strong>
+        </div>
+        <?php endif; ?>
+        <div class="block-content m-guest-book">
+            <?php foreach ($this->getPosts() as $post): ?>
+            <?php /* @var $post ManaPro_Guestbook_Model_Post */ ?>
+            <?php $text = $this->getCharacterCount() ? mb_substr($post->getText(), 0, $this->getCharacterCount()) : $post->getText(); ?>
+            <div class="quote">
+                <div>
+                    <blockquote>
+                        <?php echo nl2br($this->escapeHtml($text)) ?>
+                        <?php if ($text != $post->getText()): ?>
+                        ... <a href="<?php echo $this->getReadMoreUrl($post) ?>" class="read-more" title="<?php echo $this->__('Read more') ?>"><?php echo $this->__('Read more') ?></a>
+                        <?php endif; ?>
+                    </blockquote>
+                    <p>
+                    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/date/in_frontend')) : ?>
+                        <span class="guest-date"><?php echo $this->escapeHtml(Mage::getSingleton('core/locale')
+                            ->date($post->getCreatedAt(), Zend_Date::ISO_8601, null, false)
+                            ->toString(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM))) ?></span>
+                    <?php endif; ?>
+                        <span class="guest-name"><?php echo $this->escapeHtml($post->getName()) ?></span>
+                    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/region/in_frontend') && $post->getRegion()) : ?>
+                        , <span class="guest-region"><?php echo $this->escapeHtml($post->getRegion()) ?></span>
+                    <?php endif; ?>
+                    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/country/in_frontend') && $post->getCountryId()) : ?>
+                        , <span class="guest-country"><?php echo $this->escapeHtml($this->getCountry($post)) ?></span>
+                    <?php endif; ?>
+                    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/url/in_frontend') && $post->getUrl()) : ?>
+                        , <span class="guest-url"><a target="_blank" href="<?php echo $post->getUrl() ?>"><?php echo $this->escapeHtml($post->getUrl()) ?></a></span>
+                    <?php endif; ?>
+                    </p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

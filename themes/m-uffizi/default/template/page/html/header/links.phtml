@@ -1,0 +1,24 @@
+<ul>
+	<li class="last top-cart">
+		<?php echo  $this->getChildHtml('cart_top') ?>
+	</li> 
+	<li class="top-customer">
+		<p class="welcome-msg">
+		<?php echo $this->getWelcome() ?> 
+		<?php echo $this->getAdditionalHtml() ?></p>
+		<p><span><a href="<?php echo $this->getUrl('customer/account') ?>" alt="<?php echo $this->__('Your Account') ?>" title="<?php echo $this->__('Your Account') ?>"><?php echo $this->__('Your Account') ?></a></span></p>
+		<p><?php if(Mage::helper('customer')->isLoggedIn()) :?>
+			<a href="<?php echo $this->getUrl('customer/account/logout') ?>" alt="<?php echo $this->__('Logout') ?>" title="<?php echo $this->__('Logout') ?>"><?php echo $this->__('Logout') ?></a>
+		<?php else: ?>
+			<a href="<?php echo $this->getUrl('customer/account/create') ?>" alt="<?php echo $this->__('Create an account') ?>" title="<?php echo $this->__('Create an account') ?>"><?php echo $this->__('Create an account') ?></a>
+			<?php echo $this->__('or')?>
+			<a href="<?php echo $this->getUrl('customer/account/login') ?>" alt="<?php echo $this->__('Login') ?>" title="<?php echo $this->__('Login') ?>"><?php echo $this->__('Login') ?></a>
+		<?php endif; ?></p>
+	</li> 
+	<li class="top-store-info">
+		<p><span><a href="tel:<?php echo Mage::getStoreConfig('general/store_information/phone') ?>" >
+		<?php echo Mage::getStoreConfig('general/store_information/phone') ?>
+		</a></span></p>
+		<p><?php echo Mage::getStoreConfig('general/store_information/address') ?></p>
+	</li> 
+</ul>

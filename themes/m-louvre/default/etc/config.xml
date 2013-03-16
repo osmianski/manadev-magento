@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+@category    Mana
+@package     ManaTheme_Louvre
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <system>
+        <configuration>
+            <section>mana_louvre</section>
+        </configuration>
+        <no_cache>
+            <class>
+                <Mage_Catalog_Block_Product_Widget_New>1</Mage_Catalog_Block_Product_Widget_New>
+                <Mage_Catalog_Block_Navigation>1</Mage_Catalog_Block_Navigation>
+            </class>
+        </no_cache>
+    </system>
+    <catalog>
+        <product>
+            <!--<list_mode_config>mana_louvre/general/list_mode</list_mode_config>-->
+            <list_modes>
+                <grid translate="label" module="mana_theme">
+                    <label>Grid</label>
+                    <sort_order>100</sort_order>
+                    <default_per_page_config>catalog/frontend/grid_per_page</default_per_page_config>
+                    <per_page_values_config>catalog/frontend/grid_per_page_values</per_page_values_config>
+                    <default_block_field>default_grid_per_page</default_block_field>
+                    <template>catalog/product/list/grid.phtml</template>
+                </grid>
+                <list translate="label" module="mana_theme">
+                    <label>List</label>
+                    <sort_order>200</sort_order>
+                    <default_per_page_config>catalog/frontend/list_per_page</default_per_page_config>
+                    <per_page_values_config>catalog/frontend/list_per_page_values</per_page_values_config>
+                    <default_block_field>default_list_per_page</default_block_field>
+                    <template>catalog/product/list/list.phtml</template>
+                </list>
+                <!--<two_column translate="label" module="mana_theme">
+                    <label>2 Column List</label>
+                    <sort_order>300</sort_order>
+                    <default_per_page_config>mana_louvre/general/two_column_per_page</default_per_page_config>
+                    <per_page_values_config>mana_louvre/general/two_column_per_page_values</per_page_values_config>
+                    <default_block_field>default_two_column_per_page</default_block_field>
+                    <template>catalog/product/list/two_column.phtml</template>
+                </two_column>-->
+            </list_modes>
+        </product>
+    </catalog>
+</config>
