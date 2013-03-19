@@ -1,7 +1,7 @@
 <?php
-/**
+/** 
  * @category    Mana
- * @package     Mana_AttributePage
+ * @package     Mana_Db
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
@@ -9,6 +9,5 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Model_Indexer extends Mana_Db_Model_Entity_Indexer {
-    protected $_code = 'mana_attribute_page';
+class Mana_Db_Model_Formula_Node_NullValue extends Mana_Db_Model_Formula_Node  {
 }

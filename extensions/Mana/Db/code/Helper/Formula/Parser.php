@@ -23,7 +23,7 @@
  * Function ::= identifier '(' { Expr ',' } ')'
  * Field ::= [ identifier '.' ] identifier
  */
-class Mana_Db_Model_Formula_Parser  {
+class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     const OPEN_PAR = 1;
     const CLOSE_PAR = 2;
     const OPEN_FORMULA = 3;
@@ -66,7 +66,7 @@ class Mana_Db_Model_Formula_Parser  {
      * @param string $formula
      * @return Mana_Db_Model_Formula_Node
      */
-    public function parseText($formula) {
+    public function parse($formula) {
         $parts = array();
         $fromPos = 0;
         for ($pos = strpos($formula, self::$_tokens[self::OPEN_FORMULA]); $pos !== false;

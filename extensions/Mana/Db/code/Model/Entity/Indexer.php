@@ -10,21 +10,19 @@
  *
  */
 class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
+    protected $_code;
     protected $_process;
+
+    public function getCode() {
+        return $this->_code;
+    }
+
     /**
      * @return Mage_Index_Model_Process | bool
      */
     public function getProcess() {
         if (!$this->_process) {
-            /* @var $indexManager Mage_Index_Model_Indexer */
-            $indexManager = Mage::getSingleton('index/indexer');
-            foreach ($indexManager->getProcessesCollection() as $process) {
-                /* @var $process Mage_Index_Model_Process */
-                if ($process->getIndexer() == $this) {
-                    $this->_process = $process;
-                    break;
-                }
-            }
+            $this->_process = Mage::getModel('index/process')->load($this->getCode(), 'indexer_code');
         }
 
         return $this->_process;
@@ -36,10 +34,6 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
     public function getXml() {
         $result = Mage::getConfig()->getXpath("//global/index/indexer/{$this->getProcess()->getIndexerCode()}");
         return count($result) == 1 ? $result[0] : false;
-    }
-
-    public function getCode() {
-        return $this->getProcess()->getIndexerCode();
     }
 
     /**
@@ -128,9 +122,6 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
      * @return Varien_Simplexml_Element[]
      */
     protected function _sortTargetsByDependency() {
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper('mana_core');
-
         $targets = array();
 
         foreach ($this->getXml()->targets->children() as $target) {
@@ -146,7 +137,7 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
                     $hasUnresolvedDependency = false;
                     if (isset($target->depends)) {
                         foreach ($target->depends->children() as $dependency) {
-                            if (!isset($orders[$dependency])) {
+                            if (!isset($orders[$dependency->getName()])) {
                                 // $dependency not yet sorted so $module should wait until that happens
                                 $hasUnresolvedDependency = true;
                                 break;
@@ -206,7 +197,7 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
         foreach ($dbConfig->getEntityXml($entity)->scopes->children() as $scope) {
             if (isset($scope->flattens)) {
                 $flattenedScope = (string)$scope->flattens;
-                if (isset($dbConfig->getScopeXml($flattenedScope)->store_specifics_of)) {
+                if (isset($dbConfig->getScopeXml($flattenedScope)->store_specifics_for)) {
                     $storeScope = $scope;
                 }
                 else {

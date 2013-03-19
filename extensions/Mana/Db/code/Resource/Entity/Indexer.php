@@ -43,7 +43,7 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
             $formulas = $formulas ? json_decode($formulas, true) : array();
 
             // filter basic select by formula hash
-            $select = $this->_getUpdateSelect($formulaHash);
+            $select = $this->_getUpdateSelect($basicSelect, $formulaHash);
             $fields = array();
 
             foreach ($scope->fields->children() as $fieldName => $fieldXml) {
@@ -77,8 +77,15 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
     public function flattenStoreScope($indexer, $target, $scope, $options) {
     }
 
-    protected function _getUpdateSelect() {
+    protected function _getUpdateSelect($basicSelect, $formulaHash) {
+        $select = clone $basicSelect;
+
+        return $select;
+    }
+
+    protected function _getBasicSelect() {
         $db = $this->_getWriteAdapter();
-        return $db->select();
+        $select = $db->select();
+        return $select;
     }
 }

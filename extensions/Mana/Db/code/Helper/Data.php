@@ -455,6 +455,11 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    /**
+     * @param string $entityName
+     * @param array | null $arguments
+     * @return Mana_Db_Resource_Entity
+     */
     public function getResourceSingleton($entityName, $arguments = null) {
         if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
             $entityNameWithoutSuffix = substr($entityName, 0, strlen($entityName) - strlen($suffix));

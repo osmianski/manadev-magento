@@ -80,10 +80,10 @@
         </resources>
         <index>
             <indexer>
-                <mana_attribute_page>
+                <mana_attribute_page translate="name description" module="mana_attributepage">
                     <model>mana_attributepage/indexer</model>
                     <name>Attribute Pages (MANAdev)</name>
-                    <description>Recalculates final settings for attribute pages based on specified formulas</description>
+                    <description>Recalculates formula-based settings in attribute and attribute option pages</description>
                     <targets>
                         <page>
                             <entity>mana_attributepage/page</entity>

@@ -16,6 +16,7 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     const FIELD_LEVEL = 3;
 
     protected $_xml;
+    protected $_scopeXml = array();
     protected $_configLevels = array(
         self::MODULE_LEVEL => 'module',
         self::ENTITY_LEVEL => 'entity',
@@ -250,20 +251,24 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return Varien_Simplexml_Element | bool
      */
     public function getScopeXml($fullEntityName) {
-        $xml = $this->getXml();
-        $parts = explode('/', $fullEntityName);
-        if (count($parts) > 2) {
-            list($module, $entity, $scope) = $parts;
+        if (!isset($this->_scopeXml[$fullEntityName])) {
+            $xml = $this->getXml();
+            $parts = explode('/', $fullEntityName);
+            if (count($parts) > 2) {
+                list($module, $entity, $scope) = $parts;
+            }
+            else {
+                list($module, $entity) = $parts;
+                $scope = 'global';
+            }
+            $scopeXml = $xml->getXpath("//modules/$module/entities/$entity/scopes/$scope");
+            if (empty($scopeXml) && $scope == 'global') {
+                $scopeXml = $xml->getXpath("//modules/$module/entities/$entity");
+            }
+
+            $this->_scopeXml[$fullEntityName] = empty($scopeXml) ? false : $scopeXml[0];
         }
-        else {
-            list($module, $entity) = $parts;
-            $scope = 'global';
-        }
-        $scopeXml = $xml->getXpath("//modules/$module/entities/$entity/scopes/$scope");
-        if (empty($scopeXml) && $scope == 'global') {
-            $scopeXml = $xml->getXpath("//modules/$module/entities/$entity");
-        }
-        return empty($scopeXml) ? false : $scopeXml[0];
+        return $this->_scopeXml[$fullEntityName];
     }
 
     /**
@@ -293,6 +298,19 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
         /* @var $fieldXml Varien_Simplexml_Element */
         $fieldXml = $resultXml[0];
         return $fieldXml->getName();
+    }
+
+    /**
+     * @param string $entity
+     * @return Varien_Simplexml_Element[]
+     */
+    public function getForeignXmls($entity) {
+        /* @var $db Mana_Db_Helper_Data */
+        $db = Mage::helper('mana_db');
+
+        $scopeXml = $this->getScopeXml($entity);
+
+        return $scopeXml->xpath("fields/*[foreign]");
     }
 
     /**
