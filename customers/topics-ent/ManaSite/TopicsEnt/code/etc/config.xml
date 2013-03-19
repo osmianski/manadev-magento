@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaSite_TopicsEnt
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaSite_TopicsEnt>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.03.19.20</version>
+        </ManaSite_TopicsEnt>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaSite_TopicsEnt_Helper_Data
+		class is accessible through Mage::helper('manasite_topicsent') call, other ManaSite_TopicsEnt_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manasite_topicsent/xxx_yyy') call. -->
+        <helpers>
+            <manasite_topicsent>
+                <!-- This says that string 'manasite_topicsent' corresponds to ManaSite_TopicsEnt_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaSite_TopicsEnt_Helper</class>
+            </manasite_topicsent>
+        </helpers>
+        <page>
+            <layouts>
+                <one_column_bible module="manasite_topicsent" translate="label">
+                    <label>1 column (bible)</label>
+                    <template>page/1column-bible.phtml</template>
+                    <layout_handle>page_one_column_bible</layout_handle>
+                </one_column_bible>
+                <one_column_topics_entertainment module="manasite_topicsent" translate="label">
+                    <label>1 column (topics-entertainment)</label>
+                    <template>page/1column-topics-entertainment.phtml</template>
+                    <layout_handle>page_one_column_topics_entertainment</layout_handle>
+                </one_column_topics_entertainment>
+            </layouts>
+        </page>
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>
