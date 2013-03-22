@@ -31,9 +31,12 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
         $res = Mage::getSingleton('core/resource');
         /* @var $dbHelper Mana_Db_Helper_Data */
         $dbHelper = Mage::helper('mana_db');
+        /* @var $formulaHelper Mana_Db_Helper_Formula */
+        $formulaHelper = Mage::helper('mana_db/formula');
 
         // get basic select from all source tables, properly joined (based on m_db.xml)
-        $basicSelect = $this->_getBasicSelect();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $basicSelect = $formulaHelper->select((string)$scope->flattens, array());
 
         // get formula hashes and formula texts
         $formulaGroupSelect = $this->_getFormulaGroupSelect();
@@ -80,12 +83,6 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
     protected function _getUpdateSelect($basicSelect, $formulaHash) {
         $select = clone $basicSelect;
 
-        return $select;
-    }
-
-    protected function _getBasicSelect() {
-        $db = $this->_getWriteAdapter();
-        $select = $db->select();
         return $select;
     }
 }

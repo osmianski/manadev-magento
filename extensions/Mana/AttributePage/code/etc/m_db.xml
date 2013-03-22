@@ -103,7 +103,15 @@
                             <formula>
                                 <aggregate>
                                     <attribute>
-                                        <entity>mana_attributepage/page_attribute</entity>
+                                        <entity>eav/attribute</entity>
+                                        <join>
+                                            <page_attribute>
+                                                <entity>mana_attributepage/page_attribute</entity>
+                                                <on>{{= attribute.attribute_id }} = {{= page_attribute.attribute_id }}</on>
+                                            </page_attribute>
+                                        </join>
+                                        <order>{{= page_attribute.position }} ASC</order>
+                                        <where>{{= parent.primary.id }} = {{= page_attribute.page_id }}</where>
                                         <title>Product Attribute</title>
                                     </attribute>
                                 </aggregate>

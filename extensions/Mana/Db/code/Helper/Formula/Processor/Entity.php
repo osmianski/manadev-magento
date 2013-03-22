@@ -61,14 +61,45 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
         /** @noinspection PhpUndefinedFieldInspection */
         $aggregateXml = $dbConfig->getScopeXml($context->getEntity())->formula->aggregate;
         if (isset($aggregateXml->$entity)) {
+            /* @var $dbHelper Mana_Db_Helper_Data */
+            $dbHelper = Mage::helper('mana_db');
+
+            /* @var $resource Mana_Db_Resource_Formula */
+            $resource = Mage::getResourceSingleton('mana_db/formula');
+
+            $alias = $entity;
             $entity = (string)$aggregateXml->$entity->entity;
-            $processor = 'entity';
-            $result = clone $context;
-            $result
+            $processor = $this->getProcessor($entity);
+
+            $result = $context->getChildContext()
                 ->setEntity($entity)
                 ->setProcessor($processor)
-                ->setIsAggregate(true)
-                ->setParentContext($context);
+                ->setIsAggregate(true);
+
+            $select = $result->getSelect()
+                ->from(array($result->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName($entity))), null);
+
+            if (isset($aggregateXml->join)) {
+                foreach ($aggregateXml->join as $alias => $joinXml) {
+                    $join = isset($joinXml->type) ? 'join'.ucfirst((string)$joinXml->type) : 'joinInner';
+                    $select->$join(
+                        array($result->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName((string)$joinXml->entity))),
+                        $result->resolveAliases((string)$joinXml->on),
+                        null
+                    );
+                }
+            }
+            if (isset($aggregateXml->order)) {
+                $select->order($result->resolveAliases((string)$aggregateXml->order));
+            }
+            if (isset($aggregateXml->where)) {
+                $select->where($result->resolveAliases((string)$aggregateXml->where));
+            }
+
+            return $result;
+        }
+        else {
+            return false;
         }
     }
 

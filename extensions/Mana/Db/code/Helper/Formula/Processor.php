@@ -15,7 +15,7 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
      * @param string $field
      * @return Mana_Db_Model_Formula_TypedExpr | bool
      */
-    public function selectField($context, $field) {
+    public function selectField(/** @noinspection PhpUnusedParameterInspection */$context, $field) {
         return false;
     }
 
@@ -24,5 +24,20 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
      * @param string $entity
      * @return Mana_Db_Model_Formula_Context | bool
      */
-    abstract public function selectEntity($context, $entity);
+    public function selectEntity(/** @noinspection PhpUnusedParameterInspection */$context, $entity) {
+        return false;
+    }
+
+    public function getProcessor($entity) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        if ($dbConfig->getScopeXml($entity)) {
+            return 'entity';
+        }
+        else {
+            return 'table';
+        }
+    }
+
 }

@@ -60,6 +60,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $scope->fields->id->type = 'bigint';
             $field = $scope->fields->id;
             $field->primary = 1;
+            $field->role = Mana_Db_Helper_Config::ROLE_PRIMARY_KEY;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
         }
@@ -86,6 +87,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
                 $scope->fields->$fieldName->type = 'int unsigned';
                 $field = $scope->fields->$fieldName;
                 $field->default_value = 0;
+                $field->role = Mana_Db_Helper_Config::ROLE_DEFAULT_VALUE;
                 $configHelper->propagateName($field);
                 $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
             }
@@ -94,6 +96,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $scope->fields->$fieldName->type = 'varchar(40)';
             $field = $scope->fields->$fieldName;
             $field->indexed = 1;
+            $field->role = Mana_Db_Helper_Config::ROLE_DEFAULT_VALUE;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 
@@ -101,6 +104,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $fieldName = 'default_formulas';
             $scope->fields->$fieldName->type = 'mediumtext';
             $field = $scope->fields->$fieldName;
+            $field->role = Mana_Db_Helper_Config::ROLE_DEFAULT_VALUE;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
         }
@@ -130,6 +134,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $field->foreign->field = 'id';
             $field->foreign->on_update = 'cascade';
             $field->foreign->on_delete = 'cascade';
+            $field->role = Mana_Db_Helper_Config::ROLE_STORE_SPECIFICS;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 
@@ -140,6 +145,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $field->foreign->field = 'store_id';
             $field->foreign->on_update = 'cascade';
             $field->foreign->on_delete = 'cascade';
+            $field->role = Mana_Db_Helper_Config::ROLE_STORE_SPECIFICS;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 
@@ -171,6 +177,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $field->foreign->field = 'id';
             $field->foreign->on_update = 'cascade';
             $field->foreign->on_delete = 'cascade';
+            $field->role = Mana_Db_Helper_Config::ROLE_GRID_EDITING;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 
@@ -179,6 +186,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $field = $scope->fields->$fieldName;
             $field->default_value = 0;
             $field->indexed = 1;
+            $field->role = Mana_Db_Helper_Config::ROLE_GRID_EDITING;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 
@@ -187,6 +195,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
             $field = $scope->fields->$fieldName;
             $field->default_value = 0;
             $field->indexed = 1;
+            $field->role = Mana_Db_Helper_Config::ROLE_GRID_EDITING;
             $configHelper->propagateName($field);
             $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
 

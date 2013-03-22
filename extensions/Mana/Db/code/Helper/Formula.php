@@ -13,6 +13,12 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
     protected $_orders;
     static $_types = array(
         'varchar' => 'string',
+        'mediumtext' => 'string',
+        'text' => 'string',
+        'tinyint' => 'int',
+        'smallint' => 'int',
+        'int' => 'int',
+        'bigint' => 'int',
     );
     static $_numericTypes = array(
         8 => 'tinyint',
@@ -28,14 +34,11 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
      * @return Varien_Db_Select
      */
     public function select($entity, $formulas) {
-        /* @var $res Mage_Core_Model_Resource */
-        $res = Mage::getSingleton('core/resource');
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
 
-        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
-        $db = $res->getConnection('read');
-
-        /* @var $select Varien_Db_Select */
-        $select = $db->select();
+        /* @var $resource Mana_Db_Resource_Formula */
+        $resource = Mage::getResourceSingleton('mana_db/formula');
 
         /* @var $selector Mana_Db_Helper_Formula_Selector */
         $selector = Mage::helper('mana_db/formula_selector');
@@ -47,32 +50,25 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
             ->setProcessor('entity')
             ->setHelper($selector);
 
+        $select = $context->getSelect()
+            ->from(array($context->registerAlias('primary') => $resource->getTable($dbHelper->getScopedName($entity))), null);
+
         // process formulas
         foreach ($this->_getFieldFormulas($context, $formulas) as $field) {
-            $context->setField($field);
-            if ($field->hasFormula()) {
-                $selector->selectFormula($context, $field->getFormula());
-            }
-            elseif ($field->hasValue()) {
-                $selector->selectValue($context, $field->getValue());
-            }
-            else {
-                $selector->selectDefaultValue($context, $field->getType());
+            if (!isset($field->role)) {
+                $context->setField($field);
+                if ($field->hasFormula()) {
+                    $selector->selectFormula($context, $field->getFormula());
+                }
+                elseif ($field->hasValue()) {
+                    $selector->selectValue($context, $field->getValue());
+                }
+                else {
+                    $selector->selectDefaultValue($context, $field->getType());
+                }
             }
         }
 
-        // generate SELECT statement
-        foreach ($context->getTables() as $table) {
-            $select->from(array($table->getAlias() => $table->getName()), null);
-            foreach ($table->getJoins() as $join) {
-                $joinMethod = $join->getMethod();
-                $select->$joinMethod(array($join->getAlias() => $join->getName()), $join->getCondition(), null);
-            }
-        }
-        $select->columns($context->getColumns());
-        foreach ($context->getParts() as $name => $part) {
-            $select->setPart($name, $part);
-        }
         return $select;
     }
 
@@ -225,7 +221,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
             }
         }
         $this->_orders = $orders;
-        uasort($result, array($this, '_sortByDependencyCallback'));
+        uasort($fields, array($this, '_sortByDependencyCallback'));
 
         return $this;
     }
@@ -246,14 +242,14 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
     public function getType($sqlType) {
         if (!isset($this->_typeCache[$sqlType])) {
             $type = trim(strtolower($sqlType));
-            $pos = null;
-            if (($foundPos = strpos($type, '(')) !== null) {
+            $pos = false;
+            if (($foundPos = strpos($type, '(')) !== false) {
                 $pos = $foundPos;
             }
-            if (($foundPos = strpos($type, ' ')) !== null) {
+            if (($foundPos = strpos($type, ' ')) !== false) {
                 $pos = $foundPos;
             }
-            if ($pos !== null) {
+            if ($pos !== false) {
                 $type = substr($type, 0, $pos);
             }
 

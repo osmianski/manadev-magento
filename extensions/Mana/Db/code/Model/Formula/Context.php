@@ -22,8 +22,15 @@
  * @method Mana_Db_Model_Formula_Context setIsAggregate(bool $value)
  * @method Mana_Db_Model_Formula_Context getParentContext()
  * @method Mana_Db_Model_Formula_Context setParentContext(Mana_Db_Model_Formula_Context $value)
+ * @method string getAlias()
+ * @method Mana_Db_Model_Formula_Context setAlias(string $value)
  */
 class Mana_Db_Model_Formula_Context extends Varien_Object {
+    /**
+     * @var Varien_Db_Select()
+     */
+    protected $_select;
+
     /**
      * @var Mana_Db_Model_Formula_Context_Table[]
      */
@@ -39,6 +46,8 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
      */
     protected $_parts = array();
 
+    protected $_aliases = array();
+
     /**
      * @param Mana_Db_Helper_Formula_Processor | string $processor
      * @return Mana_Db_Model_Formula_Context
@@ -53,81 +62,80 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
     }
 
     /**
-     * @return Mana_Db_Model_Formula_Context_Table[]
-     */
-    public function getTables() {
-        return $this->_tables;
-    }
-
-    /**
-     * @param string $name
-     * @return Mana_Db_Model_Formula_Context_Table|null
-     */
-    public function getTable($name) {
-        return isset($this->_tables[$name]) ? $this->_tables[$name] : null;
-    }
-
-    /**
-     * @param string $name
-     * @param Mana_Db_Model_Formula_Context_Table $value
      * @return Mana_Db_Model_Formula_Context
      */
-    public function addTable($name, $value) {
-        $value->setAlias($name);
-        $this->_tables[$name] = $value;
-        return $this;
+    public function getChildContext() {
+        /* @var $result Mana_Db_Model_Formula_Context */
+        $result = Mage::getModel('mana_db/formula_context');
+        return $result
+            ->setHelper($this->getHelper())
+            ->setParentContext($this);
     }
 
     /**
-     * @return string[]
-     */
-    public function getColumns() {
-        return $this->_columns;
-    }
-
-    /**
-     * @param string $name
-     * @return string|Zend_Db_Expr
-     */
-    public function getColumn($name) {
-        return isset($this->_columns[$name]) ? $this->_columns[$name] : null;
-    }
-
-    /**
-     * @param string $name
-     * @param string|Zend_Db_Expr $expression
      * @return Mana_Db_Model_Formula_Context
      */
-    public function addColumn($name, $expression) {
-        $this->_columns[$name] = $expression;
-
-        return $this;
+    public function getTopContext() {
+        for ($result = $this; $result->getParentContext() != null; $result = $result->getParentContext());
+        return $result;
     }
 
     /**
-     * @return array
-     */
-    public function getParts() {
-        return $this->_parts;
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getPart($name) {
-        return isset($this->_parts[$name]) ? $this->_parts[$name] : null;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
      * @return Mana_Db_Model_Formula_Context
      */
-    public function setPart($name, $value) {
-        $this->_parts[$name] = $value;
+    public function getSelectContext() {
+        for ($result = $this->getParentContext(); $result && !$result->getIsAggregate(); $result = $result->getParentContext()) ;
 
-        return $this;
+        return $result;
     }
 
+    public function registerAlias($alias) {
+        if (!isset($this->_aliases[$alias])) {
+            $letter = substr($alias, 0, 1);
+            if ($parentContext = $this->getSelectContext()) {
+                $letter = $parentContext->registerAlias($parentContext->getAlias()).$letter;
+            }
+            for ($i = 1, $result = $letter; in_array($result, $this->_aliases); $i++, $result = $letter . $i) ;
+            $this->_aliases[$alias] = $result;
+        }
+        return $this->_aliases[$alias];
+    }
+
+    public function resolveAliases($expr) {
+        return preg_replace_callback('/{{=(.*)}}/', array($this, '_resolveAlias'), $expr);
+    }
+
+    protected function _resolveAlias($matches) {
+        return $this->resolveAlias($matches[1]);
+    }
+
+    public function resolveAlias($fieldExpr) {
+        $fieldExpr = explode('.', $fieldExpr);
+        foreach ($fieldExpr as $index => $field) {
+            $fieldExpr[$index] = trim($field);
+        }
+        if ($fieldExpr[0] == 'parent') {
+            $this->getSelectContext()->_resolveAlias(implode('.', array_slice($fieldExpr, 1)));
+        }
+        elseif (count($fieldExpr) == 2) {
+            list($alias, $field) = $fieldExpr;
+            return "`{$this->registerAlias($alias)}`.`$field`";
+        }
+        else {
+            throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("Field expression '%s' is expected to be in [alias].[field] format", implode('.', $fieldExpr)));
+        }
+    }
+
+    /**
+     * @return Varien_Db_Select
+     */
+    public function getSelect() {
+        if (!$this->_select) {
+            /* @var $resource Mana_Db_Resource_Formula */
+            $resource = Mage::getResourceSingleton('mana_db/formula');
+
+            $this->_select = $resource->select();
+        }
+        return $this->_select;
+    }
 }

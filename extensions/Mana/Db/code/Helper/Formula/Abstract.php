@@ -34,7 +34,7 @@ class Mana_Db_Helper_Formula_Abstract extends Mage_Core_Helper_Abstract {
      * @param string $type
      * @return Mana_Db_Model_Formula_TypedExpr
      */
-    public function cast($expr, $type = '') {
+    public function cast($expr, $type) {
         return $expr;
     }
 
@@ -68,6 +68,6 @@ class Mana_Db_Helper_Formula_Abstract extends Mage_Core_Helper_Abstract {
      * @return Mana_Db_Helper_Formula_Function
      */
     public function getFunction($name) {
-        return Mage::helper('mana_db/formula_function_' . lcfirst(uc_words(strtolower($name)), ''));
+        return Mage::helper('mana_db/formula_function_' . lcfirst(uc_words(strtolower($name), '')));
     }
 }

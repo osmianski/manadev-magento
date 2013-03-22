@@ -38,7 +38,6 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     const ADD = 12;
     const SUBTRACT = 13;
     const EOF = 14;
-    const WHITESPACE = 15;
 
     static $_tokens = array(
         self::OPEN_PAR => '(',
@@ -58,6 +57,7 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     static $_numeric = '0123456789';
     static $_firstIdentifierSymbol = '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     static $_nextIdentifierSymbol = '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    static $_whitespace = " \t\r\n";
     protected $_formula;
     protected $_pos;
     protected $_token;
@@ -70,13 +70,14 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
         $parts = array();
         $fromPos = 0;
         for ($pos = strpos($formula, self::$_tokens[self::OPEN_FORMULA]); $pos !== false;
-            $pos = strpos($formula, self::$_tokens[self::OPEN_FORMULA], $fromPos + 2))
+            $pos = strpos($formula, self::$_tokens[self::OPEN_FORMULA], $fromPos))
         {
             if ($fromPos < $pos) {
                 $parts[] = $this->_parseString(substr($formula, $fromPos, $pos - $fromPos));
             }
-            if (($fromPos = strpos($formula, self::$_tokens[self::CLOSE_FORMULA], $pos + 3)) !== false) {
-                $parts[] = $this->parseFormula(substr($formula, $pos + 3, $fromPos - ($pos + 3)));
+            if (($fromPos = strpos($formula, self::$_tokens[self::CLOSE_FORMULA], $pos + strlen(self::$_tokens[self::OPEN_FORMULA]))) !== false) {
+                $parts[] = $this->parseFormula(substr($formula, $pos + strlen(self::$_tokens[self::OPEN_FORMULA]), $fromPos - ($pos + 3)));
+                $fromPos += strlen(self::$_tokens[self::CLOSE_FORMULA]);
             }
             else {
                 $this->_error(self::CLOSE_FORMULA);
@@ -154,22 +155,22 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
             return $result;
         }
         elseif ($this->_token->kind == self::STRING) {
-            return new Mana_Db_Model_Formula_Node_StringConstant(array('value' => $this->_token->text));
+            $result = new Mana_Db_Model_Formula_Node_StringConstant(array('value' => $this->_token->text));
+            $this->_scan();
+            return $result;
         }
         elseif ($this->_token->kind == self::NUMBER) {
-            return new Mana_Db_Model_Formula_Node_NumberConstant(array('value' => $this->_token->text));
+            $result = new Mana_Db_Model_Formula_Node_NumberConstant(array('value' => $this->_token->text));
+            $this->_scan();
+            return $result;
         }
         elseif ($this->_token->kind == self::IDENTIFIER) {
             $identifier = $this->_token->text;
             $this->_scan();
             if ($this->_token->kind == self::DOT) {
-                $this->_scan();
-
                 return $this->_parseField($identifier);
             }
             elseif ($this->_token->kind == self::OPEN_PAR) {
-                $this->_scan();
-
                 return $this->_parseFunction($identifier);
             }
             else {
@@ -186,9 +187,9 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
         $identifiers = array($identifier);
 
         while ($this->_token->kind == self::DOT) {
-            $this->_expect(self::IDENTIFIER);
-            $identifiers[] = $this->_token->text;
             $this->_scan();
+            $identifiers[] = $this->_token->text;
+            $this->_expect(self::IDENTIFIER);
         }
 
         return new Mana_Db_Model_Formula_Node_Field(compact('identifiers'));
@@ -200,6 +201,7 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
         $this->_expect(self::OPEN_PAR);
 
         if ($this->_token->kind != self::CLOSE_PAR) {
+            $args[] = $this->_parseExpr();
             while ($this->_token->kind == self::COMMA) {
                 $this->_scan();
                 $args[] = $this->_parseExpr();
@@ -212,10 +214,10 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     }
 
     protected function _expect($tokenKind) {
-        $this->_scan();
         if ($this->_token->kind != $tokenKind) {
             $this->_error($tokenKind);
         }
+        $this->_scan();
     }
 
     /**
@@ -248,12 +250,8 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     }
 
     protected function _scan() {
-        $token = $this->_internalScan();
-        while ($token->kind == self::WHITESPACE) {
-            $token = $this->_internalScan();
-        }
         $this->_token = $this->_peek(1);
-        $this->_pos = $token->pos + $token->length;
+        $this->_pos = $this->_token->pos + $this->_token->length;
     }
 
     protected function _peek($count = 1) {
@@ -261,10 +259,6 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
         for ($pos = $this->_pos, $i = 0; $i < $count; $i++) {
             $token = $this->_internalScan($pos);
             $pos = $token->pos + $token->length;
-            while ($token->kind == self::WHITESPACE) {
-                $token = $this->_internalScan();
-                $pos = $token->pos + $token->length;
-            }
         }
         return $token;
     }
@@ -272,14 +266,25 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
     protected function _internalScan($pos = false) {
         $kind = 0;
         $text = '';
-        if ($pos === false) {
-            $pos = $this->_pos;
-        }
-        $newPos = $this->_pos;
         $formulaLength = strlen($this->_formula);
         $state = 0;
         $unexpectedEof = false;
         $found = false;
+
+        if ($pos === false) {
+            $pos = $this->_pos;
+        }
+        $whitespacePos = $pos;
+        while ($pos < $formulaLength) {
+            $ch = substr($this->_formula, $whitespacePos++, 1);
+            if (strpos(self::$_whitespace, $ch) !== false) {
+                $pos++;
+            }
+            else {
+                break;
+            }
+        }
+        $newPos = $pos;
 
         while (!$found) {
             if ($newPos < $formulaLength) {
@@ -289,6 +294,7 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
                 throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__('Unexpected end of formula'));
             }
             else {
+                $newPos++;
                 if ($kind === 0) {
                     $kind = self::EOF;
                 }
@@ -312,10 +318,11 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
                     }
                     else {
                         foreach (self::$_tokens as $k => $v) {
-                            if (substr($this->_formula, $v, $pos) === $pos) {
+                            if ($k != self::OPEN_FORMULA && $k != self::CLOSE_FORMULA && strpos($this->_formula, $v, $pos) === $pos) {
                                 $kind = $k;
                                 $text = $v;
                                 $found = true;
+                                $newPos++;
                                 break;
                             }
                         }
@@ -329,6 +336,7 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
                         $state = 2;
                     }
                     elseif ($ch == '\'') {
+                        $newPos++;
                         $found = true;
                     }
                     else {
@@ -360,7 +368,7 @@ class Mana_Db_Helper_Formula_Parser extends Mage_Core_Helper_Abstract {
             }
         }
 
-        $length = $newPos - $pos;
+        $length = $newPos - $pos - 1;
 
         if (!$text && $length) {
             $text = substr($this->_formula, $pos, $length);
