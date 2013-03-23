@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config>
+    <name>m-base/default</name>
+    <!-- server-side directories go to app/design -->
+    <sync extension-dir="layout" project-dir="app/design/frontend/{Extension/Name}/layout"/>
+    <sync extension-dir="template" project-dir="app/design/frontend/{Extension/Name}/template"/>
+    <sync extension-dir="etc" project-dir="app/design/frontend/{Extension/Name}/etc"/>
+    <sync extension-dir="locale" project-dir="app/design/frontend/{Extension/Name}/locale"/>
+
+    <!-- client-side directories go to skin -->
+    <sync extension-dir="css" project-dir="skin/frontend/{Extension/Name}/css"/>
+    <sync extension-dir="images" project-dir="skin/frontend/{Extension/Name}/images"/>
+    <sync extension-dir="js" project-dir="skin/frontend/{Extension/Name}/js"/>
+
+    <sync extension-file="favicon.ico" project-file="skin/frontend/{Extension/Name}/favicon.ico"/>
+</config>

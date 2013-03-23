@@ -60,7 +60,13 @@
             <mana_theme>
                 <class>Mana_Theme_Model</class>
                 <!-- INSERT HERE: resource section name -->
+
             </mana_theme>
+            <core>
+                <rewrite>
+                    <design_package>Mana_Theme_Model_Design_Package</design_package>
+                </rewrite>
+            </core>
             <!-- INSERT HERE: rewrites, ... -->
         </models>
     </global>
