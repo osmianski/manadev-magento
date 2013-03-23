@@ -42,7 +42,7 @@
 <?php if(!$_productCollection->count()): ?>
 <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
 <?php else: ?>
-<div class="category-products  <?php echo $_theme->getCssClass($this, 'show_in_grid/css') ?>">
+<div class="category-products mb-category-products <?php echo $_theme->getCssClass($this, 'show_in_grid/css') ?> " data-m-block="Mana/Theme/Grid" data-param="value">
     <?php
         $_toolbarTemplate = $this->getToolbarBlock()->getTemplate();
         $this->getToolbarBlock()->setTemplate(str_replace('toolbar.phtml', 'toolbar_top.phtml', $_toolbarTemplate));
