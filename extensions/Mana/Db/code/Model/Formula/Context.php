@@ -7,6 +7,10 @@
  */
 /**
  * @author Mana Team
+ * @method string getMode()
+ * @method Mana_Db_Model_Formula_Context setMode(string $value)
+ * @method string getPrefix()
+ * @method Mana_Db_Model_Formula_Context setPrefix(string $value)
  * @method string getEntity()
  * @method Mana_Db_Model_Formula_Context setEntity(string $value)
  * @method Mage_Core_Model_Abstract getModel()
@@ -22,6 +26,8 @@
  * @method Mana_Db_Model_Formula_Context setIsAggregate(bool $value)
  * @method Mana_Db_Model_Formula_Context getParentContext()
  * @method Mana_Db_Model_Formula_Context setParentContext(Mana_Db_Model_Formula_Context $value)
+ * @method Mana_Db_Model_Formula_Context getAggregateContext()
+ * @method Mana_Db_Model_Formula_Context setAggregateContext(Mana_Db_Model_Formula_Context $value)
  * @method string getAlias()
  * @method Mana_Db_Model_Formula_Context setAlias(string $value)
  */
@@ -31,23 +37,15 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
      */
     protected $_select;
 
-    /**
-     * @var Mana_Db_Model_Formula_Context_Table[]
-     */
-    protected $_tables = array();
-
-    /**
-     * @var string[]
-     */
-    protected $_columns = array();
-
-    /**
-     * @var array
-     */
-    protected $_parts = array();
-
     protected $_aliases = array();
 
+    static protected $_quoteFieldsAndEntities;
+    /**
+     * @return Mana_Db_Helper_Formula_Entity
+     */
+    public function getEntityHelper() {
+        return Mage::helper('mana_db/formula_entity_' . ($this->getMode() ? $this->getMode() : 'normal'));
+    }
     /**
      * @param Mana_Db_Helper_Formula_Processor | string $processor
      * @return Mana_Db_Model_Formula_Context
@@ -64,7 +62,7 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
     /**
      * @return Mana_Db_Model_Formula_Context
      */
-    public function getChildContext() {
+    public function createChildContext() {
         /* @var $result Mana_Db_Model_Formula_Context */
         $result = Mage::getModel('mana_db/formula_context');
         return $result
@@ -72,37 +70,18 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
             ->setParentContext($this);
     }
 
-    /**
-     * @return Mana_Db_Model_Formula_Context
-     */
-    public function getTopContext() {
-        for ($result = $this; $result->getParentContext() != null; $result = $result->getParentContext());
-        return $result;
-    }
-
-    /**
-     * @return Mana_Db_Model_Formula_Context
-     */
-    public function getSelectContext() {
-        for ($result = $this->getParentContext(); $result && !$result->getIsAggregate(); $result = $result->getParentContext()) ;
-
-        return $result;
-    }
-
     public function registerAlias($alias) {
         if (!isset($this->_aliases[$alias])) {
-            $letter = substr($alias, 0, 1);
-            if ($parentContext = $this->getSelectContext()) {
-                $letter = $parentContext->registerAlias($parentContext->getAlias()).$letter;
-            }
+            $letter = $this->getPrefix().substr($alias, 0, 1);
             for ($i = 1, $result = $letter; in_array($result, $this->_aliases); $i++, $result = $letter . $i) ;
             $this->_aliases[$alias] = $result;
         }
         return $this->_aliases[$alias];
     }
 
-    public function resolveAliases($expr) {
-        return preg_replace_callback('/{{=(.*)}}/', array($this, '_resolveAlias'), $expr);
+    public function resolveAliases($expr, $quoteFieldsAndEntities = true) {
+        self::$_quoteFieldsAndEntities = $quoteFieldsAndEntities;
+        return preg_replace_callback('/{{=([^}]*)}}/', array($this, '_resolveAlias'), $expr);
     }
 
     protected function _resolveAlias($matches) {
@@ -115,11 +94,16 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
             $fieldExpr[$index] = trim($field);
         }
         if ($fieldExpr[0] == 'parent') {
-            $this->getSelectContext()->_resolveAlias(implode('.', array_slice($fieldExpr, 1)));
+            return $this->getParentContext()->resolveAlias(implode('.', array_slice($fieldExpr, 1)));
         }
         elseif (count($fieldExpr) == 2) {
             list($alias, $field) = $fieldExpr;
-            return "`{$this->registerAlias($alias)}`.`$field`";
+            if (self::$_quoteFieldsAndEntities) {
+                return "`{$this->registerAlias($alias)}`.`$field`";
+            }
+            else {
+                return "{$this->registerAlias($alias)}.$field";
+            }
         }
         else {
             throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("Field expression '%s' is expected to be in [alias].[field] format", implode('.', $fieldExpr)));
@@ -138,4 +122,18 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
         }
         return $this->_select;
     }
+
+    public function incrementPrefix() {
+        $prefix = $this->getPrefix() . $this->registerAlias($this->getAlias());
+        $this->setPrefix($prefix);
+        return $prefix;
+    }
+
+    public function decrementPrefix() {
+        $prefix = substr($this->getPrefix(), 0, strlen($this->getPrefix()) - strlen($this->registerAlias($this->getAlias())));
+        $this->setPrefix($prefix);
+
+        return $prefix;
+    }
+
 }

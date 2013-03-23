@@ -13,7 +13,7 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param string $field
-     * @return Mana_Db_Model_Formula_TypedExpr | bool
+     * @return Mana_Db_Model_Formula_Expr | bool
      */
     public function selectField($context, $field) {
         if ($result = parent::selectField($context, $field)) {
@@ -35,9 +35,8 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
                 $alias = 'primary';
             }
             return $context->getHelper()->expr()
-                ->setExpr("`$alias`.`$field`")
-                ->setType((string)$fieldsXml->$field->type)
-                ->setIsAggregate($context->getIsAggregate());
+                ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setType((string)$fieldsXml->$field->type);
         }
         else {
             return false;
@@ -47,11 +46,11 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param string $entity
-     * @return Mana_Db_Model_Formula_Context | bool
+     * @return Mana_Db_Model_Formula_Entity | bool
      */
     public function selectEntity($context, $entity) {
-        if ($result = parent::selectEntity($context, $entity)) {
-            return $result;
+        if ($aggregateContext = parent::selectEntity($context, $entity)) {
+            return $aggregateContext;
         }
 
         /* @var $dbConfig Mana_Db_Helper_Config */
@@ -61,62 +60,20 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
         /** @noinspection PhpUndefinedFieldInspection */
         $aggregateXml = $dbConfig->getScopeXml($context->getEntity())->formula->aggregate;
         if (isset($aggregateXml->$entity)) {
-            /* @var $dbHelper Mana_Db_Helper_Data */
-            $dbHelper = Mage::helper('mana_db');
+            /* @var $entityXml Varien_Simplexml_Element */
+            /** @noinspection PhpUndefinedFieldInspection */
+            $entityXml = $aggregateXml->$entity;
 
-            /* @var $resource Mana_Db_Resource_Formula */
-            $resource = Mage::getResourceSingleton('mana_db/formula');
+            /* @var $result Mana_Db_Model_Formula_Entity */
+            $result = Mage::getModel('mana_db/formula_entity');
 
-            $alias = $entity;
-            $entity = (string)$aggregateXml->$entity->entity;
-            $processor = $this->getProcessor($entity);
-
-            $result = $context->getChildContext()
-                ->setEntity($entity)
-                ->setProcessor($processor)
-                ->setIsAggregate(true);
-
-            $select = $result->getSelect()
-                ->from(array($result->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName($entity))), null);
-
-            if (isset($aggregateXml->join)) {
-                foreach ($aggregateXml->join as $alias => $joinXml) {
-                    $join = isset($joinXml->type) ? 'join'.ucfirst((string)$joinXml->type) : 'joinInner';
-                    $select->$join(
-                        array($result->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName((string)$joinXml->entity))),
-                        $result->resolveAliases((string)$joinXml->on),
-                        null
-                    );
-                }
-            }
-            if (isset($aggregateXml->order)) {
-                $select->order($result->resolveAliases((string)$aggregateXml->order));
-            }
-            if (isset($aggregateXml->where)) {
-                $select->where($result->resolveAliases((string)$aggregateXml->where));
-            }
-
-            return $result;
+            return $result
+                ->setHelper('aggregate')
+                ->setAlias($entity)
+                ->setProcessor($this->getProcessor((string)$entityXml->entity))
+                ->addData($entityXml->asArray());
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
-
-    /**
-     * @return Varien_Db_Select
-     */
-    public function getAggregateSql($aggregateContext) {
-        /* @var $res Mage_Core_Model_Resource */
-        $res = Mage::getSingleton('core/resource');
-
-        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
-        $db = $res->getConnection('read');
-
-        $sql = $db->select();
-
-
-        return $sql;
-    }
-
 }

@@ -7,28 +7,43 @@
  */
 /**
  * @author Mana Team
- * @method string getName()
- * @method Mana_Db_Model_Formula_Entity setName(string $value)
- * @method int getSortOrder()
- * @method Mana_Db_Model_Formula_Entity setSortOrder(int $value)
+ * @method Mana_Db_Helper_Formula_Entity getHelper()
+ * @method string getAlias()
+ * @method Mana_Db_Model_Formula_Entity setAlias(string $value)
  * @method string getEntity()
  * @method Mana_Db_Model_Formula_Entity setEntity(string $value)
+ * @method string[] | bool getJoin()
+ * @method Mana_Db_Model_Formula_Entity setJoin(array $value)
+ * @method string getOrder()
+ * @method Mana_Db_Model_Formula_Entity setOrder(string $value)
+ * @method string getWhere()
+ * @method Mana_Db_Model_Formula_Entity setWhere(string $value)
+ * @method Mana_Db_Helper_Formula_Processor getProcessor()
  */
 class Mana_Db_Model_Formula_Entity extends Varien_Object {
-    public function getXml() {
-        /* @var $dbConfig Mana_Db_Helper_Config */
-        $dbConfig = Mage::helper('mana_db/config');
+    /**
+     * @param Mana_Db_Helper_Formula_Entity | string $entity
+     * @return Mana_Db_Model_Formula_Entity
+     */
+    public function setHelper($entity) {
+        if (is_string($entity)) {
+            $entity = Mage::helper('mana_db/formula_entity_' . $entity);
+        }
+        $this->setData('helper', $entity);
 
-        return $dbConfig->getScopeXml($this->getEntity());
+        return $this;
     }
 
-    public function getTableName() {
-        /* @var $db Mana_Db_Helper_Data */
-        $db = Mage::helper('mana_db');
+    /**
+     * @param Mana_Db_Helper_Formula_Processor | string $processor
+     * @return Mana_Db_Model_Formula_Entity
+     */
+    public function setProcessor($processor) {
+        if (is_string($processor)) {
+            $processor = Mage::helper('mana_db/formula_processor_' . $processor);
+        }
+        $this->setData('processor', $processor);
 
-        /* @var $res Mage_Core_Model_Resource */
-        $res = Mage::getSingleton('core/resource');
-
-        return $res->getTableName($db->getScopedName($this->getEntity()));
+        return $this;
     }
 }

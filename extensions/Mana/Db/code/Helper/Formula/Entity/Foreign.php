@@ -9,5 +9,5 @@
  * @author Mana Team
  *
  */
-class Mana_Db_Model_Formula_EntityResolver_Table extends Mana_Db_Model_Formula_EntityResolver {
+class Mana_Db_Helper_Formula_Entity_Foreign extends Mana_Db_Helper_Formula_Entity {
 }

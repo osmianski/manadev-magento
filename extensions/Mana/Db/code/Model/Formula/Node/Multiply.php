@@ -10,8 +10,8 @@
  *
  */
 class Mana_Db_Model_Formula_Node_Multiply extends Mana_Db_Model_Formula_Node  {
-    const MULTIPLY = Mana_Db_Model_Formula_Parser::MULTIPLY;
-    const DIVIDE = Mana_Db_Model_Formula_Parser::DIVIDE;
+    const MULTIPLY = Mana_Db_Helper_Formula_Parser::MULTIPLY;
+    const DIVIDE = Mana_Db_Helper_Formula_Parser::DIVIDE;
 
     /**
      * @var int

@@ -13,15 +13,12 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
     protected $_methodPrefix = '_select';
 
     /**
-     * @param Mana_Db_Model_Formula_TypedExpr $expr
+     * @param Mana_Db_Model_Formula_Expr $expr
      * @param string $type
      * @throws Mana_Db_Exception_Formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     public function cast($expr, $type) {
-        if ($expr->getIsAggregate()) {
-            throw new Mana_Db_Exception_Formula($this->__("You can only use aggregate function on aggregate fields"));
-        }
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
@@ -42,8 +39,8 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
     }
 
     /**
-     * @param Mana_Db_Model_Formula_TypedExpr $expr1
-     * @param Mana_Db_Model_Formula_TypedExpr $expr2
+     * @param Mana_Db_Model_Formula_Expr $expr1
+     * @param Mana_Db_Model_Formula_Expr $expr2
      */
     public function binaryCast(&$expr1, &$expr2) {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
@@ -63,14 +60,14 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
-        $typedExpr = $this->cast($this->_select($context, $formula), $formulaHelper->getType($context->getField()->getType()));
-        $context->getSelect()->columns("{$typedExpr->getExpr()} AS {$context->getField()->getName()}");
+        $expr = $this->cast($this->_select($context, $formula), $formulaHelper->getType($context->getField()->getType()));
+        $context->getSelect()->columns("{$expr->getExpr()} AS {$context->getField()->getName()}");
     }
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _select(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
         return $this->_call(func_get_args());
@@ -95,9 +92,8 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
-     * @param string $type
      */
-    public function selectDefaultValue($context, $type) {
+    public function selectDefaultValue($context) {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
@@ -114,7 +110,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Node_Add $formula
      * @throws Mana_Db_Exception_Formula
      * @throws Exception
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectAdd($context, $formula) {
         if ($context->getIsAggregate()) {
@@ -150,42 +146,84 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * Converts parsed field expression $formula into SQL column expression. If needed, introduces new joins in current
      * SELECT.
      *
-     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Context $originalContext
      * @param Mana_Db_Model_Formula_Node_Field $formula
      * @throws Mana_Db_Exception_Formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      *
      * Field expression looks like "a.b.c.d".
      *
      * The last identifier is field name (in case of system configuration fields field
      * name consists of 3 last identifiers "b.c.d").
      *
-     * All the identifiers before field name ("a.b.c") are entity names. Each of them is either foreign entities or
-     * aggregate entities.
+     * All the identifiers before field name ("a.b.c") are entity names. Each of them is either foreign entities,
+     * frontend entities or aggregate entities:
+     *    * foreign entity example: catalog/product for sales/order_item. For foreign entity LEFT or INNER JOIN is added based on
+     *      foreign key and primary key relationship and column using that foreign key is added.
+     *    * aggregate entity example sales/order_item for sales/order. Fields from aggregate entities are returned to
+     *      parent formula node which is expected to be an aggregate formula such as GLUE, SUM, MAX. In final SQL aggregate
+     *      fields appear as sub selects, so sub select object is returned for aggregate field as well.
+     *    * frontend entity example: catalog/category for mana_attributepage/page (in database there is no relation to
+     *      frontend entity, but it is known when calculated in frontend, typically from Mage::registry()). Such entities
+     *      are left unprocessed (with type = 'formula,int' or 'formula,string') and are only processed before displaying
+     *      data in frontend. Frontend entities can appear in identifier chain in first position only.
      *
-     * Foreign entity example is
+     * How these entity types behave in identifier chain:
+     *    * foreign entity:
+     *        * no aggregate or frontend entity met: adds JOIN to main SELECT and changes current entity in main context
+     *        * inside aggregate, no frontend entity met: adds JOIN to aggregate SUBSELECT and changes current entity in
+     *          subselect context
+     *        * inside frontend entity: changes current entity in main context
+     *    * aggregate entity:
+     *        * no frontend entity met: creates aggregate context to collect aggregate subselect
+     *        * inside frontend entity: changes current entity in main context
+     *    * frontend entity: sets a flag for processing frontend entity
      */
-    protected function _selectField($context, $formula) {
-        foreach ($formula->identifiers as $index => $identifier) {
-            if ($result = $context->getProcessor()->selectField($context, implode('.', array_slice($formula->identifiers, $index)))) {
+    protected function _selectField($originalContext, $formula) {
+        $context = clone $originalContext;
+        return $this->_selectFieldRecursively($context, $formula, 0);
+    }
+
+    /**
+     * Converts parsed field expression $formula into SQL column expression. If needed, introduces new joins in current
+     * SELECT.
+     *
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Node_Field $formula
+     * @param int $index
+     * @throws Mana_Db_Exception_Formula
+     * @return Mana_Db_Model_Formula_Expr
+     */
+    protected function _selectFieldRecursively($context, $formula, $index) {
+        $processor = $context->getProcessor();
+        if (isset($formula->identifiers[$index])) {
+            $identifier = $formula->identifiers[$index];
+        }
+        else {
+            throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("'%s' is entity, but field expected", implode('.', $formula->identifiers)));
+        }
+
+        if ($result = $processor->selectField($context, implode('.', array_slice($formula->identifiers, $index)))) {
+            $context->getEntityHelper()->selectField($context, $result);
+            return $result;
+        }
+        else {
+            if ($entity = $processor->selectEntity($context, $identifier)) {
+                $entity->getHelper()->select($context, $entity);
+                $result = $this->_selectFieldRecursively($context, $formula, ++$index);
+                $entity->getHelper()->endSelect($context, $entity);
                 return $result;
             }
             else {
-                if (!$context->getIsAggregate() && ($newContext = $context->getProcessor()->selectEntity($context, $identifier))) {
-                    $context = $newContext;
-                }
-                else {
-                    throw new Mana_Db_Exception_Formula($this->__("Unknown field or entity '%s'", $identifier));
-                }
+                throw new Mana_Db_Exception_Formula($this->__("Unknown field or entity '%s'", $identifier));
             }
         }
-        throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("'%s' is entity, but field expected", implode('.', $formula->identifiers)));
     }
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node_FormulaExpr $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectFormulaExpr($context, $formula) {
         $parts = array();
@@ -199,7 +237,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node_FunctionCall $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectFunctionCall($context, $formula) {
         $args = array();
@@ -214,7 +252,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node_Identifier $formula
      * @throws Mana_Db_Exception_Formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectIdentifier($context, $formula) {
         if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
@@ -230,7 +268,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Node_Multiply $formula
      * @throws Mana_Db_Exception_Formula
      * @throws Exception
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectMultiply($context, $formula) {
         if ($context->getIsAggregate()) {
@@ -265,7 +303,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node_NullValue $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectNullValue(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
@@ -284,7 +322,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node_NumberConstant $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectNumberConstant(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
@@ -295,8 +333,8 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
-     * @param Mana_Db_Model_Formula_Node $formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @param Mana_Db_Model_Formula_Node_StringConstant $formula
+     * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectStringConstant(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
         return $this->expr()->setExpr("'{$formula->value}'")->setType('varchar(255)');

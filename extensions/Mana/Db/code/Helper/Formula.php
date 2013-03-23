@@ -46,6 +46,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         /* @var $context Mana_Db_Model_Formula_Context */
         $context = Mage::getModel('mana_db/formula_context');
         $context
+            ->setAlias('primary')
             ->setEntity($entity)
             ->setProcessor('entity')
             ->setHelper($selector);
@@ -64,7 +65,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
                     $selector->selectValue($context, $field->getValue());
                 }
                 else {
-                    $selector->selectDefaultValue($context, $field->getType());
+                    $selector->selectDefaultValue($context);
                 }
             }
         }

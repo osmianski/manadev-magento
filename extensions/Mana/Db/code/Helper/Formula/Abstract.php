@@ -14,25 +14,25 @@ class Mana_Db_Helper_Formula_Abstract extends Mage_Core_Helper_Abstract {
     protected $_methodPrefix = '';
 
     /**
-     * @var Mana_Db_Model_Formula_TypedExpr
+     * @var Mana_Db_Model_Formula_Expr
      */
     protected $_exprPrototype;
 
     public function __construct() {
-        $this->_exprPrototype = Mage::getModel('mana_db/formula_typedExpr');
+        $this->_exprPrototype = Mage::getModel('mana_db/formula_expr');
     }
 
     /**
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     public function expr() {
         return clone $this->_exprPrototype;
     }
 
     /**
-     * @param Mana_Db_Model_Formula_TypedExpr $expr
+     * @param Mana_Db_Model_Formula_Expr $expr
      * @param string $type
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     public function cast($expr, $type) {
         return $expr;

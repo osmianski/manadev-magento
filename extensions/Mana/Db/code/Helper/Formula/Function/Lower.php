@@ -12,9 +12,9 @@
 class Mana_Db_Helper_Formula_Function_Lower extends Mana_Db_Helper_Formula_Function {
     /**
      * @param Mana_Db_Model_Formula_Context $context
-     * @param Mana_Db_Model_Formula_TypedExpr[] $args
+     * @param Mana_Db_Model_Formula_Expr[] $args
      * @throws Mana_Db_Exception_Formula
-     * @return Mana_Db_Model_Formula_TypedExpr
+     * @return Mana_Db_Model_Formula_Expr
      */
     public function select($context, $args) {
         if (count($args) != 1) {

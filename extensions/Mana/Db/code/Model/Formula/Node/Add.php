@@ -10,8 +10,8 @@
  *
  */
 class Mana_Db_Model_Formula_Node_Add  extends Mana_Db_Model_Formula_Node {
-    const ADD = Mana_Db_Model_Formula_Parser::ADD;
-    const SUBTRACT = Mana_Db_Model_Formula_Parser::SUBTRACT;
+    const ADD = Mana_Db_Helper_Formula_Parser::ADD;
+    const SUBTRACT = Mana_Db_Helper_Formula_Parser::SUBTRACT;
 
     /**
      * @var int

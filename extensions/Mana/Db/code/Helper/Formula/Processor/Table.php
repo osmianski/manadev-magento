@@ -13,7 +13,7 @@ class Mana_Db_Helper_Formula_Processor_Table extends Mana_Db_Helper_Formula_Proc
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param string $field
-     * @return Mana_Db_Model_Formula_TypedExpr | bool
+     * @return Mana_Db_Model_Formula_Expr | bool
      */
     public function selectField($context, $field) {
         if ($result = parent::selectField($context, $field)) {
@@ -31,9 +31,8 @@ class Mana_Db_Helper_Formula_Processor_Table extends Mana_Db_Helper_Formula_Proc
             }
 
             return $context->getHelper()->expr()
-                ->setExpr("`$alias`.`$field`")
-                ->setType($fields[$field]['DATA_TYPE'])
-                ->setIsAggregate($context->getIsAggregate());
+                ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setType($fields[$field]['DATA_TYPE']);
         }
         else {
             return false;

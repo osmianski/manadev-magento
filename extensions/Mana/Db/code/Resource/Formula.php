@@ -19,7 +19,7 @@ class Mana_Db_Resource_Formula extends Mage_Core_Model_Mysql4_Abstract {
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
-     * @param Mana_Db_Model_Formula_TypedExpr $expr
+     * @param Mana_Db_Model_Formula_Expr $expr
      * @return Varien_Db_Select
      */
     public function getAggregateSubSelect($context, $expr) {
