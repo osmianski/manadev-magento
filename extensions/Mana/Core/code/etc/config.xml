@@ -136,7 +136,37 @@
                     </mana_core>
                 </observers>
             </controller_action_layout_render_before>
-		</events>
+            <controller_action_layout_generate_blocks_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processJsCssFiles</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_action_layout_generate_blocks_before>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addClientSideBlockMarkup</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core_require>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderRequireSettings</method>
+                        <!-- event handler method name -->
+                    </mana_core_require>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
 		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
@@ -202,12 +232,36 @@
 		</layout>
 		<!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
+	<mana_core>
+        <js>
+            <require module="mana_core">
+                <type>library</type>
+                <skinnable>0</skinnable>
+                <full_path>jquery/require.js</full_path>
+                <minified_path>jquery/require.min.js</minified_path>
+                <sort_order>50</sort_order>
+            </require>
+            <jquery module="mana_core">
+                <type>library</type>
+                <skinnable>0</skinnable>
+                <full_path>jquery/jquery.js</full_path>
+                <minified_path>jquery/jquery.min.js</minified_path>
+                <sort_order>100</sort_order>
+            </jquery>
+        </js>
+	</mana_core>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
-	<default>
+    <default>
         <mana_dev>
             <debug>
                 <jquery_min>1</jquery_min>
             </debug>
         </mana_dev>
+        <mana>
+            <js>
+                <require>min_ondemand</require>
+                <jquery>min_ondemand</jquery>
+            </js>
+        </mana>
 	</default>
 </config>

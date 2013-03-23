@@ -12,6 +12,15 @@
  *
  */
 class Mana_Core_Block_Js extends Mage_Core_Block_Template {
+    protected $_config = array();
+
+    public function setConfig($key, $value) {
+        $this->_config[$key] = $value;
+        return $this;
+    }
+    public function getConfig() {
+        return $this->_config;
+    }
 	/**
 	 * Contains all the translations registered to be passed to client-side scripts
 	 * @var array | null

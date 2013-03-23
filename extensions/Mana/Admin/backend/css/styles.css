@@ -50,3 +50,12 @@ td div.input-color { margin:  0 auto; }
 
 /* IMAGE PICKER*/
 td div.input-image { margin:  0 auto; }
+
+.tab-group {
+    border-top: 1px solid #849ba3;
+    background: #d1dedf url(../images/config_tab_dt_bg.gif) no-repeat 0 50%;
+    padding: 2px 0 2px 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #306375;
+}

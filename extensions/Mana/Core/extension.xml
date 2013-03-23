@@ -28,4 +28,7 @@
     <sync extension-dir="jquery/scripts" project-dir="js/jquery"/>
     <sync extension-dir="jquery/frontend" project-dir="skin/frontend/base/default/css/jquery"/>
     <sync extension-dir="jquery/backend" project-dir="skin/adminhtml/default/default/css/jquery"/>
+
+    <!-- .htaccess for m-classes -->
+    <sync extension-file="m-classes/.htaccess" project-file="js/m-classes/.htaccess"/>
 </config>

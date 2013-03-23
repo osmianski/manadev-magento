@@ -97,5 +97,22 @@
             </adminhtml>
         </routers>
     </admin>
-	<!-- INSERT HERE: adminhtml, frontend, ... -->
+    <default>
+        <web>
+            <routers>
+                <!-- add router for default admin page handling -->
+                <mana_entity><area>admin</area><class>Mana_Admin_Router</class></mana_entity>
+            </routers>
+        </web>
+    </default>
+    <stores>
+        <default>
+            <web>
+                <routers>
+                    <!-- add router for default admin page handling -->
+                    <mana_entity><area>admin</area><class>Mana_Admin_Router</class></mana_entity>
+                </routers>
+            </web>
+        </default>
+    </stores>
 </config>

@@ -26,6 +26,7 @@ examples on what kind of actions can be applied to referenced blocks.
 			<action method="addCss"><stylesheet>css/mana_admin.css</stylesheet></action>
             <action method="addJs"><script>mana/admin/helper.js</script></action>
             <action method="addJs"><script>jquery/fileuploader.js</script></action>
+            <action method="addJs"><script>mana/admin.js</script></action>
             <action method="addJs"><script>mana/admin/field/image.js</script></action>
             <action method="addJs"><script>mana/admin/field/wysiwyg.js</script></action>
 		</reference>
@@ -64,4 +65,8 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="addJs"><script>mana/admin/grid/image.js</script></action>
 		</reference>
 	</mana_admin_grid_editing>
+    <mana_admin_page>
+        <update handle="mana_admin"/>
+        <update handle="mana_admin_grid_editing"/>
+    </mana_admin_page>
 </layout>

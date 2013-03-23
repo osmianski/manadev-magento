@@ -336,4 +336,7 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
         return $html;
     }
 
+    public function isAjax() {
+        return Mage::app()->getRequest()->isXmlHttpRequest() || Mage::app()->getRequest()->getParam('isAjax');
+    }
 }

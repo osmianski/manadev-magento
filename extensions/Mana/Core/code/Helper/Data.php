@@ -345,7 +345,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $val;
     }
-        public function jsonForceObjectAndEncode($data) {
+    public function jsonForceObjectAndEncode($data) {
         return json_encode($this->_forceObjectRecursively($data));
     }
     protected function _forceObjectRecursively($data) {
@@ -517,4 +517,65 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return null;
         }
     }
+
+    public function inAdmin() {
+        return $this->getRequestModule(Mage::app()->getRequest()) ==
+            ((string)Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName'));
+    }
+
+    public function getRequestModule(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getModuleName()) {
+            $result = $request->getModuleName();
+        }
+        else {
+            $result = $p[0];
+        }
+
+        return $result;
+    }
+
+    public function getRequestController(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getControllerName()) {
+            $result = $request->getControllerName();
+        }
+        else {
+            $result = $p[1];
+        }
+
+        return $result;
+    }
+
+    public function getRequestAction(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getActionName()) {
+            $result = $request->getActionName();
+        }
+        else {
+            $result = $p[2];
+        }
+
+        return $result;
+    }
+
+    public function getExplodedPath(Zend_Controller_Request_Http $request) {
+        $defaultPath = array(
+            !empty($defaultPath[0]) ? $defaultPath[0] : '',
+            !empty($defaultPath[1]) ? $defaultPath[1] : 'index',
+            !empty($defaultPath[2]) ? $defaultPath[2] : 'index'
+        );
+
+        $path = trim($request->getPathInfo(), '/');
+
+        if ($path) {
+            $path = explode('/', $path);
+        }
+        else {
+            $path = $defaultPath;
+        }
+
+        return $path;
+    }
+
 }
