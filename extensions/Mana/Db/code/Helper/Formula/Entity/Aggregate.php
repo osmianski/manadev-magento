@@ -13,7 +13,6 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Entity $entity
-     * @return Mana_Db_Helper_Formula_Entity
      */
     protected function _selectNormal($context, $entity) {
         $context->setMode($this->getName());

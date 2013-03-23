@@ -56,22 +56,12 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
         /* @var $dbConfig Mana_Db_Helper_Config */
         $dbConfig = Mage::helper('mana_db/config');
 
-        /* @var $scopeXml Varien_Simplexml_Element */
-        /** @noinspection PhpUndefinedFieldInspection */
-        $aggregateXml = $dbConfig->getScopeXml($context->getEntity())->formula->aggregate;
-        if (isset($aggregateXml->$entity)) {
-            /* @var $entityXml Varien_Simplexml_Element */
-            /** @noinspection PhpUndefinedFieldInspection */
-            $entityXml = $aggregateXml->$entity;
-
-            /* @var $result Mana_Db_Model_Formula_Entity */
-            $result = Mage::getModel('mana_db/formula_entity');
-
-            return $result
-                ->setHelper('aggregate')
-                ->setAlias($entity)
-                ->setProcessor($this->getProcessor((string)$entityXml->entity))
-                ->addData($entityXml->asArray());
+        $scopeXml = $dbConfig->getScopeXml($context->getEntity());
+        if ($result = $this->_selectEntityBasedOnXml($scopeXml->formula->aggregate, $entity, 'aggregate')) {
+            return $result;
+        }
+        if ($result = $this->_selectEntityBasedOnXml($scopeXml->formula->frontend, $entity, 'frontend')) {
+            return $result;
         }
 
         return false;

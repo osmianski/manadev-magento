@@ -115,6 +115,11 @@
                                         <title>Product Attribute</title>
                                     </attribute>
                                 </aggregate>
+                                <frontend>
+                                    <category>
+                                        <entity>catalog/category</entity>
+                                    </category>
+                                </frontend>
                             </formula>
                             <post_validation>
                                 <hasAtLeastOneAttribute />
