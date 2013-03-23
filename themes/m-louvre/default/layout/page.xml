@@ -51,6 +51,7 @@ Default layout, loads most of the pages
 
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
 
+                <action method="addCss"><stylesheet>css/base.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
                 <action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>lt IE 8</if></action>
                 <action method="addItem"><type>skin_css</type><name>css/styles-ie8.css</name><params/><if>lt IE 9</if></action>
