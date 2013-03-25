@@ -36,6 +36,7 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
             }
             return $context->getHelper()->expr()
                 ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setFieldName($field)
                 ->setType((string)$fieldsXml->$field->type);
         }
         else {

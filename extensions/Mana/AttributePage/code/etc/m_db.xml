@@ -28,7 +28,7 @@
                         <description>
                             <type>mediumtext</type>
                             <no>2</no>
-                            <default_formula><p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}</default_formula>
+                            <default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}]]></default_formula>
                         </description>
                         <image>
                             <type>varchar(255)</type>
@@ -45,7 +45,7 @@
                             <type>varchar(128)</type>
                             <indexed>1</indexed>
                             <no>5</no>
-                            <default_formula>{{= SEO(GLUE(attribute.frontend_label, '-'))}}</default_formula>
+                            <default_formula>{{= SEO(GLUE(attribute.frontend_label, ' '))}}</default_formula>
                         </url_key>
                         <template>
                             <type>varchar(20)</type>
@@ -90,7 +90,7 @@
                         <meta_keywords>
                             <type>mediumtext</type>
                             <no>15</no>
-                            <default_formula>GLUE(attribute.frontend_label, ',')}},{{= category.meta_keywords}}</default_formula>
+                            <default_formula>{{= GLUE(attribute.frontend_label, ',')}},{{= category.meta_keywords}}</default_formula>
                         </meta_keywords>
                         <meta_description>
                             <type>mediumtext</type>

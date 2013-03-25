@@ -10,6 +10,8 @@
  *
  */
 abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstract {
+    protected static $_eavEntityTypes = array();
+
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param string $field
@@ -35,11 +37,27 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
         if ($dbConfig->getScopeXml($entity)) {
             return 'entity';
         }
+        elseif ($this->getEavEntityType($entity)) {
+            return 'eav';
+        }
         else {
             return 'table';
         }
     }
 
+    /**
+     * @param string $entity
+     * @return Mage_Eav_Model_Entity_Type | bool
+     */
+    public function getEavEntityType($entity) {
+        if (!isset(self::$_eavEntityTypes[$entity])) {
+            /* @var $entityType Mage_Eav_Model_Entity_Type */
+            $entityType = Mage::getModel('eav/entity_type');
+            $entityType->load($entity, 'entity_model');
+            self::$_eavEntityTypes[$entity] = $entityType->getId() ? $entityType : false;
+        }
+        return self::$_eavEntityTypes[$entity];
+    }
     /**
      * @param Varien_Simplexml_Element $xml
      * @param string $entity

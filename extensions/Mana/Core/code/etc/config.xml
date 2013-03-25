@@ -262,6 +262,18 @@
                 <require>min_ondemand</require>
                 <jquery>min_ondemand</jquery>
             </js>
+            <seo_symbols>
+                <dash>--to-</dash>
+                <space>-</space>
+                <slash>--per-</slash>
+                <plus>--plus-</plus>
+                <underscore>--uscore-</underscore>
+                <quote>--qt-</quote>
+                <double_quote>--dqt-</double_quote>
+                <hash>--no-</hash>
+                <percent>--percent-</percent>
+                <ampersand>--and-</ampersand>
+            </seo_symbols>
         </mana>
 	</default>
 </config>

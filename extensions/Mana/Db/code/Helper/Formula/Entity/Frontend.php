@@ -13,7 +13,6 @@ class Mana_Db_Helper_Formula_Entity_Frontend extends Mana_Db_Helper_Formula_Enti
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Entity $entity
-     * @return Mana_Db_Helper_Formula_Entity
      */
     protected function _selectNormal($context, $entity) {
         $context->setMode($this->getName());
@@ -23,4 +22,16 @@ class Mana_Db_Helper_Formula_Entity_Frontend extends Mana_Db_Helper_Formula_Enti
             ->setProcessor($entity->getProcessor())
             ->setAlias($entity->getAlias());
     }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Node_Field $formula
+     * @param Mana_Db_Model_Formula_Expr $expr
+     */
+    public function selectField($context, $formula, $expr) {
+        $expr
+            ->setIsFrontend(true)
+            ->setExpr("'{{= {$formula->__toString()} }}'")
+            ->setType('varchar(255');
+   }
 }

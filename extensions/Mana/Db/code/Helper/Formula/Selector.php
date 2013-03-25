@@ -61,7 +61,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
         $formulaHelper = Mage::helper('mana_db/formula');
 
         $expr = $this->cast($this->_select($context, $formula), $formulaHelper->getType($context->getField()->getType()));
-        $context->getSelect()->columns("{$expr->getExpr()} AS {$context->getField()->getName()}");
+        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr($expr->getExpr())));
     }
 
     /**
@@ -83,10 +83,10 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
         $formulaHelper = Mage::helper('mana_db/formula');
 
         if ($formulaHelper->getType($context->getField()->getType()) == 'int') {
-            $context->getSelect()->columns("$value AS {$context->getField()->getName()}");
+            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("$value")));
         }
         else {
-            $context->getSelect()->columns("'$value' AS {$context->getField()->getName()}");
+            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("'$value'")));
         }
     }
 
@@ -98,10 +98,10 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
         $formulaHelper = Mage::helper('mana_db/formula');
 
         if ($formulaHelper->getType($context->getField()->getType()) == 'int') {
-            $context->getSelect()->columns("0 AS {$context->getField()->getName()}");
+            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("0")));
         }
         else {
-            $context->getSelect()->columns("''' AS {$context->getField()->getName()}");
+            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("''")));
         }
     }
 
@@ -204,7 +204,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
         }
 
         if ($result = $processor->selectField($context, implode('.', array_slice($formula->identifiers, $index)))) {
-            $context->getEntityHelper()->selectField($context, $result);
+            $context->getEntityHelper()->selectField($context, $formula, $result);
             return $result;
         }
         else {
@@ -256,6 +256,12 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      */
     protected function _selectIdentifier($context, $formula) {
         if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
+            /* @var $field Mana_Db_Model_Formula_Node_Field */
+            $field = Mage::getModel('mana_db/formula_node_field');
+
+            $field->identifiers = array('primary', $formula->identifier);
+            $context->getEntityHelper()->selectField($context, $field, $result);
+
             return $result;
         }
         else {

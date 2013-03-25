@@ -39,15 +39,15 @@ class Mana_Db_Helper_Formula_Function_Glue extends Mana_Db_Helper_Formula_Functi
                     "REPLACE(CONCAT(".
                         "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
                             "'{$this->_separator}', COUNT({$field}) - 1), ".
-                        "'$lastSep', ".
+                        "$lastSep, ".
                         "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
                             "'{$this->_separator}', -1)".
-                    "), '{$this->_separator}', '$sep'), ".
-                    "GROUP_CONCAT({$field} SEPARATOR '$sep')".
+                    "), '{$this->_separator}', $sep), ".
+                    "GROUP_CONCAT({$field} SEPARATOR $sep)".
                ")";
         }
         else {
-            $expr = "GROUP_CONCAT({$field} SEPARATOR '$sep')";
+            $expr = "GROUP_CONCAT({$field} SEPARATOR $sep)";
         }
 
         return $helper->expr()->setExpr("({$args[0]->getSubSelect()->columns($expr)})")->setType('varchar(255)');

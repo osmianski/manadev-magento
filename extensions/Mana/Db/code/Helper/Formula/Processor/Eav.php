@@ -10,4 +10,32 @@
  *
  */
 class Mana_Db_Helper_Formula_Processor_Eav extends Mana_Db_Helper_Formula_Processor {
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param string $field
+     * @return Mana_Db_Model_Formula_Expr | bool
+     */
+    public function selectField($context, $field) {
+        if ($result = parent::selectField($context, $field)) {
+            return $result;
+        }
+
+        $eavEntityType = $this->getEavEntityType($context->getEntity());
+        /* @var $attribute Mage_Eav_Model_Entity_Attribute */
+        $attribute = $eavEntityType->getAttributeCollection()->getItemByColumnValue('attribute_code', $field);
+
+        if ($attribute) {
+            if (!($alias = $context->getAlias()) || $alias == 'this') {
+                $alias = 'primary';
+            }
+
+            return $context->getHelper()->expr()
+                ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setFieldName($field)
+                ->setType($attribute->getBackendType());
+        }
+        else {
+            return false;
+        }
+    }
 }

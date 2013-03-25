@@ -62,14 +62,13 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Node_Field $formula
      * @param Mana_Db_Model_Formula_Expr $expr
-     * @return Mana_Db_Helper_Formula_Entity
      */
-    public function selectField($context, $expr) {
+    public function selectField($context, $formula, $expr) {
         $expr
             ->setIsAggregate(true)
             ->setSubSelect($context->getAggregateContext()->getSelect());
-        return $this;
     }
 
 }

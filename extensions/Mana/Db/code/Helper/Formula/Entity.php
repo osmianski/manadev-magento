@@ -32,9 +32,10 @@ class Mana_Db_Helper_Formula_Entity extends Mage_Core_Helper_Abstract {
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Node_Field $formula
      * @param Mana_Db_Model_Formula_Expr $expr
      */
-    public function selectField(/** @noinspection PhpUnusedParameterInspection */$context, $expr) {
+    public function selectField(/** @noinspection PhpUnusedParameterInspection */$context, $formula, $expr) {
         throw new Exception('Not implemented');
     }
 

@@ -14,4 +14,8 @@ class Mana_Db_Model_Formula_Node_Field extends Mana_Db_Model_Formula_Node  {
      * @var string[]
      */
     public $identifiers;
+
+    public function __toString() {
+        return implode('.', $this->identifiers);
+    }
 }
