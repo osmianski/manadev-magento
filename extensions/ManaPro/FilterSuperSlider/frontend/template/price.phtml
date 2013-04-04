@@ -29,9 +29,13 @@
 		<span id="<?php echo $_id ?>-range-to" class="m-slider-max-value"><?php echo $_superHelper->formatNumber($_filter->getHighestPossibleValue(), $_filter->getFilterOptions()) ?></span>
         <?php if ($_filter->getFilterOptions()->getSliderManualEntry()) : ?>
         <span id="<?php echo $_id ?>-applied" class="m-slider-selected-value">
-            <?php echo $_superHelper->beforeInput($_filter->getFilterOptions()) ?><input type="text" class="m-slider m-from" size="2" value="<?php echo $_superHelper->formatNumber($_filter->getCurrentRangeLowerBound(), $_filter->getFilterOptions()) ?>" /><?php echo $_superHelper->afterInput($_filter->getFilterOptions()) ?>
+            <?php
+                $manualEntryOptions = clone $_filter->getFilterOptions();
+                $manualEntryOptions->setSliderNumberFormat('0')->setSliderNumberFormat2('0');
+            ?>
+            <?php echo $_superHelper->beforeInput($_filter->getFilterOptions()) ?><input type="text" class="m-slider m-from" size="2" value="<?php echo $_superHelper->formatNumber($_filter->getCurrentRangeLowerBound(), $manualEntryOptions) ?>" /><?php echo $_superHelper->afterInput($_filter->getFilterOptions()) ?>
             <?php echo $_superHelper->__('to') ?>
-            <?php echo $_superHelper->beforeInput($_filter->getFilterOptions()) ?><input type="text" class="m-slider m-to"size="2" value="<?php echo $_superHelper->formatNumber($_filter->getCurrentRangeHigherBound(), $_filter->getFilterOptions()) ?>" /><?php echo $_superHelper->afterInput($_filter->getFilterOptions()) ?>
+            <?php echo $_superHelper->beforeInput($_filter->getFilterOptions()) ?><input type="text" class="m-slider m-to"size="2" value="<?php echo $_superHelper->formatNumber($_filter->getCurrentRangeHigherBound(), $manualEntryOptions) ?>" /><?php echo $_superHelper->afterInput($_filter->getFilterOptions()) ?>
         </span>
         <?php else: ?>
 		<span id="<?php echo $_id ?>-applied" class="m-slider-selected-value"><?php echo $_helper->__('%s to %s', $_superHelper->formatNumber($_filter->getCurrentRangeLowerBound(), $_filter->getFilterOptions()), $_superHelper->formatNumber($_filter->getCurrentRangeHigherBound(), $_filter->getFilterOptions()))?></span>

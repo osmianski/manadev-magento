@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <config>
+    <name>customers/topics-ent</name>
     <part name="ManaSite/TopicsEnt" />
     <part name="default/topics"/>
 </config>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev-layered-nav-seo-plus</name>
+    <part name="Mana/Admin" />
+    <part name="Mana/Ajax"/>
+    <part name="Mana/Core"/>
+    <part name="Mana/Db"/>
+    <part name="Mana/Filters"/>
+    <part name="ManaPro/FilterAdmin"/>
+    <part name="ManaPro/FilterAdvanced"/>
+    <part name="ManaPro/FilterAjax"/>
+    <part name="ManaPro/FilterCheckboxes"/>
+    <part name="ManaPro/FilterColors"/>
+    <part name="ManaPro/FilterDropdown"/>
+    <part name="ManaPro/FilterExpandCollapse"/>
+    <part name="ManaPro/FilterGroup"/>
+    <part name="ManaPro/FilterHelp"/>
+    <part name="ManaPro/FilterPositioning"/>
+    <part name="ManaPro/FilterRadios"/>
+    <part name="ManaPro/FilterSeoLinks"/>
+    <part name="ManaPro/FilterShowMore"/>
+    <part name="ManaPro/FilterSlider"/>
+    <part name="ManaPro/FilterSuperSlider"/>
+    <part name="ManaPro/FilterTree"/>
+</config>

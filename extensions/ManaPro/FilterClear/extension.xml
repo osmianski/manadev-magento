@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <name>ManaPro/FilterClear</name>
+    <type>module</type>
 
     <!-- modules files for both frontend and backend -->
     <sync extension-dir="code" project-dir="app/code/local/{Extension/Name}"/>

@@ -37,7 +37,17 @@ class ManaPage_AttributeOption_Block_Filter extends Mana_Page_Block_Filter {
                 );
             }
             else {
-                $this->_productCollection->addAttributeToFilter(array(array('attribute' => $attributeCode, $options['operator'] => $options['value'])));
+                $attributeExpr = $this->joinAttribute($attributeCode);
+                $select = $this->_productCollection->getSelect();
+                switch ($options['operator']) {
+                    case 'eq':
+                        $select->where("$attributeExpr = ?", $options['value']);
+                        break;
+                    case 'finset':
+                        $select->where("find_in_set(?,$attributeExpr)", $options['value']);
+                        break;
+                }
+                //$this->_productCollection->addAttributeToFilter(array(array('attribute' => $attributeCode, $options['operator'] => $options['value'])));
             }
         }
         return $this;
