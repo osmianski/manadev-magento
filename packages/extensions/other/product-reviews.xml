@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_product-reviews</name>
+    <part name="Mana/Core"/>
+    <part name="Mana/Widget"/>
+    <part name="ManaProduct/Review"/>
+</config>

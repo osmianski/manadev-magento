@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_developer-tools</name>
+    <part name="Mana/Dev"/>
+    <part name="Mana/DeveloperTools"/>
+</config>

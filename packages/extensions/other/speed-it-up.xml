@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_speed-it-up</name>
+    <part name="ManaPro/CatalogPerformance"/>
+    <part name="default/manapro_catalogperformance"/>
+</config>

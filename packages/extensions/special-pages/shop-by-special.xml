@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_shop-by-special-new-custom</name>
+    <part name="Mana/Core"/>
+    <part name="Mana/Page"/>
+    <part name="Mana/Widget"/>
+    <part name="ManaPage/Sale"/>
+    <part name="ManaPage/Bestseller"/>
+    <part name="ManaPage/New"/>
+    <part name="ManaPage/AttributeOption"/>
+    <part name="ManaPro/ProductCollections"/>
+</config>

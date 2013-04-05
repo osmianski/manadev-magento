@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>default/manapro_catalogpreformance</name>
+    <name>default/manapro_catalogperformance</name>
     <version>12.06.16.09</version>
 
     <!-- server-side directories go to app/design -->

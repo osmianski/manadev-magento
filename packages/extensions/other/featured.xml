@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_featured-product-slider</name>
+    <part name="Mana/Core"/>
+    <part name="ManaPro/Featured"/>
+    <part name="default/manapro_featured"/>
+</config>

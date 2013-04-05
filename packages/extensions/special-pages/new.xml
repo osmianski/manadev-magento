@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_shop-new</name>
+    <part name="Mana/Core"/>
+    <part name="Mana/Page"/>
+    <part name="Mana/Widget"/>
+    <part name="ManaPage/New"/>
+    <part name="ManaPro/ProductCollections"/>
+</config>
