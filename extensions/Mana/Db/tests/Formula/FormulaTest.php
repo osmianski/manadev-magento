@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * @category    Mana
  * @package     Mana_Db
  * @copyright   Copyright (c) http://www.manadev.com
@@ -9,8 +9,8 @@
  * @author Mana Team
  *
  */
-class Mana_Db_Exception_Formula extends Exception {
-    public function addMessage($message) {
-        $this->message .= $message;
+class Mana_Db_Formula_FormulaTest extends PHPUnit_Framework_TestCase {
+    public function testHello() {
+        $this->assertEquals(5, 2+3);
     }
 }

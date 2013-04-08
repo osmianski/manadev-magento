@@ -14,13 +14,17 @@ class Mana_Db_Helper_Formula_Entity_Frontend extends Mana_Db_Helper_Formula_Enti
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Entity $entity
      */
-    protected function _selectNormal($context, $entity) {
-        $context->setMode($this->getName());
+    public function select($context, $entity) {
+        switch ($context->getMode()) {
+            default:
+                $context->setMode($this->getName());
 
-        $context
-            ->setEntity($entity->getEntity())
-            ->setProcessor($entity->getProcessor())
-            ->setAlias($entity->getAlias());
+                $context
+                    ->setEntity($entity->getEntity())
+                    ->setProcessor($entity->getProcessor())
+                    ->setAlias($entity->getAlias());
+                break;
+        }
     }
 
     /**

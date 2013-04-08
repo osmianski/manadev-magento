@@ -25,7 +25,11 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
      * @param array $options on which records to run
      * @return void
      */
-    public function flattenGlobalScope($indexer, $target, $scope, $options) {
+    public function flattenScope($indexer, $target, $scope, $options) {
+        $options = array_merge(array(
+            'provide_field_details_in_exceptions' => true,
+        ), $options);
+
         $db = $this->_getWriteAdapter();
         /* @var $res Mage_Core_Model_Resource */
         $res = Mage::getSingleton('core/resource');
@@ -34,50 +38,32 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
+
         // get basic select from all source tables, properly joined (based on m_db.xml)
         /** @noinspection PhpUndefinedFieldInspection */
-        $basicSelect = $formulaHelper->select((string)$scope->flattens, array());
+        $entity = (string)$scope->flattens;
+        /** @noinspection PhpUndefinedFieldInspection */
+        $targetEntity = ((string)$target->entity) . '/' . $scope->getName();
+        //$db->query($formulaHelper->delete($entity, $targetEntity));
 
         // get formula hashes and formula texts
-        $formulaGroupSelect = $this->_getFormulaGroupSelect();
+        $formulaGroups = $formulaHelper->getFormulaGroups($targetEntity, $options);
 
         // for each formula hash => formula text
-        foreach ($db->fetchPairs($formulaGroupSelect) as $formulaHash => $formulas) {
+        foreach ($formulaGroups as $formulas) {
             $formulas = $formulas ? json_decode($formulas, true) : array();
 
             // filter basic select by formula hash
-            $select = $this->_getUpdateSelect($basicSelect, $formulaHash);
-            $fields = array();
-
-            foreach ($scope->fields->children() as $fieldName => $fieldXml) {
-                if (isset($fieldXml->no)) {
-                    // prepare select expression based on default mask, default formula and direct value
-                    //      (process formula language into SQL)
-                }
-                else {
-                    // add direct value from main source table
-                }
-            }
-            foreach ($this->_getSystemFields() as $fieldName => $field) {
-                // add column for system field
-            }
+            $context = $formulaHelper->select($targetEntity, $formulas, $options);
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
-            $sql = $select->insertFromSelect($res->getTableName($dbHelper->getScopedName((string)$target->entity)), $fields);
+            $sql = $context->getSelect()->insertFromSelect(
+                $res->getTableName($dbHelper->getScopedName($targetEntity)),
+                $context->getFields());
 
             // run the statement
             $db->query($sql);
         }
-    }
-
-    /**
-     * @param Mana_Db_Model_Entity_Indexer $indexer
-     * @param Varien_Simplexml_Element $target
-     * @param Varien_Simplexml_Element $scope
-     * @param array $options
-     * @return void
-     */
-    public function flattenStoreScope($indexer, $target, $scope, $options) {
     }
 
     protected function _getUpdateSelect($basicSelect, $formulaHash) {

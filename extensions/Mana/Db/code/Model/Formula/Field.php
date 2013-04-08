@@ -11,6 +11,8 @@
  * @method Mana_Db_Model_Formula_Field setName(string $value)
  * @method string getType()
  * @method Mana_Db_Model_Formula_Field setType(string $value)
+ * @method string getRole()
+ * @method Mana_Db_Model_Formula_Field setRole(string $value)
  * @method int getNo()
  * @method Mana_Db_Model_Formula_Field setNo(int $value)
  * @method bool hasFormula()
@@ -22,6 +24,8 @@
  * @method bool hasDependencies()
  * @method string[] getDependencies()
  * @method Mana_Db_Model_Formula_Field setDependencies(array $value)
+ * @method string getFormulaString()
+ * @method Mana_Db_Model_Formula_Field setFormulaString(string $value)
  */
 class Mana_Db_Model_Formula_Field extends Varien_Object {
     /**

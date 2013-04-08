@@ -14,6 +14,7 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     const ROLE_DEFAULT_VALUE = 'default_value';
     const ROLE_STORE_SPECIFICS = 'store_specifics';
     const ROLE_GRID_EDITING = 'grid_editing';
+    const ROLE_FLAT = 'flat';
 
     const MODULE_LEVEL = 0;
     const ENTITY_LEVEL = 1;

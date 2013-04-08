@@ -13,6 +13,10 @@
  * @method Mana_Db_Model_Formula_Context setPrefix(string $value)
  * @method string getEntity()
  * @method Mana_Db_Model_Formula_Context setEntity(string $value)
+ * @method string getTargetEntity()
+ * @method Mana_Db_Model_Formula_Context setTargetEntity(string $value)
+ * @method string getPrimaryEntity()
+ * @method Mana_Db_Model_Formula_Context setPrimaryEntity(string $value)
  * @method Mage_Core_Model_Abstract getModel()
  * @method Mana_Db_Model_Formula_Context setModel(Mage_Core_Model_Abstract $value)
  * @method Mana_Db_Helper_Formula_Processor getProcessor()
@@ -30,14 +34,21 @@
  * @method Mana_Db_Model_Formula_Context setAggregateContext(Mana_Db_Model_Formula_Context $value)
  * @method string getAlias()
  * @method Mana_Db_Model_Formula_Context setAlias(string $value)
+ * @method string __getGlobalEntity()
+ * @method Mana_Db_Model_Formula_Context __setGlobalEntity(string $value)
  */
 class Mana_Db_Model_Formula_Context extends Varien_Object {
     /**
      * @var Varien_Db_Select()
      */
     protected $_select;
-
+    /**
+     * @var string[]
+     */
+    protected $_fields = array();
     protected $_aliases = array();
+
+    protected $_options = array();
 
     static protected $_quoteFieldsAndEntities;
     /**
@@ -136,4 +147,21 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
         return $prefix;
     }
 
+    public function getFields() {
+        return $this->_fields;
+    }
+
+    public function addField($field) {
+        $this->_fields[] = $field;
+        return $this;
+    }
+
+    public function setOptions($options) {
+        $this->_options = $options;
+        return $this;
+    }
+
+    public function getOption($option) {
+        return isset($this->_options[$option]) ? $this->_options[$option] : false;
+    }
 }

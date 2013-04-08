@@ -220,7 +220,7 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
      * @param array $options
      */
     protected function _flattenGlobalScope($target, $scope, $options) {
-        $this->_getResource()->flattenGlobalScope($this, $target, $scope, $options);
+        $this->_getResource()->flattenScope($this, $target, $scope, $options);
     }
 
     /**
@@ -229,7 +229,7 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
      * @param array $options
      */
     protected function _flattenStoreScope($target, $scope, $options) {
-        $this->_getResource()->flattenStoreScope($this, $target, $scope, $options);
+        $this->_getResource()->flattenScope($this, $target, $scope, $options);
     }
 
     /**

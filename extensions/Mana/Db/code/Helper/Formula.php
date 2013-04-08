@@ -31,34 +31,30 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
     /**
      * @param string $entity
      * @param string[] $formulas
-     * @return Varien_Db_Select
+     * @param array $options
+     * @throws Exception|Mana_Db_Exception_Formula
+     * @return Mana_Db_Model_Formula_Context
      */
-    public function select($entity, $formulas) {
-        /* @var $dbHelper Mana_Db_Helper_Data */
-        $dbHelper = Mage::helper('mana_db');
-
-        /* @var $resource Mana_Db_Resource_Formula */
-        $resource = Mage::getResourceSingleton('mana_db/formula');
-
+    public function select($entity, $formulas, $options = array()) {
+        /* @var $select Varien_Db_Select */
         /* @var $selector Mana_Db_Helper_Formula_Selector */
-        $selector = Mage::helper('mana_db/formula_selector');
-
         /* @var $context Mana_Db_Model_Formula_Context */
-        $context = Mage::getModel('mana_db/formula_context');
-        $context
-            ->setAlias('primary')
-            ->setEntity($entity)
-            ->setProcessor('entity')
-            ->setHelper($selector);
-
-        $select = $context->getSelect()
-            ->from(array($context->registerAlias('primary') => $resource->getTable($dbHelper->getScopedName($entity))), null);
+        $this->_initSelect($entity, $options, $select, $context, $selector);
 
         // process formulas
         foreach ($this->_getFieldFormulas($context, $formulas) as $field) {
-            if (!isset($field->role)) {
-                $context->setField($field);
-                if ($field->hasFormula()) {
+            $context->setField($field);
+            $context->addField($field->getName());
+            try {
+                if ($field->getRole()) {
+                    if ($field->hasFormula()) {
+                        $selector->selectFormula($context, $field->getFormula());
+                    }
+                    else {
+                        $selector->selectSystemField($context);
+                    }
+                }
+                elseif ($field->hasFormula()) {
                     $selector->selectFormula($context, $field->getFormula());
                 }
                 elseif ($field->hasValue()) {
@@ -68,9 +64,20 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
                     $selector->selectDefaultValue($context);
                 }
             }
+            catch (Mana_Db_Exception_Formula $e) {
+                if ($context->getOption('provide_field_details_in_exceptions')) {
+                    if ($field->hasFormula()) {
+                        $e->addMessage($this->__(" in entity: '%s', field: '%s', formula '%s'", $entity, $field->getName(), $field->getFormulaString()));
+                    }
+                    else {
+                        $e->addMessage($this->__(" in entity: '%s', field: '%s'", $entity, $field->getName()));
+                    }
+                }
+                throw $e;
+            }
         }
 
-        return $select;
+        return $context;
     }
 
     /**
@@ -133,6 +140,106 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
     }
 
 
+    public function getFormulaGroups($entity, $options = array()) {
+        /* @var $select Varien_Db_Select */
+        /* @var $selector Mana_Db_Helper_Formula_Selector */
+        /* @var $context Mana_Db_Model_Formula_Context */
+        $this->_initSelect($entity, $options, $select, $context, $selector);
+        $idExpr = "`{$context->registerAlias('primary')}`.`id`";
+        $hashExpr = "`{$context->registerAlias('primary')}`.`default_formula_hash`";
+        $formulasExpr = "`{$context->registerAlias('primary')}`.`default_formulas`";
+
+
+        $select
+            ->distinct()
+            ->columns(array('id' => new Zend_Db_Expr("MIN($idExpr)")))
+            ->columns(array('hash' => new Zend_Db_Expr("$hashExpr")))
+            ->group('hash');
+
+        /* @var $resource Mana_Db_Resource_Formula */
+        $resource = Mage::getResourceSingleton('mana_db/formula');
+        $db = $resource->getReadConnection();
+        $hashes = $db->fetchPairs($select);
+        if (($nullId = array_search(null, $hashes)) !== false) {
+            unset($hashes[$nullId]);
+        }
+
+        if (count($hashes)) {
+            $this->_initSelect($entity, $options, $select, $context, $selector);
+            $select
+                ->columns(array('id' => new Zend_Db_Expr("$idExpr")))
+                ->columns(array('formulas' => new Zend_Db_Expr("$formulasExpr")))
+                ->where("$idExpr IN (?)", array_keys($hashes));
+
+            $formulas = $db->fetchPairs($select);
+
+            $result = array_combine($hashes, $formulas);
+        }
+        else {
+            $result = array();
+        }
+        if ($nullId !== false) {
+            $result[''] = '';
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $entity
+     * @param string $targetEntity
+     * @param array $options
+     * @throws Exception
+     * @return string
+     */
+    public function delete($entity, $targetEntity, $options = array()) {
+        throw new Exception('Not implemented');
+        /* @var $select Varien_Db_Select */
+        /* @var $selector Mana_Db_Helper_Formula_Selector */
+        /* @var $context Mana_Db_Model_Formula_Context */
+        $this->_initSelect($entity, $options, $select, $context, $selector);
+
+        /* @var $resource Mana_Db_Resource_Formula */
+        $resource = Mage::getResourceSingleton('mana_db/formula');
+
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        $select->setPart(Varien_Db_Select::FROM, array());
+        return $select->deleteFromSelect($resource->getTable($dbHelper->getScopedName($targetEntity)));
+    }
+
+    /**
+     * @param string $entity
+     * @param array $options
+     * @param Varien_Db_Select $select
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Helper_Formula_Selector $selector
+     */
+    protected function _initSelect($entity, $options, &$select, &$context, &$selector) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        $scopeXml = $dbConfig->getScopeXml($entity);
+
+        /* @var $selector Mana_Db_Helper_Formula_Selector */
+        $selector = Mage::helper('mana_db/formula_selector');
+
+        /* @var $context Mana_Db_Model_Formula_Context */
+        $context = Mage::getModel('mana_db/formula_context');
+        /** @noinspection PhpUndefinedFieldInspection */
+        $context
+            ->setAlias('primary')
+            ->setEntity($entity)
+            ->setPrimaryEntity((string)$scopeXml->flattens)
+            ->setTargetEntity($entity)
+            ->setProcessor('entity')
+            ->setHelper($selector)
+            ->setOptions($options);
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        $select = $this->createSelect($context, $scopeXml->formula->base);
+    }
+
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param string[] $formulas
@@ -140,7 +247,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
      */
     protected function _getFieldFormulas($context, $formulas) {
         $result = array();
-        $entity = $context->getEntity();
+        $entity = $context->getTargetEntity();
 
         /* @var $dbConfig Mana_Db_Helper_Config */
         $dbConfig = Mage::helper('mana_db/config');
@@ -153,23 +260,32 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
             $field = Mage::getModel('mana_db/formula_field');
             $field
                 ->setName($name)
+                ->setRole(isset($fieldXml->role) ? (string)$fieldXml->role : '')
                 ->setType((string)$fieldXml->type);
 
             if (isset($fieldXml->no)) {
                 $field->setNo((string)$fieldXml->no);
                 if (isset($formulas[$name])) {
                     $field
+                        ->setFormulaString($formulas[$name])
                         ->setFormula($this->parse($formulas[$name]))
                         ->setDependencies($this->depends($context, $field->getFormula()));
                 }
                 elseif(isset($fieldXml->default_formula)) {
                     $field
+                        ->setFormulaString((string)$fieldXml->default_formula)
                         ->setFormula($this->parse((string)$fieldXml->default_formula))
                         ->setDependencies($this->depends($context, $field->getFormula()));
                 }
                 elseif (isset($fieldXml->default_value)) {
                     $field->setValue((string)$fieldXml->default_value);
                 }
+            }
+            elseif (isset($fieldXml->default_formula)) {
+                $field
+                    ->setFormulaString((string)$fieldXml->default_formula)
+                    ->setFormula($this->parse((string)$fieldXml->default_formula))
+                    ->setDependencies($this->depends($context, $field->getFormula()));
             }
 
 
@@ -268,4 +384,54 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         return 'bigint';
     }
 
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param SimpleXMLElement $selectXml
+     * @return Varien_Db_Select
+     */
+    public function createSelect($context, $selectXml) {
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        /* @var $resource Mana_Db_Resource_Formula */
+        $resource = Mage::getResourceSingleton('mana_db/formula');
+
+        $select = $context->getSelect();
+
+        /* @var $fromXml SimpleXMLElement */
+        /** @noinspection PhpUndefinedFieldInspection */
+        $fromXml = $selectXml->from;
+        foreach ($fromXml->children() as $alias => $definition) {
+            $entity = $alias == 'primary' ? $context->getPrimaryEntity() : (string)$definition->entity;
+            $select->from(
+                array($context->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName($entity))),
+                null
+            );
+        }
+
+        if (isset($selectXml->join)) {
+            $joinXml = $selectXml->join;
+            /* @var $joinXml SimpleXMLElement */
+            foreach ($joinXml->children() as $alias => $definition) {
+                $method = isset($definition->type) ? 'join' . ucfirst($definition->type) : 'joinInner';
+                $entity = $alias == 'primary' ? $context->getPrimaryEntity() : (string)$definition->entity;
+                $select->$method(
+                    array($context->registerAlias($alias) => $resource->getTable($dbHelper->getScopedName($entity))),
+                    $context->resolveAliases((string)$definition->on),
+                    null
+                );
+            }
+        }
+
+        if (isset($selectXml->order)) {
+            $select->order($context->resolveAliases((string)$selectXml->order, false));
+
+        }
+        if (isset($selectXml->where)) {
+            $select->where($context->resolveAliases((string)$selectXml->where));
+
+        }
+
+        return $select;
+    }
 }

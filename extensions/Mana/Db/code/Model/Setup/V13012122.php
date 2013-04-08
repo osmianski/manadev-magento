@@ -80,7 +80,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         /* @var $configHelper Mana_Db_Helper_Config */
         $configHelper = Mage::helper('mana_db/config');
 
-        if (!empty($scope->max_defaultable_fields)) {
+        if (!empty($scope->max_defaultable_fields) && empty($scope->flattens)) {
             $maxFields = (int)(string)$scope->max_defaultable_fields;
             for ($i = 0; $i * 15 < $maxFields; $i++) {
                 $fieldName = "default_mask{$i}";
@@ -217,11 +217,75 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         $configHelper = Mage::helper('mana_db/config');
 
         if (!empty($scope->flattens)) {
-            $field = $scope->fields->id;
-            $field->foreign->entity = (string)$scope->flattens;
-            $field->foreign->field = 'id';
-            $field->foreign->on_update = 'cascade';
-            $field->foreign->on_delete = 'cascade';
+            $flattenedScopeXml = $configHelper->getScopeXml((string)$scope->flattens);
+            if (!empty($flattenedScopeXml->store_specifics_for)) {
+                $global = (string)$flattenedScopeXml->store_specifics_for;
+                $fieldName = 'global_id';
+                $scope->fields->$fieldName->type = 'bigint';
+                $field = $scope->fields->$fieldName;
+                $field->foreign->entity = substr($global, 0, strrpos($global, '/')).'/flat';
+                $field->foreign->field = 'id';
+                $field->foreign->on_update = 'cascade';
+                $field->foreign->on_delete = 'cascade';
+                $field->role = Mana_Db_Helper_Config::ROLE_STORE_SPECIFICS;
+                $field->default_formula = '{{= global.id }}';
+                $configHelper->propagateName($field);
+                $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
+
+                $fieldName = 'store_id';
+                $scope->fields->$fieldName->type = 'smallint(5) unsigned';
+                $field = $scope->fields->$fieldName;
+                $field->foreign->entity = 'core/store';
+                $field->foreign->field = 'store_id';
+                $field->foreign->on_update = 'cascade';
+                $field->foreign->on_delete = 'cascade';
+                $field->role = Mana_Db_Helper_Config::ROLE_STORE_SPECIFICS;
+                $field->default_formula = '{{= store.store_id }}';
+                $configHelper->propagateName($field);
+                $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
+
+                $fieldName = 'primary_global_id';
+                $scope->fields->$fieldName->type = 'bigint';
+                $field = $scope->fields->$fieldName;
+                $field->foreign->entity = (string)$flattenedScopeXml->store_specifics_for;
+                $field->foreign->field = 'id';
+                $field->role = Mana_Db_Helper_Config::ROLE_FLAT;
+                $field->default_formula = '{{= global.primary.id }}';
+                $field->nullable = 1;
+                $configHelper->propagateName($field);
+                $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
+
+                $fieldName = 'primary_id';
+                $scope->fields->$fieldName->type = 'bigint';
+                $field = $scope->fields->$fieldName;
+                $field->foreign->entity = (string)$scope->flattens;
+                $field->foreign->field = 'id';
+                $field->foreign->on_update = 'cascade';
+                $field->foreign->on_delete = 'cascade';
+                $field->role = Mana_Db_Helper_Config::ROLE_FLAT;
+                $field->default_formula = '{{= id }}';
+                $field->nullable = 1;
+                $configHelper->propagateName($field);
+                $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
+
+                $scope->unique->primary->global_id = '';
+                $scope->unique->primary->store_id = '';
+            }
+            else {
+                $fieldName = 'primary_id';
+                $scope->fields->$fieldName->type = 'bigint';
+                $field = $scope->fields->$fieldName;
+                $field->foreign->entity = (string)$scope->flattens;
+                $field->foreign->field = 'id';
+                $field->foreign->on_update = 'cascade';
+                $field->foreign->on_delete = 'cascade';
+                $field->role = Mana_Db_Helper_Config::ROLE_FLAT;
+                $field->default_formula = '{{= id }}';
+                $field->nullable = 1;
+                $field->unique = 1;
+                $configHelper->propagateName($field);
+                $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
+            }
         }
     }
 
@@ -269,6 +333,18 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
      * @param Varien_Simplexml_Element $scope
      */
     public function _endTableScript($context, $module, $entity, $scope) {
+        if (!empty($scope->unique)) {
+            $indexes = $context->getIndexes();
+            foreach ($scope->unique->children() as $unique) {
+                $index = (object)array('unique' => 1, 'name' => 'unique_'.$unique->getName(), 'indexed_fields' => array());
+                foreach ($unique->children() as $field => $def) {
+                    $index->indexed_fields[] = $field;
+                }
+                $indexes[] = $index;
+            }
+            $context->setIndexes($indexes);
+        }
+
         $sql = $context->getSql();
         $context->setTable(
             $this->getTable(((string)$module->name) . '/' .
@@ -339,10 +415,22 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         if (!empty($field->primary)) {
             $sql .= "PRIMARY KEY ";
         }
+        elseif (!empty($field->unique)) {
+            $sql .= "UNIQUE KEY `" . ((string)$field->name) . "` ";
+        }
         else {
             $sql .= "KEY `" . ((string)$field->name) . "` ";
         }
-        $sql .= "(`" . ((string)$field->name) . "`) ";
+        if (empty($field->indexed_fields)) {
+            $sql .= "(`" . ((string)$field->name) . "`) ";
+        }
+        else {
+            $indexedFields = array();
+            foreach ($field->indexed_fields as $indexedField) {
+                $indexedFields[] = "`$indexedField`";
+            }
+            $sql .= "(" . implode(', ', $indexedFields) . ") ";
+        }
 
         return $sql;
     }
@@ -352,8 +440,12 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
 	    $sql .= "`FK_{$context->getTable()}_". ((string)$field->name)."` ";
 	    $sql .= "FOREIGN KEY (`" . ((string)$field->name). "`) ";
 	    $sql .= "REFERENCES `{$this->getTable((string)$field->foreign->entity)}` (`".((string)$field->foreign->field)."`) ";
-	    $sql .= "ON DELETE ".((string)$field->foreign->on_delete)." ";
-	    $sql .= "ON UPDATE ".((string)$field->foreign->on_delete)." ";
+	    if (!empty($field->foreign->on_delete)) {
+            $sql .= "ON DELETE " . ((string)$field->foreign->on_delete) . " ";
+        }
+        if (!empty($field->foreign->on_update)) {
+            $sql .= "ON UPDATE ".((string)$field->foreign->on_update)." ";
+        }
 
         return $sql;
     }

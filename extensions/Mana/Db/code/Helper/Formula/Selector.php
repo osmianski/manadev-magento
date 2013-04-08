@@ -79,14 +79,41 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @throws Exception
      */
     public function selectValue($context, $value) {
+        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr(
+            $this->_getValue($context, $value))));
+    }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param mixed $value
+     * @return string
+     */
+    protected function _getValue($context, $value) {
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
         if ($formulaHelper->getType($context->getField()->getType()) == 'int') {
-            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("$value")));
+            return $value;
         }
         else {
-            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("'$value'")));
+            return "'$value'";
+        }
+    }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param mixed $value
+     * @return string
+     */
+    protected function _getDefaultValue($context) {
+        /* @var $formulaHelper Mana_Db_Helper_Formula */
+        $formulaHelper = Mage::helper('mana_db/formula');
+
+        if ($formulaHelper->getType($context->getField()->getType()) == 'int') {
+            return "0";
+        }
+        else {
+            return "''";
         }
     }
 
@@ -94,14 +121,33 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Context $context
      */
     public function selectDefaultValue($context) {
+        $context->getSelect()->columns(array(
+            $context->getField()->getName() => new Zend_Db_Expr(
+                $this->_getDefaultValue($context))
+        ));
+    }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     */
+    public function selectSystemField($context) {
+        if ($context->getField()->getRole() == Mana_Db_Helper_Config::ROLE_PRIMARY_KEY) {
+            return;
+        }
+
         /* @var $formulaHelper Mana_Db_Helper_Formula */
         $formulaHelper = Mage::helper('mana_db/formula');
 
-        if ($formulaHelper->getType($context->getField()->getType()) == 'int') {
-            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("0")));
+        $fieldExpr = "`{$context->registerAlias('primary')}`.`{$context->getField()->getName()}`";
+        if ($context->getField()->hasValue()) {
+            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr(
+                "COALESCE($fieldExpr, {$this->_getValue($context, $context->getField()->getValue())})")));
         }
         else {
-            $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr("''")));
+            $context->getSelect()->columns(array(
+                $context->getField()->getName() => new Zend_Db_Expr(
+                    "COALESCE($fieldExpr, {$this->_getDefaultValue($context)})")
+            ));
         }
     }
 
@@ -214,6 +260,10 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
                 $entity->getHelper()->endSelect($context, $entity);
                 return $result;
             }
+            elseif ($index == 0) {
+                $context->setEntity($context->getPrimaryEntity());
+                return $this->_selectFieldRecursively($context, $formula, $index);
+            }
             else {
                 throw new Mana_Db_Exception_Formula($this->__("Unknown field or entity '%s'", $identifier));
             }
@@ -255,18 +305,19 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectIdentifier($context, $formula) {
-        if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
-            /* @var $field Mana_Db_Model_Formula_Node_Field */
-            $field = Mage::getModel('mana_db/formula_node_field');
+        /* @var $field Mana_Db_Model_Formula_Node_Field */
+        $field = Mage::getModel('mana_db/formula_node_field');
+        $field->identifiers = array('primary', $formula->identifier);
 
-            $field->identifiers = array('primary', $formula->identifier);
-            $context->getEntityHelper()->selectField($context, $field, $result);
-
-            return $result;
-        }
-        else {
-            throw new Mana_Db_Exception_Formula($this->__("Can't evaluate '%s'", $formula->identifier));
-        }
+        return $this->_selectField($context, $field);
+//        if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
+//            $context->getEntityHelper()->selectField($context, $field, $result);
+//
+//            return $result;
+//        }
+//        else {
+//            throw new Mana_Db_Exception_Formula($this->__("Can't evaluate '%s'", $formula->identifier));
+//        }
     }
 
     /**

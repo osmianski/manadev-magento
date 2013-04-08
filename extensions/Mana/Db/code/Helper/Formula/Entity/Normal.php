@@ -25,4 +25,12 @@ class Mana_Db_Helper_Formula_Entity_Normal extends Mana_Db_Helper_Formula_Entity
 
         throw new Mana_Db_Exception_Formula($this->__("Field '%s' referenced in field '%s' is not defined.", $expr->getFieldName(), $context->getField()->getName()));
     }
+
+    /**
+     *
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Entity $entity
+     */
+    public function select($context, $entity) {
+    }
 }

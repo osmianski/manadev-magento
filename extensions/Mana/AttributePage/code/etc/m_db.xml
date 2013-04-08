@@ -15,95 +15,44 @@
                 <page>
                     <max_defaultable_fields>60</max_defaultable_fields>
                     <fields>
-                        <is_active>
-                            <type>tinyint</type>
-                            <no>0</no>
-                            <default_value>1</default_value>
-                        </is_active>
-                        <title>
-                            <type>varchar(255)</type>
-                            <no>1</no>
-                            <default_formula>Shop By {{= GLUE(attribute.frontend_label, ', ', ' and ')}} in {{= category.name}}</default_formula>
-                        </title>
-                        <description>
-                            <type>mediumtext</type>
-                            <no>2</no>
-                            <default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}]]></default_formula>
-                        </description>
-                        <image>
-                            <type>varchar(255)</type>
-                            <no>3</no>
-                            <default_formula>{{= SKIN_URL('images/mana_attributepage/attribute_icon.png')}}</default_formula>
-                        </image>
-                        <include_in_menu>
-                            <type>tinyint</type>
-                            <no>4</no>
-                            <default_value>1</default_value>
-                            <default_formula>{{= IF(COUNT(attribute.frontend_label) - 1, 1, 0)}}</default_formula>
-                        </include_in_menu>
-                        <url_key>
-                            <type>varchar(128)</type>
-                            <indexed>1</indexed>
-                            <no>5</no>
-                            <default_formula>{{= SEO(GLUE(attribute.frontend_label, ' '))}}</default_formula>
-                        </url_key>
-                        <template>
-                            <type>varchar(20)</type>
-                            <no>6</no>
-                        </template>
-                        <show_alphabetic_search>
-                            <type>tinyint</type>
-                            <no>7</no>
-                            <default_value>1</default_value>
-                        </show_alphabetic_search>
-                        <page_layout>
-                            <type>varchar(128)</type>
-                            <no>8</no>
-                        </page_layout>
-                        <layout_xml>
-                            <type>mediumtext</type>
-                            <no>9</no>
-                        </layout_xml>
-                        <custom_design_active_from>
-                            <type>datetime</type>
-                            <nullable>1</nullable>
-                            <no>10</no>
-                        </custom_design_active_from>
-                        <custom_design_active_to>
-                            <type>datetime</type>
-                            <nullable>1</nullable>
-                            <no>11</no>
-                        </custom_design_active_to>
-                        <custom_design>
-                            <type>varchar(128)</type>
-                            <no>12</no>
-                        </custom_design>
-                        <custom_layout_xml>
-                            <type>mediumtext</type>
-                            <no>13</no>
-                        </custom_layout_xml>
-                        <meta_title>
-                            <type>varchar(255)</type>
-                            <no>14</no>
-                            <default_formula>{{= title}}</default_formula>
-                        </meta_title>
-                        <meta_keywords>
-                            <type>mediumtext</type>
-                            <no>15</no>
-                            <default_formula>{{= GLUE(attribute.frontend_label, ',')}},{{= category.meta_keywords}}</default_formula>
-                        </meta_keywords>
-                        <meta_description>
-                            <type>mediumtext</type>
-                            <no>16</no>
-                            <default_formula>{{= description}}</default_formula>
-                        </meta_description>
+                        <is_active><type>tinyint</type><no>0</no><default_value>1</default_value></is_active>
+                        <title><type>varchar(255)</type><no>1</no></title>
+                        <description><type>mediumtext</type><no>2</no></description>
+                        <image><type>varchar(255)</type><no>3</no></image>
+                        <include_in_menu><type>tinyint</type><no>4</no><default_value>1</default_value></include_in_menu>
+                        <url_key><type>varchar(128)</type><indexed>1</indexed><no>5</no></url_key>
+                        <template><type>varchar(20)</type><no>6</no></template>
+                        <show_alphabetic_search><type>tinyint</type><no>7</no><default_value>1</default_value></show_alphabetic_search>
+                        <page_layout><type>varchar(128)</type><no>8</no></page_layout>
+                        <layout_xml><type>mediumtext</type><no>9</no></layout_xml>
+                        <custom_design_active_from><type>datetime</type><nullable>1</nullable><no>10</no></custom_design_active_from>
+                        <custom_design_active_to><type>datetime</type><nullable>1</nullable><no>11</no></custom_design_active_to>
+                        <custom_design><type>varchar(128)</type><no>12</no></custom_design>
+                        <custom_layout_xml><type>mediumtext</type><no>13</no></custom_layout_xml>
+                        <meta_title><type>varchar(255)</type><no>14</no></meta_title>
+                        <meta_keywords><type>mediumtext</type><no>15</no></meta_keywords>
+                        <meta_description><type>mediumtext</type><no>16</no></meta_description>
                     </fields>
+                    <formula>
+                        <frontend>
+                            <category>
+                                <entity>catalog/category</entity>
+                            </category>
+                        </frontend>
+                    </formula>
                     <scopes>
                         <global>
+                            <post_validation>
+                                <hasAtLeastOneAttribute />
+                                <hasUniqueAttributeCombination />
+                            </post_validation>
                             <formula>
                                 <aggregate>
                                     <attribute>
                                         <entity>eav/attribute</entity>
+                                        <from>
+                                            <attribute/>
+                                        </from>
                                         <join>
                                             <page_attribute>
                                                 <entity>mana_attributepage/page_attribute</entity>
@@ -115,25 +64,71 @@
                                         <title>Product Attribute</title>
                                     </attribute>
                                 </aggregate>
-                                <frontend>
-                                    <category>
-                                        <entity>catalog/category</entity>
-                                    </category>
-                                </frontend>
                             </formula>
-                            <post_validation>
-                                <hasAtLeastOneAttribute />
-                                <hasUniqueAttributeCombination />
-                            </post_validation>
                         </global>
                         <flat>
                             <flattens>mana_attributepage/page/global</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <primary/>
+                                    </from>
+                                </base>
+                            </formula>
+                            <fields>
+                                <title><default_formula>Shop By {{= GLUE(attribute.frontend_label, ', ', ' and ')}} in {{= category.name}}</default_formula></title>
+                                <description><default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}]]></default_formula></description>
+                                <image><default_formula>{{= SKIN_URL('images/mana_attributepage/attribute_icon.png')}}</default_formula></image>
+                                <include_in_menu><default_formula>{{= IF(COUNT(attribute.frontend_label) - 1, 1, 0)}}</default_formula></include_in_menu>
+                                <url_key><default_formula>{{= SEO(GLUE(attribute.frontend_label, ' '))}}</default_formula></url_key>
+                                <meta_title><default_formula>{{= title}}</default_formula></meta_title>
+                                <meta_keywords><default_formula>{{= GLUE(attribute.frontend_label, ',')}},{{= category.meta_keywords}}</default_formula></meta_keywords>
+                                <meta_description><default_formula>{{= description}}</default_formula></meta_description>
+                            </fields>
                         </flat>
                         <store>
                             <store_specifics_for>mana_attributepage/page/global</store_specifics_for>
                         </store>
                         <store_flat>
                             <flattens>mana_attributepage/page/store</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <global>
+                                            <entity>mana_attributepage/page/flat</entity>
+                                        </global>
+                                        <store>
+                                            <entity>core/store</entity>
+                                        </store>
+                                    </from>
+                                    <join>
+                                        <primary>
+                                            <type>left</type>
+                                            <on>{{= primary.global_id }} = {{= global.id }} AND {{= primary.store_id }} = {{= store.store_id }}</on>
+                                        </primary>
+                                    </join>
+                                    <where><![CDATA[{{= store.code}} <> 0]]></where>
+                                </base>
+                            </formula>
+                            <fields>
+                                <is_active><default_formula>{{= global.is_active}}</default_formula></is_active>
+                                <title><default_formula>{{= global.title}}</default_formula></title>
+                                <description><default_formula>{{= global.description}}</default_formula></description>
+                                <image><default_formula>{{= global.image}}</default_formula></image>
+                                <include_in_menu><default_formula>{{= global.include_in_menu}}</default_formula></include_in_menu>
+                                <url_key><default_formula>{{= global.url_key}}</default_formula></url_key>
+                                <template><default_formula>{{= global.template}}</default_formula></template>
+                                <show_alphabetic_search><default_formula>{{= global.show_alphabetic_search}}</default_formula></show_alphabetic_search>
+                                <page_layout><default_formula>{{= global.page_layout}}</default_formula></page_layout>
+                                <layout_xml><default_formula>{{= global.layout_xml}}</default_formula></layout_xml>
+                                <custom_design_active_from><default_formula>{{= global.custom_design_active_from}}</default_formula></custom_design_active_from>
+                                <custom_design_active_to><default_formula>{{= global.custom_design_active_to}}</default_formula></custom_design_active_to>
+                                <custom_design><default_formula>{{= global.custom_design}}</default_formula></custom_design>
+                                <custom_layout_xml><default_formula>{{= global.custom_layout_xml}}</default_formula></custom_layout_xml>
+                                <meta_title><default_formula>{{= global.meta_title}}</default_formula></meta_title>
+                                <meta_keywords><default_formula>{{= global.meta_keywords}}</default_formula></meta_keywords>
+                                <meta_description><default_formula>{{= global.meta_description}}</default_formula></meta_description>
+                            </fields>
                         </store_flat>
                     </scopes>
                 </page>
