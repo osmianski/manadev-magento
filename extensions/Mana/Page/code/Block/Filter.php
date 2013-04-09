@@ -133,6 +133,17 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
         return "`$alias`.`value`";
     }
 
+    public function joinField($field) {
+        $alias = 'mp_' . $field;
+        $this->_productCollection->getSelect()->joinLeft(
+            array($alias => $this->_productCollection->getResource()->getMainTable()),
+            "`$alias`.`entity_id` = `e`.`entity_id`",
+            null
+        );
+
+        return "`$alias`.`$field`";
+    }
+
     public function getAttributes()
     {
         if (is_null($this->_attributes)) {

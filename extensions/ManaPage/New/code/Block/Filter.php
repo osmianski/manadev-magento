@@ -37,7 +37,8 @@ class ManaPage_New_Block_Filter extends Mana_Page_Block_Filter {
         }
         if ($days = $this->getDaysProductsAreNew()) {
             $date = $this->getDate()->addDay(-$days)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
-            $conditions[] = $db->quoteInto("(e.created_at >= ?)", $date);
+            $createdAt = $this->joinField('created_at');
+            $conditions[] = $db->quoteInto("$createdAt >= ?", $date);
         }
 
         if (count($conditions)) {

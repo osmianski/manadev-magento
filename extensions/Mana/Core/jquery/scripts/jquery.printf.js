@@ -62,7 +62,7 @@
 #
 ##############################################################################*/
 
-(function($) {
+;(function($) {
 
 	/*
 	**	Just an equivalent of the corresponding libc function
