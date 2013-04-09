@@ -30,6 +30,8 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
         return false;
     }
 
+    abstract public function getPrimaryKey($entity);
+
     public function getProcessor($entity) {
         /* @var $dbConfig Mana_Db_Helper_Config */
         $dbConfig = Mage::helper('mana_db/config');
@@ -75,11 +77,23 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
             /* @var $result Mana_Db_Model_Formula_Entity */
             $result = Mage::getModel('mana_db/formula_entity');
 
-            $entityName = $entity == 'primary' ? $context->getPrimaryEntity() : (string)$entityXml->entity;
+            if ($entity == 'primary') {
+                /* @var $dbConfig Mana_Db_Helper_Config */
+                $dbConfig = Mage::helper('mana_db/config');
+
+                $scopeXml = $dbConfig->getScopeXml($context->getEntity());
+                /** @noinspection PhpUndefinedFieldInspection */
+                $entityName = (string)$scopeXml->flattens;
+            }
+            else {
+                /** @noinspection PhpUndefinedFieldInspection */
+                $entityName = (string)$entityXml->entity;
+            }
             $data = $entityXml->asArray();
+            $alias = $context->getAlias() ? $context->getAlias() . '.' . $entity : $entity;
             return $result
                 ->setHelper($mode)
-                ->setAlias($entity)
+                ->setAlias($alias)
                 ->setEntity($entityName)
                 ->setProcessor($this->getProcessor($entityName))
                 ->addData($data ? $data : array());

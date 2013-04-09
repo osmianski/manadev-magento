@@ -10,6 +10,8 @@
  * @method Mana_Db_Helper_Formula_Entity getHelper()
  * @method string getAlias()
  * @method Mana_Db_Model_Formula_Entity setAlias(string $value)
+ * @method string getForeignJoin()
+ * @method Mana_Db_Model_Formula_Entity setForeignJoin(string $value)
  * @method string getEntity()
  * @method Mana_Db_Model_Formula_Entity setEntity(string $value)
  * @method string[] | bool getJoin()

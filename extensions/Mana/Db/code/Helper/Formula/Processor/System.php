@@ -10,4 +10,7 @@
  *
  */
 class Mana_Db_Helper_Formula_Processor_System extends Mana_Db_Helper_Formula_Processor {
+    public function getPrimaryKey($entity) {
+        return '';
+    }
 }

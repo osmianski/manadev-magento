@@ -36,32 +36,41 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
      * @return Mana_Db_Model_Formula_Context
      */
     public function select($entity, $formulas, $options = array()) {
+        $options = array_merge(array(
+            'process_all_fields' => true,
+        ), $options);
+
         /* @var $select Varien_Db_Select */
         /* @var $selector Mana_Db_Helper_Formula_Selector */
         /* @var $context Mana_Db_Model_Formula_Context */
         $this->_initSelect($entity, $options, $select, $context, $selector);
 
         // process formulas
-        foreach ($this->_getFieldFormulas($context, $formulas) as $field) {
+        foreach ($this->_getFieldFormulas($context, $formulas, $options) as $field) {
             $context->setField($field);
-            $context->addField($field->getName());
             try {
                 if ($field->getRole()) {
                     if ($field->hasFormula()) {
                         $selector->selectFormula($context, $field->getFormula());
+                        $context->addField($field->getName());
                     }
                     else {
-                        $selector->selectSystemField($context);
+                        if ($selector->selectSystemField($context)) {
+                            $context->addField($field->getName());
+                        }
                     }
                 }
                 elseif ($field->hasFormula()) {
                     $selector->selectFormula($context, $field->getFormula());
+                    $context->addField($field->getName());
                 }
                 elseif ($field->hasValue()) {
                     $selector->selectValue($context, $field->getValue());
+                    $context->addField($field->getName());
                 }
                 else {
                     $selector->selectDefaultValue($context);
+                    $context->addField($field->getName());
                 }
             }
             catch (Mana_Db_Exception_Formula $e) {
@@ -224,15 +233,20 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         /* @var $selector Mana_Db_Helper_Formula_Selector */
         $selector = Mage::helper('mana_db/formula_selector');
 
+        /* @var $normalEntity Mana_Db_Helper_Formula_Entity_Normal */
+        $normalEntity = Mage::helper('mana_db/formula_entity_normal');
+
         /* @var $context Mana_Db_Model_Formula_Context */
         $context = Mage::getModel('mana_db/formula_context');
+
         /** @noinspection PhpUndefinedFieldInspection */
         $context
-            ->setAlias('primary')
+            ->setAlias('')
             ->setEntity($entity)
             ->setPrimaryEntity((string)$scopeXml->flattens)
             ->setTargetEntity($entity)
             ->setProcessor('entity')
+            ->setEntityHelper($normalEntity)
             ->setHelper($selector)
             ->setOptions($options);
 
@@ -245,7 +259,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
      * @param string[] $formulas
      * @return Mana_Db_Model_Formula_Field[]
      */
-    protected function _getFieldFormulas($context, $formulas) {
+    protected function _getFieldFormulas($context, $formulas, $options = array()) {
         $result = array();
         $entity = $context->getTargetEntity();
 
@@ -256,6 +270,9 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         /** @noinspection PhpUndefinedFieldInspection */
         $fieldsXml = $dbConfig->getScopeXml($entity)->fields;
         foreach ($fieldsXml->children() as $name => $fieldXml) {
+            if (empty($options['process_all_fields']) && !isset($formulas[$name])) {
+                continue;
+            }
             /* @var $field Mana_Db_Model_Formula_Field */
             $field = Mage::getModel('mana_db/formula_field');
             $field
@@ -265,30 +282,22 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
 
             if (isset($fieldXml->no)) {
                 $field->setNo((string)$fieldXml->no);
-                if (isset($formulas[$name])) {
-                    $field
-                        ->setFormulaString($formulas[$name])
-                        ->setFormula($this->parse($formulas[$name]))
-                        ->setDependencies($this->depends($context, $field->getFormula()));
-                }
-                elseif(isset($fieldXml->default_formula)) {
-                    $field
-                        ->setFormulaString((string)$fieldXml->default_formula)
-                        ->setFormula($this->parse((string)$fieldXml->default_formula))
-                        ->setDependencies($this->depends($context, $field->getFormula()));
-                }
-                elseif (isset($fieldXml->default_value)) {
-                    $field->setValue((string)$fieldXml->default_value);
-                }
             }
-            elseif (isset($fieldXml->default_formula)) {
+            if (isset($formulas[$name])) {
+                $field
+                    ->setFormulaString($formulas[$name])
+                    ->setFormula($this->parse($formulas[$name]))
+                    ->setDependencies($this->depends($context, $field->getFormula()));
+            }
+            elseif(isset($fieldXml->default_formula)) {
                 $field
                     ->setFormulaString((string)$fieldXml->default_formula)
                     ->setFormula($this->parse((string)$fieldXml->default_formula))
                     ->setDependencies($this->depends($context, $field->getFormula()));
             }
-
-
+            elseif (isset($fieldXml->default_value)) {
+                $field->setValue((string)$fieldXml->default_value);
+            }
             $result[$name] = $field;
         }
 
@@ -311,6 +320,9 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
                     $hasUnresolvedDependency = false;
                     if ($field->hasDependencies()) {
                         foreach ($field->getDependencies() as $dependency) {
+                            if (!isset($fields[$dependency])) {
+                                throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("Field '%s' depends on undefined field '%s'", $fieldName, $dependency));
+                            }
                             if (!isset($orders[$dependency])) {
                                 // $dependency not yet sorted so $module should wait until that happens
                                 $hasUnresolvedDependency = true;

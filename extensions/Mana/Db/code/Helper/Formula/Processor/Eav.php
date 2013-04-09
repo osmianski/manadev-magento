@@ -38,4 +38,8 @@ class Mana_Db_Helper_Formula_Processor_Eav extends Mana_Db_Helper_Formula_Proces
             return false;
         }
     }
+
+    public function getPrimaryKey($entity) {
+        return 'entity_id';
+    }
 }

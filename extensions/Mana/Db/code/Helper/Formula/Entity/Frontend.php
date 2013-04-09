@@ -17,7 +17,9 @@ class Mana_Db_Helper_Formula_Entity_Frontend extends Mana_Db_Helper_Formula_Enti
     public function select($context, $entity) {
         switch ($context->getMode()) {
             default:
-                $context->setMode($this->getName());
+                $context
+                    ->setMode($this->getName())
+                    ->setEntityHelper($this);
 
                 $context
                     ->setEntity($entity->getEntity())

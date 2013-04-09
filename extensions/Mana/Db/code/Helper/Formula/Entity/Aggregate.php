@@ -17,7 +17,9 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
     public function select($context, $entity) {
         switch ($context->getMode()) {
             default:
-                $context->setMode($this->getName());
+                $context
+                    ->setMode($this->getName())
+                    ->setEntityHelper($this);
 
                 /* @var $dbHelper Mana_Db_Helper_Data */
                 $dbHelper = Mage::helper('mana_db');
@@ -31,15 +33,18 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
                     ->setProcessor($entity->getProcessor())
                     ->setAlias($entity->getAlias());
 
+                $alias = explode('.', $entity->getAlias());
+                $alias = array_pop($alias);
+
                 $aggregateContext = $context->createChildContext()
                     ->setPrefix($context->getPrefix())
                     ->setEntity($entity->getEntity())
                     ->setProcessor($entity->getProcessor())
-                    ->setAlias($entity->getAlias());
+                    ->setAlias($alias);
 
                 $select = $aggregateContext->getSelect()
                     ->from(array(
-                        $aggregateContext->registerAlias($entity->getAlias())
+                        $aggregateContext->registerAlias($alias)
                         => $resource->getTable($dbHelper->getScopedName($entity->getEntity()))
                     ), null);
 

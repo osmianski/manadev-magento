@@ -107,7 +107,7 @@
                                             <on>{{= primary.global_id }} = {{= global.id }} AND {{= primary.store_id }} = {{= store.store_id }}</on>
                                         </primary>
                                     </join>
-                                    <where><![CDATA[{{= store.code}} <> 0]]></where>
+                                    <where><![CDATA[{{= store.code}} <> 'admin']]></where>
                                 </base>
                             </formula>
                             <fields>

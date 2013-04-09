@@ -31,9 +31,7 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
         $fieldsXml = $dbConfig->getScopeXml($context->getEntity())->fields;
 
         if (isset($fieldsXml->$field)) {
-            if (!($alias = $context->getAlias()) || $alias == 'this') {
-                $alias = 'primary';
-            }
+            $alias = $context->getAlias();
             return $context->getHelper()->expr()
                 ->setFieldExpr($context->resolveAlias("$alias.$field"))
                 ->setFieldName($field)
@@ -59,9 +57,11 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
 
         $scopeXml = $dbConfig->getScopeXml($context->getEntity());
         if ($result = $this->_selectEntityBasedOnXml($context, $scopeXml->formula->base->from, $entity, 'foreign')) {
+            $this->setForeignJoin($context, $result);
             return $result;
         }
         if ($result = $this->_selectEntityBasedOnXml($context, $scopeXml->formula->base->join, $entity, 'foreign')) {
+            $this->setForeignJoin($context, $result);
             return $result;
         }
         if ($result = $this->_selectEntityBasedOnXml($context, $scopeXml->formula->aggregate, $entity, 'aggregate')) {
@@ -72,5 +72,23 @@ class Mana_Db_Helper_Formula_Processor_Entity extends Mana_Db_Helper_Formula_Pro
         }
 
         return false;
+    }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param Mana_Db_Model_Formula_Entity $entity
+     */
+    protected function setForeignJoin($context, $entity) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        if ($context->getAlias()) {
+            $entity->setForeignJoin("{{= {$entity->getAlias()}.{$entity->getProcessor()->getPrimaryKey($entity->getEntity())} }} = " .
+                "{{= {$context->getAlias()}.{$dbConfig->getForeignKey($entity->getEntity(), $context->getEntity())} }}");
+        }
+    }
+
+    public function getPrimaryKey($entity) {
+        return 'id';
     }
 }

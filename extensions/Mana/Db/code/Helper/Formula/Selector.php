@@ -57,11 +57,14 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Node $formula
      */
     public function selectFormula(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
-        /* @var $formulaHelper Mana_Db_Helper_Formula */
-        $formulaHelper = Mage::helper('mana_db/formula');
-
-        $expr = $this->cast($this->_select($context, $formula), $formulaHelper->getType($context->getField()->getType()));
-        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr($expr->getExpr())));
+        $expr = $this->_select($context, $formula);
+        if ($expr->getIsAggregate()) {
+            throw new Mana_Db_Exception_Formula($this->__("Aggregate field used outside of aggregate function"));
+        }
+        $expr = $this->cast($expr, $context->getField()->getType());
+        $expr = $this->_getOverriddenValueExpr($context, $expr->getExpr());
+        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr(
+            $expr)));
     }
 
     /**
@@ -79,8 +82,8 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @throws Exception
      */
     public function selectValue($context, $value) {
-        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr(
-            $this->_getValue($context, $value))));
+        $expr = $this->_getOverriddenValueExpr($context, $this->_getValue($context, $value));
+        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr($expr)));
     }
 
     /**
@@ -121,18 +124,17 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @param Mana_Db_Model_Formula_Context $context
      */
     public function selectDefaultValue($context) {
-        $context->getSelect()->columns(array(
-            $context->getField()->getName() => new Zend_Db_Expr(
-                $this->_getDefaultValue($context))
-        ));
+        $expr = $this->_getOverriddenValueExpr($context, $this->_getDefaultValue($context));
+        $context->getSelect()->columns(array($context->getField()->getName() => new Zend_Db_Expr($expr)));
     }
 
     /**
      * @param Mana_Db_Model_Formula_Context $context
+     * @return bool
      */
     public function selectSystemField($context) {
         if ($context->getField()->getRole() == Mana_Db_Helper_Config::ROLE_PRIMARY_KEY) {
-            return;
+            return false;
         }
 
         /* @var $formulaHelper Mana_Db_Helper_Formula */
@@ -149,6 +151,7 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
                     "COALESCE($fieldExpr, {$this->_getDefaultValue($context)})")
             ));
         }
+        return true;
     }
 
     /**
@@ -226,8 +229,22 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      *    * frontend entity: sets a flag for processing frontend entity
      */
     protected function _selectField($originalContext, $formula) {
+        if ($formula->identifiers[0] == 'this') {
+            if (count($formula->identifiers) == 1) {
+                throw new Mana_Db_Exception_Formula(Mage::helper('mana_db')->__("'%s' is entity, but field expected", implode('.', $formula->identifiers)));
+            }
+            $formula->identifiers = array_slice($formula->identifiers, 1);
+            if (count($formula->identifiers) == 1) {
+                /* @var $identifier Mana_Db_Model_Formula_Node_Identifier */
+                $identifier = Mage::getModel('mana_db/formula_node_identifier');
+                $identifier->identifier = $formula->identifiers[0];
+                $this->_selectIdentifier($originalContext, $identifier);
+            }
+        }
         $context = clone $originalContext;
-        return $this->_selectFieldRecursively($context, $formula, 0);
+        $result = $this->_selectFieldRecursively($context, $formula, 0);
+        $originalContext->copyAliases($context);
+        return $result;
     }
 
     /**
@@ -305,19 +322,14 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      * @return Mana_Db_Model_Formula_Expr
      */
     protected function _selectIdentifier($context, $formula) {
-        /* @var $field Mana_Db_Model_Formula_Node_Field */
-        $field = Mage::getModel('mana_db/formula_node_field');
-        $field->identifiers = array('primary', $formula->identifier);
+        if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
+            $context->getEntityHelper()->selectField($context, null, $result);
 
-        return $this->_selectField($context, $field);
-//        if ($result = $context->getProcessor()->selectField($context, $formula->identifier)) {
-//            $context->getEntityHelper()->selectField($context, $field, $result);
-//
-//            return $result;
-//        }
-//        else {
-//            throw new Mana_Db_Exception_Formula($this->__("Can't evaluate '%s'", $formula->identifier));
-//        }
+            return $result;
+        }
+        else {
+            throw new Mana_Db_Exception_Formula($this->__("Can't evaluate '%s'", $formula->identifier));
+        }
     }
 
     /**
@@ -403,5 +415,29 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
      */
     protected function _selectNode(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
         // all future nodes ignored
+    }
+
+    /**
+     * @param Mana_Db_Model_Formula_Context $context
+     * @param string $defaultExpr
+     * @return string
+     */
+    protected function _getOverriddenValueExpr($context, $defaultExpr) {
+        if (($no = $context->getField()->getNo()) !== null) {
+            $overriddenExpr = "`p`.`{$context->getField()->getName()}`";
+            if ($overriddenExpr != $defaultExpr) {
+                /* @var $db Mana_Db_Helper_Data */
+                $db = Mage::helper('mana_db');
+
+                $condition = "`p`.`default_mask{$db->getMaskIndex($no)}` & {$db->getMask($no)} = {$db->getMask($no)}";
+                return "IF ($condition, $overriddenExpr, $defaultExpr)";
+            }
+            else {
+                return $overriddenExpr;
+            }
+        }
+        else {
+            return $defaultExpr;
+        }
     }
 }

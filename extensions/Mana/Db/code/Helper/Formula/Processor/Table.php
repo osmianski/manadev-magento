@@ -39,4 +39,13 @@ class Mana_Db_Helper_Formula_Processor_Table extends Mana_Db_Helper_Formula_Proc
             return false;
         }
     }
+
+    public function getPrimaryKey($entity) {
+        /* @var $resource Mana_Db_Resource_Formula */
+        $resource = Mage::getResourceSingleton('mana_db/formula');
+
+        foreach ($resource->getTableFields($entity) as $field) {
+            throw new Exception('Not implemented');
+        }
+    }
 }

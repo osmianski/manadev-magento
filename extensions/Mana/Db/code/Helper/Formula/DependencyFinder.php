@@ -35,7 +35,7 @@ class Mana_Db_Helper_Formula_DependencyFinder extends Mana_Db_Helper_Formula_Abs
      * @return string[]
      */
     protected function _findInField(/** @noinspection PhpUnusedParameterInspection */$context, $formula) {
-        if (count($formula->identifiers) == 2 && $formula->identifiers[0] == 'primary' || $formula->identifiers[0] == 'this') {
+        if (count($formula->identifiers) == 2 && $formula->identifiers[0] == 'this') {
             return array($formula->identifiers[1]);
         }
         else {

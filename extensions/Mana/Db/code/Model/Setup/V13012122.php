@@ -263,7 +263,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
                 $field->foreign->on_update = 'cascade';
                 $field->foreign->on_delete = 'cascade';
                 $field->role = Mana_Db_Helper_Config::ROLE_FLAT;
-                $field->default_formula = '{{= id }}';
+                $field->default_formula = '{{= primary.id }}';
                 $field->nullable = 1;
                 $configHelper->propagateName($field);
                 $configHelper->propagateAttributes($scope, $field, array('module', 'version'));
@@ -280,7 +280,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
                 $field->foreign->on_update = 'cascade';
                 $field->foreign->on_delete = 'cascade';
                 $field->role = Mana_Db_Helper_Config::ROLE_FLAT;
-                $field->default_formula = '{{= id }}';
+                $field->default_formula = '{{= primary.id }}';
                 $field->nullable = 1;
                 $field->unique = 1;
                 $configHelper->propagateName($field);
