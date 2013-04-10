@@ -120,8 +120,14 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
             return $this->getParentContext()->resolveAlias(implode('.', array_slice($fieldExpr, 1)));
         }
         else {
+            if ($fieldExpr[0] == 'context') {
+                $fieldExpr[0] = $this->getAlias();
+            }
             $field = array_pop($fieldExpr);
             $alias = implode('.', $fieldExpr);
+            if (!$alias) {
+                $alias = 'primary';
+            }
             if (self::$_quoteFieldsAndEntities) {
                 return "`{$this->registerAlias($alias)}`.`$field`";
             }
@@ -145,13 +151,15 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
     }
 
     public function incrementPrefix() {
-        $prefix = $this->getPrefix() . $this->registerAlias($this->getAlias());
+        $alias = $this->getAlias() ? $this->getAlias() : 'primary';
+        $prefix = $this->getPrefix() . $this->registerAlias($alias);
         $this->setPrefix($prefix);
         return $prefix;
     }
 
     public function decrementPrefix() {
-        $prefix = substr($this->getPrefix(), 0, strlen($this->getPrefix()) - strlen($this->registerAlias($this->getAlias())));
+        $alias = $this->getAlias() ? $this->getAlias() : 'primary';
+        $prefix = substr($this->getPrefix(), 0, strlen($this->getPrefix()) - strlen($this->registerAlias($alias)));
         $this->setPrefix($prefix);
 
         return $prefix;

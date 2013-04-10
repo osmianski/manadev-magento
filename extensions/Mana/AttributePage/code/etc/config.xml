@@ -88,12 +88,12 @@
                         <page>
                             <entity>mana_attributepage/page</entity>
                         </page>
-                        <!--<option_page>
+                        <option_page>
                             <entity>mana_attributepage/option_page</entity>
                             <depends>
                                 <page />
                             </depends>
-                        </option_page>-->
+                        </option_page>
                     </targets>
                 </mana_attribute_page>
             </indexer>

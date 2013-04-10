@@ -60,7 +60,7 @@
                                             </page_attribute>
                                         </join>
                                         <order>{{= page_attribute.position }} ASC</order>
-                                        <where>{{= parent.primary.id }} = {{= page_attribute.page_id }}</where>
+                                        <where>{{= parent.context.id }} = {{= page_attribute.page_id }}</where>
                                         <title>Product Attribute</title>
                                     </attribute>
                                 </aggregate>
@@ -197,6 +197,27 @@
                             </fields>
                         </default>
                         <global>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <attribute_page>
+                                            <entity>mana_attributepage/page/flat</entity>
+                                        </attribute_page>
+                                    </from>
+                                    <join>
+                                        <default>
+                                            <type>inner</type>
+                                            <entity>mana_attributepage/option_page/default</entity>
+                                            <on>{{= default.attribute_page_id }} = {{= attribute_page.primary_id }}</on>
+                                        </default>
+                                        <page_attribute>
+                                            <type>inner</type>
+                                            <entity>mana_attributepage/option_page/default</entity>
+                                            <on>{{= default.attribute_page_id }} = {{= attribute_page.primary_id }}</on>
+                                        </page_attribute>
+                                    </join>
+                                </base>
+                            </formula>
                             <fields>
                                 <attribute_page_id>
                                     <type>bigint</type>

@@ -28,10 +28,6 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
                 $resource = Mage::getResourceSingleton('mana_db/formula');
 
                 $context->incrementPrefix();
-                $context
-                    ->setEntity($entity->getEntity())
-                    ->setProcessor($entity->getProcessor())
-                    ->setAlias($entity->getAlias());
 
                 $alias = explode('.', $entity->getAlias());
                 $alias = array_pop($alias);
@@ -68,7 +64,11 @@ class Mana_Db_Helper_Formula_Entity_Aggregate extends Mana_Db_Helper_Formula_Ent
                     $select->where($aggregateContext->resolveAliases($entity->getWhere()));
                 }
 
-                $context->setAggregateContext($aggregateContext);
+                $context
+                    ->setEntity($entity->getEntity())
+                    ->setProcessor($entity->getProcessor())
+                    ->setAlias($entity->getAlias())
+                    ->setAggregateContext($aggregateContext);
                 break;
         }
     }
