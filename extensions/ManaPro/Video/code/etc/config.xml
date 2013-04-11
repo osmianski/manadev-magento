@@ -11,7 +11,7 @@
         <ManaPro_Video>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>12.08.22.12</version>
+            <version>13.04.10.22</version>
         </ManaPro_Video>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -26,6 +26,11 @@
 				Mage::helper() calls. -->
                 <class>ManaPro_Video_Helper</class>
             </manapro_video>
+            <catalog>
+                <rewrite>
+                    <image>Mana_Core_Helper_Image</image>
+                </rewrite>
+            </catalog>
         </helpers>
         <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
             Mage::getSingleton('<model type>') calls. That is, ManaPro_Video_Model_XXX_YYY classes are accessible as
