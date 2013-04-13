@@ -90,8 +90,9 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
         foreach ($children as $childCategory) {
             /* @var $childCategory Mage_Catalog_Model_Category */
             if ($childCategory['is_active'] &&
-                $childCategory['level'] == $category['level'] + 1 &&
-                strpos($childCategory['path'], $category['path']) === 0 &&
+                //$childCategory['level'] == $category['level'] + 1 &&
+                strpos($childCategory['path'], $category['path'] . '/') === 0 &&
+                strpos('/', substr($childCategory['path'], strlen($category['path'] . '/'))) === false &&
                 $childCategory['product_count'])
             {
                 $data[] = array(
