@@ -12,27 +12,10 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             this._cellWidth = 0;
             this._paddingWidth = 0;
         },
-        _subscribeToHtmlEvents: function() {
-            var self = this;
-            var inResize = false;
-            function _raiseResize() {
-                if (inResize) {
-                    return;
-                }
-                inResize = true;
-                self.decorateGrid();
-                inResize = false;
-            }
-
+        _subscribeToBlockEvents: function() {
             return this
                 ._super()
-                .on('bind', this, function() {
-                    this.decorateGrid();
-                    $(window).on('resize', _raiseResize);
-                })
-                .on('unbind', this, function() {
-                    $(window).off('resize', _raiseResize);
-                });
+                .on('resize', this, this.decorateGrid);
         },
         _appleZoomFix: function () {
             var meta = document.querySelector( "meta[name=viewport]" ),
@@ -61,7 +44,6 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             //return;
             //alert('window: ' +  $(window).width());
             //console.log('window: ' +  $(window).width());
-            $('.col-main').width($('.main').width() - $('.col-left').outerWidth(true) - $('.col-right').outerWidth(true) - $('.col-main').outerWidth(true) + $('.col-main').width());
             var $el = $(this.getElement());
             var width = $el.width();
             var $cells = $el.find('li.item');
@@ -125,3 +107,20 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
       }
     });
 });
+
+Mana.define('Mana/Theme/Body', ['jquery', 'Mana/Core/PageBlock'], function ($, PageBlock) {
+    return PageBlock.extend('Mana/Theme/Body', {
+        _subscribeToBlockEvents: function() {
+            return this
+                ._super()
+                .on('resize', this, function () {
+                    var $colMain = this.$().find('.col-main');
+                    $colMain.width(this.$().find('.main').width() -
+                        this.$().find('.col-left').outerWidth(true) -
+                        this.$().find('.col-right').outerWidth(true) -
+                        $colMain.outerWidth(true) +
+                        $colMain.width());
+                });
+        }
+    });
+ });
