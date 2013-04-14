@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.02.21.22</version>
+		    <version>13.04.14.09</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 

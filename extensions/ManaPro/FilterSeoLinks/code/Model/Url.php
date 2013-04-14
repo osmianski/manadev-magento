@@ -74,10 +74,12 @@ class ManaPro_FilterSeoLinks_Model_Url extends Mage_Core_Model_Url {
         $path = $parts['scheme'].'://'.$parts['host'].(isset($parts['port']) ? ':'.$parts['port'] : '').$parts['path'];
         $result = '';
         foreach (Mage::app()->getStores() as /* @var $store Mage_Core_Model_Store */ $store) {
-            $baseUrl = $store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, strtolower($parts['scheme']) == 'https');
-            if ($core->startsWith($path, $baseUrl)) {
-                $result = $baseUrl;
-                break;
+            foreach (array(false, true) as $secure) {
+                $baseUrl = $store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $secure);
+                if ($core->startsWith($path, $baseUrl)) {
+                    $result = $baseUrl;
+                    break;
+                }
             }
         }
         if (!$result) throw new Exception('Not implemented');
