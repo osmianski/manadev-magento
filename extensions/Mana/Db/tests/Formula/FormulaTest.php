@@ -45,7 +45,7 @@ class Mana_Db_Test_Formula_FormulaTest extends PHPUnit_Framework_TestCase {
         $this->assertFormulasSelect('mana_attributepage/page/store_flat',
             // formulas and SQL column expressions
             array(
-                'title' => array('{{= global.title }}', "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`, `g`.`title`)")
+                'title' => array('{{= global.title }}', "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`, `g`.`title`)"),
             ),
             // SQL joined tables
             array(
@@ -73,38 +73,43 @@ class Mana_Db_Test_Formula_FormulaTest extends PHPUnit_Framework_TestCase {
         $this->assertFormulasSelect('mana_attributepage/page/store_flat',
             // formulas and SQL column expressions
             array(
-                'title' => array('{{= COUNT(global.primary.attribute.frontend_label) }}',
-                    "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`, ".
-                        "CONCAT((SELECT COUNT(`p2a`.`frontend_label`)".
-                        " FROM `eav_attribute` AS `p2a`\n".
-                        " INNER JOIN `m_attribute_page_attribute` AS `p2p` ON `p2a`.`attribute_id` = `p2p`.`attribute_id`".
-                        " WHERE (`p2`.`id` = `p2p`.`page_id`)".
-                        " ORDER BY `p2p`.`position` ASC)))")
+                'title' => array('{{= COUNT(global.attribute.frontend_label) }}',
+                    "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`,".
+                        " CONCAT(IF (`a`.`frontend_label` IS NULL, 0, 1) +".
+                        " IF (`a2`.`frontend_label` IS NULL, 0, 1) +".
+                        " IF (`a3`.`frontend_label` IS NULL, 0, 1) +".
+                        " IF (`a4`.`frontend_label` IS NULL, 0, 1) +".
+                        " IF (`a5`.`frontend_label` IS NULL, 0, 1)))")
             ),
             // SQL joined tables
             array(
                 'primary' => array('m_attribute_page_store', "`p`.`global_id` = `g`.`id` AND `p`.`store_id` = `s`.`store_id`"), // p
                 'global' => 'm_attribute_page_flat', // g
+                'global.attribute0' => array('eav_attribute', "`a`.`attribute_id` = `g`.`attribute_id_0`"), // a
+                'global.attribute1' => array('eav_attribute', "`a2`.`attribute_id` = `g`.`attribute_id_1`"), // a2
+                'global.attribute2' => array('eav_attribute', "`a3`.`attribute_id` = `g`.`attribute_id_2`"), // a3
+                'global.attribute3' => array('eav_attribute', "`a4`.`attribute_id` = `g`.`attribute_id_3`"), // a4
+                'global.attribute4' => array('eav_attribute', "`a5`.`attribute_id` = `g`.`attribute_id_4`"), // a5
             )
         );
-        $this->assertFormulasSelect('mana_attributepage/page/flat',
-            // formulas and SQL column expressions
-            array(
-                'title' => array(
-                    '{{= COUNT(attribute.frontend_label) }}',
-                    "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`,".
-                        " CONCAT((SELECT COUNT(`pa`.`frontend_label`)".
-                        " FROM `eav_attribute` AS `pa`\n".
-                        " INNER JOIN `m_attribute_page_attribute` AS `pp` ON `pa`.`attribute_id` = `pp`.`attribute_id`".
-                        " WHERE (`p`.`id` = `pp`.`page_id`)".
-                        " ORDER BY `pp`.`position` ASC)))"
-                )
-            ),
-            // SQL joined tables
-            array(
-                'primary' => 'm_attribute_page', // p
-            )
-        );
+//        $this->assertFormulasSelect('mana_attributepage/page/flat',
+//            // formulas and SQL column expressions
+//            array(
+//                'title' => array(
+//                    '{{= COUNT(attribute.frontend_label) }}',
+//                    "IF (`p`.`default_mask0` & 2 = 2, `p`.`title`,".
+//                        " CONCAT((SELECT COUNT(`pa`.`frontend_label`)".
+//                        " FROM `eav_attribute` AS `pa`\n".
+//                        " INNER JOIN `m_attribute_page_attribute` AS `pp` ON `pa`.`attribute_id` = `pp`.`attribute_id`".
+//                        " WHERE (`p`.`id` = `pp`.`page_id`)".
+//                        " ORDER BY `pp`.`position` ASC)))"
+//                )
+//            ),
+//            // SQL joined tables
+//            array(
+//                'primary' => 'm_attribute_page', // p
+//            )
+//        );
     }
 
     public function testFrontendField() {

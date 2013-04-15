@@ -10,6 +10,8 @@
  *
  */
 class Mana_AttributePage_Model_Page extends Mana_Db_Model_Entity {
+    const MAX_ATTRIBUTE_COUNT = 5;
+
     public function hasAtLeastOneAttribute($dataSource) {
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');

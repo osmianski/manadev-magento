@@ -26,17 +26,47 @@ class Mana_Db_Helper_Formula_Processor_Table extends Mana_Db_Helper_Formula_Proc
         $fields = $resource->getTableFields($context->getEntity());
 
         if (isset($fields[$field])) {
-            if (!($alias = $context->getAlias()) || $alias == 'this') {
-                $alias = 'primary';
-            }
-
             return $context->getHelper()->expr()
-                ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setFieldExpr($context->getAlias()->fieldExpr($context, $field))
                 ->setFieldName($field)
                 ->setType($fields[$field]['DATA_TYPE']);
         }
         else {
-            return false;
+            /* @var $dbConfig Mana_Db_Helper_Config */
+            $dbConfig = Mage::helper('mana_db/config');
+
+            /* @var $formulaHelper Mana_Db_Helper_Formula */
+            $formulaHelper = Mage::helper('mana_db/formula');
+
+            /* @var $fieldsXml Varien_Simplexml_Element */
+            /** @noinspection PhpUndefinedFieldInspection */
+            $fieldsXml = $dbConfig->getTableXml($context->getEntity())->fields;
+
+            if (isset($fieldsXml->$field)) {
+                $alias = $context->getAlias();
+                $formula = $fieldsXml->$field->formula;
+                $context->resetLocalAliases();
+
+                if (isset($formula->join)) {
+                    /* @var $joinContainerXml Varien_Simplexml_Element */
+                    $joinContainerXml = $formula->join;
+                    foreach ($joinContainerXml->children() as $joinAlias => $definition) {
+                        /* @var $joinClosure Mana_Db_Model_Formula_Closure_Join */
+                        $joinClosure = Mage::getModel('mana_db/formula_closure_join', compact('context', 'definition'));
+                        $alias
+                            ->child($formulaHelper->createAlias($joinAlias))
+                            ->each($joinClosure);
+
+                    }
+                }
+                return $context->getHelper()->expr()
+                    ->setFieldExpr($alias->expr($context, (string)$formula->expr))
+                    ->setFieldName($field)
+                    ->setType((string)$fieldsXml->$field->type);
+            }
+            else {
+                return false;
+            }
         }
     }
 
@@ -45,7 +75,12 @@ class Mana_Db_Helper_Formula_Processor_Table extends Mana_Db_Helper_Formula_Proc
         $resource = Mage::getResourceSingleton('mana_db/formula');
 
         foreach ($resource->getTableFields($entity) as $field) {
-            throw new Exception('Not implemented');
+            if (!empty($field['PRIMARY'])) {
+                return $field['COLUMN_NAME'];
+            }
         }
+
+        return false;
     }
+
 }

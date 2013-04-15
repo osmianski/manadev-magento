@@ -241,7 +241,7 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
 
         /** @noinspection PhpUndefinedFieldInspection */
         $context
-            ->setAlias('')
+            ->setAlias($this->createAlias(''))
             ->setEntity($entity)
             ->setPrimaryEntity((string)$scopeXml->flattens)
             ->setTargetEntity($entity)
@@ -445,5 +445,21 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         }
 
         return $select;
+    }
+
+    /**
+     * @param string | string[]  $value
+     * @return Mana_Db_Model_Formula_Alias
+     */
+    public function createAlias($value) {
+        if (!$value || $value == 'this') {
+            return Mage::getModel('mana_db/formula_alias_empty');
+        }
+        elseif (is_array($value)) {
+            return Mage::getModel('mana_db/formula_alias_array', $value);
+        }
+        else {
+            return Mage::getModel('mana_db/formula_alias_single', $value);
+        }
     }
 }

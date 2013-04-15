@@ -32,8 +32,8 @@
  * @method Mana_Db_Model_Formula_Context setParentContext(Mana_Db_Model_Formula_Context $value)
  * @method Mana_Db_Model_Formula_Context getAggregateContext()
  * @method Mana_Db_Model_Formula_Context setAggregateContext(Mana_Db_Model_Formula_Context $value)
- * @method string getAlias()
- * @method Mana_Db_Model_Formula_Context setAlias(string $value)
+ * @method Mana_Db_Model_Formula_Alias getAlias()
+ * @method Mana_Db_Model_Formula_Context setAlias(Mana_Db_Model_Formula_Alias $value)
  * @method string __getGlobalEntity()
  * @method Mana_Db_Model_Formula_Context __setGlobalEntity(string $value)
  * @method Mana_Db_Helper_Formula_Entity getEntityHelper()
@@ -49,10 +49,12 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
      */
     protected $_fields = array();
     protected $_aliases = array();
+    protected $_localAliases = array();
 
     protected $_options = array();
 
     static protected $_quoteFieldsAndEntities = true;
+    static protected $_aliasIndex = null;
 
     /**
      * @param Mana_Db_Helper_Formula_Processor | string $processor
@@ -98,8 +100,9 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
         return $this->_aliases[$alias];
     }
 
-    public function resolveAliases($expr, $quoteFieldsAndEntities = true) {
+    public function resolveAliases($expr, $quoteFieldsAndEntities = true, $aliasIndex = null) {
         self::$_quoteFieldsAndEntities = $quoteFieldsAndEntities;
+        self::$_aliasIndex = $aliasIndex;
         return preg_replace_callback('/{{=([^}]*)}}/', array($this, '_resolveAlias'), $expr);
     }
 
@@ -107,27 +110,56 @@ class Mana_Db_Model_Formula_Context extends Varien_Object {
         return isset($this->_aliases[$alias]);
     }
 
-    protected function _resolveAlias($matches) {
-        return $this->resolveAlias($matches[1]);
+
+    public function resetLocalAliases() {
+        $this->_localAliases = array();
+
+        return $this;
     }
 
-    public function resolveAlias($fieldExpr) {
+    public function addLocalAlias($localAlias, $globalAlias) {
+        $this->_localAliases[$localAlias] = $globalAlias;
+        return $this;
+    }
+
+    protected function _resolveAlias($matches) {
+        return $this->_doResolveAlias($matches[1]);
+    }
+
+    public function resolveAlias($fieldExpr, $quoteFieldsAndEntities = true, $aliasIndex = null) {
+        self::$_quoteFieldsAndEntities = $quoteFieldsAndEntities;
+        self::$_aliasIndex = $aliasIndex;
+        return $this->_doResolveAlias($fieldExpr);
+    }
+    protected function _doResolveAlias($fieldExpr) {
         $fieldExpr = explode('.', $fieldExpr);
         foreach ($fieldExpr as $index => $field) {
             $fieldExpr[$index] = trim($field);
         }
         if ($fieldExpr[0] == 'parent') {
-            return $this->getParentContext()->resolveAlias(implode('.', array_slice($fieldExpr, 1)));
+            return $this->getParentContext()->_doResolveAlias(implode('.', array_slice($fieldExpr, 1)));
         }
         else {
-            if ($fieldExpr[0] == 'context') {
-                $fieldExpr[0] = $this->getAlias();
-            }
             $field = array_pop($fieldExpr);
             $alias = implode('.', $fieldExpr);
             if (!$alias) {
                 $alias = 'primary';
             }
+
+            if ($fieldExpr[0] == 'context') {
+                /* @var $formulaHelper Mana_Db_Helper_Formula */
+                $formulaHelper = Mage::helper('mana_db/formula');
+
+                $alias = $this->getAlias()->child($formulaHelper->createAlias(implode('.', array_slice($fieldExpr, 1))));
+            }
+            elseif (isset($this->_localAliases[$alias])) {
+                $alias = $this->_localAliases[$alias];
+            }
+
+            if (!is_string($alias)) {
+                $alias = $alias->asString(self::$_aliasIndex);
+            }
+
             if (self::$_quoteFieldsAndEntities) {
                 return "`{$this->registerAlias($alias)}`.`$field`";
             }

@@ -25,12 +25,8 @@ class Mana_Db_Helper_Formula_Processor_Eav extends Mana_Db_Helper_Formula_Proces
         $attribute = $eavEntityType->getAttributeCollection()->getItemByColumnValue('attribute_code', $field);
 
         if ($attribute) {
-            if (!($alias = $context->getAlias()) || $alias == 'this') {
-                $alias = 'primary';
-            }
-
             return $context->getHelper()->expr()
-                ->setFieldExpr($context->resolveAlias("$alias.$field"))
+                ->setFieldExpr($context->getAlias()->fieldExpr($context, $field))
                 ->setFieldName($field)
                 ->setType($attribute->getBackendType());
         }

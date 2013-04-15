@@ -30,26 +30,54 @@ class Mana_Db_Helper_Formula_Function_Glue extends Mana_Db_Helper_Formula_Functi
 
         $helper = $context->getHelper();
 
-        $field = $helper->cast($args[0], 'varchar (255)')->getFieldExpr();
         $sep = $helper->cast($args[1], 'varchar (255)')->getExpr();
-        if (count($args) == 3) {
-            $lastSep = $helper->cast($args[2], 'varchar (255)')->getExpr();
-            $expr =
-                "IF (COUNT({$args[0]->getFieldExpr()}) > 1, ".
-                    "REPLACE(CONCAT(".
-                        "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
-                            "'{$this->_separator}', COUNT({$field}) - 1), ".
-                        "$lastSep, ".
-                        "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
-                            "'{$this->_separator}', -1)".
-                    "), '{$this->_separator}', $sep), ".
-                    "GROUP_CONCAT({$field} SEPARATOR $sep)".
-               ")";
+        $lastSep = count($args) == 3 ? $helper->cast($args[2], 'varchar (255)')->getExpr() : '';
+        if ($args[0]->getSubSelect()) {
+            $field = $helper->cast($args[0], 'varchar (255)')->getFieldExpr();
+            if (count($args) == 3) {
+                $expr =
+                    "IF (COUNT({$args[0]->getFieldExpr()}) > 1, ".
+                        "REPLACE(CONCAT(".
+                            "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
+                                "'{$this->_separator}', COUNT({$field}) - 1), ".
+                            "$lastSep, ".
+                            "SUBSTRING_INDEX(GROUP_CONCAT({$field} SEPARATOR '{$this->_separator}'), ".
+                                "'{$this->_separator}', -1)".
+                        "), '{$this->_separator}', $sep), ".
+                        "GROUP_CONCAT({$field} SEPARATOR $sep)".
+                   ")";
+            }
+            else {
+                $expr = "GROUP_CONCAT({$field} SEPARATOR $sep)";
+            }
+
+            return $helper->expr()->setExpr("({$args[0]->getSubSelect()->columns($expr)})")->setType('varchar(255)');
         }
         else {
-            $expr = "GROUP_CONCAT({$field} SEPARATOR $sep)";
-        }
+            $expr = '';
+            $fieldExpr = $args[0]->getFieldExpr();
+            foreach ($fieldExpr as $index => $field) {
+                $nextField = isset($fieldExpr[$index + 1]) ? $fieldExpr[$index + 1] : '';
+                if ($expr) {
+                    if (count($args) == 3) {
+                        if ($nextField) {
+                            $expr .= ", IF ($field IS NULL, '', CONCAT(IF ($nextField IS NULL, $lastSep, $sep), $field))";
+                        }
+                        else {
+                            $expr .= ", IF ($field IS NULL, '', CONCAT($lastSep, $field))";
+                        }
+                    }
+                    else {
+                        $expr .= ", IF ($field IS NULL, '', CONCAT($sep, $field))";
+                    }
+                }
+                else {
+                    $expr .= "COALESCE({$helper->cast($args[0]->setExpr($field), 'varchar (255)')->getExpr()}, '')";
+                }
+            }
+            $expr = "CONCAT($expr)";
 
-        return $helper->expr()->setExpr("({$args[0]->getSubSelect()->columns($expr)})")->setType('varchar(255)');
+            return $helper->expr()->setExpr($expr)->setType('varchar(255)');
+        }
     }
 }

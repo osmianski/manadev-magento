@@ -60,46 +60,4 @@ abstract class Mana_Db_Helper_Formula_Processor extends Mage_Core_Helper_Abstrac
         }
         return self::$_eavEntityTypes[$entity];
     }
-
-    /**
-     * @param Mana_Db_Model_Formula_Context $context
-     * @param Varien_Simplexml_Element $xml
-     * @param string $entity
-     * @param string $mode
-     * @return Mana_Db_Model_Formula_Entity
-     */
-    protected function _selectEntityBasedOnXml($context, $xml, $entity, $mode) {
-        if (isset($xml->$entity)) {
-            /* @var $entityXml Varien_Simplexml_Element */
-            /** @noinspection PhpUndefinedFieldInspection */
-            $entityXml = $xml->$entity;
-
-            /* @var $result Mana_Db_Model_Formula_Entity */
-            $result = Mage::getModel('mana_db/formula_entity');
-
-            if ($entity == 'primary') {
-                /* @var $dbConfig Mana_Db_Helper_Config */
-                $dbConfig = Mage::helper('mana_db/config');
-
-                $scopeXml = $dbConfig->getScopeXml($context->getEntity());
-                /** @noinspection PhpUndefinedFieldInspection */
-                $entityName = (string)$scopeXml->flattens;
-            }
-            else {
-                /** @noinspection PhpUndefinedFieldInspection */
-                $entityName = (string)$entityXml->entity;
-            }
-            $data = $entityXml->asArray();
-            $alias = $context->getAlias() ? $context->getAlias() . '.' . $entity : $entity;
-            return $result
-                ->setHelper($mode)
-                ->setAlias($alias)
-                ->setEntity($entityName)
-                ->setProcessor($this->getProcessor($entityName))
-                ->addData($data ? $data : array());
-        }
-        else {
-            return false;
-        }
-    }
 }

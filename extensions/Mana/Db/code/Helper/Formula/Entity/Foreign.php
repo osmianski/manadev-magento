@@ -17,21 +17,16 @@ class Mana_Db_Helper_Formula_Entity_Foreign extends Mana_Db_Helper_Formula_Entit
     public function select($context, $entity) {
         switch ($context->getMode()) {
             default:
-                if (!$context->hasAlias($entity->getAlias())) {
+                if (!$context->hasAlias($entity->getAlias()->asString(0))) {
                     /* @var $resource Mana_Db_Resource_Formula */
                     $resource = Mage::getResourceSingleton('mana_db/formula');
 
                     /* @var $dbHelper Mana_Db_Helper_Data */
                     $dbHelper = Mage::helper('mana_db');
 
-                    $context->getSelect()->joinLeft(
-                        array(
-                            $context->registerAlias($entity->getAlias()) =>
-                            $resource->getTable($dbHelper->getScopedName($entity->getEntity()))
-                        ),
-                        $context->resolveAliases($entity->getForeignJoin()),
-                        null
-                    );
+                    /* @var $joinClosure Mana_Db_Model_Formula_Closure_ForeignJoinEnd */
+                    $joinClosure = Mage::getModel('mana_db/formula_closure_foreignJoinEnd', compact('context', 'entity'));
+                    $context->getAlias()->each($joinClosure);
                 }
 
                 $context

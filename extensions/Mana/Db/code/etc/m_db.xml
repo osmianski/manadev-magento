@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Db
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+    <modules>
+        <eav>
+            <tables>
+                <attribute_option>
+                    <fields>
+                        <global_label>
+                            <formula>
+                                <expr>{{= value.value }}</expr>
+                                <join>
+                                    <value>
+                                        <type>left</type>
+                                        <entity>eav/attribute_option_value</entity>
+                                        <on>{{= value.option_id }} = {{= context.option_id }} AND {{= value.store_id }} = 0</on>
+                                    </value>
+                                </join>
+                            </formula>
+                        </global_label>
+                        <store_label>
+                            <formula>
+                                <expr>{{= value.value }}</expr>
+                                <join>
+                                    <value>
+                                        <type>left</type>
+                                        <entity>eav/attribute_option_value</entity>
+                                        <on>{{= value.option_id }} = {{= context.option_id }} AND {{= value.store_id }} = {{= store.store_id }}</on>
+                                    </value>
+                                </join>
+                            </formula>
+                        </store_label>
+                    </fields>
+                </attribute_option>
+            </tables>
+        </eav>
+    </modules>
+</config>

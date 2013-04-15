@@ -26,7 +26,22 @@ class Mana_Db_Helper_Formula_Function_Count extends Mana_Db_Helper_Formula_Funct
 
         $helper = $context->getHelper();
 
-        $expr = "COUNT({$args[0]->getFieldExpr()})";
-        return $helper->expr()->setExpr("({$args[0]->getSubSelect()->columns($expr)})")->setType('int');
+        if ($args[0]->getSubSelect()) {
+            $expr = "COUNT({$args[0]->getFieldExpr()})";
+
+            return $helper->expr()->setExpr("({$args[0]->getSubSelect()->columns($expr)})")->setType('int');
+        }
+        else {
+            $expr = '';
+            $fieldExpr = $args[0]->getFieldExpr();
+            foreach ($fieldExpr as $field) {
+                if ($expr) {
+                    $expr .= " + ";
+                }
+                $expr .= "IF ($field IS NULL, 0, 1)";
+            }
+
+            return $helper->expr()->setExpr($expr)->setType('int');
+        }
     }
 }

@@ -84,6 +84,7 @@
                     <model>mana_attributepage/indexer</model>
                     <name>Attribute Pages (MANAdev)</name>
                     <description>Recalculates formula-based settings in attribute and attribute option pages</description>
+
                     <targets>
                         <page>
                             <entity>mana_attributepage/page</entity>
@@ -95,6 +96,12 @@
                             </depends>
                         </option_page>
                     </targets>
+
+                    <!--<targets>
+                        <option_page>
+                            <entity>mana_attributepage/option_page</entity>
+                        </option_page>
+                    </targets>-->
                 </mana_attribute_page>
             </indexer>
         </index>

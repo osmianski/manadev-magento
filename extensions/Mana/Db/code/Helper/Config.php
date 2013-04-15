@@ -152,6 +152,10 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
      * @param Varien_Simplexml_Element $module
      */
     protected function _prepareCustom($context, $module) {
+        if (!$module->installer_versions) {
+            return;
+        }
+
         foreach ($module->installer_versions->children() as $moduleVersion => $version) {
             $version = (string) $version;
 
@@ -194,6 +198,9 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     }
 
     protected function _iterateLevel ($level, $elements, $callbacks, $args, $deeperLevelIterator = null) {
+        if (!$elements) {
+            return;
+        }
         $hasCallbacks = false;
         foreach ($this->_configLevels as $levelIndex =>$levelKey) {
             if ($levelIndex < $level) {
@@ -251,6 +258,16 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
 
         return empty($entityXml) ? false : $entityXml[0];
     }
+
+    public function getTableXml($entityName) {
+        $xml = $this->getXml();
+        $parts = explode('/', $entityName);
+        list($module, $entity) = $parts;
+        $entityXml = $xml->getXpath("//modules/$module/tables/$entity");
+
+        return empty($entityXml) ? false : $entityXml[0];
+    }
+
 
     /**
      * @param string $fullEntityName
