@@ -13,14 +13,25 @@
  *        b.    we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
  */
 ;(function($) {
-    $('#mf_general_display').live('change', function() {
+    function _change() {
         if ($('#mfs_range').hasClass('m-decimal')) {
-            if ($(this).val() != 'slider') {
+            var $this = $('#mf_general_display');
+            if ($this.val() != 'slider' && $this.val() != 'range') {
                 $('#mfs_range').show();
             }
             else {
                 $('#mfs_range').hide();
             }
+            if ($this.val() != 'slider') {
+                $('#mf_general_slider_manual_entry').parent().parent().hide();
+                $('#mf_general_slider_use_existing_values').parent().parent().hide();
+            }
+            else {
+                $('#mf_general_slider_manual_entry').parent().parent().show();
+                $('#mf_general_slider_use_existing_values').parent().parent().show();
+            }
         }
-    });
+    }
+    $(_change);
+    $('#mf_general_display').live('change', _change);
 })(jQuery);

@@ -6,6 +6,14 @@
  */
 ;var ManaPro = ManaPro || {};
 ManaPro.filterSuperSlider = function(id, o) {
+    var _changing = false;
+    var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
+    var $_to = jQuery('#' + id + '-applied input.m-slider.m-to');
+    var _value = [
+        parseFloat($_from.val()),
+        parseFloat($_to.val())
+    ];
+
     function _round(value) {
         if (o.existingValues.length) {
             var distance = 0;
@@ -53,14 +61,26 @@ ManaPro.filterSuperSlider = function(id, o) {
             + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
     }
     function _change(value, undefined) {
+        if (_changing) {
+            return;
+        }
+        _changing = true;
+
         if (value === undefined) {
             value = [
-                parseFloat(jQuery('#'+id+'-applied input.m-slider.m-from').val()),
-                parseFloat(jQuery('#'+id+'-applied input.m-slider.m-to').val())
+                parseFloat($_from.val()),
+                parseFloat($_to.val())
             ];
             if (value[0] == NaN || value[1] == NaN) {
+                _changing = false;
                 return;
             }
+
+            if (value[0] == _value[0] && value[1] == _value[1]) {
+                _changing = false;
+                return;
+            }
+
             else if (value[0] > value[1]) {
                 var t = value[0];
                 value[0] = value[1];
@@ -74,6 +94,7 @@ ManaPro.filterSuperSlider = function(id, o) {
             var formattedValue = [_round(value[0]), _round(value[1])];
             window.setLocation(o.url.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
         }
+        _changing = false;
     }
 	var s = new Control.PriceSlider([id + '-from', id + '-to'], id + '-track', {
 		spans: [id + '-span'], 
@@ -93,27 +114,79 @@ ManaPro.filterSuperSlider = function(id, o) {
         }
 	};
 	s.options.onChange = _change;
-	var _timer = null;
-    jQuery('#'+id+'-applied input.m-slider.m-from').change(function(event) {
-        _timer = setTimeout(function() {
-            clearTimeout(_timer);
-            _timer = null;
+
+    var _timer = null;
+    $_from
+        .change(function (event) {
+            if (!_timer) {
+                _timer = setTimeout(function () {
+                    clearTimeout(_timer);
+                    _timer = null;
+                    _change();
+                }, 100);
+            }
+        })
+        .keypress(function (e) {
+            if (e.which == 13) {
+                if (!_timer) {
+                    _timer = setTimeout(function () {
+                        clearTimeout(_timer);
+                        _timer = null;
+                        _change();
+                    }, 100);
+                }
+            }
+            else if (e.which == 27) {
+                $_from.val(_value[0]);
+            }
+        })
+        .focus(function () {
+            var self = this;
+            var focusing = setTimeout(function () {
+                clearTimeout(focusing);
+                focusing = null;
+                $(self).select();
+            }, 100);
+        });
+    $_to
+        .change(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
             _change();
-        }, 100);
-    });
-    jQuery('#'+id+'-applied input.m-slider.m-to').change(function() {
-        _timer = null;
-        _change();
-    })
-    .focus(function() {
-        clearTimeout(_timer);
-    })
-    .blur(function() {
-        if (_timer) {
-            _timer = null;
+        })
+        .keypress(function (e) {
+            if (e.which == 13) {
+                if (_timer) {
+                    clearTimeout(_timer);
+                    _timer = null;
+                }
+                _change();
+            }
+            else if (e.which == 27) {
+                $_to.val(_value[1]);
+            }
+        })
+        .focus(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
+            var self = this;
+            var focusing = setTimeout(function () {
+                clearTimeout(focusing);
+                focusing = null;
+                $(self).select();
+            }, 100);
+        })
+        .blur(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
             _change();
-        }
-    });
+        });
 
 };
 ManaPro.filterAttributeSlider = function (id, o) {
@@ -177,4 +250,129 @@ ManaPro.filterAttributeSlider = function (id, o) {
         $(id + '-applied').update(o.appliedFormat.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
     };
     s.options.onChange = _change;
+};
+ManaPro.filterRangeInput = function (id, o) {
+    var _changing = false;
+    var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
+    var $_to = jQuery('#' + id + '-applied input.m-slider.m-to');
+    var _value = [
+        parseFloat($_from.val()),
+        parseFloat($_to.val())
+    ];
+
+    function _round(value) {
+        if (o.formatThreshold && value >= o.formatThreshold) {
+            return o.decimalDigits2 ? value.toFixed(o.decimalDigits2) : value.round();
+        }
+        else {
+            return o.decimalDigits ? value.toFixed(o.decimalDigits) : value.round();
+        }
+    }
+
+    function _change(undefined) {
+        if (_changing) {
+            return;
+        }
+        _changing = true;
+        value = [
+            parseFloat($_from.val()),
+            parseFloat($_to.val())
+        ];
+        if (value[0] == NaN || value[1] == NaN) {
+            _changing = false;
+            return;
+        }
+        if (value[0] == _value[0] && value[1] == _value[1]) {
+            _changing = false;
+            return;
+        }
+
+        else if (value[0] > value[1]) {
+            var t = value[0];
+            value[0] = value[1];
+            value[1] = t;
+        }
+        if (value[0] <= o.rangeFrom && value[1] >= o.rangeTo) {
+            window.setLocation(o.clearUrl);
+        }
+        else {
+            var formattedValue = [_round(value[0]), _round(value[1])];
+            window.setLocation(o.url.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
+        }
+        _changing = false;
+    }
+
+    var _timer = null;
+    $_from
+        .change(function (event) {
+            if (!_timer) {
+                _timer = setTimeout(function () {
+                    clearTimeout(_timer);
+                    _timer = null;
+                    _change();
+                }, 100);
+            }
+        })
+        .keypress(function (e) {
+            if (e.which == 13) {
+                if (!_timer) {
+                    _timer = setTimeout(function () {
+                        clearTimeout(_timer);
+                        _timer = null;
+                        _change();
+                    }, 100);
+                }
+            }
+            else if (e.which == 27) {
+                $_from.val(_value[0]);
+            }
+        })
+        .focus(function () {
+            var self = this;
+            var focusing = setTimeout(function () {
+                clearTimeout(focusing);
+                focusing = null;
+                $(self).select();
+            }, 100);
+        });
+    $_to
+        .change(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
+            _change();
+        })
+        .keypress(function (e) {
+            if (e.which == 13) {
+                if (_timer) {
+                    clearTimeout(_timer);
+                    _timer = null;
+                }
+                _change();
+            }
+            else if (e.which == 27) {
+                $_to.val(_value[1]);
+            }
+        })
+        .focus(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
+            var self = this;
+            var focusing = setTimeout(function () {
+                clearTimeout(focusing);
+                focusing = null;
+                $(self).select();
+            }, 100);
+        })
+        .blur(function () {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
+            _change();
+        });
+
 };

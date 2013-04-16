@@ -14,3 +14,5 @@ input.m-slider { width: 30px; }
 .col-main .block-layered-nav.m-topmenu dl.m-slider.m-inline dd .m-slider-min-value,
 .col-main .block-layered-nav.m-topmenu dl.m-slider.m-inline dd .m-slider-max-value
     { display: none; }
+
+.m-slider-values.left-aligned { text-align: left; }

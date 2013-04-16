@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <name>customers/zaun24</name>
+    <part name="Mana/Admin"/>
+    <part name="Mana/Core"/>
+    <part name="Mana/Db"/>
+    <part name="Mana/Filters"/>
+    <part name="ManaPro/FilterAdmin"/>
+    <part name="ManaPro/FilterSlider"/>
+    <part name="ManaPro/FilterSuperSlider"/>
+    <part name="ManaPro/FilterDropdown"/>
+</config>
