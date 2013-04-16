@@ -92,7 +92,7 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
             if ($childCategory['is_active'] &&
                 //$childCategory['level'] == $category['level'] + 1 &&
                 strpos($childCategory['path'], $category['path'] . '/') === 0 &&
-                strpos('/', substr($childCategory['path'], strlen($category['path'] . '/'))) === false &&
+                strpos($childCategory['path'], '/', strlen($category['path'] . '/')) === false &&
                 $childCategory['product_count'])
             {
                 $data[] = array(
