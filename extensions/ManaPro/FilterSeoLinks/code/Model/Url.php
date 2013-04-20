@@ -147,6 +147,10 @@ class ManaPro_FilterSeoLinks_Model_Url extends Mage_Core_Model_Url {
                             $seoQuery .= '/' . $seoName . '/' . $seoValue;
                         }
                     }
+                    elseif ($key == 'm-layered') {
+                        if ($leftQuery) $leftQuery .= '&';;
+                        $leftQuery .= $key . '=1';
+                    }
                     else {
                         if ($leftQuery) $leftQuery .= '&';//'&amp;';
                         $leftQuery .= $key . '=' . $value;
