@@ -48,9 +48,9 @@
                         <?php echo $this->getChildHtml('global_messages') ?>
                         <?php echo $this->getChildHtml('content') ?>
                     </div>
-                    <div class="col-left sidebar"><?php echo $this->getChildHtml('left') ?></div>
+                    <div class="col-left sidebar mb-left-sidebar"  data-m-block="Mana/Theme/Sidebar" data-side="left"><?php echo $this->getChildHtml('left') ?></div>
                 </div>
-                <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
+                <div class="col-right sidebar mb-right-sidebar"  data-m-block="Mana/Theme/Sidebar" data-side="right"><?php echo $this->getChildHtml('right') ?></div>
             </div>
         </div>
         <?php echo $this->getChildHtml('superfooter') ?>

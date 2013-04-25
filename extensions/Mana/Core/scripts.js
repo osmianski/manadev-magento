@@ -739,7 +739,7 @@ function ($, Block, config)
                     return;
                 }
                 inResize = true;
-                self._resize();
+                self.resize();
                 inResize = false;
             }
 
@@ -758,10 +758,10 @@ function ($, Block, config)
             return this
                 ._super()
                 .on('load', this, function () {
-                    this._resize();
+                    this.resize();
                 });
         },
-        _resize: function () {
+        resize: function () {
             this.trigger('resize', {}, false, true);
         },
         showOverlay: function() {
