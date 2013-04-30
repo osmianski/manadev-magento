@@ -30,7 +30,7 @@ class ManaPro_FilterSeoLinks_Model_Rewrite extends Mage_Core_Model_Url_Rewrite {
     {
         /* @var $_core Mana_Core_Helper_Data */ $_core = Mage::helper(strtolower('Mana_Core'));
         $conditionalWord = $_core->getStoreConfig('mana_filters/seo/conditional_word');
-        $categorySuffix = Mage::helper('catalog/category')->getCategoryUrlSuffix();
+        $categorySuffix = Mage::helper('manapro_filterseolinks')->getCategoryUrlSuffix();
 
         if (!Mage::isInstalled()) {
             return false;

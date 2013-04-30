@@ -66,7 +66,7 @@ class ManaPro_FilterSeoLinks_Model_Url extends Mage_Core_Model_Url {
         /* @var $core Mana_Core_Helper_Data */ $core = Mage::helper(strtolower('Mana_Core'));
         /* @var $resource ManaPro_FilterSeoLinks_Resource_Rewrite */ $resource = Mage::getResourceSingleton('manapro_filterseolinks/rewrite');
         $conditionalWord = $core->getStoreConfig('mana_filters/seo/conditional_word');
-        $categorySuffix = $options['handleCategorySuffix'] ? Mage::helper('catalog/category')->getCategoryUrlSuffix() : '';
+        $categorySuffix = $options['handleCategorySuffix'] ? Mage::helper('manapro_filterseolinks')->getCategoryUrlSuffix() : '';
         $showAllSuffix = $core->getStoreConfig('mana_filters/seo/show_all_suffix');
         if ($showAllSuffix) $showAllSeoSuffix = $showAllSuffix;
         $vars = Mage::helper('manapro_filterseolinks')->getUrlVars();
