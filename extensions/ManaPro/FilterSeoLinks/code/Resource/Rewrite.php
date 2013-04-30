@@ -105,20 +105,31 @@ class ManaPro_FilterSeoLinks_Resource_Rewrite extends Mage_Core_Model_Mysql4_Url
 			return $candidates[0];
 		}
 	}
+
+	protected $_attributes = array();
+	protected function _getAttribute($entityType, $attributeCode, $columns) {
+	    $key = $entityType . '-' . $attributeCode . '-' . implode('-', $columns);
+	    if (!isset($this->_attributes[$key])){
+            $this->_attributes[$key] = $this->_getReadAdapter()->fetchAll($this->_getReadAdapter()->select()
+                ->from(array('a' => $this->_resources->getTableName('eav_attribute'), array('attribute_id', 'backend_table')))
+                ->join(array('t' => $this->_resources->getTableName('eav_entity_type')), 't.entity_type_id = a.entity_type_id', null)
+                ->where('a.attribute_code = ?', 'url_key')
+                ->where('t.entity_type_code = ?', 'catalog_category'));
+	    }
+        return $this->_attributes[$key];
+    }
 	public function getCategoryLabel($categoryId) {
 		/* @var $select Varien_Db_Select */ $select = $this->_getReadAdapter()->select();
         $path = $this->_getReadAdapter()->fetchOne("SELECT path FROM {$this->_resources->getTableName('catalog_category_entity')} WHERE entity_id = ?", $categoryId);
+        $attribute = $this->_getAttribute('catalog_category', 'url_key', array('attribute_id', 'backend_type'));
         $currentCategoryId = Mage::helper('mana_filters')->getLayer()->getCurrentCategory()->getId();
         $path = explode('/', $path);
         $relativePath = array_slice($path, array_search($currentCategoryId, $path) + 1);
         $select
 			->from(array('e' => $this->_resources->getTableName('catalog_category_entity')), 'e.entity_id')
-			->join(array('v' => $this->_resources->getTableName('catalog_category_entity_varchar')), 'v.entity_id = e.entity_id', 'LOWER(value)')
-			->join(array('a' => $this->_resources->getTableName('eav_attribute')), 'a.attribute_id = v.attribute_id', null)
-			->join(array('t' => $this->_resources->getTableName('eav_entity_type')), 't.entity_type_id = a.entity_type_id', null)
+			->join(array('v' => $this->_resources->getTableName('catalog_category_entity_'. $attribute['backend_type'])), 'v.entity_id = e.entity_id', 'LOWER(value)')
 			->where('e.entity_id IN (?)', $relativePath)
-			->where('t.entity_type_code = ?', 'catalog_category')
-			->where('a.attribute_code = ?', 'url_key')
+			->where('v.attribute_id = ?', $attribute['attribute_id'])
 			->where('v.store_id IN (?)', array(0, Mage::app()->getStore()->getId()));
 		$urlKeys = $this->_getReadAdapter()->fetchPairs($select);
 		$result = array();
