@@ -128,7 +128,7 @@ class ManaPro_FilterSeoLinks_Resource_Rewrite extends Mage_Core_Model_Mysql4_Url
         $relativePath = array_slice($path, array_search($currentCategoryId, $path) + 1);
         $select
 			->from(array('e' => $this->_resources->getTableName('catalog_category_entity')), 'e.entity_id')
-			->join(array('v' => $this->_resources->getTableName($attributeTable)), 'v.entity_id = e.entity_id', 'LOWER(value)')
+			->join(array('v' => $this->_resources->getTableName($attributeTable )), 'v.entity_id = e.entity_id', 'LOWER(value)')
 			->where('e.entity_id IN (?)', $relativePath)
 			->where('v.attribute_id = ?', $attribute['attribute_id'])
 			->where('v.store_id IN (?)', array(0, Mage::app()->getStore()->getId()));
