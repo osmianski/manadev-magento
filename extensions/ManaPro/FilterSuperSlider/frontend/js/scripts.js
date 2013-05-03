@@ -88,11 +88,11 @@ ManaPro.filterSuperSlider = function(id, o) {
             }
         }
         if (value[0] <= o.rangeFrom && value[1] >= o.rangeTo) {
-            window.setLocation(o.clearUrl);
+            window.setLocation(jQuery.base64_decode(o.clearUrl));
         }
         else {
             var formattedValue = [_round(value[0]), _round(value[1])];
-            window.setLocation(o.url.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
+            window.setLocation(jQuery.base64_decode(o.url).replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
         }
         _changing = false;
     }
@@ -223,7 +223,7 @@ ManaPro.filterAttributeSlider = function (id, o) {
         s.handles[1].style[s.isVertical() ? 'top' : 'left'] = s.translateToPx(indexes[1], 1);
         s.drawSpans();
         if (indexes[0] <= _indexOf(o.rangeFrom) && indexes[1] >= _indexOf(o.rangeTo)) {
-            window.setLocation(o.clearUrl);
+            window.setLocation(jQuery.base64_decode(o.clearUrl));
         }
         else {
             /*var formattedValue = '';
@@ -234,7 +234,7 @@ ManaPro.filterAttributeSlider = function (id, o) {
                 formattedValue += _urlValueOf(i);
             }*/
             var formattedValue = _urlValueOf(indexes[0]) + '_' + _urlValueOf(indexes[1]);
-            window.setLocation(o.url.replace("__0__", formattedValue));
+            window.setLocation(jQuery.base64_decode(o.url).replace("__0__", formattedValue));
         }
     }
 
@@ -293,11 +293,11 @@ ManaPro.filterRangeInput = function (id, o) {
             value[1] = t;
         }
         if (value[0] <= o.rangeFrom && value[1] >= o.rangeTo) {
-            window.setLocation(o.clearUrl);
+            window.setLocation(jQuery.base64_decode(o.clearUrl));
         }
         else {
             var formattedValue = [_round(value[0]), _round(value[1])];
-            window.setLocation(o.url.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
+            window.setLocation(jQuery.base64_decode(o.url).replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
         }
         _changing = false;
     }

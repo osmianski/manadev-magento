@@ -38,8 +38,8 @@ ManaPro.filterAttributeSlider('<?php echo $_id ?>', {
 	appliedFrom: <?php echo $_filter->getCurrentRangeLowerBound() ?>,
 	appliedTo: <?php echo $_filter->getCurrentRangeHigherBound() ?>,
 	appliedFormat: '<?php echo $_helper->__('__0__ to __1__') ?>',
-	url: '<?php echo $_superHelper->getAttributeUrl($_filter->getRequestVar()) ?>',
-	clearUrl: '<?php echo $_slider->getClearUrl($_filter->getRequestVar()) ?>',
+	url: '<?php echo  base64_encode($_superHelper->getAttributeUrl($_filter->getRequestVar())) ?>',
+	clearUrl: '<?php echo  base64_encode($_slider->getClearUrl($_filter->getRequestVar())) ?>',
     existingValues: <?php echo json_encode($_filter->getExistingValues()) ?>
 });
 //]]>
