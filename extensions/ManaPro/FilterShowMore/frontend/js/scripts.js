@@ -133,8 +133,8 @@
         l.height(heights.less);
     });
     $(document).bind('m-show-more-popup-reset', function (e, code, url, targetUrl, values, action, showWait, debug) {
-        _popupUrls[code] = url;
-        _popupTargetUrls[code] = targetUrl;
+        _popupUrls[code] = $.base64_decode(url);
+        _popupTargetUrls[code] = $.base64_decode(targetUrl);
         _popupProgress = showWait;
         _popupDebug = debug;
         _popupValues[code] = values ? values.split('_') : [];
