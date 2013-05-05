@@ -105,7 +105,7 @@
     <mana_seo>
         <variation_points>
             <parameter_schema>
-                <helper>mana_seo/variationPoint_parameterSchema</helper>
+                <helper>mana_seo/variationPoint_schema</helper>
                 <sort_order>100</sort_order>
             </parameter_schema>
             <page_type>
@@ -139,11 +139,5 @@
                 <sort_order>200</sort_order>
             </home_page>
         </page_types>
-        <parameter_schemas>
-            <default>
-                <helper>mana_seo/parameterSchema_default</helper>
-                <sort_order>100</sort_order>
-            </default>
-        </parameter_schemas>
     </mana_seo>
 </config>

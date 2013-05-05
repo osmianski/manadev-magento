@@ -12,7 +12,7 @@
 class Mana_Seo_Helper_VariationPoint_FirstValue extends Mana_Seo_Helper_VariationPoint {
     /**
      * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Helper_VariationSource[]
+     * @return Mana_Seo_Interface_VariationSource[]
      */
     public function getVariationSources($variationPoint) {
         /* @var $seo Mana_Seo_Helper_Data */

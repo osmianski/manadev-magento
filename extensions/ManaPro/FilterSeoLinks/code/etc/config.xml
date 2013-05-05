@@ -191,7 +191,7 @@
 	<manapro_filterseolinks>
         <noindex>
             <empty translate="title" module="manapro_filterseolinks">
-                <title></title>
+                <title />
                 <model>manapro_filterseolinks/noindex_empty</model>
             </empty>
             <several_filters translate="title" module="manapro_filterseolinks">
@@ -213,11 +213,6 @@
         </noindex>
 	</manapro_filterseolinks>
     <mana_seo>
-        <parameter_schemas>
-            <default>
-                <helper>manapro_filterseolinks/parameterSchema</helper>
-            </default>
-        </parameter_schemas>
         <parameter_handlers>
             <toolbar>
                 <helper>manapro_filterseolinks/parameterHandler_toolbar</helper>

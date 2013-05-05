@@ -22,7 +22,7 @@ abstract class Mana_Seo_Helper_VariationPoint extends Mage_Core_Helper_Abstract 
 
     /**
      * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Helper_VariationSource[]
+     * @return Mana_Seo_Interface_VariationSource[]
      */
     abstract public function getVariationSources($variationPoint);
 

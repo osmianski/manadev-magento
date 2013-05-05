@@ -16,26 +16,6 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_variationPoints;
 
     /**
-     * @return Mana_Seo_Helper_ParameterSchema[]
-     */
-    public function getParameterSchemaProviders() {
-        if (!$this->_parameterSchemaProviders) {
-            $result = array();
-            /* @var $core Mana_Core_Helper_Data */
-            $core = Mage::helper('mana_core');
-
-            foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'parameter_schemas') as $schemaProviderXml) {
-                /* @var $schemaProvider Mana_Seo_Helper_ParameterSchema */
-                $result[] = Mage::helper((string)$schemaProviderXml->helper);
-            }
-
-            $this->_parameterSchemaProviders = $result;
-        }
-
-        return $this->_parameterSchemaProviders;
-    }
-
-    /**
      * @return Mana_Seo_Helper_PageType[]
      */
     public function getPageTypes() {

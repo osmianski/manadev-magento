@@ -10,7 +10,7 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Seo_Helper_Page
      * @param Mana_Seo_Model_Context $context
      * @param object[] $activeVariations
      * @param object[] $obsoleteVariations
-     * @return Mana_Seo_Helper_VariationSource
+     * @return Mana_Seo_Interface_VariationSource
      */
     public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
         $activeVariations = array();

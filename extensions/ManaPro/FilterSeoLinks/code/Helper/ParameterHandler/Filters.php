@@ -12,7 +12,7 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
      * @param object[] $activeVariations
      * @param object[] $obsoleteVariations
      * @throws Exception
-     * @return Mana_Seo_Helper_VariationSource
+     * @return Mana_Seo_Interface_VariationSource
      */
     public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
         $activeVariations = array();

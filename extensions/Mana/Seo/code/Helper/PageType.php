@@ -5,7 +5,7 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-abstract class Mana_Seo_Helper_PageType extends Mana_Seo_Helper_VariationSource {
+abstract class Mana_Seo_Helper_PageType extends Mage_Core_Helper_Abstract implements Mana_Seo_Interface_VariationSource {
     /**
      * @param Mana_Seo_Model_Context $context
      * @param string $suffix

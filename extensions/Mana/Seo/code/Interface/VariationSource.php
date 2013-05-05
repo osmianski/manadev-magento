@@ -9,15 +9,12 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Helper_ParameterSchema_Default extends Mana_Seo_Helper_ParameterSchema  {
+interface Mana_Seo_Interface_VariationSource {
     /**
      * @param Mana_Seo_Model_Context $context
      * @param object[] $activeVariations
      * @param object[] $obsoleteVariations
-     * @return Mana_Seo_Helper_VariationSource
+     * @return Mana_Seo_Interface_VariationSource
      */
-    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
-        $activeVariations = array(Mage::getModel('mana_seo/parameterSchema'));
-        $obsoleteVariations = array();
-    }
+    public function getVariations($context, &$activeVariations, &$obsoleteVariations);
 }
