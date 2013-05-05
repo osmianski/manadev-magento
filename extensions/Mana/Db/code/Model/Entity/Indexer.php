@@ -9,51 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
-    protected $_code;
-    protected $_process;
-
-    public function getCode() {
-        return $this->_code;
-    }
-
-    /**
-     * @return Mage_Index_Model_Process | bool
-     */
-    public function getProcess() {
-        if (!$this->_process) {
-            $this->_process = Mage::getModel('index/process')->load($this->getCode(), 'indexer_code');
-        }
-
-        return $this->_process;
-    }
-
-    /**
-     * @return Varien_Simplexml_Element | bool
-     */
-    public function getXml() {
-        $result = Mage::getConfig()->getXpath("//global/index/indexer/{$this->getProcess()->getIndexerCode()}");
-        return count($result) == 1 ? $result[0] : false;
-    }
-
-    /**
-     * Get Indexer name
-     *
-     * @return string
-     */
-    public function getName() {
-        return (string)$this->getXml()->name;
-    }
-
-    /**
-     * Retrieve Indexer description
-     *
-     * @return string
-     */
-    public function getDescription() {
-        return (string)$this->getXml()->description;
-    }
-
+class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
     /**
      * Register indexer required data inside event object
      *
@@ -124,50 +80,53 @@ class Mana_Db_Model_Entity_Indexer extends Mage_Index_Model_Indexer_Abstract {
     protected function _sortTargetsByDependency() {
         $targets = array();
 
-        foreach ($this->getXml()->targets->children() as $target) {
-            $targets[] = $target;
+        if ($this->getXml()->targets) {
+            foreach ($this->getXml()->targets->children() as $target) {
+                $targets[] = $target;
+            }
         }
 
-        $count = count($targets);
-        $orders = array();
-        for ($position = 0; $position < $count; $position++) {
-            $found = false;
-            foreach ($targets as $target) {
-                if (!isset($orders[$target->getName()])) {
-                    $hasUnresolvedDependency = false;
-                    if (isset($target->depends)) {
-                        foreach ($target->depends->children() as $dependency) {
-                            if (!isset($orders[$dependency->getName()])) {
-                                // $dependency not yet sorted so $module should wait until that happens
-                                $hasUnresolvedDependency = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!$hasUnresolvedDependency) {
-                        $found = $target;
-                        break;
-                    }
-                }
-            }
-            if ($found) {
-                $found->sort_order = $orders[$found->getName()] = count($orders);
-            }
-            else {
-                $circular = array();
+        if ($count = count($targets)) {
+            $orders = array();
+            for ($position = 0; $position < $count; $position++) {
+                $found = false;
                 foreach ($targets as $target) {
                     if (!isset($orders[$target->getName()])) {
-                        $circular[] = $target->getName();
+                        $hasUnresolvedDependency = false;
+                        if (isset($target->depends)) {
+                            foreach ($target->depends->children() as $dependency) {
+                                if (!isset($orders[$dependency->getName()])) {
+                                    // $dependency not yet sorted so $module should wait until that happens
+                                    $hasUnresolvedDependency = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!$hasUnresolvedDependency) {
+                            $found = $target;
+                            break;
+                        }
                     }
                 }
-                throw new Exception(sprintf(
-                    "Circular target dependency is not allowed. " .
-                        "Please check these targets: %s.",
-                    implode(', ', $circular)
-                ));
+                if ($found) {
+                    $found->sort_order = $orders[$found->getName()] = count($orders);
+                }
+                else {
+                    $circular = array();
+                    foreach ($targets as $target) {
+                        if (!isset($orders[$target->getName()])) {
+                            $circular[] = $target->getName();
+                        }
+                    }
+                    throw new Exception(sprintf(
+                        "Circular target dependency is not allowed. " .
+                            "Please check these targets: %s.",
+                        implode(', ', $circular)
+                    ));
+                }
             }
+            uasort($targets, array($this, '_compareBySortOrder'));
         }
-        uasort($targets, array($this, '_compareBySortOrder'));
 
         return $targets;
     }

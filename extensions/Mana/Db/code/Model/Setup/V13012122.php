@@ -309,6 +309,9 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
      * @param Varien_Simplexml_Element $field
      */
     public function _fieldScript($context, $module, $entity, $scope, $field) {
+        if (((string)$field['module']) != $this->getModuleName() || ((string)$field['version']) != $this->getVersion()) {
+            return;
+        }
         $fields = $context->getFields();
         $fields[] = $field;
         $context->setFields($fields);
@@ -333,14 +336,33 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
      * @param Varien_Simplexml_Element $scope
      */
     public function _endTableScript($context, $module, $entity, $scope) {
+        $scope = $scope;
         if (!empty($scope->unique)) {
+            /* @var $resource Mage_Core_Model_Mysql4_Resource */
+            $resource = Mage::getResourceSingleton('core/resource');
+
             $indexes = $context->getIndexes();
             foreach ($scope->unique->children() as $unique) {
                 $index = (object)array('unique' => 1, 'name' => 'unique_'.$unique->getName(), 'indexed_fields' => array());
+                $includeUniqueIndex = false;
                 foreach ($unique->children() as $field => $def) {
-                    $index->indexed_fields[] = $field;
+                    if (((string)$def['module']) == $this->getModuleName() && ((string)$def['version']) == $this->getVersion()) {
+                        $includeUniqueIndex = true;
+                        $index->indexed_fields[] = $field;
+                    }
+                    else {
+                        $installedVersion = $resource->getDbVersion(((string)$def['module']).'_setup');
+                        if ($installedVersion && version_compare($installedVersion, (string)$def['version']) >= 0) {
+                            $index->indexed_fields[] = $field;
+                        }
+                    }
                 }
-                $indexes[] = $index;
+                if ($includeUniqueIndex) {
+                    if (!(((string)$scope->unique['module']) == $this->getModuleName() && ((string)$scope->unique['version']) == $this->getVersion())) {
+                        $index->rebuild = true;
+                    }
+                    $indexes[] = $index;
+                }
             }
             $context->setIndexes($indexes);
         }
@@ -357,6 +379,10 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
                 $sql .= ");\n";
             }
             foreach ($context->getIndexes() as $index) {
+                if (!empty($index->rebuild)) {
+                    $sql .= "ALTER TABLE `{$context->getTable()}` DROP KEY `".(string)$index->name."`";
+                    $sql .= ";\n";
+                }
                 $sql .= "ALTER TABLE `{$context->getTable()}` ADD ";
                 $sql .= $this->_renderIndex($index);
                 $sql .= ";\n";
@@ -397,7 +423,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         }
         else {
             $sql .= "NOT null ";
-            if (!empty($field->default_value)) {
+            if (!empty($field->default_value) && strpos(strtolower((string)$field->type), 'text') === false) {
                 $sql .= "DEFAULT '".((string)$field->default_value)."' ";
             }
             elseif (strpos((string)$field->type, 'varchar') !== false) {

@@ -436,23 +436,44 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function getResourceModel($entityName, $arguments = null) {
         if ($suffix = $this->getSuffix($entityName, $this->_resourceSuffixes)) {
-            $entityNameWithoutSuffix = substr($entityName, 0, strlen($entityName) - strlen($suffix));
-        }
-        else {
-            $entityNameWithoutSuffix = $entityName;
+            $entityName = substr($entityName, 0, strlen($entityName) - strlen($suffix));
         }
 
         $arguments = array_merge(array(
-            'scope' => $entityNameWithoutSuffix,
+            'scope' => $entityName,
         ), $arguments ? (is_array($arguments) ? $arguments : array('resource' => $arguments)) : array());
 
+
+        $arguments = array_merge(array('scope' => $entityName), $arguments);
+
         $resolvedEntityName = $this->getScopedName($entityName);
-        if ($this->resourceExists($resolvedEntityName)) {
-            return Mage::getResourceModel($resolvedEntityName, $arguments);
+        if ($this->resourceExists($resolvedEntityName . $suffix)) {
+            return Mage::getResourceModel($resolvedEntityName . $suffix, $arguments);
         }
-        else {
-            return Mage::getResourceModel('mana_db/entity'. $suffix, $arguments);
+
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+        if (!($scopeXml = $dbConfig->getScopeXml($entityName))) {
+            return Mage::getResourceModel('mana_db/entity' . $suffix, $arguments);
         }
+
+        if (!empty($scopeXml->flattens)) {
+            $entityName = (string)$scopeXml->flattens;
+            $resolvedEntityName = $this->getScopedName($entityName);
+            if ($this->resourceExists($resolvedEntityName . $suffix)) {
+                return Mage::getResourceModel($resolvedEntityName . $suffix, $arguments);
+            }
+            $scopeXml = $dbConfig->getScopeXml($entityName);
+        }
+        if (!empty($scopeXml->store_specifics_for)) {
+            $entityName = (string)$scopeXml->store_specifics_for;
+            $resolvedEntityName = $this->getScopedName($entityName);
+            if ($this->resourceExists($resolvedEntityName . $suffix)) {
+                return Mage::getResourceModel($resolvedEntityName . $suffix, $arguments);
+            }
+        }
+
+        return Mage::getResourceModel('mana_db/entity' . $suffix, $arguments);
     }
 
     /**
@@ -495,9 +516,29 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         if ($this->modelExists($resolvedEntityName)) {
             return Mage::getModel($resolvedEntityName, $arguments);
         }
-        else {
+
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+        if (!($scopeXml = $dbConfig->getScopeXml($entityName))) {
             return Mage::getModel('mana_db/entity', $arguments);
         }
+
+        if (!empty($scopeXml->flattens)) {
+            $entityName = (string)$scopeXml->flattens;
+            $resolvedEntityName = $this->getScopedName($entityName);
+            if ($this->modelExists($resolvedEntityName)) {
+                return Mage::getModel($resolvedEntityName, $arguments);
+            }
+            $scopeXml = $dbConfig->getScopeXml($entityName);
+        }
+        if (!empty($scopeXml->store_specifics_for)) {
+            $entityName = (string)$scopeXml->store_specifics_for;
+            $resolvedEntityName = $this->getScopedName($entityName);
+            if ($this->modelExists($resolvedEntityName)) {
+                return Mage::getModel($resolvedEntityName, $arguments);
+            }
+        }
+        return Mage::getModel('mana_db/entity', $arguments);
     }
 
     public function resourceExists($entityName) {

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_Seo>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.04.18.07</version>
+        </Mana_Seo>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Seo_Helper_Data
+		class is accessible through Mage::helper('mana_seo') call, other Mana_Seo_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_seo/xxx_yyy') call. -->
+        <helpers>
+            <mana_seo>
+                <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_Seo_Helper</class>
+            </mana_seo>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, Mana_Seo_Model_XXX_YYY classes are accessible as
+            'mana_seo/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <mana_seo>
+                <class>Mana_Seo_Model</class>
+                <!-- This tells Magento to read config/global/models/mana_seo_resources sections and register
+                    resource model information from there -->
+                <resourceModel>mana_seo_resources</resourceModel>
+            </mana_seo>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <mana_seo_resources>
+                <class>Mana_Seo_Resource</class>
+                <entities>
+					<schema><table>m_seo_schema</table></schema>
+					<schema_flat><table>m_seo_schema_flat</table></schema_flat>
+					<schema_store><table>m_seo_schema_store</table></schema_store>
+					<schema_store_flat><table>m_seo_schema_store_flat</table></schema_store_flat>
+					<url><table>m_seo_url</table></url>
+					<urlHistory><table>m_seo_url_history</table></urlHistory>
+                </entities>
+            </mana_seo_resources>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This tells Magento to analyze sql/mana_seo_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <mana_seo_setup>
+                <setup>
+                    <module>Mana_Seo</module>
+                </setup>
+            </mana_seo_setup>
+        </resources>
+        <!-- This section registers event handlers of this module defined in Mana_Seo_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of Mana_Seo_Model_Observer class gets called. -->
+        <events>
+            <controller_front_init_routers><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_seo>
+                        <class>Mana_Seo_Router</class>
+                        <method>initControllerRouters</method>
+                    </mana_seo>
+                </observers>
+            </controller_front_init_routers>
+        </events>
+        <index>
+            <indexer>
+                <mana_seo translate="name description" module="mana_seo">
+                    <model>mana_seo/indexer</model>
+                    <name>SEO Settings (MANAdev)</name>
+                    <description>Recalculates formula-based SEO settings</description>
+                    <targets>
+                        <schema>
+                            <entity>mana_seo/schema</entity>
+                        </schema>
+                    </targets>
+                </mana_seo>
+                <mana_seo_url translate="name description" module="mana_seo">
+                    <model>mana_seo/urlIndexer</model>
+                    <name>SEO URL Rewrites (MANAdev)</name>
+                    <description>Indexes SEO URL Rewrites for page types, parameters and parameter values</description>
+                    <sources>
+                        <category><resource>mana_seo/urlIndexer_category</resource></category>
+                        <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
+                    </sources>
+                </mana_seo_url>
+            </indexer>
+        </index>
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <mana_seo>
+        <variation_points>
+            <parameter_schema>
+                <helper>mana_seo/variationPoint_parameterSchema</helper>
+                <sort_order>100</sort_order>
+            </parameter_schema>
+            <page_type>
+                <helper>mana_seo/variationPoint_pageType</helper>
+                <sort_order>200</sort_order>
+            </page_type>
+            <parameter>
+                <helper>mana_seo/variationPoint_parameter</helper>
+                <sort_order>300</sort_order>
+            </parameter>
+            <first_value>
+                <helper>mana_seo/variationPoint_firstValue</helper>
+                <sort_order>400</sort_order>
+            </first_value>
+            <multiple_value>
+                <helper>mana_seo/variationPoint_multipleValue</helper>
+                <sort_order>500</sort_order>
+            </multiple_value>
+        </variation_points>
+        <page_types>
+            <category>
+                <helper>mana_seo/pageType_category</helper>
+                <sort_order>100</sort_order>
+            </category>
+            <cms_page>
+                <helper>mana_seo/pageType_cmsPage</helper>
+                <sort_order>200</sort_order>
+            </cms_page>
+            <home_page>
+                <helper>mana_seo/pageType_homePage</helper>
+                <sort_order>200</sort_order>
+            </home_page>
+        </page_types>
+        <parameter_schemas>
+            <default>
+                <helper>mana_seo/parameterSchema_default</helper>
+                <sort_order>100</sort_order>
+            </default>
+        </parameter_schemas>
+    </mana_seo>
+</config>

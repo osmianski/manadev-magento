@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <mana_seo version="13.04.18.07">
+            <installer_versions>
+                <v13.04.18.07>13.01.21.22</v13.04.18.07>
+            </installer_versions>
+            <entities>
+                <schema>
+                    <max_defaultable_fields>60</max_defaultable_fields>
+                    <fields>
+                        <symbols>
+                            <type>mediumtext</type>
+                            <no>5</no>
+                            <default_value><![CDATA[{
+                                ["symbol": "-", "substitute": "-"],
+                                ["symbol": "\"", "substitute": ""],
+                                ["symbol": "/", "substitute": "/"],
+                                ["symbol": "+", "substitute": "+"],
+                                ["symbol": "_", "substitute": "-"],
+                                ["symbol": "'", "substitute": ""],
+                                ["symbol": "%", "substitute": ""],
+                                ["symbol": "#", "substitute": ""],
+                                ["symbol": "&", "substitute": "+"],
+                                ["symbol": " ", "substitute": "-"]
+                            }]]></default_value>
+                        </symbols>
+                        <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no></status>
+                    </fields>
+                    <scopes>
+                        <global/>
+                        <flat>
+                            <flattens>mana_seo/schema/global</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <primary/>
+                                    </from>
+                                </base>
+                            </formula>
+                        </flat>
+                        <store>
+                            <store_specifics_for>mana_seo/schema/global</store_specifics_for>
+                        </store>
+                        <store_flat>
+                            <flattens>mana_seo/schema/store</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <global>
+                                            <entity>mana_seo/schema/flat</entity>
+                                        </global>
+                                        <store>
+                                            <entity>core/store</entity>
+                                        </store>
+                                    </from>
+                                    <join>
+                                        <primary>
+                                            <type>left</type>
+                                            <on>{{= primary.global_id }} = {{= global.id }} AND {{= primary.store_id }} = {{= store.store_id }}</on>
+                                        </primary>
+                                    </join>
+                                    <where><![CDATA[{{= store.code}} <> 'admin']]></where>
+                                </base>
+                            </formula>
+                            <fields>
+                                <symbols><default_formula>{{= global.symbols}}</default_formula></symbols>
+                                <status><default_formula>{{= global.status}}</default_formula></status>
+                            </fields>
+                        </store_flat>
+                    </scopes>
+                </schema>
+                <url>
+                    <unique>
+                        <primary>
+                            <type/>
+                            <store_id/>
+                            <unique_key/>
+                        </primary>
+                    </unique>
+                    <fields>
+                        <url_key><type>varchar(255)</type><indexed>1</indexed></url_key>
+                        <unique_key><type>varchar(255)</type><indexed>1</indexed></unique_key>
+                        <type><type>varchar(40)</type><indexed>1</indexed></type>
+                        <is_page><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_page>
+                        <supports_parameters><type>tinyint</type><default_value>0</default_value></supports_parameters>
+                        <is_parameter><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_parameter>
+                        <is_value><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_value>
+                        <status><type>varchar(10)</type><indexed>1</indexed><default_value>obsolete</default_value><no>7</no></status>
+                        <store_id>
+                            <type>smallint(5) unsigned</type>
+                            <foreign>
+                                <entity>core/store</entity>
+                                <field>store_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </store_id>
+                        <schema_id>
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_seo/schema/store_flat</entity>
+                                <field>id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </schema_id>
+                        <category_id>
+                            <type>int(10) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>catalog/category</entity>
+                                <field>entity_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </category_id>
+                        <cms_page_id>
+                            <type>smallint(6)</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>cms/page</entity>
+                                <field>page_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </cms_page_id>
+                    </fields>
+                </url>
+                <urlHistory>
+                    <fields>
+                        <url_key><type>varchar(255)</type><indexed>1</indexed></url_key>
+                        <type><type>varchar(40)</type><indexed>1</indexed></type>
+                        <redirect_to><type>varchar(255)</type><indexed>1</indexed></redirect_to>
+                        <store_id>
+                            <type>smallint(5) unsigned</type>
+                            <foreign>
+                                <entity>core/store</entity>
+                                <field>store_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </store_id>
+                    </fields>
+                </urlHistory>
+            </entities>
+        </mana_seo>
+    </modules>
+</config>

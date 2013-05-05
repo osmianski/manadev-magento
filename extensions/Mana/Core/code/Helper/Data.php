@@ -589,4 +589,14 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return $block->getNameInLayout();
         }
     }
+
+    public function indexArray($source, $key) {
+        $result = array();
+        foreach ($source as $value) {
+            $result[$value[$key]] = $value;
+        }
+
+        return $result;
+    }
+
 }

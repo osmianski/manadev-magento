@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.02.21.22</version>
+		    <version>13.04.17.16</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -47,7 +47,7 @@
 			<core>
 				<rewrite>
 					<url>ManaPro_FilterSeoLinks_Model_Url</url>
-					<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>
+					<!--<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>-->
 					<store>ManaPro_FilterSeoLinks_Model_Store</store>
 					<!-- INSERT HERE: individual type rewrites -->
 				</rewrite>
@@ -58,7 +58,6 @@
 			<manapro_filterseolinks_resources>
 				<class>ManaPro_FilterSeoLinks_Resource</class>
 				<entities>
-					<!-- INSERT HERE: table-entity mappings -->
 				</entities>
 			</manapro_filterseolinks_resources>
 			<!-- INSERT HERE: rewrites, ... -->
@@ -128,8 +127,28 @@
                     </manapro_filterseolinks>
                 </observers>
             </m_before_load_filter_collection>
-        </events><!-- INSERT HERE: blocks, models, ... -->
-	</global>
+        </events>
+        <!-- This tells Magento to analyze sql/manapro_filterseolinks_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterseolinks_setup>
+                <setup>
+                    <module>ManaPro_FilterSeoLinks</module>
+                </setup>
+            </manapro_filterseolinks_setup>
+        </resources>
+        <index>
+            <indexer>
+                <mana_seo_url>
+                    <sources>
+                        <filter><resource>manapro_filterseolinks/urlIndexer_filter</resource></filter>
+                        <filter_value><resource>manapro_filterseolinks/urlIndexer_value</resource></filter_value>
+                    </sources>
+                </mana_seo_url>
+            </indexer>
+        </index>
+    </global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
 	<adminhtml>
@@ -193,4 +212,21 @@
             </any>
         </noindex>
 	</manapro_filterseolinks>
+    <mana_seo>
+        <parameter_schemas>
+            <default>
+                <helper>manapro_filterseolinks/parameterSchema</helper>
+            </default>
+        </parameter_schemas>
+        <parameter_handlers>
+            <toolbar>
+                <helper>manapro_filterseolinks/parameterHandler_toolbar</helper>
+                <sort_order>100</sort_order>
+            </toolbar>
+            <filters>
+                <helper>manapro_filterseolinks/parameterHandler_filters</helper>
+                <sort_order>200</sort_order>
+            </filters>
+        </parameter_handlers>
+    </mana_seo>
 </config>

@@ -17,6 +17,7 @@
 class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     protected $_scope;
     protected $_isIndexingDisabled = false;
+    protected $_jsons;
 
     public function __construct($data = null) {
         if (is_array($data)) {
@@ -131,7 +132,27 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
 
     public function isNotEmpty($dataSource, $field) {
         if (!$this->getData($field)) {
-            throw new Mana_Db_Exception_Validation(Mage::helper('mana_attributepage')->__("Please fill in '%s'.", $dataSource->getLabel($this->getScope(), $field)));
+            throw new Mana_Db_Exception_Validation(Mage::helper('mana_db')->__("Please fill in '%s'.", $dataSource->getLabel($this->getScope(), $field)));
         }
+    }
+
+    public function getJson($key) {
+        if (!$this->_jsons) {
+            $this->_jsons = array();
+        }
+        if (!isset($this->_jsons[$key])) {
+            $data = $this->getData($key);
+            if (empty($data)) {
+                $this->_jsons[$key] = array();
+            }
+            else {
+                $this->_jsons[$key] = json_decode($data, true);
+                if (is_null($this->_jsons[$key])) {
+                    throw new Exception(json_last_error());
+                }
+            }
+        }
+
+        return $this->_jsons[$key];
     }
 }

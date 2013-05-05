@@ -132,6 +132,17 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
                 $scope->extendChild($child);
             }
         }
+        if (!empty($scope->unique)) {
+            /** @noinspection PhpParamsInspection */
+            $this->propagateAttributes($scope, $scope->unique, array('module', 'version'));
+            foreach ($scope->unique->children() as $index) {
+                /** @noinspection PhpParamsInspection */
+                $this->propagateAttributes($scope->unique, $index, array('module', 'version'));
+                foreach ($index->children() as $column) {
+                    $this->propagateAttributes($index, $column, array('module', 'version'));
+                }
+            }
+        }
         $this->propagateName($scope);
     }
 

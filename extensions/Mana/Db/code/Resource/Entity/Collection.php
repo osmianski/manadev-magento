@@ -33,7 +33,7 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
         /* @var $db Mana_Db_Helper_Data */
         $db = Mage::helper('mana_db');
 
-        $this->_init($db->getScopedName($this->_scope));
+        $this->_init($this->_scope);
         return $this;
     }
 
@@ -64,6 +64,14 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
         $this->_editFilter = $editFilter;
         $this->_parentCondition = $parentCondition;
 
+        return $this;
+    }
+
+    public function setStoreFilter($storeId = null) {
+        if ($storeId === null) {
+            $storeId = Mage::app()->getStore()->getId();
+        }
+        $this->addFieldToFilter('store_id', $storeId);
         return $this;
     }
 
