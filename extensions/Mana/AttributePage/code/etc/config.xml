@@ -181,16 +181,4 @@
             </adminhtml>
         </routers>
     </admin>
-    <mana_seo>
-        <page_types>
-            <option_page>
-                <helper>mana_attributepage/pageType_optionPage</helper>
-                <sort_order>400</sort_order>
-            </option_page>
-            <attribute_page>
-                <helper>mana_attributepage/pageType_attributePage</helper>
-                <sort_order>500</sort_order>
-            </attribute_page>
-        </page_types>
-    </mana_seo>
 </config>

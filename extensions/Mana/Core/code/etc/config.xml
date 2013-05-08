@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>12.12.21.19</version>
+		    <version>13.05.08.09</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 

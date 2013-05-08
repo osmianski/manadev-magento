@@ -9,7 +9,8 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Helper_VariationPoint_PageType extends Mana_Seo_Helper_VariationPoint {
+class Mana_Seo_Helper_VariationPoint_PageType extends Mana_Seo_Helper_VariationPoint
+    implements Mana_Seo_Interface_VariationSource {
     /**
      * @param Mana_Seo_Model_VariationPoint $variationPoint
      * @return Mana_Seo_Interface_VariationSource[]
@@ -17,7 +18,9 @@ class Mana_Seo_Helper_VariationPoint_PageType extends Mana_Seo_Helper_VariationP
     public function getVariationSources($variationPoint) {
         /* @var $seo Mana_Seo_Helper_Data */
         $seo = Mage::helper('mana_seo');
-        return $seo->getPageTypes();
+        $result = $seo->getPageTypes();
+        array_push($result, $this);
+        return $result;
     }
 
     /**
@@ -67,4 +70,42 @@ class Mana_Seo_Helper_VariationPoint_PageType extends Mana_Seo_Helper_VariationP
         return $this;
     }
 
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param object[] $activeVariations
+     * @param object[] $obsoleteVariations
+     * @return Mana_Seo_Interface_VariationSource
+     */
+    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
+        $activeVariations = array();
+        $obsoleteVariations = array();
+
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
+        $collection
+            ->setStoreFilter($context->getStoreId())
+            ->addFieldToFilter('url_key', array('in' => $context->getCandidates()))
+            ->addFieldToFilter('is_page', 1)
+            ->addFieldToFilter('status', array(
+                'in' => array(
+                    Mana_Seo_Model_Url::STATUS_ACTIVE,
+                    Mana_Seo_Model_Url::STATUS_OBSOLETE
+                )
+            ));
+
+        foreach ($collection as $pageUrl) {
+            /* @var $pageUrl Mana_Seo_Model_Url */
+            if ($pageUrl->getHelper()->isValidUrl($context, $pageUrl)) {
+                if ($pageUrl->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE) {
+                    $activeVariations[] = $pageUrl;
+                }
+                else {
+                    $obsoleteVariations[] = $pageUrl;
+                }
+            }
+        }
+    }
 }

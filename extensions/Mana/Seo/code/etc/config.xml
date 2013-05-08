@@ -125,19 +125,5 @@
                 <sort_order>500</sort_order>
             </multiple_value>
         </variation_points>
-        <page_types>
-            <category>
-                <helper>mana_seo/pageType_category</helper>
-                <sort_order>100</sort_order>
-            </category>
-            <cms_page>
-                <helper>mana_seo/pageType_cmsPage</helper>
-                <sort_order>200</sort_order>
-            </cms_page>
-            <home_page>
-                <helper>mana_seo/pageType_homePage</helper>
-                <sort_order>200</sort_order>
-            </home_page>
-        </page_types>
     </mana_seo>
 </config>

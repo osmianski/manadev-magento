@@ -7,10 +7,10 @@
  */
 /**
  * @author Mana Team
- * @method string getOldUrl()
- * @method Mana_Seo_Model_UrlHistory setOldUrl(string $value)
- * @method string getNewUrl()
- * @method Mana_Seo_Model_UrlHistory setNewUrl(string $value)
+ * @method string getUrlKey()
+ * @method Mana_Seo_Model_UrlHistory setUrlKey(string $value)
+ * @method string getRedirectTo()
+ * @method Mana_Seo_Model_UrlHistory setRedirectTo(string $value)
  */
 class Mana_Seo_Model_UrlHistory extends Mana_Db_Model_Entity {
     const TYPE_CATEGORY_SUFFIX =     'category_suffix';

@@ -28,8 +28,8 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
             'cms_page_id' => new Zend_Db_Expr('`p`.`page_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`p`.`page_id`)"),
             'status' => new Zend_Db_Expr("IF(`p`.`is_active`, '" .
-                Mana_Seo_Model_Schema::STATUS_ACTIVE . "', '".
-                Mana_Seo_Model_Schema::STATUS_DISABLED . "')"),
+                Mana_Seo_Model_Url::STATUS_ACTIVE . "', '".
+                Mana_Seo_Model_Url::STATUS_DISABLED . "')"),
         );
 
         /* @var $select Varien_Db_Select */

@@ -38,8 +38,8 @@ class Mana_Seo_Resource_UrlIndexer_Category extends Mana_Seo_Resource_UrlIndexer
                 'category_id' => new Zend_Db_Expr('`r`.`category_id`'),
                 'unique_key' => new Zend_Db_Expr("CONCAT(`r`.`id_path`, '-', `r`.`is_system`)"),
                 'status' => new Zend_Db_Expr("IF(`r`.`options` = '', '" .
-                    Mana_Seo_Model_Schema::STATUS_ACTIVE . "', '" .
-                    Mana_Seo_Model_Schema::STATUS_OBSOLETE . "')"),
+                    Mana_Seo_Model_Url::STATUS_ACTIVE . "', '" .
+                    Mana_Seo_Model_Url::STATUS_OBSOLETE . "')"),
             );
 
             /* @var $select Varien_Db_Select */
