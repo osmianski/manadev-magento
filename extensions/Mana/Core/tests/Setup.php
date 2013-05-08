@@ -35,7 +35,7 @@ class Mana_Core_Test_Setup  {
 
     public function _addInstallFile($filename, $isDir) {
         if (!$isDir) {
-            $version = basename($filename);
+            $version = pathinfo($filename, PATHINFO_FILENAME);
             if ((!$this->_installedVersion || version_compare($version, $this->_installedVersion) > 0) &&
                 version_compare($version, $this->_definedVersion) <= 0)
             {

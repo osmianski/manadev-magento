@@ -15,5 +15,7 @@ class Mana_Seo_Test_RouterTest extends Mana_Core_Test_Case {
     }
 
     public function assertRoute($expected, $path) {
+        $router = new Mana_Seo_Router();
+
     }
 }
