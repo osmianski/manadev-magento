@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <magento>
+        <e-142>
+            <db_template>template_test-e-142</db_template>
+            <base_dir>s/e-142</base_dir>
+        </e-142>
+    </magento>
+    <variations>
+        <test>
+            <Mana_Core>
+                <p1>Main test database. All main use cases are tested against the data in this database.</p1>
+            </Mana_Core>
+        </test>
+    </variations>
+</config>

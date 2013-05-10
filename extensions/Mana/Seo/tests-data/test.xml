@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <variations>
+        <test>
+            <Mana_Seo>
+                <p1>.html suffixes are active, .htm and empty suffixes are obsolete</p1>
+            </Mana_Seo>
+        </test>
+        <test2>
+            <Mana_Seo>
+                <p1>empty suffixes are active, .html and .htm are are obsolete</p1>
+            </Mana_Seo>
+        </test2>
+    </variations>
+</config>

@@ -25,8 +25,7 @@
                     <fields>
                         <test_db translate="label comment">
                             <label>This Database is Dedicated for Automated Testing</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

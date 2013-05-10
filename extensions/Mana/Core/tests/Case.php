@@ -10,20 +10,24 @@
  *
  */
 class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
+    protected static $_mergedTestXml;
+
     public static function installTestData() {
-        if (!Mage::getStoreConfigFlag('mana/developer/test_db')) {
-            throw new Exception('Tests can only be run on test database. Please either switch to test database '.
-                'in app/etc/local.xml or mark this database as test database in '.
-                'System->Configuration->MANAdev->General->Developer Tools.');
+        if (!($testVariation = Mage::getStoreConfig('mana/developer/test_db'))) {
+            throw new Exception('Tests can only be run on test database. Please either switch to test database ' .
+                'by using team-test:switch command');
+        }
+        if ($testVariation != (string) Mage::getConfig()->getNode('mana_developertools/test/variation')) {
+            throw new Exception('Test variation name in System->Configuration is out of sync with app/etc/local.xml file');
         }
 
-        $installedVersions = self::_beginInstallTestData();
+        $installedVersions = self::_beginInstallTestData($testVariation);
         try {
             foreach (Mage::getConfig()->getNode('modules')->children() as $moduleName => $moduleXml) {
                 if ($definedVersion = (string)$moduleXml->version) {
                     $installedVersion = isset($installedVersions[$moduleName]) ? $installedVersions[$moduleName] : '';
                     if (!$installedVersion || version_compare($definedVersion, $installedVersion) > 0) {
-                        $setup = new Mana_Core_Test_Setup($moduleName, $definedVersion, $installedVersion);
+                        $setup = new Mana_Core_Test_Setup($testVariation, $moduleName, $definedVersion, $installedVersion);
                         $setup->install();
                     }
                     self::_finishModuleInstall($moduleName, $definedVersion);
@@ -93,5 +97,9 @@ class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
         $db = $res->getConnection('setup');
 
         $db->rollback();
+    }
+
+    public static function getMergedTestXml() {
+
     }
 }

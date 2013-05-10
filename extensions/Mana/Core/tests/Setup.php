@@ -10,12 +10,14 @@
  *
  */
 class Mana_Core_Test_Setup  {
+    protected $_testVariation;
     protected $_module;
     protected $_definedVersion;
     protected $_installedVersion;
     protected $_files = array();
 
-    public function __construct($module, $definedVersion, $installedVersion) {
+    public function __construct($testVariation, $module, $definedVersion, $installedVersion) {
+        $this->_testVariation = $testVariation;
         $this->_module = $module;
         $this->_definedVersion = $definedVersion;
         $this->_installedVersion = $installedVersion;
@@ -34,7 +36,7 @@ class Mana_Core_Test_Setup  {
     }
 
     public function _addInstallFile($filename, $isDir) {
-        if (!$isDir) {
+        if (!$isDir && strtolower(pathinfo($filename, PATHINFO_EXTENSION)) == '.php') {
             $version = pathinfo($filename, PATHINFO_FILENAME);
             if ((!$this->_installedVersion || version_compare($version, $this->_installedVersion) > 0) &&
                 version_compare($version, $this->_definedVersion) <= 0)
