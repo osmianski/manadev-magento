@@ -332,7 +332,8 @@ Control.PriceSlider.prototype = {
   resize: function() {
     //console.log('trackLength: ' + this.trackLength);
     var slider = this;
-    this.initialized = false;
+    var onChange = this.options.onChange;
+    this.options.onChange = null;
     this.trackLength = this.maximumOffset() - this.minimumOffset();
     this.handleLength = this.isVertical() ? this.handles[0].offsetHeight : this.handles[0].offsetWidth;
     this.drawSpans();
@@ -346,6 +347,17 @@ Control.PriceSlider.prototype = {
       Event.observe(h, "mousedown", slider.eventMouseDown);
       Event.observe(h, "touchstart", slider.eventMouseDown);
     });
-    this.initialized = true;
+
+    //console.log(this.spans[0].id + ": " + this.spans[0].style.width);
+    this.options.onChange = onChange;
+  },
+  needsResize: function () {
+    var trackLength = this.trackLength;
+    this.trackLength = this.maximumOffset() - this.minimumOffset();
+    var range = this.getRange(0);
+    var span = this.spans[0];
+    var expectedWidth = this.translateToPx(range.end - range.start + this.range.start, null);
+    this.trackLength = trackLength;
+    return span.style.width != expectedWidth;
   }
 }

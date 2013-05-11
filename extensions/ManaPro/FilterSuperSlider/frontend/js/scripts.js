@@ -6,6 +6,7 @@
  */
 ;var ManaPro = ManaPro || {};
 var _mana_oldResizehandler = {};
+var _mana_sliderTimers = {};
 ManaPro.filterSuperSlider = function(id, o) {
     var _changing = false;
     var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
@@ -190,12 +191,32 @@ ManaPro.filterSuperSlider = function(id, o) {
         });
 
     function _resizeSpanAndHandles() {
-        var t = setTimeout(function () {
-                clearTimeout(t);
-                t = null;
+        var checkFrequency = 100, stabilityPeriod = 500;
+        var checkingForStability = false, currentlyStableFor = 0;
+        if (!_mana_sliderTimers[id]) {
+            _mana_sliderTimers[id] = setInterval(function () {
+                if (s.needsResize()) {
+                    //console.log(id + ': resize');
+                    s.resize();
+                    checkingForStability = false;
+                }
+                else if (!checkingForStability){
+                    checkingForStability = true;
+                    currentlyStableFor = 0;
+                    //console.log(id + ': checking for stability ' + currentlyStableFor);
+                }
+                else if (currentlyStableFor >= stabilityPeriod){
+                    //console.log('stable');
+                    clearInterval(_mana_sliderTimers[id]);
+                    _mana_sliderTimers[id] = null;
+                }
+                else {
+                    currentlyStableFor += checkFrequency;
+                    //console.log('checking for stability ' + currentlyStableFor);
+                }
 
-                s.resize();
-            }, 100);
+            }, checkFrequency);
+        }
     }
     if (_mana_oldResizehandler[id]) {
         jQuery(window).unbind('resize', _mana_oldResizehandler[id]);
@@ -269,13 +290,33 @@ ManaPro.filterAttributeSlider = function (id, o) {
     };
     s.options.onChange = _change;
     //
-        function _resizeSpanAndHandles() {
-        var t = setTimeout(function () {
-                clearTimeout(t);
-                t = null;
+    function _resizeSpanAndHandles() {
+        var checkFrequency = 100, stabilityPeriod = 500;
+        var checkingForStability = false, currentlyStableFor = 0;
+        if (!_mana_sliderTimers[id]) {
+            _mana_sliderTimers[id] = setInterval(function () {
+                if (s.needsResize()) {
+                    //console.log(id + ': resize');
+                    s.resize();
+                    checkingForStability = false;
+                }
+                else if (!checkingForStability){
+                    checkingForStability = true;
+                    currentlyStableFor = 0;
+                    //console.log(id + ': checking for stability ' + currentlyStableFor);
+                }
+                else if (currentlyStableFor >= stabilityPeriod){
+                    //console.log('stable');
+                    clearInterval(_mana_sliderTimers[id]);
+                    _mana_sliderTimers[id] = null;
+                }
+                else {
+                    currentlyStableFor += checkFrequency;
+                    //console.log('checking for stability ' + currentlyStableFor);
+                }
 
-                s.resize();
-            }, 100);
+            }, checkFrequency);
+        }
     }
     if (_mana_oldResizehandler[id]) {
         jQuery(window).unbind('resize', _mana_oldResizehandler[id]);
