@@ -5,6 +5,7 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 ;var ManaPro = ManaPro || {};
+var _mana_oldResizehandler = {};
 ManaPro.filterSuperSlider = function(id, o) {
     var _changing = false;
     var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
@@ -188,6 +189,23 @@ ManaPro.filterSuperSlider = function(id, o) {
             _change();
         });
 
+    function _resizeSpanAndHandles() {
+        var t = setTimeout(function () {
+                clearTimeout(t);
+                t = null;
+
+                s.resize();
+            }, 100);
+    }
+    if (_mana_oldResizehandler[id]) {
+        jQuery(window).unbind('resize', _mana_oldResizehandler[id]);
+        _mana_oldResizehandler[id] = null;
+    }
+    _mana_oldResizehandler[id] = _resizeSpanAndHandles;
+    jQuery(_resizeSpanAndHandles);
+
+    jQuery(window).bind('resize', _resizeSpanAndHandles);
+    //jQuery('body').click(_resizeSpanAndHandles);
 };
 ManaPro.filterAttributeSlider = function (id, o) {
     function _indexOf(valueId) {
@@ -250,6 +268,22 @@ ManaPro.filterAttributeSlider = function (id, o) {
         $(id + '-applied').update(o.appliedFormat.replace("__0__", formattedValue[0]).replace("__1__", formattedValue[1]));
     };
     s.options.onChange = _change;
+    //
+        function _resizeSpanAndHandles() {
+        var t = setTimeout(function () {
+                clearTimeout(t);
+                t = null;
+
+                s.resize();
+            }, 100);
+    }
+    if (_mana_oldResizehandler[id]) {
+        jQuery(window).unbind('resize', _mana_oldResizehandler[id]);
+        _mana_oldResizehandler[id] = null;
+    }
+    _mana_oldResizehandler[id] = _resizeSpanAndHandles;
+    jQuery(_resizeSpanAndHandles);
+    jQuery(window).bind('resize', _resizeSpanAndHandles);
 };
 ManaPro.filterRangeInput = function (id, o) {
     var _changing = false;

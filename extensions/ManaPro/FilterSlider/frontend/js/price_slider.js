@@ -47,7 +47,7 @@ Control.PriceSlider.prototype = {
     this.increment = this.options.increment || 1;
     this.step      = parseInt(this.options.step || '1');
     this.range     = this.options.range || $R(0,1);
-    
+
     this.value     = 0; // assure backwards compat
     this.values    = this.handles.map( function() { return 0 });
     this.spans     = this.options.spans ? this.options.spans.map(function(s){ return $(s) }) : false;
@@ -250,7 +250,7 @@ Control.PriceSlider.prototype = {
     } else {
       span.style.left = this.translateToPx(range.start, null);
       span.style.width = this.translateToPx(range.end - range.start + this.range.start, null);
-    }
+     }
   },
   updateStyles: function() {
     this.handles.each( function(h){ Element.removeClassName(h, 'selected') });
@@ -328,5 +328,24 @@ Control.PriceSlider.prototype = {
     if(this.initialized && this.options.onChange) 
       this.options.onChange(this.values.length>1 ? this.values : this.value, this);
     this.event = null;
+  },
+  resize: function() {
+    //console.log('trackLength: ' + this.trackLength);
+    var slider = this;
+    this.initialized = false;
+    this.trackLength = this.maximumOffset() - this.minimumOffset();
+    this.handleLength = this.isVertical() ? this.handles[0].offsetHeight : this.handles[0].offsetWidth;
+    this.drawSpans();
+    this.handles.each( function(h,i) {
+      i = slider.handles.length-1-i;
+      slider.setValue(parseFloat(
+        (slider.options.sliderValue instanceof Array ?
+          slider.options.sliderValue[i] : slider.options.sliderValue) ||
+         slider.range.start), i);
+      Element.makePositioned(h); // fix IE
+      Event.observe(h, "mousedown", slider.eventMouseDown);
+      Event.observe(h, "touchstart", slider.eventMouseDown);
+    });
+    this.initialized = true;
   }
 }
