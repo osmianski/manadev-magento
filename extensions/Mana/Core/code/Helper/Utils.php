@@ -24,6 +24,15 @@ class Mana_Core_Helper_Utils extends Mage_Core_Helper_Abstract {
         return $this;
     }
 
+    public function reindex($code) {
+        /* @var $indexer Mage_Index_Model_Indexer */
+        $indexer = Mage::getSingleton('index/indexer');
+
+        $indexer->getProcessByCode($code)->reindexAll();
+
+        return $this;
+    }
+
     /**
      * @param string $module
      * @return Mana_Core_Helper_Utils
@@ -60,4 +69,40 @@ class Mana_Core_Helper_Utils extends Mage_Core_Helper_Abstract {
 
         return true;
     }
+
+    public function setStoreConfig($path, $value, $scope = 'default', $scopeId = 0) {
+        /* @var $configData Mage_Core_Model_Config_Data */
+        $configData = Mage::getModel('core/config_data');
+        /* @noinspection PhpUndefinedMethodInspection */
+        $configData
+            ->setScope($scope)
+            ->setScopeId($scopeId)
+            ->setPath($path)
+            ->setValue($value)
+            ->save();
+
+        return $this;
+    }
+
+    public function getStoreConfig($path) {
+        $scope = 'default';
+        $scopeId = 0;
+
+        /* @var $collection Mage_Core_Model_Mysql4_Config_Data_Collection */
+        $collection = Mage::getModel('core/config_data')->getCollection();
+
+        $collection->getSelect()
+            ->where('scope=?', $scope)
+            ->where('scope_id=?', $scopeId)
+            ->where('path=?', $path);
+
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($collection as $result) {
+            /* @noinspection PhpUndefinedMethodInspection */
+            return $result->getValue();
+        }
+
+        return (string)Mage::getConfig()->getNode('default/'.$path);
+    }
+
 }

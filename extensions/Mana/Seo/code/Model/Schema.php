@@ -17,6 +17,16 @@
  * @method Mana_Seo_Model_Schema setMultipleValueSeparator(string $value)
  * @method string getStatus()
  * @method Mana_Seo_Model_Schema setStatus(string $value)
+ * @method int getUseFilterLabels()
+ * @method Mana_Seo_Model_Schema setUseFilterLabels(int $value)
+ * @method string getSymbols()
+ * @method Mana_Seo_Model_Schema setSymbols(string $value)
+ * @method string getToolbarUrlKeys()
+ * @method Mana_Seo_Model_Schema setToolbarUrlKeys(string $value)
+ * @method string getName()
+ * @method Mana_Seo_Model_Schema setName(string $value)
+ * @method string getInternalName()
+ * @method Mana_Seo_Model_Schema setInternalName(string $value)
  */
 class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';

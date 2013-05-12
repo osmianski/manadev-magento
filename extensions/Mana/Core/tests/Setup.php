@@ -36,7 +36,7 @@ class Mana_Core_Test_Setup  {
     }
 
     public function _addInstallFile($filename, $isDir) {
-        if (!$isDir && strtolower(pathinfo($filename, PATHINFO_EXTENSION)) == '.php') {
+        if (!$isDir && strtolower(pathinfo($filename, PATHINFO_EXTENSION)) == 'php') {
             $version = pathinfo($filename, PATHINFO_FILENAME);
             if ((!$this->_installedVersion || version_compare($version, $this->_installedVersion) > 0) &&
                 version_compare($version, $this->_definedVersion) <= 0)
@@ -46,5 +46,13 @@ class Mana_Core_Test_Setup  {
         }
 
         return true;
+    }
+
+    public function getTestVariation() {
+        return $this->_testVariation;
+    }
+
+    public function getMagentoVersion() {
+        return (string)Mage::getConfig()->getNode('mana_developertools/test/magento');
     }
 }

@@ -155,4 +155,52 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
 
         return $this->_jsons[$key];
     }
+
+    public function setData($key, $value = null) {
+        parent::setData($key, $value);
+
+        if (is_array($key)) {
+            foreach (array_keys($key) as $aKey) {
+                $this->_setDefaultMask($aKey, true);
+            }
+        }
+        else {
+            $this->_setDefaultMask($key, true);
+        }
+        return $this;
+    }
+
+    protected function _setDefaultMask($key, $value) {
+        /* @var $dbConfig Mana_Db_Helper_Config */
+        $dbConfig = Mage::helper('mana_db/config');
+
+        if (($field = $dbConfig->getScopeField($this->_scope, $key)) && isset($field->no)) {
+            /* @var $db Mana_Db_Helper_Data */
+            $db = Mage::helper('mana_db');
+
+            $no = (int)(string)$field->no;
+            $maskIndex = $db->getMaskIndex($no);
+            $mask = isset($this->_data['default_mask' . $maskIndex]) ? $this->_data['default_mask' . $maskIndex] : 0;
+            if ($value) {
+                $mask = $mask | $db->getMask($no);
+            }
+            else {
+                $mask = $mask & ~$db->getMask($no);
+            }
+            $this->_data['default_mask' . $maskIndex] = $mask;
+        }
+    }
+
+    public function useDefaultData($key) {
+        if (is_array($key)) {
+            foreach ($key as $aKey) {
+                $this->_setDefaultMask($aKey, false);
+            }
+        }
+        else {
+            $this->_setDefaultMask($key, false);
+        }
+
+        return $this;
+    }
 }

@@ -10,6 +10,7 @@
         <mana_seo version="13.04.18.07">
             <installer_versions>
                 <v13.04.18.07>13.01.21.22</v13.04.18.07>
+                <v13.05.11.13>13.01.21.22</v13.05.11.13>
             </installer_versions>
             <entities>
                 <schema>
@@ -19,10 +20,7 @@
                             <type>mediumtext</type>
                             <no>5</no>
                             <default_value><![CDATA[{
-                                ["symbol": "-", "substitute": "-"],
                                 ["symbol": "\"", "substitute": ""],
-                                ["symbol": "/", "substitute": "/"],
-                                ["symbol": "+", "substitute": "+"],
                                 ["symbol": "_", "substitute": "-"],
                                 ["symbol": "'", "substitute": ""],
                                 ["symbol": "%", "substitute": ""],
@@ -31,7 +29,9 @@
                                 ["symbol": " ", "substitute": "-"]
                             }]]></default_value>
                         </symbols>
-                        <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no></status>
+                        <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no><indexed /></status>
+                        <name version="13.05.11.13"><type>varchar(80)</type><no>8</no></name>
+                        <internal_name version="13.05.11.13"><type>varchar(20)</type><no>9</no><indexed /></internal_name>
                     </fields>
                     <scopes>
                         <global/>
@@ -72,6 +72,8 @@
                             <fields>
                                 <symbols><default_formula>{{= global.symbols}}</default_formula></symbols>
                                 <status><default_formula>{{= global.status}}</default_formula></status>
+                                <name version="13.05.11.13"><default_formula>{{= global.name}}</default_formula></name>
+                                <internal_name version="13.05.11.13"><default_formula>{{= global.internal_name}}</default_formula></internal_name>
                             </fields>
                         </store_flat>
                     </scopes>

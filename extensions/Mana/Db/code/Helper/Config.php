@@ -369,6 +369,19 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
     /**
      * @param string $entity
      * @param string $field
+     * @return Varien_Simplexml_Element || bool
+     */
+    public function getScopeField($entity, $field) {
+        $scopeXml = $this->getScopeXml($entity);
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        $result = $scopeXml->fields->$field;
+        return empty($result) ? false : $result;
+    }
+
+    /**
+     * @param string $entity
+     * @param string $field
      * @return Varien_Simplexml_Element[]
      */
     public function getFieldValidators($entity, $field = null) {

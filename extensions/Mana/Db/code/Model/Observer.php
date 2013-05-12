@@ -28,7 +28,19 @@ class Mana_Db_Model_Observer {
 			Mage::unregister('m_run_db_replication');
 			$this->_getProcess()->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX)->reindexAll();
 		}
-	}
+
+        /* @var $indexer Mage_Index_Model_Indexer */
+        $indexer = Mage::getSingleton('index/indexer');
+
+        if ($reindex = Mage::registry('m_reindex')) {
+            foreach ($reindex as $code) {
+                $indexer->getProcessByCode($code)
+                    ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX)
+                    ->reindexAll();
+            }
+        }
+
+    }
 	/**
 	 * Enter description here ...
 	 * @param unknown_type $observer

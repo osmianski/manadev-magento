@@ -68,4 +68,13 @@ class Mana_Db_Model_Setup extends Varien_Object {
 
         return $this;
     }
+
+    public function scheduleReindexing($code) {
+        if (!($reindex = Mage::registry('m_reindex'))) {
+            $reindex = array();
+        }
+        $reindex[$code] = $code;
+
+        return $this;
+    }
 }
