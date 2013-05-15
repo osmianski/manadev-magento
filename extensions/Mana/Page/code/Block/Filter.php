@@ -135,8 +135,11 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
 
     public function joinField($field) {
         $alias = 'mp_' . $field;
+        /* @var $resource Mage_Catalog_Model_Resource_Product */
+        $resource = $this->_productCollection->getResource();
+
         $this->_productCollection->getSelect()->joinLeft(
-            array($alias => $this->_productCollection->getResource()->getMainTable()),
+            array($alias => $resource->getTable('catalog/product')),
             "`$alias`.`entity_id` = `e`.`entity_id`",
             null
         );
