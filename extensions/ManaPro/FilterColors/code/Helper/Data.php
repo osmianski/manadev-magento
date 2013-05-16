@@ -70,7 +70,8 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
     $filterOptions->getImageSelected(), $value->getSelectedImage()) ?>
 <?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected.hovered',
     $filterOptions->getImageSelectedHovered(), $value->getSelectedHoveredImage()) ?>
-.<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state {
+.<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state,
+.<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state .m-layer1 {
     width: <?php echo $filterOptions->getStateWidth() ?>px;
     height: <?php echo $filterOptions->getStateHeight() ?>px;
 }
