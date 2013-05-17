@@ -17,6 +17,9 @@ class ManaPro_FilterSeoLinks_Resource_Rewrite extends Mage_Core_Model_Mysql4_Url
 		/* @var $core Mana_Core_Helper_Data */ $core = Mage::helper(strtolower('Mana_Core'));
 		/* @var $helper Mana_Filters_Helper_Data */ $helper = Mage::helper(strtolower('Mana_Filters'));
 		$result = $core->collectionFind($helper->getFilterOptionsCollection(true), 'code', $name);
+		if ($result && $result->getType() == 'category') {
+		    $result = false;
+		}
 		Mana_Core_Profiler::stop('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . $name);
 		return $result;
 	}
