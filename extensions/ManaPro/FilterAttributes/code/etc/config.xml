@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterAttributes
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaPro_FilterAttributes>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.05.18.12</version>
+        </ManaPro_FilterAttributes>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaPro_FilterAttributes_Helper_Data
+		class is accessible through Mage::helper('manapro_filterattributes') call, other ManaPro_FilterAttributes_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manapro_filterattributes/xxx_yyy') call. -->
+        <helpers>
+            <manapro_filterattributes>
+                <!-- This says that string 'manapro_filterattributes' corresponds to ManaPro_FilterAttributes_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaPro_FilterAttributes_Helper</class>
+            </manapro_filterattributes>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterAttributes_Model_XXX_YYY classes are accessible as
+            'manapro_filterattributes/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'manapro_filterattributes' corresponds to ManaPro_FilterAttributes_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <manapro_filterattributes>
+                <class>ManaPro_FilterAttributes_Model</class>
+                <!-- This tells Magento to read config/global/models/manapro_filterattributes_resources sections and register
+                    resource model information from there -->
+                <resourceModel>manapro_filterattributes_resources</resourceModel>
+            </manapro_filterattributes>
+            <!-- This says that string 'manapro_filterattributes' corresponds to ManaPro_FilterAttributes_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <manapro_filterattributes_resources>
+                <class>ManaPro_FilterAttributes_Resource</class>
+                <entities>
+                    <!-- INSERT HERE: table-entity mappings -->
+                </entities>
+            </manapro_filterattributes_resources>
+        </models>
+        <!-- INSERT HERE: blocks, models, ... -->
+        <index>
+            <indexer>
+                <manapro_filterattributes translate="name description" module="manapro_filterattributes">
+                    <model>manapro_filterattributes/indexer</model>
+                    <name>Calculated Attributes for Layered Navigation (MANAdev)</name>
+                    <description>Recalculates attributes used in Layered Navigation</description>
+                    <types>
+                        <sync_value><resource>manapro_filterattributes/syncValue</resource></sync_value>
+                    </types>
+                </manapro_filterattributes>
+            </indexer>
+        </index>
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

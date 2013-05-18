@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+    <name>customers/chillyhilversum</name>
+    <part name="Mana/Core" />
+    <part name="ManaPro/FilterAttributes" />
+</config>

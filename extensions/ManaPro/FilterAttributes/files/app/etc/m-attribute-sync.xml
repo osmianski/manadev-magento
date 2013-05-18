@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sync>
+        <source>color</source>
+        <target>verzamelkleur</target>
+        <value>
+            <source>caffé latte</source>
+            <target>blauw</target>
+            <target>bruin</target>
+            <target>crème</target>
+        </value>
+        <value>
+            <source>ocean</source>
+            <target>geel</target>
+            <target>grijs</target>
+            <target>groen</target>
+        </value>
+    </sync>
+</config>
