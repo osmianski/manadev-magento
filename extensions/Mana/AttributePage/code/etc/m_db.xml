@@ -11,6 +11,7 @@
             <installer_versions>
                 <v13.01.18.23>13.01.21.22</v13.01.18.23>
                 <v13.04.24.18>13.01.21.22</v13.04.24.18>
+                <v13.05.19.08>13.01.21.22</v13.05.19.08>
             </installer_versions>
             <entities>
                 <page>
@@ -484,6 +485,18 @@
         </mana_attributepage>
         <mana_seo>
             <entities>
+                <schema>
+                    <fields>
+                        <redirect_to_option_page module="mana_attributepage" version="13.05.19.08"><type>tinyint</type><no>13</no><default_value>1</default_value></redirect_to_option_page>
+                    </fields>
+                    <scopes>
+                        <store_flat>
+                            <fields>
+                                <redirect_to_option_page module="mana_attributepage" version="13.05.19.08"><default_formula>{{= global.redirect_to_option_page}}</default_formula></redirect_to_option_page>
+                            </fields>
+                        </store_flat>
+                    </scopes>
+                </schema>
                 <url>
                     <!--<unique>
                         <primary>

@@ -10,6 +10,7 @@
         <manapro_filterseolinks version="13.04.17.16">
             <installer_versions>
                 <v13.04.17.16>13.01.21.22</v13.04.17.16>
+                <v13.05.19.08>13.01.21.22</v13.05.19.08>
             </installer_versions>
         </manapro_filterseolinks>
         <mana_seo>
@@ -32,6 +33,8 @@
                                 ["internal_name": "limit", "name": "show", "position": "9940"]
                             }]]></default_value>
                         </toolbar_url_keys>
+                        <include_filter_name module="manapro_filterseolinks" version="13.05.19.08"><type>varchar(20)</type><no>10</no><default_value>if-necessary</default_value></include_filter_name>
+                        <redirect_to_subcategory module="manapro_filterseolinks" version="13.05.19.08"><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
                     </fields>
                     <scopes>
                         <store_flat>
@@ -42,6 +45,8 @@
                                 <multiple_value_separator module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.multiple_value_separator}}</default_formula></multiple_value_separator>
                                 <use_filter_labels module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.use_filter_labels}}</default_formula></use_filter_labels>
                                 <toolbar_url_keys module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.toolbar_url_keys}}</default_formula></toolbar_url_keys>
+                                <include_filter_name module="manapro_filterseolinks" version="13.05.19.08"><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
+                                <redirect_to_subcategory module="manapro_filterseolinks" version="13.05.19.08"><default_formula>{{= global.redirect_to_subcategory}}</default_formula></redirect_to_subcategory>
                             </fields>
                         </store_flat>
                     </scopes>

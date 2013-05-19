@@ -69,6 +69,7 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         foreach ($this->_getSources() as $source) {
             $this->_processSource($source, $options);
         }
+        $this->_processConflicts($options);
     }
 
     /**
@@ -88,5 +89,8 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         /** @noinspection PhpUndefinedFieldInspection */
         $resource = Mage::getResourceSingleton((string)$source->resource);
         $resource->process($this, $options);
+    }
+
+    protected function _processConflicts($options) {
     }
 }

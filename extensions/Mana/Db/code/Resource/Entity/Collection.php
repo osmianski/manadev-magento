@@ -71,7 +71,8 @@ class Mana_Db_Resource_Entity_Collection extends Mage_Core_Model_Mysql4_Collecti
         if ($storeId === null) {
             $storeId = Mage::app()->getStore()->getId();
         }
-        $this->addFieldToFilter('store_id', $storeId);
+
+        $this->getSelect()->where("`main_table`.`store_id` = ?", $storeId);
         return $this;
     }
 

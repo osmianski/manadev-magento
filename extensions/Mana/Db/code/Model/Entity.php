@@ -13,6 +13,8 @@
  * @method Mana_Db_Model_Entity setEditSessionId(int $value)
  * @method Mana_Db_Model_Entity setEditMassaction(int $value)
  * @method string getDefaultFormulas()
+ * @method int getStoreId()
+ * @method Mana_Db_Model_Entity setStoreId(int $value)
  */
 class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     protected $_scope;

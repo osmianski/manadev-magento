@@ -28,6 +28,9 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         /* @var $seo Mana_Seo_Helper_Data */
         $seo = Mage::helper('mana_seo');
 
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
+
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
                 ->setRedirect(Mage::getUrl('install'))
@@ -42,6 +45,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         /* @var $context Mana_Seo_Model_Context */
         $context = Mage::getModel('mana_seo/context');
         $context
+            ->setRouter($this)
             ->setMode(Mana_Seo_Model_Context::MODE_DIAGNOSTIC)
             ->setAction(Mana_Seo_Model_Context::ACTION_FORWARD)
             ->setRequest($request)
@@ -49,95 +53,64 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
             ->setOriginalSlash($origSlash)
             ->setAlternativeSlash($altSlash);
 
+        $logger->beginSeo("Processing $path ...");
         $context->setStoreId(Mage::app()->getStore()->getId());
 
         $this->_matches = array();
-        $this->_matchVariationPoint($context, $seo->getFirstVariationPoint());
+        $seo->getSchemaVariationPoint()->match($context);
         if (count($this->_matches)) {
             $matches = $this->_matches;
             $this->_matches = array();
             if ($context->getMode() == Mana_Seo_Model_Context::MODE_DIAGNOSTIC) {
-                $this->_logMatches($matches);
+                $this->_logMatches($context, $matches);
             }
             $this->_processMatch($matches[0]);
+            $logger->endSeo();
+
             return true;
         }
         else {
+            $logger->endSeo();
+
             return false;
         }
     }
 
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
      * @return bool
      */
-    protected function _matchVariationPoint($context, $variationPoint) {
-        $allObsoleteVariations = array();
-        $variationPointHelper = $variationPoint->getHelper();
-        $action = $context->getAction();
-
-        $variationPointHelper->registerPoint($context, $variationPoint);
-        foreach ($variationPointHelper->getVariationSources($variationPoint) as $variationSource) {
-            $variationSource->getVariations($context, $activeVariations, $obsoleteVariations);
-            foreach ($activeVariations as $variation) {
-                $variationPointHelper->registerVariation($context, $variationPoint, $variation);
-                if ($nextVariationPoints = $variationPointHelper->getNextVariationPoints($context, $variationPoint, $variation)) {
-                    foreach ($nextVariationPoints as $nextVariationPoint) {
-                        if ($this->_matchVariationPoint($context, $nextVariationPoint)) {
-                            return true;
-                        }
-                    }
-                }
-                else {
-                    if ($this->_registerMatch($context)) {
-                        return true;
-                    }
-                }
-                $variationPointHelper->unregisterVariation($context, $variationPoint,  $variation);
-            }
-            $allObsoleteVariations = array_merge($allObsoleteVariations, $obsoleteVariations);
-        }
-        $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
-        foreach ($allObsoleteVariations as $variation) {
-            $variationPointHelper->registerVariation($context, $variationPoint, $variation);
-            if ($nextVariationPoints = $variationPointHelper->getNextVariationPoints($context, $variationPoint, $variation)) {
-                foreach ($nextVariationPoints as $nextVariationPoint) {
-                    if ($this->_matchVariationPoint($context, $nextVariationPoint)) {
-                        return true;
-                    }
-                }
-            }
-            else {
-                if ($this->_registerMatch($context)) {
-                    return true;
-                }
-            }
-            $variationPointHelper->unregisterVariation($context, $variationPoint, $variation);
-        }
-        $context->setAction($action);
-        $variationPointHelper->unregisterPoint($context, $variationPoint);
-
-        return false;
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @return bool
-     */
-    protected function _registerMatch($context) {
+    public function registerMatch($context) {
         $this->_matches[] = clone $context;
         return ($context->getMode() == Mana_Seo_Model_Context::MODE_OPTIMIZED);
     }
 
     /**
+     * @param Mana_Seo_Model_Context $context
      * @param Mana_Seo_Model_Context[] $matches
      * @return Mana_Seo_Router
      */
-    protected function _logMatches($matches) {
-        foreach ($matches as $context) {
+    protected function _logMatches($context, $matches) {
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
 
+        $logger->beginSeoMatch("Matches found for '{$context->getPath()}'");
+        foreach ($matches as $index => $match) {
+            $logger->beginSeoMatch("Match $index:");
+            $logger->logSeoMatch("Action: '{$match->getAction()}'");
+            $logger->logSeoMatch("Schema: '{$match->getSchema()->getName()}'");
+            $logger->logSeoMatch("Page: '{$match->getPageUrl()->getUrlKey()}' (type: {$match->getPageUrl()->getType()})");
+            if (($parameters = $match->getParameters()) && count($parameters)) {
+                $logger->beginSeoMatch("Parameters");
+                foreach ($parameters as $parameter => $values) {
+                    $logger->logSeoMatch("$parameter: ".implode(', ', $values));
+                }
+                $logger->endSeoMatch();
+            }
+            $logger->logSeoMatch(("Suffix: '{$match->getSuffix()}'"));
+            $logger->endSeoMatch();
         }
+        $logger->endSeoMatch();
     }
 
     /**
@@ -148,6 +121,28 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     protected function _processMatch($context) {
         switch ($context->getAction()) {
             case Mana_Seo_Model_Context::ACTION_FORWARD:
+                $request = $context->getRequest();
+
+                /* @noinspection PhpUndefinedMethodInspection */
+                $request->initForward();
+
+                $params = array();
+                if (($parameters = $context->getParameters()) && count($parameters)) {
+                    foreach ($parameters as $parameter => $values) {
+                        $params[$parameter] = implode('_', $values);
+                    }
+                }
+
+                $route = explode('/', $context->getPageUrl()->getHelper()->getRoute($context, $params));
+                if (count($params)) {
+                    $request->setParams($params);
+                }
+                $request
+                    ->setModuleName($route[0])
+                    ->setControllerName($route[1])
+                    ->setActionName($route[2])
+                    ->setDispatched(false);
+
                 break;
             case Mana_Seo_Model_Context::ACTION_REDIRECT:
                 break;
@@ -158,78 +153,8 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
 
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_ParameterSet $currentParameterSet
-     * @return bool
      */
-    protected function _matchPage($context, $currentParameterSet = null) {
-        $page = $context->getPage();
-        if (!$currentParameterSet) {
-            /* @var $currentParameterSet Mana_Seo_Model_ParameterSet */
-            $currentParameterSet = Mage::getModel('mana_seo/parameterSet');
-            $currentParameterSet
-                ->setQuery($page->getQuery())
-                ->setExpect(Mana_Seo_Model_ParameterSet::EXPECT_PARAMETER);
-        }
-
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-
-        /* @var $mbstring Mana_Core_Helper_Mbstring */
-        $mbstring = Mage::helper('mana_core/mbstring');
-
-        $paramSep = $context->getSchema()->getParamSeparator();
-        $firstValueSep = $context->getSchema()->getFirstValueSeparator();
-        $multiValueSep = $context->getSchema()->getMultipleValueSeparator();
-
-        if ($query = $currentParameterSet->getQuery()) {
-            $path = explode($firstValueSep, $query);
-            $candidates = array();
-            foreach (array_keys($path) as $index) {
-                $candidates[] = implode($firstValueSep, array_slice($path, 0, $index + 1));
-            }
-            $currentParameterSet->setCandidates($candidates);
-
-            $allObsoleteParameterSets = array();
-            foreach ($seo->getParameterHandlers() as $parameterHandler) {
-                $parameterHandler->findParameter($context, $currentParameterSet, $activeParameterSets, $obsoleteParameterSets);
-                foreach ($activeParameterSets as $parameterSet) {
-                    if ($this->_matchPage($context, $parameterSet)) {
-                        return true;
-                    }
-                }
-                $allObsoleteParameterSets = array_merge($allObsoleteParameterSets, $obsoleteParameterSets);
-            }
-            $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
-            foreach ($allObsoleteParameterSets as $parameterSet) {
-                if ($this->_matchPage($context, $parameterSet)) {
-                    return true;
-                }
-            }
-
-            // do parameter matching
-            // if doesn't match, do unique value matching
-            // if doesn't match return false
-            // if match found call self recursively with the rest ques=ry string
-        }
-        // do optimization checks
-        // if fully optimized page is found return true
-        // otherwise return false and add all found pages to obsolete pages array
-        // write easy writable URL conflict log
-        return true;
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-
-        /* @var $mbstring Mana_Core_Helper_Mbstring */
-        $mbstring = Mage::helper('mana_core/mbstring');
-
-        $page = $context->getPage();
-        $paramSep = $context->getSchema()->getParamSeparator();
-        $firstValueSep = $context->getSchema()->getFirstValueSeparator();
-        $nextValueSep = $context->getSchema()->getMultipleValueSeparator();
-
-        $query = $page->getQuery();
-        $query = explode($firstValueSep, $query);
-        $expect = 0; // both
+    protected function _forward($context) {
     }
 
 }

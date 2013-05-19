@@ -10,51 +10,62 @@
  *
  */
 class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoint
-    implements Mana_Seo_Interface_VariationSource
 {
     /**
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Interface_VariationSource[]
+     * @param Mana_Seo_Model_Context $context
+     * @return Mana_Seo_Helper_VariationPoint_Schema
      */
-    public function getVariationSources($variationPoint) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-        return array($this);
+    protected function _before(/** @noinspection PhpUnusedParameterInspection */$context) {
+        return $this;
     }
 
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @param Mana_Seo_Model_Schema $variation
-     * @return Mana_Seo_Helper_VariationPoint
+     * @param Mana_Seo_Model_Schema $schema
+     * @return Mana_Seo_Helper_VariationPoint_Schema
      */
-    public function registerVariation($context, $variationPoint, $variation) {
-        $context->setSchema($variation);
+    protected function _register($context, $schema) {
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
+
+        $logger->beginSeo("Checking schema {$schema->getName()} ...");
+        $context->setSchema($schema);
 
         return $this;
     }
 
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @param Mana_Seo_Model_Schema $variation
-     * @return Mana_Seo_Helper_VariationPoint
+     * @param Mana_Seo_Model_Schema $schema
+     * @return Mana_Seo_Helper_VariationPoint_Schema
      */
-    public function unregisterVariation($context, $variationPoint, $variation) {
+    protected function _unregister(/** @noinspection PhpUnusedParameterInspection */$context, $schema) {
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
+
         $context->unsetData('schema');
+        $logger->endSeo();
 
         return $this;
     }
 
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param object[] $activeVariations
-     * @param object[] $obsoleteVariations
-     * @return Mana_Seo_Interface_VariationSource
+     * @return Mana_Seo_Helper_VariationPoint_Schema
      */
-    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
-        $activeVariations = array();
-        $obsoleteVariations = array();
+    protected function _after(/** @noinspection PhpUnusedParameterInspection */$context) {
+        return $this;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param Mana_Seo_Model_Schema[] $activeSchemas
+     * @param Mana_Seo_Model_Schema[] $obsoleteSchemas
+     * @return Mana_Seo_Helper_VariationPoint_Schema
+     */
+    protected function _getSchemas($context, &$activeSchemas, &$obsoleteSchemas) {
+        $activeSchemas = array();
+        $obsoleteSchemas = array();
 
         /* @var $dbHelper Mana_Db_Helper_Data */
         $dbHelper = Mage::helper('mana_db');
@@ -73,11 +84,52 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
         foreach ($collection as $schema) {
             /* @var $schema Mana_Seo_Model_Schema */
             if ($schema->getStatus() == Mana_Seo_Model_Schema::STATUS_ACTIVE) {
-                $activeVariations[] = $schema;
+                $activeSchemas[] = $schema;
             }
             else {
-                $obsoleteVariations[] = $schema;
+                $obsoleteSchemas[] = $schema;
             }
         }
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @return bool
+     */
+    public function match($context) {
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
+
+        $allObsoleteSchemas = array();
+        $action = $context->getAction();
+
+        $this->_before($context);
+        $this->_getSchemas($context, $activeSchemas, $obsoleteSchemas);
+        foreach ($activeSchemas as $schema) {
+            $this->_register($context, $schema);
+
+            if ($seo->getPageUrlVariationPoint()->match($context)) {
+                return true;
+            }
+
+            $this->_unregister($context, $schema);
+        }
+        $allObsoleteSchemas = array_merge($allObsoleteSchemas, $obsoleteSchemas);
+
+        $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
+        foreach ($allObsoleteSchemas as $schema) {
+            $this->_register($context, $schema);
+
+            if ($seo->getPageUrlVariationPoint()->match($context)) {
+                return true;
+            }
+
+            $this->_unregister($context, $schema);
+        }
+
+        $context->setAction($action);
+        $this->_after($context);
+
+        return false;
     }
 }

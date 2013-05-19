@@ -27,8 +27,16 @@
  * @method Mana_Seo_Model_Context setSchema(Mana_Seo_Model_Schema $value)
  * @method string[] getCandidates()
  * @method Mana_Seo_Model_Context setCandidates(array $value)
- * @method Mana_Seo_Model_Page getPage()
- * @method Mana_Seo_Model_Context setPage(Mana_Seo_Model_Page $value)
+ * @method Mana_Seo_Model_Url getPageUrl()
+ * @method Mana_Seo_Model_Context setPageUrl(Mana_Seo_Model_Url $value)
+ * @method string getSuffix()
+ * @method Mana_Seo_Model_Context setSuffix(string $value)
+ * @method Mana_Seo_Router getRouter()
+ * @method Mana_Seo_Model_Context setRouter(Mana_Seo_Router $value)
+ * @method array getParameters()
+ * @method Mana_Seo_Model_Context setParameters(array $value)
+ * @method string getCurrentParameter()
+ * @method Mana_Seo_Model_Context setCurrentParameter(string $value)
  */
 class Mana_Seo_Model_Context extends Varien_Object {
     const ACTION_FORWARD = 'forward';
@@ -66,4 +74,23 @@ class Mana_Seo_Model_Context extends Varien_Object {
         return $result;
     }
 
+    public function pushParameter($parameter, $value) {
+        if (!($parameters = $this->getParameters())) {
+            $parameters = array();
+        }
+        if (!isset($parameters[$parameter])) {
+            $parameters[$parameter] = array();
+        }
+        $parameters[$parameter][$value] = $value;
+
+        $this->pushData('parameters', $parameters);
+
+        return $this;
+    }
+
+    public function popParameter() {
+        $this->popData('parameters');
+
+        return $this;
+    }
 }

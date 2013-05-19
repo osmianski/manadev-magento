@@ -47,8 +47,12 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mage_Core_Model_Mysql4_Abstr
     protected function _seoify($expr, $schema) {
         $expr = "LOWER($expr)";
         foreach ($schema->getSortedSymbols() as $symbol) {
-            $expr = "REPLACE($expr, '". str_replace("'", "\\'", $symbol['symbol']) . "', '{$symbol['substitute']}')";
+            $expr = "REPLACE($expr, {$this->_quote($symbol['symbol'])}, {$this->_quote($symbol['substitute'])})";
         }
         return $expr;
+    }
+
+    protected function _quote($s) {
+        return $this->_getReadAdapter()->quote($s);
     }
 }

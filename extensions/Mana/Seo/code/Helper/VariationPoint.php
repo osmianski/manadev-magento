@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * @category    Mana
  * @package     Mana_Seo
  * @copyright   Copyright (c) http://www.manadev.com
@@ -11,56 +11,6 @@
  */
 abstract class Mana_Seo_Helper_VariationPoint extends Mage_Core_Helper_Abstract {
     /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @param object $variation
-     * @return Mana_Seo_Model_VariationPoint[] | bool
-     */
-    public function getNextVariationPoints(/** @noinspection PhpUnusedParameterInspection */$context, $variationPoint, $variation) {
-        return $variationPoint->getNextPoint() ? array($variationPoint->getNextPoint()) : false;
-    }
-
-    /**
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Interface_VariationSource[]
-     */
-    abstract public function getVariationSources($variationPoint);
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @param object $variation
-     * @return Mana_Seo_Helper_VariationPoint
-     */
-    abstract public function registerVariation($context, $variationPoint, $variation);
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @param object $variation
-     * @return Mana_Seo_Helper_VariationPoint
-     */
-    abstract public function unregisterVariation($context, $variationPoint, $variation);
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Helper_VariationPoint
-     */
-    public function registerPoint(/** @noinspection PhpUnusedParameterInspection */$context, $variationPoint) {
-        return $this;
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_VariationPoint $variationPoint
-     * @return Mana_Seo_Helper_VariationPoint
-     */
-    public function unregisterPoint(/** @noinspection PhpUnusedParameterInspection */$context, $variationPoint) {
-        return $this;
-    }
-
-    /**
      * @param string $haystack
      * @param string $sep
      * @param bool $throwIfSepEmpty
@@ -69,11 +19,32 @@ abstract class Mana_Seo_Helper_VariationPoint extends Mage_Core_Helper_Abstract 
      */
     protected function _parsePath($haystack, $sep, $throwIfSepEmpty = true) {
         if ($sep) {
-            $path = explode($sep, $haystack);
-            $candidates = array();
-            foreach (array_keys($path) as $index) {
-                $candidates[] = implode($sep, array_slice($path, 0, $index + 1));
+            /* @var $mbstring Mana_Core_Helper_Mbstring */
+            $mbstring = Mage::helper('mana_core/mbstring');
+
+            if (!is_array($sep)) {
+                $sep = array($sep);
             }
+
+            $pos = 0;
+            $parsed = false;
+            $candidates = array();
+            while (!$parsed) {
+                $nextPos = $pos;
+                $parsed = true;
+                foreach ($sep as $value) {
+                    if (($sepPos = $mbstring->strpos($haystack, $value, $pos)) != false && $sepPos > $nextPos) {
+                        $nextPos = $sepPos;
+                        $parsed = false;
+                    }
+                }
+                if (!$parsed) {
+                    $candidates[] = $mbstring->substr($haystack, 0, $nextPos);
+                    $pos = $nextPos + 1;
+                }
+            }
+            $candidates[] = $haystack;
+
             return $candidates;
         }
         else {
@@ -85,4 +56,10 @@ abstract class Mana_Seo_Helper_VariationPoint extends Mage_Core_Helper_Abstract 
             }
         }
     }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @return bool
+     */
+    abstract public function match($context);
 }

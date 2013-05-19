@@ -19,9 +19,8 @@ class ManaPro_FilterSeoLinks_Resource_UrlIndexer_Filter extends Mana_Seo_Resourc
 
         foreach ($this->_getSchemas() as $schema) {
             $fields = array(
-                'url_key' => new Zend_Db_Expr($this->_seoify(
-                    Mage::getStoreConfigFlag('mana_filters/seo/use_label') ? '`f`.`name`' : '`g`.`code`',
-                    $schema)),
+                'url_key' => new Zend_Db_Expr($schema->getUseFilterLabels() ? $this->_seoify('`f`.`name`', $schema) :
+                    "REPLACE(LOWER(`g`.`code`), '_', '-')"),
                 'type' => new Zend_Db_Expr("'manapro_filterseolinks/url_filter'"),
                 'is_page' => new Zend_Db_Expr(0),
                 'supports_parameters' => new Zend_Db_Expr(0),
@@ -38,7 +37,8 @@ class ManaPro_FilterSeoLinks_Resource_UrlIndexer_Filter extends Mana_Seo_Resourc
             $select = $db->select()
                 ->from(array('f' => $this->getTable('mana_filters/filter2_store')), null)
                 ->joinInner(array('g' => $this->getTable('mana_filters/filter2')), '`g`.`id` = `f`.`global_id`', null)
-                ->columns($fields);
+                ->columns($fields)
+                ->where("`f`.`store_id` = ?", $schema->getStoreId());
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));

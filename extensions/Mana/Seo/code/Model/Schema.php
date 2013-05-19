@@ -27,11 +27,23 @@
  * @method Mana_Seo_Model_Schema setName(string $value)
  * @method string getInternalName()
  * @method Mana_Seo_Model_Schema setInternalName(string $value)
+ * @method bool getRedirectParameterOrder()
+ * @method Mana_Seo_Model_Schema setRedirectParameterOrder(bool $value)
+ * @method string getIncludeFilterName()
+ * @method Mana_Seo_Model_Schema setIncludeFilterName(string $value)
+ * @method bool getRedirectToSubcategory()
+ * @method Mana_Seo_Model_Schema setRedirectToSubcategory(bool $value)
+ * @method bool getRedirectToOptionPage()
+ * @method Mana_Seo_Model_Schema setRedirectToOptionPage(bool $value)
  */
 class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';
     const STATUS_OBSOLETE = 'obsolete';
     const STATUS_DISABLED = 'disabled';
+
+    const INCLUDE_NEVER = 'never';
+    const INCLUDE_ALWAYS = 'always';
+    const INCLUDE_IF_NECESSARY = 'if-necessary';
 
     protected $_sortedSymbols;
 

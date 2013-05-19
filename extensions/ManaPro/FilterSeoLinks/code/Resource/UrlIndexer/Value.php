@@ -19,24 +19,24 @@ class ManaPro_FilterSeoLinks_Resource_UrlIndexer_Value extends Mana_Seo_Resource
 
         foreach ($this->_getSchemas() as $schema) {
             $fields = array(
-                'url_key' => new Zend_Db_Expr($this->_seoify(
-                    Mage::getStoreConfigFlag('mana_filters/seo/use_label') ? '`f`.`name`' : '`g`.`code`',
-                    $schema)),
-                'type' => new Zend_Db_Expr("'manapro_filterseolinks/url_filter'"),
+                'url_key' => new Zend_Db_Expr($this->_seoify("COALESCE(vs.value, vg.value)", $schema)),
+                'type' => new Zend_Db_Expr("'manapro_filterseolinks/url_value'"),
                 'is_page' => new Zend_Db_Expr(0),
                 'supports_parameters' => new Zend_Db_Expr(0),
-                'is_parameter' => new Zend_Db_Expr(1),
-                'is_value' => new Zend_Db_Expr(0),
+                'is_parameter' => new Zend_Db_Expr(0),
+                'is_value' => new Zend_Db_Expr(1),
                 'schema_id' => new Zend_Db_Expr($schema->getId()),
-                'store_id' => new Zend_Db_Expr('`f`.`store_id`'),
-                'filter_id' => new Zend_Db_Expr('`f`.`id`'),
-                'unique_key' => new Zend_Db_Expr("CONCAT('{$schema->getId()}-', `f`.`id`)"),
+                'store_id' => new Zend_Db_Expr('`v`.`store_id`'),
+                'filter_value_id' => new Zend_Db_Expr('`v`.`id`'),
+                'unique_key' => new Zend_Db_Expr("CONCAT('{$schema->getId()}-', `v`.`id`)"),
                 'status' => new Zend_Db_Expr("'{$schema->getStatus()}'"),
             );
 
             /* @var $select Varien_Db_Select */
             $select = $db->select()
                 ->from(array('v' => $this->getTable('mana_filters/filter2_value_store')), null)
+                ->joinLeft(array('vg' => $this->getTable('eav/attribute_option_value')), 'v.option_id = vg.option_id AND vg.store_id = 0', null)
+                ->joinLeft(array('vs' => $this->getTable('eav/attribute_option_value')), 'v.option_id = vs.option_id AND vs.store_id = v.store_id', null)
                 ->columns($fields);
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys

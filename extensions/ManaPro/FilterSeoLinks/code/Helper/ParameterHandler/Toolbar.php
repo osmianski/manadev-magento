@@ -9,31 +9,25 @@
 class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Toolbar extends Mana_Seo_Helper_ParameterHandler {
     /**
      * @param Mana_Seo_Model_Context $context
-     * @param object[] $activeVariations
-     * @param object[] $obsoleteVariations
-     * @throws Exception
-     * @return Mana_Seo_Interface_VariationSource
+     * @param Mana_Seo_Model_Url[] $activeParameterUrls
+     * @param Mana_Seo_Model_Url[] $obsoleteParameterUrls
+     * @return Mana_Seo_Helper_ParameterHandler
      */
-    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
-        $activeVariations = array();
-        $obsoleteVariations = array();
+    public function getParameterUrls($context, &$activeParameterUrls, &$obsoleteParameterUrls) {
+        $activeParameterUrls = array();
+        $obsoleteParameterUrls = array();
 
-
-        /* @var $helper ManaPro_FilterSeoLinks_Helper_Data */
-        $helper = Mage::helper('manapro_filterseolinks');
         $vars = $context->getSchema()->getJson('toolbar_url_keys');
 
         foreach ($context->getCandidates() as $candidate) {
             foreach ($vars as $var) {
                 if ($var['name'] == $candidate) {
-                    /* @var $parameter Mana_Seo_Model_Parameter */
-                    $parameter = Mage::getModel('mana_seo/parameter');
-                    $parameter
-                        ->setName($var['name'])
-                        ->setInternalName($var['internal_name'])
-                        ->setNextPoints(array('single_value'));
+                    /* @var $parameterUrl Mana_Seo_Model_Url */
+                    $parameterUrl = Mage::getModel('mana_seo/url');
+                    $parameterUrl
+                        ->setUrlKey($var['name']);
 
-                    $activeVariations[] = $parameter;
+                    $activeParameterUrls[] = $parameterUrl;
                 }
             }
         }

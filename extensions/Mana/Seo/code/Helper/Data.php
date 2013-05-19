@@ -51,6 +51,27 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->_parameterHandlers;
     }
 
+    /**
+     * @return Mana_Seo_Helper_VariationPoint
+     */
+    public function getSchemaVariationPoint() {
+        return Mage::helper('mana_seo/variationPoint_schema');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_VariationPoint
+     */
+    public function getPageUrlVariationPoint() {
+        return Mage::helper('mana_seo/variationPoint_pageUrl');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_VariationPoint
+     */
+    public function getParameterVariationPoint() {
+        return Mage::helper('mana_seo/variationPoint_parameter');
+    }
+
     public function getFirstVariationPoint() {
         if (!$this->_variationPoints) {
             /* @var $core Mana_Core_Helper_Data */
