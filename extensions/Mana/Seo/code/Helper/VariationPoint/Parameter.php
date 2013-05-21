@@ -28,7 +28,7 @@ class Mana_Seo_Helper_VariationPoint_Parameter extends Mana_Seo_Helper_Variation
     /**
      * @param Mana_Seo_Model_Context $context
      * @param Mana_Seo_Model_Url $parameterUrl
-     * @return Mana_Seo_Helper_VariationPoint_Parameter
+     * @return bool
      */
     protected function _register($context, $parameterUrl) {
         $parameterUrl->getHelper()->registerParameter($context, $parameterUrl);
@@ -39,16 +39,25 @@ class Mana_Seo_Helper_VariationPoint_Parameter extends Mana_Seo_Helper_Variation
         $path = $context->getPath();
         $path = $mbstring->substr($path, $mbstring->strlen($parameterUrl->getUrlKey()));
         if ($path) {
-            throw new Exception('Not implemented');
-        }
-        if ($parameterUrl->getIsValue()) {
-
-        }
-        else {
+            if ($mbstring->startsWith($path, $context->getSchema()->getParamSeparator())) {
+                $path = $mbstring->substr($path, $mbstring->strlen($context->getSchema()->getParamSeparator()));
+                $context->setLastSeparator($context->getSchema()->getParamSeparator());
+            }
+            elseif ($mbstring->startsWith($path, $context->getSchema()->getFirstValueSeparator())) {
+                $path = $mbstring->substr($path, $mbstring->strlen($context->getSchema()->getFirstValueSeparator()));
+                $context->setLastSeparator($context->getSchema()->getFirstValueSeparator());
+            }
+            elseif ($mbstring->startsWith($path, $context->getSchema()->getMultipleValueSeparator())) {
+                $path = $mbstring->substr($path, $mbstring->strlen($context->getSchema()->getMultipleValueSeparator()));
+                $context->setLastSeparator($context->getSchema()->getMultipleValueSeparator());
+            }
+            else {
+                return false;
+            }
         }
         $context->pushData('path', $path);
 
-        return $this;
+        return true;
     }
 
     /**
@@ -94,31 +103,40 @@ class Mana_Seo_Helper_VariationPoint_Parameter extends Mana_Seo_Helper_Variation
             $parameterHandler->getParameterUrls($context, $activeParameterUrls, $obsoleteParameterUrls);
             foreach ($activeParameterUrls as $parameterUrl) {
                 /* @var $parameterUrl Mana_Seo_Model_Url */
-                $this->_register($context, $parameterUrl);
-
-                if ($seo->getParameterVariationPoint()->match($context)) {
+                if ($this->_matchDeeper($context, $parameterUrl, $seo)) {
                     return true;
                 }
-
-                $this->_unregister($context, $parameterUrl);
             }
             $allObsoleteParameterUrls = array_merge($allObsoleteParameterUrls, $obsoleteParameterUrls);
         }
 
         $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
         foreach ($allObsoleteParameterUrls as $parameterUrl) {
-            $this->_register($context, $parameterUrl);
+            if ($this->_matchDeeper($context, $parameterUrl, $seo)) {
+                return true;
+            }
+        }
 
+        $context->setAction($action);
+        $this->_after($context);
+
+        return false;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param Mana_Seo_Model_Url $parameterUrl
+     * @param Mana_Seo_Helper_Data $seo
+     * @return bool
+     */
+    protected function _matchDeeper($context, $parameterUrl, $seo) {
+        if ($this->_register($context, $parameterUrl)) {
             if ($seo->getParameterVariationPoint()->match($context)) {
                 return true;
             }
 
             $this->_unregister($context, $parameterUrl);
         }
-
-        $context->setAction($action);
-        $this->_after($context);
-
         return false;
     }
 }

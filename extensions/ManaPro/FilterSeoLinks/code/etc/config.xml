@@ -42,16 +42,6 @@
 				resource model information from there -->
 				<resourceModel>manapro_filterseolinks_resources</resourceModel>
 			</manapro_filterseolinks>
-			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
-			<!-- This declares that current module will rewrite some model types in module shortnamed 'core'. -->
-			<core>
-				<rewrite>
-					<url>ManaPro_FilterSeoLinks_Model_Url</url>
-					<!--<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>-->
-					<store>ManaPro_FilterSeoLinks_Model_Store</store>
-					<!-- INSERT HERE: individual type rewrites -->
-				</rewrite>
-			</core>
 			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
 			<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Resource pseudo-namespace in 
 			getResourceModel() calls. -->

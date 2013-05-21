@@ -25,6 +25,7 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
 
         /* @var $collection Mana_Db_Resource_Entity_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
+        $db = $collection->getResource()->getReadConnection();
         $collection
             ->setStoreFilter($context->getStoreId())
             ->addFieldToFilter('schema_id', $context->getSchema()->getId())
@@ -36,14 +37,18 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
                 )
             ));
 
-        $conditions = array("(`main_table`.`is_parameter` = 1)");
-        $internalParameterName = "`fg`.`code`";
-        $collection->getSelect()
-            ->joinLeft(array('fs' => $res->getTableName('mana_filters/filter2_store')),
-                "`fs`.`id` = `main_table`.`filter_id`", null)
-            ->joinLeft(array('fg' => $res->getTableName('mana_filters/filter2')),
-                "`fg`.`id` = `fs`.`global_id`", null);
-        if ($context->getSchema()->getIncludeFilterName() != Mana_Seo_Model_Schema::INCLUDE_ALWAYS) {
+        $conditions = array();
+        $internalParameterName = array();
+        if (!$context->getExpectValue()) {
+            $conditions[] = "(`main_table`.`is_parameter` = 1)";
+            $internalParameterName[] = "`fg`.`code`";
+            $collection->getSelect()
+                ->joinLeft(array('fs' => $res->getTableName('mana_filters/filter2_store')),
+                    "`fs`.`id` = `main_table`.`filter_id`", null)
+                ->joinLeft(array('fg' => $res->getTableName('mana_filters/filter2')),
+                    "`fg`.`id` = `fs`.`global_id`", null);
+        }
+        if ($context->getExpectValue() || $context->getSchema()->getIncludeFilterName() != Mana_Seo_Model_Schema::INCLUDE_ALWAYS) {
             $conditions[] = "(`main_table`.`is_value` = 1)";
             $collection->getSelect()
                 ->joinLeft(array('v' => $res->getTableName('mana_filters/filter2_value_store')),
@@ -52,12 +57,22 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
                 ->joinLeft(array('vfs' => $res->getTableName('mana_filters/filter2_store')),
                     "`vfs`.`id` = `v`.`filter_id`", null)
                 ->joinLeft(array('vfg' => $res->getTableName('mana_filters/filter2')),
-                    "`vfg`.`id` = `vfs`.`global_id`", null);
-            $internalParameterName = "COALESCE(`vfg`.`code`, $internalParameterName)";
+                    "`vfg`.`id` = `vfs`.`global_id`" .
+                    ($context->getExpectValue() ? $db->quoteInto(" AND `vfg`.`code` = ?", $context->getCurrentParameter()) : ''), null);
+            $internalParameterName[] = "`vfg`.`code`";
         }
-        $collection->getSelect()
-            ->where(implode(' OR ', $conditions))
-            ->columns(array('internal_parameter_name' => new Zend_Db_Expr($internalParameterName)));
+        if (count($conditions)) {
+            $collection->getSelect()->where(implode(' OR ', $conditions));
+        }
+        if (count($internalParameterName)) {
+            if (count($internalParameterName) > 1) {
+                $internalParameterName = "COALESCE(".implode(', ', $internalParameterName).")";
+            }
+            else {
+                $internalParameterName = $internalParameterName[0];
+            }
+            $collection->getSelect()->columns(array('internal_parameter_name' => new Zend_Db_Expr($internalParameterName)));
+        }
 
         foreach ($collection as $parameterUrl) {
             /* @var $parameterUrl Mana_Seo_Model_Url */
@@ -70,4 +85,29 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
         }
 
     }
+
+    /**
+     * @return $this
+     */
+    public function prepareForParameterEncoding() {
+        return $this;
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    public function getParameterPositions($parameters) {
+        return array();
+    }
+
+    /**
+     * @param string $parameter
+     * @param string $value
+     * @return bool
+     */
+    public function encodeParameter($parameter, $value) {
+        return false;
+    }
+
 }

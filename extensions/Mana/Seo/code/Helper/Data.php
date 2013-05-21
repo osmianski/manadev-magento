@@ -16,7 +16,7 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_variationPoints;
 
     /**
-     * @return Mana_Seo_Helper_PageType[]
+     * @return Mana_Seo_Helper_Url[]
      */
     public function getPageTypes() {
         if (!$this->_pageTypes) {
@@ -52,7 +52,7 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     /**
-     * @return Mana_Seo_Helper_VariationPoint
+     * @return Mana_Seo_Helper_VariationPoint_Schema
      */
     public function getSchemaVariationPoint() {
         return Mage::helper('mana_seo/variationPoint_schema');
@@ -72,33 +72,17 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         return Mage::helper('mana_seo/variationPoint_parameter');
     }
 
-    public function getFirstVariationPoint() {
-        if (!$this->_variationPoints) {
-            /* @var $core Mana_Core_Helper_Data */
-            $core = Mage::helper('mana_core');
+    public function getParameterComparer($parameters) {
+        /* @var $comparer Mana_Seo_Helper_ParameterComparer */
+        $comparer = Mage::helper('mana_seo/parameterComparer');
 
-            $result = array();
-
-            /* @var $previousVariationPoint Mana_Seo_Model_VariationPoint */
-            $previousVariationPoint = null;
-
-            foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'variation_points') as $xml) {
-                /* @var $variationPoint Mana_Seo_Model_VariationPoint */
-                $variationPoint = Mage::getModel('mana_seo/variationPoint');
-                /** @noinspection PhpUndefinedMethodInspection */
-                $variationPoint
-                    ->setHelper(Mage::helper((string)$xml->helper))
-                    ->setXml($xml)
-                    ->setName($xml->getName());
-
-                if ($previousVariationPoint) {
-                    $previousVariationPoint->setNextPoint($variationPoint);
-                }
-                $result[] = $previousVariationPoint = $variationPoint;
-            }
-            $this->_variationPoints = $result;
+        $positions = array();
+        foreach ($this->getParameterHandlers() as $parameterHandler) {
+            $positions = array_merge($positions, $parameterHandler->getParameterPositions($parameters));
         }
 
-        return $this->_variationPoints[0];
+        $comparer->setPositions($positions);
+
+        return $comparer;
     }
 }

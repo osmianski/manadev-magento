@@ -37,6 +37,10 @@
  * @method Mana_Seo_Model_Context setParameters(array $value)
  * @method string getCurrentParameter()
  * @method Mana_Seo_Model_Context setCurrentParameter(string $value)
+ * @method string getLastSeparator()
+ * @method Mana_Seo_Model_Context setLastSeparator(string $value)
+ * @method bool getExpectValue()
+ * @method Mana_Seo_Model_Context setExpectValue(bool $value)
  */
 class Mana_Seo_Model_Context extends Varien_Object {
     const ACTION_FORWARD = 'forward';
@@ -44,6 +48,11 @@ class Mana_Seo_Model_Context extends Varien_Object {
     const MODE_OPTIMIZED = 'optimized';
     const MODE_DIAGNOSTIC = 'diagnostic';
 
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return Mana_Seo_Model_Context
+     */
     public function pushData($key, $value) {
         $stackKey = $key.'_stack';
         if ($this->hasData($key)) {

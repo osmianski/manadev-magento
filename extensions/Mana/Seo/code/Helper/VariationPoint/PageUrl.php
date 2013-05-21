@@ -31,7 +31,7 @@ class Mana_Seo_Helper_VariationPoint_PageUrl extends Mana_Seo_Helper_VariationPo
     /**
      * @param Mana_Seo_Model_Context $context
      * @param Mana_Seo_Model_Url $pageUrl
-     * @return Mana_Seo_Helper_VariationPoint_PageUrl
+     * @return bool
      */
     protected function _register($context, $pageUrl) {
         /* @var $logger Mana_Core_Helper_Logger */
@@ -47,10 +47,11 @@ class Mana_Seo_Helper_VariationPoint_PageUrl extends Mana_Seo_Helper_VariationPo
         $path = $mbstring->substr($path, $mbstring->strlen($pageUrl->getUrlKey()));
         if ($mbstring->startsWith($path, $context->getSchema()->getQuerySeparator())) {
             $path = $mbstring->substr($path, $mbstring->strlen($context->getSchema()->getQuerySeparator()));
+            $context->setLastSeparator($context->getSchema()->getQuerySeparator());
         }
         $context->pushData('path', $path);
 
-        return $this;
+        return true;
     }
 
     /**
@@ -131,27 +132,33 @@ class Mana_Seo_Helper_VariationPoint_PageUrl extends Mana_Seo_Helper_VariationPo
         $this->_getPageUrls($context, $activePageUrls, $obsoletePageUrls);
         foreach ($activePageUrls as $pageUrl) {
             /* @var $pageUrl Mana_Seo_Model_Url */
-            $this->_register($context, $pageUrl);
-
-            if ($suffixVariationPoint = $pageUrl->getHelper()->getSuffixVariationPoint($context)) {
-                if ($suffixVariationPoint->match($context)) {
-                    return true;
-                }
+            if ($this->_matchDeeper($context, $pageUrl, $seo)) {
+                return true;
             }
-            else {
-                if ($seo->getParameterVariationPoint()->match($context)) {
-                    return true;
-                }
-            }
-
-            $this->_unregister($context, $pageUrl);
         }
         $allObsoletePageUrls = array_merge($allObsoletePageUrls, $obsoletePageUrls);
 
         $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
         foreach ($allObsoletePageUrls as $pageUrl) {
-            $this->_register($context, $pageUrl);
+            if ($this->_matchDeeper($context, $pageUrl, $seo)) {
+                return true;
+            }
+        }
 
+        $context->setAction($action);
+        $this->_after($context);
+
+        return false;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param Mana_Seo_Model_Url $pageUrl
+     * @param Mana_Seo_Helper_Data $seo
+     * @return bool
+     */
+    protected function _matchDeeper($context, $pageUrl, $seo) {
+        if ($this->_register($context, $pageUrl)) {
             if ($suffixVariationPoint = $pageUrl->getHelper()->getSuffixVariationPoint($context)) {
                 if ($suffixVariationPoint->match($context)) {
                     return true;
@@ -165,10 +172,6 @@ class Mana_Seo_Helper_VariationPoint_PageUrl extends Mana_Seo_Helper_VariationPo
 
             $this->_unregister($context, $pageUrl);
         }
-
-        $context->setAction($action);
-        $this->_after($context);
-
         return false;
     }
 

@@ -43,4 +43,30 @@ class Mana_Seo_Helper_Url extends Mage_Core_Helper_Abstract {
     public function getRoute(/** @noinspection PhpUnusedParameterInspection */$context, &$params) {
         throw new Exception('Not implemented');
     }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @throws Exception
+     * @return string
+     */
+    public function getDirectUrl(/** @noinspection PhpUnusedParameterInspection */$context) {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * @param string $route
+     * @return bool
+     */
+    public function recognizeRoute(/** @noinspection PhpUnusedParameterInspection */$route) {
+        return false;
+    }
+
+    public function getSuffix() {
+        if ($suffixHelper = $this->getSuffixVariationPoint(null)) {
+            return $suffixHelper->getCurrentSuffix();
+        }
+        else {
+            return '';
+        }
+    }
 }

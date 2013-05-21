@@ -12,7 +12,7 @@
 class Mana_Seo_Helper_VariationPoint_Suffix_Category extends Mana_Seo_Helper_VariationPoint_Suffix {
     protected $_historyType = Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX;
 
-    protected function _getCurrentSuffix() {
+    public function getCurrentSuffix() {
         /* @var $categoryHelper Mage_Catalog_Helper_Category */
         $categoryHelper = Mage::helper('catalog/category');
         return $categoryHelper->getCategoryUrlSuffix();

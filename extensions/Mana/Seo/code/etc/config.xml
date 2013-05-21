@@ -39,6 +39,12 @@
                     resource model information from there -->
                 <resourceModel>mana_seo_resources</resourceModel>
             </mana_seo>
+            <core>
+                <rewrite>
+                    <url>Mana_Seo_Rewrite_Url</url>
+                    <store>Mana_Seo_Rewrite_Store</store>
+                </rewrite>
+            </core>
             <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Resource pseudo-namespace in
                 getResourceModel() calls. -->
             <mana_seo_resources>
@@ -103,27 +109,8 @@
     </global>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
     <mana_seo>
-        <variation_points>
-            <parameter_schema>
-                <helper>mana_seo/variationPoint_schema</helper>
-                <sort_order>100</sort_order>
-            </parameter_schema>
-            <page_type>
-                <helper>mana_seo/variationPoint_pageType</helper>
-                <sort_order>200</sort_order>
-            </page_type>
-            <parameter>
-                <helper>mana_seo/variationPoint_parameter</helper>
-                <sort_order>300</sort_order>
-            </parameter>
-            <first_value>
-                <helper>mana_seo/variationPoint_firstValue</helper>
-                <sort_order>400</sort_order>
-            </first_value>
-            <multiple_value>
-                <helper>mana_seo/variationPoint_multipleValue</helper>
-                <sort_order>500</sort_order>
-            </multiple_value>
-        </variation_points>
+        <page_types>
+            <category><helper>mana_seo/url_category</helper></category>
+        </page_types>
     </mana_seo>
 </config>

@@ -24,7 +24,7 @@ abstract class Mana_Seo_Helper_VariationPoint_Suffix extends Mana_Seo_Helper_Var
     /**
      * @param Mana_Seo_Model_Context $context
      * @param string $suffix
-     * @return Mana_Seo_Helper_VariationPoint_Suffix
+     * @return bool
      */
     protected function _register($context, $suffix) {
         /* @var $logger Mana_Core_Helper_Logger */
@@ -41,7 +41,7 @@ abstract class Mana_Seo_Helper_VariationPoint_Suffix extends Mana_Seo_Helper_Var
         }
         $context->pushData('path', $path);
 
-        return $this;
+        return true;
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class Mana_Seo_Helper_VariationPoint_Suffix extends Mana_Seo_Helper_Var
         $activeSuffixes = array();
         $obsoleteSuffixes = array();
 
-        $currentSuffix = $this->_getCurrentSuffix();
+        $currentSuffix = $this->getCurrentSuffix();
         foreach ($this->_getApplicableSuffixes($context, $currentSuffix, $this->_getHistoryType()) as $suffix => $redirect) {
             if (!$redirect) {
                 $activeSuffixes[] = $suffix;
@@ -104,25 +104,17 @@ abstract class Mana_Seo_Helper_VariationPoint_Suffix extends Mana_Seo_Helper_Var
         $this->_before($context);
         $this->_getSuffixes($context, $activeSuffixes, $obsoleteSuffixes);
         foreach ($activeSuffixes as $suffix) {
-            $this->_register($context, $suffix);
-
-            if ($seo->getParameterVariationPoint()->match($context)) {
+            if ($this->_matchDeeper($context, $suffix, $seo)) {
                 return true;
             }
-
-            $this->_unregister($context, $suffix);
         }
         $allObsoleteSuffixes = array_merge($allObsoleteSuffixes, $obsoleteSuffixes);
 
         $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
         foreach ($allObsoleteSuffixes as $suffix) {
-            $this->_register($context, $suffix);
-
-            if ($seo->getParameterVariationPoint()->match($context)) {
+            if ($this->_matchDeeper($context, $suffix, $seo)) {
                 return true;
             }
-
-            $this->_unregister($context, $suffix);
         }
 
         $context->setAction($action);
@@ -213,8 +205,24 @@ abstract class Mana_Seo_Helper_VariationPoint_Suffix extends Mana_Seo_Helper_Var
         }
     }
 
-    abstract protected function _getCurrentSuffix();
+    abstract public function getCurrentSuffix();
     protected function _getHistoryType() {
         return $this->_historyType;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param string $suffix
+     * @param Mana_Seo_Helper_Data $seo
+     * @return bool
+     */
+    protected function _matchDeeper($context, $suffix, $seo) {
+        if ($this->_register($context, $suffix)) {
+            if ($seo->getParameterVariationPoint()->match($context)) {
+                return true;
+            }
+            $this->_unregister($context, $suffix);
+        }
+        return false;
     }
 }

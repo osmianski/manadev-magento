@@ -11,6 +11,7 @@
  */
 class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     protected $_matches;
+    protected $_lastMatch = false;
 
     /**
      * Initialize Controller Router
@@ -72,6 +73,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         else {
             $logger->endSeo();
 
+            $this->_lastMatch = false;
             return false;
         }
     }
@@ -119,21 +121,22 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
      * @return Mana_Seo_Router
      */
     protected function _processMatch($context) {
+        $params = array();
+        if (($parameters = $context->getParameters()) && count($parameters)) {
+            foreach ($parameters as $parameter => $values) {
+                $params[$parameter] = implode('_', $values);
+            }
+        }
+
+        $request = $context->getRequest();
+
         switch ($context->getAction()) {
             case Mana_Seo_Model_Context::ACTION_FORWARD:
-                $request = $context->getRequest();
+                $route = explode('/', $context->getPageUrl()->getHelper()->getRoute($context, $params));
 
                 /* @noinspection PhpUndefinedMethodInspection */
                 $request->initForward();
 
-                $params = array();
-                if (($parameters = $context->getParameters()) && count($parameters)) {
-                    foreach ($parameters as $parameter => $values) {
-                        $params[$parameter] = implode('_', $values);
-                    }
-                }
-
-                $route = explode('/', $context->getPageUrl()->getHelper()->getRoute($context, $params));
                 if (count($params)) {
                     $request->setParams($params);
                 }
@@ -143,8 +146,29 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     ->setActionName($route[2])
                     ->setDispatched(false);
 
+                $this->_lastMatch = $context;
                 break;
             case Mana_Seo_Model_Context::ACTION_REDIRECT:
+                /* @var $front Mage_Core_Controller_Varien_Front */
+                $front = $this->getFront();
+
+                $url = Mage::getUrl('', array(
+                    '_direct' => $context->getPageUrl()->getHelper()->getDirectUrl($context),
+                    '_current' => true,
+                    '_m_escape' => '',
+                    '_use_rewrite' => true,
+                    '_query' => $params,
+                    '_nosid' => defined('_TEST'),
+                    '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())
+                );
+                $relativeUrl = substr($url, strlen(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,
+                    Mage::app()->getFrontController()->getRequest()->isSecure())));
+                if (!defined('_TEST')) {
+                    $front->getResponse()->setRedirect($url);
+                }
+                $this->_lastMatch = $relativeUrl;
+                $request->setDispatched(true);
+
                 break;
             default:
                 throw new Exception('Not implemented');
@@ -157,4 +181,10 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     protected function _forward($context) {
     }
 
+    /**
+     * @return Mana_Seo_Model_Context | string | bool
+     */
+    public function getLastMatch() {
+        return $this->_lastMatch;
+    }
 }

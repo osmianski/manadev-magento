@@ -11,8 +11,12 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Store extends Mage_Core_Model_Store {
+class Mana_Seo_Rewrite_Store extends Mage_Core_Model_Store {
 	public function getCurrentUrl($fromStore = true) {
-		return Mage::getSingleton('core/url')->setEscape(true)->encodeUrl('*/*/*', parent::getCurrentUrl($fromStore));
+        /* @var $url Mana_Seo_Rewrite_Url */
+        $url = Mage::getSingleton('core/url');
+		return $url
+		    ->setEscape(true)
+		    ->encodeUrl('*/*/*', parent::getCurrentUrl($fromStore));
 	}
 }

@@ -9,8 +9,10 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoint
-{
+class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoint {
+    protected $_activeSchema;
+    protected $_isActiveSchemaLoaded;
+
     /**
      * @param Mana_Seo_Model_Context $context
      * @return Mana_Seo_Helper_VariationPoint_Schema
@@ -22,7 +24,7 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
     /**
      * @param Mana_Seo_Model_Context $context
      * @param Mana_Seo_Model_Schema $schema
-     * @return Mana_Seo_Helper_VariationPoint_Schema
+     * @return bool
      */
     protected function _register($context, $schema) {
         /* @var $logger Mana_Core_Helper_Logger */
@@ -31,7 +33,7 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
         $logger->beginSeo("Checking schema {$schema->getName()} ...");
         $context->setSchema($schema);
 
-        return $this;
+        return true;
     }
 
     /**
@@ -63,7 +65,7 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
      * @param Mana_Seo_Model_Schema[] $obsoleteSchemas
      * @return Mana_Seo_Helper_VariationPoint_Schema
      */
-    protected function _getSchemas($context, &$activeSchemas, &$obsoleteSchemas) {
+    protected function _getSchemas($context, &$activeSchemas, &$obsoleteSchemas, $onlyActive = false) {
         $activeSchemas = array();
         $obsoleteSchemas = array();
 
@@ -72,14 +74,18 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
 
         /* @var $collection Mana_Db_Resource_Entity_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/schema/store_flat_collection');
-        $collection
-            ->setStoreFilter($context->getStoreId())
-            ->addFieldToFilter('status', array(
+        $collection->setStoreFilter($context->getStoreId());
+        if ($onlyActive) {
+            $collection->addFieldToFilter('status', Mana_Seo_Model_Schema::STATUS_ACTIVE);
+        }
+        else {
+            $collection->addFieldToFilter('status', array(
                 'in' => array(
                     Mana_Seo_Model_Schema::STATUS_ACTIVE,
                     Mana_Seo_Model_Schema::STATUS_OBSOLETE
                 )
             ));
+        }
 
         foreach ($collection as $schema) {
             /* @var $schema Mana_Seo_Model_Schema */
@@ -90,6 +96,24 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
                 $obsoleteSchemas[] = $schema;
             }
         }
+    }
+
+    /**
+     * @return Mana_Seo_Model_Schema
+     */
+    public function getActiveSchema() {
+        if (!$this->_isActiveSchemaLoaded) {
+            /* @var $context Mana_Seo_Model_Context */
+            $context = Mage::getModel('mana_seo/context');
+            $context->setStoreId(Mage::app()->getStore()->getId());
+
+            $this->_getSchemas($context, $activeSchemas, $obsoleteSchemas, true);
+            if (count($activeSchemas)) {
+                $this->_activeSchema = $activeSchemas[0];
+            }
+            $this->_isActiveSchemaLoaded = true;
+        }
+        return $this->_activeSchema;
     }
 
     /**
@@ -106,30 +130,39 @@ class Mana_Seo_Helper_VariationPoint_Schema extends Mana_Seo_Helper_VariationPoi
         $this->_before($context);
         $this->_getSchemas($context, $activeSchemas, $obsoleteSchemas);
         foreach ($activeSchemas as $schema) {
-            $this->_register($context, $schema);
-
-            if ($seo->getPageUrlVariationPoint()->match($context)) {
+            if ($this->_matchDeeper($context, $schema, $seo)) {
                 return true;
             }
-
-            $this->_unregister($context, $schema);
         }
         $allObsoleteSchemas = array_merge($allObsoleteSchemas, $obsoleteSchemas);
 
         $context->setAction(Mana_Seo_Model_Context::ACTION_REDIRECT);
         foreach ($allObsoleteSchemas as $schema) {
-            $this->_register($context, $schema);
+            if ($this->_matchDeeper($context, $schema, $seo)) {
+                return true;
+            }
+        }
 
+        $context->setAction($action);
+        $this->_after($context);
+
+        return false;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Context $context
+     * @param Mana_Seo_Model_Schema $schema
+     * @param Mana_Seo_Helper_Data $seo
+     * @return bool
+     */
+    protected function _matchDeeper($context, $schema, $seo) {
+        if ($this->_register($context, $schema)) {
             if ($seo->getPageUrlVariationPoint()->match($context)) {
                 return true;
             }
 
             $this->_unregister($context, $schema);
         }
-
-        $context->setAction($action);
-        $this->_after($context);
-
         return false;
     }
 }
