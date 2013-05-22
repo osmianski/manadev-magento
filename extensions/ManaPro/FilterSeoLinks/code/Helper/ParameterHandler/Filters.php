@@ -23,7 +23,7 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
         /* @var $res Mage_Core_Model_Resource */
         $res = Mage::getSingleton('core/resource');
 
-        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        /* @var $collection Mana_Seo_Resource_Url_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
         $db = $collection->getResource()->getReadConnection();
         $collection
@@ -37,33 +37,26 @@ class ManaPro_FilterSeoLinks_Helper_ParameterHandler_Filters extends Mana_Seo_He
                 )
             ));
 
-        $conditions = array();
+        $types = array();
         $internalParameterName = array();
         if (!$context->getExpectValue()) {
-            $conditions[] = "(`main_table`.`is_parameter` = 1)";
-            $internalParameterName[] = "`fg`.`code`";
+            $types[] = 'parameter';
+            $internalParameterName[] = "`a`.`attribute_code`";
             $collection->getSelect()
-                ->joinLeft(array('fs' => $res->getTableName('mana_filters/filter2_store')),
-                    "`fs`.`id` = `main_table`.`filter_id`", null)
-                ->joinLeft(array('fg' => $res->getTableName('mana_filters/filter2')),
-                    "`fg`.`id` = `fs`.`global_id`", null);
+                ->joinLeft(array('a' => $res->getTableName('eav/attribute')),
+                    "`a`.`attribute_id` = `main_table`.`attribute_id`", null);
         }
         if ($context->getExpectValue() || $context->getSchema()->getIncludeFilterName() != Mana_Seo_Model_Schema::INCLUDE_ALWAYS) {
-            $conditions[] = "(`main_table`.`is_value` = 1)";
+            $types[] = 'value';
             $collection->getSelect()
-                ->joinLeft(array('v' => $res->getTableName('mana_filters/filter2_value_store')),
-                    "`v`.`id` = `main_table`.`filter_value_id`", array(
-                        'internal_value_name' => new Zend_Db_Expr("`v`.`option_id`")))
-                ->joinLeft(array('vfs' => $res->getTableName('mana_filters/filter2_store')),
-                    "`vfs`.`id` = `v`.`filter_id`", null)
-                ->joinLeft(array('vfg' => $res->getTableName('mana_filters/filter2')),
-                    "`vfg`.`id` = `vfs`.`global_id`" .
-                    ($context->getExpectValue() ? $db->quoteInto(" AND `vfg`.`code` = ?", $context->getCurrentParameter()) : ''), null);
-            $internalParameterName[] = "`vfg`.`code`";
+                ->joinLeft(array('o' => $res->getTableName('eav/attribute_option')),
+                    "`o`.`option_id` = `main_table`.`option_id`", null)
+                ->joinLeft(array('oa' => $res->getTableName('eav/attribute')),
+                    "`oa`.`attribute_id` = `o`.`attribute_id`".
+                    ($context->getExpectValue() ? $db->quoteInto(" AND `oa` . `code` = ?", $context->getCurrentParameter()) : ''), null);
+            $internalParameterName[] = "`oa`.`attribute_code`";
         }
-        if (count($conditions)) {
-            $collection->getSelect()->where(implode(' OR ', $conditions));
-        }
+        $collection->addTypeFilter($types);
         if (count($internalParameterName)) {
             if (count($internalParameterName) > 1) {
                 $internalParameterName = "COALESCE(".implode(', ', $internalParameterName).")";

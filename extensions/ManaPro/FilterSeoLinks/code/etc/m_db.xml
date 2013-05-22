@@ -21,7 +21,6 @@
                         <param_separator module="manapro_filterseolinks" version="13.04.17.16"><type>varchar(10)</type><no>1</no></param_separator>
                         <first_value_separator module="manapro_filterseolinks" version="13.04.17.16"><type>varchar(10)</type><no>2</no></first_value_separator>
                         <multiple_value_separator module="manapro_filterseolinks" version="13.04.17.16"><type>varchar(10)</type><no>3</no></multiple_value_separator>
-                        <use_filter_labels module="manapro_filterseolinks" version="13.04.17.16"><type>tinyint</type><no>4</no><default_value>1</default_value></use_filter_labels>
                         <toolbar_url_keys module="manapro_filterseolinks" version="13.04.17.16">
                             <type>mediumtext</type>
                             <no>6</no>
@@ -33,7 +32,6 @@
                                 ["internal_name": "limit", "name": "show", "position": "9940"]
                             }]]></default_value>
                         </toolbar_url_keys>
-                        <include_filter_name module="manapro_filterseolinks" version="13.05.19.08"><type>varchar(20)</type><no>10</no><default_value>if-necessary</default_value></include_filter_name>
                         <redirect_to_subcategory module="manapro_filterseolinks" version="13.05.19.08"><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
                     </fields>
                     <scopes>
@@ -43,44 +41,12 @@
                                 <param_separator module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.param_separator}}</default_formula></param_separator>
                                 <first_value_separator module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.first_value_separator}}</default_formula></first_value_separator>
                                 <multiple_value_separator module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.multiple_value_separator}}</default_formula></multiple_value_separator>
-                                <use_filter_labels module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.use_filter_labels}}</default_formula></use_filter_labels>
                                 <toolbar_url_keys module="manapro_filterseolinks" version="13.04.17.16"><default_formula>{{= global.toolbar_url_keys}}</default_formula></toolbar_url_keys>
-                                <include_filter_name module="manapro_filterseolinks" version="13.05.19.08"><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
                                 <redirect_to_subcategory module="manapro_filterseolinks" version="13.05.19.08"><default_formula>{{= global.redirect_to_subcategory}}</default_formula></redirect_to_subcategory>
                             </fields>
                         </store_flat>
                     </scopes>
                 </schema>
-                <url>
-                    <!--<unique>
-                        <primary>
-                            <filter_id module="manapro_filterseolinks" version="13.04.17.16"/>
-                            <filter_value_id module="manapro_filterseolinks" version="13.04.17.16"/>
-                        </primary>
-                    </unique>-->
-                    <fields>
-                        <filter_id module="manapro_filterseolinks" version="13.04.17.16">
-                            <type>bigint</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>mana_filters/filter2_store</entity>
-                                <field>id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </filter_id>
-                        <filter_value_id module="manapro_filterseolinks" version="13.04.17.16">
-                            <type>bigint</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>mana_filters/filter2_value_store</entity>
-                                <field>id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </filter_value_id>
-                    </fields>
-                </url>
             </entities>
         </mana_seo>
     </modules>

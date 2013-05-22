@@ -105,12 +105,26 @@
                 </mana_attribute_page>
                 <mana_seo_url>
                     <sources>
-                        <attribute_page><resource>mana_attributepage/urlIndexer_attributePage</resource></attribute_page>
-                        <option_page><resource>mana_attributepage/urlIndexer_optionPage</resource></option_page>
+                        <filter><resource>mana_seo/urlIndexer_filter</resource></filter>
+                        <filter_value><resource>mana_seo/urlIndexer_value</resource></filter_value>
                     </sources>
                 </mana_seo_url>
             </indexer>
         </index>
+        <indexer>
+            <mana_seo_url>
+                <sources>
+                    <filter>
+                        <resource>mana_seo/urlIndexer_filter</resource>
+                        <parameter_type>manapro_filterseolinks/url_filter</parameter_type>
+                    </filter>
+                    <filter_value>
+                        <resource>mana_seo/urlIndexer_value</resource>
+                        <parameter_type>manapro_filterseolinks/url_value</parameter_type>
+                    </filter_value>
+                </sources>
+            </mana_seo_url>
+        </indexer>
         <!-- INSERT HERE: blocks, models, ... -->
     </global>
     <!-- This section enables static visual changes in admin area. -->
@@ -181,4 +195,10 @@
             </adminhtml>
         </routers>
     </admin>
+    <mana_seo>
+        <url_types>
+            <filter><page_helper>mana_attributepage/url_attributePage</page_helper></filter>
+            <value><page_helper>mana_attributepage/url_optionPage</page_helper></value>
+        </url_types>
+    </mana_seo>
 </config>

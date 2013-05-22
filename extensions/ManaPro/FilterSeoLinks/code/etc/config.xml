@@ -132,8 +132,8 @@
             <indexer>
                 <mana_seo_url>
                     <sources>
-                        <filter><resource>manapro_filterseolinks/urlIndexer_filter</resource></filter>
-                        <filter_value><resource>manapro_filterseolinks/urlIndexer_value</resource></filter_value>
+                        <filter><resource>mana_seo/urlIndexer_filter</resource></filter>
+                        <filter_value><resource>mana_seo/urlIndexer_value</resource></filter_value>
                     </sources>
                 </mana_seo_url>
             </indexer>
@@ -203,6 +203,10 @@
         </noindex>
 	</manapro_filterseolinks>
     <mana_seo>
+        <url_types>
+            <filter><parameter_helper>manapro_filterseolinks/url_filter</parameter_helper></filter>
+            <value><parameter_helper>manapro_filterseolinks/url_value</parameter_helper></value>
+        </url_types>
         <parameter_handlers>
             <toolbar>
                 <helper>manapro_filterseolinks/parameterHandler_toolbar</helper>

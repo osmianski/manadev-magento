@@ -11,27 +11,9 @@
  */
 class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_parameterSchemaProviders;
-    protected $_pageTypes;
+    protected $_urlTypes;
     protected $_parameterHandlers;
     protected $_variationPoints;
-
-    /**
-     * @return Mana_Seo_Helper_Url[]
-     */
-    public function getPageTypes() {
-        if (!$this->_pageTypes) {
-            /* @var $core Mana_Core_Helper_Data */
-            $core = Mage::helper('mana_core');
-
-            $result = array();
-
-            foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'page_types') as $pageTypeXml) {
-                $result[] = Mage::helper((string)$pageTypeXml->helper);
-            }
-            $this->_pageTypes = $result;
-        }
-        return $this->_pageTypes;
-    }
 
     /**
      * @return Mana_Seo_Helper_ParameterHandler[]
@@ -84,5 +66,40 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         $comparer->setPositions($positions);
 
         return $comparer;
+    }
+
+    /**
+     * @param array | bool $types
+     * @return Mana_Seo_Helper_Url[]
+     */
+    public function getUrlTypes($types = false) {
+        if ($types === false) {
+            if (!$this->_urlTypes) {
+                /* @var $core Mana_Core_Helper_Data */
+                $core = Mage::helper('mana_core');
+
+                $result = array();
+
+                foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'url_types') as $urlTypeXml) {
+                    $result[(string)$urlTypeXml->helper] = Mage::helper((string)$urlTypeXml->helper);
+                }
+                $this->_urlTypes = $result;
+            }
+
+            return $this->_urlTypes;
+        }
+        else {
+            $result = array();
+            foreach ($this->getUrlTypes() as $type => $helper) {
+                if (in_array('page', $types) && $helper->isPage() ||
+                    in_array('parameter', $types) && $helper->isParameter() ||
+                    in_array('value', $types) && $helper->isValue())
+                {
+                    $result[] = $type;
+                }
+            }
+
+            return $result;
+        }
     }
 }

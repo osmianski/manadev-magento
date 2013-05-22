@@ -66,6 +66,7 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
      */
     public function process($options = array()) {
         $options = $this->_prepareOptions($options);
+        $this->_makeAllRowsObsolete($options);
         foreach ($this->_getSources() as $source) {
             $this->_processSource($source, $options);
         }
@@ -92,5 +93,12 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
     }
 
     protected function _processConflicts($options) {
+    }
+
+    protected function _makeAllRowsObsolete($options) {
+        /* @var $resource Mana_Seo_Resource_UrlIndexer_General */
+        $resource = Mage::getResourceSingleton('mana_seo/urlIndexer_general');
+        $resource->makeAllRowsObsolete($options);
+
     }
 }

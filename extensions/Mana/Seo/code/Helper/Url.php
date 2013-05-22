@@ -10,6 +10,19 @@
  *
  */
 class Mana_Seo_Helper_Url extends Mage_Core_Helper_Abstract {
+    protected $_type = '';
+    protected $_xml = null;
+
+    public function getXml() {
+        if (is_null($this->_xml)) {
+            $result = Mage::getConfig()->getXpath("//mana_seo/url_types/{$this->_type}");
+
+            $this->_xml = count($result) == 1 ? $result[0] : false;
+        }
+
+        return $this->_xml;
+    }
+
     /**
      * @param Mana_Seo_Model_Context $context
      * @return bool|Mana_Seo_Helper_VariationPoint_Suffix
@@ -68,5 +81,17 @@ class Mana_Seo_Helper_Url extends Mage_Core_Helper_Abstract {
         else {
             return '';
         }
+    }
+
+    public function isPage() {
+        return false;
+    }
+
+    public function isParameter() {
+        return false;
+    }
+
+    public function isValue() {
+        return false;
     }
 }

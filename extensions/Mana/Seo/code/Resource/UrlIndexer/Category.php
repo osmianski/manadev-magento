@@ -30,10 +30,6 @@ class Mana_Seo_Resource_UrlIndexer_Category extends Mana_Seo_Resource_UrlIndexer
             $fields = array(
                 'url_key' => new Zend_Db_Expr('SUBSTRING(`r`.`request_path`, 1, CHAR_LENGTH(`r`.`request_path`) - ' . $mbstring->strlen($suffix) . ')'),
                 'type' => new Zend_Db_Expr("'mana_seo/url_category'"),
-                'is_page' => new Zend_Db_Expr(1),
-                'supports_parameters' => new Zend_Db_Expr(1),
-                'is_parameter' => new Zend_Db_Expr(0),
-                'is_value' => new Zend_Db_Expr(1),
                 'store_id' => new Zend_Db_Expr('`r`.`store_id`'),
                 'category_id' => new Zend_Db_Expr('`r`.`category_id`'),
                 'unique_key' => new Zend_Db_Expr("CONCAT(`r`.`id_path`, '-', `r`.`is_system`)"),

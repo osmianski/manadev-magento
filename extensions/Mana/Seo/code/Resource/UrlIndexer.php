@@ -55,4 +55,16 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mage_Core_Model_Mysql4_Abstr
     protected function _quote($s) {
         return $this->_getReadAdapter()->quote($s);
     }
+
+    /**
+     * @param Varien_Db_Adapter_Pdo_Mysql $db
+     * @return Varien_Db_Select
+     */
+    protected function _getFilterableAttributeSelect($db) {
+        return $db->select()
+            ->from(array('a' => $this->getTable('eav/attribute')), null)
+            ->joinInner(array('t' => $this->getTable('eav/entity_type')), "`t`.`entity_type_id` = `a`.`entity_type_id` AND `t`.`entity_type_code` = 'catalog_product'", null)
+            ->joinInner(array('ca' => $this->getTable('catalog/eav_attribute')), "`ca`.`attribute_id` = `a`.`attribute_id`", null)
+            ->where("`ca`.`is_filterable` <> 0");
+    }
 }

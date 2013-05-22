@@ -10,6 +10,12 @@
  *
  */
 class Mana_Seo_Helper_Url_Category extends Mana_Seo_Helper_Url {
+    protected $_type = 'category';
+
+    public function isPage() {
+        return true;
+    }
+
     /**
      * @param Mana_Seo_Model_Context $context
      * @return bool|Mana_Seo_Helper_VariationPoint_Suffix

@@ -34,6 +34,8 @@
                         <name version="13.05.11.13"><type>varchar(80)</type><no>8</no></name>
                         <internal_name version="13.05.11.13"><type>varchar(20)</type><no>9</no><indexed /></internal_name>
                         <redirect_parameter_order version="13.05.19.08"><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
+                        <use_filter_labels version="13.05.19.08"><type>tinyint</type><no>4</no><default_value>1</default_value></use_filter_labels>
+                        <include_filter_name version="13.05.19.08"><type>varchar(20)</type><no>10</no><default_value>if-necessary</default_value></include_filter_name>
                     </fields>
                     <scopes>
                         <global/>
@@ -77,6 +79,8 @@
                                 <name version="13.05.11.13"><default_formula>{{= global.name}}</default_formula></name>
                                 <internal_name version="13.05.11.13"><default_formula>{{= global.internal_name}}</default_formula></internal_name>
                                 <redirect_parameter_order version="13.05.19.08"><default_formula>{{= global.redirect_parameter_order}}</default_formula></redirect_parameter_order>
+                                <use_filter_labels version="13.05.19.08"><default_formula>{{= global.use_filter_labels}}</default_formula></use_filter_labels>
+                                <include_filter_name version="13.05.19.08"><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
                             </fields>
                         </store_flat>
                     </scopes>
@@ -90,14 +94,12 @@
                         </primary>
                     </unique>
                     <fields>
-                        <url_key><type>varchar(255)</type><indexed>1</indexed></url_key>
-                        <unique_key><type>varchar(255)</type><indexed>1</indexed></unique_key>
-                        <type><type>varchar(40)</type><indexed>1</indexed></type>
-                        <is_page><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_page>
-                        <supports_parameters><type>tinyint</type><default_value>0</default_value></supports_parameters>
-                        <is_parameter><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_parameter>
-                        <is_value><type>tinyint</type><indexed>1</indexed><default_value>0</default_value></is_value>
-                        <status><type>varchar(10)</type><indexed>1</indexed><default_value>obsolete</default_value><no>7</no></status>
+                        <url_key><type>varchar(255)</type><indexed /></url_key>
+                        <permanent_url_key><type>varchar(255)</type><nullable /><indexed /></permanent_url_key>
+                        <unique_key><type>varchar(255)</type><indexed /></unique_key>
+                        <type><type>varchar(80)</type><indexed /></type>
+                        <always_use_parameter><type>tinyint</type><indexed /><default_value>0</default_value></always_use_parameter>
+                        <status><type>varchar(10)</type><indexed /><default_value>obsolete</default_value><no>7</no></status>
                         <store_id>
                             <type>smallint(5) unsigned</type>
                             <foreign>
@@ -137,13 +139,33 @@
                                 <on_delete>cascade</on_delete>
                             </foreign>
                         </cms_page_id>
+                        <attribute_id>
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id>
+                        <option_id>
+                            <type>int(10) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute_option</entity>
+                                <field>option_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </option_id>
                     </fields>
                 </url>
                 <urlHistory>
                     <fields>
-                        <url_key><type>varchar(255)</type><indexed>1</indexed></url_key>
-                        <type><type>varchar(40)</type><indexed>1</indexed></type>
-                        <redirect_to><type>varchar(255)</type><indexed>1</indexed></redirect_to>
+                        <url_key><type>varchar(255)</type><indexed /></url_key>
+                        <type><type>varchar(40)</type><indexed /></type>
+                        <redirect_to><type>varchar(255)</type><indexed /></redirect_to>
                         <store_id>
                             <type>smallint(5) unsigned</type>
                             <foreign>

@@ -93,12 +93,12 @@ class Mana_Seo_Helper_VariationPoint_PageUrl extends Mana_Seo_Helper_VariationPo
         /* @var $dbHelper Mana_Db_Helper_Data */
         $dbHelper = Mage::helper('mana_db');
 
-        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        /* @var $collection Mana_Seo_Resource_Url_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
         $collection
+            ->addTypeFilter('page')
             ->setStoreFilter($context->getStoreId())
             ->addFieldToFilter('url_key', array('in' => $context->getCandidates()))
-            ->addFieldToFilter('is_page', 1)
             ->addFieldToFilter('status', array(
                 'in' => array(
                     Mana_Seo_Model_Url::STATUS_ACTIVE,

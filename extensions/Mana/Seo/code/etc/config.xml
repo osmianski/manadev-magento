@@ -109,8 +109,11 @@
     </global>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
     <mana_seo>
-        <page_types>
+        <url_types>
             <category><helper>mana_seo/url_category</helper></category>
-        </page_types>
+            <cms_page><helper>mana_seo/url_cmsPage</helper></cms_page>
+            <filter><helper>mana_seo/url_filter</helper></filter>
+            <value><helper>mana_seo/url_value</helper></value>
+        </url_types>
     </mana_seo>
 </config>

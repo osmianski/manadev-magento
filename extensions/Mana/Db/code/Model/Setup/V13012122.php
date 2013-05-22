@@ -316,7 +316,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         $fields[] = $field;
         $context->setFields($fields);
 
-        if (!empty($field->indexed) || isset($field->foreign) || !empty($field->primary)) {
+        if (isset($field->indexed) || isset($field->foreign) || !empty($field->primary)) {
             $indexes = $context->getIndexes();
             $indexes[] = $field;
             $context->setIndexes($indexes);
@@ -418,7 +418,7 @@ class Mana_Db_Model_Setup_V13012122 extends Mana_Db_Model_Setup_Abstract {
         $sql = '';
         $sql .= "`".((string)$field->name)."` ";
         $sql .= ((string)$field->type) ." ";
-        if (!empty($field->nullable)) {
+        if (isset($field->nullable)) {
             $sql .= "null ";
         }
         else {
