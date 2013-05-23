@@ -517,4 +517,8 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return null;
         }
     }
+
+    public function base64EncodeUrl($url) {
+        return base64_encode(Mage::getSingleton('core/url')->sessionUrlVar($url));
+    }
 }

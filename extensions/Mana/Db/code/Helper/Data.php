@@ -11,7 +11,7 @@
  * @author Mana Team
  */
 class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
-	protected $_logQueries = true;
+	protected $_logQueries = false;
 	public function getLogQueries() {
 		return $this->_logQueries;
 	}

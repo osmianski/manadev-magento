@@ -37,8 +37,8 @@
 ManaPro.filterRangeInput('<?php echo $_id ?>', {
 	rangeFrom: <?php echo $_filter->getLowestPossibleValue() ?>,
 	rangeTo: <?php echo $_filter->getHighestPossibleValue() ?>,
-	url: '<?php echo base64_encode($_slider->getUrl($_filter->getRequestVar())) ?>',
-	clearUrl: '<?php echo base64_encode($_slider->getClearUrl($_filter->getRequestVar())) ?>',
+	url: '<?php echo Mage::helper('mana_core')->base64EncodeUrl($_slider->getUrl($_filter->getRequestVar())) ?>',
+	clearUrl: '<?php echo Mage::helper('mana_core')->base64EncodeUrl($_slider->getClearUrl($_filter->getRequestVar())) ?>',
 	formatThreshold: <?php echo $_filter->getFilterOptions()->getSliderThreshold() ? $_filter->getFilterOptions()->getSliderThreshold() : 0 ?>,
     decimalDigits: <?php echo $_filter->getFilterOptions()->getSliderDecimalDigits() ?>,
     decimalDigits2: <?php echo $_filter->getFilterOptions()->getSliderDecimalDigits2() ?>,
