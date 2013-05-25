@@ -189,6 +189,7 @@ class ManaPro_FilterPositioning_Model_Observer {
             $grid->addColumn('show_in', array(
                 'header' => Mage::helper('manapro_filterpositioning')->__('Show'),
                 'index' => 'show_in',
+                'filter_index' => 'main_table.show_in',
                 'width' => '150px',
                 'align' => 'center',
                 'type' => 'options',

@@ -29,6 +29,7 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
 
         // reset columns, order and limitation conditions
         $select->reset(Zend_Db_Select::COLUMNS);
+        $select->reset(Zend_Db_Select::GROUP);
         $select->reset(Zend_Db_Select::ORDER);
         $select->reset(Zend_Db_Select::LIMIT_COUNT);
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
@@ -115,6 +116,8 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
             Mage::helper('mana_filters')->resetProductCollectionWhereClause($select);
             $select->where("{$table}.min_price > 0");
 
+//Mage::log($select->__toString(), Zend_Log::DEBUG, 'price.log' );
+//Mage::log(json_encode($this->_getReadAdapter()->fetchPairs($select)), Zend_Log::DEBUG, 'price.log' );
             return $this->_getReadAdapter()->fetchPairs($select);
         }
         else {
