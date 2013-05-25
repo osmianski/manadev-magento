@@ -18,21 +18,15 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return $this;
     }
 
+    public function getMagentoUrl($routePath = null, $routeParams = null) {
+        return parent::getUrl($routePath, $routeParams);
+    }
     public function getUrl($routePath = null, $routeParams = null) {
-        $this->_escape = isset($routeParams['_escape']) ? $routeParams['_escape'] : isset($routeParams['_m_escape']);
-        $result = $this->encodeUrl($routePath, parent::getUrl($routePath, $routeParams));
-        $result = preg_replace('#\/[-_\w\d]+\/\.#', '.', $result);
-        if (strpos($result, '/.html') !== false) {
-            $currentUrl = parent::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()));
-            Mage::log("Wrong URL {$result} on page {$currentUrl}", Zend_Log::DEBUG, 'seo_errors.log');
-            try {
-                throw new Exception();
-            } catch (Exception $e) {
-                Mage::log("{$e->getMessage()}\n{$e->getTraceAsString()}", Zend_Log::DEBUG, 'seo_errors.log');
-            }
-        }
+        /* @var $generator Mana_Seo_Helper_UrlGenerator */
+        $generator = Mage::helper('mana_seo/urlGenerator');
 
-        return $result;
+        $this->_escape = isset($routeParams['_escape']) ? $routeParams['_escape'] : isset($routeParams['_m_escape']);
+        return $generator->generateAndValidateUrl($routePath, $routeParams, $this);
     }
 
     public function encodeUrl($routePath, $result) {
