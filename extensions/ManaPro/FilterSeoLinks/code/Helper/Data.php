@@ -58,7 +58,7 @@ class ManaPro_FilterSeoLinks_Helper_Data extends Mage_Core_Helper_Abstract {
         /* @var $helper Mage_Catalog_Helper_Category */
         $helper = Mage::helper('catalog/category');
         $result = $helper->getCategoryUrlSuffix();
-        if ($result && strpos($result, '.') !== 0) {
+        if ($result && $result != '/' && strpos($result, '.') !== 0) {
             $result = '.'.$result;
         }
         return $result;
