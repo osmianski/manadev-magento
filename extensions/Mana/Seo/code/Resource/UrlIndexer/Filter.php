@@ -26,10 +26,16 @@ class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_UrlIndexer {
                     ? $this->_seoify('`f`.`name`', $schema)
                     : $this->_seoify('COALESCE(`l`.`value`, `a`.`frontend_label`)', $schema)
                 )
-                : "REPLACE(LOWER(`g`.`code`), '_', '-')";
+                : "REPLACE(LOWER(`a`.`attribute_code`), '_', '-')";
             $fields = array(
                 'url_key' => new Zend_Db_Expr($urlKeyExpr),
                 'type' => new Zend_Db_Expr("'mana_seo/url_filter'"),
+                'url_key_provider' => new Zend_Db_Expr(
+                    "IF(a.backend_type = 'decimal', 'mana_seo/urlKeyProvider_price', 'mana_seo/urlKeyProvider_attribute')"),
+                'is_page' => new Zend_Db_Expr('0'),
+                'is_parameter' => new Zend_Db_Expr('1'),
+                'is_value' => new Zend_Db_Expr('0'),
+                'is_multiple_value' => new Zend_Db_Expr('0'),
                 'schema_id' => new Zend_Db_Expr($schema->getId()),
                 'store_id' => new Zend_Db_Expr($schema->getStoreId()),
                 'attribute_id' => new Zend_Db_Expr('`a`.`attribute_id`'),

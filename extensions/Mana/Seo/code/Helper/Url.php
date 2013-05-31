@@ -10,88 +10,120 @@
  *
  */
 class Mana_Seo_Helper_Url extends Mage_Core_Helper_Abstract {
-    protected $_type = '';
-    protected $_xml = null;
+    public function isManadevLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
+    }
 
-    public function getXml() {
-        if (is_null($this->_xml)) {
-            $result = Mage::getConfig()->getXpath("//mana_seo/url_types/{$this->_type}");
-
-            $this->_xml = count($result) == 1 ? $result[0] : false;
-        }
-
-        return $this->_xml;
+    public function isManadevAttributePageInstalled() {
+        return $this->isModuleEnabled('Mana_AttributePage');
     }
 
     /**
-     * @param Mana_Seo_Model_Context $context
-     * @return bool|Mana_Seo_Helper_VariationPoint_Suffix
-     */
-    public function getSuffixVariationPoint(/** @noinspection PhpUnusedParameterInspection */$context) {
-        return false;
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_Url $parameterUrl
-     * @return Mana_Seo_Helper_Url
-     */
-    public function registerParameter($context, $parameterUrl) {
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_Url $parameterUrl
-     * @return Mana_Seo_Helper_Url
-     */
-    public function unregisterParameter($context, $parameterUrl) {
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param array $params
+     * @param Mana_Seo_Model_ParsedUrl $parsedUrl
+     * @param Mana_Seo_Model_Url $urlKey
      * @throws Exception
-     * @return string
-     */
-    public function getRoute(/** @noinspection PhpUnusedParameterInspection */$context, &$params) {
-        throw new Exception('Not implemented');
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @throws Exception
-     * @return string
-     */
-    public function getDirectUrl(/** @noinspection PhpUnusedParameterInspection */$context) {
-        throw new Exception('Not implemented');
-    }
-
-    /**
-     * @param string $route
      * @return bool
      */
-    public function recognizeRoute(/** @noinspection PhpUnusedParameterInspection */$route) {
-        return false;
+    public function registerPage(/** @noinspection PhpUnusedParameterInspection */ $parsedUrl, $urlKey) {
+        throw new Exception('Not implemented');
     }
 
-    public function getSuffix() {
-        if ($suffixHelper = $this->getSuffixVariationPoint(null)) {
-            return $suffixHelper->getCurrentSuffix();
+    /**
+     * @param Mana_Seo_Model_ParsedUrl $parsedUrl
+     * @param Mana_Seo_Model_Url $urlKey
+     * @throws Exception
+     * @return bool
+     */
+    public function registerParameter(/** @noinspection PhpUnusedParameterInspection */ $parsedUrl, $urlKey) {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * @param Mana_Seo_Model_ParsedUrl $parsedUrl
+     * @param Mana_Seo_Model_Url $urlKey
+     * @throws Exception
+     * @return bool
+     */
+    public function registerValue(/** @noinspection PhpUnusedParameterInspection */ $parsedUrl, $urlKey) {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * @throws Exception
+     * @return string
+     */
+    protected function _getSuffix() {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * @throws Exception
+     * @return string
+     */
+    protected function _getSuffixHistoryType() {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * @param string $path
+     * @param string $originalSlash
+     * @param int $storeId
+     * @param string[] $activeSuffixes
+     * @param string[] $obsoleteSuffixes
+     */
+    public function getSuffixes($path, $originalSlash, $storeId, &$activeSuffixes, &$obsoleteSuffixes) {
+        $activeSuffixes = array();
+        $obsoleteSuffixes = array();
+
+        if (!($urlHistoryType = $this->_getSuffixHistoryType())) {
+            return;
+        }
+        $currentSuffix = (string)$this->_getSuffix();
+
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        $suffixes = array();
+        if ($this->_matchSuffix($path, $originalSlash, $currentSuffix)) {
+            $activeSuffixes[] = $currentSuffix;
+        }
+        /* @var $oldSuffixCollection Mana_Db_Resource_Entity_Collection */
+        $oldSuffixCollection = $dbHelper->getResourceModel('mana_seo/urlHistory_collection');
+        $oldSuffixCollection->getSelect()
+            ->where('type = ?', $urlHistoryType)
+            ->where('store_id IN(?)', array(0, $storeId))
+            ->where('url_key <> ?', $currentSuffix);
+        foreach ($oldSuffixCollection as $historyRecord) {
+            /* @var $historyRecord Mana_Seo_Model_UrlHistory */
+            $suffix = (string)$historyRecord->getUrlKey();
+            if (!in_array($suffix, $obsoleteSuffixes) && $this->_matchSuffix($path, $originalSlash, $suffix)) {
+                $obsoleteSuffixes[] = $suffix;
+            }
+
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param string $originalSlash
+     * @param string $suffix
+     * @return bool
+     */
+    protected function _matchSuffix($path, $originalSlash, $suffix) {
+        if ($suffix) {
+            if ($suffix == '/') {
+                return $originalSlash == '/';
+            }
+            else {
+                /* @var $mbstring Mana_Core_Helper_Mbstring */
+                $mbstring = Mage::helper('mana_core/mbstring');
+
+                return $mbstring->endsWith($path, $suffix);
+            }
         }
         else {
-            return '';
+            return true;
         }
     }
 
-    public function isPage() {
-        return false;
-    }
-
-    public function isParameter() {
-        return false;
-    }
-
-    public function isValue() {
-        return false;
-    }
 }

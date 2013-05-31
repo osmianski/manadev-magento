@@ -38,7 +38,6 @@ class Mana_Seo_Helper_UrlGenerator extends Mage_Core_Helper_Abstract {
         /* @var $seo Mana_Seo_Helper_Data */
         $seo = Mage::helper('mana_seo');
 
-        $route = $this->_populateRoute($route);
 
 
         return $magentoUrl;

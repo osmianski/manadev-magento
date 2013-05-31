@@ -4,6 +4,7 @@
         <test>
             <Mana_Seo>
                 <p1>.html suffixes are active, .htm and empty suffixes are obsolete</p1>
+                <p1>Subcategory filters are redirected to subcategory pages</p1>
             </Mana_Seo>
         </test>
         <test2>
@@ -12,111 +13,4 @@
             </Mana_Seo>
         </test2>
     </variations>
-    <seo>
-        <page_types>
-            <catalog_category_view>
-                <title>Category Page</title>
-                <current_url>apparel.html</current_url>
-                <option_page>
-                    <route>mana_attributepage/option/category</route>
-                    <title>Option Page Based on Category Page</title>
-                    <current_url>apparel/red.html</current_url>
-                </option_page>
-                <parameters>
-                    <__empty__>
-                        <query/>
-                        <title>No Parameters</title>
-                        <result>apparel.html</result>
-                        <option_page>
-                            <result>apparel/red.html</result>
-                        </option_page>
-                    </__empty__>
-                    <third_party>
-                        <query>qq=qqq</query>
-                        <title>Unknown URL Parameter</title>
-                        <result>apparel.html?qq=qqq</result>
-                        <option_page>
-                            <result>apparel/red.html?qq=qqq</result>
-                        </option_page>
-                    </third_party>
-                    <toolbar>
-                        <query>page=2</query>
-                        <title>Toolbar Parameter</title>
-                        <result>apparel/page/2.html</result>
-                        <option_page>
-                            <result>apparel/red/page/2.html</result>
-                        </option_page>
-                    </toolbar>
-                    <price>
-                        <query>price=1,100</query>
-                        <title>Price Parameter</title>
-                        <result>apparel/price/0-100.html</result>
-                        <option_page>
-                            <result>apparel/red/price/0-100.html</result>
-                        </option_page>
-                    </price>
-                    <filter>
-                        <query>shoe_type=51</query>
-                        <title>Attribute Filter Parameter</title>
-                        <result>apparel/high-heels.html</result>
-                        <option_page>
-                            <result>apparel/red/high-heels.html</result>
-                        </option_page>
-                    </filter>
-                    <multi-value>
-                        <query>shoe_type=51_97</query>
-                        <title>Attribute Filter Parameter With Multiple Values</title>
-                        <result>apparel/high-heels-sandal.html</result>
-                        <option_page>
-                            <result>apparel/red/high-heels-sandal.html</result>
-                        </option_page>
-                    </multi-value>
-                    <option>
-                        <query>color=25</query>
-                        <title>Attribute Filter Parameter Having Underlying Option Page Defined</title>
-                        <result>apparel/blue.html</result>
-                        <option_page>
-                            <result>apparel/blue-red.html</result>
-                        </option_page>
-                    </option>
-                    <category>
-                        <query>cat=5</query>
-                        <title>Subcategory Filter</title>
-                        <result>apparel/shoes.html</result>
-                        <option_page>
-                            <result>apparel/shoes/red.html</result>
-                        </option_page>
-                    </category>
-                </parameters>
-            </catalog_category_view>
-            <catalogsearch_result_index>
-                <title>Quick Search Result Page</title>
-                <option_page>
-                    <route>mana_attributepage/option/search</route>
-                    <title>Option Page Based on Quick Search Result Page</title>
-                </option_page>
-            </catalogsearch_result_index>
-            <cms_index_index>
-                <title>Home Page</title>
-                <option_page>
-                    <route>mana_attributepage/option/home</route>
-                    <title>Option Page Based on Home Page</title>
-                </option_page>
-            </cms_index_index>
-            <cms_page_view>
-                <title>CMS Page</title>
-                <option_page>
-                    <route>mana_attributepage/option/cms</route>
-                    <title>Option Page Based on CMS Page</title>
-                </option_page>
-            </cms_page_view>
-            <__any_page__>
-                <title>Any Page</title>
-                <option_page>
-                    <route>mana_attributepage/option/view</route>
-                    <title>Option Page</title>
-                </option_page>
-            </__any_page__>
-        </page_types>
-    </seo>
 </config>

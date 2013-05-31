@@ -10,50 +10,38 @@
  *
  */
 class Mana_Seo_Helper_Url_Category extends Mana_Seo_Helper_Url {
-    protected $_type = 'category';
+    /**
+     * @param Mana_Seo_Model_ParsedUrl $parsedUrl
+     * @param Mana_Seo_Model_Url $urlKey
+     * @return bool
+     */
+    public function registerPage($parsedUrl, $urlKey) {
+        $parsedUrl
+            ->setPageUrlKey($urlKey->getUrlKey())
+            ->setRoute('catalog/category/view')
+            ->addParameter('id', $urlKey->getCategoryId());
 
-    public function isPage() {
         return true;
     }
 
     /**
-     * @param Mana_Seo_Model_Context $context
-     * @return bool|Mana_Seo_Helper_VariationPoint_Suffix
-     */
-    public function getSuffixVariationPoint(/** @noinspection PhpUnusedParameterInspection */$context) {
-        return Mage::helper('mana_seo/variationPoint_suffix_category');
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param array $params
      * @return string
      */
-    public function getRoute($context, &$params) {
-        $params['id'] = $context->getPageUrl()->getCategoryId();
-        return 'catalog/category/view';
+    protected function _getSuffix() {
+        /* @var $helper Mage_Catalog_Helper_Category */
+        $helper = Mage::helper('catalog/category');
+        $result = $helper->getCategoryUrlSuffix();
+        if ($result && strpos($result, '.') !== 0) {
+            $result = '.' . $result;
+        }
+
+        return $result;
     }
 
     /**
-     * @param Mana_Seo_Model_Context $context
      * @return string
      */
-    public function getDirectUrl(/** @noinspection PhpUnusedParameterInspection */$context) {
-        /* @var $category Mage_Catalog_Model_Category */
-        $category = Mage::getModel('catalog/category');
-        $category
-            ->setStoreId(Mage::app()->getStore()->getId())
-            ->load($context->getPageUrl()->getCategoryId());
-        $url = $category->getUrl();
-        return substr($url, strlen(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,
-            Mage::app()->getFrontController()->getRequest()->isSecure())));
-    }
-
-    /**
-     * @param string $route
-     * @return bool
-     */
-    public function recognizeRoute($route) {
-        return $route == 'catalog/category/view';
+    protected function _getSuffixHistoryType() {
+        return Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX;
     }
 }

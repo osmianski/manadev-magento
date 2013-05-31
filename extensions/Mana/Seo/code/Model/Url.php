@@ -12,6 +12,8 @@
  * @method Mana_Seo_Model_Url setUrlKey(string $value)
  * @method string getType()
  * @method Mana_Seo_Model_Url setType(string $value)
+ * @method string getUrlKeyProvider()
+ * @method Mana_Seo_Model_Url setUrlKeyProvider(string $value)
  * @method string getInternalParameterName()
  * @method Mana_Seo_Model_Url setInternalParameterName(string $value)
  * @method string getInternalValueName()
@@ -24,6 +26,12 @@
  * @method Mana_Seo_Model_Url setIsValue(bool $value)
  * @method int getCategoryId()
  * @method Mana_Seo_Model_Url setCategoryId(int $value)
+ * @method int getCmsPageId()
+ * @method Mana_Seo_Model_Url setCmsPageId(int $value)
+ * @method int getOptionId()
+ * @method Mana_Seo_Model_Url setOptionId(int $value)
+ * @method int getOptionAttributeCode()
+ * @method Mana_Seo_Model_Url setOptionAttributeCode(int $value)
  */
 class Mana_Seo_Model_Url extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';

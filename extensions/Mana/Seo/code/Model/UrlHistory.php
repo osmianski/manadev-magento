@@ -15,10 +15,9 @@
  * @method Mana_Seo_Model_UrlHistory setType(string $value)
  */
 class Mana_Seo_Model_UrlHistory extends Mana_Db_Model_Entity {
-    const TYPE_CATEGORY_SUFFIX =     'category_suffix';
-    const TYPE_CMS_PAGE_IDENTIFIER = 'cms_identifier';
-    const TYPE_OPTION_PAGE_SUFFIX =  'option_page_suffix';
-    const TYPE_OPTION_PAGE_URL_KEY = 'option_page_url_key';
+    const TYPE_CATEGORY_SUFFIX =       'category_suffix';
+    const TYPE_HOME_PAGE_SUFFIX =      'home_page_suffix';
+    const TYPE_CMS_PAGE_SUFFIX =       'cms_page_suffix';
+    const TYPE_SEARCH_SUFFIX =         'search_suffix';
     const TYPE_ATTRIBUTE_PAGE_SUFFIX = 'attr_page_suffix';
-    const TYPE_ATTRIBUTE_PAGE_URL_KEY = 'attr_page_url_key';
 }

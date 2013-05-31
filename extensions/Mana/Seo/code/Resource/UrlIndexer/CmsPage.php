@@ -20,6 +20,11 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
         $fields = array(
             'url_key' => new Zend_Db_Expr('`p`.`identifier`'),
             'type' => new Zend_Db_Expr("'mana_seo/url_cmsPage'"),
+            'url_key_provider' => new Zend_Db_Expr("'mana_seo/urlKeyProvider_database'"),
+            'is_page' => new Zend_Db_Expr('1'),
+            'is_parameter' => new Zend_Db_Expr('0'),
+            'is_value' => new Zend_Db_Expr('0'),
+            'is_multiple_value' => new Zend_Db_Expr('0'),
             'store_id' => new Zend_Db_Expr('`s`.`store_id`'),
             'cms_page_id' => new Zend_Db_Expr('`p`.`page_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`p`.`page_id`, '-', `p`.`identifier`)"),

@@ -98,8 +98,12 @@
                         <permanent_url_key><type>varchar(255)</type><nullable /><indexed /></permanent_url_key>
                         <unique_key><type>varchar(255)</type><indexed /></unique_key>
                         <type><type>varchar(80)</type><indexed /></type>
-                        <always_use_parameter><type>tinyint</type><indexed /><default_value>0</default_value></always_use_parameter>
                         <status><type>varchar(10)</type><indexed /><default_value>obsolete</default_value><no>7</no></status>
+                        <url_key_provider><type>varchar(80)</type></url_key_provider>
+                        <is_page><type>tinyint</type><indexed /><default_value>0</default_value></is_page>
+                        <is_parameter><type>tinyint</type><indexed /><default_value>0</default_value></is_parameter>
+                        <is_value><type>tinyint</type><indexed /><default_value>0</default_value></is_value>
+                        <is_multiple_value><type>tinyint</type><indexed /><default_value>0</default_value></is_multiple_value>
                         <store_id>
                             <type>smallint(5) unsigned</type>
                             <foreign>

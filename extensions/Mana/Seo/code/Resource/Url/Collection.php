@@ -10,30 +10,14 @@
  *
  */
 class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collection {
-    /**
-     * @param string | array $types
-     * @return $this
-     */
-    public function addTypeFilter($types) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-
-        if (!is_array($types)) {
-            $types = array($types);
-        }
-
-        $types = $seo->getUrlTypes($types);
-
-        if (count($types) == 0) {
-            $this->getSelect()->where(new Zend_Db_Expr('1 <> 1'));
-        }
-        elseif (count($types) == 1) {
-            $this->addFieldToFilter('type', $types[0]);
-        }
-        else {
-            $this->addFieldToFilter('type', array('in' => $types));
-        }
-
+    public function addOptionAttributeIdAndCodeToSelect() {
+        $this->getSelect()
+            ->joinLeft(array('o' => $this->getTable('eav/attribute_option')),
+                "`o`.`option_id` = `main_table`.`option_id`",
+                array('option_attribute_id' => new Zend_Db_Expr('`o`.`attribute_id`')))
+            ->joinLeft(array('oa' => $this->getTable('eav/attribute')),
+                "`oa`.`attribute_id` = `o`.`attribute_id`",
+                array('option_attribute_code' => new Zend_Db_Expr('`oa`.`attribute_code`')));
         return $this;
     }
 }

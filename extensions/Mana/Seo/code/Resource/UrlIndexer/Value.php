@@ -17,11 +17,19 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_UrlIndexer {
     public function process($indexer, $options) {
         $db = $this->_getWriteAdapter();
 
+        /* @var $urlHelper Mana_Seo_Helper_Url_Value */
+        $urlHelper = Mage::helper('mana_seo/url_value');
+
         foreach ($this->_getSchemas() as $schema) {
             $urlKeyExpr = $this->_seoify("COALESCE(vs.value, vg.value)", $schema);
             $fields = array(
                 'url_key' => new Zend_Db_Expr($urlKeyExpr),
                 'type' => new Zend_Db_Expr("'mana_seo/url_value'"),
+                'url_key_provider' => new Zend_Db_Expr("'mana_seo/urlKeyProvider_database'"),
+                'is_page' => new Zend_Db_Expr('0'),
+                'is_parameter' => new Zend_Db_Expr('0'),
+                'is_value' => new Zend_Db_Expr('1'),
+                'is_multiple_value' => new Zend_Db_Expr($urlHelper->isManadevLayeredNavigationInstalled() ? '1' : '0'),
                 'schema_id' => new Zend_Db_Expr($schema->getId()),
                 'store_id' => new Zend_Db_Expr($schema->getStoreId()),
                 'option_id' => new Zend_Db_Expr('`o`.`option_id`'),

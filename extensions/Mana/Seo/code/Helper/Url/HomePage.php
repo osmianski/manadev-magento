@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Helper_Url_CmsPage extends Mana_Seo_Helper_Url {
+class Mana_Seo_Helper_Url_HomePage extends Mana_Seo_Helper_Url {
     /**
      * @param Mana_Seo_Model_ParsedUrl $parsedUrl
      * @param Mana_Seo_Model_Url $urlKey
@@ -17,9 +17,8 @@ class Mana_Seo_Helper_Url_CmsPage extends Mana_Seo_Helper_Url {
      */
     public function registerPage($parsedUrl, $urlKey) {
         $parsedUrl
-            ->setPageUrlKey($urlKey->getUrlKey())
-            ->setRoute('cms/page/view')
-            ->addParameter('id', $urlKey->getCmsPageId());
+            ->setPageUrlKey('')
+            ->setRoute('cms/index/index');
 
         return true;
     }
@@ -28,13 +27,13 @@ class Mana_Seo_Helper_Url_CmsPage extends Mana_Seo_Helper_Url {
      * @return string
      */
     protected function _getSuffix() {
-        return Mage::getStoreConfig('mana/seo/cms_page_suffix');
+        return Mage::getStoreConfig('mana/seo/home_page_suffix');
     }
 
     /**
      * @return string
      */
     protected function _getSuffixHistoryType() {
-        return Mana_Seo_Model_UrlHistory::TYPE_CMS_PAGE_SUFFIX;
+        return Mana_Seo_Model_UrlHistory::TYPE_HOME_PAGE_SUFFIX;
     }
 }
