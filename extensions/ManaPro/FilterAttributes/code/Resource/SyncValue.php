@@ -74,6 +74,9 @@ class ManaPro_FilterAttributes_Resource_SyncValue  extends ManaPro_FilterAttribu
                         ->from($res->getTableName($targetAttributeTable))
                         ->where("`attribute_id` = ?", $targetAttribute['attribute_id']);
 
+                    if (isset($options['product_id'])) {
+                        $select->where("`entity_id` = ?", $options['product_id']);
+                    }
                     $sql = $select->deleteFromSelect($res->getTableName($targetAttributeTable));
 
                     $db->query($sql);
@@ -94,6 +97,10 @@ class ManaPro_FilterAttributes_Resource_SyncValue  extends ManaPro_FilterAttribu
                             $db->quoteInto("`e`.`entity_id` = `v`.`entity_id` AND `v`.`store_id` = 0 ".
                                 "AND `v`.`attribute_id` = ?", $sourceAttribute['attribute_id']), null)
                         ->columns($fields);
+
+                    if (isset($options['product_id'])) {
+                        $select->where("`e`.`entity_id` = ?", $options['product_id']);
+                    }
 
                     // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
                     $sql = $select->insertFromSelect($res->getTableName($targetAttributeTable), array_keys($fields));
@@ -156,20 +163,6 @@ class ManaPro_FilterAttributes_Resource_SyncValue  extends ManaPro_FilterAttribu
         }
     }
 
-
-    /**
-     * @param $attributeCode
-     * @return array | bool
-     */
-    protected function _getAttributeByCode ( $attributeCode) {
-        $db = $this->_getWriteAdapter();
-
-        $select = $db->select()
-            ->from(array('a' => $this->getTable('eav/attribute')), array('attribute_id', 'backend_type', 'backend_table'))
-            ->where("`a`.`attribute_code` = ?", $attributeCode);
-
-        return $db->fetchRow($select);
-    }
     /**
      * @param int $attributeId
      * @param string $label
@@ -186,14 +179,5 @@ class ManaPro_FilterAttributes_Resource_SyncValue  extends ManaPro_FilterAttribu
             ->where("`o`.`attribute_id` = ?", $attributeId);
 
         return $db->fetchOne($select);
-    }
-
-    private function _getIfExpr($fieldExpr, $values) {
-        $result = "''";
-
-        foreach ($values as $source => $target) {
-            $result = "IF($fieldExpr = $source, '$target', $result)";
-        }
-        return $result;
     }
 }

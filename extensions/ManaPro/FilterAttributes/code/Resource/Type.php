@@ -23,4 +23,31 @@ abstract class ManaPro_FilterAttributes_Resource_Type extends Mage_Core_Model_My
      */
     abstract public function process($indexer, $options);
 
+    /**
+     * @param $attributeCode
+     * @return array | bool
+     */
+    protected function _getAttributeByCode ( $attributeCode) {
+        $db = $this->_getWriteAdapter();
+
+        $select = $db->select()
+            ->from(array('a' => $this->getTable('eav/attribute')), array('attribute_id', 'backend_type', 'backend_table'))
+            ->where("`a`.`attribute_code` = ?", $attributeCode);
+
+        return $db->fetchRow($select);
+    }
+
+    /**
+     * @param $fieldExpr
+     * @param $values
+     * @return string
+     */
+    protected function _getIfExpr($fieldExpr, $values) {
+        $result = "''";
+
+        foreach ($values as $source => $target) {
+            $result = "IF($fieldExpr = $source, '$target', $result)";
+        }
+        return $result;
+    }
 }
