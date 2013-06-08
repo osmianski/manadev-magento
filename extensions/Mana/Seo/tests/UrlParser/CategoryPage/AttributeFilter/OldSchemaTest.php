@@ -11,9 +11,9 @@
  */
 class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OldSchemaTest extends Mana_Seo_Test_Case {
     public function testSingleValue() {
-        $this->assertParsedUrl('/apparel/where/color/black.html', array(
+        $this->assertParsedUrl('apparel/where/color/black.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'color' => 24,
@@ -22,9 +22,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OldSchemaTest extends
     }
 
     public function testMultipleValue() {
-        $this->assertParsedUrl('/apparel/where/color/black_blue.html', array(
+        $this->assertParsedUrl('apparel/where/color/black_blue.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'color' => '24_25',
@@ -33,9 +33,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OldSchemaTest extends
     }
 
     public function testTwoFilters() {
-        $this->assertParsedUrl('/apparel/where/color/black_blue/shoe-type/dress.html', array(
+        $this->assertParsedUrl('apparel/where/color/black_blue/shoe-type/dress.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'color' => '24_25',

@@ -10,20 +10,22 @@
  *
  */
 class Mana_Seo_Helper_PageType_HomePage extends Mana_Seo_Helper_PageType  {
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param object[] $activeVariations
-     * @param object[] $obsoleteVariations
-     * @return Mana_Seo_Interface_VariationSource
-     */
-    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
-        /* @var $page Mana_Seo_Model_Page */
-        $page = Mage::getModel('mana_seo/page');
-        $page
-            ->setUrl('')
-            ->setQuery($context->getPath());
-
-        $activeVariations = array($page);
-        $obsoleteVariations = array();
+    public function getCurrentSuffix() {
+        return Mage::getStoreConfig('mana/seo/home_page_suffix');
     }
+
+    public function getSuffixHistoryType() {
+        return Mana_Seo_Model_UrlHistory::TYPE_HOME_PAGE_SUFFIX;
+    }
+
+    /**
+     * @param Mana_Seo_Model_ParsedUrl $token
+     * @return bool
+     */
+    public function setPage($token) {
+        $token->setRoute('cms/index/index');
+
+        return true;
+    }
+
 }

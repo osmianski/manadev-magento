@@ -100,8 +100,16 @@
                     <name>SEO URL Rewrites (MANAdev)</name>
                     <description>Indexes SEO URL Rewrites for page types, parameters and parameter values</description>
                     <sources>
-                        <category><resource>mana_seo/urlIndexer_category</resource></category>
+                        <category_page><resource>mana_seo/urlIndexer_categoryPage</resource></category_page>
                         <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
+                        <search_page><resource>mana_seo/urlIndexer_search</resource></search_page>
+
+                        <filter_parameter><resource>mana_seo/urlIndexer_filter</resource></filter_parameter>
+                        <category_parameter><resource>mana_seo/urlIndexer_categoryParameter</resource></category_parameter>
+                        <toolbar_parameter><resource>mana_seo/urlIndexer_toolbar</resource></toolbar_parameter>
+
+                        <category_value><resource>mana_seo/urlIndexer_categoryValue</resource></category_value>
+                        <attribute_value><resource>mana_seo/urlIndexer_value</resource></attribute_value>
                     </sources>
                 </mana_seo_url>
             </indexer>
@@ -109,11 +117,19 @@
     </global>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
     <mana_seo>
-        <url_types>
-            <category><helper>mana_seo/url_category</helper></category>
-            <cms_page><helper>mana_seo/url_cmsPage</helper></cms_page>
-            <filter><helper>mana_seo/url_filter</helper></filter>
-            <value><helper>mana_seo/url_value</helper></value>
-        </url_types>
+        <page_types>
+            <category><helper>mana_seo/pageType_category</helper></category>
+            <cms_page><helper>mana_seo/pageType_cmsPage</helper></cms_page>
+            <home_page><helper>mana_seo/pageType_homePage</helper></home_page>
+            <search><helper>mana_seo/pageType_search</helper></search>
+        </page_types>
     </mana_seo>
+    <default>
+        <mana>
+            <seo>
+                <search_url_key>search</search_url_key>
+                <max_correction_count>1</max_correction_count>
+            </seo>
+        </mana>
+    </default>
 </config>

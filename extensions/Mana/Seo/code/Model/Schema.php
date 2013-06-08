@@ -15,6 +15,8 @@
  * @method Mana_Seo_Model_Schema setFirstValueSeparator(string $value)
  * @method string getMultipleValueSeparator() '_' in 'url/p1-v1_v2/p2-v3_v4_v5.html'
  * @method Mana_Seo_Model_Schema setMultipleValueSeparator(string $value)
+ * @method string getPriceSeparator()
+ * @method Mana_Seo_Model_Schema setPriceSeparator(string $value)
  * @method string getStatus()
  * @method Mana_Seo_Model_Schema setStatus(string $value)
  * @method int getUseFilterLabels()

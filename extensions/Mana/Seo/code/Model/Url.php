@@ -28,10 +28,23 @@
  * @method Mana_Seo_Model_Url setCategoryId(int $value)
  * @method int getCmsPageId()
  * @method Mana_Seo_Model_Url setCmsPageId(int $value)
+ * @method int getAttributeId()
+ * @method Mana_Seo_Model_Url setAttributeId(int $value)
+ * @method string getInternalName()
+ * @method Mana_Seo_Model_Url setInternalName(string $value)
+ *
+ * Fields from additional joins
+ *
  * @method int getOptionId()
  * @method Mana_Seo_Model_Url setOptionId(int $value)
- * @method int getOptionAttributeCode()
- * @method Mana_Seo_Model_Url setOptionAttributeCode(int $value)
+ * @method int getOptionAttributeId()
+ * @method Mana_Seo_Model_Url setOptionAttributeId(int $value)
+ * @method string getOptionAttributeCode()
+ * @method Mana_Seo_Model_Url setOptionAttributeCode(string $value)
+ * @method string getAttributeCode()
+ * @method Mana_Seo_Model_Url setAttributeCode(string $value)
+ * @method string getFilterDisplay()
+ * @method Mana_Seo_Model_Url setFilterDisplay(string $value)
  */
 class Mana_Seo_Model_Url extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';

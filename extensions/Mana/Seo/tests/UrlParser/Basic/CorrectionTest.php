@@ -11,9 +11,9 @@
  */
 class Mana_Seo_Test_UrlParser_Basic_CorrectionTest extends Mana_Seo_Test_Case {
     public function testNotRecognizedToken() {
-        $this->assertParsedUrl('/apparel/col.html', array(
+        $this->assertParsedUrl('apparel/col.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
             ),
@@ -21,9 +21,9 @@ class Mana_Seo_Test_UrlParser_Basic_CorrectionTest extends Mana_Seo_Test_Case {
     }
 
     public function testEmptyUrlKey() {
-        $this->assertParsedUrl('/apparel///---/-/-/-/-/-.html', array(
+        $this->assertParsedUrl('apparel///---/-/-/-/-/-.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
             ),

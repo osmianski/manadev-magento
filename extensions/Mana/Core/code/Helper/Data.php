@@ -599,4 +599,29 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $result;
     }
 
+    protected $_attributes = array();
+
+    public function getAttribute($entityType, $attributeCode, $columns) {
+        /* @var $res Mage_Core_Model_Resource */
+        $res = Mage::getSingleton('core/resource');
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $res->getConnection('core_read');
+
+        $key = $entityType . '-' . $attributeCode . '-' . implode('-', $columns);
+        if (!isset($this->_attributes[$key])) {
+            $this->_attributes[$key] = $db->fetchRow($db->select()
+                ->from(array('a' => $res->getTableName('eav_attribute')), $columns)
+                ->join(array('t' => $res->getTableName('eav_entity_type')), 't.entity_type_id = a.entity_type_id', null)
+                ->where('a.attribute_code = ?', $attributeCode)
+                ->where('t.entity_type_code = ?', $entityType));
+        }
+
+        return $this->_attributes[$key];
+    }
+
+    public function getAttributeTable($attribute) {
+        return $attribute['backend_table'] ?
+            $attribute['backend_table'] :
+            'catalog_category_entity_' . $attribute['backend_type'];
+    }
 }

@@ -13,7 +13,7 @@ class Mana_Seo_Test_Case extends Mana_Core_Test_Case {
     public function assertParsedUrl($path, $expected) {
         /* @var $parser Mana_Seo_Helper_UrlParser */
         $parser = Mage::helper('mana_seo/urlParser');
-        $result = $parser->parseUrlPath($path);
+        $result = $parser->parse($path);
 
         if (empty($expected)) {
             $this->assertFalse($result, sprintf("Failed asserting that URL '%s' would result in page is not found", $path));
@@ -28,10 +28,12 @@ class Mana_Seo_Test_Case extends Mana_Core_Test_Case {
                 }
                 if (isset($expected['params'])) {
                     foreach ($expected['params'] as $key => $value) {
+                        $this->assertArrayHasKey($key, $result->getParameters());
                         $this->assertEquals($value, implode('_', $result->getParameter($key)));
                     }
                 }
             }
         }
+        return $result;
     }
 }

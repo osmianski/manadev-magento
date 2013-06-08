@@ -12,9 +12,9 @@
  */
 class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNameTest extends Mana_Seo_Test_Case {
     public function testValue() {
-        $this->assertParsedUrl('/electronics/manufacturer/amd.html', array(
+        $this->assertParsedUrl('electronics/manufacturer/amd.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
                 'id' => 13,
                 'manufacturer' => 117,
@@ -23,9 +23,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
     }
 
     public function testMultipleValues() {
-        $this->assertParsedUrl('/electronics/manufacturer/amd/apple.html', array(
+        $this->assertParsedUrl('electronics/manufacturer/amd/apple.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
                 'id' => 13,
                 'manufacturer' => '117_29',
@@ -34,9 +34,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
     }
 
     public function testOtherValues() {
-        $this->assertParsedUrl('/electronics/acer/apple.html', array(
+        $this->assertParsedUrl('electronics/acer/apple.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
                 'id' => 13,
                 'manufacturer' => '28_29',
@@ -45,9 +45,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
     }
 
     public function testOtherValuesWithAttributeName() {
-        $this->assertParsedUrl('/electronics/manufacturer/acer/apple.html', array(
+        $this->assertParsedUrl('electronics/manufacturer/acer/apple.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
                 'id' => 13,
                 'manufacturer' => '28_29',
@@ -56,9 +56,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
     }
 
     public function testAttribute() {
-        $this->assertParsedUrl('/electronics/contrast-ratio/10000-1.html', array(
+        $this->assertParsedUrl('electronics/contrast-ratio/10000-1.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
                 'id' => 13,
                 'contrast_ratio' => 106,
@@ -67,9 +67,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
     }
 
     public function testAttributeWithoutAttributeName() {
-        $this->assertParsedUrl('/electronics/10000-1.html', array(
+        $this->assertParsedUrl('electronics/10000-1.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 13,
                 'contrast_ratio' => 106,

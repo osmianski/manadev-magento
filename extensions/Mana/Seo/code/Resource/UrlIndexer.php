@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-abstract class Mana_Seo_Resource_UrlIndexer extends Mage_Core_Model_Mysql4_Abstract {
+abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
     /**
      * Resource initialization
      */
@@ -19,24 +19,13 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mage_Core_Model_Mysql4_Abstr
 
     /**
      * @param Mana_Seo_Model_UrlIndexer $indexer
+     * @param Mana_Seo_Model_Schema $schema
      * @param array $options
      */
-    abstract public function process($indexer, $options);
+    abstract public function process($indexer, $schema, $options);
 
     protected function getTargetTableName() {
         return $this->getTable('mana_seo/url');
-    }
-
-    /**
-     * @return Mana_Seo_Model_Schema[]
-     */
-    protected function _getSchemas() {
-        /* @var $dbHelper Mana_Db_Helper_Data */
-        $dbHelper = Mage::helper('mana_db');
-
-        /* @var $collection Mana_Db_Resource_Entity_Collection */
-        $collection = $dbHelper->getResourceModel('mana_seo/schema/store_flat_collection');
-        return $collection;
     }
 
     /**

@@ -11,9 +11,9 @@
  */
 class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extends Mana_Seo_Test_Case {
     public function testShowAll() {
-        $this->assertParsedUrl('/apparel/where/limit/all.html', array(
+        $this->assertParsedUrl('apparel/where/limit/all.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'limit' => 'all',
@@ -22,9 +22,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extend
     }
 
     public function testShow15() {
-        $this->assertParsedUrl('/apparel/where/limit/15.html', array(
+        $this->assertParsedUrl('apparel/where/limit/15.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'limit' => '15',
@@ -33,9 +33,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extend
     }
 
     public function testGridMode() {
-        $this->assertParsedUrl('/apparel/where/mode/grid.html', array(
+        $this->assertParsedUrl('apparel/where/mode/grid.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'mode' => 'grid',
@@ -44,9 +44,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extend
     }
 
     public function testPage2() {
-        $this->assertParsedUrl('/apparel/where/p/2.html', array(
+        $this->assertParsedUrl('apparel/where/p/2.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'p' => 2,
@@ -55,9 +55,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extend
     }
 
     public function testSortByPrice() {
-        $this->assertParsedUrl('/apparel/where/order/price.html', array(
+        $this->assertParsedUrl('apparel/where/order/price.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'order' => 'price',
@@ -66,9 +66,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OldSchemaTest extend
     }
 
     public function testDescendingSortDirection() {
-        $this->assertParsedUrl('/apparel/where/dir/desc.html', array(
+        $this->assertParsedUrl('apparel/where/dir/desc.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_OBSOLETE,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
                 'id' => 18,
                 'dir' => 'desc',

@@ -118,16 +118,6 @@
                 </observers>
             </m_before_load_filter_collection>
         </events>
-        <!-- This tells Magento to analyze sql/manapro_filterseolinks_setup directory for install/upgrade scripts.
-            Installation scripts should be named as 'mysql4-install-<new version>.php'.
-            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
-        <resources>
-            <manapro_filterseolinks_setup>
-                <setup>
-                    <module>ManaPro_FilterSeoLinks</module>
-                </setup>
-            </manapro_filterseolinks_setup>
-        </resources>
         <index>
             <indexer>
                 <mana_seo_url>

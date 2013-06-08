@@ -12,20 +12,20 @@
 class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer {
     /**
      * @param Mana_Seo_Model_UrlIndexer $indexer
+     * @param Mana_Seo_Model_Schema $schema
      * @param array $options
      */
-    public function process($indexer, $options) {
+    public function process($indexer, $schema, $options) {
         $db = $this->_getWriteAdapter();
 
         $fields = array(
             'url_key' => new Zend_Db_Expr('`p`.`identifier`'),
-            'type' => new Zend_Db_Expr("'mana_seo/url_cmsPage'"),
-            'url_key_provider' => new Zend_Db_Expr("'mana_seo/urlKeyProvider_database'"),
+            'type' => new Zend_Db_Expr("'cms_page'"),
             'is_page' => new Zend_Db_Expr('1'),
             'is_parameter' => new Zend_Db_Expr('0'),
-            'is_value' => new Zend_Db_Expr('0'),
-            'is_multiple_value' => new Zend_Db_Expr('0'),
-            'store_id' => new Zend_Db_Expr('`s`.`store_id`'),
+            'is_attribute_value' => new Zend_Db_Expr('0'),
+            'is_category_value' => new Zend_Db_Expr('0'),
+            'schema_id' => new Zend_Db_Expr($schema->getId()),
             'cms_page_id' => new Zend_Db_Expr('`p`.`page_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`p`.`page_id`, '-', `p`.`identifier`)"),
             'status' => new Zend_Db_Expr("IF(`p`.`is_active`, '" .
@@ -37,12 +37,13 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
         $select = $db->select()
             ->from(array('p' => $this->getTable('cms/page')), null)
             ->joinInner(array('s' => $this->getTable('cms/page_store')), '`p`.`page_id` = `s`.`page_id`', null)
-            ->columns($fields);
+            ->columns($fields)
+            ->where('`s`.`store_id` = ?', $schema->getStoreId());
 
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
         // run the statement
-        $db->query($sql);
+        $db->raw_query($sql);
     }
 }

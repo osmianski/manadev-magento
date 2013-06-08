@@ -10,6 +10,7 @@
  * @author Mana Team
  */
 class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
+    protected $_pageTypes;
     protected $_parameterSchemaProviders;
     protected $_urlTypes;
     protected $_parameterHandlers;
@@ -101,5 +102,37 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 
             return $result;
         }
+    }
+
+    /**
+     * @return Mana_Seo_Helper_PageType[]
+     */
+    public function getPageTypes() {
+        if (!$this->_pageTypes) {
+            /* @var $core Mana_Core_Helper_Data */
+            $core = Mage::helper('mana_core');
+
+            $result = array();
+
+            foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'page_types') as $key => $pageTypeXml) {
+                $result[$key] = Mage::helper((string)$pageTypeXml->helper);
+            }
+            $this->_pageTypes = $result;
+        }
+
+        return $this->_pageTypes;
+    }
+
+    public function getPageType($type) {
+        $pageTypes = $this->getPageTypes();
+        return $pageTypes[$type];
+    }
+
+    public function isManadevLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
+    }
+
+    public function isManadevAttributePageInstalled() {
+        return $this->isModuleEnabled('Mana_AttributePage');
     }
 }

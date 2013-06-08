@@ -11,9 +11,9 @@
  */
 class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Case {
     public function testNoValues() {
-        $this->assertParsedUrl('/apparel/category.html', array(
+        $this->assertParsedUrl('apparel/category.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
             ),
@@ -21,19 +21,20 @@ class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Ca
     }
 
     public function testUnnecessaryFilterName() {
-        $this->assertParsedUrl('/apparel/category/shoes.html', array(
+        $this->assertParsedUrl('apparel/category/shoes.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
-                'id' => 5,
+                'id' => 18,
+                'cat' => 5,
             ),
         ));
     }
 
     public function testMultipleValues() {
-        $this->assertParsedUrl('/apparel/category/shoes-shirts.html', array(
+        $this->assertParsedUrl('apparel/category/shoes-shirts.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
                 'color' => '24_25',
@@ -43,9 +44,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Ca
     }
 
     public function testOldSchema() {
-        $this->assertParsedUrl('/apparel/where/category/shoes.html', array(
+        $this->assertParsedUrl('apparel/where/category/shoes.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Helper_UrlParser::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 5,
             ),

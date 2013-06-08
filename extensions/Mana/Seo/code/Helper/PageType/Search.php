@@ -9,13 +9,13 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
+class Mana_Seo_Helper_PageType_Search extends Mana_Seo_Helper_PageType  {
     public function getCurrentSuffix() {
-        return Mage::getStoreConfig('mana/seo/cms_page_suffix');
+        return Mage::getStoreConfig('mana/seo/search_suffix');
     }
 
     public function getSuffixHistoryType() {
-        return Mana_Seo_Model_UrlHistory::TYPE_CMS_PAGE_SUFFIX;
+        return Mana_Seo_Model_UrlHistory::TYPE_SEARCH_SUFFIX;
     }
 
     /**
@@ -23,9 +23,7 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
      * @return bool
      */
     public function setPage($token) {
-        $token
-            ->setRoute('cms/page/view')
-            ->addParameter('id', $token->getPageUrl()->getCmsPageId());
+        $token->setRoute('catalogsearch/result/index');
 
         return true;
     }

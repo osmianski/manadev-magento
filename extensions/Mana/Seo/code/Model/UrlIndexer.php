@@ -89,7 +89,9 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         /* @var $resource Mana_Seo_Resource_UrlIndexer */
         /** @noinspection PhpUndefinedFieldInspection */
         $resource = Mage::getResourceSingleton((string)$source->resource);
-        $resource->process($this, $options);
+        foreach ($this->_getSchemas() as $schema) {
+            $resource->process($this, $schema, $options);
+        }
     }
 
     protected function _processConflicts($options) {
@@ -101,4 +103,18 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         $resource->makeAllRowsObsolete($options);
 
     }
+
+    /**
+     * @return Mana_Seo_Model_Schema[]
+     */
+    protected function _getSchemas() {
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        /* @var $collection Mana_Db_Resource_Entity_Collection */
+        $collection = $dbHelper->getResourceSingleton('mana_seo/schema/store_flat_collection');
+
+        return $collection;
+    }
+
 }
