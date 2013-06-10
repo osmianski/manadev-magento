@@ -362,7 +362,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         switch ($target->getEntityName()) {
             case 'mana_filters/filter2_store':
                 $target->getSelect('main')->columns(array(
-                    'global.include_in_url AS include_in_url.',
+                    'global.include_in_url AS include_in_url',
                 ));
                 break;
         }

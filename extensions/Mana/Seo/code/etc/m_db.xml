@@ -48,7 +48,7 @@
                         <name><type>varchar(80)</type><no>8</no></name>
                         <internal_name><type>varchar(20)</type><no>9</no><indexed /></internal_name>
                         <redirect_parameter_order><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
-                        <include_filter_name><type>varchar(20)</type><no>10</no><default_value>if-necessary</default_value></include_filter_name>
+                        <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value></include_filter_name>
                         <redirect_to_subcategory><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
                     </fields>
                     <scopes>
@@ -105,6 +105,11 @@
                         </store_flat>
                     </scopes>
                 </schema>
+                <urlConflict>
+                    <fields>
+                        <message><type>mediumtext</type></message>
+                    </fields>
+                </urlConflict>
                 <url>
                     <unique>
                         <primary>
@@ -128,6 +133,11 @@
                         <is_attribute_value><type>tinyint</type><indexed /><default_value>0</default_value></is_attribute_value>
                         <is_category_value><type>tinyint</type><indexed /><default_value>0</default_value></is_category_value>
                         <internal_name><type>varchar(20)</type><indexed /></internal_name>
+                        <include_filter_name><type>tinyint</type><default_value>0</default_value></include_filter_name>
+                        <force_include_filter_name><type>tinyint</type><nullable /></force_include_filter_name>
+                        <final_include_filter_name><type>tinyint</type><default_value>0</default_value></final_include_filter_name>
+                        <manual_url_key><type>varchar(255)</type><nullable /></manual_url_key>
+                        <final_url_key><type>varchar(255)</type><indexed /></final_url_key>
                         <schema_id>
                             <type>bigint</type>
                             <foreign>
@@ -177,6 +187,16 @@
                                 <on_delete>cascade</on_delete>
                             </foreign>
                         </option_id>
+                        <conflict_id>
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_seo/urlConflict</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </conflict_id>
                     </fields>
                 </url>
                 <urlHistory>

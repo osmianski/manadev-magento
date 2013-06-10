@@ -56,6 +56,7 @@
 					<schema_store_flat><table>m_seo_schema_store_flat</table></schema_store_flat>
 					<url><table>m_seo_url</table></url>
 					<urlHistory><table>m_seo_url_history</table></urlHistory>
+					<urlConflict><table>m_seo_url_conflict</table></urlConflict>
                 </entities>
             </mana_seo_resources>
             <!-- INSERT HERE: rewrites, ... -->
