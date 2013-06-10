@@ -53,6 +53,9 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
     const DM_HELP_WIDTH = 33;
 
     const DM_IS_REVERSE = 34;
+
+    const DM_INCLUDE_IN_URL = 35;
+
     #endregion
 
     /**

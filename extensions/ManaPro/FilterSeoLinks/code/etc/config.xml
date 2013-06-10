@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.05.19.08</version>
+		    <version>13.06.10.09</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -117,6 +117,73 @@
                     </manapro_filterseolinks>
                 </observers>
             </m_before_load_filter_collection>
+
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_update_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareUpdateColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_update_columns>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_update_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processUpdate</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_update_process>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_insert_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareInsertColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_insert_columns>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_insert_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processInsert</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_insert_process>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_crud_form><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addFields</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_crud_form>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_add_edited_data><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addEditedData</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_add_edited_data>
         </events>
         <index>
             <indexer>
@@ -128,6 +195,16 @@
                 </mana_seo_url>
             </indexer>
         </index>
+        <!-- This tells Magento to analyze sql/manapro_filterseolinks_setup directory for install/upgrade scripts.
+        Installation scripts should be named as 'mysql4-install-<new version>.php'.
+        Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterseolinks_setup>
+                <setup>
+                    <module>ManaPro_FilterSeoLinks</module>
+                </setup>
+            </manapro_filterseolinks_setup>
+        </resources>
     </global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
