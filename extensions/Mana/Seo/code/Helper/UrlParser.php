@@ -671,7 +671,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             foreach (array_keys($tokens) as $key) {
                 $keys[] = new Zend_Db_Expr("'$key'");
             }
-            $collection->addFieldToFilter('url_key', array('in' => $keys));
+            $collection->addFieldToFilter('final_url_key', array('in' => $keys));
         }
         $parserConditions = array();
         if ($conditions & self::IS_PAGE) {
