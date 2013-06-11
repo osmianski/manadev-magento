@@ -71,15 +71,21 @@ class Mana_Core_Helper_Utils extends Mage_Core_Helper_Abstract {
     }
 
     public function setStoreConfig($path, $value, $scope = 'default', $scopeId = 0) {
-        /* @var $configData Mage_Core_Model_Config_Data */
-        $configData = Mage::getModel('core/config_data');
-        /* @noinspection PhpUndefinedMethodInspection */
-        $configData
-            ->setScope($scope)
-            ->setScopeId($scopeId)
-            ->setPath($path)
-            ->setValue($value)
-            ->save();
+        /* @var $res Mage_Core_Model_Resource */
+        $res = Mage::getSingleton('core/resource');
+
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $res->getConnection('write');
+
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        $db->query($core->insert($db, $res->getTableName('core/config_data'), array(
+            'scope' => "'$scope'",
+            'scope_id' => $scopeId,
+            'path' => "'$path'",
+            'value' => "'$value'",
+        )));
 
         return $this;
     }

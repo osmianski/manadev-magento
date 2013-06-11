@@ -11,20 +11,9 @@
  */
 abstract class Mana_Core_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract {
     public function insert($tableName, $fields = array(), $onDuplicate = true) {
-        $sql = "INSERT INTO `{$tableName}` ";
-        $sql .= "(`" . implode('`,`', array_keys($fields)) . "`) ";
-        $sql .= "VALUES (" . implode(',', $fields) . ") ";
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-        if ($onDuplicate && $fields) {
-            $sql .= " ON DUPLICATE KEY UPDATE";
-            $updateFields = array();
-            foreach ($fields as $key => $field) {
-                $key = $this->_getWriteAdapter()->quoteIdentifier($key);
-                $updateFields[] = "{$key}=VALUES({$key})";
-            }
-            $sql .= " " . implode(', ', $updateFields);
-        }
-
-        return $sql;
+        return $core->insert($this->_getWriteAdapter(), $tableName, $fields, $onDuplicate);
     }
 }

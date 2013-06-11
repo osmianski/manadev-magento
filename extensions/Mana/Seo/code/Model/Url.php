@@ -10,6 +10,10 @@
  * @method Mana_Seo_Model_Url setStatus(string $value)
  * @method string getUrlKey()
  * @method Mana_Seo_Model_Url setUrlKey(string $value)
+ * @method string getManualUrlKey()
+ * @method Mana_Seo_Model_Url setManualUrlKey(string $value)
+ * @method string getFinalUrlKey()
+ * @method Mana_Seo_Model_Url setFinalUrlKey(string $value)
  * @method string getType()
  * @method Mana_Seo_Model_Url setType(string $value)
  * @method string getUrlKeyProvider()
@@ -32,6 +36,12 @@
  * @method Mana_Seo_Model_Url setAttributeId(int $value)
  * @method string getInternalName()
  * @method Mana_Seo_Model_Url setInternalName(string $value)
+ * @method bool getForceIncludeFilterName()
+ * @method Mana_Seo_Model_Url setForceIncludeFilterName(bool $value)
+ * @method bool getIncludeFilterName()
+ * @method Mana_Seo_Model_Url setIncludeFilterName(bool $value)
+ * @method bool getFinalIncludeFilterName()
+ * @method Mana_Seo_Model_Url setFinalIncludeFilterName(bool $value)
  *
  * Fields from additional joins
  *
@@ -56,5 +66,17 @@ class Mana_Seo_Model_Url extends Mana_Db_Model_Entity {
      */
     public function getHelper() {
         return Mage::helper($this->getType());
+    }
+
+    protected function _beforeSave() {
+        $this->setFinalIncludeFilterName($this->getForceIncludeFilterName() !== null
+            ? $this->getForceIncludeFilterName()
+            : $this->getIncludeFilterName());
+        $this->setFinalUrlKey($this->getManualUrlKey() !== null
+            ? $this->getManualUrlKey()
+            : $this->getUrlKey());
+        parent::_beforeSave();
+
+        return $this;
     }
 }

@@ -624,4 +624,29 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             $attribute['backend_table'] :
             'catalog_category_entity_' . $attribute['backend_type'];
     }
+
+    /**
+     * @param Varien_Db_Adapter_Pdo_Mysql $connection
+     * @param $tableName
+     * @param array $fields
+     * @param bool $onDuplicate
+     * @return string
+     */
+    public function insert($connection, $tableName, $fields = array(), $onDuplicate = true) {
+        $sql = "INSERT INTO `{$tableName}` ";
+        $sql .= "(`" . implode('`,`', array_keys($fields)) . "`) ";
+        $sql .= "VALUES (" . implode(',', $fields) . ") ";
+
+        if ($onDuplicate && $fields) {
+            $sql .= " ON DUPLICATE KEY UPDATE";
+            $updateFields = array();
+            foreach ($fields as $key => $field) {
+                $key = $connection->quoteIdentifier($key);
+                $updateFields[] = "{$key}=VALUES({$key})";
+            }
+            $sql .= " " . implode(', ', $updateFields);
+        }
+
+        return $sql;
+    }
 }

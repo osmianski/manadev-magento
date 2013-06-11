@@ -59,7 +59,8 @@ class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
 
         $db->query($q);
 
-        $db->beginTransaction();
+        // we can't use translations here as some Magento code is not executed under nested transactions
+        //$db->beginTransaction();
 
         return $db->fetchPairs("SELECT `module`, `version` FROM `{$res->getTableName('m_test_version')}");
     }
@@ -86,7 +87,8 @@ class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
         /* @var $db Varien_Db_Adapter_Pdo_Mysql */
         $db = $res->getConnection('setup');
 
-        $db->commit();
+        // we can't use translations here as some Magento code is not executed under nested transactions
+        //$db->commit();
     }
 
     protected static function _rollbackTestData() {
@@ -96,7 +98,8 @@ class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
         /* @var $db Varien_Db_Adapter_Pdo_Mysql */
         $db = $res->getConnection('setup');
 
-        $db->rollback();
+        // we can't use translations here as some Magento code is not executed under nested transactions
+        //$db->rollback();
     }
 
     public static function getMergedTestXml() {
