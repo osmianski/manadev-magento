@@ -66,7 +66,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
     }
 
     public function testDescendingSortDirection() {
-        $this->assertParsedUrl('apparel/sort-direction/descending.html', array(
+        $this->assertParsedUrl('apparel/sort-direction/desc.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(

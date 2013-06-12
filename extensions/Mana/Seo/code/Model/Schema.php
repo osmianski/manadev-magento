@@ -33,6 +33,8 @@
  * @method Mana_Seo_Model_Schema setRedirectParameterOrder(bool $value)
  * @method string getIncludeFilterName()
  * @method Mana_Seo_Model_Schema setIncludeFilterName(string $value)
+ * @method bool getUseRangeBounds()
+ * @method Mana_Seo_Model_Schema setUseRangeBounds(bool $value)
  * @method bool getRedirectToSubcategory()
  * @method Mana_Seo_Model_Schema setRedirectToSubcategory(bool $value)
  * @method bool getRedirectToOptionPage()

@@ -37,6 +37,8 @@ $schema
     ->setParamSeparator('/')
     ->setFirstValueSeparator('/')
     ->setMultipleValueSeparator('-')
+    ->setPriceSeparator('-')
+    ->setUseRangeBounds(1)
     ->setUseFilterLabels(1)
     ->setToolbarUrlKeys(json_encode(array(
         array('internal_name' => 'p', 'name' => 'page', 'position' => 9900),
@@ -71,6 +73,8 @@ $schema
     ->setParamSeparator('/')
     ->setFirstValueSeparator('/')
     ->setMultipleValueSeparator('_')
+    ->setPriceSeparator(',')
+    ->setUseRangeBounds(0)
     ->setUseFilterLabels($utils->getStoreConfig('mana_filters/seo/use_label'))
     ->setToolbarUrlKeys(json_encode(array(
         array('internal_name' => 'p', 'name' => 'p', 'position' => 9900),

@@ -47,7 +47,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
     public function testUnnecessaryAttributeName() {
         $this->assertParsedUrl('apparel/color/black.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
                 'color' => 24,
@@ -58,7 +58,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
     public function testMultipleValueInTwoPlaces() {
         $this->assertParsedUrl('apparel/black/dress/blue.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
                 'color' => '24_25',

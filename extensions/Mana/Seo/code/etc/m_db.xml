@@ -50,6 +50,8 @@
                         <redirect_parameter_order><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
                         <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value></include_filter_name>
                         <redirect_to_subcategory><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
+                        <price_separator><type>varchar(10)</type><no>12</no></price_separator>
+                        <use_range_bounds><type>tinyint</type><no>13</no><default_value>1</default_value></use_range_bounds>
                     </fields>
                     <scopes>
                         <global/>
@@ -101,6 +103,8 @@
                                 <redirect_parameter_order><default_formula>{{= global.redirect_parameter_order}}</default_formula></redirect_parameter_order>
                                 <include_filter_name><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
                                 <redirect_to_subcategory><default_formula>{{= global.redirect_to_subcategory}}</default_formula></redirect_to_subcategory>
+                                <price_separator><default_formula>{{= global.price_separator}}</default_formula></price_separator>
+                                <use_range_bounds><default_formula>{{= global.use_range_bounds}}</default_formula></use_range_bounds>
                             </fields>
                         </store_flat>
                     </scopes>
@@ -124,7 +128,6 @@
                     </unique>
                     <fields>
                         <url_key><type>varchar(255)</type><indexed /></url_key>
-                        <permanent_url_key><type>varchar(255)</type><nullable /><indexed /></permanent_url_key>
                         <unique_key><type>varchar(255)</type><indexed /></unique_key>
                         <type><type>varchar(20)</type><indexed /></type>
                         <status><type>varchar(10)</type><indexed /><default_value>obsolete</default_value><no>7</no></status>

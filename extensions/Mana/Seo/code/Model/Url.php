@@ -12,6 +12,8 @@
  * @method Mana_Seo_Model_Url setUrlKey(string $value)
  * @method string getManualUrlKey()
  * @method Mana_Seo_Model_Url setManualUrlKey(string $value)
+ * @method string getUniqueKey()
+ * @method Mana_Seo_Model_Url setUniqueKey(string $value)
  * @method string getFinalUrlKey()
  * @method Mana_Seo_Model_Url setFinalUrlKey(string $value)
  * @method string getType()

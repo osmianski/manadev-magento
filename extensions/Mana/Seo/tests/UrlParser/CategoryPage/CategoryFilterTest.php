@@ -23,10 +23,9 @@ class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Ca
     public function testUnnecessaryFilterName() {
         $this->assertParsedUrl('apparel/category/shoes.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_REDIRECT,
             'params' => array(
-                'id' => 18,
-                'cat' => 5,
+                'id' => 5,
             ),
         ));
     }
@@ -37,8 +36,6 @@ class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Ca
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
             'params' => array(
                 'id' => 18,
-                'color' => '24_25',
-                'shoe_type' => 52,
             ),
         ));
     }
@@ -46,9 +43,10 @@ class Mana_Seo_Test_UrlParser_CategoryPage_CategoryTest extends Mana_Seo_Test_Ca
     public function testOldSchema() {
         $this->assertParsedUrl('apparel/where/category/shoes.html', array(
             'route' => 'catalog/category/view',
-            'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
+            'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(
-                'id' => 5,
+                'id' => 18,
+                'cat' => 5,
             ),
         ));
     }

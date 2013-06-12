@@ -38,6 +38,8 @@
  * @method Mana_Seo_Model_ParsedUrl setAttributeId(mixed $value)
  * @method string | bool getAttributeCode() - code of attribute of which values are currently expected
  * @method Mana_Seo_Model_ParsedUrl setAttributeCode(mixed $value)
+ * @method bool getIsRedirectToSubcategoryPossible() - code of attribute of which values are currently expected
+ * @method Mana_Seo_Model_ParsedUrl setIsRedirectToSubcategoryPossible(bool $value)
  *
  * Data operation properties
  *
@@ -53,12 +55,19 @@
  * @method Mana_Seo_Model_ParsedUrl setParameterType(int $value)
  */
 class Mana_Seo_Model_ParsedUrl extends Varien_Object {
-    const STATUS_OK = 1;
-    const STATUS_OBSOLETE = 2;
-    const STATUS_CORRECTION = 5;
-    const STATUS_OBSOLETE_CORRECTION = 6;
-    const STATUS_MASK_ACTIVE = 3;
-    const STATUS_MASK_CORRECTION = 4;
+    const STATUS_MASK_ACTIVE = 0x03;
+    const STATUS_MASK_NOTICE = 0x10;
+    const STATUS_MASK_REDIRECT = 0x20;
+    const STATUS_MASK_CORRECTION = 0x40;
+    const STATUS_MASK_COUNTED = 0x60;
+    const STATUS_OK = 0x01;
+    const STATUS_OBSOLETE = 0x02;
+    const STATUS_NOTICE = 0x11;
+    const STATUS_OBSOLETE_NOTICE = 0x12;
+    const STATUS_REDIRECT = 0x21;
+    const STATUS_OBSOLETE_REDIRECT = 0x22;
+    const STATUS_CORRECTION = 0x41;
+    const STATUS_OBSOLETE_CORRECTION = 0x042;
 
     const PARAMETER_ATTRIBUTE = 'attribute';
     const PARAMETER_CATEGORY = 'category';
@@ -69,16 +78,26 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
     const CORRECT_NOT_FOUND_ATTRIBUTE_FILTER_URL_KEY = 0x0002;
     const CORRECT_INVALID_PRICE_FILTER_VALUE = 0x0004;
     const CORRECT_INVALID_TOOLBAR_VALUE = 0x0008;
+    const CORRECT_EXPECTED_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY = 0x0010;
+    const CORRECT_REDUNDANT_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY = 0x0020;
+    const CORRECT_PARAMETER_ALREADY_MET = 0x0040;
+    const CORRECT_REDIRECT_TO_SUBCATEGORY = 0x0080;
+    const CORRECT_SWAP_RANGE_BOUNDS = 0x0100;
 
     protected static $_correctionNames = array(
         self::CORRECT_NOT_FOUND_CATEGORY_FILTER_URL_KEY => 'CORRECT_NOT_FOUND_CATEGORY_FILTER_URL_KEY',
         self::CORRECT_NOT_FOUND_ATTRIBUTE_FILTER_URL_KEY => 'CORRECT_NOT_FOUND_ATTRIBUTE_FILTER_URL_KEY',
         self::CORRECT_INVALID_PRICE_FILTER_VALUE => 'CORRECT_INVALID_PRICE_FILTER_VALUE',
         self::CORRECT_INVALID_TOOLBAR_VALUE => 'CORRECT_INVALID_TOOLBAR_VALUE',
+        self::CORRECT_EXPECTED_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY => 'CORRECT_EXPECTED_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY',
+        self::CORRECT_REDUNDANT_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY => 'CORRECT_REDUNDANT_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY',
+        self::CORRECT_PARAMETER_ALREADY_MET => 'CORRECT_PARAMETER_ALREADY_MET',
+        self::CORRECT_REDIRECT_TO_SUBCATEGORY => 'CORRECT_REDIRECT_TO_SUBCATEGORY',
+        self::CORRECT_SWAP_RANGE_BOUNDS => 'CORRECT_SWAP_RANGE_BOUNDS',
     );
     protected $_parameters = array();
     protected $_corrections = array();
-
+    protected $_pendingCorrections = 0;
     #region Parsed URL parameters
 
     /**
@@ -91,6 +110,16 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
             $this->_parameters[$key] = array();
         }
         $this->_parameters[$key][] = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return Mana_Seo_Model_ParsedUrl
+     */
+    public function removeParameter($key) {
+        unset($this->_parameters[$key]);
+
         return $this;
     }
 
@@ -140,5 +169,19 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
 
     public function getCorrectionName($correction) {
         return self::$_correctionNames[$correction['correction']];
+    }
+
+    public function setPendingCorrection($correction) {
+        $this->_pendingCorrections |= $correction;
+        return $this;
+    }
+
+    public function clearPendingCorrection($correction) {
+        $this->_pendingCorrections &= ~$correction;
+        return $this;;
+    }
+
+    public function hasPendingCorrection($correction) {
+        return ($this->_pendingCorrections & $correction) == $correction;
     }
 }

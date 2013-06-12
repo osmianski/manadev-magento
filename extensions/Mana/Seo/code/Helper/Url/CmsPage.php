@@ -17,7 +17,7 @@ class Mana_Seo_Helper_Url_CmsPage extends Mana_Seo_Helper_Url {
      */
     public function registerPage($parsedUrl, $urlKey) {
         $parsedUrl
-            ->setPageUrlKey($urlKey->getUrlKey())
+            ->setPageUrlKey($urlKey->getFinalUrlKey())
             ->setRoute('cms/page/view')
             ->addParameter('id', $urlKey->getCmsPageId());
 

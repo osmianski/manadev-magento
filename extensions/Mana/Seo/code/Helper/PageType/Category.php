@@ -28,6 +28,7 @@ class Mana_Seo_Helper_PageType_Category extends Mana_Seo_Helper_PageType  {
     public function setPage($token) {
         $token
             ->setRoute('catalog/category/view')
+            ->setIsRedirectToSubcategoryPossible(true)
             ->addParameter('id', $token->getPageUrl()->getCategoryId());
         return true;
     }

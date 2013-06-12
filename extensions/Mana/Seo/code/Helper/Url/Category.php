@@ -17,7 +17,7 @@ class Mana_Seo_Helper_Url_Category extends Mana_Seo_Helper_Url {
      */
     public function registerPage($parsedUrl, $urlKey) {
         $parsedUrl
-            ->setPageUrlKey($urlKey->getUrlKey())
+            ->setPageUrlKey($urlKey->getFinalUrlKey())
             ->setRoute('catalog/category/view')
             ->addParameter('id', $urlKey->getCategoryId());
 

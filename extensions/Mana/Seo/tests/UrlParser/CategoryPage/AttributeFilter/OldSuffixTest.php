@@ -33,7 +33,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OldSuffixTest extends
     }
 
     public function testTwoFilters() {
-        $this->assertParsedUrl('apparel/black-blue-dress', array(
+        $this->assertParsedUrl('apparel/black-blue/dress', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
             'params' => array(

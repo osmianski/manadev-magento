@@ -23,8 +23,8 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
             $fields = array(
                 'url_key' => new Zend_Db_Expr($urlKeyExpr),
                 'type' => new Zend_Db_Expr("'" . Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR . "'"),
-                'is_page' => new Zend_Db_Expr('1'),
-                'is_parameter' => new Zend_Db_Expr('0'),
+                'is_page' => new Zend_Db_Expr('0'),
+                'is_parameter' => new Zend_Db_Expr('1'),
                 'is_attribute_value' => new Zend_Db_Expr('0'),
                 'is_category_value' => new Zend_Db_Expr('0'),
                 'schema_id' => new Zend_Db_Expr($schema->getId()),
