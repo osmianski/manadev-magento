@@ -66,7 +66,7 @@ class ManaPro_FilterAjax_Model_Observer {
 
         $exactUrls[$url] = $url;
         $partialUrls[$url . '?'] = $url . '?';
-        if ($categorySuffix = Mage::helper('catalog/category')->getCategoryUrlSuffix()) {
+        if ($categorySuffix = $core->addDotToSuffix(Mage::helper('catalog/category')->getCategoryUrlSuffix())) {
             if (($pos = mb_strrpos($url, $categorySuffix)) !== false) {
                 if ($pos + mb_strlen($categorySuffix) < mb_strlen($url)) {
                     $url = mb_substr($url, 0, $pos) . mb_substr($url, $pos + mb_strlen($categorySuffix));
