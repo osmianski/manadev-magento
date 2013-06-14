@@ -10,25 +10,10 @@
  *
  */
 class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collection {
-    public function addOptionAttributeIdAndCodeToSelect() {
-        $this->getSelect()
-            ->joinLeft(array('o' => $this->getTable('eav/attribute_option')),
-                "`o`.`option_id` = `main_table`.`option_id`",
-                array('option_attribute_id' => new Zend_Db_Expr('`o`.`attribute_id`')))
-            ->joinLeft(array('oa' => $this->getTable('eav/attribute')),
-                "`oa`.`attribute_id` = `o`.`attribute_id`",
-                array('option_attribute_code' => new Zend_Db_Expr('`oa`.`attribute_code`')));
-        return $this;
-    }
-
-    public function addAttributeCodeToSelect() {
-        $this->getSelect()
-            ->joinLeft(array('a' => $this->getTable('eav/attribute')),
-                "`a`.`attribute_id` = `main_table`.`attribute_id`",
-                array('attribute_code' => new Zend_Db_Expr('`a`.`attribute_code`')));
-
-        return $this;
-    }
+    const TYPE_PAGE = 0x01;
+    const TYPE_PARAMETER = 0x02;
+    const TYPE_ATTRIBUTE_VALUE = 0x04;
+    const TYPE_CATEGORY_VALUE = 0x08;
 
     public function addParentCategoryFilter($categoryId) {
         $this->getSelect()
@@ -36,28 +21,6 @@ class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collectio
                 $this->getConnection()->quoteInto("`c`.`entity_id` = `main_table`.`category_id` AND `c`.`parent_id` = ?", $categoryId),
                 null);
 
-        return $this;
-    }
-
-    public function addOptionAttributeFilter($attributeId) {
-        $this->getSelect()
-            ->where('`o`.`attribute_id` = ?', $attributeId);
-
-        return $this;
-    }
-
-    public function addManadevFilterTypeToSelect($storeId) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-
-        if ($seo->isManadevLayeredNavigationInstalled()) {
-            $this->getSelect()
-                ->joinLeft(array('mfg' => $this->getTable('mana_filters/filter2')),
-                    "`mfg`.`code` = `a`.`attribute_code`", null)
-                ->joinLeft(array('mfs' => $this->getTable('mana_filters/filter2_store')),
-                    $this->getConnection()->quoteInto("`mfs`.`global_id` = `mfg`.`id` AND `mfs`.`store_id` = ?", $storeId),
-                    array('filter_display' => new Zend_Db_Expr('`mfs`.`display`')));
-        }
         return $this;
     }
 
@@ -71,4 +34,23 @@ class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collectio
         return $this;
     }
 
+    public function addTypeFilter($type) {
+        $conditions = array();
+        if ($type & self::TYPE_PAGE) {
+            $conditions[] = "(`main_table`.`is_page` = 1)";
+        }
+        if ($type & self::TYPE_PARAMETER) {
+            $conditions[] = "(`main_table`.`is_parameter` = 1)";
+        }
+        if ($type & self::TYPE_ATTRIBUTE_VALUE) {
+            $conditions[] = "(`main_table`.`is_attribute_value` = 1)";
+        }
+        if ($type & self::TYPE_CATEGORY_VALUE) {
+            $conditions[] = "(`main_table`.`is_category_value` = 1)";
+        }
+        if (count($conditions)) {
+            $this->getSelect()->where(new Zend_Db_Expr(implode(' OR ', $conditions)));
+        }
+        return $this;
+    }
 }

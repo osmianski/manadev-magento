@@ -29,6 +29,9 @@ class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_UrlIndexer {
             : "REPLACE(LOWER(`a`.`attribute_code`), '_', '-')";
         $fields = array(
             'url_key' => new Zend_Db_Expr($urlKeyExpr),
+            'internal_name' => new Zend_Db_Expr('`a`.`attribute_code`'),
+            'position' => new Zend_Db_Expr($seo->isManadevLayeredNavigationInstalled() ? '`f`.`position`': '`ca`.`position`'),
+            'filter_display' => new Zend_Db_Expr($seo->isManadevLayeredNavigationInstalled() ? '`f`.`display`' : 'NULL'),
             'type' => new Zend_Db_Expr("IF(a.backend_type = 'decimal', ".
                 "'" . Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE . "', ".
                 "'" . Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE ."')"),

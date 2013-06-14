@@ -44,19 +44,12 @@
  * @method Mana_Seo_Model_Url setIncludeFilterName(bool $value)
  * @method bool getFinalIncludeFilterName()
  * @method Mana_Seo_Model_Url setFinalIncludeFilterName(bool $value)
- *
- * Fields from additional joins
- *
  * @method int getOptionId()
  * @method Mana_Seo_Model_Url setOptionId(int $value)
- * @method int getOptionAttributeId()
- * @method Mana_Seo_Model_Url setOptionAttributeId(int $value)
- * @method string getOptionAttributeCode()
- * @method Mana_Seo_Model_Url setOptionAttributeCode(string $value)
- * @method string getAttributeCode()
- * @method Mana_Seo_Model_Url setAttributeCode(string $value)
  * @method string getFilterDisplay()
  * @method Mana_Seo_Model_Url setFilterDisplay(string $value)
+ * @method int getPosition()
+ * @method Mana_Seo_Model_Url setPosition(int $value)
  */
 class Mana_Seo_Model_Url extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';

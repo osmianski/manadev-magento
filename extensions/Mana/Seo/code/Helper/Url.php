@@ -10,14 +10,6 @@
  *
  */
 class Mana_Seo_Helper_Url extends Mage_Core_Helper_Abstract {
-    public function isManadevLayeredNavigationInstalled() {
-        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
-    }
-
-    public function isManadevAttributePageInstalled() {
-        return $this->isModuleEnabled('Mana_AttributePage');
-    }
-
     /**
      * @param Mana_Seo_Model_ParsedUrl $parsedUrl
      * @param Mana_Seo_Model_Url $urlKey

@@ -30,6 +30,7 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
                 'schema_id' => new Zend_Db_Expr($schema->getId()),
                 'unique_key' => new Zend_Db_Expr($urlKeyExpr),
                 'internal_name' => new Zend_Db_Expr("'" . $urlKey['internal_name'] . "'"),
+                'position' => new Zend_Db_Expr($urlKey['position']),
                 'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
             );
 

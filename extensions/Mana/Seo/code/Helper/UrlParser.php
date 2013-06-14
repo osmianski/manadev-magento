@@ -10,11 +10,6 @@
  *
  */
 class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
-    const IS_PAGE = 1;
-    const IS_PARAMETER = 2;
-    const IS_ATTRIBUTE_VALUE = 4;
-    const IS_CATEGORY_VALUE = 8;
-
     const CONFLICT_ATTRIBUTE_VALUE = 1;
     const CONFLICT_PAGE = 2;
     const CONFLICT_PARAMETER = 3;
@@ -185,7 +180,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     if ($this->_getParameterUrlKey($token)) {
                         if (!$this->_setCurrentAttribute($token,
                             $token->getParameterUrl()->getAttributeId(),
-                            $token->getParameterUrl()->getAttributeCode())
+                            $token->getParameterUrl()->getInternalName())
                         ) {
                             return false;
                         }
@@ -680,10 +675,10 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
     /**
      * @param Mana_Seo_Model_ParsedUrl[] | bool $tokens
-     * @param int $conditions
+     * @param int $type
      * @return Mana_Seo_Model_Url[]
      */
-    protected function _getUrls($tokens, $conditions)
+    protected function _getUrls($tokens, $type)
     {
         /* @var $dbHelper Mana_Db_Helper_Data */
         $dbHelper = Mage::helper('mana_db');
@@ -691,10 +686,8 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         /* @var $collection Mana_Seo_Resource_Url_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
         $collection
-            ->addOptionAttributeIdAndCodeToSelect()
-            ->addAttributeCodeToSelect()
-            ->addManadevFilterTypeToSelect($this->_storeId)
             ->setSchemaFilter($this->_schema)
+            ->addTypeFilter($type)
             ->addFieldToFilter('status', array(
                 'in' => array(
                     Mana_Seo_Model_Url::STATUS_ACTIVE,
@@ -708,22 +701,6 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $keys[] = new Zend_Db_Expr("'$key'");
             }
             $collection->addFieldToFilter('final_url_key', array('in' => $keys));
-        }
-        $parserConditions = array();
-        if ($conditions & self::IS_PAGE) {
-            $parserConditions[] = "(`main_table`.`is_page` = 1)";
-        }
-        if ($conditions & self::IS_PARAMETER) {
-            $parserConditions[] = "(`main_table`.`is_parameter` = 1)";
-        }
-        if ($conditions & self::IS_ATTRIBUTE_VALUE) {
-            $parserConditions[] = "(`main_table`.`is_attribute_value` = 1)";
-        }
-        if ($conditions & self::IS_CATEGORY_VALUE) {
-            $parserConditions[] = "(`main_table`.`is_category_value` = 1)";
-        }
-        if (count($parserConditions)) {
-            $collection->getSelect()->where(new Zend_Db_Expr(implode(' OR ', $parserConditions)));
         }
         return $collection;
     }
@@ -743,7 +720,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $result[$suffix] = array();
             $flatTokens = array_merge($flatTokens, $suffixTokens);
         }
-        foreach ($this->_getUrls($flatTokens, self::IS_PAGE) as $url) {
+        foreach ($this->_getUrls($flatTokens, Mana_Seo_Resource_Url_Collection::TYPE_PAGE) as $url) {
             foreach ($tokens as $suffix => $suffixTokens){
                 if (!isset($result[$suffix][$url->getFinalUrlKey()])) {
                     if (isset($suffixTokens[$url->getFinalUrlKey()])) {
@@ -776,11 +753,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $result = array();
 
         /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
-        $urlCollection = $urls = $this->_getUrls($tokens, self::IS_ATTRIBUTE_VALUE);
+        $urlCollection = $urls = $this->_getUrls($tokens, Mana_Seo_Resource_Url_Collection::TYPE_ATTRIBUTE_VALUE);
         /* @var $token Mana_Seo_Model_ParsedUrl */
         $token = current($tokens);
         if (($attributeId = $token->getAttributeId()) !== false) {
-            $urlCollection->addOptionAttributeFilter($attributeId);
+            $urlCollection->addFieldToFilter('attribute_id', $attributeId);
         }
         foreach ($urls as $url) {
             if (isset($result[$url->getFinalUrlKey()])) {
@@ -812,7 +789,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _getParameterUrlKey($token) {
         if (!isset($this->_parameterUrls[$this->_schema->getId()])) {
             $urls = array();
-            foreach ($this->_getUrls(false, self::IS_PARAMETER) as $url) {
+            foreach ($this->_getUrls(false, Mana_Seo_Resource_Url_Collection::TYPE_PARAMETER) as $url) {
                 if (!isset($urls[$url->getFinalUrlKey()])) {
                     $urls[$url->getFinalUrlKey()] = $url;
                 }
@@ -848,7 +825,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     protected function _getCategoryIdByFilterUrlKey($token, $categoryId) {
         /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
-        $urlCollection = $urls = $this->_getUrls(array($token->getText() => $token), self::IS_CATEGORY_VALUE);
+        $urlCollection = $urls = $this->_getUrls(array($token->getText() => $token), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
         $urlCollection->addParentCategoryFilter($categoryId);
 
         $result = false;
@@ -929,8 +906,8 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _setAttributeFilter($token) {
         if ($token->getAttributeId() === false) {
             if (!$this->_setCurrentAttribute($token,
-                $token->getAttributeValueUrl()->getOptionAttributeId(),
-                $token->getAttributeValueUrl()->getOptionAttributeCode()))
+                $token->getAttributeValueUrl()->getAttributeId(),
+                $token->getAttributeValueUrl()->getInternalName()))
             {
                 return false;
             }

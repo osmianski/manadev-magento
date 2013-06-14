@@ -28,4 +28,15 @@ class Mana_Seo_Helper_PageType_HomePage extends Mana_Seo_Helper_PageType  {
         return true;
     }
 
+    public function matchRoute($route) {
+        return $route == 'cms/index/index';
+    }
+
+    /**
+     * @param Mana_Seo_Rewrite_Url $urlModel
+     * @return string | bool
+     */
+    public function getUrlKey($urlModel) {
+        return '';
+    }
 }

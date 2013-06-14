@@ -29,4 +29,31 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
 
         return true;
     }
+
+    public function matchRoute($route) {
+        return $route == 'cms/page/view';
+    }
+
+    /**
+     * @param Mana_Seo_Rewrite_Url $urlModel
+     * @return string | bool
+     */
+    public function getUrlKey($urlModel) {
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
+
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
+
+        if (($cmsPageId = $urlModel->getSeoRouteParam('id')) === false) {
+            $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'CMS page URL key', 'id'));
+        }
+        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+        $urlCollection->addFieldToFilter('cms_page_id', $cmsPageId);
+        if (!($result = $urlModel->getUrlKey($urlCollection))) {
+            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'CMS page URL key', 'id', $cmsPageId));
+        }
+
+        return $result['final_url_key'];
+    }
 }

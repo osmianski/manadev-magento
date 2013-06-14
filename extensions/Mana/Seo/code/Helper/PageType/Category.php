@@ -32,4 +32,31 @@ class Mana_Seo_Helper_PageType_Category extends Mana_Seo_Helper_PageType  {
             ->addParameter('id', $token->getPageUrl()->getCategoryId());
         return true;
     }
+
+    public function matchRoute($route) {
+        return $route == 'catalog/category/view';
+    }
+
+    /**
+     * @param Mana_Seo_Rewrite_Url $urlModel
+     * @return string | bool
+     */
+    public function getUrlKey($urlModel) {
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
+
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
+
+        if (($categoryId = $urlModel->getSeoRouteParam('id')) === false) {
+            $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'category URL key', 'id'));
+        }
+        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+        $urlCollection->addFieldToFilter('category_id', $categoryId);
+        if (!($result = $urlModel->getUrlKey($urlCollection))) {
+            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
+        }
+
+        return $result['final_url_key'];
+    }
 }

@@ -141,6 +141,8 @@
                         <final_include_filter_name><type>tinyint</type><default_value>0</default_value></final_include_filter_name>
                         <manual_url_key><type>varchar(255)</type><nullable /></manual_url_key>
                         <final_url_key><type>varchar(255)</type><indexed /></final_url_key>
+                        <filter_display><type>varchar(255)</type><nullable /></filter_display>
+                        <position><type>int</type><indexed /><default_value>0</default_value></position>
                         <schema_id>
                             <type>bigint</type>
                             <foreign>

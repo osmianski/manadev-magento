@@ -18,18 +18,21 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_UrlIndexer {
     public function process($indexer, $schema, $options) {
         $db = $this->_getWriteAdapter();
 
-        /* @var $seo Mana_Seo_Helper_Url_Filter */
+        /* @var $seo Mana_Seo_Helper_Data */
         $seo = Mage::helper('mana_seo');
 
         $urlKeyExpr = $this->_seoify("COALESCE(vs.value, vg.value)", $schema);
         $fields = array(
             'url_key' => new Zend_Db_Expr($urlKeyExpr),
+            'internal_name' => new Zend_Db_Expr('`a`.`attribute_code`'),
+            'position' => new Zend_Db_Expr('`o`.`sort_order`'),
+            'attribute_id' => new Zend_Db_Expr('`o`.`attribute_id`'),
             'type' => new Zend_Db_Expr("'option'"),
             'is_page' => new Zend_Db_Expr('0'),
             'is_parameter' => new Zend_Db_Expr('0'),
             'is_attribute_value' => new Zend_Db_Expr('1'),
             'is_category_value' => new Zend_Db_Expr('0'),
-            'include_filter_name' => new Zend_Db_Expr($seo->isManadevLayeredNavigationInstalled()
+            'include_filter_name' => new Zend_Db_Expr($seo->isManadevSeoLayeredNavigationInstalled()
                 ? "IF(`f`.include_in_url = '". Mana_Seo_Model_Source_IncludeInUrl::ALWAYS."', 1, ".
                     "IF(`f`.include_in_url = '" . Mana_Seo_Model_Source_IncludeInUrl::NEVER . "', 0, ".
                     "{$schema->getIncludeFilterName()}))"

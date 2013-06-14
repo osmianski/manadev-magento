@@ -11,31 +11,11 @@
  */
 class Mana_Seo_Test_UrlParser_CategoryPage_PriceFilter_ListTest extends Mana_Seo_Test_Case {
     protected function setUp() {
-        /* @var $dbHelper Mana_Db_Helper_Data */
-        $dbHelper = Mage::helper('mana_db');
-        $filter = $dbHelper->getModel('mana_filters/filter2');
-        $filter->load('price', 'code');
-        $dbHelper->updateDefaultableField($filter, 'display', Mana_Filters_Resource_Filter2::DM_DISPLAY,
-            array('display' => 'css_checkboxes'), array());
-        $filter->save();
-
-        /* @var $parser Mana_Seo_Helper_UrlParser */
-        $parser = Mage::helper('mana_seo/urlParser');
-        $parser->clearParameterUrlCache();
+        $this->_setAttributeUrlFilterDisplay('price', 'css_checkboxes');
     }
 
     protected function tearDown() {
-        /* @var $dbHelper Mana_Db_Helper_Data */
-        $dbHelper = Mage::helper('mana_db');
-        $filter = $dbHelper->getModel('mana_filters/filter2');
-        $filter->load('price', 'code');
-        $dbHelper->updateDefaultableField($filter, 'display', Mana_Filters_Resource_Filter2::DM_DISPLAY,
-            array(), array('display'));
-        $filter->save();
-
-        /* @var $parser Mana_Seo_Helper_UrlParser */
-        $parser = Mage::helper('mana_seo/urlParser');
-        $parser->clearParameterUrlCache();
+        $this->_setAttributeUrlFilterDisplay('price', 'slider');
     }
 
     public function testTwoValues() {

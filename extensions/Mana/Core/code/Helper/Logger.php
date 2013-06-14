@@ -7,20 +7,20 @@
  */
 /**
  * @author Mana Team
- * @method Mana_Core_Helper_Logger beginSeo(string $message = null)
- * @method Mana_Core_Helper_Logger logSeo(string $message = null)
- * @method Mana_Core_Helper_Logger endSeo(string $message = null)
-
  * @method Mana_Core_Helper_Logger beginSeoMatch(string $message = null)
  * @method Mana_Core_Helper_Logger logSeoMatch(string $message = null)
  * @method Mana_Core_Helper_Logger endSeoMatch(string $message = null)
+
+ * @method Mana_Core_Helper_Logger beginSeoUrl(string $message = null)
+ * @method Mana_Core_Helper_Logger logSeoUrl(string $message = null)
+ * @method Mana_Core_Helper_Logger endSeoUrl(string $message = null)
  */
 class Mana_Core_Helper_Logger extends Mage_Core_Helper_Abstract {
     const INDENT_WIDTH = 4;
     protected $_isEnabled = array(
         'all' => true,
-        'seo' => true,
         'seo_match' => true,
+        'seo_url' => true,
     );
     protected $_indent = array('all' => 0);
 

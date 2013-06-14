@@ -30,6 +30,8 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
             : ($schema->getUseFilterLabels() ? $this->_seoify($defaultLabel, $schema) : "'category'");
         $fields = array(
             'url_key' => new Zend_Db_Expr($urlKeyExpr),
+            'internal_name' => new Zend_Db_Expr("'cat'"),
+            'position' => new Zend_Db_Expr($seo->isManadevLayeredNavigationInstalled() ? '`f`.`position`': "-1"),
             'type' => new Zend_Db_Expr("'" . Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY . "'"),
             'is_page' => new Zend_Db_Expr('0'),
             'is_parameter' => new Zend_Db_Expr('1'),
