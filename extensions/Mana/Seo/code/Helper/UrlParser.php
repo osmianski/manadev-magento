@@ -912,7 +912,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 return false;
             }
         }
-        $token->addParameter($token->getAttributeCode(), $token->getAttributeValueUrl()->getOptionId());
+        $token->addQueryParameter($token->getAttributeCode(), $token->getAttributeValueUrl()->getOptionId());
 
         return true;
     }
@@ -926,7 +926,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _setCurrentAttribute($token, $id, $code) {
         $cParameterAlreadyMet = Mana_Seo_Model_ParsedUrl::CORRECT_PARAMETER_ALREADY_MET;
         $token->setAttributeId($id)->setAttributeCode($code);
-        if ($code && $token->hasParameter($code)) {
+        if ($code && $token->hasQueryParameter($code)) {
             return $this->_correct($token, $cParameterAlreadyMet, __LINE__, $code);
         }
         return true;
@@ -946,10 +946,10 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 ->addParameter('id', $categoryId);
             return $this->_redirect($token, $cRedirectToSubcategory, __LINE__, $token->getText());
         }
-        if ($token->hasParameter('cat')) {
+        if ($token->hasQueryParameter('cat')) {
             return $this->_correct($token, $cParameterAlreadyMet, __LINE__, 'cat');
         }
-        $token->addParameter('cat', $categoryId);
+        $token->addQueryParameter('cat', $categoryId);
 
         return true;
     }
@@ -978,7 +978,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $to = $t;
             }
             if ($isSlider) {
-                $token->addParameter($token->getAttributeCode(), "$from,$to");
+                $token->addQueryParameter($token->getAttributeCode(), "$from,$to");
 
             }
             else {
@@ -992,11 +992,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     return false;
                 }
 
-                $token->addParameter($token->getAttributeCode(), "$index,$range");
+                $token->addQueryParameter($token->getAttributeCode(), "$index,$range");
             }
         }
         else {
-            $token->addParameter($token->getAttributeCode(), "$from,$to");
+            $token->addQueryParameter($token->getAttributeCode(), "$from,$to");
         }
 
 
@@ -1012,7 +1012,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $cParameterAlreadyMet = Mana_Seo_Model_ParsedUrl::CORRECT_PARAMETER_ALREADY_MET;
         $cInvalid = Mana_Seo_Model_ParsedUrl::CORRECT_INVALID_TOOLBAR_VALUE;
 
-        if ($token->hasParameter($token->getParameterUrl()->getInternalName())) {
+        if ($token->hasQueryParameter($token->getParameterUrl()->getInternalName())) {
             return $this->_correct($token, $cParameterAlreadyMet, __LINE__, $token->getParameterUrl()->getInternalName());
         }
         $value = $token->getTextToBeParsed();
@@ -1053,7 +1053,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 }
                 break;
         }
-        $token->addParameter($name, $token->getTextToBeParsed());
+        $token->addQueryParameter($name, $token->getTextToBeParsed());
 
         return true;
     }
@@ -1065,7 +1065,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     protected function _setResult($token) {
         if ($token->getStatus() & Mana_Seo_Model_ParsedUrl::STATUS_MASK_CORRECTION
-            && $token->getRoute() == 'cms/index/index' && !count($token->getParameters()))
+            && $token->getRoute() == 'cms/index/index' && !count($token->getQueryParameters()))
         {
             return false;
         }
@@ -1237,6 +1237,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                         $logger->logSeoMatch("$parameter: " . implode(', ', $values));
                     }
                 }
+                if (($parameters = $parsedUrl->getQueryParameters()) && count($parameters)) {
+                    foreach ($parameters as $parameter => $values) {
+                        $logger->logSeoMatch("$parameter: " . implode(', ', $values));
+                    }
+                }
                 if (($corrections = $parsedUrl->getCorrections()) && count($corrections)) {
                     foreach ($corrections as $correction) {
                         $logger->logSeoMatch("{$parsedUrl->getCorrectionName($correction)
@@ -1264,18 +1269,18 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return int
      */
     protected function _compareResults($a, $b) {
-        $aCount = count($a->getParameters());
-        $bCount = count($b->getParameters());
+        $aCount = count($a->getQueryParameters());
+        $bCount = count($b->getQueryParameters());
 
         if ($aCount < $bCount) return 1;
         if ($aCount > $bCount) return -1;
 
         $aCount = 0;
-        foreach ($a->getParameters() as $values) {
+        foreach ($a->getQueryParameters() as $values) {
             $aCount += count($values);
         }
         $bCount = 0;
-        foreach ($b->getParameters() as $values) {
+        foreach ($b->getQueryParameters() as $values) {
             $bCount += count($values);
         }
 

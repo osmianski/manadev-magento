@@ -15,8 +15,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/manufacturer/amd.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'manufacturer' => 117,
             ),
         ));
@@ -26,8 +26,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/manufacturer/amd-apple.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'manufacturer' => '117_29',
             ),
         ));
@@ -37,8 +37,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/acer-apple.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'manufacturer' => '28_29',
             ),
         ));
@@ -48,8 +48,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/acer/apple.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'manufacturer' => '28_29',
             ),
         ));
@@ -59,8 +59,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/manufacturer/acer-apple.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'manufacturer' => '28_29',
             ),
         ));
@@ -70,8 +70,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/contrast-ratio/10000-1.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'contrast_ratio' => 106,
             ),
         ));
@@ -81,8 +81,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_MandatoryAttributeNam
         $this->assertParsedUrl('electronics/10000-1.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 13,
+            'params' => array('id' => 13),
+            'query' => array(
                 'contrast_ratio' => 106,
             ),
         ));

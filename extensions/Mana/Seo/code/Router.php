@@ -20,18 +20,12 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
      */
     public function initControllerRouters($observer) {
         /* @var $front Mage_Core_Controller_Varien_Front */
-        $front = $observer->getEvent()->getFront();
+        $front = $observer->getEvent()->getData('front');
 
         $front->addRouter('mana_seo', $this);
     }
 
     public function match(Zend_Controller_Request_Http $request) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
-
-        /* @var $logger Mana_Core_Helper_Logger */
-        $logger = Mage::helper('mana_core/logger');
-
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
                 ->setRedirect(Mage::getUrl('install'))
@@ -39,152 +33,51 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
             exit;
         }
 
-        $origSlash = (substr($request->getPathInfo(), -1) == '/') ? '/' : '';
-        $altSlash = $origSlash ? '' : '/';
-        $path = trim($request->getPathInfo(), '/');
+        /* @var $parser Mana_Seo_Helper_UrlParser */
+        $parser = Mage::helper('mana_seo/urlParser');
 
-        /* @var $context Mana_Seo_Model_Context */
-        $context = Mage::getModel('mana_seo/context');
-        $context
-            ->setRouter($this)
-            ->setMode(Mana_Seo_Model_Context::MODE_DIAGNOSTIC)
-            ->setAction(Mana_Seo_Model_Context::ACTION_FORWARD)
-            ->setRequest($request)
-            ->setPath($path)
-            ->setOriginalSlash($origSlash)
-            ->setAlternativeSlash($altSlash);
+        /* @var $urlModel Mana_Seo_Rewrite_Url */
+        $urlModel = Mage::getModel('core/url');
 
-        $logger->beginSeo("Processing $path ...");
-        $context->setStoreId(Mage::app()->getStore()->getId());
+        $path = ltrim($request->getPathInfo(), '/');
+        if ($parsedUrl = $parser->parse($path)) {
+            $url = $urlModel->getUrl($parsedUrl->getRoute(), array_merge(
+                array('_use_rewrite' => true, '_nosid' => true),
+                $parsedUrl->getImplodedParameters(),
+                count($parsedUrl->getQueryParameters())
+                    ? array('_query' => $parsedUrl->getImplodedQueryParameters())
+                    : array()));
 
-        $this->_matches = array();
-        $seo->getSchemaVariationPoint()->match($context);
-        if (count($this->_matches)) {
-            $matches = $this->_matches;
-            $this->_matches = array();
-            if ($context->getMode() == Mana_Seo_Model_Context::MODE_DIAGNOSTIC) {
-                $this->_logMatches($context, $matches);
-            }
-            $this->_processMatch($matches[0]);
-            $logger->endSeo();
-
-            return true;
-        }
-        else {
-            $logger->endSeo();
-
-            $this->_lastMatch = false;
-            return false;
-        }
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @return bool
-     */
-    public function registerMatch($context) {
-        $this->_matches[] = clone $context;
-        return ($context->getMode() == Mana_Seo_Model_Context::MODE_OPTIMIZED);
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @param Mana_Seo_Model_Context[] $matches
-     * @return Mana_Seo_Router
-     */
-    protected function _logMatches($context, $matches) {
-        /* @var $logger Mana_Core_Helper_Logger */
-        $logger = Mage::helper('mana_core/logger');
-
-        $logger->beginSeoMatch("Matches found for '{$context->getPath()}'");
-        foreach ($matches as $index => $match) {
-            $logger->beginSeoMatch("Match $index:");
-            $logger->logSeoMatch("Action: '{$match->getAction()}'");
-            $logger->logSeoMatch("Schema: '{$match->getSchema()->getName()}'");
-            $logger->logSeoMatch("Page: '{$match->getPageUrl()->getUrlKey()}' (type: {$match->getPageUrl()->getType()})");
-            if (($parameters = $match->getParameters()) && count($parameters)) {
-                $logger->beginSeoMatch("Parameters");
-                foreach ($parameters as $parameter => $values) {
-                    $logger->logSeoMatch("$parameter: ".implode(', ', $values));
-                }
-                $logger->endSeoMatch();
-            }
-            $logger->logSeoMatch(("Suffix: '{$match->getSuffix()}'"));
-            $logger->endSeoMatch();
-        }
-        $logger->endSeoMatch();
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     * @throws Exception
-     * @return Mana_Seo_Router
-     */
-    protected function _processMatch($context) {
-        $params = array();
-        if (($parameters = $context->getParameters()) && count($parameters)) {
-            foreach ($parameters as $parameter => $values) {
-                $params[$parameter] = implode('_', $values);
-            }
-        }
-
-        $request = $context->getRequest();
-
-        switch ($context->getAction()) {
-            case Mana_Seo_Model_Context::ACTION_FORWARD:
-                $route = explode('/', $context->getPageUrl()->getHelper()->getRoute($context, $params));
+            if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK &&
+                $urlModel->getRoutePath() == $path)
+            {
+                $route = explode('/', $parsedUrl->getRoute());
 
                 /* @noinspection PhpUndefinedMethodInspection */
                 $request->initForward();
 
-                if (count($params)) {
-                    $request->setParams($params);
-                }
                 $request
+                    ->setParams(array_merge($request->getParams(),
+                        $parsedUrl->getImplodedParameters()))
                     ->setModuleName($route[0])
                     ->setControllerName($route[1])
                     ->setActionName($route[2])
                     ->setDispatched(false);
 
-                $this->_lastMatch = $context;
-                break;
-            case Mana_Seo_Model_Context::ACTION_REDIRECT:
+                $_GET = array_merge($_GET, $parsedUrl->getImplodedQueryParameters());
+            }
+            else {
                 /* @var $front Mage_Core_Controller_Varien_Front */
                 $front = $this->getFront();
 
-                $url = Mage::getUrl('', array(
-                    '_direct' => $context->getPageUrl()->getHelper()->getDirectUrl($context),
-                    '_current' => true,
-                    '_m_escape' => '',
-                    '_use_rewrite' => true,
-                    '_query' => $params,
-                    '_nosid' => defined('_TEST'),
-                    '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())
-                );
-                $relativeUrl = substr($url, strlen(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,
-                    Mage::app()->getFrontController()->getRequest()->isSecure())));
-                if (!defined('_TEST')) {
-                    $front->getResponse()->setRedirect($url);
-                }
-                $this->_lastMatch = $relativeUrl;
+                $front->getResponse()->setRedirect($url);
                 $request->setDispatched(true);
+            }
 
-                break;
-            default:
-                throw new Exception('Not implemented');
+            return true;
         }
-    }
-
-    /**
-     * @param Mana_Seo_Model_Context $context
-     */
-    protected function _forward($context) {
-    }
-
-    /**
-     * @return Mana_Seo_Model_Context | string | bool
-     */
-    public function getLastMatch() {
-        return $this->_lastMatch;
+        else {
+            return false;
+        }
     }
 }

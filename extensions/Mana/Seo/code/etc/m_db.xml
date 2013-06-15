@@ -135,7 +135,7 @@
                         <is_parameter><type>tinyint</type><indexed /><default_value>0</default_value></is_parameter>
                         <is_attribute_value><type>tinyint</type><indexed /><default_value>0</default_value></is_attribute_value>
                         <is_category_value><type>tinyint</type><indexed /><default_value>0</default_value></is_category_value>
-                        <internal_name><type>varchar(20)</type><indexed /></internal_name>
+                        <internal_name><type>varchar(255)</type><indexed /></internal_name>
                         <include_filter_name><type>tinyint</type><default_value>0</default_value></include_filter_name>
                         <force_include_filter_name><type>tinyint</type><nullable /></force_include_filter_name>
                         <final_include_filter_name><type>tinyint</type><default_value>0</default_value></final_include_filter_name>

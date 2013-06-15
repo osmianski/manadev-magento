@@ -45,6 +45,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 //        $this->_escape = isset($routeParams['_escape']) ? $routeParams['_escape'] :
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
 
+        $this->_routeParams = $routeParams;
         if (isset($routeParams['_use_rewrite'])) {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
@@ -54,13 +55,12 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $this->_routePath = $this->_populateCurrentRouteFromRequest($routePath);
 
             $query = null;
-            if (isset($routeParams['_query'])) {
+            if (isset($this->_routeParams['_query'])) {
                 $this->purgeQueryParams();
-                $query = $routeParams['_query'];
-                unset($routeParams['_query']);
+                $query = $this->_routeParams['_query'];
+                unset($this->_routeParams['_query']);
             }
             $this->_query = $query;
-            $this->_routeParams = $routeParams;
 
             $this->_pageType = $this->_getPageType($this->_routePath);
             $this->_suffix = $this->_pageType->getCurrentSuffix();
@@ -71,7 +71,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     public function getRoutePath($routeParams = array()) {
-        if ($this->_pageUrlKey === false) {
+        if ($this->_pageUrlKey === null) {
             return parent::getRoutePath($routeParams);
         }
 
@@ -93,28 +93,31 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $seoParams = array();
             foreach ($this->getQueryParams() as $key => $value) {
                 $path = false;
-                if ($url = $this->_getParameterUrl($key)) {
-                    $position = $url->getPosition();
-                    $attribute_id = $url->getAttributeId();
-                    switch ($url->getType()) {
-                        case Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE:
-                            $path = $this->_generateAttributeParameter($url, $value);
-                            break;
-                        case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
-                            $path = $this->_generateCategoryParameter($url, $value);
-                            break;
-                        case Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE:
-                            $path = $this->_generatePriceParameter($url, $value);
-                            break;
-                        case Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR:
-                            $path = $this->_generateToolbarParameter($url, $value);
-                            break;
-                        default:
-                            throw new Exception('Not implemented');
+                if ($value !== null) {
+                    if ($url = $this->_getParameterUrl($key)) {
+                        $position = $url->getPosition();
+                        $attribute_id = $url->getAttributeId();
+                        $category_id = null;
+                        switch ($url->getType()) {
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE:
+                                $path = $this->_generateAttributeParameter($url, $value);
+                                break;
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
+                                list($path, $category_id) = $this->_generateCategoryParameter($url, $value);
+                                break;
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE:
+                                $path = $this->_generatePriceParameter($url, $value);
+                                break;
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR:
+                                $path = $this->_generateToolbarParameter($url, $value);
+                                break;
+                            default:
+                                throw new Exception('Not implemented');
+                        }
                     }
                 }
                 if ($path) {
-                    $seoParams[$key] = compact('path', 'position', 'attribute_id');
+                    $seoParams[$key] = compact('path', 'position', 'attribute_id', 'category_id');
                     unset($queryParams[$key]);
                 }
             }
@@ -244,7 +247,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 
         $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
         $urlCollection->addFieldToFilter('category_id', $categoryId);
-        if (!($result = $this->getUrlKey($urlCollection))) {
+        if (!($result = $this->getUrlKey($urlCollection, array('category_id')))) {
             $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
         }
 
@@ -296,16 +299,16 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     /**
      * @param Mana_Seo_Model_Url $parameterUrl
      * @param string $value
-     * @return string
+     * @return array
      */
     protected function _generateCategoryParameter($parameterUrl, $value) {
         $path = '';
         if ($urlKey = $this->_getCategoryUrlKey($value)) {
-            $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator().
-                $urlKey['final_url_key'];
+            return array($parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator().
+                $urlKey['final_url_key'], $urlKey['category_id']);
         }
 
-        return $path;
+        return array(null, null);
     }
 
     /**
@@ -321,11 +324,16 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             in_array($parameterUrl->getFilterDisplay(), array('slider', 'range'));
 
         $path = '';
-        $values = array();
-        foreach (explode('_', $value) as $singleValue) {
-            $values[] = explode(',', $singleValue);
+        if ($value != '__0__,__1__') {
+            $values = array();
+            foreach (explode('_', $value) as $singleValue) {
+                $values[] = explode(',', $singleValue);
+            }
+            uasort($values, array($this, '_comparePriceValues'));
         }
-        uasort($values, array($this, '_comparePriceValues'));
+        else {
+            $values = array(explode(',', $value));
+        }
         foreach ($values as $singleValue) {
             list($from, $to) = $singleValue;
             if ($path) {
@@ -418,7 +426,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         if ($this->_schema->getRedirectToSubcategory() && isset($seoParams['cat'])) {
             if (in_array($this->_routePath, array('catalog/category/view', 'cms/index/index'))) {
                 $this->_routePath = 'catalog/category/view';
-                $this->_routeParams['id'] = $seoParams['cat'];
+                $this->_routeParams['id'] = $seoParams['cat']['category_id'];
                 $this->_pageType = $this->_getPageType($this->_routePath);
                 $this->_suffix = $this->_pageType->getCurrentSuffix();
                 $this->_pageUrlKey = $this->_pageType->getUrlKey($this);

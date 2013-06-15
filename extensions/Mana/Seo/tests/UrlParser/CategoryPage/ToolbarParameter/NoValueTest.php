@@ -14,9 +14,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_NoValueTest extends 
         $this->assertParsedUrl('apparel/show.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 
@@ -24,9 +22,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_NoValueTest extends 
         $this->assertParsedUrl('apparel/mode.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 
@@ -34,9 +30,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_NoValueTest extends 
         $this->assertParsedUrl('apparel/page.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 
@@ -44,9 +38,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_NoValueTest extends 
         $this->assertParsedUrl('apparel/sort-by.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 
@@ -54,9 +46,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_NoValueTest extends 
         $this->assertParsedUrl('apparel/sort-direction.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 }

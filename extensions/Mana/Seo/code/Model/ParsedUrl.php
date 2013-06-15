@@ -96,6 +96,7 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
         self::CORRECT_SWAP_RANGE_BOUNDS => 'CORRECT_SWAP_RANGE_BOUNDS',
     );
     protected $_parameters = array();
+    protected $_queryParameters = array();
     protected $_corrections = array();
     protected $_pendingCorrections = 0;
     #region Parsed URL parameters
@@ -137,6 +138,58 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
 
     public function getParameters() {
         return $this->_parameters;
+    }
+
+    public function getImplodedParameters() {
+        return $this->_implode($this->_parameters);
+    }
+
+    #endregion
+
+    #region Parsed URL query parameters
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return Mana_Seo_Model_ParsedUrl
+     */
+    public function addQueryParameter($key, $value) {
+        if (!isset($this->_queryParameters[$key])) {
+            $this->_queryParameters[$key] = array();
+        }
+        $this->_queryParameters[$key][] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return Mana_Seo_Model_ParsedUrl
+     */
+    public function removeQueryParameter($key) {
+        unset($this->_queryParameters[$key]);
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function hasQueryParameter($key) {
+        return isset($this->_queryParameters[$key]);
+    }
+
+    public function getQueryParameter($key) {
+        return $this->_queryParameters[$key];
+    }
+
+    public function getQueryParameters() {
+        return $this->_queryParameters;
+    }
+
+    public function getImplodedQueryParameters() {
+        return $this->_implode($this->_queryParameters);
     }
 
     #endregion
@@ -183,5 +236,13 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
 
     public function hasPendingCorrection($correction) {
         return ($this->_pendingCorrections & $correction) == $correction;
+    }
+
+    protected function _implode($parameters) {
+        $result = array();
+        foreach ($parameters as $key => $value) {
+            $result[$key] = implode('_', $value);
+        }
+        return $result;
     }
 }

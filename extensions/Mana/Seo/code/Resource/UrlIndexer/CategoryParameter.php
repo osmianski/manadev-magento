@@ -39,9 +39,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
             'is_category_value' => new Zend_Db_Expr('0'),
             'schema_id' => new Zend_Db_Expr($schema->getId()),
             'unique_key' => new Zend_Db_Expr($urlKeyExpr),
-            'status' => new Zend_Db_Expr("'".($schema->getRedirectToSubcategory()
-                ? Mana_Seo_Model_Url::STATUS_OBSOLETE
-                : Mana_Seo_Model_Url::STATUS_ACTIVE)."'"),
+            'status' => new Zend_Db_Expr("'". Mana_Seo_Model_Url::STATUS_ACTIVE."'"),
         );
 
         if ($seo->isManadevLayeredNavigationInstalled()) {

@@ -14,8 +14,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/show/all.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'limit' => 'all',
             ),
         ));
@@ -25,8 +25,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/show/15.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'limit' => '15',
             ),
         ));
@@ -36,8 +36,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/mode/grid.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'mode' => 'grid',
             ),
         ));
@@ -47,8 +47,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/page/2.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'p' => 2,
             ),
         ));
@@ -58,8 +58,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/sort-by/price.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'order' => 'price',
             ),
         ));
@@ -69,8 +69,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_ToolbarParameter_OkTest extends Mana_
         $this->assertParsedUrl('apparel/sort-direction/desc.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'dir' => 'desc',
             ),
         ));

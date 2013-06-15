@@ -14,9 +14,7 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_CorrectionTest extend
         $this->assertParsedUrl('apparel/color.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
-            ),
+            'params' => array('id' => 18),
         ));
     }
 }

@@ -14,8 +14,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
         $this->assertParsedUrl('apparel/black.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'color' => 24,
             ),
         ));
@@ -25,8 +25,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
         $this->assertParsedUrl('apparel/black-blue.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'color' => '24_25',
             ),
         ));
@@ -36,8 +36,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
         $this->assertParsedUrl('apparel/black-blue/dress.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'color' => '24_25',
                 'shoe_type' => 52,
             ),
@@ -48,8 +48,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
         $this->assertParsedUrl('apparel/color/black.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'color' => 24,
             ),
         ));
@@ -59,8 +59,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_AttributeFilter_OkTest extends Mana_S
         $this->assertParsedUrl('apparel/black/dress/blue.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_CORRECTION,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'color' => '24_25',
                 'shoe_type' => 52,
             ),

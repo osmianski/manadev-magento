@@ -22,8 +22,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_PriceFilter_ListTest extends Mana_Seo
         $this->assertParsedUrl('apparel/price/100-200.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'price' => '2,100',
             ),
         ));
@@ -33,8 +33,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_PriceFilter_ListTest extends Mana_Seo
         $this->assertParsedUrl('apparel/price/200-100.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_NOTICE,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'price' => '2,100',
             ),
         ));
@@ -44,8 +44,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_PriceFilter_ListTest extends Mana_Seo
         $this->assertParsedUrl('apparel/price/-200--100.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'price' => '-1,100',
             ),
         ));
@@ -56,8 +56,8 @@ class Mana_Seo_Test_UrlParser_CategoryPage_PriceFilter_ListTest extends Mana_Seo
         $this->assertParsedUrl('apparel/where/price/1,100.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE,
-            'params' => array(
-                'id' => 18,
+            'params' => array('id' => 18),
+            'query' => array(
                 'price' => '1,100',
             ),
         ));

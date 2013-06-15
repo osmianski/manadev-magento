@@ -22,7 +22,7 @@ class Mana_Seo_Test_Case extends Mana_Core_Test_Case {
             $this->assertNotEmpty($result, sprintf("Failed asserting that URL '%s' would be parsed", $path));
             if ($result) {
                 foreach ($expected as $key => $expectedValue) {
-                    if ($key != 'params') {
+                    if ($key != 'params' && $key != 'query') {
                         $this->assertEquals($expectedValue, $result->getData($key));
                     }
                 }
@@ -32,17 +32,15 @@ class Mana_Seo_Test_Case extends Mana_Core_Test_Case {
                         $this->assertEquals($value, implode('_', $result->getParameter($key)));
                     }
                 }
+                if (isset($expected['query'])) {
+                    foreach ($expected['query'] as $key => $value) {
+                        $this->assertArrayHasKey($key, $result->getQueryParameters());
+                        $this->assertEquals($value, implode('_', $result->getQueryParameter($key)));
+                    }
+                }
             }
         }
         return $result;
-    }
-
-    protected function assertGeneratedCategoryUrl($expected, $query = '') {
-        $params = array(
-            '__route' => 'catalog/category/view',
-            '_direct' => 'apparel.html',
-        );
-        $this->assertGeneratedUrl($expected, $params, $query);
     }
 
     protected function assertGeneratedUrl($expected, $route, $params) {
