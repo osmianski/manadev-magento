@@ -895,8 +895,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             {
                 return {
                     id: id || element.id,
-                    typeName: typeName || $element.attr('data-m-block')
-                        || (id ? 'Mana/Core/NameBlock' : 'Mana/Core/Block')
+                    typeName: typeName || $element.attr('data-m-block') || 'Mana/Core/Block'
                 };
             }
 

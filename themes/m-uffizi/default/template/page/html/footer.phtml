@@ -1,0 +1,84 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="footer-container">
+	<div class="superfooter">
+		<ul class="footer-top col3-set">
+			<li class="col-1">
+				<?php echo $this->getChildHtml('left.newsletter') ?>
+				<?php echo $this->getChildHtml('footer_top1') ?>
+			</li> 
+			<li class="col-2">
+				<?php echo $this->getChildHtml('currency') ?>
+				<?php echo $this->getChildHtml('footer_top2') ?>
+			</li> 
+			<li class="col-3">
+				<?php echo $this->getChildHtml('guestbook') ?>
+				<?php echo $this->getChildHtml('footer_top3') ?>
+			</li> 
+		</ul>
+		<div class="footer-center"><?php echo $this->getChildHtml('footer_center') ?></div>
+		<ul class="footer-bottom">
+			<li class="col1">
+				<?php echo $this->getChildHtml('footer_bottom1') ?>
+			</li> 
+			<li class="col2">
+				<?php echo $this->getChildHtml('footer_bottom2') ?>
+			</li> 
+			<li class="col3">
+				<?php echo $this->getChildHtml('footer_bottom3') ?>
+			</li> 
+			<li class="col4">
+				<?php echo $this->getChildHtml('footer_bottom4') ?>
+			</li> 
+			<li class="col5">
+				<?php echo $this->getChildHtml('footer_bottom5') ?>
+			</li> 
+			<li class="col6">
+				<?php echo $this->getChildHtml('footer_bottom6') ?>
+			</li> 	
+		</ul>
+	</div>		
+    <div class="footer">
+        <?php /*echo $this->getChildHtml() */?>
+        <p class="copyright"><?php echo $this->__('© 2012 Uffizi Theme Demo. All Rights Reserved.') ?>
+        <a href="http://www.manadev.com">www.manadev.com</a>
+    </div>
+    <div class="responsive-indicators">
+        <span class="i-any-409">Phones Portrait 409- | </span>
+        <span class="i-410px-589">Phone Landscape 410+ 589-| </span>
+        <span class="i-590-759">Note Landscape 590+ 759-| </span>
+        <span class="i-760px-839">Tablet Portrait and Landscape 760+ 839-| </span>
+        <span class="i-840-any">Tablet Landscape 840+ |</span>
+        <span class="i-any-999">All mobile 999- | </span>
+        <span class="i-1015-any">Default 1015+ |</span>
+        <span class="i-1190-any">Large screen 1190+ | </span>
+        <span class="i-1365-any">Large screen 1365+ |</span>
+        <span class="i-1540-any">Large screen 1540+ |</span>
+        <span class="i-1715-any">Large screen 1715+ |</span>
+        <span class="i-1890-any">Large screen 1890+ |</span>
+    </div>
+</div>

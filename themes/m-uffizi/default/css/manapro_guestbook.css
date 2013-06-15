@@ -1,0 +1,25 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+.m-guest-book {}
+.m-guest-book blockquote {
+  font: 13px/22px normal helvetica, sans-serif;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  padding-left: 50px;
+background: transparent url(../images/quote_bottom.png) right bottom no-repeat;
+color: black;
+}
+.m-guest-book p {  }
+.m-guest-book .guest-date {color: #aaa; float: right;}
+.m-guest-book .guest-says {color: #aaa;}
+.m-guest-book .guest-name {color: #7a3379; font-size: 16px;}
+.m-guest-book .guest-url a {color: blue;}
+.m-write-comment { Font-size: medium; margin-top: 50px; }
+
+.m-guest-book li {background: transparent url(../images/quote_top.png) 0 0 no-repeat; padding: 0 30px 5px 35px;   border-bottom: 1px dotted #787878; margin-bottom: 15px;}

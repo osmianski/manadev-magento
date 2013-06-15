@@ -1,0 +1,39 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaPro_Guestbook_Block_Posts */
+?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="page-title">
+    <h1><?php echo $this->__('Guest Book') ?></h1>
+</div>
+<ul class="m-guest-book">
+<?php foreach($this->getPosts() as $post) : ?>
+<li>
+    <p>
+    <span class="guest-name"><?php echo $this->escapeHtml($post->getName()) ?></span>
+    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/region/in_frontend') && $post->getRegion()) : ?>
+        , <span class="guest-region"><?php echo $this->escapeHtml($post->getRegion()) ?></span>
+    <?php endif; ?>
+    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/country/in_frontend') && $post->getCountryId()) : ?>
+        , <span class="guest-country"><?php echo $this->escapeHtml($this->getCountry($post)) ?></span>
+    <?php endif; ?>
+    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/url/in_frontend') && $post->getUrl()) : ?>
+        , <span class="guest-url"><a target="_blank" href="http://<?php echo $post->getUrl() ?>"><?php echo $this->escapeHtml($post->getUrl()) ?></a></span>
+    <?php endif; ?>
+    <span class="guest-says"><?php echo $this->__('says') ?></span>
+    <?php if (Mage::getStoreConfigFlag('manapro_guestbook/date/in_frontend')) : ?>
+        <span class="guest-date"><?php echo $this->escapeHtml(Mage::getSingleton('core/locale')
+            ->date($post->getCreatedAt(), Zend_Date::ISO_8601, null, false)
+            ->toString(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM))) ?></span>
+    <?php endif; ?>
+    </p>
+    <blockquote><?php echo nl2br($this->escapeHtml($post->getText())) ?></blockquote>
+</li>
+<?php endforeach; ?>
+</ul>
+

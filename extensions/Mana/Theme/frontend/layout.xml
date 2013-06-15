@@ -23,6 +23,7 @@ examples on what kind of actions can be applied to referenced blocks.
         <reference name="head">
 			<action method="addCss"><stylesheet>css/mana_theme.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/mana_theme.js</name><params/></action>
+            <action method="addJs"><script>mana/theme.js</script></action>
         </reference>
         <block type="core/template" name="m_theme_options" />
     </default>

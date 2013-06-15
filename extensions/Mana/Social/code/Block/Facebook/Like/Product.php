@@ -16,8 +16,16 @@ class Mana_Social_Block_Facebook_Like_Product extends Mana_Social_Block_Facebook
      */
     protected $_product;
 
+    /**
+     * @param Mage_Catalog_Model_Product $value
+     * @return Mana_Social_Block_Facebook_Like_Product
+     */
     public function setProduct($value) {
-        $this->_product = $value;
+        $this->_product = $product = $value;
+        $this->setPageUrl($product->getProductUrl());
+        $this->setWidth(90);
+        $this->setShowSend(false);
+        $this->setFbLayout('button_count');
         return $this;
     }
 }

@@ -103,7 +103,7 @@ class ManaPage_AttributeOption_Block_Filter extends Mana_Page_Block_Filter {
                 // does not work well for non-simple products
                 //$options['useAttributeIndex'] = true;
             }
-            elseif ($attribute->getData('backend_model') == 'eav/entity_attribute_backend_array') {
+            if ($attribute->getData('backend_model') == 'eav/entity_attribute_backend_array') {
                 $options['operator'] = 'finset'; //'FIND_IN_SET({{value}}, {{field}})';
             }
         }

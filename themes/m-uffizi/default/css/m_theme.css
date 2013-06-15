@@ -1,0 +1,11 @@
+/**
+ * @category    Mana
+ * @package     M_Theme
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-select { position: relative; }
+.m-select select { position: relative; z-index: 2; opacity: 0; top: 2px;}
+.m-select span { position: absolute; top: -2px; left: 0; cursor: default; z-index: 1;
+    background: white url(../images/i-select.png) right 7px no-repeat; color: #646464; border-radius: 0; padding: 3px 14px 1px 4px;
+    border: solid; border-width: 2px 1px 0; line-height: normal; font: 12px Tahoma, Helvetica, sans-serif; overflow: hidden; border-color: #BFBFBF #DBDBDB;}

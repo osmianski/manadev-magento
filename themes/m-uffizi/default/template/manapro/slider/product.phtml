@@ -1,0 +1,101 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Slider
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+?>
+<?php if ($_product = $this->getCatalogProduct()): ?>
+<?php
+/* @var $this ManaPro_Slider_Block_Product */
+$_helper = $this->helper('catalog/output');
+/* @var $_slider ManaPro_Slider_Block_Slider */
+$_slider = $this->getParentBlock();
+$_text = array();
+$_image = array();
+foreach (array('left', 'top', 'width', 'height') as $_field) {
+    $_text[$_field] = $_slider->getData('product_text_'.$_field);
+    $_image[$_field] = $_slider->getData('product_image_'.$_field);
+}
+?>
+<ol class="products-list <?php echo $this->getCss() ?>">
+    <li class="item">
+        <?php // Product Image ?>
+        <a href="<?php echo $_product->getProductUrl() ?>"
+           title="<?php echo $this->stripTags($this->getImageTitle(), null, true) ?>"
+           class="product-image"
+           style="left: <?php echo $_image['left'] ?>px; top: <?php echo $_image['top'] ?>px; width: <?php echo $_image['width'] ?>px; height: <?php echo $_image['height'] ?>px;">
+           <img
+                src="<?php echo $this->getImage()->resize($_image['width'], $_image['height']); ?>"
+                width="<?php echo $_image['width'] ?>" height="<?php echo $_image['height'] ?>"
+                alt="<?php echo $this->stripTags($this->getImageTitle(), null, true) ?>"/></a>
+        <?php // Product description ?>
+        <div class="product-shop"
+            style="left: <?php echo $_text['left'] ?>px; top: <?php echo $_text['top'] ?>px; width: <?php echo $_text['width'] ?>px; height: <?php echo $_text['height'] ?>px;">
+            <div class="f-fix">
+                <?php // Promotion text ?>
+                <h3><?php echo $this->__('Exclusive'); ?></h3>
+                <?php // Product Name ?>
+                <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                <?php if ($_slider->getData('product_field_name')) : ?>
+                <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>"
+                                            title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?></a>
+                </h2>
+                <?php endif; ?>
+                <?php // Product Description ?>
+                <div class="desc std">
+                    <?php if ($_slider->getData('product_field_description')) : ?>
+                    <?php if ($_description = $_helper->productAttribute($_product, $_product->getMFeaturedDescription(), 'm_featured_description')) : ?>
+                        <?php echo $_description ?>
+                        <?php else : ?>
+                        <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>"
+                       title="<?php echo $_productNameStripped ?>"
+                       class="link-learn"><?php echo $this->__('Learn More') ?></a>
+                </div>
+
+                <?php // Product Rating ?>
+                <?php if ($_slider->getData('product_field_rating')) : ?>
+                <?php if ($_product->getRatingSummary()): ?>
+                    <?php echo $this->getReviewsSummaryHtml($_product) ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php // Product Price ?>
+                <?php if ($_slider->getData('product_field_price')) : ?>
+                    <?php echo $this->getPriceHtml($_product, true) ?>
+                <?php endif; ?>
+
+
+                <?php // Product Add To Cart Button ?>
+                <?php if ($_slider->getData('product_field_cart')) : ?>
+                <?php if ($_product->isSaleable()): ?>
+
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart"
+                                onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')">
+                            <span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+
+                    <?php else: ?>
+                    <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                <?php endif; ?>
+               <?php // Product Add To Links ?>
+               <?php if ($_slider->getData('product_field_links')) : ?>
+                    <ul class="add-to-links">
+                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                        <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist link-go"><span><?php echo $this->__('Wishlist') ?></span></a></li>
+                        <?php endif; ?>
+                        <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                        <li><a href="<?php echo $_compareUrl ?>" class="link-compare link-go"><span><?php echo $this->__('Compare') ?></span></a></li>
+                       <?php endif; ?>
+                    </ul>
+               <?php endif; ?>
+
+            </div>
+        </div>
+    </li>
+</ol>
+<?php endif ?>

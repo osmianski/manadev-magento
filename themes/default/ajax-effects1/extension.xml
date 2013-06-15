@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <config>
+    <name>default/ajax-effects1</name>
+
     <!-- server-side directories go to app/design -->
     <sync extension-dir="layout" project-dir="app/design/frontend/{Extension/Name}/layout"/>
     <sync extension-dir="template" project-dir="app/design/frontend/{Extension/Name}/template"/>
