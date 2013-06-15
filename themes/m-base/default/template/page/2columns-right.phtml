@@ -34,7 +34,7 @@
 <head>
 <?php echo $this->getChildHtml('head') ?>
 </head>
-<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<body class="mb-body <?php echo $this->getBodyClass() ?>" data-m-block="Mana/Theme/Body">
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="wrapper">
     <?php echo $this->getChildHtml('global_notices') ?>
@@ -47,7 +47,7 @@
                     <?php echo $this->getChildHtml('global_messages') ?>
                     <?php echo $this->getChildHtml('content') ?>
                 </div>
-                <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
+                <div class="col-right sidebar mb-right-sidebar"  data-m-block="Mana/Theme/Sidebar" data-side="right"><?php echo $this->getChildHtml('right') ?></div>
             </div>
         </div>
         <?php echo $this->getChildHtml('superfooter') ?>

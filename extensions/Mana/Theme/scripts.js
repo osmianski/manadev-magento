@@ -12,27 +12,10 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             this._cellWidth = 0;
             this._paddingWidth = 0;
         },
-        _subscribeToHtmlEvents: function() {
-            var self = this;
-            var inResize = false;
-            function _raiseResize() {
-                if (inResize) {
-                    return;
-                }
-                inResize = true;
-                self.decorateGrid();
-                inResize = false;
-            }
-
+        _subscribeToBlockEvents: function() {
             return this
                 ._super()
-                .on('bind', this, function() {
-                    this.decorateGrid();
-                    $(window).on('resize', _raiseResize);
-                })
-                .on('unbind', this, function() {
-                    $(window).off('resize', _raiseResize);
-                });
+                .on('resize', this, this.decorateGrid);
         },
         _appleZoomFix: function () {
             var meta = document.querySelector( "meta[name=viewport]" ),
@@ -61,7 +44,6 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             //return;
             //alert('window: ' +  $(window).width());
             //console.log('window: ' +  $(window).width());
-            $('.col-main').width($('.main').width() - $('.col-left').outerWidth(true) - $('.col-right').outerWidth(true) - $('.col-main').outerWidth(true) + $('.col-main').width());
             var $el = $(this.getElement());
             var width = $el.width();
             var $cells = $el.find('li.item');
@@ -125,3 +107,137 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
       }
     });
 });
+
+Mana.define('Mana/Theme/Body', ['jquery', 'Mana/Core/PageBlock'], function ($, PageBlock) {
+    return PageBlock.extend('Mana/Theme/Body', {
+        _subscribeToBlockEvents: function() {
+            return this
+                ._super()
+                 .on('resize', this, function () {
+                    var $colMain = this.$().find('.col-main');
+                    var leftSidebar = this.getChild('left-sidebar'),
+                        rightSidebar = this.getChild('right-sidebar');
+                    $colMain.width(this.$().find('.main').width() -
+                        (leftSidebar ? leftSidebar.getWidth() : 0) -
+                        (rightSidebar ? rightSidebar.getWidth() : 0) -
+                        $colMain.outerWidth(true) +
+                        $colMain.width());
+                });
+        }
+    });
+ });
+
+Mana.define('Mana/Theme/Sidebar', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout'], function ($, Block, layout) {
+    return Block.extend('Mana/Theme/Sidebar', {
+        _init: function() {
+            this._super();
+            this._side = '';
+            this._defaultSide = 'left';
+            this._minPageWidth = 0;
+            this._defaultMinPageWidth = 900;
+            this._state = 'static';
+//            this._float = 'none';
+            this._handleWidth = 0;
+            this._defaultHandleWidth = 20;
+
+        },
+        getSide:function () {
+            if (!this._side) {
+                this._side = this.$().data('side');
+                if (!this._side) {
+                    this._side = this._defaultSide;
+                }
+            }
+            return this._side;
+        },
+        getMinPageWidth:function () {
+            if (!this._minPageWidth) {
+                this._minPageWidth = this.$().data('min-page-width');
+                if (!this._minPageWidth) {
+                    this._minPageWidth = this._defaultMinPageWidth;
+                }
+            }
+            return this._minPageWidth;
+        },
+        getHandleWidth:function () {
+            if (!this._handleWidth) {
+                this._handleWidth = this.$().data('handle-width');
+                if (!this._handleWidth) {
+                    this._handleWidth = this._defaultHandleWidth;
+                }
+            }
+            return this._handleWidth;
+        },
+        getWidth: function() {
+            return this.getState() == 'static' ? this.$().outerWidth(true) : this.getHandleWidth();
+        },
+        getState:function () {
+            return this._state;
+        },
+        setState:function (value) {
+            this._state = value;
+            return this;
+        },
+//        getFloat:function () {
+//            return this._float;
+//        },
+//        setFloat:function (value) {
+//            this._float = value;
+//            return this;
+//        },
+        _makeTouchable:function () {
+            if ($('.sidebar-container' + '.' + this.getSide()).length == 0) {
+                $container = $('<div class="sidebar-container ' + this.getSide() + '"><div class="handle ' + this.getSide() + '"><div class="icon-press"></div></div></div>');
+                $container.insertBefore(this.getElement());
+                this.$().insertBefore($container.find('.handle'));
+                layout.getPageBlock().resize();
+                $('.handle' + '.' + this.getSide()) .css("min-height", this.$().height() );
+            }
+            return this;
+        },
+        _makeUntouchable:function () {
+            $container = $('.sidebar-container' + '.' + this.getSide());
+            if ($container.length == 1) {
+                this.$().insertBefore($container);
+                $container.remove();
+                layout.getPageBlock().resize();
+            }
+            return this;
+        },
+        _expand:function () {
+            this.$().css( "display", "block");
+            return this;
+        },
+        _collapse:function () {
+            this.$().css( "display", "none");
+            return this;
+        },
+/*        $("p").click(function(){
+          // action goes here!!
+        }),*/
+        _subscribeToBlockEvents: function() {
+            return this
+                ._super()
+                .on('resize', this, function () {
+                    if ($('body').width() < this.getMinPageWidth()) {
+                        if (this.getState() == 'static') {
+                            this
+                                .setState('expanded')
+                                ._makeTouchable()
+                                ._collapse();
+                        }
+                    }
+                    else {
+                        if (this.getState() !='static') {
+                            this
+                                .setState('static')
+                                ._makeUntouchable()
+                                ._expand();
+                        }
+                    }
+             //       var side = this.getSide();
+                });
+        }
+    });
+
+ });

@@ -753,6 +753,39 @@ Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana
 function ($, Block, config)
 {
     return Block.extend('Mana/Core/PageBlock', {
+        _subscribeToHtmlEvents: function() {
+            var self = this;
+            var inResize = false;
+            function _raiseResize() {
+                if (inResize) {
+                    return;
+                }
+                inResize = true;
+                self.resize();
+                inResize = false;
+            }
+
+
+            return this
+                ._super()
+                .on('bind', this, function() {
+                    $(window).on('resize', _raiseResize);
+                })
+                .on('unbind', this, function() {
+                    $(window).off('resize', _raiseResize);
+                });
+
+        },
+        _subscribeToBlockEvents: function() {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.resize();
+                });
+        },
+        resize: function () {
+            this.trigger('resize', {}, false, true);
+        },
         showOverlay: function() {
             var overlay = $('<div class="m-overlay"></div>');
             overlay.appendTo(this.getElement());
@@ -820,9 +853,11 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         endGeneratingBlocks: function(vars) {
             var parentBlock = vars.parentBlock, namedBlocks = vars.namedBlocks;
             var self = this;
-            this._collectBlockTypes(parentBlock ? parentBlock.getElement() : document.body, function (blockTypes) {
+            this._collectBlockTypes(parentBlock ? parentBlock.getElement() : document, function (blockTypes) {
                 if (!self._pageBlock) {
-                    var PageBlock = blockTypes['Mana/Core/PageBlock'];
+                    var body = document.body, $body = $(body);
+                    var typeName = $body.attr('data-m-block');
+                    var PageBlock = typeName ? blockTypes[typeName] : blockTypes['Mana/Core/PageBlock'];
                     self._pageBlock = new PageBlock()
                         .setElement($('body')[0])
                         .setId('page');
@@ -940,10 +975,13 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
     });
 });
 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function($, layout) {
-    $(function() {
+    function _generateBlocks() {
         var vars = layout.beginGeneratingBlocks();
         layout.endGeneratingBlocks(vars);
-    });
+    }
+    $(_generateBlocks);
+    $(document).bind('m-ajax-after', _generateBlocks);
+
 });
 
 //region (Obsolete) additional jQuery functions used in MANAdev extensions
