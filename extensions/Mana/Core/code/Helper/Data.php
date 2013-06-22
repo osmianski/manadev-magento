@@ -11,6 +11,8 @@
  * @author Mana Team
  */
 class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
+    protected $_pageTypes;
+
     /**
      * Retrieve config value for store by path. By default uses standard Magento function to query core_config_data
      * table and use config.xml for default value. Though this could be replaced by extensions (in later versions).
@@ -403,6 +405,16 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return $request->getRouteName() . '/' . $request->getControllerName() . '/' . $request->getActionName();
         }
     }
+    public function getRouteParams() {
+        $request = Mage::app()->getRequest();
+
+        $result = '';
+        foreach ($request->getUserParams() as $key => $value) {
+            $result .= '/'.$key.'/'.$value;
+        }
+        return $result;
+    }
+
     public function isMageVersionEqualOrGreater($version) {
         $version = explode('.', $version);
         $mageVersion = array_values(Mage::getVersionInfo());
@@ -649,4 +661,57 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $sql;
     }
+
+    public function addDotToSuffix($suffix) {
+        if ($suffix && $suffix != '/' && strpos($suffix, '.') !== 0) {
+            $suffix = '.' . $suffix;
+        }
+
+        return $suffix;
+    }
+
+    /**
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType[]
+     */
+    public function getPageTypes($helper = 'helper') {
+        if (!isset($this->_pageTypes[$helper])) {
+            $result = array();
+
+            foreach ($this->getSortedXmlChildren(Mage::getConfig()->getNode('mana_core'), 'page_types') as $key => $pageTypeXml) {
+                /* @var $pageType Mana_Seo_Helper_PageType */
+                $pageType = Mage::helper((string)$pageTypeXml->$helper);
+                $pageType->setCode($key);
+                $result[$key] = $pageType;
+            }
+            $this->_pageTypes[$helper] = $result;
+        }
+
+        return $this->_pageTypes[$helper];
+    }
+
+    /**
+     * @param string $type
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType
+     */
+    public function getPageType($type, $helper = 'helper') {
+        $pageTypes = $this->getPageTypes($helper);
+
+        return $pageTypes[$type];
+    }
+
+    public function isManadevLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('Mana_Filters');
+    }
+
+    public function isManadevSeoLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
+    }
+
+    public function isManadevAttributePageInstalled() {
+        return $this->isModuleEnabled('Mana_AttributePage');
+    }
+
+
 }

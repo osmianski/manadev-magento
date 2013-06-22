@@ -18,8 +18,8 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_UrlIndexer {
     public function process($indexer, $schema, $options) {
         $db = $this->_getWriteAdapter();
 
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
         $urlKeyExpr = $this->_seoify("COALESCE(vs.value, vg.value)", $schema);
         $fields = array(
@@ -32,7 +32,7 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_UrlIndexer {
             'is_parameter' => new Zend_Db_Expr('0'),
             'is_attribute_value' => new Zend_Db_Expr('1'),
             'is_category_value' => new Zend_Db_Expr('0'),
-            'include_filter_name' => new Zend_Db_Expr($seo->isManadevSeoLayeredNavigationInstalled()
+            'include_filter_name' => new Zend_Db_Expr($core->isManadevSeoLayeredNavigationInstalled()
                 ? "IF(`f`.include_in_url = '". Mana_Seo_Model_Source_IncludeInUrl::ALWAYS."', 1, ".
                     "IF(`f`.include_in_url = '" . Mana_Seo_Model_Source_IncludeInUrl::NEVER . "', 0, ".
                     "{$schema->getIncludeFilterName()}))"
@@ -52,7 +52,7 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_UrlIndexer {
                 null)
             ->columns($fields);
 
-        if ($seo->isManadevLayeredNavigationInstalled()) {
+        if ($core->isManadevLayeredNavigationInstalled()) {
             $select
                 ->joinInner(array('g' => $this->getTable('mana_filters/filter2')), '`g`.`code` = `a`.`attribute_code`', null)
                 ->joinInner(array('f' => $this->getTable('mana_filters/filter2_store')),

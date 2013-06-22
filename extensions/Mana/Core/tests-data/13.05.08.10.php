@@ -9,4 +9,5 @@ $utils = Mage::helper('mana_core/utils');
 $utils
     ->reindexAll()
     ->disableModuleOutput('Mage_AdminNotification')
+    ->disableModuleOutput('Local_Demo')
     ->clearDiskCache();

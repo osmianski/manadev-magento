@@ -10,10 +10,6 @@
  *
  */
 class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
-    public function getCurrentSuffix() {
-        return Mage::getStoreConfig('mana/seo/cms_page_suffix');
-    }
-
     public function getSuffixHistoryType() {
         return Mana_Seo_Model_UrlHistory::TYPE_CMS_PAGE_SUFFIX;
     }
@@ -23,15 +19,11 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
      * @return bool
      */
     public function setPage($token) {
+        parent::setPage($token);
         $token
-            ->setRoute('cms/page/view')
             ->addParameter('id', $token->getPageUrl()->getCmsPageId());
 
         return true;
-    }
-
-    public function matchRoute($route) {
-        return $route == 'cms/page/view';
     }
 
     /**

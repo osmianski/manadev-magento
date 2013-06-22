@@ -257,6 +257,20 @@ class Mana_Core_Model_Observer {
         /* @var $transport Varien_Object */
         $transport = $observer->getEvent()->getTransport();
 
+        if ($block->getNameInLayout() == 'head' && ($css = $block->getMCss())) {
+            /* @var $files Mana_Core_Helper_Files */
+            $files = Mage::helper(strtolower('Mana_Core/Files'));
+            $html = '';
+            foreach ($css as $relativeUrl) {
+                if ($files->getFilename($relativeUrl, 'css')) {
+                    $html .= '<link rel="stylesheet" type="text/css" href="' . $files->getUrl($relativeUrl, 'css') . '" />' . "\n";
+                }
+            }
+            if ($html) {
+                $transport->setHtml($transport->getHtml() . $html);
+            }
+        }
+
         /* @var $js Mana_Core_Helper_Js */
         $js = Mage::helper('mana_core/js');
         $transport->setHtml($js->wrapClientSideBlock($transport->getHtml(), $block));
@@ -282,6 +296,17 @@ class Mana_Core_Model_Observer {
 
             // replace original content with wrapped one
             $transport->setHtml($html);
+        }
+    }
+
+    /**
+     * If relevant global flag is raised, renders AJAX content into JSON response instead of typical full-page
+     * HTML response (handles event "controller_front_send_response_before")
+     * @param Varien_Event_Observer $observer
+     */
+    public function renderCustomResponse($observer) {
+        if ($callback = Mage::registry('m_response_callback')) {
+            call_user_func($callback);
         }
     }
 }

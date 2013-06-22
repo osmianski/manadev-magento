@@ -303,6 +303,14 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
 
     }
 
+    /**
+     * @param string $blockName
+     * @return string
+     */
+    public function getClientSideBlockName($blockName) {
+        return str_replace('.', '-', str_replace('_', '-', $blockName));
+    }
+
     public function parseClientSideBlockInfo($params = false) {
         /* @var $core Mana_Core_Helper_Data */
         $core = Mage::helper('mana_core');
@@ -311,7 +319,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             $block = $params;
             $params = $block->getMClientSideBlock();
             if (is_array($params) && empty($params['id']) && !$block->getIsAnonymous()) {
-                $params['id'] = str_replace('.', '-', str_replace('_', '-', $block->getNameInLayout()));
+                $params['id'] = $this->getClientSideBlockName($block->getNameInLayout());
             }
         }
 
@@ -422,6 +430,19 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         }
 
         return $this;
+    }
+
+    public function getConfig() {
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton(strtolower('Core/Layout'));
+        /* @var $jsBlock Mana_Core_Block_Js */
+        $jsBlock = $layout->getBlock('m_js');
+
+        if ($jsBlock) {
+            return $jsBlock->getConfig();
+        }
+
+        return false;
     }
 
     #endregion

@@ -18,13 +18,16 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_UrlInd
     public function process($indexer, $schema, $options) {
         $db = $this->_getWriteAdapter();
 
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
         /* @var $mbstring Mana_Core_Helper_Mbstring */
         $mbstring = Mage::helper('mana_core/mbstring');
 
         /* @var $categoryHelper Mage_Catalog_Helper_Category */
         $categoryHelper = Mage::helper('catalog/category');
 
-        $suffix = $this->_addDotToSuffix($categoryHelper->getCategoryUrlSuffix($schema->getStoreId()));
+        $suffix = $core->addDotToSuffix($categoryHelper->getCategoryUrlSuffix($schema->getStoreId()));
 
         $fields = array(
             'url_key' => new Zend_Db_Expr('SUBSTRING(`r`.`request_path`, 1, CHAR_LENGTH(`r`.`request_path`) - ' . $mbstring->strlen($suffix) . ')'),
@@ -54,13 +57,5 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_UrlInd
 
         // run the statement
         $db->raw_query($sql);
-    }
-
-    protected function _addDotToSuffix($suffix) {
-        if ($suffix && $suffix != '/' && strpos($suffix, '.') !== 0) {
-            $suffix = '.' . $suffix;
-        }
-
-        return $suffix;
     }
 }

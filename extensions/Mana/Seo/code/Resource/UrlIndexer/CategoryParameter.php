@@ -22,16 +22,16 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
         $defaultLabel = Mage::helper('catalog')->__('Category');
         Mage::app()->getLocale()->revert();
 
-        /* @var $seo Mana_Seo_Helper_Url_Filter */
-        $seo = Mage::helper('mana_seo');
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-        $urlKeyExpr = $seo->isManadevLayeredNavigationInstalled()
+        $urlKeyExpr = $core->isManadevLayeredNavigationInstalled()
             ? ($schema->getUseFilterLabels() ? $this->_seoify('`f`.`name`', $schema) : "'category'")
             : ($schema->getUseFilterLabels() ? $this->_seoify($defaultLabel, $schema) : "'category'");
         $fields = array(
             'url_key' => new Zend_Db_Expr($urlKeyExpr),
             'internal_name' => new Zend_Db_Expr("'cat'"),
-            'position' => new Zend_Db_Expr($seo->isManadevLayeredNavigationInstalled() ? '`f`.`position`': "-1"),
+            'position' => new Zend_Db_Expr($core->isManadevLayeredNavigationInstalled() ? '`f`.`position`': "-1"),
             'type' => new Zend_Db_Expr("'" . Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY . "'"),
             'is_page' => new Zend_Db_Expr('0'),
             'is_parameter' => new Zend_Db_Expr('1'),
@@ -42,7 +42,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
             'status' => new Zend_Db_Expr("'". Mana_Seo_Model_Url::STATUS_ACTIVE."'"),
         );
 
-        if ($seo->isManadevLayeredNavigationInstalled()) {
+        if ($core->isManadevLayeredNavigationInstalled()) {
             /* @var $select Varien_Db_Select */
             $select = $db->select()
                 ->from(array('g' => $this->getTable('mana_filters/filter2')), null)

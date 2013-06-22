@@ -10,7 +10,6 @@
  * @author Mana Team
  */
 class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
-    protected $_pageTypes;
     protected $_activeSchemas = array();
     protected $_parameterUrls = array();
 
@@ -18,39 +17,21 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return Mana_Seo_Helper_PageType[]
      */
     public function getPageTypes() {
-        if (!$this->_pageTypes) {
-            /* @var $core Mana_Core_Helper_Data */
-            $core = Mage::helper('mana_core');
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-            $result = array();
-
-            foreach ($core->getSortedXmlChildren(Mage::getConfig()->getNode('mana_seo'), 'page_types') as $key => $pageTypeXml) {
-                /* @var $pageType Mana_Seo_Helper_PageType */
-                $pageType = Mage::helper((string)$pageTypeXml->helper);
-                $pageType->setCode($key);
-                $result[$key] = $pageType;
-            }
-            $this->_pageTypes = $result;
-        }
-
-        return $this->_pageTypes;
+        return $core->getPageTypes('seo_helper');
     }
 
+    /**
+     * @param string $type
+     * @return Mana_Seo_Helper_PageType
+     */
     public function getPageType($type) {
-        $pageTypes = $this->getPageTypes();
-        return $pageTypes[$type];
-    }
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-    public function isManadevLayeredNavigationInstalled() {
-        return $this->isModuleEnabled('Mana_Filters');
-    }
-
-    public function isManadevSeoLayeredNavigationInstalled() {
-        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
-    }
-
-    public function isManadevAttributePageInstalled() {
-        return $this->isModuleEnabled('Mana_AttributePage');
+        return $core->getPageType($type, 'seo_helper');
     }
 
     /**

@@ -20,10 +20,6 @@ examples on what kind of actions can be applied to referenced blocks.
 <layout version="0.1.0">
     <mana_ajax>
         <update handle="jquery_core"/>
-		<reference name="head">
-			<action method="addCss"><stylesheet>css/mana_ajax.css</stylesheet></action>
-        	<action method="addItem"><type>skin_js</type><name>js/mana_ajax.js</name><params/></action>
-		</reference>
         <reference name="m_core_singletons">
             <action method="addSingletonBlock">
                 <type>mana_ajax/update</type>

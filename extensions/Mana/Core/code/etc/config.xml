@@ -96,16 +96,6 @@
 					</mana_core>
 				</observers>
 			</controller_action_layout_generate_blocks_after>
-            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_core>
-                        <class>mana_core/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>adhocCss</method>
-                        <!-- event handler method name -->
-                    </mana_core>
-                </observers>
-            </core_block_abstract_to_html_after>
             <cms_page_render><!-- this is event name this module listens for -->
                 <observers>
                     <mana_core>
@@ -166,6 +156,16 @@
                     </mana_core_require>
                 </observers>
             </core_block_abstract_to_html_after>
+            <controller_front_send_response_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderCustomResponse</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_front_send_response_before>
         </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
@@ -249,6 +249,12 @@
                 <sort_order>100</sort_order>
             </jquery>
         </js>
+        <page_types>
+            <category><helper>mana_core/pageType_category</helper></category>
+            <cms_page><helper>mana_core/pageType_cmsPage</helper></cms_page>
+            <home_page><helper>mana_core/pageType_homePage</helper></home_page>
+            <search><helper>mana_core/pageType_search</helper></search>
+        </page_types>
 	</mana_core>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
     <default>

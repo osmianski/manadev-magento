@@ -85,7 +85,7 @@
             and executes during page rendering. -->
         <layout>
             <updates>
-                <mana_theme>
+                <mana_theme module="Mana_Theme">
                     <file>mana_theme.xml</file>
                 </mana_theme>
             </updates>
@@ -123,7 +123,7 @@
             and executes during page rendering. -->
         <layout>
             <updates>
-                <mana_theme>
+                <mana_theme module="Mana_Theme">
                     <file>mana_theme.xml</file>
                 </mana_theme>
             </updates>

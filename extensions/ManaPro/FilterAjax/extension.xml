@@ -25,5 +25,5 @@
     <sync extension-dir="backend/images" project-dir="skin/adminhtml/default/default/images/{extension_name}"/>
 
     <!-- additional 3-rd party JS file adapted to be used by this module -->
-    <sync extension-file="frontend/layout2.xml" project-file="app/design/frontend/base/default/layout/manapro_filterajax2.xml"/>
+    <sync extension-file="frontend/layout3.xml" project-file="app/design/frontend/base/default/layout/manapro_filterajax3.xml"/>
 </config>

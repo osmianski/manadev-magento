@@ -48,41 +48,6 @@
             </mana_ajax>
             <!-- INSERT HERE: rewrites, ... -->
         </models>
-        <!-- This section registers event handlers of this module defined in Mana_Ajax_Model_Observer with
-            events defined in other module throughout the system. So when some code in other module invokes an event
-            mentioned in this section, handler method of Mana_Ajax_Model_Observer class gets called. -->
-        <events>
-            <controller_action_predispatch><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_ajax>
-                        <class>mana_ajax/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>ajaxifyPage</method>
-                        <!-- event handler method name -->
-                    </mana_ajax>
-                </observers>
-            </controller_action_predispatch>
-            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_ajax>
-                        <class>mana_ajax/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>wrapUpdatableHtml</method>
-                        <!-- event handler method name -->
-                    </mana_ajax>
-                </observers>
-            </core_block_abstract_to_html_after>
-            <controller_front_send_response_before><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_ajax>
-                        <class>mana_ajax/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>renderAjaxResponse</method>
-                        <!-- event handler method name -->
-                    </mana_ajax>
-                </observers>
-            </controller_front_send_response_before>
-        </events>
     </global>
     <!-- This section enables static visual changes in admin area. -->
     <adminhtml>
@@ -115,7 +80,8 @@
                 <mode>2</mode>
                 <bots>Teoma;alexa;froogle;Gigabot;inktomi;looksmart;URL_Spider_SQL;Firefly;NationalDirectory;Ask Jeeves;TECNOSEEK;InfoSeek;WebFindBot;girafabot;crawler;www.galaxy.com;Googlebot;Scooter;Slurp;msnbot;appie;FAST;WebBug;Spade;ZyBorg;rabaz;Baiduspider;Feedfetcher-Google;TechnoratiSnoop;Rankivabot;Mediapartners-Google;Sogou web spider;WebAlta Crawler</bots>
                 <debug>0</debug>
-                <method>2</method>
+                <overlay>1</overlay>
+                <progress>1</progress>
             </ajax>
         </mana>
     </default>

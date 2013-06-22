@@ -317,10 +317,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return string
      */
     protected function _generatePriceParameter($parameterUrl, $value) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-        $isSlider = $seo->isManadevLayeredNavigationInstalled() &&
+        $isSlider = $core->isManadevLayeredNavigationInstalled() &&
             in_array($parameterUrl->getFilterDisplay(), array('slider', 'range'));
 
         $path = '';

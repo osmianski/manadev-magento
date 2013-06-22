@@ -12,3 +12,5 @@
 "Content Processing Method","Content Processing Method"
 "Recommended setting is 'Wrap into HTML element'. Other settings provided for backward compatibility.","Recommended setting is 'Wrap into HTML element'. Other settings provided for backward compatibility."
 "Enable this option to see error messages if AJAX features do not work as intended","Enable this option to see error messages if AJAX features do not work as intended"
+"Show 'Please Wait' While Performing AJAX Refresh","Show 'Please Wait' While Performing AJAX Refresh"
+"Disable Mouse Clicks While Performing AJAX Refresh","Disable Mouse Clicks While Performing AJAX Refresh"

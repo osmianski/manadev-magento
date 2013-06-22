@@ -39,6 +39,9 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         /* @var $urlModel Mana_Seo_Rewrite_Url */
         $urlModel = Mage::getModel('core/url');
 
+        /* @var $routerHelper Mana_Core_Helper_Router */
+        $routerHelper = Mage::helper('mana_core/router');
+
         $path = ltrim($request->getPathInfo(), '/');
         if ($parsedUrl = $parser->parse($path)) {
             $url = $urlModel->getUrl($parsedUrl->getRoute(), array_merge(
@@ -51,20 +54,11 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
             if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK &&
                 $urlModel->getRoutePath() == $path)
             {
-                $route = explode('/', $parsedUrl->getRoute());
-
-                /* @noinspection PhpUndefinedMethodInspection */
-                $request->initForward();
-
-                $request
-                    ->setParams(array_merge($request->getParams(),
-                        $parsedUrl->getImplodedParameters()))
-                    ->setModuleName($route[0])
-                    ->setControllerName($route[1])
-                    ->setActionName($route[2])
-                    ->setDispatched(false);
-
-                $_GET = array_merge($_GET, $parsedUrl->getImplodedQueryParameters());
+                $routerHelper
+                    ->forward($parsedUrl->getRoute(), $request,
+                        array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
+                        array_merge($_GET, $parsedUrl->getImplodedQueryParameters()))
+                    ->changePath($parsedUrl->getPageUrlKey().$parsedUrl->getSuffix());
             }
             else {
                 /* @var $front Mage_Core_Controller_Varien_Front */

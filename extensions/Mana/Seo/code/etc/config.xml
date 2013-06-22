@@ -125,6 +125,14 @@
             <search><helper>mana_seo/pageType_search</helper></search>
         </page_types>
     </mana_seo>
+    <mana_core>
+        <page_types>
+            <category><seo_helper>mana_seo/pageType_category</seo_helper></category>
+            <cms_page><seo_helper>mana_seo/pageType_cmsPage</seo_helper></cms_page>
+            <home_page><seo_helper>mana_seo/pageType_homePage</seo_helper></home_page>
+            <search><seo_helper>mana_seo/pageType_search</seo_helper></search>
+        </page_types>
+    </mana_core>
     <default>
         <mana>
             <seo>

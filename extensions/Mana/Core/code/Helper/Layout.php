@@ -34,4 +34,18 @@ class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
         if ($a['sortOrder'] > $b['sortOrder']) return 1;
         return 0;
     }
+
+    public function renderBlock($blockName) {
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton('core/layout');
+
+        /* @var $url Mage_Core_Model_Url */
+        $url = Mage::getSingleton('core/url');
+        if ($block = $layout->getBlock($blockName)) {
+            return $url->sessionUrlVar($block->toHtml());
+        }
+        else {
+            return '';
+        }
+    }
 }

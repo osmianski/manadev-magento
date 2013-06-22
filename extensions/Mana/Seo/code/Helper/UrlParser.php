@@ -607,12 +607,15 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
+            /* @var $core Mana_Core_Helper_Data */
+            $core = Mage::helper('mana_core');
+
             $current = array();
             $historyType = array();
             foreach ($seo->getPageTypes() as $pageType) {
                 $suffix = (string)$pageType->getCurrentSuffix();
                 $type = $pageType->getSuffixHistoryType();
-                $current[$suffix] = $this->_addDotToSuffix($suffix);
+                $current[$suffix] = $core->addDotToSuffix($suffix);
                 $historyType[$type] = $type;
             }
 
@@ -626,10 +629,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
+            /* @var $core Mana_Core_Helper_Data */
+            $core = Mage::helper('mana_core');
+
             $pageTypeHelper = $seo->getPageType($pageType);
 
             $this->_suffixesByPageType[$pageType] = $this->_getSuffixes($token,
-                $this->_addDotToSuffix($pageTypeHelper->getCurrentSuffix()), $pageTypeHelper->getSuffixHistoryType());
+                $core->addDotToSuffix($pageTypeHelper->getCurrentSuffix()), $pageTypeHelper->getSuffixHistoryType());
         }
 
         return $this->_suffixesByPageType[$pageType];
@@ -643,6 +649,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _getSuffixes($token, $current, $type) {
         /* @var $dbHelper Mana_Db_Helper_Data */
         $dbHelper = Mage::helper('mana_db');
+
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
         $suffixes = array();
         if (!is_array($current)) {
@@ -665,7 +674,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             ->where('url_key NOT IN (?)', $current);
         foreach ($oldSuffixCollection as $historyRecord) {
             /* @var $historyRecord Mana_Seo_Model_UrlHistory */
-            $suffix = $this->_addDotToSuffix((string)$historyRecord->getUrlKey());
+            $suffix = $core->addDotToSuffix((string)$historyRecord->getUrlKey());
             if ($this->_matchSuffix($token, $suffix)) {
                 $suffixes[$suffix] = false;
             }
@@ -963,10 +972,10 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _setPriceFilter($token, $from, $to) {
         $cSwapRangeBounds = Mana_Seo_Model_ParsedUrl::CORRECT_SWAP_RANGE_BOUNDS;
 
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
-        $isSlider = $seo->isManadevLayeredNavigationInstalled() &&
+        $isSlider = $core->isManadevLayeredNavigationInstalled() &&
             in_array($token->getParameterUrl()->getFilterDisplay(), array('slider', 'range'));
         if ($this->_schema->getUseRangeBounds() || $isSlider) {
             $from = 0 + $from;
@@ -1207,13 +1216,6 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         else {
             return true;
         }
-    }
-
-    protected function _addDotToSuffix($suffix) {
-        if ($suffix && $suffix != '/' && strpos($suffix, '.') !== 0) {
-            $suffix = '.' . $suffix;
-        }
-        return $suffix;
     }
 
     protected function _processResult() {

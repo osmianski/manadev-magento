@@ -12,6 +12,7 @@
  *
  */
 class Mana_Ajax_Model_Observer {
+    #region Obsolete event handlers
     /**
      * If AJAX is enabled on page, raises global flag to wrap all AJAX-able blocks into container DIV elements.
      * If in addition, current request asks only for AJAX content, cancels full page rendering and instead
@@ -19,24 +20,6 @@ class Mana_Ajax_Model_Observer {
      * @param Varien_Event_Observer $observer
      */
     public function ajaxifyPage($observer) {
-        /* @var $controller Mage_Core_Controller_Varien_Action */ $controller = $observer->getEvent()->getControllerAction();
-        if (Mage::registry('m_current_ajax_callback')) {
-            Mage::app()->getFrontController()->setNoRender(true);
-        }
-        else {
-            $actionName = $controller->getFullActionName();
-            if ($allowedAjaxActions = Mage::helper('mana_ajax')->getAllowedActions($actionName)) {
-                Mage::register('m_wrap_updatable_html_blocks', true);
-                if (($ajaxAction = $controller->getRequest()->getParam('m-ajax')) && in_array($ajaxAction, $allowedAjaxActions)) {
-                    Mage::helper('mana_core')->updateRequestParameter('m-ajax', '', $ajaxAction);
-                    Mage::helper('mana_core')->updateRequestParameter('no_cache', '', '1');
-                    Mage::register('m_current_ajax_action', $ajaxAction);
-
-                    Mage::dispatchEvent('m_ajax_request');
-                    Mage::app()->getFrontController()->setNoRender(true);
-                }
-            }
-        }
     }
 
     /**
@@ -45,14 +28,6 @@ class Mana_Ajax_Model_Observer {
      * @param Varien_Event_Observer $observer
      */
     public function wrapUpdatableHtml($observer) {
-        if (Mage::registry('m_wrap_updatable_html_blocks')) {
-            /* @var $block Mage_Core_Block_Abstract */ $block = $observer->getEvent()->getBlock();
-            /* @var $transport Varien_Object */ $transport = $observer->getEvent()->getTransport();
-
-            if ($block->getLayout() && ($updateBlock = $block->getLayout()->getBlock('m_ajax_update'))) {
-                $transport->setHtml($updateBlock->markUpdatable($block->getNameInLayout(), $transport->getHtml()));
-            }
-        }
     }
 
     /**
@@ -61,37 +36,6 @@ class Mana_Ajax_Model_Observer {
      * @param Varien_Event_Observer $observer
      */
     public function renderAjaxResponse($observer) {
-        if ($callback = Mage::registry('m_current_ajax_callback')) {
-            call_user_func($callback);
-        }
-        elseif ($action = Mage::registry('m_current_ajax_action')) {
-            $response = new Varien_Object();
-            Mage::dispatchEvent('m_ajax_response', compact('action', 'response'));
-            if ($response->getIsHandled()) {
-                $response = $response->getData();
-                unset($response['is_handled']);
-            }
-            else {
-                $response = $this->getLayout()->getBlock('m_ajax_update')->toAjaxHtml($action);
-            }
-            $this->getResponse()->setBody(json_encode($response));
-        }
     }
-
-    /**
-     * Retrieve current layout object
-     *
-     * @return Mage_Core_Model_Layout
-     */
-    public function getLayout() {
-        return Mage::getSingleton('core/layout');
-    }
-    /**
-     * Retrieve response object
-     *
-     * @return Mage_Core_Controller_Response_Http
-     */
-    public function getResponse() {
-        return Mage::app()->getResponse();
-    }
+    #endregion
 }

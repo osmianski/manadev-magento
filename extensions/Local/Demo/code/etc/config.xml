@@ -49,7 +49,7 @@
             and executes during page rendering. -->
         <layout>
             <updates>
-                <local_demo>
+                <local_demo module="Local_Demo">
                     <file>local_demo.xml</file>
                 </local_demo>
             </updates>
@@ -61,7 +61,7 @@
             and executes during page rendering. -->
         <layout>
             <updates>
-                <local_demo>
+                <local_demo module="Local_Demo">
                     <file>local_demo.xml</file>
                 </local_demo>
             </updates>

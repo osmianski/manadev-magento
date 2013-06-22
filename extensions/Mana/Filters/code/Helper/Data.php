@@ -115,7 +115,7 @@ class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 		return $url;
 	}
-    public function getClearUrl($markUrl = true, $clearListParams = false) {
+    public function getClearUrl($markUrl = true, $clearListParams = false, $nosid = false) {
         $filterState = array();
         foreach ($this->getLayer()->getState()->getFilters() as $item) {
             $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
@@ -135,6 +135,9 @@ class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_m_escape'] = '';
         $filterState['m-layered'] = null;
         $params['_query'] = $filterState;
+        if ($nosid) {
+            $params['_nosid'] = true;
+        }
         $result = Mage::getUrl('*/*/*', $params);
         if ($markUrl) {
             $result = $this->markLayeredNavigationUrl($result, '*/*/*', $params);
