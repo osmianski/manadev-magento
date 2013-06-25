@@ -39,7 +39,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_UrlInd
             'schema_id' => new Zend_Db_Expr($schema->getId()),
             'category_id' => new Zend_Db_Expr('`r`.`category_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`r`.`id_path`, '-', `r`.`is_system`)"),
-            'status' => new Zend_Db_Expr("IF(`r`.`options` = '', '" .
+            'status' => new Zend_Db_Expr("IF(`r`.`options` = '' OR `r`.`options` IS NULL, '" .
                 Mana_Seo_Model_Url::STATUS_ACTIVE . "', '" .
                 Mana_Seo_Model_Url::STATUS_OBSOLETE . "')"),
         );
