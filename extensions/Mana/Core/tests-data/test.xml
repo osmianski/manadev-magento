@@ -10,7 +10,7 @@
             <base_dir>s/e-1702</base_dir>
         </e-1702>
         <ent-113>
-            <db_template>template_test-ent-113/db_template>
+            <db_template>template_test-ent-113</db_template>
             <base_dir>s/ent-113</base_dir>
         </ent-113>
     </magento>

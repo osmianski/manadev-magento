@@ -99,7 +99,10 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
             return $value;
         }
         else {
-            return "'$value'";
+            /* @var $resource Mana_Db_Resource_Formula */
+            $resource = Mage::getResourceSingleton('mana_db/formula');
+
+            return $resource->getReadConnection()->quote($value);
         }
     }
 

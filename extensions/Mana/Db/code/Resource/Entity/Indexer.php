@@ -62,7 +62,16 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
                 $context->getFields());
 
             // run the statement
-            $db->query($sql);
+            try {
+                $db->query($sql);
+            }
+            catch (Exception $e) {
+                /* @var $logger Mana_Core_Helper_Logger */
+                $logger = Mage::helper('mana_core/logger');
+                $logger->logDbIndexerFailure($sql);
+                throw $e;
+            }
+
         }
     }
 
