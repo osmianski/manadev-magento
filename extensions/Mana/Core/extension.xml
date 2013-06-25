@@ -33,4 +33,8 @@
 
     <!-- .htaccess for m-classes -->
     <sync extension-file="m-classes/.htaccess" project-file="js/m-classes/.htaccess"/>
+
+    <!-- unit testing core files -->
+    <sync extension-file="tests.Bootstrap.php" project-file="tests/Bootstrap.php"/>
+    <sync extension-file="tests.config.xml" project-file="tests/config.xml"/>
 </config>
