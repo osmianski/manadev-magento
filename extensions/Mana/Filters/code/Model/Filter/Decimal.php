@@ -30,8 +30,8 @@ class Mana_Filters_Model_Filter_Decimal
             return $result->getLabel();
         } else {
             $store = Mage::app()->getStore();
-            $fromPrice = $store->formatPrice($range['from']);
-            $toPrice = $store->formatPrice($range['to']);
+            $fromPrice = $store->formatPrice($range['from'], false);
+            $toPrice = $store->formatPrice($range['to'], false);
 
             return Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
         }
