@@ -353,6 +353,9 @@ Control.PriceSlider.prototype = {
   },
   needsResize: function () {
     var trackLength = this.trackLength;
+    if (this.maximumOffset() == this.minimumOffset()) { // don't do anything if slider is hidden
+        return false;
+    }
     this.trackLength = this.maximumOffset() - this.minimumOffset();
     var range = this.getRange(0);
     var span = this.spans[0];
