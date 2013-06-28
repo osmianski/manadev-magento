@@ -17,10 +17,14 @@ class Mana_Core_Helper_Utils extends Mage_Core_Helper_Abstract {
         /* @var $indexer Mage_Index_Model_Indexer */
         $indexer = Mage::getSingleton('index/indexer');
 
+        Mage::dispatchEvent('shell_reindex_init_process');
         foreach ($indexer->getProcessesCollection() as $process) {
             /* @var $process Mage_Index_Model_Process */
-            $process->reindexAll();
+            $process->reindexEverything();
+            Mage::dispatchEvent($process->getIndexerCode() . '_shell_reindex_after');
         }
+        Mage::dispatchEvent('shell_reindex_finalize_process');
+
         return $this;
     }
 

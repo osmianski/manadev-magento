@@ -62,9 +62,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             }
             $this->_query = $query;
 
-            $this->_pageType = $this->_getPageType($this->_routePath);
-            $this->_suffix = $this->_pageType->getCurrentSuffix();
-            $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+            if ($this->_pageType = $this->_getPageType($this->_routePath)) {
+                $this->_suffix = $this->_pageType->getCurrentSuffix();
+                $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+            }
         }
 
         return parent::getUrl($routePath, $this->_routeParams);
@@ -74,6 +75,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         if ($this->_pageUrlKey === null) {
             return parent::getRoutePath($routeParams);
         }
+
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
 
         if (!$this->hasData('route_path')) {
             $query = $this->_query;
@@ -139,7 +143,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             }
 
             if ($routePath) {
-                $routePath .= $this->_suffix;
+                $routePath .= $core->addDotToSuffix($this->_suffix);
             }
 
             $this->setData('query_params', $queryParams);
@@ -302,7 +306,6 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return array
      */
     protected function _generateCategoryParameter($parameterUrl, $value) {
-        $path = '';
         if ($urlKey = $this->_getCategoryUrlKey($value)) {
             return array($parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator().
                 $urlKey['final_url_key'], $urlKey['category_id']);

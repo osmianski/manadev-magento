@@ -25,21 +25,26 @@ $db = $res->getConnection('write');
 /* @var $category Mage_Catalog_Model_Category */
 /* @var $foundCategory Mage_Catalog_Model_Category */
 
+$dot = '.';
+if (Mage::getStoreConfig('catalog/seo/category_url_suffix') == 'html') {
+    $dot = '';
+}
+
 switch ($this->getTestVariation()) {
     case 'test':
-        $utils->setStoreConfig('catalog/seo/category_url_suffix', '.html');
+        $utils->setStoreConfig('catalog/seo/category_url_suffix', $dot.'html');
 
         $history = $dbHelper->getModel('mana_seo/urlHistory');
         $history
-            ->setUrlKey('.htm')
-            ->setRedirectTo('.html')
+            ->setUrlKey($dot.'htm')
+            ->setRedirectTo($dot.'html')
             ->setType(Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX)
             ->save();
 
         $history = $dbHelper->getModel('mana_seo/urlHistory');
         $history
             ->setUrlKey('')
-            ->setRedirectTo('.htm')
+            ->setRedirectTo($dot.'htm')
             ->setType(Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX)
             ->save();
         break;
@@ -49,18 +54,43 @@ switch ($this->getTestVariation()) {
 
         $history = $dbHelper->getModel('mana_seo/urlHistory');
         $history
-            ->setUrlKey('.htm')
+            ->setUrlKey($dot.'htm')
             ->setRedirectTo('')
             ->setType(Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX)
             ->save();
 
         $history = $dbHelper->getModel('mana_seo/urlHistory');
         $history
-            ->setUrlKey('.html')
-            ->setRedirectTo('.htm')
+            ->setUrlKey($dot.'html')
+            ->setRedirectTo($dot.'htm')
             ->setType(Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX)
             ->save();
         break;
+}
+
+// apparel category should be saved with apparel_old URL key and then again with apparel key,
+// so that apparel_old URL key would be added as a redirect in catalog URL rewrites.
+$categoryCollection = $dbHelper->getResourceModel('catalog/category_collection');
+$categoryCollection->addAttributeToFilter('url_key', 'apparel');
+foreach ($categoryCollection as $foundCategory) {
+    $category = $dbHelper->getModel('catalog/category');
+
+    $category
+        ->setStoreId(0)
+        ->load($foundCategory->getId())
+        ->setData('save_rewrites_history', false)
+        ->setDataUsingMethod('url_key', 'apparel-old');
+    $category->save();
+
+
+    $category = $dbHelper->getModel('catalog/category');
+    $category
+        ->setStoreId(0)
+        ->load($foundCategory->getId())
+        ->setData('save_rewrites_history', true)
+        ->setDataUsingMethod('url_key', 'apparel')
+        ->setDataUsingMethod('url_key_create_redirect', 'apparel-old');
+    $category->save();
 }
 
 // contract_ratio and computer_manufacturers filter names should always be visible
@@ -79,29 +109,6 @@ foreach ($urlKeyCollection as $urlKey) {
     $urlKey
         ->setForceIncludeFilterName(1)
         ->save();
-}
-
-// apparel category should be saved with apparel_old URL key and then again with apparel key,
-// so that apparel_old URL key would be added as a redirect in catalog URL rewrites.
-$categoryCollection = $dbHelper->getResourceModel('catalog/category_collection');
-$categoryCollection->addAttributeToFilter('url_key', 'apparel');
-foreach ($categoryCollection as $foundCategory) {
-    $category = $dbHelper->getModel('catalog/category');
-
-    $category
-        ->setStoreId(0)
-        ->load($foundCategory->getId())
-        ->setData('save_rewrites_history', false)
-        ->setDataUsingMethod('url_key', 'apparel-old');
-    $category->save();
-
-    $category
-        ->setStoreId(0)
-        ->load($foundCategory->getId())
-        ->setData('save_rewrites_history', true)
-        ->setDataUsingMethod('url_key', 'apparel')
-        ->setDataUsingMethod('url_key_create_redirect', 'apparel-old');
-    $category->save();
 }
 
 // black, blue and dress values should have old URL keys. The same with color attribute

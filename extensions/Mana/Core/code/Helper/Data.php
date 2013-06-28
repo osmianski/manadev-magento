@@ -713,5 +713,8 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_AttributePage');
     }
 
+    public function isEnterpriseUrlRewriteInstalled() {
+        return $this->isModuleEnabled('Enterprise_UrlRewrite');
+    }
 
 }
