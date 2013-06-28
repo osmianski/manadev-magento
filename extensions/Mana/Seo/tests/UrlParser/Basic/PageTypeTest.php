@@ -21,7 +21,10 @@ class Mana_Seo_Test_UrlParser_Basic_PageTypeTest extends Mana_Seo_Test_Case {
     }
 
     public function testSubcategory() {
-        $this->assertParsedUrl('apparel/shoes.html', array(
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        $this->assertParsedUrl($core->isEnterpriseUrlRewriteInstalled() ? 'shoes.html' : 'apparel/shoes.html', array(
             'route' => 'catalog/category/view',
             'status' => Mana_Seo_Model_ParsedUrl::STATUS_OK,
             'params' => array(
