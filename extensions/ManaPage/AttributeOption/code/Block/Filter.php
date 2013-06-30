@@ -7,49 +7,32 @@
  */
 /**
  * @author Mana Team
- *
  */
 class ManaPage_AttributeOption_Block_Filter extends Mana_Page_Block_Filter {
-    protected function _prepareProductCollection() {
-        /* @var $res Mage_Core_Model_Resource */
-        $res = Mage::getSingleton('core/resource');
-        $db = $res->getConnection('read');
+    public function prepareProductCollection() {
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $this->_productCollection->getConnection();
 
+        $condition = array();
         foreach ($this->_filters as $options) {
             $attributeCode = $options['attributeCode'];
             unset($options['attributeCode']);
-            $attribute = $this->_getAttribute($attributeCode);
             $options = $this->_translateOptions($attributeCode, $options);
-            if (!empty($options['useAttributeIndex'])) {
-                $tableAlias = $attributeCode . '_mpc_idx';
-                $conditions = array(
-                    "{$tableAlias}.entity_id = e.entity_id",
-                    $db->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
-                    $db->quoteInto("{$tableAlias}.store_id = ?", $this->getStoreId()),
-                    "{$tableAlias}.value in (" . implode(',', array_filter(explode('_', $options['value']))) . ")"
-                );
-                $this->_productCollection->getSelect()
-                        ->distinct()
-                        ->join(
-                    array($tableAlias => $res->getTableName('catalog/product_index_eav')),
-                    join(' AND ', $conditions),
-                    array()
-                );
-            }
-            else {
-                $attributeExpr = $this->joinAttribute($attributeCode);
-                $select = $this->_productCollection->getSelect();
-                switch ($options['operator']) {
-                    case 'eq':
-                        $select->where("$attributeExpr = ?", $options['value']);
-                        break;
-                    case 'finset':
-                        $select->where("find_in_set(?,$attributeExpr)", $options['value']);
-                        break;
-                }
-                //$this->_productCollection->addAttributeToFilter(array(array('attribute' => $attributeCode, $options['operator'] => $options['value'])));
+            $attributeExpr = $this->joinAttribute($attributeCode);
+            switch ($options['operator']) {
+                case 'eq':
+                    $condition[] = $db->quoteInto("$attributeExpr = ?", $options['value']);
+                    break;
+                case 'finset':
+                    $condition[] = $db->quoteInto("find_in_set(?,$attributeExpr)", $options['value']);
+                    break;
             }
         }
+
+        $this->_condition = strtolower($this->getOperation()) == 'or'
+            ? implode(' OR ', $condition)
+            : implode(' AND ', $condition);
+
         return $this;
     }
 
@@ -109,10 +92,6 @@ class ManaPage_AttributeOption_Block_Filter extends Mana_Page_Block_Filter {
                 ->where('v.store_id IN (?)', array(0, $this->getStoreId()));
             $options['value'] = $db->fetchOne($select);
 
-            if ($attribute->getIsFilterable() >= 0) {
-                // does not work well for non-simple products
-                //$options['useAttributeIndex'] = true;
-            }
             if ($attribute->getData('backend_model') == 'eav/entity_attribute_backend_array') {
                 $options['operator'] = 'finset'; //'FIND_IN_SET({{value}}, {{field}})';
             }
