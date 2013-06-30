@@ -147,7 +147,7 @@ class ManaPro_FilterExpandCollapse_Model_Observer {
 //                    $widgetFilters = array('is_email_compatible' => 1);
 //                    $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig(array('widget_filters' => $widgetFilters));
                     $field = $fieldset->addField('collapseable', 'select', array(
-                        'label' => $t->__('Expand/Collapse Method'),
+                        'label' => $t->__('Expand/Collapse/Dropdown Method'),
                         'name' => 'collapseable',
                         'required' => false,
                         'options' => Mage::getSingleton('manapro_filterexpandcollapse/source_method')->getOptionArray(),
@@ -179,9 +179,35 @@ class ManaPro_FilterExpandCollapse_Model_Observer {
                 case 'collapse':
                     echo ' m-collapseable';
                     break;
+                case 'dropdown':
+                    echo ' m-dropdown-menu';
+                    break;
             }
         }
     }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "m_advanced_filter_value_css")
+     * @param Varien_Event_Observer $observer
+     */
+    public function renderValueCss($observer) {
+        /* @var $block Mana_Filters_Block_View */
+        $block = $observer->getEvent()->getBlock();
+        /* @var $filter Mana_Filters_Block_Filter */
+        $filter = $observer->getEvent()->getFilter();
+        /* @var $helper ManaPro_FilterExpandCollapse_Helper_Data */
+        $helper = Mage::helper(strtolower('ManaPro_FilterExpandCollapse'));
+
+        if ($options = $filter->getFilterOptions()) {
+            /* @var $options Mana_Filters_Model_Filter2_Store */
+            switch ($helper->isCollapseable($block, $options)) {
+                case 'dropdown':
+                    echo ' m-dropdown-menu block-content';
+                    break;
+            }
+        }
+    }
+
     /**
      * REPLACE THIS WITH DESCRIPTION (handles event "m_advanced_filter_name_attributes")
      * @param Varien_Event_Observer $observer

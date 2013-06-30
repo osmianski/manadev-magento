@@ -11,7 +11,7 @@
         <ManaPro_FilterExpandCollapse>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>12.11.25.16</version>
+            <version>13.06.30.18</version>
         </ManaPro_FilterExpandCollapse>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -132,6 +132,16 @@
                     </manapro_filterexpandcollapse>
                 </observers>
             </m_advanced_filter_name_css>
+            <m_advanced_filter_value_css><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterexpandcollapse>
+                        <class>manapro_filterexpandcollapse/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderValueCss</method>
+                        <!-- event handler method name -->
+                    </manapro_filterexpandcollapse>
+                </observers>
+            </m_advanced_filter_value_css>
             <m_advanced_filter_name_attributes><!-- this is event name this module listens for -->
                 <observers>
                     <manapro_filterexpandcollapse>
