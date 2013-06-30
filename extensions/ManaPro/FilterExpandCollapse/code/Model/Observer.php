@@ -202,7 +202,7 @@ class ManaPro_FilterExpandCollapse_Model_Observer {
             /* @var $options Mana_Filters_Model_Filter2_Store */
             switch ($helper->isCollapseable($block, $options)) {
                 case 'dropdown':
-                    echo ' m-dropdown-menu block-content';
+                    echo ' m-dropdown-menu';
                     break;
             }
         }

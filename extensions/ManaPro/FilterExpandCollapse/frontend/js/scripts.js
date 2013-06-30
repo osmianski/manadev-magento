@@ -114,10 +114,9 @@
                 if (dd.hasClass('hidden')) {
                     dd
                         .removeClass('hidden')
-                        .removeClass('last')
                         .offset({
                             top: dt.offset().top + dt.outerHeight(),
-                            left: dt.offset().left + 20
+                            left: dt.offset().left
                         })
                         .width(_width(dt, dd))
                         .addClass('m-popup-filter');
