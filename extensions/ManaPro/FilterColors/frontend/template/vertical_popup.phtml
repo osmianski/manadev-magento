@@ -24,13 +24,22 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
             <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
             <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
-                <a href="#"
-                   onclick="jQuery(this).parent().toggleClass('m-selected-ln-item'); jQuery(this).find('div').<?php echo $_item->getMShowSelected() ? 'removeClass' : 'addClass' ?>('selected'); return jQuery.mShowMorePopupSelect('<?php echo $_item->getSeoValue() ?>', <?php echo $this->getFilterOptions()->getIsReverse() ? '!' : '' ?> jQuery(this).parent().hasClass('m-selected-ln-item'));">
-                    <div class="m-color <?php if ($_item->getMShowSelected()): ?>selected<?php endif; ?> <?php echo $this->getFilterValueClass($_item) ?>"
-                         title="<?php echo $this->escapeHtml($_item->getLabel()) ?><?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?> (<?php echo $_item->getCount() ?>)<?php endif; ?>">
-                        <div class="m-layer1"></div>
-                    </div>
-                </a>
+                <?php if ($_item->getCount()): ?>
+                    <a href="#"
+                       onclick="jQuery(this).parent().toggleClass('m-selected-ln-item'); jQuery(this).find('div').<?php echo $_item->getMShowSelected() ? 'removeClass' : 'addClass' ?>('selected'); return jQuery.mShowMorePopupSelect('<?php echo $_item->getSeoValue() ?>', <?php echo $this->getFilterOptions()->getIsReverse() ? '!' : '' ?> jQuery(this).parent().hasClass('m-selected-ln-item'));">
+                        <div class="m-color <?php if ($_item->getMShowSelected()): ?>selected<?php endif; ?> <?php echo $this->getFilterValueClass($_item) ?>"
+                             title="<?php echo $this->escapeHtml($_item->getLabel()) ?><?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?> (<?php echo $_item->getCount() ?>)<?php endif; ?>">
+                            <div class="m-layer1"></div>
+                        </div>
+                    </a>
+                <?php else: ?>
+                    <a href="javascript:void(0)" class="m-disabled">
+                        <div class="m-color <?php if ($_item->getMShowSelected()): ?>selected<?php endif; ?> <?php echo $this->getFilterValueClass($_item) ?>"
+                             title="<?php echo $this->escapeHtml($_item->getLabel()) ?><?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?> (<?php echo $_item->getCount() ?>)<?php endif; ?>">
+                            <div class="m-layer1"></div>
+                        </div>
+                    </a>
+                <?php endif; ?>
             </li>
             <?php endif; endfor; ?>
         </ol>

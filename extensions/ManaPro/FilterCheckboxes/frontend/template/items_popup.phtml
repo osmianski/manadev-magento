@@ -24,11 +24,18 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
             <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
             <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
-                <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>"
-                       value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
-                       onClick="jQuery(this).parent().toggleClass('m-selected-ln-item'); jQuery.mShowMorePopupSelect('<?php echo $_item->getSeoValue() ?>', <?php echo $this->getFilterOptions()->getIsReverse() ? '!' : '' ?> jQuery(this).parent().hasClass('m-selected-ln-item'));"/>
-                <label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMShowSelected()): ?>class="m-selected-checkbox-item"<?php endif; ?>
-                        title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+                <?php if ($_item->getCount()): ?>
+                    <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>"
+                           value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
+                           onClick="jQuery(this).parent().toggleClass('m-selected-ln-item'); jQuery.mShowMorePopupSelect('<?php echo $_item->getSeoValue() ?>', <?php echo $this->getFilterOptions()->getIsReverse() ? '!' : '' ?> jQuery(this).parent().hasClass('m-selected-ln-item'));"/>
+                    <label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMShowSelected()): ?>class="m-selected-checkbox-item"<?php endif; ?>
+                            title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+                <?php else: ?>
+                    <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
+                           disabled="disabled"/>
+                    <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="m-disabled <?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
+                                                                                title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+                <?php endif; ?>
                 <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
                     (<?php echo $_item->getCount() ?>)
                 <?php endif; ?>
