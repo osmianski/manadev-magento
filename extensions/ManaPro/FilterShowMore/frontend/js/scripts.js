@@ -18,6 +18,7 @@
 	var _time = {};
 	var _popupUrls = {};
 	var _popupTargetUrls = {};
+    var _popupClearUrls = {};
     var _popupProgress = false;
     var _popupDebug = false;
     var _lastPopupCode = null;
@@ -132,9 +133,10 @@
         var heights = _calculateHeights(l, code);
         l.height(heights.less);
     });
-    $(document).bind('m-show-more-popup-reset', function (e, code, url, targetUrl, values, action, showWait, debug) {
+    $(document).bind('m-show-more-popup-reset', function (e, code, url, targetUrl, clearUrl, values, action, showWait, debug) {
         _popupUrls[code] = $.base64_decode(url);
         _popupTargetUrls[code] = $.base64_decode(targetUrl);
+        _popupClearUrls[code] = $.base64_decode(clearUrl);
         _popupProgress = showWait;
         _popupDebug = debug;
         _popupValues[code] = values ? values.split('_') : [];
@@ -268,8 +270,13 @@
             $('#m-popup').fadeOut(1000);
         });
 
-        var param = values.join('_');
-        setLocation(_popupTargetUrls[code].replace('__0__', param));
+        if (values.length) {
+            var param = values.join('_');
+            setLocation(_popupTargetUrls[code].replace('__0__', param));
+        }
+        else {
+            setLocation(_popupClearUrls[code]);
+        }
     }
     $.mShowMorePopupApply = function (value) {
         if (value === undefined) {
