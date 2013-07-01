@@ -42,3 +42,6 @@
     opacity: 0;
     z-index: 10000;
 }
+
+a.m-disabled { }
+label span.m-disabled { }
