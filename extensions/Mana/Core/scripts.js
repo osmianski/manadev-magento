@@ -35,6 +35,41 @@ var Mana = Mana || {};
             });
         },
 
+        requireOptional: function (dependencies, callback) {
+            var resolved = Mana._resolveDependencyNames(dependencies);
+            var args = [];
+            var argResolved = [];
+            function _finishRequire() {
+                var allResolved = true;
+                $.each(argResolved, function(index, isResolved) {
+                    if (!isResolved) {
+                        allResolved = false;
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                });
+                if (allResolved) {
+                    return callback.apply(this, Mana._resolveDependencies(args, resolved.deps));
+                }
+            }
+            $.each(resolved.names, function () {
+                args.push(undefined);
+                argResolved.push(false);
+            });
+            $.each(resolved.names, function(index, name) {
+                require([name], function(arg) {
+                    args[index] = arg;
+                    argResolved[index] = true;
+                    return _finishRequire.apply(this);
+                }, function() {
+                    argResolved[index] = true;
+                    return _finishRequire.apply(this);
+                });
+            });
+        },
+
         _resolveDependencyNames: function(dependencies) {
             var depNames = [];
             var deps = [];
@@ -66,12 +101,14 @@ var Mana = Mana || {};
         },
 
         _resolveDependency:function (dep, value) {
-            switch (dep.resolver) {
-                case 'singleton':
-                    if (Mana._singletons[dep.name] === undefined) {
-                        Mana._singletons[dep.name] = new value();
-                    }
-                    return Mana._singletons[dep.name];
+            if (value !== undefined) {
+                switch (dep.resolver) {
+                    case 'singleton':
+                        if (Mana._singletons[dep.name] === undefined) {
+                            Mana._singletons[dep.name] = new value();
+                        }
+                        return Mana._singletons[dep.name];
+                }
             }
             return value;
         }
@@ -985,16 +1022,17 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         _collectBlockTypes: function(element, callback) {
             var blockTypeNames = ['Mana/Core/PageBlock'];
             this._collectBlockTypesInElement(element, blockTypeNames);
-            Mana.require(blockTypeNames, function() {
+            Mana.requireOptional(blockTypeNames, function() {
                 var blockTypeValues = arguments;;
                 var blockTypes = {};
                 $.each(blockTypeNames, function(key, value) {
-                    if (blockTypeValues[key]) {
-                        blockTypes[value] = blockTypeValues[key];
-                    }
-                    else {
-                        throw "Block type '" + value + "' is not defined.";
-                    }
+                    blockTypes[value] = blockTypeValues[key];
+//                    if (blockTypeValues[key]) {
+//                        blockTypes[value] = blockTypeValues[key];
+//                    }
+//                    else {
+//                        throw "Block type '" + value + "' is not defined.";
+//                    }
                 });
                 callback(blockTypes);
             });
@@ -1058,19 +1096,24 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         exists = true;
                         delete namedBlocks[blockInfo.id];
                     }
-                    else {
+                    else if (type) {
                         block = new type();
                     }
                     block.setId(blockInfo.id);
                 }
-                else {
+                else if (type) {
                     block = new type();
                 }
-                block.setElement(element);
-                if (!exists) {
-                    parent.addChild(block);
+                if (block) {
+                    block.setElement(element);
+                    if (!exists) {
+                        parent.addChild(block);
+                    }
+                    return block;
                 }
-                return block;
+                else {
+                    return null;
+                }
             }
             else {
                 return null;
