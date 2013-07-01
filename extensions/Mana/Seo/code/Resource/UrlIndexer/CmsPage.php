@@ -35,10 +35,11 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
 
         /* @var $select Varien_Db_Select */
         $select = $db->select()
+            ->distinct()
             ->from(array('p' => $this->getTable('cms/page')), null)
             ->joinInner(array('s' => $this->getTable('cms/page_store')), '`p`.`page_id` = `s`.`page_id`', null)
             ->columns($fields)
-            ->where('`s`.`store_id` = ?', $schema->getStoreId());
+            ->where('`s`.`store_id` = ? OR `s`.`store_id` = 0', $schema->getStoreId());
 
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));

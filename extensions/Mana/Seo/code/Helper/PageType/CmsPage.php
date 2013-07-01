@@ -21,7 +21,7 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
     public function setPage($token) {
         parent::setPage($token);
         $token
-            ->addParameter('id', $token->getPageUrl()->getCmsPageId());
+            ->addParameter('page_id', $token->getPageUrl()->getCmsPageId());
 
         return true;
     }
@@ -37,7 +37,7 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
         /* @var $logger Mana_Core_Helper_Logger */
         $logger = Mage::helper('mana_core/logger');
 
-        if (($cmsPageId = $urlModel->getSeoRouteParam('id')) === false) {
+        if (($cmsPageId = $urlModel->getSeoRouteParam('page_id')) === false) {
             $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'CMS page URL key', 'id'));
         }
         $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);

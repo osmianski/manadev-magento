@@ -107,9 +107,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             ->setSlash((substr($token->getTextToBeParsed(), -1) == '/') ? '/' : '')
             ->setTextToBeParsed(rtrim($token->getTextToBeParsed(), '/'));
 
+        /* @var $mbstring Mana_Core_Helper_Mbstring */
+        $mbstring = Mage::helper('mana_core/mbstring');
+
         // split by "/", split suffix
+        $separator = $this->_schema->getQuerySeparator();
         $suffixes = $this->_scanSuffixes($pageToken, $this->_getAllSuffixes($pageToken));
-        $tokens = $this->_scanUntilSeparatorOrSuffix($suffixes, $this->_schema->getQuerySeparator());
+        $tokens = $this->_scanUntilSeparatorOrSuffix($suffixes, $separator);
 
         // get all valid page URL key and suffix combinations (including home page) based on given URL path
         if ($tokens = $this->_getPageUrlKeysAndRemoveSuffixes($tokens)) {
@@ -123,6 +127,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         }
 
         // home page
+        if ($mbstring->startsWith($separator, '/') &&
+            $mbstring->strlen($separator) > 1 &&
+            $mbstring->startsWith($pageToken->getTextToBeParsed(), $mbstring->substr($separator, 1)))
+        {
+            $pageToken->setTextToBeParsed($mbstring->substr($pageToken->getTextToBeParsed(), $mbstring->strlen($separator) - 1));
+        }
+
         if ($tokens = $this->_scanSuffixes($pageToken, $this->_getSuffixesByType($token, 'home_page'))) {
             foreach ($tokens as $token) {
                 $this->_setHomePage($token);
@@ -1066,7 +1077,6 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
         return true;
     }
-
 
     /**
      * @param Mana_Seo_Model_ParsedUrl $token

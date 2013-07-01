@@ -33,7 +33,7 @@ class ManaPro_FilterAjax_Model_Observer {
 
 	    foreach ($filterAjax->getPageTypes() as $pageType) {
 	        if ($pageType->matchRoute($core->getRoutePath())) {
-                $unfilteredUrl = $layeredNavigation->getClearUrl(false, true, true);
+                $unfilteredUrl = $layeredNavigation->getClearUrl(false, true, true, true);
                 $suffix = $core->addDotToSuffix($pageType->getCurrentSuffix());
                 if ($suffix && $core->endsWith($unfilteredUrl, $suffix)) {
                     $unfilteredUrl = substr($unfilteredUrl, 0, strlen($unfilteredUrl) - strlen($suffix));

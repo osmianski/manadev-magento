@@ -46,7 +46,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
 
         $this->_routeParams = $routeParams;
-        if (isset($routeParams['_use_rewrite'])) {
+        if (isset($routeParams['_use_rewrite']) || $routePath == 'catalogsearch/result') {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -73,6 +73,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 
     public function getRoutePath($routeParams = array()) {
         if ($this->_pageUrlKey === null) {
+            if ($this->_query) {
+                $this->setData('query_params', $this->_query);
+            }
+
             return parent::getRoutePath($routeParams);
         }
 
@@ -133,7 +137,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $first = true;
             foreach ($seoParams as $path) {
                 if ($first) {
-                    $routePath .= $this->_schema->getQuerySeparator();
+                    if ($routePath) {
+                        $routePath .= $this->_schema->getQuerySeparator();
+                    }
                     $first = false;
                 }
                 else {
@@ -174,7 +180,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         $request = $this->getRequest();
         $route = explode('/', $route);
         if (isset($route[0]) && $route[0] == '*') $route[0] = $request->getRouteName();
+        if (!isset($route[1])) $route[2] = 'index';
         if (isset($route[1]) && $route[1] == '*') $route[1] = $request->getControllerName();
+        if (!isset($route[2])) $route[2] = 'index';
         if (isset($route[2]) && $route[2] == '*') $route[2] = $request->getActionName();
 
         return $route[0] . (isset($route[1]) ? '/' . $route[1] : '') . (isset($route[2]) ? '/' . $route[2] : '');
