@@ -23,7 +23,7 @@ class ManaPro_FilterSeoLinks_Model_Noindex_Filters {
             }
         }
         if ($noindex) {
-            $robots = 'NOINDEX, NOFOLLOW';
+            $robots = Mage::getStoreConfigFlag('mana_filters/seo/no_follow') ? 'NOINDEX, NOFOLLOW' : 'NOINDEX, FOLLOW';
         }
     }
 }

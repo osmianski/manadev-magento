@@ -26,3 +26,4 @@
 "Attribute Value Ampersand ('&') Symbol Shown in URL As","Attribute Value Ampersand ('&') Symbol Shown in URL As"
 "Injected into SEO friendly layered navigation URLs instead of ampersands ('&'). Must be uniquely recognizable when system converts URL back to attribute value.","Injected into SEO friendly layered navigation URLs instead of ampersands ('&'). Must be uniquely recognizable when system converts URL back to attribute value."
 "Any filter applied","Any filter applied"
+"Search Engines Do Not Follow Links on Non Indexed Pages","Search Engines Do Not Follow Links on Non Indexed Pages"
