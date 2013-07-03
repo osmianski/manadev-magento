@@ -10,20 +10,18 @@
  *
  */
 class ManaPro_FilterSeoLinks_Model_Noindex_Filters {
-    public function process(&$robots, $layerModel) {
+    public function detect($layerModel) {
         $filter = null;
-        $noindex = false;
+        $result = false;
         foreach (Mage::getSingleton($layerModel)->getState()->getFilters() as $item) {
             if (!$filter) {
                 $filter = $item->getFilter();
             }
             elseif ($item->getFilter() != $filter) {
-                $noindex = true;
+                $result = true;
                 break;
             }
         }
-        if ($noindex) {
-            $robots = Mage::getStoreConfigFlag('mana_filters/seo/no_follow') ? 'NOINDEX, NOFOLLOW' : 'NOINDEX, FOLLOW';
-        }
+        return $result;
     }
 }

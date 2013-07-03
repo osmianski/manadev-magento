@@ -305,16 +305,36 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
             /* @var $head Mage_Page_Block_Html_Head */
             $robots = $head->getRobots();
+            $noIndex = false;
+            $follow = false;
             /* @var $layer Mage_Catalog_Model_Layer */ $layer = Mage::getSingleton($layerModel);
-            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noindexProcessorName) {
-                if (!$noindexProcessorName) {
+            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noIndexProcessorName) {
+                if (!$noIndexProcessorName) {
                     continue;
                 }
 
-                $noindexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$noindexProcessorName->model);
-                $noindexProcessor->process($robots, $layerModel);
+                $noIndexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$noIndexProcessorName->model);
+                if ($noIndexProcessor->detect($layerModel)) {
+                    $noIndex = true;
+                    break;
+                }
             }
-            $head->setRobots($robots);
+
+            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/follow')) as $followProcessorName) {
+                if (!$followProcessorName) {
+                    continue;
+                }
+
+                $followProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$followProcessorName->model);
+                if ($followProcessor->detect($layerModel)) {
+                    $follow = true;
+                    break;
+                }
+            }
+
+            if ($noIndex) {
+                $head->setRobots($follow ? 'NOINDEX, FOLLOW' : 'NOINDEX, NOFOLLOW');
+            }
         }
     }
     /**

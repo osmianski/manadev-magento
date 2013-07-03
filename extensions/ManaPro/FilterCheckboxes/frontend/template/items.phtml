@@ -16,7 +16,7 @@
 ?>
 <ol class="m-filter-checkboxes <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
 <?php foreach ($this->getItems() as $_item): ?>
-    <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+    <li  <?php echo $this->getListItemClass($_item) ?> >
         <?php // MANA BEGIN ?>
         <?php if ($_item->getCount()): ?>
             <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
@@ -26,7 +26,7 @@
         <?php else: ?>
             <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
                    disabled="disabled" />
-            <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="m-disabled <?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
+            <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="<?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
                                                                         title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
         <?php endif; ?>
         <?php // MANA END ?>

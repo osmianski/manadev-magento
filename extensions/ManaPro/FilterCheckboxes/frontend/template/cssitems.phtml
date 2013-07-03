@@ -18,14 +18,14 @@
 <ol class="m-filter-css-checkboxes <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
 <?php foreach ($this->getItems() as $_item): ?>
     <?php $_itemUrl = $this->urlEscape($_item->getMSelected() ? $_item->getRemoveUrl() : $_item->getUrl()); ?>
-    <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+    <li <?php echo $this->getListItemClass($_item) ?> >
         <?php // MANA BEGIN ?>
             <?php if ($_item->getCount()): ?>
                 <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
                    onclick="this.className='<?php echo $_item->getMShowSelected() ? 'm-checkbox-unchecked' : 'm-checkbox-checked' ?>'"
                    href="<?php echo $_itemUrl ?>" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
             <?php else: ?>
-                <a class="m-disabled <?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
+                <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
                    href="javascript:void(0)" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
             <?php endif; ?>
         <?php // MANA END ?>

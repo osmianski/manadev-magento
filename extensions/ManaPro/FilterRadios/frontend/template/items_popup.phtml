@@ -24,7 +24,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
         <ol class="m-columns">
             <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
-            <li <?php if ($_item->getMSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+            <li  <?php echo $this->getListItemClass($_item) ?> >
                 <?php if ($_item->getCount()): ?>
                     <input type="radio" id="popup_<?php echo $_item->getUniqueId($this) ?>"
                            name="popup_<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
@@ -35,7 +35,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                 <?php else: ?>
                     <input type="radio" id="<?php echo $_item->getUniqueId($this) ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
                            disabled="disabled"/>
-                    <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="m-disabled <?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
+                    <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="<?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
                                                                                 title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
                 <?php endif; ?>
                 <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
