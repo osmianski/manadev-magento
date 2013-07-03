@@ -26,8 +26,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </conditional_word>
-                        <no_index translate="label">
+                        <no_index translate="label comment">
                             <label>Search Engines Do Not Index Any of These Pages</label>
+                            <comment>NOINDEX, NOFOLLOW in robots meta tag</comment>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>manapro_filterseolinks/source_noindex</source_model>
                             <sort_order>150</sort_order>
@@ -35,8 +36,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </no_index>
-                        <follow translate="label">
+                        <follow translate="label comment">
                             <label>Search Engines Do Follow Links on Any of These Non Indexed Pages</label>
+                            <comment>Changes NOFOLLOW to FOLLOW in robots meta tag</comment>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>manapro_filterseolinks/source_noindex</source_model>
                             <sort_order>160</sort_order>
