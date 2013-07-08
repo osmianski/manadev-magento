@@ -19,8 +19,11 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
         }
 		return $noExistanceCheck || file_exists($result) ? $result : false;
 	}
-	public function getBaseUrl($type) {
-		return Mage::getBaseUrl('media').'m-'.str_replace(DS, '/', $type);
+	public function getBaseUrl($type, $baseUrl = null, $storeId = null) {
+	    if (!$baseUrl) {
+            $baseUrl = Mage::app()->getStore($storeId)->getBaseUrl('media');
+	    }
+		return $baseUrl.'m-'.str_replace(DS, '/', $type);
 	}
 	public function getBasePath($type) {
 		return Mage::getConfig()->getOptions()->getMediaDir().DS.'m-'.str_replace('/', DS, $type);
@@ -36,10 +39,10 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 		}
 		return false;
 	}
-	public function getUrl($relativeUrl, $type) {
+	public function getUrl($relativeUrl, $type, $baseUrl = null) {
 		if (is_array($type)) {
 			foreach ($type as $candidate) {
-				if ($url = $this->getUrl($relativeUrl, $candidate)) {
+				if ($url = $this->getUrl($relativeUrl, $candidate, $storeId)) {
 					return $url;
 				}
 			}
@@ -47,7 +50,7 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 		}
 		else {
 			if ($this->getFilename($relativeUrl, $type)) {
-				return $this->getBaseUrl($type).'/'.str_replace(DS, '/', $relativeUrl);
+				return $this->getBaseUrl($type, $baseUrl).'/'.str_replace(DS, '/', $relativeUrl);
 			}
 			else {
 				return false;
