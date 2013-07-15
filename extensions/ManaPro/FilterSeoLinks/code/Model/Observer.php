@@ -58,6 +58,8 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $head->getTitle();
             $globalVars = array(
                 'title' => $this->_getInitialTitle($head),
+                'keywords' => $this->_getInitialKeywords($head),
+                'description' => $this->_getInitialDescription($head),
                 'page' => $page,
                 'site' => (object)array(
                     'title' => $head->getDefaultTitle(),
@@ -67,6 +69,10 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 '_filterPattern' => null,
                 '_valuePattern' => null,
                 '_valuePatterns' => array(),
+                '_keyword_valuePattern' => null,
+                '_keyword_valuePatterns' => array(),
+                '_description_valuePattern' => null,
+                '_description_valuePatterns' => array(),
             );
 
             foreach ($appliedFilters as /* @var $item Mana_Filters_Model_Item */$item) {
@@ -90,6 +96,12 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                     case 'values':
                         $this->_processValues($rule, $globalVars);
                         break;
+                    case 'keyword_values':
+                        $this->_processValues($rule, $globalVars);
+                        break;
+                    case 'description_values':
+                        $this->_processValues($rule, $globalVars);
+                        break;
                     case 'filters':
                         $this->_processFilters($rule, $globalVars);
                         break;
@@ -107,7 +119,10 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 }
             }
 
-            $head->setTitle($globalVars['title']);
+            $head
+                ->setTitle($globalVars['title'])
+                ->setData('keywords', $globalVars['keywords'])
+                ->setData('description', $globalVars['description']);
         }
     }
     protected function _addAppliedFiltersToSearchTitle($head, $appliedFilters, $page) {
@@ -186,17 +201,36 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
 	    }
 	    return eval(' return "'.$__template.'";');
 	}
-	protected function _processValues($rule, &$globalVars) {
-	    $locals = array();
+	protected function _getValuePatternVarName($var) {
+        return '_'. substr($var, 0, strlen($var) - 1).'Pattern';
+    }
+
+    protected function _getFinalVarName($var) {
+        switch ($var) {
+            case 'values':
+                return 'title';
+            case 'keyword_values':
+                return 'keywords';
+            case 'description_values':
+                return 'description';
+            default:
+                throw new Exception('Not implemented');
+
+        }
+    }
+
+    protected function _processValues($rule, &$globalVars) {
+        $patternVar = $this->_getValuePatternVarName($rule->getName());
+        $locals = array();
         foreach ($rule->children() as $instructionName => $instruction) { /* @var $instruction SimpleXMLElement */
             switch ($instructionName) {
                 case 'if': $this->_processApplyIf($instruction, $globalVars, $locals); break;
                 case 'apply':
                     if (isset($locals['code'])) {
-                        $this->_processApply($instruction, $globalVars, '_valuePatterns', $locals['code']);
+                        $this->_processApply($instruction, $globalVars, $patternVar . 's', $locals['code']);
                     }
                     else {
-                        $this->_processApply($instruction, $globalVars, '_valuePattern');
+                        $this->_processApply($instruction, $globalVars, $patternVar);
                     }
                     break;
                 default: throw new Exception('Not implemented');
@@ -237,18 +271,19 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $globalVars[$var][$key] = $pattern;
         }
     }
-    protected function _processFinally($rule, &$globalVars) {
+    protected function _prepareProcessFinally($var, &$globalVars) {
+        $patternVar = $this->_getValuePatternVarName($var);
         $valuePattern = array('pattern' => '{$value->title}', 'glue' => ', ', 'lastGlue' => ', ', 'prefix' => ': ');
-        $valuePattern = $globalVars['_valuePattern'] ? $globalVars['_valuePattern'] : $valuePattern;
-        if ($globalVars['_filterPattern']) {
+        $valuePattern = $globalVars[$patternVar] ? $globalVars[$patternVar] : $valuePattern;
+        if ($globalVars['_filterPattern'] && $var == 'values') {
             $filters = array();
             $filterValues = array();
             foreach ($globalVars['_values'] as $value) {
                 $code = $value->_obj->getFilter()->getFilterOptions()->getCode();
                 if (!isset($filters[$code])) {
                     $filters[$code] = array(
-                        'pattern' => isset($globalVars['_valuePatterns'][$code])
-                            ? $globalVars['_valuePatterns'][$code]
+                        'pattern' => isset($globalVars[$patternVar.'s'][$code])
+                            ? $globalVars[$patternVar.'s'][$code]
                             : $valuePattern,
                         'options' => $value->_obj->getFilter()->getFilterOptions(),
                         'values' => array(),
@@ -271,12 +306,16 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             foreach ($globalVars['_values'] as $value) {
                 $values[] = $this->_processValue($valuePattern['pattern'], $globalVars, compact('value'));
             }
-            $globalVars['values'] = $this->_implode($values, $valuePattern);
-            if ($globalVars['values']) {
-                $globalVars['values'] = $valuePattern['prefix'] . $globalVars['values'];
+            $globalVars[$var] = $this->_implode($values, $valuePattern);
+            if ($globalVars[$var] && ($this->_getFinalVarName($var) != 'keywords' || $globalVars[$this->_getFinalVarName($var)])) {
+                $globalVars[$var] = $valuePattern['prefix'] . $globalVars[$var];
             }
         }
-
+    }
+    protected function _processFinally($rule, &$globalVars) {
+        $this->_prepareProcessFinally('values', $globalVars);
+        $this->_prepareProcessFinally('keyword_values', $globalVars);
+        $this->_prepareProcessFinally('description_values', $globalVars);
         foreach ($rule->children() as $instructionName => $instruction) { /* @var $instruction SimpleXMLElement */
             switch ($instructionName) {
                 case 'set': $this->_processSet($instruction, $globalVars); break;
@@ -383,6 +422,23 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $title = substr($title, 0, strlen($title) - strlen($suffix) - 1);
         }
         return $title;
+    }
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @return string
+     */
+    protected function _getInitialKeywords($head) {
+        $result = $head->getData('keywords');
+        return $result;
+    }
+
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @return string
+     */
+    protected function _getInitialDescription($head) {
+        $result = $head->getData('description');
+        return $result;
     }
 
     //region Obsolete event handlers. Left here for easier upgrade

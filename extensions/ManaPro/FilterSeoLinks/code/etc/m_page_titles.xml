@@ -5,8 +5,16 @@
     <values as="value">
         <apply pattern="{$value->title}" glued_by=", " last_glued_by=" and " prefix=": " />
     </values>
+    <keyword_values as="value">
+        <apply pattern="{$value->title}" glued_by="," last_glued_by="," prefix="," />
+    </keyword_values>
+    <description_values as="value">
+        <apply pattern="{$value->title}" glued_by=", " last_glued_by=" and " prefix=" Applied filters: " />
+    </description_values>
     <page pattern=" (Page {$page})" />
     <finally>
         <set title="{$title}{$values}{$page}" />
+        <set keywords="{$keywords}{$keyword_values}"/>
+        <set description="{$description}{$description_values}"/>
     </finally>
 </m_page_titles>
