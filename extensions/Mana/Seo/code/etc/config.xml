@@ -27,6 +27,15 @@
                 <class>Mana_Seo_Helper</class>
             </mana_seo>
         </helpers>
+        <!-- This section registers block classes Mana_Seo_Block_XXX_YYY to be accessible through
+            'mana_seo/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Block pseudo-namespace. -->
+            <mana_seo>
+                <class>Mana_Seo_Block</class>
+            </mana_seo>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
         <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
             Mage::getSingleton('<model type>') calls. That is, Mana_Seo_Model_XXX_YYY classes are accessible as
             'mana_seo/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
@@ -119,15 +128,35 @@
             </indexer>
         </index>
     </global>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+     method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+     it will expect Mana_Seo_Adminhtml_AController class, and in class it will expect bAction() method. In most cases,
+     when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_seo before="Mage_Adminhtml">Mana_Seo_Adminhtml</mana_seo>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <mana_seo>
+                    <file>mana_seo.xml</file>
+                </mana_seo>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
-    <mana_seo>
-        <page_types>
-            <category><helper>mana_seo/pageType_category</helper></category>
-            <cms_page><helper>mana_seo/pageType_cmsPage</helper></cms_page>
-            <home_page><helper>mana_seo/pageType_homePage</helper></home_page>
-            <search><helper>mana_seo/pageType_search</helper></search>
-        </page_types>
-    </mana_seo>
     <mana_core>
         <page_types>
             <category><seo_helper>mana_seo/pageType_category</seo_helper></category>

@@ -11,7 +11,7 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
     'Mana/Admin/Grid/Column', 'singleton:Mana/Core',
     'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Json', 'singleton:Mana/Core/Config',
     'singleton:Mana/Core/Base64', 'singleton:Mana/Core/UrlTemplate'],
-function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
+function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate, undefined)
 {
     var RewrittenVarienGrid = Class.create(varienGrid, {
         reload:function (url) {
@@ -24,8 +24,15 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
             url = url || this.url;
 
             this._block._updateReloadParams();
-
-            ajax.post(url, this.reloadParams || {}, ajax.response(this._block));
+            var self = this;
+            ajax.post(url, this.reloadParams || {}, function(response) {
+                if (core.isString(response)) {
+                    self._block.setContent(response);
+                }
+                else {
+                    ajax.update(response);
+                }
+            });
         }
     });
 
@@ -34,16 +41,18 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
             this._super();
             this._varienGrid = null;
             this._url = '';
+            this._readonly = false;
             this._edit = {
                 pending:{},
                 saved:{},
                 deleted:{}
             };
+            this._raw = undefined;
         },
 
         getUrl: function() {
             if (!this._url) {
-                this._url = urlTemplate.decodeAttribute($(this.getElement()).data('url'));
+                this._url = urlTemplate.decodeAttribute(this.$().data('url'));
             }
             return this._url;
         },
@@ -54,6 +63,9 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
         getEdit: function() {
             return this._edit;
         },
+        getRaw: function() {
+            return this._raw;
+        },
         setEdit: function(value) {
             this._edit = value;
             return this;
@@ -61,25 +73,64 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
 
         //region Event handlers
         _subscribeToHtmlEvents:function () {
+            var self = this;
+            function _setPage() {
+                self._varienGrid.setPage($(this).data('page'));
+                return false;
+            }
+
+            function _inputPage() {
+                self._varienGrid.inputPage(this, $(this).data('page'));
+            }
+
+            function _loadByElement() {
+                self._varienGrid.loadByElement(this);
+            }
+
+            function _useDefault() {
+                self._edit.useDefault = this.checked;
+                self.trigger('readonly-changed', {value: self._edit.useDefault}, false, true);
+            }
+
             return this
                 ._super()
                 .on('bind', this, function () {
                     //noinspection JSPotentiallyInvalidConstructorUsage
-                    this._varienGrid = new RewrittenVarienGrid(this.getElement().id,
-                        this.getUrl().replace('{action}', 'index'), 'page', 'sort', 'dir', 'filter');
-                    this._varienGrid.useAjax = true;
-                    this._varienGrid._block = this;
+                    self._varienGrid = new RewrittenVarienGrid(this.getElement().id,
+                        this.getUrl(), 'page', 'sort', 'dir', 'filter');
+                    self._varienGrid.useAjax = true;
+                    self._varienGrid._block = this;
 
-                    var edit = $(this.getElement()).data('edit');
+                    var edit = self.$().data('edit');
                     if (edit) {
                         this._edit = json.decodeAttribute(edit);
                     }
+
+                    var raw = self.$().data('raw');
+                    if (raw) {
+                        this._raw = json.decodeAttribute(raw);
+                    }
+
+                    if (self._edit.useDefault === undefined) {
+                        self._edit.useDefault = this.$().data('readonly') ? true : false;
+                    }
+                    self.trigger('readonly-changed', {value: self._edit.useDefault}, false, true);
+
+                    this.$().find('.pager .previous, .pager .next').on('click', _setPage);
+                    this.$().find('.pager .input-text.page').on('keypress', _inputPage);
+                    this.$().find('.pager .limit').on('change', _loadByElement);
+                    this.$().find('input.m-default').on('click', _useDefault);
                 })
                 .on('unbind', this, function () {
+                    this.$().find('.pager .previous, .pager .next').off('click', _setPage);
+                    this.$().find('.pager .input-text.page').off('keypress', _inputPage);
+                    this.$().find('.pager .limit').off('change', _loadByElement);
+                    this.$().find('.input.m-default').off('click', _useDefault);
                     this._varienGrid = null;
                 });
         },
         _subscribeToBlockEvents:function() {
+            var self = this;
             return this
                 ._super()
                 .on('load', this, function () {
@@ -114,15 +165,16 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
             return this;
         },
         post: function(e) {
-            if (e.target.getId() == 'page') {
-                e.result[this.getAlias()] = json.stringify(this.getEdit());
+            if (e.target.getId() == 'container') {
+                this._updateReloadParams();
+                e.result.push({name: this.getAlias(), value: json.stringify(this._varienGrid.reloadParams)});
             }
         },
         //endregion
         _call:function(action, args) {
             var gridUrl = this._varienGrid.url;
 
-            this._varienGrid.url = this.getUrl().replace('{action}', action);
+            this._varienGrid.addVarToUrl('action', action);
             if (args) {
                 this._varienGrid.addVarToUrl('args', base64.encode(json.stringify(args)));
             }
@@ -133,7 +185,6 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
             this._varienGrid.reload(url);
         },
         _updateReloadParams: function() {
-            var id = this.getElement().id;
             if (!this._varienGrid.reloadParams) {
                 this._varienGrid.reloadParams = {};
             }
@@ -141,6 +192,10 @@ function ($, Block, Row, Column, core, ajax, json, config, base64, urlTemplate)
                 { sessionId: config.getData('editSessionId') },
                 this.getEdit()
             ));
+
+            if (this.getRaw()) {
+                this._varienGrid.reloadParams['raw'] = json.stringify(this.getRaw());
+            }
         },
         getRows: function() {
             return this.getChildren(function (index, child) {
@@ -182,16 +237,37 @@ Mana.define('Mana/Admin/Action', ['jquery', 'Mana/Core/Block'], function ($, Blo
         //region Event handlers
         _subscribeToHtmlEvents:function () {
             var self = this;
-            var _raiseClick = function () { self.trigger('click'); };
+            function _raiseClick () {
+                if (!self.$().hasClass('disabled')) {
+                    self.trigger('click');
+                }
+            }
+
             return this
                 ._super()
                 .on('bind', this, function () {
-                    $(this.getElement()).on('click', _raiseClick);
+                    $('.mb-'+this.getId()).on('click', _raiseClick);
                 })
                 .on('unbind', this, function () {
-                    $(this.getElement()).off('click', _raiseClick);
+                    $('.mb-' + this.getId()).off('click', _raiseClick);
                 });
+        },
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('readonly-changed', this, this.onReadonlyChanged);
+        },
+        onReadonlyChanged: function (e) {
+            if (!this.$().data('readonly-action')) {
+                if (e.value) {
+                    this.$().addClass('disabled');
+                }
+                else {
+                    this.$().removeClass('disabled');
+                }
+            }
         }
+
         //endregion
     });
 });
@@ -206,12 +282,13 @@ Mana.define('Mana/Admin/Grid/Column', ['jquery', 'Mana/Core/Block'], function ($
         }
     });
 });
-Mana.define('Mana/Admin/Grid/Row', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Cell'],
-function ($, Block, Cell)
+Mana.define('Mana/Admin/Grid/Row', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Cell', 'singleton:Mana/Core/UrlTemplate'],
+function ($, Block, Cell, urlTemplate)
 {
     return Block.extend('Mana/Admin/Grid/Row', {
         _init:function () {
             this._super();
+            this._url = '';
             this.setIsSelfContained(true);
         },
         getGrid: function() {
@@ -230,6 +307,38 @@ function ($, Block, Cell)
         },
         getRowId:function () {
             return this.$().data('row-id');
+        },
+        getUrl: function () {
+            if (!this._url) {
+                this._url = urlTemplate.decodeAttribute(this.$().data('url'));
+            }
+            return this._url;
+        },
+        setUrl: function (value) {
+            this._url = value;
+            return this;
+        },
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+            function _processClick(e) { self._onClick(e); }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$().on('click', _processClick);
+                })
+                .on('unbind', this, function () {
+                    this.$().off('click', _processClick);
+                });
+        },
+        _onClick: function(e) {
+            if (['a', 'input', 'select', 'option'].indexOf(e.target.tagName.toLowerCase()) != -1) {
+                return;
+            }
+
+            if (this.getUrl()) {
+                setLocation(this.getUrl());
+            }
         }
     });
 });
@@ -247,8 +356,19 @@ Mana.define('Mana/Admin/Grid/Cell', ['jquery', 'Mana/Core/Block'], function ($, 
         },
         getColumn: function() {
             return this.getGrid().getColumn($.inArray(this, this.getRow().getChildren()));
+        },
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('readonly-changed', this, this.onReadonlyChanged);
+        },
+        onReadonlyChanged: function(e) {
         }
     });
+});
+
+Mana.define('Mana/Admin/Grid/Cell/Text', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Text', {});
 });
 
 Mana.define('Mana/Admin/Grid/Cell/Select', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
@@ -273,6 +393,14 @@ Mana.define('Mana/Admin/Grid/Cell/Select', ['jquery', 'Mana/Admin/Grid/Cell'], f
         },
         onChange: function() {
             this.getGrid().setCellValue(this, { value: this.$input().val() });
+        },
+        onReadonlyChanged: function (e) {
+            if (e.value) {
+                this.$input().attr('disabled', true).addClass('disabled');
+            }
+            else {
+                this.$input().removeAttr('disabled').removeClass('disabled');
+            }
         }
     });
 });
@@ -299,6 +427,14 @@ Mana.define('Mana/Admin/Grid/Cell/Input', ['jquery', 'Mana/Admin/Grid/Cell'], fu
         },
         onChange:function () {
             this.getGrid().setCellValue(this, { value:this.$input().val() });
+        },
+        onReadonlyChanged: function (e) {
+            if (e.value) {
+                this.$input().attr('disabled', true).addClass('disabled');
+            }
+            else {
+                this.$input().removeAttr('disabled').removeClass('disabled');
+            }
         }
     });
 });
@@ -325,6 +461,14 @@ Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'],
         },
         onClick:function () {
             this.getGrid().setCellValue(this, { value:this.$input().attr('checked') == 'checked' ? 1 : 0 });
+        },
+        onReadonlyChanged: function (e) {
+            if (e.value) {
+                this.$input().attr('disabled', true).addClass('disabled');
+            }
+            else {
+                this.$input().removeAttr('disabled').removeClass('disabled');
+            }
         }
     });
 });
@@ -336,19 +480,23 @@ Mana.define('Mana/Admin/Tab', ['jquery', 'Mana/Core/Block'], function ($, Block)
     return Block.extend('Mana/Admin/Tab', {
     });
 });
-Mana.define('Mana/Admin/Page', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/UrlTemplate',
+Mana.define('Mana/Admin/Container', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/UrlTemplate',
     'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/Config', 'singleton:Mana/Core'],
-function ($, Block, urlTemplate, layout, ajax, config, core)
+function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
 {
-    return Block.extend('Mana/Admin/Page', {
-        getUrl:function () {
-            if (!this._url) {
-                this._url = urlTemplate.decodeAttribute($(this.getElement()).data('url'));
-            }
-            return this._url;
+    return Block.extend('Mana/Admin/Container', {
+        _init: function () {
+            this._super();
+            this._url = {};
         },
-        setUrl:function (value) {
-            this._url = value;
+        getUrl:function (key) {
+            if (this._url[key] === undefined) {
+                this._url[key] = urlTemplate.decodeAttribute($(this.getElement()).data(key + '-url'));
+            }
+            return this._url[key];
+        },
+        setUrl:function (key, value) {
+            this._url[key] = value;
             return this;
         },
 
@@ -357,27 +505,34 @@ function ($, Block, urlTemplate, layout, ajax, config, core)
                 ._super()
                 .on('load', this, function () {
                     if (this.getChild('close')) this.getChild('close').on('click', this, this.close);
-                    if (this.getChild('save')) this.getChild('save').on('click', this, this.save);
-                    if (this.getChild('saveAndClose')) this.getChild('saveAndClose').on('click', this, this.saveAndClose);
+                    if (this.getChild('apply')) this.getChild('apply').on('click', this, this.save);
+                    if (this.getChild('save')) this.getChild('save').on('click', this, this.saveAndClose);
                 })
                 .on('unload', this, function () {
                     if (this.getChild('close')) this.getChild('close').off('click', this, this.close);
-                    if (this.getChild('save')) this.getChild('save').off('click', this, this.save);
-                    if (this.getChild('saveAndClose')) this.getChild('saveAndClose').off('click', this, this.saveAndClose);
+                    if (this.getChild('apply')) this.getChild('apply').off('click', this, this.save);
+                    if (this.getChild('save')) this.getChild('save').off('click', this, this.saveAndClose);
                 });
         },
-        save: function() {
-            var params = {
-                form_key:FORM_KEY,
-                sessionId:config.getData('editSessionId')
-            };
-            params = layout.getPageBlock().trigger('post', { target: this, result: params}, false, true);
-            var self = this;
+        save: function(callback) {
+            var params = this.getPostParams();
 
-            ajax.post(this.getUrl().replace('{action}', 'save'), params, ajax.response(this));
+            ajax.post(this.getUrl('save'), params, function(response) {
+                ajax.update(response);
+                if (core.isFunction(callback)) {
+                    callback.call();
+                }
+            });
+        },
+        getPostParams: function() {
+            var params = [{name: 'form_key', value: FORM_KEY}];
+            if (config.getData('editSessionId') !== undefined) {
+                params.push({name: 'sessionId', value: config.getData('editSessionId')});
+            }
+            return layout.getPageBlock().trigger('post', { target: this, result: params}, false, true);
         },
         close: function() {
-            window.location = this.getUrl().replace('{action}', 'index');
+            window.location.href = this.getUrl('close');
         },
         saveAndClose: function() {
             var self = this;
@@ -386,5 +541,62 @@ function ($, Block, urlTemplate, layout, ajax, config, core)
             });
         }
 
+    });
+});
+Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Field', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _raiseUseDefaultClick() {
+                return self.onUseDefaultClick();
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$useDefault().on('click', _raiseUseDefaultClick);
+                })
+                .on('unbind', this, function () {
+                    this.$useDefault().off('click', _raiseUseDefaultClick);
+                });
+        },
+        $field: function () {
+            return this.$().find('td.value:first input, td.value:first select');
+        },
+        $useDefault: function () {
+            return this.$().find('td.use-default input.m-default');
+        },
+        onUseDefaultClick: function () {
+            if (this.$useDefault()[0].checked) {
+                this.$field().attr('disabled', true).addClass('disabled');
+            }
+            else {
+                this.$field().removeAttr('disabled').removeClass('disabled').focus();
+            }
+
+        }
+    });
+});
+Mana.define('Mana/Admin/Form', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+    return Block.extend('Mana/Admin/Form', {
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.on('post', this, this.post);
+                })
+                .on('unload', this, function () {
+                    this.off('post', this, this.post);
+                });
+        },
+        $form: function() {
+            return this.$().find('form');
+        },
+        post: function (e) {
+            if (e.target.getId() == 'container') {
+                $.merge(e.result, this.$form().serializeArray());
+            }
+        }
     });
 });

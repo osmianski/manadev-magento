@@ -311,6 +311,10 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         return str_replace('.', '-', str_replace('_', '-', $blockName));
     }
 
+    /**
+     * @param bool|array|Mage_Core_Block_Abstract $params
+     * @return array
+     */
     public function parseClientSideBlockInfo($params = false) {
         /* @var $core Mana_Core_Helper_Data */
         $core = Mage::helper('mana_core');
@@ -392,7 +396,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             }
             foreach ($params as $key => $value) {
                 $attributeKey = 'data-' . str_replace('.', '-', str_replace('_', '-', $key));
-                $attributeValue = htmlentities($value);
+                $attributeValue = str_replace('"', '&quot;', str_replace('<', '&lt;', str_replace('>', '&gt;', $value)));
                 $attributes[$attributeKey] = $attributeValue;
 
                 if ($attribute_html) $attribute_html .= ' ';

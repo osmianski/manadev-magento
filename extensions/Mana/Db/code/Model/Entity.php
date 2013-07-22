@@ -15,6 +15,12 @@
  * @method string getDefaultFormulas()
  * @method int getStoreId()
  * @method Mana_Db_Model_Entity setStoreId(int $value)
+ * @method int getGlobalId()
+ * @method Mana_Seo_Model_Schema setGlobalId(int $value)
+ * @method int getPrimaryId()
+ * @method Mana_Seo_Model_Schema setPrimaryId(int $value)
+ * @method int getPrimaryGlobalId()
+ * @method Mana_Seo_Model_Schema setPrimaryGlobalId(int $value)
  */
 class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
     protected $_scope;
@@ -30,6 +36,15 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         }
 
         parent::__construct($data);
+    }
+
+    public function loadForStore($id, $storeId, $fieldName = 'global_id') {
+        $this->_getResource()->loadForStore($this, $id, $storeId, $fieldName);
+        $this->_afterLoad();
+        $this->setOrigData();
+        $this->_hasDataChanges = false;
+
+        return $this;
     }
 
     protected function _construct() {
@@ -67,7 +82,7 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
 
     public function addGridCellData($cells) {
         foreach ($cells as $column => $cell) {
-            $this->setData($column, $cell['value']);
+            $this->overrideData($column, $cell['value']);
         }
         return $this;
     }
@@ -158,8 +173,8 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         return $this->_jsons[$key];
     }
 
-    public function setData($key, $value = null) {
-        parent::setData($key, $value);
+    public function overrideData($key, $value = null) {
+       $this->setData($key, $value);
 
         if (is_array($key)) {
             foreach (array_keys($key) as $aKey) {
@@ -205,4 +220,57 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
 
         return $this;
     }
+
+    public function isUsingDefaultData($key, $in = '_data') {
+        if (($field = $this->dbConfigHelper()->getScopeField($this->_scope, $key)) && isset($field->no)) {
+            /* @var $db Mana_Db_Helper_Data */
+            $db = Mage::helper('mana_db');
+
+            $no = (int)(string)$field->no;
+            $maskIndex = $db->getMaskIndex($no);
+            $data = $this->$in;
+            $mask = isset($data['default_mask' . $maskIndex]) ? $data['default_mask' . $maskIndex] : 0;
+            return !($mask & $db->getMask($no));
+        }
+        return false;
+    }
+
+    public function isDefaultable($key) {
+        return ($field = $this->dbConfigHelper()->getScopeField($this->_scope, $key)) && isset($field->no);
+    }
+
+    public function getFieldsXml() {
+        return $this->dbConfigHelper()->getScopeFields($this->_scope);
+    }
+
+    public function getDefaultableFields() {
+        $result = array();
+        foreach ($this->getFieldsXml() as $fieldXml) {
+            if (isset($fieldXml->no)) {
+                $result[] = (string)$fieldXml->name;
+            }
+        }
+        return $result;
+    }
+
+    public function __call($method, $args) {
+        if (substr($method, 0, 8) == 'override') {
+            //Varien_Profiler::start('SETTER: '.get_class($this).'::'.$method);
+            $key = $this->_underscore(substr($method, 8));
+            $result = $this->overrideData($key, isset($args[0]) ? $args[0] : null);
+
+            //Varien_Profiler::stop('SETTER: '.get_class($this).'::'.$method);
+            return $result;
+        }
+        return parent::__call($method, $args);
+    }
+
+    #region Dependencies
+    /**
+     * @return Mana_Db_Helper_Config
+     */
+    public function dbConfigHelper() {
+        return Mage::helper('mana_db/config');
+    }
+    #endregion
 }

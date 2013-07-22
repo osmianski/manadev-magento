@@ -57,4 +57,13 @@ class Mana_Core_Helper_Mbstring extends Mage_Core_Helper_Abstract {
     public function startsWith($haystack, $needle) {
         return ($this->strpos($haystack, $needle) === 0);
     }
+
+    public function stripos($haystack, $needle, $offset = 0) {
+        if ($this->_multiByte) {
+            return mb_stripos($haystack, $needle, $offset);
+        }
+        else {
+            return stripos($haystack, $needle, $offset);
+        }
+    }
 }

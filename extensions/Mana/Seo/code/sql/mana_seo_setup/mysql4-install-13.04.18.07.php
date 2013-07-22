@@ -19,9 +19,8 @@ $utils = Mage::helper('mana_core/utils');
 /* @var $schema Mana_Seo_Model_Schema */
 $schema = $db->getModel('mana_seo/schema');
 $schema
-    ->setName('MANAdev 2013')
-    ->setInternalName('manadev-2013')
-    ->setSymbols(json_encode(array(
+    ->overrideName('MANAdev 2013')
+    ->overrideSymbols(json_encode(array(
         array('symbol' => '\\', 'substitute' => ''),
         array('symbol' => '_', 'substitute' => '-'),
         array('symbol' => '\'', 'substitute' => ''),
@@ -31,31 +30,30 @@ $schema
         array('symbol' => '&', 'substitute' => '+'),
         array('symbol' => ' ', 'substitute' => '-'),
     )))
-    ->setStatus(Mana_Seo_Model_Schema::STATUS_ACTIVE)
-    ->setRedirectParameterOrder(1)
-    ->setQuerySeparator('/')
-    ->setParamSeparator('/')
-    ->setFirstValueSeparator('/')
-    ->setMultipleValueSeparator('-')
-    ->setPriceSeparator('-')
-    ->setUseRangeBounds(1)
-    ->setUseFilterLabels(1)
-    ->setToolbarUrlKeys(json_encode(array(
+    ->overrideStatus(Mana_Seo_Model_Schema::STATUS_ACTIVE)
+    ->overrideRedirectParameterOrder(1)
+    ->overrideQuerySeparator('/')
+    ->overrideParamSeparator('/')
+    ->overrideFirstValueSeparator('/')
+    ->overrideMultipleValueSeparator('-')
+    ->overridePriceSeparator('-')
+    ->overrideUseRangeBounds(1)
+    ->overrideUseFilterLabels(1)
+    ->overrideToolbarUrlKeys(json_encode(array(
         array('internal_name' => 'p', 'name' => 'page', 'position' => 9900),
         array('internal_name' => 'order', 'name' => 'sort-by', 'position' => 9910),
         array('internal_name' => 'dir', 'name' => 'sort-direction', 'position' => 9920),
         array('internal_name' => 'mode', 'name' => 'mode', 'position' => 9930),
         array('internal_name' => 'limit', 'name' => 'show', 'position' => 9940),
     )))
-    ->setIncludeFilterName(0)
-    ->setRedirectToSubcategory(1)
+    ->overrideIncludeFilterName(0)
+    ->overrideRedirectToSubcategory(1)
     ->save();
 
 $schema = $db->getModel('mana_seo/schema');
 $schema
-    ->setName('MANAdev 2011')
-    ->setInternalName('manadev-2011')
-    ->setSymbols(json_encode(array(
+    ->overrideName('MANAdev 2011')
+    ->overrideSymbols(json_encode(array(
         array('symbol' => '-', 'substitute' => $utils->getStoreConfig('mana_filters/seo/dash')),
         array('symbol' => '/', 'substitute' => $utils->getStoreConfig('mana_filters/seo/slash')),
         array('symbol' => '+', 'substitute' => $utils->getStoreConfig('mana_filters/seo/plus')),
@@ -67,24 +65,24 @@ $schema
         array('symbol' => '&', 'substitute' => $utils->getStoreConfig('mana_filters/seo/ampersand')),
         array('symbol' => ' ', 'substitute' => $utils->getStoreConfig('mana_filters/seo/space')),
     )))
-    ->setStatus(Mana_Seo_Model_Schema::STATUS_OBSOLETE)
-    ->setRedirectParameterOrder(0)
-    ->setQuerySeparator('/' . $utils->getStoreConfig('mana_filters/seo/conditional_word') . '/')
-    ->setParamSeparator('/')
-    ->setFirstValueSeparator('/')
-    ->setMultipleValueSeparator('_')
-    ->setPriceSeparator(',')
-    ->setUseRangeBounds(0)
-    ->setUseFilterLabels($utils->getStoreConfig('mana_filters/seo/use_label'))
-    ->setToolbarUrlKeys(json_encode(array(
+    ->overrideStatus(Mana_Seo_Model_Schema::STATUS_OBSOLETE)
+    ->overrideRedirectParameterOrder(0)
+    ->overrideQuerySeparator('/' . $utils->getStoreConfig('mana_filters/seo/conditional_word') . '/')
+    ->overrideParamSeparator('/')
+    ->overrideFirstValueSeparator('/')
+    ->overrideMultipleValueSeparator('_')
+    ->overridePriceSeparator(',')
+    ->overrideUseRangeBounds(0)
+    ->overrideUseFilterLabels($utils->getStoreConfig('mana_filters/seo/use_label'))
+    ->overrideToolbarUrlKeys(json_encode(array(
         array('internal_name' => 'p', 'name' => 'p', 'position' => 9900),
         array('internal_name' => 'order', 'name' => 'order', 'position' => 9910),
         array('internal_name' => 'dir', 'name' => 'dir', 'position' => 9920),
         array('internal_name' => 'mode', 'name' => 'mode', 'position' => 9930),
         array('internal_name' => 'limit', 'name' => 'limit', 'position' => 9940),
     )))
-    ->setIncludeFilterName(1)
-    ->setRedirectToSubcategory(0)
+    ->overrideIncludeFilterName(1)
+    ->overrideRedirectToSubcategory(0)
     ->save();
 
 $setup->scheduleReindexing('mana_seo');

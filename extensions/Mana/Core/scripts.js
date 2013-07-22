@@ -692,6 +692,7 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
             this._isSelfContained = false;
             this._eventHandlers = {};
             this._data = {};
+            this._text = {};
             this._subscribeToHtmlEvents()._subscribeToBlockEvents();
         },
         _subscribeToHtmlEvents: function() {
@@ -887,6 +888,12 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
         setData: function(key, value) {
             this._data[key] = value;
             return this;
+        },
+        getText: function (key) {
+            if (this._text[key] === undefined) {
+                this._text[key] = this.$().data(key + '-text');
+            }
+            return this._text[key];
         }
     });
 });

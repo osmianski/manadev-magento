@@ -69,4 +69,27 @@ examples on what kind of actions can be applied to referenced blocks.
         <update handle="mana_admin"/>
         <update handle="mana_admin_grid_editing"/>
     </mana_admin_page>
+
+    <!-- V2 -->
+    <mana_admin2>
+        <update handle="jquery_core"/>
+		<reference name="head">
+            <action method="addJs"><script>mana/admin.js</script></action>
+        </reference>
+    </mana_admin2>
+	<mana_admin2_multistore_list>
+		<reference name="container">
+			<block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher" before="grid">
+				<action method="addToParentGroup"><group>content</group></action>
+				<action method="setUseConfirm"><value>0</value></action>
+			</block>
+		</reference>
+	</mana_admin2_multistore_list>
+	<mana_admin2_multistore_card>
+		<reference name="left">
+			<block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher" before="-">
+				<action method="setUseConfirm"><value>1</value></action>
+			</block>
+		</reference>
+	</mana_admin2_multistore_card>
 </layout>

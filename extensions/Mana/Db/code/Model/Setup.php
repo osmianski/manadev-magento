@@ -46,6 +46,7 @@ class Mana_Db_Model_Setup extends Varien_Object {
             $installer->getConnection()->allowDdlCache();
         }
 
+        Mage::register('m_prevent_indexing_on_save', true, true);
         return $this;
     }
     protected function _run() {
@@ -65,6 +66,8 @@ class Mana_Db_Model_Setup extends Varien_Object {
             $installer->getConnection()->disallowDdlCache();
         }
         $installer->endSetup();
+
+        Mage::register('m_prevent_indexing_on_save', false, true);
 
         return $this;
     }

@@ -36,18 +36,30 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 
     /**
      * @param int $storeId
+     * @param bool $flat
      * @return Mana_Seo_Model_Schema | false
      */
-    public function getActiveSchema($storeId) {
+    public function getActiveSchema($storeId, $flat = true) {
         if (!isset($this->_activeSchemas[$storeId])) {
             /* @var $dbHelper Mana_Db_Helper_Data */
             $dbHelper = Mage::helper('mana_db');
 
             /* @var $collection Mana_Db_Resource_Entity_Collection */
-            $collection = $dbHelper->getResourceModel('mana_seo/schema/store_flat_collection');
-            $collection
-                ->setStoreFilter($storeId)
-                ->addFieldToFilter('status', Mana_Seo_Model_Schema::STATUS_ACTIVE);
+            if ($storeId != Mage_Core_Model_App::ADMIN_STORE_ID) {
+                $collection = $flat
+                    ? $dbHelper->getResourceModel('mana_seo/schema/store_flat_collection')
+                    : $dbHelper->getResourceModel('mana_seo/schema/store_collection');
+                $collection
+                    ->setStoreFilter($storeId)
+                    ->addFieldToFilter('status', Mana_Seo_Model_Schema::STATUS_ACTIVE);
+            }
+            else {
+                $collection = $flat
+                    ? $dbHelper->getResourceModel('mana_seo/schema/flat_collection')
+                    : $dbHelper->getResourceModel('mana_seo/schema/global_collection');
+                $collection
+                    ->addFieldToFilter('status', Mana_Seo_Model_Schema::STATUS_ACTIVE);
+            }
 
             foreach ($collection as $schema) {
                 $this->_activeSchemas[$storeId] = $schema;

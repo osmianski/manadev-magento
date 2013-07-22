@@ -15,11 +15,11 @@
                 <schema>
                     <max_defaultable_fields>60</max_defaultable_fields>
                     <fields>
-                        <query_separator><type>varchar(10)</type><no>0</no></query_separator>
-                        <param_separator><type>varchar(10)</type><no>1</no></param_separator>
-                        <first_value_separator><type>varchar(10)</type><no>2</no></first_value_separator>
-                        <multiple_value_separator><type>varchar(10)</type><no>3</no></multiple_value_separator>
-                        <use_filter_labels><type>tinyint</type><no>4</no><default_value>1</default_value></use_filter_labels>
+                        <query_separator><type>varchar(10)</type><no>0</no><affects_url/></query_separator>
+                        <param_separator><type>varchar(10)</type><no>1</no><affects_url/></param_separator>
+                        <first_value_separator><type>varchar(10)</type><no>2</no><affects_url/></first_value_separator>
+                        <multiple_value_separator><type>varchar(10)</type><no>3</no><affects_url/></multiple_value_separator>
+                        <use_filter_labels><type>tinyint</type><no>4</no><default_value>1</default_value><affects_url/></use_filter_labels>
                         <toolbar_url_keys>
                             <type>mediumtext</type>
                             <no>6</no>
@@ -30,6 +30,7 @@
                                 ["internal_name": "mode", "name": "mode", "position": "9930"],
                                 ["internal_name": "limit", "name": "show", "position": "9940"]
                             }]]></default_value>
+                            <affects_url/>
                         </toolbar_url_keys>
                         <symbols>
                             <type>mediumtext</type>
@@ -43,15 +44,16 @@
                                 ["symbol": "&", "substitute": "+"],
                                 ["symbol": " ", "substitute": "-"]
                             }]]></default_value>
+                            <affects_url/>
                         </symbols>
                         <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no><indexed /></status>
                         <name><type>varchar(80)</type><no>8</no></name>
-                        <internal_name><type>varchar(20)</type><no>9</no><indexed /></internal_name>
                         <redirect_parameter_order><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
-                        <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value></include_filter_name>
+                        <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value><affects_url/></include_filter_name>
                         <redirect_to_subcategory><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
-                        <price_separator><type>varchar(10)</type><no>12</no></price_separator>
-                        <use_range_bounds><type>tinyint</type><no>13</no><default_value>1</default_value></use_range_bounds>
+                        <price_separator><type>varchar(10)</type><no>12</no><affects_url/></price_separator>
+                        <use_range_bounds><type>tinyint</type><no>13</no><default_value>1</default_value><affects_url/></use_range_bounds>
+                        <updated_at><type>datetime</type><no>14</no><default_value>0000-00-00 00:00:00</default_value></updated_at>
                     </fields>
                     <scopes>
                         <global/>
@@ -99,12 +101,12 @@
                                 <symbols><default_formula>{{= global.symbols}}</default_formula></symbols>
                                 <status><default_formula>{{= global.status}}</default_formula></status>
                                 <name><default_formula>{{= global.name}}</default_formula></name>
-                                <internal_name><default_formula>{{= global.internal_name}}</default_formula></internal_name>
                                 <redirect_parameter_order><default_formula>{{= global.redirect_parameter_order}}</default_formula></redirect_parameter_order>
                                 <include_filter_name><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
                                 <redirect_to_subcategory><default_formula>{{= global.redirect_to_subcategory}}</default_formula></redirect_to_subcategory>
                                 <price_separator><default_formula>{{= global.price_separator}}</default_formula></price_separator>
                                 <use_range_bounds><default_formula>{{= global.use_range_bounds}}</default_formula></use_range_bounds>
+                                <updated_at><default_formula>{{= global.updated_at}}</default_formula></updated_at>
                             </fields>
                         </store_flat>
                     </scopes>

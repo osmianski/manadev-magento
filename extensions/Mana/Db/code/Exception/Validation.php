@@ -14,7 +14,11 @@ class Mana_Db_Exception_Validation extends Exception {
 	public function __construct($errors) {
 		$this->_errors = $errors;
 	}
-	public function getErrors() {
+
+    /**
+     * @return array
+     */
+    public function getErrors() {
 		return $this->_errors;
 	}
 }
