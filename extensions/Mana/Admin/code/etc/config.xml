@@ -37,8 +37,18 @@
 			getModel() and getSingleton() calls. -->
 			<mana_admin>
 				<class>Mana_Admin_Model</class>
-				<!-- INSERT HERE: resource section name -->
+                <!-- This tells Magento to read config/global/models/mana_admin_resources sections and register
+                    resource model information from there -->
+                <resourceModel>mana_admin_resources</resourceModel>
 			</mana_admin>
+            <!-- This says that string 'mana_admin' corresponds to Mana_Admin_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <mana_admin_resources>
+                <class>Mana_Admin_Resource</class>
+                <entities>
+                    <!-- INSERT HERE: table-entity mappings -->
+                </entities>
+            </mana_admin_resources>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
 		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->

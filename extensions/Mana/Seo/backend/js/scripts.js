@@ -37,7 +37,9 @@ function ($, Container, ajax, core)
                 if (response.messages) {
                     alert(response.messages.join("\n"));
                 }
+                //noinspection JSUnresolvedVariable
                 if (response.affectsUrl) {
+                    //noinspection JSUnresolvedVariable
                     params.push({name: 'createObsoleteCopy', value: confirm(response.affectsUrl)});
                 }
                 ajax.post(self.getUrl('save'), params, function (response) {
@@ -51,6 +53,39 @@ function ($, Container, ajax, core)
                     }
                 });
             });
+        }
+    });
+});
+
+Mana.define('Mana/Seo/Url/FormContainer', ['jquery', 'Mana/Admin/Container'],
+function ($, Container) {
+    return Container.extend('Mana/Seo/Url/FormContainer', {
+        _subscribeToHtmlEvents:function () {
+            var self = this;
+
+            function _urlKeyChange() {
+                self._onManualValueChange('final_url_key', 'url_key', $(this).val(), $(this).val());
+            }
+
+            function _includeFilterNameChange() {
+                self._onManualValueChange('final_include_filter_name', 'include_filter_name', $(this).val(),
+                    $(this).find('option:selected').text());
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$().find('#mf_form_manual_url_key').on('change', _urlKeyChange);
+                    this.$().find('#mf_form_force_include_filter_name').on('change', _includeFilterNameChange);
+                })
+                .on('unbind', this, function () {
+                    this.$().find('#mf_form_manual_url_key').off('change', _urlKeyChange);
+                });
+        },
+        _onManualValueChange: function(targetField, defaultField, value, label) {
+                this.$().find('#mf_form_tr_' + targetField + ' .value strong').html(value !== ''
+                    ? label
+                    : this.$().find('#mf_form_tr_' + defaultField + ' .value strong').html());
         }
     });
 });

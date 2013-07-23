@@ -64,10 +64,13 @@ class Mana_Seo_Model_Url extends Mana_Db_Model_Entity {
     }
 
     protected function _beforeSave() {
+        if ($this->getForceIncludeFilterName() === '') {
+            $this->setForceIncludeFilterName(null);
+        }
         $this->setFinalIncludeFilterName($this->getForceIncludeFilterName() !== null
             ? $this->getForceIncludeFilterName()
             : $this->getIncludeFilterName());
-        $this->setFinalUrlKey($this->getManualUrlKey() !== null
+        $this->setFinalUrlKey($this->getManualUrlKey() !== null && trim($this->getManualUrlKey()) !== ''
             ? $this->getManualUrlKey()
             : $this->getUrlKey());
         parent::_beforeSave();

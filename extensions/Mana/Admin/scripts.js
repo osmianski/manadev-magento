@@ -371,6 +371,12 @@ Mana.define('Mana/Admin/Grid/Cell/Text', ['jquery', 'Mana/Admin/Grid/Cell'], fun
     return Cell.extend('Mana/Admin/Grid/Cell/Text', {});
 });
 
+Mana.define('Mana/Admin/Grid/Cell/Options', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Options', {});
+});
+Mana.define('Mana/Admin/Grid/Cell/Store', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Store', {});
+});
 Mana.define('Mana/Admin/Grid/Cell/Select', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
     return Cell.extend('Mana/Admin/Grid/Cell/Select', {
         _subscribeToHtmlEvents: function() {
@@ -519,7 +525,8 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
 
             ajax.post(this.getUrl('save'), params, function(response) {
                 ajax.update(response);
-                if (core.isFunction(callback)) {
+                //noinspection JSUnresolvedVariable
+                if (core.isFunction(callback) && !response.failed) {
                     callback.call();
                 }
             });

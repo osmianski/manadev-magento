@@ -59,6 +59,7 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
         $fieldset = $form->addFieldset($id, $options);
 
         $fieldset->setRenderer($this->getFieldsetRenderer());
+        $fieldset->addType('select_text', 'Mana_Admin_Block_V2_Form_Field_SelectText');
 
         return $fieldset;
     }

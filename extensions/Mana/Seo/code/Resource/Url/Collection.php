@@ -53,4 +53,10 @@ class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collectio
         }
         return $this;
     }
+
+    public function addStoreAndGlobalSchemaColumns() {
+        $this->getSelect()->joinInner(array('schema' => $this->getTable('mana_seo/schema_store_flat')),
+            "`schema`.`id` = `main_table`.`schema_id`", array('global_schema_id' => 'global_id', 'store_id'));
+        return $this;
+    }
 }

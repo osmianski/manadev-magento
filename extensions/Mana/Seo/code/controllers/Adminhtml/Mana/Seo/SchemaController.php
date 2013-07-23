@@ -324,11 +324,11 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
             foreach ($e->getErrors() as $error) {
                 $messages->addError($error);
             }
-            $response->setData('error', true);
+            $response->setData('failed', true);
         }
         catch (Exception $e) {
             $messages->addError($e->getMessage());
-            $response->setData('error', true);
+            $response->setData('failed', true);
         }
 
         $update['#messages'] = $messages->getGroupedHtml();
