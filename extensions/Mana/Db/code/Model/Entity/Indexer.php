@@ -10,13 +10,124 @@
  *
  */
 class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
+    protected $_code = 'mana_db';
+    protected $_standardEventEntities = array(
+        'core_store' => 'core/store',
+    );
+    /**
+     * @var Varien_Object[]
+     */
+    protected $_matchedEvents = array();
+
+    public function matchEvent(Mage_Index_Model_Event $event) {
+        /* @var $object Mana_Db_Model_Entity */
+        $object = $event->getData('data_object');
+        $key = $event->getData('entity').'-'.$object->getId();
+        if (!isset($this->_matchedEvents[$key])) {
+            $this->_matchedEvents[$key] = $this->_matchEntity($event, $object);
+        }
+        return $this->_matchedEvents[$key]->getData('is_matching');
+    }
+
+    /**
+     * @param Mage_Index_Model_Event $event
+     * @param Mana_Db_Model_Entity $object
+     * @return Varien_Object
+     */
+    protected function _matchEntity($event, /** @noinspection PhpUnusedParameterInspection */ $object) {
+        $result = new Varien_Object(array('is_matching' => false));
+        $entityFilters = array();
+        $eventEntity = $event->getData('entity');
+        if (isset($this->_standardEventEntities[$eventEntity])) {
+            $eventEntity = $this->_standardEventEntities[$eventEntity];
+        }
+        foreach ($this->_sortTargetsByDependency() as $target) {
+            if ($entity = (string)$target->entity) {
+                foreach ($this->dbConfigHelper()->getEntityXml($entity)->scopes->children() as $scope) {
+                    if (isset($scope->flattens)) {
+                        if ($formula = $this->_findEntityFilterFormula($entity . '/' . $scope->getName(), $eventEntity)) {
+                            $result->setData('is_matching', true);
+                            $entityFilters[$entity . '/' . $scope->getName()] = $formula;
+                        }
+                    }
+                }
+            }
+        }
+
+        $result->setData('entity_filters', $entityFilters);
+        return $result;
+    }
+    protected function _findEntityFilterFormula($entity, $what) {
+        return $this->_findEntityFilterFormulaRecursively($entity, $what, '');
+    }
+
+    protected function _findEntityFilterFormulaRecursively($entity, $what, $formula) {
+        if (!($scopeXml = $this->dbConfigHelper()->getScopeXml($entity))) {
+            return false;
+        }
+
+        if (!isset($scopeXml->formula)) {
+            return false;
+        }
+
+        foreach ($scopeXml->formula->children() as $selectXml) {
+            if (isset($selectXml->from)) {
+                $fromXml = $selectXml->from;
+                foreach ($fromXml->children() as $alias => $definition) {
+                    $sourceEntity = $alias == 'primary' ? (string)$scopeXml->flattens : (string)$definition->entity;
+                    if ($sourceEntity == $what) {
+                        return $formula . $alias . '.' . $this->_getPrimaryKey($sourceEntity);
+                    }
+                    else {
+                        if ($result = $this->_findEntityFilterFormulaRecursively($sourceEntity, $what, $formula . $alias . '.')) {
+                            return $result;
+                        }
+                    }
+                }
+            }
+
+            if (isset($selectXml->join)) {
+                $joinXml = $selectXml->join;
+                /* @var $joinXml SimpleXMLElement */
+                foreach ($joinXml->children() as $alias => $definition) {
+                    $sourceEntity = $alias == 'primary' ? (string)$scopeXml->flattens : (string)$definition->entity;
+                    if ($sourceEntity == $what) {
+                        return $formula . $alias . '.' . $this->_getPrimaryKey($sourceEntity);
+                    }
+                    else {
+                        if ($result = $this->_findEntityFilterFormulaRecursively($sourceEntity, $what, $formula . $alias . '.')) {
+                            return $result;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    protected function _getPrimaryKey($entity) {
+        if ($this->dbConfigHelper()->getScopeXml($entity)) {
+            return 'id';
+        }
+        else {
+            return $this->tableProcessorHelper()->getPrimaryKey($entity);
+        }
+    }
+
     /**
      * Register indexer required data inside event object
      *
      * @param   Mage_Index_Model_Event $event
      */
     protected function _registerEvent(Mage_Index_Model_Event $event) {
-        // TODO: Implement _registerEvent() method.
+        /* @var $object Mana_Db_Model_Entity */
+        $object = $event->getData('data_object');
+        $key = $event->getData('entity') . '-' . $object->getId();
+        if (isset($this->_matchedEvents[$key])) {
+            $event
+                ->addNewData('entity_filters', $this->_matchedEvents[$key]->getData('entity_filters'))
+                ->addNewData('entity_filter_id', $object->getId());
+        }
     }
 
     /**
@@ -25,7 +136,7 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
      * @param   Mage_Index_Model_Event $event
      */
     protected function _processEvent(Mage_Index_Model_Event $event) {
-        // TODO: Implement _processEvent() method.
+        $this->process($event->getNewData());
     }
 
     /**
@@ -143,9 +254,6 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
      * @param array $options
      */
     protected function _processTarget($target, $options) {
-        /* @var $dbConfig Mana_Db_Helper_Config */
-        $dbConfig = Mage::helper('mana_db/config');
-
         $entity = (string)$target->entity;
 
         /* @var $globalScope Varien_Simplexml_Element */
@@ -153,10 +261,10 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
         /* @var $storeScope Varien_Simplexml_Element */
         $storeScope = null;
 
-        foreach ($dbConfig->getEntityXml($entity)->scopes->children() as $scope) {
+        foreach ($this->dbConfigHelper()->getEntityXml($entity)->scopes->children() as $scope) {
             if (isset($scope->flattens)) {
                 $flattenedScope = (string)$scope->flattens;
-                if (isset($dbConfig->getScopeXml($flattenedScope)->store_specifics_for)) {
+                if (isset($this->dbConfigHelper()->getScopeXml($flattenedScope)->store_specifics_for)) {
                     $storeScope = $scope;
                 }
                 else {
@@ -201,4 +309,41 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
             $this->_processTarget($target, $options);
         }
     }
+
+    /**
+     * Retrieve Indexer description
+     *
+     * @return string
+     */
+    public function getDescription() {
+        $targets = $this->_sortTargetsByDependency();
+        $descriptions = array();
+        foreach ($targets as $target) {
+            if (isset($target->description)) {
+                $descriptions[] = (string)$target->description;
+            }
+        }
+
+        $result = parent::getDescription();
+        if (count($descriptions)) {
+            $result .= ': '.implode(', ', $descriptions);
+        }
+        return $result;
+    }
+
+    #region Dependencies
+    /**
+     * @return Mana_Db_Helper_Config
+     */
+    public function dbConfigHelper() {
+        return Mage::helper('mana_db/config');
+    }
+
+    /**
+     * @return Mana_Db_Helper_Formula_Processor_Table
+     */
+    public function tableProcessorHelper() {
+        return Mage::helper('mana_db/formula_processor_table');
+    }
+    #endregion
 }

@@ -204,7 +204,7 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
             else {
                 $mask = $mask & ~$db->getMask($no);
             }
-            $this->_data['default_mask' . $maskIndex] = $mask;
+            $this->setData('default_mask' . $maskIndex, $mask);
         }
     }
 
@@ -265,12 +265,32 @@ class Mana_Db_Model_Entity extends Mage_Core_Model_Abstract {
         return parent::__call($method, $args);
     }
 
+    /**
+     * Init indexing process after category data commit
+     *
+     * @return Mage_Catalog_Model_Category
+     */
+    public function afterCommitCallback() {
+        parent::afterCommitCallback();
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($this, $this->getScope(), Mage_Index_Model_Event::TYPE_SAVE);
+        }
+        return $this;
+    }
+
     #region Dependencies
     /**
      * @return Mana_Db_Helper_Config
      */
     public function dbConfigHelper() {
         return Mage::helper('mana_db/config');
+    }
+
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
     }
     #endregion
 }

@@ -80,29 +80,21 @@
         </resources>
         <index>
             <indexer>
-                <mana_attribute_page translate="name description" module="mana_attributepage">
-                    <model>mana_attributepage/indexer</model>
-                    <name>Attribute Pages (MANAdev)</name>
-                    <description>Recalculates formula-based settings in attribute and attribute option pages</description>
-
+                <mana_db>
                     <targets>
-                        <page>
+                        <page translate="description" module="mana_attributepage">
                             <entity>mana_attributepage/page</entity>
+                            <description>Attribute Pages</description>
                         </page>
-                        <option_page>
+                        <option_page translate="description" module="mana_attributepage">
                             <entity>mana_attributepage/option_page</entity>
+                            <description>Attribute Option Pages</description>
                             <depends>
                                 <page />
                             </depends>
                         </option_page>
                     </targets>
-
-                    <!--<targets>
-                        <option_page>
-                            <entity>mana_attributepage/option_page</entity>
-                        </option_page>
-                    </targets>-->
-                </mana_attribute_page>
+                </mana_db>
                 <mana_seo_url>
                     <sources>
                         <filter><resource>mana_seo/urlIndexer_filter</resource></filter>

@@ -444,6 +444,12 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
 
         }
 
+        if ($formula = $context->getOption('entity_filter_formula')) {
+            /* @var $selector Mana_Db_Helper_Formula_Selector */
+            $selector = Mage::helper('mana_db/formula_selector');
+            $selector->filterFormula($context, $this->parse($formula), $context->getOption('entity_filter_id'));
+        }
+
         return $select;
     }
 

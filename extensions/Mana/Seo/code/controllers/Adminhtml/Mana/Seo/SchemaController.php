@@ -239,6 +239,11 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
                 if ($edit = json_decode($json['edit'], true)) {
                     $this->_processPendingRawEdits($raw, $edit);
                 }
+                foreach (array_keys($raw) as $index) {
+                    if (isset($raw[$index]['id'])) {
+                        unset($raw[$index]['id']);
+                    }
+                }
                 if (empty($edit['useDefault'])) {
                     $models['edit']->overrideData($key, json_encode($raw));
                 }

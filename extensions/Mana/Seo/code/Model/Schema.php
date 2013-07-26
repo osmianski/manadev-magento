@@ -101,14 +101,4 @@ class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
         $this->overrideUpdatedAt(now());
         return parent::_beforeSave();
     }
-    public function afterCommitCallback() {
-        if (!Mage::registry('m_prevent_indexing_on_save')) {
-            /* @var $indexer Mage_Index_Model_Indexer */
-            $indexer = Mage::getSingleton('index/indexer');
-
-            $indexer->getProcessByCode('mana_seo')
-                ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX)
-                ->reindexAll();
-        }
-    }
 }

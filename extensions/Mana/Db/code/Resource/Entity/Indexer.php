@@ -26,10 +26,18 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
      * @return void
      */
     public function flattenScope($indexer, $target, $scope, $options) {
+        /** @noinspection PhpUndefinedFieldInspection */
+        $targetEntity = ((string)$target->entity) . '/' . $scope->getName();
+
+        if (isset($options['entity_filters']) && !isset($options['entity_filters'][$targetEntity])) {
+            return;
+        }
         $options = array_merge(array(
             'provide_field_details_in_exceptions' => true,
         ), $options);
-
+        if (isset($options['entity_filters']) && !isset($options['entity_filter_formula'])) {
+            $options['entity_filter_formula'] = '{{= ' . $options['entity_filters'][$targetEntity] . '}}';
+        }
         $db = $this->_getWriteAdapter();
         /* @var $res Mage_Core_Model_Resource */
         $res = Mage::getSingleton('core/resource');
@@ -42,8 +50,6 @@ class Mana_Db_Resource_Entity_Indexer extends Mage_Core_Model_Mysql4_Abstract {
         // get basic select from all source tables, properly joined (based on m_db.xml)
         /** @noinspection PhpUndefinedFieldInspection */
         $entity = (string)$scope->flattens;
-        /** @noinspection PhpUndefinedFieldInspection */
-        $targetEntity = ((string)$target->entity) . '/' . $scope->getName();
         //$db->query($formulaHelper->delete($entity, $targetEntity));
 
         // get formula hashes and formula texts

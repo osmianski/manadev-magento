@@ -301,6 +301,13 @@ function ($, layout, json, core, config, undefined)
             return options;
         },
         _done:function (response, callback, options, url, data) {
+            var page = layout.getPageBlock();
+            if (options.showOverlay) {
+                page.hideOverlay();
+            }
+            if (options.showWait) {
+                page.hideWait();
+            }
             try {
                 var content = response;
                 try {
@@ -345,12 +352,6 @@ function ($, layout, json, core, config, undefined)
             }
         },
         _fail:function (error, options, url, data) {
-            if (options.showDebugMessages) {
-                alert(error.status + (error.responseText ? ': ' + error.responseText : ''));
-            }
-        },
-        _complete:function (options, url, data) {
-            $(document).trigger('m-ajax-after', [[], url, '']);
             var page = layout.getPageBlock();
             if (options.showOverlay) {
                 page.hideOverlay();
@@ -358,6 +359,12 @@ function ($, layout, json, core, config, undefined)
             if (options.showWait) {
                 page.hideWait();
             }
+            if (options.showDebugMessages) {
+                alert(error.status + (error.responseText ? ': ' + error.responseText : ''));
+            }
+        },
+        _complete:function (options, url, data) {
+            $(document).trigger('m-ajax-after', [[], url, '']);
         },
         addInterceptor: function (interceptor) {
             this._interceptors.push(interceptor);

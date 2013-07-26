@@ -67,6 +67,10 @@ class Mana_Db_Helper_Formula_Selector extends Mana_Db_Helper_Formula_Abstract {
             $expr)));
     }
 
+    public function filterFormula(/** @noinspection PhpUnusedParameterInspection */$context, $formula, $id) {
+        $context->getSelect()->where($this->_select($context, $formula)->getExpr() .' = ?', $id);
+    }
+
     /**
      * @param Mana_Db_Model_Formula_Context $context
      * @param Mana_Db_Model_Formula_Node $formula

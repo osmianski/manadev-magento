@@ -95,16 +95,14 @@
         </events>
         <index>
             <indexer>
-                <mana_seo translate="name description" module="mana_seo">
-                    <model>mana_seo/indexer</model>
-                    <name>SEO Settings (MANAdev)</name>
-                    <description>Recalculates formula-based SEO settings</description>
+                <mana_db>
                     <targets>
-                        <schema>
+                        <schema translate="description" module="mana_seo">
                             <entity>mana_seo/schema</entity>
+                            <description>SEO Schemas</description>
                         </schema>
                     </targets>
-                </mana_seo>
+                </mana_db>
                 <mana_seo_url translate="name description" module="mana_seo">
                     <model>mana_seo/urlIndexer</model>
                     <name>SEO URL Rewrites (MANAdev)</name>
