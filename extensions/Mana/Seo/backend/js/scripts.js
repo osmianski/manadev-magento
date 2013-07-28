@@ -12,6 +12,22 @@ Mana.define('Mana/Seo/Schema/TabContainer', ['jquery', 'Mana/Admin/Container', '
 function ($, Container, ajax, core)
 {
     return Container.extend('Mana/Seo/Schema/TabContainer', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _hideCreateDuplicateAdvice() {
+                self._hideCreateDuplicateAdvice(this);
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    $('.hide-create-duplicate-advice').on('click', _hideCreateDuplicateAdvice);
+                })
+                .on('unbind', this, function () {
+                    $('.hide-create-duplicate-advice').off('click', _hideCreateDuplicateAdvice);
+                });
+        },
         _subscribeToBlockEvents: function () {
             return this
                 ._super()
@@ -33,15 +49,15 @@ function ($, Container, ajax, core)
         save: function (callback) {
             var params = this.getPostParams();
             var self = this;
-            ajax.post(this.getUrl('before-save'), params, function (response) {
-                if (response.messages) {
-                    alert(response.messages.join("\n"));
-                }
-                //noinspection JSUnresolvedVariable
-                if (response.affectsUrl) {
-                    //noinspection JSUnresolvedVariable
-                    params.push({name: 'createObsoleteCopy', value: confirm(response.affectsUrl)});
-                }
+//            ajax.post(this.getUrl('before-save'), params, function (response) {
+//                if (response.messages) {
+//                    alert(response.messages.join("\n"));
+//                }
+//                //noinspection JSUnresolvedVariable
+//                if (response.affectsUrl) {
+//                    //noinspection JSUnresolvedVariable
+//                    params.push({name: 'createObsoleteCopy', value: confirm(response.affectsUrl)});
+//                }
                 ajax.post(self.getUrl('save'), params, function (response) {
                     ajax.update(response);
                     var $status = self.$().find('#mf_url_status');
@@ -52,7 +68,20 @@ function ($, Container, ajax, core)
                         callback.call();
                     }
                 });
-            });
+//            });
+        },
+        _hideCreateDuplicateAdvice: function(a) {
+            //noinspection JSCheckFunctionSignatures
+            var $li = $(a).parent();
+            $li.hide();
+            //noinspection JSCheckFunctionSignatures
+            for (var $parent = $li.parent(); $parent.length && $parent[0].id != 'messages'; $parent = $parent.parent()) {
+                if ($parent.children(':visible').length) {
+                    break;
+                }
+                $parent.hide();
+            }
+            ajax.post(this.getUrl('hide-create-duplicate-advice'), [{name: 'form_key', value: FORM_KEY}]);
         }
     });
 });

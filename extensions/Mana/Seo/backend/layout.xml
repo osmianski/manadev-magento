@@ -40,7 +40,7 @@
 			</block>
 		</reference>
 		<reference name="content">
-			<block type="mana_seo/adminhtml_schema_tabContainer" name="container" as="container" />
+            <block type="mana_seo/adminhtml_schema_tabContainer" name="container" as="container" />
 		</reference>
     </adminhtml_mana_seo_schema_edit>
 	<adminhtml_mana_seo_schema_symbolgrid>

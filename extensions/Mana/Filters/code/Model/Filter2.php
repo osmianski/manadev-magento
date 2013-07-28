@@ -10,9 +10,11 @@
 /**
  * INSERT HERE: what is this model for 
  * @author Mana Team
+ * @method string getType()
  */
 class Mana_Filters_Model_Filter2 extends Mana_Db_Model_Object {
     protected $_eventPrefix = 'mana_filter';
+    protected $_entity = 'mana_filters/filter2';
 
     /**
      * Invoked during model creation process, this method associates this model with resource and resource
@@ -58,4 +60,27 @@ class Mana_Filters_Model_Filter2 extends Mana_Db_Model_Object {
     public function getCode() {
         return isset($this->_data['code']) ? $this->_data['code'] : null;
     }
+
+    /**
+     * Init indexing process after category data commit
+     *
+     * @return Mage_Catalog_Model_Category
+     */
+    public function afterCommitCallback() {
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($this, $this->_entity, Mage_Index_Model_Event::TYPE_SAVE);
+        }
+        parent::afterCommitCallback();
+
+        return $this;
+    }
+
+    #region Dependencies
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
+    }
+    #endregion
 }

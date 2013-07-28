@@ -11,6 +11,30 @@
  */
 class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
     protected $_code = 'mana_seo_url';
+    protected $_matchedEntities = array(
+        Mage_Core_Model_Store::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        'mana_seo/schema/global' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        'mana_seo/schema/store' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+    );
+
+    public function matchEvent(Mage_Index_Model_Event $event) {
+        foreach ($this->_getSources() as $source) {
+            /* @var $resource Mana_Seo_Resource_UrlIndexer */
+            /** @noinspection PhpUndefinedFieldInspection */
+            $resource = Mage::getResourceSingleton((string)$source->resource);
+            if ($resource->match($this, $event)) {
+                return true;
+            }
+        }
+
+        return parent::matchEvent($event);
+    }
 
     /**
      * Register indexer required data inside event object
@@ -18,7 +42,23 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
      * @param   Mage_Index_Model_Event $event
      */
     protected function _registerEvent(Mage_Index_Model_Event $event) {
-        // TODO: Implement _registerEvent() method.
+        foreach ($this->_getSources() as $source) {
+            /* @var $resource Mana_Seo_Resource_UrlIndexer */
+            /** @noinspection PhpUndefinedFieldInspection */
+            $resource = Mage::getResourceSingleton((string)$source->resource);
+            $resource->register($this, $event);
+        }
+        if ($event->getEntity() == Mage_Core_Model_Store::ENTITY) {
+            if ($event->getData('data_object')->isObjectNew()) {
+                $event->addNewData('store_id', $event->getData('data_object')->getId());
+            }
+        }
+        elseif ($event->getEntity() == 'mana_seo/schema/global') {
+            $event->addNewData('schema_global_id', $event->getData('data_object')->getId());
+        }
+        elseif ($event->getEntity() == 'mana_seo/schema/store') {
+            $event->addNewData('schema_store_id', $event->getData('data_object')->getId());
+        }
     }
 
     /**
@@ -27,7 +67,7 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
      * @param   Mage_Index_Model_Event $event
      */
     protected function _processEvent(Mage_Index_Model_Event $event) {
-        // TODO: Implement _processEvent() method.
+        $this->process($event->getNewData());
     }
 
     public function reindexAll() {
@@ -65,11 +105,16 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
      * @param array $options
      */
     public function process($options = array()) {
+        if (isset($options['store_id'])) {
+            $this->getProcess()->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
+            return;
+        }
+
         /* @var $resource Mana_Seo_Resource_UrlIndexer_General */
         $resource = Mage::getResourceSingleton('mana_seo/urlIndexer_general');
 
         $options = $this->_prepareOptions($options);
-        $resource->makeAllRowsObsolete($options);
+        //$resource->makeAllRowsObsolete($options);
 
         foreach ($this->_getSources() as $source) {
             $this->_processSource($source, $options);
@@ -95,6 +140,17 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         /** @noinspection PhpUndefinedFieldInspection */
         $resource = Mage::getResourceSingleton((string)$source->resource);
         foreach ($this->_getSchemas() as $schema) {
+            if (isset($options['schema_global_id'])) {
+                if ($schema->getPrimaryGlobalId() != $options['schema_global_id']) {
+                    continue;
+                }
+            }
+            elseif (isset($options['schema_store_id'])) {
+                if ($schema->getPrimaryId() != $options['schema_store_id']) {
+                    continue;
+                }
+            }
+
             $resource->process($this, $schema, $options);
         }
     }

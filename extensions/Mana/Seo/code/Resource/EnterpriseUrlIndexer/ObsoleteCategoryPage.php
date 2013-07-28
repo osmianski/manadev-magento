@@ -9,13 +9,19 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Resource_EnterpriseUrlIndexer_ObsoleteCategoryPage extends Mana_Seo_Resource_UrlIndexer {
+class Mana_Seo_Resource_EnterpriseUrlIndexer_ObsoleteCategoryPage extends Mana_Seo_Resource_CategoryUrlIndexer {
     /**
      * @param Mana_Seo_Model_UrlIndexer $indexer
      * @param Mana_Seo_Model_Schema $schema
      * @param array $options
      */
     public function process($indexer, $schema, $options) {
+        if (!isset($options['category_id']) && !isset($options['store_id']) &&
+            !isset($options['schema_global_id']) && !isset($options['schema_store_id']) && !$options['reindex_all']
+        ) {
+            return;
+        }
+
         /* @var $db Varien_Db_Adapter_Pdo_Mysql */
         $db = $this->_getWriteAdapter();
 
@@ -53,7 +59,21 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ObsoleteCategoryPage extends Mana_S
                 ->columns($fields)
                 ->where("`r`.`target_path` LIKE 'catalog/category/view/id/%'");
 
+            if (isset($options['category_id'])) {
+                $categoryIds = $this->_getChildCategoryIds($options['category_id'], $options['category_path']);
+                $paths = array();
+                foreach ($categoryIds as $categoryId) {
+                    $paths[] = 'catalog/category/view/id/' . $categoryId;
+                }
+                $select->where('`r`.`target_path` IN (?)', $paths);
+            }
+
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
+            Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
+            Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
+            Mage::log($select->__toString(), Zend_log::DEBUG, 'm_url.log');
+            Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
+            Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
             // run the statement

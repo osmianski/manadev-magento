@@ -185,16 +185,6 @@
                 </observers>
             </m_db_add_edited_data>
         </events>
-        <index>
-            <indexer>
-                <mana_seo_url>
-                    <sources>
-                        <filter><resource>mana_seo/urlIndexer_filter</resource></filter>
-                        <filter_value><resource>mana_seo/urlIndexer_value</resource></filter_value>
-                    </sources>
-                </mana_seo_url>
-            </indexer>
-        </index>
         <!-- This tells Magento to analyze sql/manapro_filterseolinks_setup directory for install/upgrade scripts.
         Installation scripts should be named as 'mysql4-install-<new version>.php'.
         Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->

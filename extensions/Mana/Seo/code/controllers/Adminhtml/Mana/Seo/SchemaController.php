@@ -102,6 +102,25 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
         // page
         $this->_title('Mana')->_title($this->__('%s - SEO Schema', $models['flat']->getName()));
 
+        // advise create schema duplicates before important changes
+        if (Mage::getStoreConfigFlag('mana/seo/show_create_duplicate_advice')) {
+            $fieldsAffectingUrls = array(
+                "'" . $this->seoHelper()->__('Query Separator') . "'",
+                "'" . $this->seoHelper()->__('Parameter Separator') . "'",
+                "'" . $this->seoHelper()->__('Value Separator') . "'",
+                "'" . $this->seoHelper()->__('Multiple Value Separator') . "'",
+                "'" . $this->seoHelper()->__('Price Separator') . "'",
+                "'" . $this->seoHelper()->__('Include Filter Names Before Values') . "'",
+                "'" . $this->seoHelper()->__('Use Attribute Labels Instead Of Attribute Codes') . "'",
+                "'" . $this->seoHelper()->__('Use Range Bounds in Price Filters') . "'",
+                "'" . $this->seoHelper()->__('Special Symbols in URL') . "'",
+                "'" . $this->seoHelper()->__('Toolbar URL Keys') . "'",
+            );
+            $fieldsAffectingUrls = implode(', ', $fieldsAffectingUrls);
+
+            $this->getSessionSingleton()->addNotice($this->seoHelper()->__("If you change one of the fields affecting URL structure (%s), URLs with old structure will result in 404 'Page not found' pages. If URLs with old structure are already indexed by search bots, it is recommended to create a duplicate of this schema before making such changes, so that URLs with old structure would be redirected to this schema URLs. ", $fieldsAffectingUrls) . '<a href="#" class="hide-create-duplicate-advice">' . $this->adminHelper()->__('Hide this advice') . '</a>');
+        }
+
         // layout
         $update = $this->getLayout()->getUpdate();
         $update->addHandle('default');
@@ -253,50 +272,50 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
             }
         }
     }
-    public function beforeSaveAction() {
-        // data
-        $models = $this->_registerModels();
-        $response = new Varien_Object();
-        $messages = array();
-
-        try {
-            $this->_processChanges();
-
-            $affectsUrl = false;
-            if ($models['flat']->getStatus() == Mana_Seo_Model_Schema::STATUS_ACTIVE) {
-                foreach ($models['flat']->getFieldsAffectingUrl() as $key) {
-                    if ($models['flat']->isDefaultable($key) &&
-                        $models['edit']->isUsingDefaultData($key) != $models['edit']->isUsingDefaultData($key, '_origData'))
-                    {
-                        $affectsUrl = true;
-                        break;
-                    }
-                    elseif (!$models['edit']->isUsingDefaultData($key) &&
-                        $models['flat']->getData($key) !== $models['edit']->getData($key))
-                    {
-                        $affectsUrl = true;
-                        break;
-                    }
-                }
-            }
-
-            if ($affectsUrl) {
-                $response->setData('affectsUrl', $this->seoHelper()->__('One or more edited fields affects the way URL is constructed. It is recommended to save previous schema settings as separate obsolete schema when old structure URL may have been indexed by search bots, so that URLs with old structure would be redirected to this schema URLs. Do you want to save previous schema settings as separate obsolete schema?'));
-            }
-
-        } catch (Mana_Db_Exception_Validation $e) {
-            foreach ($e->getErrors() as $error) {
-                $messages[] = $error;
-            }
-        }
-        catch (Exception $e) {
-            $messages[] = $e->getMessage();
-        }
-        if (count($messages)) {
-            $response->setData('messages', $messages);
-        }
-        $this->getResponse()->setBody($response->toJson());
-    }
+//    public function beforeSaveAction() {
+//        // data
+//        $models = $this->_registerModels();
+//        $response = new Varien_Object();
+//        $messages = array();
+//
+//        try {
+//            $this->_processChanges();
+//
+//            $affectsUrl = false;
+//            if ($models['flat']->getStatus() == Mana_Seo_Model_Schema::STATUS_ACTIVE) {
+//                foreach ($models['flat']->getFieldsAffectingUrl() as $key) {
+//                    if ($models['flat']->isDefaultable($key) &&
+//                        $models['edit']->isUsingDefaultData($key) != $models['edit']->isUsingDefaultData($key, '_origData'))
+//                    {
+//                        $affectsUrl = true;
+//                        break;
+//                    }
+//                    elseif (!$models['edit']->isUsingDefaultData($key) &&
+//                        $models['flat']->getData($key) !== $models['edit']->getData($key))
+//                    {
+//                        $affectsUrl = true;
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            if ($affectsUrl) {
+//                $response->setData('affectsUrl', $this->seoHelper()->__('One or more edited fields affects the way URL is constructed. It is recommended to save previous schema settings as separate obsolete schema when old structure URL may have been indexed by search bots, so that URLs with old structure would be redirected to this schema URLs. Do you want to save previous schema settings as separate obsolete schema?'));
+//            }
+//
+//        } catch (Mana_Db_Exception_Validation $e) {
+//            foreach ($e->getErrors() as $error) {
+//                $messages[] = $error;
+//            }
+//        }
+//        catch (Exception $e) {
+//            $messages[] = $e->getMessage();
+//        }
+//        if (count($messages)) {
+//            $response->setData('messages', $messages);
+//        }
+//        $this->getResponse()->setBody($response->toJson());
+//    }
     public function saveAction() {
         // data
         $models = $this->_registerModels();
@@ -315,11 +334,11 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
                 }
             }
 
-            if ($this->getRequest()->getPost('createObsoleteCopy')) {
-                if ($id = $this->getRequest()->getParam('id')) {
-                    $this->_duplicate($id);
-                }
-            }
+//            if ($this->getRequest()->getPost('createObsoleteCopy')) {
+//                if ($id = $this->getRequest()->getParam('id')) {
+//                    $this->_duplicate($id);
+//                }
+//            }
 
             // do save
             $models['edit']->save();
@@ -410,12 +429,25 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
         }
     }
 
+    public function hideCreateDuplicateAdviceAction() {
+        $this->utilsHelper()->setStoreConfig('mana/seo/show_create_duplicate_advice', 0);
+        Mage::app()->cleanCache();
+        $this->getResponse()->setBody('ok');
+    }
+
     #region Dependencies
     /**
      * @return Mana_Seo_Helper_Data
      */
     public function seoHelper() {
         return Mage::helper('mana_seo');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Utils
+     */
+    public function utilsHelper() {
+        return Mage::helper('mana_core/utils');
     }
     #endregion
 }

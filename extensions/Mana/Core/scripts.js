@@ -255,6 +255,12 @@ function ($, layout, json, core, config, undefined)
         },
         post:function (url, data, callback, options) {
             var self = this;
+            if (data === undefined) {
+                data = [];
+            }
+            if (callback === undefined) {
+                callback = function() {};
+            }
             options = this._before(options, url, data);
             $.post(window.encodeURI(url), data)
                 .done(function (response) { self._done(response, callback, options, url, data); })

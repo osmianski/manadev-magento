@@ -16,6 +16,12 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
      * @param array $options
      */
     public function process($indexer, $schema, $options) {
+        if (!isset($options['store_id']) &&
+            !isset($options['schema_global_id']) && !isset($options['schema_store_id']) && !$options['reindex_all'])
+        {
+            return;
+        }
+
         $db = $this->_getWriteAdapter();
 
         foreach ($schema->getJson('toolbar_url_keys') as $urlKey) {
@@ -34,9 +40,17 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
                 'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
             );
 
+            $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_parameter` = 1) AND (`type` = '".
+                Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR."')";
+            Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
+            Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
+            Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
+            Mage::log($obsoleteCondition, Zend_log::DEBUG, 'm_url.log');
+            Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
             $sql = $this->insert($this->getTargetTableName(), $fields);
 
             // run the statement
+            $this->makeAllRowsObsolete($options, $obsoleteCondition);
             $db->raw_query($sql);
         }
     }

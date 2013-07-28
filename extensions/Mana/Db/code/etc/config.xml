@@ -144,7 +144,7 @@
 				<observers>
 					<mana_db>
 						<class>mana_db/observer</class> <!-- model name of class containing event handler methods -->
-						<method>afterConfigSave</method> <!-- event handler method name -->
+						<method>afterSaveCommit</method> <!-- event handler method name -->
 					</mana_db>
 				</observers>
 			</model_save_commit_after>

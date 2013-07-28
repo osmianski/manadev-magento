@@ -96,6 +96,7 @@ class Mana_Seo_Block_Adminhtml_Schema_TabContainer extends Mana_Admin_Block_V2_C
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'duplicate_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('duplicate')),
             'before_save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('beforeSave')),
+            'hide_create_duplicate_advice_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/hideCreateDuplicateAdvice')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this SEO schema?'),
         ));
 

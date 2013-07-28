@@ -113,13 +113,28 @@ class Mana_Db_Model_Observer {
 	 * Runs data replication actions if related configuration changed (handles event "core_config_data_save_commit_after")
 	 * @param Varien_Event_Observer $observer
 	 */
-	public function afterConfigSave($observer) {
-		$configData = $observer->getEvent()->getObject();
-		if ($configData->getResourceName() == 'core/config_data' && 
-			Mage::helper('mana_db')->isReplicatedConfigChanged($configData)) 
+	public function afterSaveCommit($observer) {
+		$object = $observer->getEvent()->getObject();
+		if ($object->getResourceName() == 'core/config_data' &&
+			Mage::helper('mana_db')->isReplicatedConfigChanged($object))
 		{
 			Mage::register('m_run_db_replication', true);
 		}
+		elseif ($object->getResourceName() == 'cms/page') {
+            if (!Mage::registry('m_prevent_indexing_on_save')) {
+                $this->getIndexerSingleton()->processEntityAction($object, 'cms/page', Mage_Index_Model_Event::TYPE_SAVE);
+            }
+        }
 	}
-	
+
+    public function afterConfigSave($observer) {}
+
+    #region Dependencies
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
+    }
+    #endregion
 }

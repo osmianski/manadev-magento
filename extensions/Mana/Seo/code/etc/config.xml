@@ -122,6 +122,11 @@
                         <enterprise_active_category_page><resource>mana_seo/enterpriseUrlIndexer_activeCategoryPage</resource></enterprise_active_category_page>
                         <enterprise_obsolete_category_page><resource>mana_seo/enterpriseUrlIndexer_obsoleteCategoryPage</resource></enterprise_obsolete_category_page>
                     </sources>
+                    <depends>
+                        <mana_db />
+                        <mana_db_replicator />
+                        <catalog_url/>
+                    </depends>
                 </mana_seo_url>
             </indexer>
         </index>
@@ -168,6 +173,7 @@
             <seo>
                 <search_url_key>search</search_url_key>
                 <max_correction_count>1</max_correction_count>
+                <show_create_duplicate_advice>1</show_create_duplicate_advice>
             </seo>
         </mana>
     </default>

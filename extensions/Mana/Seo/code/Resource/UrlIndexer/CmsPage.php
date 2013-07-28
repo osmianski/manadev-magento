@@ -10,12 +10,33 @@
  *
  */
 class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer {
+    protected $_matchedEntities = array(
+        'cms/page' => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+    );
+
+    /**
+     * @param Mana_Seo_Model_UrlIndexer $indexer
+     * @param Mage_Index_Model_Event $event
+     */
+    public function register(/** @noinspection PhpUnusedParameterInspection */ $indexer, $event) {
+        if ($event->getEntity() == 'cms/page') {
+            $event->addNewData('cms_page_id', $event->getData('data_object')->getId());
+        }
+    }
+
     /**
      * @param Mana_Seo_Model_UrlIndexer $indexer
      * @param Mana_Seo_Model_Schema $schema
      * @param array $options
      */
     public function process($indexer, $schema, $options) {
+        if (!isset($options['cms_page_id']) && !isset($options['store_id']) &&
+            !isset($options['schema_global_id']) && !isset($options['schema_store_id']) && !$options['reindex_all']
+        ) {
+            return;
+        }
         $db = $this->_getWriteAdapter();
 
         $fields = array(
@@ -41,10 +62,23 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
             ->columns($fields)
             ->where('`s`.`store_id` = ? OR `s`.`store_id` = 0', $schema->getStoreId());
 
+        $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_page` = 1) AND (`type` = 'cms_page')";
+        if (isset($options['cms_page_id'])) {
+            $select->where('`p`.`page_id` = ?', $options['cms_page_id']);
+            $obsoleteCondition .= ' AND (`cms_page_id` = ' . $options['cms_page_id'] . ')';
+        }
+
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
+        Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
+        Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
+        Mage::log($select->__toString(), Zend_log::DEBUG, 'm_url.log');
+        Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
+        Mage::log($obsoleteCondition, Zend_log::DEBUG, 'm_url.log');
+        Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
         // run the statement
+        $this->makeAllRowsObsolete($options, $obsoleteCondition);
         $db->raw_query($sql);
     }
 }

@@ -44,9 +44,9 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
             'align' => 'center',
             'width' => '50px',
         ));
-        $this->addColumn('global_schema_id', array(
+        $this->addColumn('global_id', array(
             'header' => $this->__('Schema'),
-            'index' => 'global_schema_id',
+            'index' => 'global_id',
             'width' => '100px',
             'align' => 'center',
             'type' => 'options',
@@ -57,9 +57,9 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
                 'header' => $this->__('Store'),
                 'index' => 'store_id',
                 'type' => 'store',
-                'store_all' => true,
+                'store_all' => false,
                 'store_view' => true,
-                'sortable' => false,
+                'sortable' => true,
             ));
         }
         $this->addColumn('internal_name', array(

@@ -10,11 +10,49 @@
  *
  */
 abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
+    protected $_matchedEntities = array();
+
     /**
      * Resource initialization
      */
     protected function _construct() {
         $this->_setResource('core');
+    }
+
+    /**
+     * @param Mana_Seo_Model_UrlIndexer $indexer
+     * @param Mage_Index_Model_Event $event
+     * @return bool
+     */
+    public function match(/** @noinspection PhpUnusedParameterInspection */ $indexer, $event) {
+        $entity = $event->getEntity();
+        $type = $event->getType();
+
+        return $this->matchEntityAndType($entity, $type);
+    }
+
+    /**
+     * @param Mana_Seo_Model_UrlIndexer $indexer
+     * @param Mage_Index_Model_Event $event
+     */
+    public function register(/** @noinspection PhpUnusedParameterInspection */ $indexer, $event) {
+    }
+
+    /**
+     * Check if indexer matched specific entity and action type
+     *
+     * @param   string $entity
+     * @param   string $type
+     * @return  bool
+     */
+    public function matchEntityAndType($entity, $type) {
+        if (isset($this->_matchedEntities[$entity])) {
+            if (in_array($type, $this->_matchedEntities[$entity])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -56,4 +94,12 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
             ->joinInner(array('ca' => $this->getTable('catalog/eav_attribute')), "`ca`.`attribute_id` = `a`.`attribute_id`", null)
             ->where("`ca`.`is_filterable` <> 0");
     }
+
+    public function makeAllRowsObsolete($options, $condition) {
+        $db = $this->_getWriteAdapter();
+
+        $db->query("UPDATE `{$this->getTable('mana_seo/url')}` SET `status` = 'obsolete' WHERE `status` = 'active' AND (".
+            $condition .")");
+    }
+
 }
