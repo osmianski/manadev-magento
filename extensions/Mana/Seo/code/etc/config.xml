@@ -92,6 +92,16 @@
                     </mana_seo>
                 </observers>
             </controller_front_init_routers>
+            <controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_seo>
+                        <class>mana_seo/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareMetaData</method>
+                        <!-- event handler method name -->
+                    </mana_seo>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
         </events>
         <index>
             <indexer>

@@ -123,5 +123,5 @@ foreach (array('black', 'blue', 'dress', 'color') as $key) {
     }
 }
 
-$utils->reindex('mana_seo');
+$utils->reindex('mana_db');
 $utils->reindex('mana_seo_url');

@@ -67,7 +67,7 @@ class Mana_Db_Model_Setup extends Varien_Object {
         }
         $installer->endSetup();
 
-        Mage::register('m_prevent_indexing_on_save', false, true);
+        Mage::unregister('m_prevent_indexing_on_save');
 
         return $this;
     }

@@ -48,6 +48,12 @@ $schema
     )))
     ->overrideIncludeFilterName(0)
     ->overrideRedirectToSubcategory(1)
+    ->overrideCanonicalCategory(1)
+    ->overrideCanonicalSearch(1)
+    ->overrideCanonicalCms(1)
+    ->overrideCanonicalFilters(1)
+    ->overrideCanonicalLimitAll(1)
+    ->overridePrevNextProductList(1)
     ->save();
 
 $schema = $db->getModel('mana_seo/schema');
@@ -83,6 +89,12 @@ $schema
     )))
     ->overrideIncludeFilterName(1)
     ->overrideRedirectToSubcategory(0)
+    ->overrideCanonicalCategory(0)
+    ->overrideCanonicalSearch(0)
+    ->overrideCanonicalCms(0)
+    ->overrideCanonicalFilters(0)
+    ->overrideCanonicalLimitAll(0)
+    ->overridePrevNextProductList(0)
     ->save();
 
-$setup->scheduleReindexing('mana_seo');
+$setup->scheduleReindexing('mana_db');

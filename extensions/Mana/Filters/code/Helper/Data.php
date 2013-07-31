@@ -10,7 +10,7 @@
  * Generic helper functions for Mana_Filters module. This class is a must for any module even if empty.
  * @author Mana Team
  */
-class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
+class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
 	/**
 	 * Return unique filter name. 
 	 * OO purists would say that kind of ifs should be done using virtual functions. Here we ignore OO-ness and 
@@ -187,23 +187,6 @@ class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
         $select->setPart(Zend_Db_Select::WHERE, $where);
     }
 
-    protected $_mode;
-    public function getMode() {
-        if ($this->_mode) {
-            return $this->_mode;
-        }
-        elseif (in_array(Mage::helper('mana_core')->getRoutePath(), array('catalogsearch/result/index', 'manapro_filterajax/search/index'))) {
-            return 'search';
-        }
-        else {
-            return 'category';
-        }
-    }
-    public function setMode($mode) {
-        $this->_mode = $mode;
-        return $this;
-    }
-
     /**
      * @param Mana_Filters_Model_Filter2_Store $filterOptions
      * @throws Exception
@@ -215,29 +198,6 @@ class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
                 return $filterOptions->getIsEnabled();
             case 'search':
                 return $filterOptions->getIsEnabledInSearch();
-            default:
-                throw new Exception('Not implemented');
-        }
-    }
-    /**
-     * @return Mage_Catalog_Model_Layer
-     * @throws Exception
-     */
-    public function getLayer ($mode = null) {
-        if (!$mode) {
-            $mode = $this->getMode();
-        }
-        switch ($mode) {
-            case 'category':
-                return Mage::getSingleton($this->useSolrForNavigation()
-                    ? 'enterprise_search/catalog_layer'
-                    : 'catalog/layer'
-                );
-            case 'search':
-                return Mage::getSingleton($this->useSolrForSearch()
-                    ? 'enterprise_search/search_layer'
-                    : 'catalogsearch/layer'
-                );
             default:
                 throw new Exception('Not implemented');
         }
@@ -421,35 +381,5 @@ class Mana_Filters_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         return $result;
-    }
-
-    public function useSolrForNavigation() {
-        if (!Mage::helper('core')->isModuleEnabled('Enterprise_Search')) {
-            return false;
-        }
-        /* @var $helper Enterprise_Search_Helper_Data */
-        $helper = Mage::helper('enterprise_search');
-
-        return $helper->getIsEngineAvailableForNavigation();
-    }
-    public function useSolrForSearch() {
-        if (!Mage::helper('core')->isModuleEnabled('Enterprise_Search')) {
-            return false;
-        }
-        /* @var $helper Enterprise_Search_Helper_Data */
-        $helper = Mage::helper('enterprise_search');
-
-        return $helper->isThirdPartSearchEngine() && $helper->isActiveEngine();
-    }
-
-    public function useSolr() {
-        switch ($this->getMode()) {
-            case 'category':
-                return $this->useSolrForNavigation();
-            case 'search':
-                return $this->useSolrForSearch();
-            default:
-                throw new Exception('Not implemented');
-        }
     }
 }

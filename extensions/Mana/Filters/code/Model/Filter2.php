@@ -67,10 +67,10 @@ class Mana_Filters_Model_Filter2 extends Mana_Db_Model_Object {
      * @return Mage_Catalog_Model_Category
      */
     public function afterCommitCallback() {
+        parent::afterCommitCallback();
         if (!Mage::registry('m_prevent_indexing_on_save')) {
             $this->getIndexerSingleton()->processEntityAction($this, $this->_entity, Mage_Index_Model_Event::TYPE_SAVE);
         }
-        parent::afterCommitCallback();
 
         return $this;
     }

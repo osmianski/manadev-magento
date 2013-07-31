@@ -102,4 +102,13 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
             $condition .")");
     }
 
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Logger
+     */
+    public function logger() {
+        return Mage::helper('mana_core/logger');
+    }
+    #endregion
 }

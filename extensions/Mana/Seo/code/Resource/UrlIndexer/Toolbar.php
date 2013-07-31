@@ -41,12 +41,12 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
             );
 
             $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_parameter` = 1) AND (`type` = '".
-                Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR."')";
-            Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
-            Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
-            Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
-            Mage::log($obsoleteCondition, Zend_log::DEBUG, 'm_url.log');
-            Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
+                Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR."') AND (`internal_name` = '" . $urlKey['internal_name'] . "')";
+            $this->logger()->logUrlIndexer('-----------------------------');
+            $this->logger()->logUrlIndexer(get_class($this));
+            $this->logger()->logUrlIndexer($schema->getId());
+            $this->logger()->logUrlIndexer($obsoleteCondition);
+            $this->logger()->logUrlIndexer(json_encode($options));
             $sql = $this->insert($this->getTargetTableName(), $fields);
 
             // run the statement

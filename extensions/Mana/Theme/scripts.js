@@ -114,14 +114,18 @@ Mana.define('Mana/Theme/Body', ['jquery', 'Mana/Core/PageBlock'], function ($, P
             return this
                 ._super()
                  .on('resize', this, function () {
+                    var $main = this.$().find('.main');
                     var $colMain = this.$().find('.col-main');
+                    var $colWrapper = $main.children('.col-wrapper');
                     var leftSidebar = this.getChild('left-sidebar'),
                         rightSidebar = this.getChild('right-sidebar');
-                    $colMain.width(this.$().find('.main').width() -
-                        (leftSidebar ? leftSidebar.getWidth() : 0) -
-                        (rightSidebar ? rightSidebar.getWidth() : 0) -
-                        $colMain.outerWidth(true) +
-                        $colMain.width());
+                    $colMain.width($main.width()
+                        - (leftSidebar ? leftSidebar.getWidth() : 0)
+                        - (rightSidebar ? rightSidebar.getWidth() : 0)
+                        - $colMain.outerWidth(true) + $colMain.width());
+                    $colWrapper.width($main.width()
+                        - (rightSidebar ? rightSidebar.getWidth() : 0)
+                        - $colWrapper.outerWidth(true) + $colWrapper.width());
                 });
         }
     });

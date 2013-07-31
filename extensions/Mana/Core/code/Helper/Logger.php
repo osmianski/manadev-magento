@@ -18,6 +18,10 @@
  * @method Mana_Core_Helper_Logger beginDbIndexerFailure(string $message = null)
  * @method Mana_Core_Helper_Logger logDbIndexerFailure(string $message = null)
  * @method Mana_Core_Helper_Logger endDbIndexerFailure(string $message = null)
+
+ * @method Mana_Core_Helper_Logger beginUrlIndexer(string $message = null)
+ * @method Mana_Core_Helper_Logger logUrlIndexer(string $message = null)
+ * @method Mana_Core_Helper_Logger endUrlIndexer(string $message = null)
  */
 class Mana_Core_Helper_Logger extends Mage_Core_Helper_Abstract {
     const INDENT_WIDTH = 4;
@@ -26,6 +30,7 @@ class Mana_Core_Helper_Logger extends Mage_Core_Helper_Abstract {
         'seo_match' => true,
         'seo_url' => true,
         'db_indexer_failure' => true,
+        'url_indexer' => true,
     );
     protected $_indent = array('all' => 0);
 

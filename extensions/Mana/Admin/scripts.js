@@ -374,6 +374,9 @@ Mana.define('Mana/Admin/Grid/Cell/Text', ['jquery', 'Mana/Admin/Grid/Cell'], fun
 Mana.define('Mana/Admin/Grid/Cell/Options', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
     return Cell.extend('Mana/Admin/Grid/Cell/Options', {});
 });
+Mana.define('Mana/Admin/Grid/Cell/Datetime', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
+    return Cell.extend('Mana/Admin/Grid/Cell/Datetime', {});
+});
 Mana.define('Mana/Admin/Grid/Cell/Store', ['jquery', 'Mana/Admin/Grid/Cell'], function ($, Cell) {
     return Cell.extend('Mana/Admin/Grid/Cell/Store', {});
 });

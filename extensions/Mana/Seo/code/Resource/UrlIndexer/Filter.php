@@ -75,12 +75,12 @@ class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_AttributeUrl
         $select->columns($fields);
 
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
-        Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
-        Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
-        Mage::log($select->__toString(), Zend_log::DEBUG, 'm_url.log');
-        Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
-        Mage::log($obsoleteCondition, Zend_log::DEBUG, 'm_url.log');
-        Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
+        $this->logger()->logUrlIndexer('-----------------------------');
+        $this->logger()->logUrlIndexer(get_class($this));
+        $this->logger()->logUrlIndexer($select->__toString());
+        $this->logger()->logUrlIndexer($schema->getId());
+        $this->logger()->logUrlIndexer($obsoleteCondition);
+        $this->logger()->logUrlIndexer(json_encode($options));
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
         // run the statement

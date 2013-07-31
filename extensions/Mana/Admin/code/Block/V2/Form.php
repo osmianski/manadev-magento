@@ -115,7 +115,7 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
     }
 
     /**
-     * @return Mana_Seo_Model_Source_Schema_Status
+     * @return Mana_Core_Model_Source_Yesno
      */
     public function getYesNoSourceModel() {
         return Mage::getSingleton('mana_core/source_yesno');

@@ -163,7 +163,7 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
         $dbHelper = Mage::helper('mana_db');
 
         /* @var $collection Mana_Db_Resource_Entity_Collection */
-        $collection = $dbHelper->getResourceSingleton('mana_seo/schema/store_flat_collection');
+        $collection = $dbHelper->getResourceModel('mana_seo/schema/store_flat_collection');
 
         return $collection;
     }

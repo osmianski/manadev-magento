@@ -38,11 +38,11 @@ class Mana_Seo_Resource_UrlIndexer_Search extends Mana_Seo_Resource_UrlIndexer {
         );
 
         $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_page` = 1) AND (`type` = 'search')";
-        Mage::log('-----------------------------', Zend_log::DEBUG, 'm_url.log');
-        Mage::log(get_class($this), Zend_log::DEBUG, 'm_url.log');
-        Mage::log($schema->getId(), Zend_log::DEBUG, 'm_url.log');
-        Mage::log($obsoleteCondition, Zend_log::DEBUG, 'm_url.log');
-        Mage::log(json_encode($options), Zend_log::DEBUG, 'm_url.log');
+        $this->logger()->logUrlIndexer('-----------------------------');
+        $this->logger()->logUrlIndexer(get_class($this));
+        $this->logger()->logUrlIndexer($schema->getId());
+        $this->logger()->logUrlIndexer($obsoleteCondition);
+        $this->logger()->logUrlIndexer(json_encode($options));
         $sql = $this->insert($this->getTargetTableName(), $fields);
 
         // run the statement

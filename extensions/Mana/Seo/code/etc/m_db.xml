@@ -54,6 +54,12 @@
                         <price_separator><type>varchar(10)</type><no>12</no><affects_url/></price_separator>
                         <use_range_bounds><type>tinyint</type><no>13</no><default_value>1</default_value><affects_url/></use_range_bounds>
                         <updated_at><type>datetime</type><no>14</no><default_value>0000-00-00 00:00:00</default_value></updated_at>
+                        <canonical_category><type>tinyint</type><no>15</no><default_value>1</default_value><affects_url/></canonical_category>
+                        <canonical_search><type>tinyint</type><no>16</no><default_value>1</default_value><affects_url/></canonical_search>
+                        <canonical_cms><type>tinyint</type><no>17</no><default_value>1</default_value><affects_url/></canonical_cms>
+                        <canonical_filters><type>tinyint</type><no>18</no><default_value>1</default_value><affects_url/></canonical_filters>
+                        <canonical_limit_all><type>tinyint</type><no>19</no><default_value>1</default_value><affects_url/></canonical_limit_all>
+                        <prev_next_product_list><type>tinyint</type><no>20</no><default_value>1</default_value><affects_url/></prev_next_product_list>
                     </fields>
                     <scopes>
                         <global/>
@@ -107,6 +113,12 @@
                                 <price_separator><default_formula>{{= global.price_separator}}</default_formula></price_separator>
                                 <use_range_bounds><default_formula>{{= global.use_range_bounds}}</default_formula></use_range_bounds>
                                 <updated_at><default_formula>{{= global.updated_at}}</default_formula></updated_at>
+                                <canonical_category><default_formula>{{= global.canonical_category}}</default_formula></canonical_category>
+                                <canonical_search><default_formula>{{= global.canonical_search}}</default_formula></canonical_search>
+                                <canonical_cms><default_formula>{{= global.canonical_cms}}</default_formula></canonical_cms>
+                                <canonical_filters><default_formula>{{= global.canonical_filters}}</default_formula></canonical_filters>
+                                <canonical_limit_all><default_formula>{{= global.canonical_limit_all}}</default_formula></canonical_limit_all>
+                                <prev_next_product_list><default_formula>{{= global.prev_next_product_list}}</default_formula></prev_next_product_list>
                             </fields>
                         </store_flat>
                     </scopes>

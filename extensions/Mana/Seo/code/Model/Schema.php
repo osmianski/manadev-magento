@@ -41,6 +41,18 @@
  * @method Mana_Seo_Model_Schema overrideRedirectToOptionPage(bool $value)
  * @method string getUpdatedAt()
  * @method Mana_Seo_Model_Schema overrideUpdatedAt(string $value)
+ * @method bool getCanonicalCategory()
+ * @method Mana_Seo_Model_Schema overrideCanonicalCategory(bool $value)
+ * @method bool getCanonicalSearch()
+ * @method Mana_Seo_Model_Schema overrideCanonicalSearch(bool $value)
+ * @method bool getCanonicalCms()
+ * @method Mana_Seo_Model_Schema overrideCanonicalCms(bool $value)
+ * @method bool getCanonicalFilters()
+ * @method Mana_Seo_Model_Schema overrideCanonicalFilters(bool $value)
+ * @method bool getCanonicalLimitAll()
+ * @method Mana_Seo_Model_Schema overrideCanonicalLimitAll(bool $value)
+ * @method bool getPrevNextProductList()
+ * @method Mana_Seo_Model_Schema overridePrevNextProductList(bool $value)
  */
 class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';
@@ -55,10 +67,11 @@ class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
 
     public function __construct($data = null) {
         parent::__construct($data);
-        $this->setQuerySeparator('');
-        $this->setParamSeparator('');
-        $this->setFirstValueSeparator('');
-        $this->setMultipleValueSeparator('');
+        $this
+            ->setData('query_separator', '')
+            ->setData('param_separator', '')
+            ->setData('first_value_separator', '')
+            ->setData('multiple_value_separator', '');
     }
 
     public function getSortedSymbols() {

@@ -24,4 +24,4 @@ $db = Mage::helper('mana_db');
 //    ->setRedirectToOptionPage(0)
 //    ->save();
 
-$setup->scheduleReindexing('mana_seo');
+$setup->scheduleReindexing('mana_db');
