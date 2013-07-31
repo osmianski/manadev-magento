@@ -31,14 +31,31 @@ class ManaPro_FilterAjax_Model_Observer {
         /* @var $filterAjax ManaPro_FilterAjax_Helper_Data */
 	    $filterAjax = Mage::helper('manapro_filterajax');
 
-	    foreach ($filterAjax->getPageTypes() as $pageType) {
+        /* @var $urlModel Mage_Core_Model_Url */
+        $urlModel = Mage::getSingleton('core/url');
+
+        foreach ($filterAjax->getPageTypes() as $pageType) {
 	        if ($pageType->matchRoute($core->getRoutePath())) {
                 $unfilteredUrl = $layeredNavigation->getClearUrl(false, true, true, true);
                 $suffix = $core->addDotToSuffix($pageType->getCurrentSuffix());
                 if ($suffix && $core->endsWith($unfilteredUrl, $suffix)) {
                     $unfilteredUrl = substr($unfilteredUrl, 0, strlen($unfilteredUrl) - strlen($suffix));
                 }
+                $unfilteredUrl = array($unfilteredUrl);
+                if ($layeredNavigation->isTreeVisible() && $core->getRoutePath() == 'catalog/category/view') {
+                    $unfilteredUrl = array();
+                    /* @var $treeHelper ManaPro_FilterTree_Helper_Data */
+                    $treeHelper = Mage::helper('manapro_filtertree');
+                    foreach ($treeHelper->getRootCategory()->getChildrenCategories() as $category) {
+                        /* @var $category Mage_Catalog_Model_Category */
+                        $url = $urlModel->sessionUrlVar($category->getUrl());
+                        if ($suffix && $core->endsWith($url, $suffix)) {
+                            $url = substr($url, 0, strlen($url) - strlen($suffix));
+                        }
+                        $unfilteredUrl[] = $url;
 
+                    }
+                }
                 $js
                     ->setConfig('layeredNavigation.ajax.urlKey', Mage::getStoreConfig('mana/ajax/url_key_filter'))
                     ->setConfig('layeredNavigation.ajax.routeSeparator', Mage::getStoreConfig('mana/ajax/route_separator_filter'))

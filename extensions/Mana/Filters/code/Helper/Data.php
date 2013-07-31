@@ -382,4 +382,22 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
 
         return $result;
     }
+
+    public function isTreeVisible() {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        if ($core->isManadevLayeredNavigationTreeInstalled()) {
+            $filterCollection = $this->getFilterOptionsCollection();
+            foreach ($filterCollection as $filter) {
+                /* @var $filter Mana_Filters_Model_Filter2_Store */
+                if ($filter->getType() == 'category') {
+                    if ($filter->getData('display') == 'tree') {
+                        return true;
+                    }
+                }
+            }
+       }
+       return false;
+    }
 }

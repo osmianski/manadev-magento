@@ -301,19 +301,25 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected function _parseCategoryValues($token) {
         $cNotFound = Mana_Seo_Model_ParsedUrl::CORRECT_NOT_FOUND_CATEGORY_FILTER_URL_KEY;
 
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
+
         // get category id defined by page URL key, or store root category is for non category pages
         $categoryId = $this->_getCategoryIdByPageUrlKey($token);
+        $categoryPath = $seo->getCategoryPath($categoryId);
 
         // scan subcategory URL key
         if ($urlKey = $this->_scanSingleUntilSeparator($token, '/')) {
             $token = $urlKey;
-            if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryId)) {
+            if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
                 $categoryId = $subCategoryId;
+                $categoryPath.='/'. $subCategoryId;
                 while ($token->getTextToBeParsed()) {
                     if ($urlKey = $this->_scanSingleUntilSeparator($token, '/')) {
                         $token = $urlKey;
-                        if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryId)) {
+                        if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
                             $categoryId = $subCategoryId;
+                            $categoryPath .= '/' . $subCategoryId;
                         }
                         else {
                             if (!$this->_correct($token, $cNotFound, __LINE__, $token->getText())) {
@@ -833,7 +839,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return int | bool
      */
     protected function _getCategoryIdByPageUrlKey($token) {
-        return $token->getPageUrl()->getType() == 'category'
+        return $token->getPageUrl() && $token->getPageUrl()->getType() == 'category'
             ? $token->getPageUrl()->getCategoryId()
             : Mage::app()->getStore($this->_storeId)->getRootCategoryId();
     }
@@ -843,10 +849,10 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @param int $categoryId
      * @return int | bool
      */
-    protected function _getCategoryIdByFilterUrlKey($token, $categoryId) {
+    protected function _getCategoryIdByFilterUrlKey($token, $categoryPath) {
         /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
         $urlCollection = $urls = $this->_getUrls(array($token->getText() => $token), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
-        $urlCollection->addParentCategoryFilter($categoryId);
+        $urlCollection->addParentCategoryFilter($categoryPath);
 
         $result = false;
         foreach ($urls as $url) {

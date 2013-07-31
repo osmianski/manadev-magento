@@ -15,10 +15,10 @@ class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collectio
     const TYPE_ATTRIBUTE_VALUE = 0x04;
     const TYPE_CATEGORY_VALUE = 0x08;
 
-    public function addParentCategoryFilter($categoryId) {
+    public function addParentCategoryFilter($categoryPath) {
         $this->getSelect()
             ->joinInner(array('c' => $this->getTable('catalog/category')),
-                $this->getConnection()->quoteInto("`c`.`entity_id` = `main_table`.`category_id` AND `c`.`parent_id` = ?", $categoryId),
+                $this->getConnection()->quoteInto("`c`.`entity_id` = `main_table`.`category_id` AND `c`.`path` LIKE ?", $categoryPath.'/%'),
                 null);
 
         return $this;

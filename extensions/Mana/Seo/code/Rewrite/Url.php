@@ -250,20 +250,53 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return $result;
     }
 
-    protected function _getCategoryUrlKey($categoryId) {
+    protected function _getCategoryUrlKeys($categoryId) {
+        /* @var $layeredNavigation Mana_Filters_Helper_Data */
+        $layeredNavigation = Mage::helper('mana_filters');
+
         /* @var $seo Mana_Seo_Helper_Data */
         $seo = Mage::helper('mana_seo');
 
         /* @var $logger Mana_Core_Helper_Logger */
         $logger = Mage::helper('mana_core/logger');
 
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
         $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
-        $urlCollection->addFieldToFilter('category_id', $categoryId);
-        if (!($result = $this->getUrlKey($urlCollection, array('category_id')))) {
-            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
+        $categoryIds = explode('/', $seo->getCategoryPath($categoryId));
+        if ($layeredNavigation->isTreeVisible()) {
+            $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        }
+        else {
+            if ($this->_routePath == 'catalog/category/view') {
+                $routeParams = $this->getData('route_params');
+                $rootCategoryId = $routeParams['id'];
+            }
+            else {
+                $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+            }
+        }
+        if (($rootIndex = array_search($rootCategoryId, $categoryIds)) === false) {
+            $categoryIds = array($categoryId);
+        }
+        else {
+            $categoryIds = array_slice($categoryIds, $rootIndex + 1);
         }
 
-        return $result;
+        $urlCollection->addFieldToFilter('category_id', array('in' => $categoryIds));
+        $select = $urlCollection->getSelect()
+            ->reset(Varien_Db_Select::COLUMNS)
+            ->columns(array_merge(array('category_id', 'final_url_key')));
+        $urlKeys = $urlCollection->getConnection()->fetchPairs($select);
+        if (!isset($urlKeys[$categoryId])) {
+            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
+        }
+        $result = array();
+        foreach ($categoryIds as $key) {
+            $result[] = $urlKeys[$key];
+        }
+        return implode('/', $result);
     }
 
     /**
@@ -314,9 +347,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return array
      */
     protected function _generateCategoryParameter($parameterUrl, $value) {
-        if ($urlKey = $this->_getCategoryUrlKey($value)) {
+        if ($urlKey = $this->_getCategoryUrlKeys($value)) {
+
             return array($parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator().
-                $urlKey['final_url_key'], $urlKey['category_id']);
+                $urlKey, $value);
         }
 
         return array(null, null);

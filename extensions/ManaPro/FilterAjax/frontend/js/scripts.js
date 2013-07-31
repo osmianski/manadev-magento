@@ -28,19 +28,24 @@ function($, ajax, config, layout)
                 );
         },
         match: function (url, element) {
-            if (url.indexOf(config.getData('url.unfiltered')) != 0) {
-                return false;
-            }
-
-            var suffixPos = false;
-            if (config.getData('url.suffix')) {
-                suffixPos = url.indexOf(config.getData('url.suffix'), config.getData('url.unfiltered').length);
-                if (suffixPos === -1) {
-                    return false;
+            var result = false;
+            $.each(config.getData('url.unfiltered'), function(key, unfilteredUrl) {
+                if (url.indexOf(unfilteredUrl) != 0) {
+                    return true;
                 }
-            }
 
-            return true;
+                var suffixPos = false;
+                if (config.getData('url.suffix')) {
+                    suffixPos = url.indexOf(config.getData('url.suffix'), unfilteredUrl.length);
+                    if (suffixPos === -1) {
+                        return true;
+                    }
+                }
+
+                result = true;
+                return false;
+            });
+            return result;
         },
         intercept: function (url, element) {
             var isProductListToolbarClicked = this._isProductListToolbarClicked(element);

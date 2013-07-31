@@ -12,6 +12,7 @@
 class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_activeSchemas = array();
     protected $_parameterUrls = array();
+    protected $_categoryPaths = array();
 
     /**
      * @return Mana_Seo_Helper_PageType[]
@@ -126,5 +127,16 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this;
     }
 
+    public function getCategoryPath($id) {
+        if (!isset($this->_categoryPaths[$id])) {
+            /* @var $res Mage_Core_Model_Resource */
+            $res = Mage::getSingleton('core/resource');
+            $db = $res->getConnection('read');
+            $this->_categoryPaths[$id] = $db->fetchOne($db->select()
+                ->from($res->getTableName('catalog/category'), 'path')
+                ->where('entity_id = ?', $id));
+        }
+        return $this->_categoryPaths[$id];
+    }
     #endregion
 }
