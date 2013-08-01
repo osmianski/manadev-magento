@@ -77,6 +77,17 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_query'] = array($filter->getRequestVar() => '__0__');
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
+
+    public function getPopupClearUrl($filter) {
+        $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
+        $params['_current'] = true;
+        $params['_use_rewrite'] = true;
+        $params['_m_escape'] = '';
+        $params['_query'] = array($filter->getRequestVar() => null);
+
+        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
+    }
+
     public function getPopupDimensions($items, $maxRowCount, $maxColumnCount) {
         $count = count($items);
         $columnCount = ceil($count / $maxRowCount);

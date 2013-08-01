@@ -8,12 +8,15 @@
 /**
  * @author Mana Team
  *
+ * @method string getOperation()
+ * @method Mana_Page_Block_Filter setOperation(string $value)
  */
 abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
     /**
-     * @var Mage_Eav_Model_Entity_Collection_Abstract
+     * @var Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection
      */
     protected $_productCollection;
+    protected $_condition;
     protected $_attributes;
     protected $_usedAttributes = array();
 
@@ -33,39 +36,53 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
     }
 
     public function delayedPrepareLayout() {
-        $layer = $this->getLayer();
-        if ($this->getShowRootCategory()) {
-            $this->setCategoryId(Mage::app()->getStore()->getRootCategoryId());
-        }
-
-        if (Mage::registry('product')) {
-            $categories = Mage::registry('product')->getCategoryCollection()
-                    ->setPage(1, 1)
-                    ->load();
-            if ($categories->count()) {
-                $this->setCategoryId(current($categories->getIterator()));
+        if (!($this->getParentBlock() instanceof Mana_Page_Block_Expr)) {
+            $layer = $this->getLayer();
+            if ($this->getShowRootCategory()) {
+                $this->setCategoryId(Mage::app()->getStore()->getRootCategoryId());
             }
-        }
 
-        $origCategory = null;
-        if ($this->getCategoryId()) {
-            $category = Mage::getModel('catalog/category')->load($this->getCategoryId());
-            if ($category->getId()) {
-                $origCategory = $layer->getCurrentCategory();
-                $layer->setCurrentCategory($category);
+            if (Mage::registry('product')) {
+                $categories = Mage::registry('product')->getCategoryCollection()
+                        ->setPage(1, 1)
+                        ->load();
+                if ($categories->count()) {
+                    $this->setCategoryId(current($categories->getIterator()));
+                }
             }
-        }
 
-        $this->_productCollection = $layer->getProductCollection();
-        $this
-            ->_prepareProductCollection()
-            ->prepareSortableFieldsByCategory($layer->getCurrentCategory());
+            $origCategory = null;
+            if ($this->getCategoryId()) {
+                $category = Mage::getModel('catalog/category')->load($this->getCategoryId());
+                if ($category->getId()) {
+                    $origCategory = $layer->getCurrentCategory();
+                    $layer->setCurrentCategory($category);
+                }
+            }
 
-        if ($origCategory) {
-            $layer->setCurrentCategory($origCategory);
+            $this->_productCollection = $layer->getProductCollection();
+            $this
+                ->prepareProductCollection()
+                ->_applyCondition($this->_condition)
+                ->prepareSortableFieldsByCategory($layer->getCurrentCategory());
+
+            if ($origCategory) {
+                $layer->setCurrentCategory($origCategory);
+            }
         }
 
         return parent::_prepareLayout();
+    }
+
+    /**
+     * @param string $condition
+     * @return Mana_Page_Block_Filter
+     */
+    protected function _applyCondition($condition) {
+        if ($condition) {
+            $this->_productCollection->getSelect()->distinct()->where($condition);
+        }
+        return $this;
     }
     protected function _addProductAttributesAndPrices($collection) {
         return $collection
@@ -100,7 +117,11 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
 
         return $this;
     }
-    protected function _prepareProductCollection() {
+
+    /**
+     * @return Mana_Page_Block_Filter
+     */
+    public function prepareProductCollection() {
         return $this;
     }
     public function getStoreId() {
@@ -162,4 +183,16 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
         return $this->_attributes;
     }
 
+    /**
+     * @param $collection
+     * @return Mana_Page_Block_Filter
+     */
+    public function setProductCollection($collection) {
+        $this->_productCollection = $collection;
+        return $this;
+    }
+
+    public function getCondition() {
+        return $this->_condition;
+    }
 }

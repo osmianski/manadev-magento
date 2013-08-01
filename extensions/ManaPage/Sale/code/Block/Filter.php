@@ -10,7 +10,7 @@
  *
  */
 class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
-    protected function _prepareProductCollection() {
+    public function prepareProductCollection() {
         /////////// Begin Special Price and Rule Filtering
         $todayDate = $this->getTodayDate();
         /* @var $res Mage_Core_Model_Resource */
@@ -63,9 +63,9 @@ class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
         }
         $merged_ids = array_merge($specialids, $promoids);
 
-        $this->_productCollection
-            ->addFieldToFilter('entity_id', count($merged_ids) ? $merged_ids: 0)
-            ->getSelect()->distinct();
+        $this->_condition = count($merged_ids)
+            ? $db->quoteInto('`e`.`entity_id` IN (?)', $merged_ids)
+            : '`e`.`entity_id` = 0';
 
         return $this;
     }

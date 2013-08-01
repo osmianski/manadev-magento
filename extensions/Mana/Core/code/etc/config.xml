@@ -91,6 +91,16 @@
 					</mana_core>
 				</observers>
 			</controller_action_layout_generate_blocks_after>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>adhocCss</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </core_block_abstract_to_html_after>
             <cms_page_render><!-- this is event name this module listens for -->
                 <observers>
                     <mana_core>

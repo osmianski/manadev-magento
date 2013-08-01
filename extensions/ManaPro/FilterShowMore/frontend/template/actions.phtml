@@ -33,6 +33,7 @@
             '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
             '<?php echo Mage::helper('mana_core')->base64EncodeUrl($_helper->getPopupUrl($_filter)) ?>',
             '<?php echo Mage::helper('mana_core')->base64EncodeUrl($_helper->getPopupTargetUrl($_filter)) ?>',
+            '<?php echo Mage::helper('mana_core')->base64EncodeUrl($_helper->getPopupClearUrl($_filter)) ?>',
             '<?php echo $block->getSelectedSeoValues() ?>',
             '<?php echo Mage::getStoreConfig('mana_filters/show_more_popup/action') ?>',
             <?php echo Mage::getStoreConfigFlag('mana_filters/show_more_popup/progress') ? 'true' : 'false' ?>,

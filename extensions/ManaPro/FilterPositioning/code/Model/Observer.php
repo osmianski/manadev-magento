@@ -205,14 +205,41 @@ class ManaPro_FilterPositioning_Model_Observer {
      */
     public function renderLayeredNavigationAboveProductList($observer) {
         /* @var $block Mage_Core_Block_Abstract */ $block = $observer->getEvent()->getBlock();
-        /* @var $transport Varien_Object */ $transport = $observer->getEvent()->getTransport();
-    	if (in_array($block->getNameInLayout(), array('product_list', 'search_result_list')) && ($parent = $block->getParentBlock()) && ($aboveBlock = $parent->getChild('above_products')) ) {
+        /* @var $transport Varien_Object */ $transport = $observer->getEvent()->getData('transport');
+
+    	if (in_array($block->getNameInLayout(), array('product_list', 'search_result_list')) &&
+    	    ($parent = $block->getParentBlock()) &&
+    	    ($aboveBlock = $parent->getChild('above_products')) &&
+    	    !$aboveBlock->getData('m_already_rendered'))
+    	{
             $productListHtml = $transport->getHtml();
             $html = $aboveBlock->toHtml();
-            $transport->setHtml($html. $productListHtml);
+            $transport->setData('html', $html. $productListHtml);
+            $aboveBlock->setData('m_already_rendered', true);
     	}
     }
 
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "core_block_abstract_to_html_before")
+     * @param Varien_Event_Observer $observer
+     */
+    public function renderCategoryCmsBlock($observer) {
+        /* @var $block Mage_Catalog_Block_Category_View */
+        $block = $observer->getEvent()->getBlock();
+
+        if ($block instanceof Mage_Catalog_Block_Category_View &&
+            ($block->isContentMode() || $block->isMixedMode()) &&
+            ($aboveBlock = $block->getChild('above_products')) &&
+            !$aboveBlock->getData('m_already_rendered'))
+        {
+            /* @var $cmsBlock Mage_Cms_Block_Block */
+            $cmsBlock = $block->getLayout()->createBlock('cms/block');
+            $cmsBlock->setData('block_id', $block->getCurrentCategory()->getDataUsingMethod('landing_page'));
+            $html = $aboveBlock->toHtml(). $cmsBlock->toHtml();
+            $aboveBlock->setData('m_already_rendered', true);
+            $block->setData('cms_block_html', $html);
+        }
+    }
     /**
      * REPLACE THIS WITH DESCRIPTION (handles event "m_advanced_filter_currently_shopping_by")
      * @param Varien_Event_Observer $observer

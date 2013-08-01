@@ -70,3 +70,72 @@
         }
     });
 })(jQuery);
+
+/********************************/
+/* dropdown menu in left column */
+/********************************/
+
+(function ($) {
+    var _selectors = {
+        visibleDd: '.block-layered-nav dl dd.m-dropdown-menu.m-popup-filter',
+        dt: '.block-layered-nav dl dt.m-dropdown-menu',
+        dd: '.block-layered-nav dl dd.m-dropdown-menu'
+    };
+    function _width(dt, dd) {
+        var maxWidth = dd.attr('data-max-width');
+        var result = dd.width() > dt.width() ? dd.width() : dt.width();
+        return maxWidth ? (result <= maxWidth ? result : maxWidth) : result;
+    }
+
+    function _hidePopups() {
+        var $popups = $(_selectors.visibleDd);
+        if ($popups.length) {
+            $popups.each(function () {
+                var dd = $(this);
+                var dt = $(this).prev();
+                dd
+                    .removeClass('m-popup-filter')
+                    .addClass('hidden');
+                dt
+                    .removeClass('m-popup-filter');
+            });
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    $(_selectors.dt)
+        .live('click', function () {
+            if (!_hidePopups()) {
+                var dt = $(this);
+                var dd = $(this).next();
+                if (dd.hasClass('hidden')) {
+                    dd
+                        .removeClass('hidden')
+                        .offset({
+                            top: dt.offset().top + dt.outerHeight(),
+                            left: dt.offset().left
+                        })
+                        .width(_width(dt, dd))
+                        .addClass('m-popup-filter');
+                    dt
+                        .addClass('m-popup-filter');
+                }
+                return false;
+            }
+        });
+    $(document).click(function () {
+        _hidePopups();
+    });
+
+    $(function () {
+        $(_selectors.dd).addClass('hidden');
+    });
+
+    $(document).bind('m-ajax-after', function () {
+        $(_selectors.dd).addClass('hidden');
+    });
+
+})(jQuery);

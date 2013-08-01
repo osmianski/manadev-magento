@@ -17,13 +17,20 @@
 ?>
 <ol class="m-filter-radios">
 <?php foreach ($this->getItems() as $_item): ?>
-    <li <?php if ($_item->getMSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
+    <li  <?php echo $this->getListItemClass($_item) ?> >
         <?php // MANA BEGIN ?>
-		<input type="radio" id="<?php echo $_item->getUniqueId($this) ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
+        <?php if ($_item->getCount()): ?>
+        <input type="radio" id="<?php echo $_item->getUniqueId($this) ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
 			value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMSelected()): ?>checked="checked"<?php else : ?> 
 			onClick="setLocation('<?php echo $this->urlEscape($_item->getReplaceUrl()) ?>');"<?php endif; ?> />
 		<label for="<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMSelected()): ?>class="m-selected-radio-button"<?php endif; ?>
                 title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+        <?php else: ?>
+            <input type="radio" id="<?php echo $_item->getUniqueId($this) ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>" value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
+                   disabled="disabled"/>
+            <label for="<?php echo $_item->getUniqueId($this) ?>"><span class="<?php if ($_item->getMShowSelected()): ?>m-selected-checkbox-item<?php endif; ?>"
+                                                                        title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
+        <?php endif; ?>
         <?php // MANA END ?>
         <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
             (<?php echo $_item->getCount() ?>)

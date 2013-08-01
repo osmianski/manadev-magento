@@ -10,17 +10,15 @@
  *
  */
 class ManaPro_FilterSeoLinks_Model_Noindex_Slider {
-    public function process(&$robots, $layerModel) {
+    public function detect($layerModel) {
         $filter = null;
-        $noindex = false;
+        $result = false;
         foreach (Mage::getSingleton($layerModel)->getState()->getFilters() as $item) {
             if ($item->getFilter()->getFilterOptions() && $item->getFilter()->getFilterOptions()->getDisplay() == 'slider') {
-                $noindex = true;
+                $result = true;
                 break;
             }
         }
-        if ($noindex) {
-            $robots = 'NOINDEX, NOFOLLOW';
-        }
+        return $result;
     }
 }

@@ -10,6 +10,7 @@
  *
  */
 class ManaPro_FilterSeoLinks_Model_Noindex_Empty {
-    public function process(&$robots, $layerModel) {
+    public function detect($layerModel) {
+        return false;
     }
 }

@@ -12,7 +12,7 @@
 		<ManaPro_FilterCheckboxes>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.02.13.14</version>
+		    <version>13.07.03.16</version>
 		</ManaPro_FilterCheckboxes>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
