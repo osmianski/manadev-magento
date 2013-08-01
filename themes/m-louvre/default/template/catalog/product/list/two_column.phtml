@@ -1,0 +1,128 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+    $_category = Mage::getSingleton('catalog/layer')->getCurrentCategory();
+    /* @var $_theme Mana_Theme_Helper_Data */
+    $_theme = Mage::helper('mana_theme');
+    $_doubleDescLengths = array(
+      'one_column' => 150,
+      'two_columns_left' => 80,
+      'two_columns_right' => 80,
+      'three_columns' => -1,
+    );
+?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<div class="category-products  <?php echo $_theme->getCssClass($this, 'grid_mode') ?>">
+    <?php echo $this->getToolbarHtml() ?>
+    <?php $_collectionSize = $_productCollection->count() ?>
+    <?php $_columnCount = 2; ?>
+    <?php $i=0; foreach ($_productCollection as $_product): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-list double-list<?php if(floor($i/2)==0): ?> first<?php elseif(ceil($i/2)==ceil($_collectionSize/2)): ?> last<?php endif; ?>">
+        <?php endif ?>
+        <li class="item<?php if($_iterator == 0): ?> first<?php endif; ?><?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?> <?php echo $_theme->getListItemClass($this, $_product) ?>">
+            <?php // Product Image ?>
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="height: <?php echo $_theme->getHeight(155) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(155, $_theme->getHeight(155)); ?>" width="155" height="<?php echo $_theme->getHeight(155) ?>"  alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+            <?php // Product description ?>
+            <div class="product-shop">
+                <div class="f-fix">
+                    <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                    <?php if ($_theme->isVisibleInProductList($this, 'name')): ?>
+                        <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a></h2>
+                    <?php endif ?>
+                    <?php if($_product->getRatingSummary() && $_theme->isVisibleInProductList($this, 'rating')): ?>
+                    <?php echo $this->getReviewsSummaryHtml($_product) ?>
+                    <?php endif; ?>
+                    <?php if ($_theme->isVisibleInProductList($this, 'description') || $_theme->isVisibleInProductList($this, 'read_more')): ?>
+                    <div class="desc std">
+                        <?php if ($_theme->isVisibleInProductList($this, 'description')): ?>
+                            <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        <?php endif; ?>
+                        <?php if ($_theme->isVisibleInProductList($this, 'read_more')): ?>
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+                <div class="actions-block">
+                    <?php if ($_theme->isVisibleInProductList($this, 'price')): ?>
+                        <?php echo $this->getPriceHtml($_product, true) ?>
+                    <?php endif; ?>
+                    <?php if ($_theme->isVisibleInProductList($this, 'wishlist') || $_theme->isVisibleInProductList($this, 'compare')): ?>
+                    <ul class="add-to-links">
+                        <?php if ($this->helper('wishlist')->isAllow() && $_theme->isVisibleInProductList($this, 'wishlist')) : ?>
+                            <?php if (!($_wishlistItem = $_theme->inWishlist($_product))): ?>
+                                <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist" title="<?php echo $this->__('Add to Wishlist') ?>"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <?php else: ?>
+                                <li><a href="<?php echo $this->helper('wishlist')->getRemoveUrl($_wishlistItem) ?>" class="link-wishlist" title="<?php echo $this->__('Remove from Wishlist') ?>"><?php echo $this->__('In Wishlist') ?></a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <?php if(($_compareUrl=$this->getAddToCompareUrl($_product)) && $_theme->isVisibleInProductList($this, 'compare')): ?>
+                            <?php if (!($_compareItem = $_theme->inCompare($_product))): ?>
+                                <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare" title="<?php echo $this->__('Add to Compare') ?>"><?php echo $this->__('Add to Compare') ?></a></li>
+                            <?php else: ?>
+                                <li><span class="separator">|</span> <a href="<?php echo $this->helper('catalog/product_compare')->getRemoveUrl($_compareItem) ?>" class="link-compare" title="<?php echo $this->__('Remove from Compare') ?>"><?php echo $this->__('In Compare') ?></a></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </ul>
+                    <?php endif; ?>
+                    <?php if($_product->isSaleable()): ?>
+                        <?php if ($_theme->isVisibleInProductList($this, 'cart')): ?>
+                            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if ($_theme->isVisibleInProductList($this, 'out_of_stock')): ?>
+                            <li><span class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+
+                </div>
+        </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+    <?php endforeach; ?>
+    <script type="text/javascript">decorateGeneric($$('ul.products-2-column-list'), ['odd','even','first','last'])</script>
+
+    <div class="toolbar-bottom">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+</div>
+<?php endif; ?>

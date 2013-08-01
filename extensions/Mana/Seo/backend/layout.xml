@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+	<adminhtml_mana_seo_schema_index>
+		<update handle="mana_admin2" />
+		<reference name="content">
+			<block type="mana_seo/adminhtml_schema_listContainer" name="container" as="container">
+				<block type="mana_seo/adminhtml_schema_listGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+	</adminhtml_mana_seo_schema_index>
+	<adminhtml_mana_seo_schema_grid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_seo/adminhtml_schema_listGrid" name="grid" as="grid" />
+        </block>
+	</adminhtml_mana_seo_schema_grid>
+	<adminhtml_mana_seo_schema_edit>
+        <update handle="mana_admin2"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana_seo.js</name><params/></action>
+        </reference>
+		<reference name="left">
+			<block type="mana_seo/adminhtml_schema_tabs" name="tabs" as="tabs">
+				<block type="mana_seo/adminhtml_schema_urlFormTab" name="url_tab" as="url_tab">
+                    <block type="mana_seo/adminhtml_schema_urlForm" name="url_form" as="url_form" />
+				</block>
+                <block type="mana_seo/adminhtml_schema_canonicalFormTab" name="canonical_tab" as="canonical_tab">
+                    <block type="mana_seo/adminhtml_schema_canonicalForm" name="canonical_form" as="canonical_form"/>
+                </block>
+                <block type="mana_seo/adminhtml_schema_symbolGridTab" name="symbol_tab" as="symbol_tab">
+                    <block type="mana_seo/adminhtml_schema_symbolGrid" name="symbol_grid" as="symbol_grid"/>
+                </block>
+				<block type="mana_seo/adminhtml_schema_toolbarGridTab" name="toolbar_tab" as="toolbar_tab">
+                    <block type="mana_seo/adminhtml_schema_toolbarGrid" name="toolbar_grid" as="toolbar_grid"/>
+                </block>
+			</block>
+		</reference>
+		<reference name="content">
+            <block type="mana_seo/adminhtml_schema_tabContainer" name="container" as="container" />
+		</reference>
+    </adminhtml_mana_seo_schema_edit>
+	<adminhtml_mana_seo_schema_symbolgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_seo/adminhtml_schema_symbolGrid" name="symbol_grid" as="symbol_grid"/>
+        </block>
+	</adminhtml_mana_seo_schema_symbolgrid>
+    <adminhtml_mana_seo_schema_toolbargrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_seo/adminhtml_schema_toolbarGrid" name="toolbar_grid" as="toolbar_grid"/>
+        </block>
+    </adminhtml_mana_seo_schema_toolbargrid>
+    <adminhtml_mana_seo_url_index>
+        <update handle="mana_admin2"/>
+        <reference name="content">
+            <block type="mana_seo/adminhtml_url_listContainer" name="container" as="container">
+                <block type="mana_seo/adminhtml_url_listGrid" name="grid" as="grid">
+                    <action method="addToParentGroup"><group>content</group></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mana_seo_url_index>
+	<adminhtml_mana_seo_url_grid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_seo/adminhtml_url_listGrid" name="grid" as="grid" />
+        </block>
+	</adminhtml_mana_seo_url_grid>
+	<adminhtml_mana_seo_url_edit>
+        <update handle="mana_admin2"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana_seo.js</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block type="mana_seo/adminhtml_url_formContainer" name="container" as="container">
+                <block type="mana_seo/adminhtml_url_form" name="form" as="form">
+                    <action method="addToParentGroup"><group>content</group></action>
+                </block>
+			</block>
+		</reference>
+    </adminhtml_mana_seo_url_edit>
+</layout>

@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.06.13.08</version>
+		    <version>13.08.01.09</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -42,33 +42,11 @@
 				resource model information from there -->
 				<resourceModel>manapro_filterseolinks_resources</resourceModel>
 			</manapro_filterseolinks>
-			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
-			<!-- This declares that current module will rewrite some model types in module shortnamed 'core'. -->
-			<core>
-				<rewrite>
-					<url>ManaPro_FilterSeoLinks_Model_Url</url>
-					<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>
-					<store>ManaPro_FilterSeoLinks_Model_Store</store>
-					<!-- INSERT HERE: individual type rewrites -->
-				</rewrite>
-			</core>
-            <enterprise_urlrewrite>
-                <rewrite>
-                    <url_rewrite_request>ManaPro_FilterSeoLinks_Model_Enterprise_Rewrite_Request</url_rewrite_request>
-                </rewrite>
-            </enterprise_urlrewrite>
-            <enterprise_urlrewrite_resource>
-                <rewrite>
-                    <url_rewrite>ManaPro_FilterSeoLinks_Resource_Enterprise_Rewrite</url_rewrite>
-                </rewrite>
-            </enterprise_urlrewrite_resource>
-            <!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
-			<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Resource pseudo-namespace in 
+			<!-- This says that string 'manapro_filterseolinks' corresponds to ManaPro_FilterSeoLinks_Resource pseudo-namespace in
 			getResourceModel() calls. -->
 			<manapro_filterseolinks_resources>
 				<class>ManaPro_FilterSeoLinks_Resource</class>
 				<entities>
-					<!-- INSERT HERE: table-entity mappings -->
 				</entities>
 			</manapro_filterseolinks_resources>
 			<!-- INSERT HERE: rewrites, ... -->
@@ -138,8 +116,85 @@
                     </manapro_filterseolinks>
                 </observers>
             </m_before_load_filter_collection>
-        </events><!-- INSERT HERE: blocks, models, ... -->
-	</global>
+
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_update_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareUpdateColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_update_columns>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_update_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processUpdate</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_update_process>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_insert_columns><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareInsertColumns</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_insert_columns>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_insert_process><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processInsert</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_insert_process>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_crud_form><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addFields</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_crud_form>
+            <!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+            <m_db_add_edited_data><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addEditedData</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks>
+                </observers>
+            </m_db_add_edited_data>
+        </events>
+        <!-- This tells Magento to analyze sql/manapro_filterseolinks_setup directory for install/upgrade scripts.
+        Installation scripts should be named as 'mysql4-install-<new version>.php'.
+        Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterseolinks_setup>
+                <setup>
+                    <module>ManaPro_FilterSeoLinks</module>
+                </setup>
+            </manapro_filterseolinks_setup>
+        </resources>
+    </global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
 	<adminhtml>
@@ -182,7 +237,7 @@
 	<manapro_filterseolinks>
         <noindex>
             <empty translate="title" module="manapro_filterseolinks">
-                <title></title>
+                <title />
                 <model>manapro_filterseolinks/noindex_empty</model>
             </empty>
             <several_filters translate="title" module="manapro_filterseolinks">
@@ -203,4 +258,20 @@
             </any>
         </noindex>
 	</manapro_filterseolinks>
+    <mana_seo>
+        <url_types>
+            <filter><parameter_helper>manapro_filterseolinks/url_filter</parameter_helper></filter>
+            <value><parameter_helper>manapro_filterseolinks/url_value</parameter_helper></value>
+        </url_types>
+        <parameter_handlers>
+            <toolbar>
+                <helper>manapro_filterseolinks/parameterHandler_toolbar</helper>
+                <sort_order>100</sort_order>
+            </toolbar>
+            <filters>
+                <helper>manapro_filterseolinks/parameterHandler_filters</helper>
+                <sort_order>200</sort_order>
+            </filters>
+        </parameter_handlers>
+    </mana_seo>
 </config>

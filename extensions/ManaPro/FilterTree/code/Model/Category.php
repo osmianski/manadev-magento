@@ -18,6 +18,18 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
         }
         return $this->_countedCategories;
     }
+
+    public function getCategory() {
+        return $this->treeHelper()->getRootCategory();
+    }
+
+    public function countOnCollection($collection) {
+        $collection->addCategoryFilter($this->getCategory());
+        $this->addCountToCategories($this->getCountedCategories(), $collection);
+
+        return $this->getCountedCategories();
+    }
+
     protected function _getItemsData() {
         $key = $this->getLayer()->getStateKey() . '_SUBCATEGORIES';
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
@@ -31,7 +43,7 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
             foreach ($counts as $category) {
                 $result[] = $category->getData();
             }
-            $data = $this->_getCategoryItemsDataRecursively($this->getLayer()->getCurrentCategory()->getData(), $result);
+            $data = $this->_getCategoryItemsDataRecursively($this->treeHelper()->getRootCategory()->getData(), $result);
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
@@ -99,7 +111,7 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
                     'label' => Mage::helper('core')->htmlEscape($childCategory['name']),
                     'value' => $childCategory['entity_id'],
                     'count' => $childCategory['product_count'],
-                    'm_selected' => false, // filled out during apply phase
+                    'm_selected' => $childCategory['entity_id'] == $this->getLayer()->getCurrentCategory()->getId(),
                     'items' => $this->_getCategoryItemsDataRecursively($childCategory, $children),
                 );
             }
@@ -133,10 +145,18 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
 
     protected function _markSelectedCategoryRecursively($items) {
         foreach ($items as $item) {
-            if ($item->getValue() == $this->getAppliedCategory()->getId())  {
-                $item->setMSelected(true);
-            }
+            $item->setMSelected($item->getValue() == $this->getAppliedCategory()->getId());
             $this->_markSelectedCategoryRecursively($item->getItems());
         }
     }
+
+    #region Dependencies
+
+    /**
+     * @return ManaPro_FilterTree_Helper_Data
+     */
+    public function treeHelper() {
+        return Mage::helper('manapro_filtertree');
+    }
+    #endregion
 }

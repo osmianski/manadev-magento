@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana>
+            <groups>
+                <seo translate="label" module="mana_seo">
+                    <label>Search Engine Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <search_url_key translate="label">
+                            <label>Quick Search Page URL Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </search_url_key>
+                        <max_correction_count translate="label comment">
+                            <label>Maximum Correction Count</label>
+							<comment>In case of misspelled URL system tries to correct or reduce misspelled words and get valid executable URL. This parameter specifies how many spelling errors should be corrected until system shows 404 'Page not found' page. URL processing time grows exponentially depending on ths parameter, so keep it low.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_correction_count>
+                        <show_create_duplicate_advice translate="label">
+                            <label>Advise to Create Duplicates Before Important Schema Changes</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_create_duplicate_advice>
+                    </fields>
+                </seo>
+            </groups>
+        </mana>
+    </sections>
+</config>

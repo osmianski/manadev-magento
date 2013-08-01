@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_Seo>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.05.19.08</version>
+        </Mana_Seo>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Seo_Helper_Data
+		class is accessible through Mage::helper('mana_seo') call, other Mana_Seo_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_seo/xxx_yyy') call. -->
+        <helpers>
+            <mana_seo>
+                <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_Seo_Helper</class>
+            </mana_seo>
+        </helpers>
+        <!-- This section registers block classes Mana_Seo_Block_XXX_YYY to be accessible through
+            'mana_seo/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Block pseudo-namespace. -->
+            <mana_seo>
+                <class>Mana_Seo_Block</class>
+            </mana_seo>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, Mana_Seo_Model_XXX_YYY classes are accessible as
+            'mana_seo/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <mana_seo>
+                <class>Mana_Seo_Model</class>
+                <!-- This tells Magento to read config/global/models/mana_seo_resources sections and register
+                    resource model information from there -->
+                <resourceModel>mana_seo_resources</resourceModel>
+            </mana_seo>
+            <core>
+                <rewrite>
+                    <url>Mana_Seo_Rewrite_Url</url>
+                    <store>Mana_Seo_Rewrite_Store</store>
+                </rewrite>
+            </core>
+            <!-- This says that string 'mana_seo' corresponds to Mana_Seo_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <mana_seo_resources>
+                <class>Mana_Seo_Resource</class>
+                <entities>
+					<schema><table>m_seo_schema</table></schema>
+					<schema_flat><table>m_seo_schema_flat</table></schema_flat>
+					<schema_store><table>m_seo_schema_store</table></schema_store>
+					<schema_store_flat><table>m_seo_schema_store_flat</table></schema_store_flat>
+					<url><table>m_seo_url</table></url>
+					<urlHistory><table>m_seo_url_history</table></urlHistory>
+					<urlConflict><table>m_seo_url_conflict</table></urlConflict>
+                </entities>
+            </mana_seo_resources>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This tells Magento to analyze sql/mana_seo_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <mana_seo_setup>
+                <setup>
+                    <module>Mana_Seo</module>
+                </setup>
+            </mana_seo_setup>
+        </resources>
+        <!-- This section registers event handlers of this module defined in Mana_Seo_Model_Observer with
+            events defined in other module throughout the system. So when some code in other module invokes an event
+            mentioned in this section, handler method of Mana_Seo_Model_Observer class gets called. -->
+        <events>
+            <controller_front_init_routers><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_seo>
+                        <class>Mana_Seo_Router</class>
+                        <method>initControllerRouters</method>
+                    </mana_seo>
+                </observers>
+            </controller_front_init_routers>
+            <controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_seo>
+                        <class>mana_seo/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareMetaData</method>
+                        <!-- event handler method name -->
+                    </mana_seo>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+        </events>
+        <index>
+            <indexer>
+                <mana_db>
+                    <targets>
+                        <schema translate="description" module="mana_seo">
+                            <entity>mana_seo/schema</entity>
+                            <description>SEO Schemas</description>
+                        </schema>
+                    </targets>
+                </mana_db>
+                <mana_seo_url translate="name description" module="mana_seo">
+                    <model>mana_seo/urlIndexer</model>
+                    <name>SEO URL Rewrites (MANAdev)</name>
+                    <description>Indexes SEO URL Rewrites for page types, parameters and parameter values</description>
+                    <sources>
+                        <category_page><resource>mana_seo/urlIndexer_categoryPage</resource></category_page>
+                        <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
+                        <search_page><resource>mana_seo/urlIndexer_search</resource></search_page>
+
+                        <filter_parameter><resource>mana_seo/urlIndexer_filter</resource></filter_parameter>
+                        <category_parameter><resource>mana_seo/urlIndexer_categoryParameter</resource></category_parameter>
+                        <toolbar_parameter><resource>mana_seo/urlIndexer_toolbar</resource></toolbar_parameter>
+
+                        <category_value><resource>mana_seo/urlIndexer_categoryValue</resource></category_value>
+                        <attribute_value><resource>mana_seo/urlIndexer_value</resource></attribute_value>
+
+                        <enterprise_active_category_page><resource>mana_seo/enterpriseUrlIndexer_activeCategoryPage</resource></enterprise_active_category_page>
+                        <enterprise_obsolete_category_page><resource>mana_seo/enterpriseUrlIndexer_obsoleteCategoryPage</resource></enterprise_obsolete_category_page>
+                    </sources>
+                    <depends>
+                        <mana_db />
+                        <mana_db_replicator />
+                        <catalog_url/>
+                    </depends>
+                </mana_seo_url>
+            </indexer>
+        </index>
+    </global>
+    <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
+     method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+     it will expect Mana_Seo_Adminhtml_AController class, and in class it will expect bAction() method. In most cases,
+     when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_seo before="Mage_Adminhtml">Mana_Seo_Adminhtml</mana_seo>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <mana_seo>
+                    <file>mana_seo.xml</file>
+                </mana_seo>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <mana_core>
+        <page_types>
+            <category><seo_helper>mana_seo/pageType_category</seo_helper></category>
+            <cms_page><seo_helper>mana_seo/pageType_cmsPage</seo_helper></cms_page>
+            <home_page><seo_helper>mana_seo/pageType_homePage</seo_helper></home_page>
+            <search><seo_helper>mana_seo/pageType_search</seo_helper></search>
+        </page_types>
+    </mana_core>
+    <default>
+        <mana>
+            <seo>
+                <search_url_key>search</search_url_key>
+                <max_correction_count>1</max_correction_count>
+                <show_create_duplicate_advice>1</show_create_duplicate_advice>
+            </seo>
+        </mana>
+    </default>
+</config>

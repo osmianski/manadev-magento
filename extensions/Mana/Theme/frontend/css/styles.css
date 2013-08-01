@@ -9,3 +9,27 @@
 .m-select span { position: absolute; top: 1px; left: 0; cursor: default; z-index: 1;
     background: white url(../images/mana_theme/i-select.png) right 7px no-repeat; color: #646464; border-radius: 5px; padding: 3px 4px 1px;
     border: solid; border-width: 2px 1px 0; line-height: normal; font: 12px Tahoma, Helvetica, sans-serif; overflow: hidden; padding-right: 14px; border-color: #BFBFBF #DBDBDB;}
+
+.sidebar-container { display: block; background-color: white;}
+.sidebar-container.right { right: 0;}
+.sidebar-container.left { left: 0; }
+/*.sidebar-container .handle {width: 20px; display: inline-block; min-height: 200px; z-index: 2; cursor: pointer; border: 1px solid black;}
+*/
+.sidebar-container .handle {width: 20px; display: inline-block; z-index: 2; cursor: pointer; background: #d7d7d7; }
+.sidebar-container.right .handle { float: left; }
+
+/*
+.sidebar-container.left .handle .icon-press {
+background: url(../images/mana_theme/i-select.png) no-repeat;
+    cursor: pointer;
+    height: 18px;
+    left: -5px;
+    margin-left: 50%;
+    margin-top: -9px;
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    display: inline-block;
+vertical-align: middle;
+zoom: 1;
+}*/

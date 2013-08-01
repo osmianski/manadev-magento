@@ -11,4 +11,24 @@
  * @author Mana Team
  */
 class ManaPro_FilterAjax_Helper_Data extends Mage_Core_Helper_Abstract {
+    /**
+     * @return ManaPro_FilterAjax_Helper_PageType[]
+     */
+    public function getPageTypes() {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        return $core->getPageTypes(/*'filter_ajax_helper'*/);
+    }
+
+    /**
+     * @param string $type
+     * @return ManaPro_FilterAjax_Helper_PageType
+     */
+    public function getPageType($type) {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+        return $core->getPageType($type/*, 'filter_ajax_helper'*/);
+    }
 }

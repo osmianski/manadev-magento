@@ -96,34 +96,27 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </layered_navigation>
-                        <poll translate="label">
-                            <label>Poll</label>
+                        <categories translate="label">
+                            <label>Categories</label>
+                            <comment>Block of categories in sidebar</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </categories>
+                        <cart translate="label">
+                            <label>Cart</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>200</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </poll>
-                        <cart translate="label">
-                            <label>Cart</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>300</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
                         </cart>
-                        <tags translate="label">
-                            <label>Tags</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>400</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </tags>
                         <wishlist translate="label">
                             <label>Wishlist</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>500</sort_order>
+                            <sort_order>300</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -131,7 +124,7 @@
                         <compare translate="label">
                             <label>Compare</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>600</sort_order>
+                            <sort_order>400</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -139,11 +132,27 @@
                         <related translate="label">
                             <label>Related Products</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>700</sort_order>
+                            <sort_order>500</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </related>
+                        <poll translate="label">
+                            <label>Poll</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </poll>
+                        <tags translate="label">
+                            <label>Tags</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tags>
                         <my_account translate="label comment">
                             <label>My Account</label>
                             <comment>Navigation block in My Account</comment>

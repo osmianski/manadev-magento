@@ -1,0 +1,20 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Social_Block_Facebook_Meta */
+?>
+<?php if ($this->getIsRelevant()) : ?>
+<meta property="og:title" content="<?php echo $this->getTitle() ?>"/>
+<meta property="og:type" content="<?php echo $this->getType() ?>"/>
+<meta property="og:url" content="<?php echo $this->getFbUrl() ?>"/>
+<?php if ( $this->getMediaUrl() ): ?>
+  <meta property="og:image" content="<?php echo $this->getMediaUrl() ?>"/>
+<?php endif ?>
+<meta property="og:site_name" content="<?php echo $this->getSiteName() ?>"/>
+<meta property="og:description" content="<?php echo $this->stripTags($this->getDescription(), null, true) ?>" />
+<?php endif ?>
+              

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <mana_seo version="13.04.18.07">
+            <installer_versions>
+                <v13.04.18.07>13.01.21.22</v13.04.18.07>
+            </installer_versions>
+            <entities>
+                <schema>
+                    <max_defaultable_fields>60</max_defaultable_fields>
+                    <fields>
+                        <query_separator><type>varchar(10)</type><no>0</no><affects_url/></query_separator>
+                        <param_separator><type>varchar(10)</type><no>1</no><affects_url/></param_separator>
+                        <first_value_separator><type>varchar(10)</type><no>2</no><affects_url/></first_value_separator>
+                        <multiple_value_separator><type>varchar(10)</type><no>3</no><affects_url/></multiple_value_separator>
+                        <use_filter_labels><type>tinyint</type><no>4</no><default_value>1</default_value><affects_url/></use_filter_labels>
+                        <toolbar_url_keys>
+                            <type>mediumtext</type>
+                            <no>6</no>
+                            <default_value><![CDATA[{
+                                ["internal_name": "p", "name": "page", "position": "9900"],
+                                ["internal_name": "order", "name": "sort-by", "position": "9910"],
+                                ["internal_name": "dir", "name": "sort-direction", "position": "9920"],
+                                ["internal_name": "mode", "name": "mode", "position": "9930"],
+                                ["internal_name": "limit", "name": "show", "position": "9940"]
+                            }]]></default_value>
+                            <affects_url/>
+                        </toolbar_url_keys>
+                        <symbols>
+                            <type>mediumtext</type>
+                            <no>5</no>
+                            <default_value><![CDATA[{
+                                ["symbol": "\"", "substitute": ""],
+                                ["symbol": "_", "substitute": "-"],
+                                ["symbol": "'", "substitute": ""],
+                                ["symbol": "%", "substitute": ""],
+                                ["symbol": "#", "substitute": ""],
+                                ["symbol": "&", "substitute": "+"],
+                                ["symbol": " ", "substitute": "-"]
+                            }]]></default_value>
+                            <affects_url/>
+                        </symbols>
+                        <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no><indexed /></status>
+                        <name><type>varchar(80)</type><no>8</no></name>
+                        <redirect_parameter_order><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
+                        <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value><affects_url/></include_filter_name>
+                        <redirect_to_subcategory><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
+                        <price_separator><type>varchar(10)</type><no>12</no><affects_url/></price_separator>
+                        <use_range_bounds><type>tinyint</type><no>13</no><default_value>1</default_value><affects_url/></use_range_bounds>
+                        <updated_at><type>datetime</type><no>14</no><default_value>0000-00-00 00:00:00</default_value></updated_at>
+                        <canonical_category><type>tinyint</type><no>15</no><default_value>1</default_value><affects_url/></canonical_category>
+                        <canonical_search><type>tinyint</type><no>16</no><default_value>1</default_value><affects_url/></canonical_search>
+                        <canonical_cms><type>tinyint</type><no>17</no><default_value>1</default_value><affects_url/></canonical_cms>
+                        <canonical_filters><type>tinyint</type><no>18</no><default_value>1</default_value><affects_url/></canonical_filters>
+                        <canonical_limit_all><type>tinyint</type><no>19</no><default_value>1</default_value><affects_url/></canonical_limit_all>
+                        <prev_next_product_list><type>tinyint</type><no>20</no><default_value>1</default_value><affects_url/></prev_next_product_list>
+                    </fields>
+                    <scopes>
+                        <global/>
+                        <flat>
+                            <flattens>mana_seo/schema/global</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <primary/>
+                                    </from>
+                                </base>
+                            </formula>
+                        </flat>
+                        <store>
+                            <store_specifics_for>mana_seo/schema/global</store_specifics_for>
+                        </store>
+                        <store_flat>
+                            <flattens>mana_seo/schema/store</flattens>
+                            <formula>
+                                <base>
+                                    <from>
+                                        <global>
+                                            <entity>mana_seo/schema/flat</entity>
+                                        </global>
+                                        <store>
+                                            <entity>core/store</entity>
+                                        </store>
+                                    </from>
+                                    <join>
+                                        <primary>
+                                            <type>left</type>
+                                            <on>{{= primary.global_id }} = {{= global.id }} AND {{= primary.store_id }} = {{= store.store_id }}</on>
+                                        </primary>
+                                    </join>
+                                    <where><![CDATA[{{= store.code}} <> 'admin']]></where>
+                                </base>
+                            </formula>
+                            <fields>
+                                <query_separator><default_formula>{{= global.query_separator}}</default_formula></query_separator>
+                                <param_separator><default_formula>{{= global.param_separator}}</default_formula></param_separator>
+                                <first_value_separator><default_formula>{{= global.first_value_separator}}</default_formula></first_value_separator>
+                                <multiple_value_separator><default_formula>{{= global.multiple_value_separator}}</default_formula></multiple_value_separator>
+                                <use_filter_labels><default_formula>{{= global.use_filter_labels}}</default_formula></use_filter_labels>
+                                <toolbar_url_keys><default_formula>{{= global.toolbar_url_keys}}</default_formula></toolbar_url_keys>
+                                <symbols><default_formula>{{= global.symbols}}</default_formula></symbols>
+                                <status><default_formula>{{= global.status}}</default_formula></status>
+                                <name><default_formula>{{= global.name}}</default_formula></name>
+                                <redirect_parameter_order><default_formula>{{= global.redirect_parameter_order}}</default_formula></redirect_parameter_order>
+                                <include_filter_name><default_formula>{{= global.include_filter_name}}</default_formula></include_filter_name>
+                                <redirect_to_subcategory><default_formula>{{= global.redirect_to_subcategory}}</default_formula></redirect_to_subcategory>
+                                <price_separator><default_formula>{{= global.price_separator}}</default_formula></price_separator>
+                                <use_range_bounds><default_formula>{{= global.use_range_bounds}}</default_formula></use_range_bounds>
+                                <updated_at><default_formula>{{= global.updated_at}}</default_formula></updated_at>
+                                <canonical_category><default_formula>{{= global.canonical_category}}</default_formula></canonical_category>
+                                <canonical_search><default_formula>{{= global.canonical_search}}</default_formula></canonical_search>
+                                <canonical_cms><default_formula>{{= global.canonical_cms}}</default_formula></canonical_cms>
+                                <canonical_filters><default_formula>{{= global.canonical_filters}}</default_formula></canonical_filters>
+                                <canonical_limit_all><default_formula>{{= global.canonical_limit_all}}</default_formula></canonical_limit_all>
+                                <prev_next_product_list><default_formula>{{= global.prev_next_product_list}}</default_formula></prev_next_product_list>
+                            </fields>
+                        </store_flat>
+                    </scopes>
+                </schema>
+                <urlConflict>
+                    <fields>
+                        <message><type>mediumtext</type></message>
+                    </fields>
+                </urlConflict>
+                <url>
+                    <unique>
+                        <primary>
+                            <type/>
+                            <schema_id/>
+                            <unique_key/>
+                            <is_page />
+                            <is_parameter/>
+                            <is_attribute_value/>
+                            <is_category_value/>
+                        </primary>
+                    </unique>
+                    <fields>
+                        <url_key><type>varchar(255)</type><indexed /></url_key>
+                        <unique_key><type>varchar(255)</type><indexed /></unique_key>
+                        <type><type>varchar(20)</type><indexed /></type>
+                        <status><type>varchar(10)</type><indexed /><default_value>obsolete</default_value><no>7</no></status>
+                        <is_page><type>tinyint</type><indexed /><default_value>0</default_value></is_page>
+                        <is_parameter><type>tinyint</type><indexed /><default_value>0</default_value></is_parameter>
+                        <is_attribute_value><type>tinyint</type><indexed /><default_value>0</default_value></is_attribute_value>
+                        <is_category_value><type>tinyint</type><indexed /><default_value>0</default_value></is_category_value>
+                        <internal_name><type>varchar(255)</type><indexed /></internal_name>
+                        <include_filter_name><type>tinyint</type><default_value>0</default_value></include_filter_name>
+                        <force_include_filter_name><type>tinyint</type><nullable /></force_include_filter_name>
+                        <final_include_filter_name><type>tinyint</type><default_value>0</default_value></final_include_filter_name>
+                        <manual_url_key><type>varchar(255)</type><nullable /></manual_url_key>
+                        <final_url_key><type>varchar(255)</type><indexed /></final_url_key>
+                        <filter_display><type>varchar(255)</type><nullable /></filter_display>
+                        <position><type>int</type><indexed /><default_value>0</default_value></position>
+                        <schema_id>
+                            <type>bigint</type>
+                            <foreign>
+                                <entity>mana_seo/schema/store_flat</entity>
+                                <field>id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </schema_id>
+                        <category_id>
+                            <type>int(10) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>catalog/category</entity>
+                                <field>entity_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </category_id>
+                        <cms_page_id>
+                            <type>smallint(6)</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>cms/page</entity>
+                                <field>page_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </cms_page_id>
+                        <attribute_id>
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id>
+                        <option_id>
+                            <type>int(10) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute_option</entity>
+                                <field>option_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </option_id>
+                        <conflict_id>
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_seo/urlConflict</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </conflict_id>
+                    </fields>
+                </url>
+                <urlHistory>
+                    <fields>
+                        <url_key><type>varchar(255)</type><indexed /></url_key>
+                        <type><type>varchar(40)</type><indexed /></type>
+                        <redirect_to><type>varchar(255)</type><indexed /></redirect_to>
+                        <store_id>
+                            <type>smallint(5) unsigned</type>
+                            <foreign>
+                                <entity>core/store</entity>
+                                <field>store_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </store_id>
+                    </fields>
+                </urlHistory>
+            </entities>
+        </mana_seo>
+    </modules>
+</config>

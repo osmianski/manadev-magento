@@ -45,4 +45,15 @@ class Mana_Db_Resource_Edit_Session extends Mage_Core_Model_Mysql4_Abstract {//M
     		throw $e;
     	}
     }
+
+    public function isExpired($editSessionId) {
+        $db = $this->_getReadAdapter();
+        $table = Mage::getSingleton('core/resource')->getTableName('mana_db/edit_session');
+
+        $select = $db->select()
+            ->from($table, 'id')
+            ->where("id = ?", $editSessionId);
+
+        return $db->fetchOne($select) ? false : true;
+    }
 }

@@ -5,27 +5,176 @@
 @copyright   Copyright (c) http://www.manadev.com
 @license     http://www.manadev.com/license  Proprietary License
  -->
-<!-- This file defines the rules which should be applied when module mana_attributepage is installed and active. Typically, 
-rules consists of the following parts:
-	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
-		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
-		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
-		every each page rendered by Magento.
-	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
-	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
-		your own blocks, to invoke methods on referenced block).
-Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
-examples on what kind of actions can be applied to referenced blocks. 
- -->
 <layout version="0.1.0">
-    <adminhtml_mana_attributepage_new>
-        <update handle="mana_admin"/>
+    <adminhtml_mana_attribute_page_new type="page">
         <reference name="content">
-            <block type="mana_attributepage/adminhtml_new_container" name="container" as="container">
-				<block type="mana_attributepage/adminhtml_new_form" name="form" as="form">
-					<action method="addToParentGroup"><group>content</group></action>
-				</block>
+            <block type="mana_admin/page" name="page">
+                <action method="setTitle" translate="value" module="mana_attributepage">
+                    <value>Create Pages for Attribute(s)</value>
+                </action>
+                <action method="setTitleGroup"><value>MANAdev</value></action>
+                <action method="setMenu"><value>mana/attribute</value></action>
+                <action method="setFormUrl"><value>*/*/save</value></action>
+
+                <!-- Data Source -->
+                <block type="mana_admin/data_entity" name="page.data_source">
+                    <action method="setEntity"><entity>mana_attributepage/page</entity></action>
+                    <action method="addEntity"><name>option_page_defaults</name><entity>mana_attributepage/option_page/default</entity></action>
+                </block>
+
+                <!-- Actions -->
+                <block type="mana_admin/page_action" name="page.close">
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Close</value>
+                    </action>
+                    <action method="setSortOrder"><value>100</value></action>
+                    <action method="setClass"><value>back</value></action>
+                </block>
+                <block type="mana_admin/page_action" name="page.save">
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Save</value>
+                    </action>
+                    <action method="setSortOrder"><value>200</value></action>
+                    <action method="setClass"><value>save</value></action>
+                </block>
+                <block type="mana_admin/page_action" name="page.saveAndClose">
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Save and Close</value>
+                    </action>
+                    <action method="setSortOrder"><value>300</value></action>
+                    <action method="setClass"><value>save</value></action>
+                </block>
+
+                <!-- Tabs -->
+                <block type="mana_admin/tab" name="attribute.list">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>General</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Attributes</value>
+                    </action>
+                    <action method="setSortOrder"><value>100</value></action>
+
+                    <!-- Grid -->
+                    <block type="mana_admin/grid" name="grid">
+                        <action method="setDefaultSort"><value>position</value></action>
+                        <action method="setDefaultDir"><value>asc</value></action>
+                        <action method="setGridController"><value>mana_attribute_page_newGrid</value></action>
+
+                        <!-- Data Source -->
+                        <block type="mana_admin/data_collection" name="grid.data_source">
+                            <action method="setEntity"><entity>mana_attributepage/page_attribute</entity></action>
+                        </block>
+
+                        <!-- Columns -->
+                        <block type="mana_admin/grid_column" name="grid.attribute_id">
+                            <action method="setTitle" translate="value" module="mana_attributepage">
+                                <value>Attribute</value>
+                            </action>
+                            <action method="setColumnType"><value>select</value></action>
+                            <action method="setSourceModel"><value>mana_attributepage/source_attribute</value></action>
+                            <action method="setSortOrder"><value>100</value></action>
+                        </block>
+                        <block type="mana_admin/grid_column" name="grid.position">
+                            <action method="setTitle" translate="value" module="mana_attributepage">
+                                <value>Position</value>
+                            </action>
+                            <action method="setColumnType"><value>input</value></action>
+                            <action method="setWidth"><value>100px</value></action>
+                            <action method="setAlign"><value>center</value></action>
+                            <action method="setSortOrder"><value>200</value></action>
+                        </block>
+
+                        <!-- Actions -->
+                        <block type="mana_admin/grid_action" name="grid.add">
+                            <action method="setTitle" translate="value" module="mana_attributepage">
+                                <value>Add</value>
+                            </action>
+                            <action method="setSortOrder"><value>100</value></action>
+                            <action method="setClass"><value>add</value></action>
+                        </block>
+                        <block type="mana_admin/grid_action" name="grid.remove">
+                            <action method="setTitle" translate="value" module="mana_attributepage">
+                                <value>Remove Selected</value>
+                            </action>
+                            <action method="setSortOrder"><value>200</value></action>
+                            <action method="setClass"><value>delete</value></action>
+                        </block>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="attribute.meta">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Attribute Page</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Meta Information</value>
+                    </action>
+                    <action method="setSortOrder"><value>200</value></action>
+                    <block type="mana_admin/placeholder" name="attribute.meta.placeholder">
+                        <action method="setText"><value>Meta Info for Attribute Page is set here</value></action>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="attribute.content">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Attribute Page</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Content</value>
+                    </action>
+                    <action method="setSortOrder"><value>300</value></action>
+                    <block type="mana_admin/placeholder" name="attribute.content.placeholder">
+                        <action method="setText"><value>Attribute Page content is set here</value></action>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="attribute.layout">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Attribute Page</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Layout</value>
+                    </action>
+                    <action method="setSortOrder"><value>400</value></action>
+                    <block type="mana_admin/placeholder" name="attribute.layout.placeholder">
+                        <action method="setText"><value>Attribute Page layout is set here</value></action>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="option.meta">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Option Pages</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Meta Information</value>
+                    </action>
+                    <action method="setSortOrder"><value>500</value></action>
+                    <block type="mana_admin/placeholder" name="option.meta.placeholder">
+                        <action method="setText"><value>Meta Info for Option Pages is set here</value></action>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="option.content">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Option Pages</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Content</value>
+                    </action>
+                    <action method="setSortOrder"><value>600</value></action>
+                    <block type="mana_admin/placeholder" name="option.content.placeholder">
+                        <action method="setText"><value>Option Page content is set here</value></action>
+                    </block>
+                </block>
+                <block type="mana_admin/tab" name="option.layout">
+                    <action method="setGroup" translate="value" module="mana_attributepage">
+                        <value>Option Pages</value>
+                    </action>
+                    <action method="setTitle" translate="value" module="mana_attributepage">
+                        <value>Layout</value>
+                    </action>
+                    <action method="setSortOrder"><value>700</value></action>
+                    <block type="mana_admin/placeholder" name="option.layout.placeholder">
+                        <action method="setText"><value>Option Page layout is set here</value></action>
+                    </block>
+                </block>
             </block>
         </reference>
-    </adminhtml_mana_attributepage_new>
+    </adminhtml_mana_attribute_page_new>
 </layout>
