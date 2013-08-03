@@ -265,7 +265,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 
         $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
         $categoryIds = explode('/', $seo->getCategoryPath($categoryId));
-        if ($layeredNavigation->isTreeVisible()) {
+        if ($layeredNavigation->isTreeVisible() && $this->getSchema()->getRedirectToSubcategory()) {
             $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
         }
         else {
