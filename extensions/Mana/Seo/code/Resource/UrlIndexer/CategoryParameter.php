@@ -68,7 +68,9 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
         $fields = array(
             'url_key' => new Zend_Db_Expr($urlKeyExpr),
             'internal_name' => new Zend_Db_Expr("'cat'"),
-            'position' => new Zend_Db_Expr($core->isManadevLayeredNavigationInstalled() ? '`f`.`position`': "-1"),
+            'position' => new Zend_Db_Expr(
+                $core->isManadevSeoLayeredNavigationInstalled() ? '`f`.`url_position`' :
+                ($core->isManadevLayeredNavigationInstalled() ? '`f`.`position`': "-1")),
             'type' => new Zend_Db_Expr("'" . Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY . "'"),
             'is_page' => new Zend_Db_Expr('0'),
             'is_parameter' => new Zend_Db_Expr('1'),
