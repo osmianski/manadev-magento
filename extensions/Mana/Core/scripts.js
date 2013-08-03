@@ -274,8 +274,11 @@ function ($, layout, json, core, config, undefined)
                 });
             }
             if (response.blocks) {
-                $.each(response.blocks, function (block, html) {
-                    layout.getBlock(block).setContent(html);
+                $.each(response.blocks, function (blockName, html) {
+                    var block = layout.getBlock(blockName);
+                    if (block) {
+                        block.setContent(html);
+                    }
                 });
             }
             if (response.config) {

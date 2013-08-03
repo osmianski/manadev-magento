@@ -60,6 +60,9 @@ class Mana_Core_Helper_Router extends Mage_Core_Helper_Abstract {
             $request = Mage::app()->getRequest();
         }
 
+        if ($path === '') {
+            $path = '/';
+        }
         $request->setPathInfo($path)->setDispatched(false);
 
         return $this;
