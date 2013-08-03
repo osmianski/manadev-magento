@@ -50,21 +50,21 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
-            $this->_schema = $seo->getActiveSchema($this->getStore()->getId());
+            if ($this->_schema = $seo->getActiveSchema($this->getStore()->getId())) {
+                $this->_routePath = $this->_populateCurrentRouteFromRequest($routePath);
 
-            $this->_routePath = $this->_populateCurrentRouteFromRequest($routePath);
+                $query = null;
+                if (isset($this->_routeParams['_query'])) {
+                    $this->purgeQueryParams();
+                    $query = $this->_routeParams['_query'];
+                    unset($this->_routeParams['_query']);
+                }
+                $this->_query = $query;
 
-            $query = null;
-            if (isset($this->_routeParams['_query'])) {
-                $this->purgeQueryParams();
-                $query = $this->_routeParams['_query'];
-                unset($this->_routeParams['_query']);
-            }
-            $this->_query = $query;
-
-            if ($this->_pageType = $this->_getPageType($this->_routePath)) {
-                $this->_suffix = $this->_pageType->getCurrentSuffix();
-                $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                if ($this->_pageType = $this->_getPageType($this->_routePath)) {
+                    $this->_suffix = $this->_pageType->getCurrentSuffix();
+                    $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                }
             }
         }
 

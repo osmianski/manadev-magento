@@ -12,7 +12,7 @@
 		<ManaPro_FilterAjax>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.01.16.16</version>
+		    <version>13.08.03.15</version>
 		</ManaPro_FilterAjax>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -55,14 +55,6 @@
                     </manapro_filterajax>
                 </observers>
             </m_ajax_options>
-            <controller_front_init_routers><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filterajax>
-                        <class>ManaPro_FilterAjax_Router</class>
-                        <method>initControllerRouters</method>
-                    </manapro_filterajax>
-                </observers>
-            </controller_front_init_routers>
         </events>
 	</global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
@@ -96,7 +88,15 @@
 			</updates>
 		</layout>
 	</frontend>
-	<default>
+    <mana_core>
+        <routers>
+            <manapro_filterajax>
+                <class>ManaPro_FilterAjax_Router</class>
+                <sort_order>100</sort_order>
+            </manapro_filterajax>
+        </routers>
+    </mana_core>
+    <default>
 		<mana>
 			<ajax>
                 <url_key_filter>ajax/layered-navigation</url_key_filter>

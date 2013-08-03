@@ -43,7 +43,7 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
                 'required' => true,
             ), $this->getFlatModel()->getStatus() == Mana_Seo_Model_Schema::STATUS_ACTIVE ? array(
                 'disabled' => true,
-                'note' => $this->__("You can't change status of active schema. However, you can set another schema as 'Active', after that previously active schema status is set to 'Redirect'."),
+                'note' => $this->__("You can't change status of active schema. However, you can set another 'Redirect' schema as 'Active' (after this active schema status automatically changes to 'Redirect')."),
             ) : array(
                 'note' => $this->__("If changed to 'Active', previously active schema status is set to 'Redirect'."),
             )));

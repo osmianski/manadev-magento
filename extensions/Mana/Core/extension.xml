@@ -5,8 +5,8 @@
 
     <!-- modules files for both frontend and backend -->
     <sync extension-dir="code" project-dir="app/code/local/{Extension/Name}" />
-    <sync extension-dir="tests" project-dir="tests/{Extension/Name}/Test"/>
-    <sync extension-dir="tests-data" project-dir="tests/data/{Extension/Name}"/>
+    <sync extension-dir="tests" project-dir="tests/{Extension/Name}/Test" no-pack="1"/>
+    <sync extension-dir="tests-data" project-dir="tests/data/{Extension/Name}" no-pack="1"/>
     <sync extension-file="module.xml" project-file="app/etc/modules/{Extension_Name}.xml"/>
     <sync extension-dir="email" project-dir="app/locale/en_US/template/email/{extension_name}"/>
     <sync extension-file="translate.csv" project-file="app/locale/en_US/{Extension_Name}.csv"/>
@@ -36,5 +36,5 @@
     <sync extension-file="m-classes/.htaccess" project-file="js/m-classes/.htaccess"/>
 
     <!-- unit testing core files -->
-    <sync extension-file="tests-core/Bootstrap.php" project-file="tests/Bootstrap.php"/>
+    <sync extension-file="tests-core/Bootstrap.php" project-file="tests/Bootstrap.php" no-pack="1"/>
 </config>

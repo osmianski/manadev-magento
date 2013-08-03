@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.08.01.09</version>
+		    <version>13.08.03.15</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -171,6 +171,16 @@
                     </mana_core>
                 </observers>
             </controller_front_send_response_before>
+            <controller_front_init_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>registerEarlyRouters</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_front_init_before>
         </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 

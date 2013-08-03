@@ -309,5 +309,28 @@ class Mana_Core_Model_Observer {
             call_user_func($callback);
         }
     }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "controller_front_init_before")
+     * @param Varien_Event_Observer $observer
+     */
+    public function registerEarlyRouters($observer) {
+        /* @var $front Mage_Core_Controller_Varien_Front */
+        $front = $observer->getEvent()->getData('front');
+
+        foreach ($this->coreHelper()->getSortedXmlChildren(Mage::getConfig()->getNode('mana_core'), 'routers') as $key => $routerXml) {
+            $class = (string)$routerXml->class;
+            $front->addRouter($key, new $class);
+        }
+    }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    #endregion
 }
 

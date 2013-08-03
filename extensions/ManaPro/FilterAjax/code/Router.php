@@ -12,18 +12,6 @@
 class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     protected $_route;
 
-    /**
-     * Initialize Controller Router
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function initControllerRouters($observer) {
-        /* @var $front Mage_Core_Controller_Varien_Front */
-        $front = $observer->getEvent()->getData('front');
-
-        $front->addRouter('manapro_filterajax', $this);
-    }
-
     public function match(Zend_Controller_Request_Http $request) {
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
@@ -47,11 +35,15 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             $routerHelper
                 ->changePath($path)
                 ->processWithoutRendering($this, 'render');
+            $this->getCatalogSession()->setData('manapro_filterajax_request', 1);
+            Mage::getModel('core/url_rewrite')->rewrite();
         }
         return false;
     }
 
     public function render() {
+        $this->getCatalogSession()->unsetData('manapro_filterajax_request');
+
         /* @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getSingleton('core/layout');
 
@@ -95,4 +87,14 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
 
         Mage::app()->getResponse()->setBody(json_encode($response));
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mage_Catalog_Model_Session
+     */
+    public function getCatalogSession() {
+        return Mage::getSingleton('catalog/session');
+    }
+    #endregion
 }

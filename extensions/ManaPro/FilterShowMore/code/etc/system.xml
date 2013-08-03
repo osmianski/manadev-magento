@@ -9,25 +9,6 @@
     <sections>
         <mana_filters>
             <groups>
-                <seo translate="label" module="manapro_filtershowmore">
-                    <label>Search Engine Optimization</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>250</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <show_all_suffix translate="label">
-                            <label>'Show More' URL suffix</label>
-							<comment>Injected into SEO friendly layered navigation URLs to indicate that filter shows all items.</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>200</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </show_all_suffix>
-                    </fields>
-                </seo>
                 <display>
                     <fields>
                         <show_more_item_count translate="label comment" module="manapro_filtershowmore">

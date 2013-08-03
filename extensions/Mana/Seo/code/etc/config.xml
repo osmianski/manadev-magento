@@ -11,7 +11,7 @@
         <Mana_Seo>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.05.19.08</version>
+            <version>13.08.03.15</version>
         </Mana_Seo>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -84,14 +84,6 @@
             events defined in other module throughout the system. So when some code in other module invokes an event
             mentioned in this section, handler method of Mana_Seo_Model_Observer class gets called. -->
         <events>
-            <controller_front_init_routers><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_seo>
-                        <class>Mana_Seo_Router</class>
-                        <method>initControllerRouters</method>
-                    </mana_seo>
-                </observers>
-            </controller_front_init_routers>
             <controller_action_layout_generate_blocks_after><!-- this is event name this module listens for -->
                 <observers>
                     <mana_seo>
@@ -177,6 +169,12 @@
             <home_page><seo_helper>mana_seo/pageType_homePage</seo_helper></home_page>
             <search><seo_helper>mana_seo/pageType_search</seo_helper></search>
         </page_types>
+        <routers>
+            <mana_seo>
+                <class>Mana_Seo_Router</class>
+                <sort_order>200</sort_order>
+            </mana_seo>
+        </routers>
     </mana_core>
     <default>
         <mana>

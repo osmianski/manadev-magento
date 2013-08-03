@@ -75,7 +75,7 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
 
         $this->addField($fieldset, 'prev_next_product_list', 'select', array(
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('rel=prev and rel=next URLs on All Pages Containing Product List Toolbar'),
+            'label' => $this->__('rel=prev and rel=next URLs on Paginated Product List Pages'),
             'name' => 'prev_next_product_list',
             'required' => true,
         ));

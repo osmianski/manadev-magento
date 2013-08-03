@@ -23,8 +23,8 @@ class Mana_Seo_Model_Observer {
         /* @var $layout Mage_Core_Model_Layout */
         $layout = $observer->getEvent()->getData('layout');
 
-        if ($head = $layout->getBlock('head')) {
-            $schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId());
+        if (($head = $layout->getBlock('head')) &&
+            ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
 
             /* @var $head Mage_Page_Block_Html_Head */
@@ -80,8 +80,7 @@ class Mana_Seo_Model_Observer {
                         $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
                             array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
                     }
-                    if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all') &&
-                        ($pageNo > 1 || $pageNo < $pageCount)) {
+                    if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
                         $query['limit'] = 'all';
                     }
                 }

@@ -13,18 +13,6 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     protected $_matches;
     protected $_lastMatch = false;
 
-    /**
-     * Initialize Controller Router
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function initControllerRouters($observer) {
-        /* @var $front Mage_Core_Controller_Varien_Front */
-        $front = $observer->getEvent()->getData('front');
-
-        $front->addRouter('mana_seo', $this);
-    }
-
     public function match(Zend_Controller_Request_Http $request) {
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
@@ -67,11 +55,8 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                 $front->getResponse()->setRedirect($url);
                 $request->setDispatched(true);
             }
+        }
 
-            return true;
-        }
-        else {
-            return false;
-        }
+        return false;
     }
 }
