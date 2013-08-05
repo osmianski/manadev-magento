@@ -117,7 +117,7 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
                 //$childCategory['level'] == $category['level'] + 1 &&
                 strpos($childCategory['path'], $category['path'] . '/') === 0 &&
                 strpos($childCategory['path'], '/', strlen($category['path'] . '/')) === false &&
-                $childCategory['product_count'])
+                ($this->filterHelper()->isFilterEnabled($this->getFilterOptions()) == 2 || $childCategory['product_count']))
             {
                 $data[] = array(
                     'label' => Mage::helper('core')->htmlEscape($childCategory['name']),
