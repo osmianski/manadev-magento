@@ -34,17 +34,27 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </max_correction_count>
-                        <show_create_duplicate_advice translate="label">
-                            <label>Advise to Create Duplicates Before Important Schema Changes</label>
+                    </fields>
+                </seo>
+                <message translate="label" module="mana_core">
+                    <label>Advices, Warnings and Messages</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <create_seo_schema_duplicate_advice translate="label" module="mana_seo">
+                            <label>Advise to Create SEO Schema Duplicates Before Important Schema Changes</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>300</sort_order>
+                            <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </show_create_duplicate_advice>
+                        </create_seo_schema_duplicate_advice>
                     </fields>
-                </seo>
+                </message>
             </groups>
         </mana>
     </sections>

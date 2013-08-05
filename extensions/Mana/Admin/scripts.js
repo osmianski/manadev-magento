@@ -496,7 +496,8 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
     return Block.extend('Mana/Admin/Container', {
         _init: function () {
             this._super();
-            this._url = {};
+            this._url = {}
+            this._messages = {};
         },
         getUrl:function (key) {
             if (this._url[key] === undefined) {
@@ -509,6 +510,26 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
             return this;
         },
 
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _hideMessage(e) {
+                self._hideMessage(this, e.data.messageKey);
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    $.each(self._messages, function(messageKey) {
+                        $('.' + messageKey + '-message').on('click', {messageKey: messageKey}, _hideMessage);
+                    });
+                })
+                .on('unbind', this, function () {
+                    $.each(self._messages, function (messageKey) {
+                        $('.' + messageKey + '-message').on('click', _hideMessage);
+                    });
+                });
+        },
         _subscribeToBlockEvents:function () {
             return this
                 ._super()
@@ -549,8 +570,22 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
             this.save(function() {
                 self.close();
             });
+        },
+        _hideMessage: function (a, messageKey) {
+            //noinspection JSCheckFunctionSignatures
+            var $li = $(a).parent();
+            $li.hide();
+            //noinspection JSCheckFunctionSignatures
+            for (var $parent = $li.parent(); $parent.length && $parent[0].id != 'messages'; $parent = $parent.parent()) {
+                if ($parent.children(':visible').length) {
+                    break;
+                }
+                $parent.hide();
+            }
+            ajax.post(this.getUrl('hide-' + messageKey.replace(/_/g, '-') + '-message'), [
+                {name: 'form_key', value: FORM_KEY}
+            ]);
         }
-
     });
 });
 Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Block) {

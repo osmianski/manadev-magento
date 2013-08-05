@@ -181,8 +181,10 @@
             <seo>
                 <search_url_key>search</search_url_key>
                 <max_correction_count>1</max_correction_count>
-                <show_create_duplicate_advice>1</show_create_duplicate_advice>
             </seo>
+            <message>
+                <create_seo_schema_duplicate_advice>1</create_seo_schema_duplicate_advice>
+            </message>
         </mana>
     </default>
 </config>

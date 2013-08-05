@@ -12,21 +12,9 @@ Mana.define('Mana/Seo/Schema/TabContainer', ['jquery', 'Mana/Admin/Container', '
 function ($, Container, ajax, core)
 {
     return Container.extend('Mana/Seo/Schema/TabContainer', {
-        _subscribeToHtmlEvents: function () {
-            var self = this;
-
-            function _hideCreateDuplicateAdvice() {
-                self._hideCreateDuplicateAdvice(this);
-            }
-
-            return this
-                ._super()
-                .on('bind', this, function () {
-                    $('.hide-create-duplicate-advice').on('click', _hideCreateDuplicateAdvice);
-                })
-                .on('unbind', this, function () {
-                    $('.hide-create-duplicate-advice').off('click', _hideCreateDuplicateAdvice);
-                });
+        _init: function () {
+            this._super();
+            this._messages['create_seo_schema_duplicate_advice'] = 1;
         },
         _subscribeToBlockEvents: function () {
             return this
@@ -69,19 +57,6 @@ function ($, Container, ajax, core)
                     }
                 });
 //            });
-        },
-        _hideCreateDuplicateAdvice: function(a) {
-            //noinspection JSCheckFunctionSignatures
-            var $li = $(a).parent();
-            $li.hide();
-            //noinspection JSCheckFunctionSignatures
-            for (var $parent = $li.parent(); $parent.length && $parent[0].id != 'messages'; $parent = $parent.parent()) {
-                if ($parent.children(':visible').length) {
-                    break;
-                }
-                $parent.hide();
-            }
-            ajax.post(this.getUrl('hide-create-duplicate-advice'), [{name: 'form_key', value: FORM_KEY}]);
         }
     });
 });

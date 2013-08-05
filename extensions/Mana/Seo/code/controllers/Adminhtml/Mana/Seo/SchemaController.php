@@ -103,22 +103,21 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
         $this->_title('Mana')->_title($this->__('%s - SEO Schema', $models['flat']->getName()));
 
         // advise create schema duplicates before important changes
-        if (Mage::getStoreConfigFlag('mana/seo/show_create_duplicate_advice')) {
-            $fieldsAffectingUrls = array(
-                "'" . $this->seoHelper()->__('Query Separator') . "'",
-                "'" . $this->seoHelper()->__('Parameter Separator') . "'",
-                "'" . $this->seoHelper()->__('Value Separator') . "'",
-                "'" . $this->seoHelper()->__('Multiple Value Separator') . "'",
-                "'" . $this->seoHelper()->__('Price Separator') . "'",
-                "'" . $this->seoHelper()->__('Include Filter Names Before Values') . "'",
-                "'" . $this->seoHelper()->__('Use Attribute Labels Instead Of Attribute Codes') . "'",
-                "'" . $this->seoHelper()->__('Use Range Bounds in Price Filters') . "'",
-                "'" . $this->seoHelper()->__('Special Symbols in URL') . "'",
-                "'" . $this->seoHelper()->__('Toolbar URL Keys') . "'",
-            );
-            $fieldsAffectingUrls = implode(', ', $fieldsAffectingUrls);
-
-            $this->getSessionSingleton()->addNotice($this->seoHelper()->__("If you change one of the fields affecting URL structure (%s), URLs with old structure will result in 404 'Page not found' pages. If URLs with old structure are already indexed by search bots, it is recommended to create a duplicate of this schema before making such changes, so that URLs with old structure would be redirected to this schema URLs. ", $fieldsAffectingUrls) . '<a href="#" class="hide-create-duplicate-advice">' . $this->adminHelper()->__('Hide this advice') . '</a>');
+        if (Mage::getStoreConfigFlag('mana/message/create_seo_schema_duplicate_advice')) {
+            $this->showMessage('create_seo_schema_duplicate_advice', $this->seoHelper()->__(
+                "If you change one of the fields affecting URL structure (%s), URLs with old structure will result in 404 'Page not found' pages. If URLs with old structure are already indexed by search bots, it is recommended to create a duplicate of this schema before making such changes, so that URLs with old structure would be redirected to this schema URLs. ",
+                implode(', ', array(
+                    "'" . $this->seoHelper()->__('Query Separator') . "'",
+                    "'" . $this->seoHelper()->__('Parameter Separator') . "'",
+                    "'" . $this->seoHelper()->__('Value Separator') . "'",
+                    "'" . $this->seoHelper()->__('Multiple Value Separator') . "'",
+                    "'" . $this->seoHelper()->__('Price Separator') . "'",
+                    "'" . $this->seoHelper()->__('Include Filter Names Before Values') . "'",
+                    "'" . $this->seoHelper()->__('Use Attribute Labels Instead Of Attribute Codes') . "'",
+                    "'" . $this->seoHelper()->__('Use Range Bounds in Price Filters') . "'",
+                    "'" . $this->seoHelper()->__('Special Symbols in URL') . "'",
+                    "'" . $this->seoHelper()->__('Toolbar URL Keys') . "'",
+                ))));
         }
 
         // layout
@@ -430,7 +429,7 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
     }
 
     public function hideCreateDuplicateAdviceAction() {
-        $this->utilsHelper()->setStoreConfig('mana/seo/show_create_duplicate_advice', 0);
+        $this->utilsHelper()->setStoreConfig('mana/seo/create_seo_schema_duplicate_advice', 0);
         Mage::app()->cleanCache();
         $this->getResponse()->setBody('ok');
     }

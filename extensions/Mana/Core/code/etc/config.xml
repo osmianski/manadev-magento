@@ -220,7 +220,7 @@
 
         <!-- INSERT HERE: layout, translate, routers -->
 	</frontend>
-	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+    <!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
 	<adminhtml>
 		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->

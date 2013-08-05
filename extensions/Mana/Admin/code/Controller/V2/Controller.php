@@ -26,6 +26,12 @@ class Mana_Admin_Controller_V2_Controller extends Mage_Adminhtml_Controller_Acti
         return $this;
     }
 
+    public function showMessage($cssClass, $message) {
+        $this->getSessionSingleton()->addNotice($message . '<a href="#" class="'.
+            $cssClass .'-message">' . $this->adminHelper()->__('Hide this advice') .
+            '</a>');
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
