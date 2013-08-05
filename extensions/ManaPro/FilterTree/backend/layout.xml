@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterTree
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_filters_edit>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtertree.js</name><params/></action>
+        </reference>
+    </adminhtml_mana_filters_edit>
+</layout>

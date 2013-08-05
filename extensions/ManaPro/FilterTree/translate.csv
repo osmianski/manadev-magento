@@ -1,3 +1,7 @@
 "Tree","Tree"
 "Category Tree","Category Tree"
 "Expand All Tree Items on Initial Page Load","Expand All Tree Items on Initial Page Load"
+"Category tree requires all categories to have 'Is Anchor' set to 'Yes'.","Category tree requires all categories to have 'Is Anchor' set to 'Yes'."
+" or "," or "
+"Offer to Make All Categories Anchored if Category Tree Filter Is Selected","Offer to Make All Categories Anchored if Category Tree Filter Is Selected"
+"Make all categories anchored","Make all categories anchored"
