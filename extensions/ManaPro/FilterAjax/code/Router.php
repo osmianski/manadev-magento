@@ -70,9 +70,11 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
                 : 'updated_blocks_if_page_changed';
 
             if ($blocks->hasData($key)) {
+                $sections = array();
                 foreach (explode(',', $blocks->getData($key)) as $blockName) {
                     if ($html = $layoutHelper->renderBlock($blockName)) {
-                        $response['blocks'][$js->getClientSideBlockName($blockName)] = $html;
+                        $response['blocks'][$js->getClientSideBlockName($blockName)] = count($sections);
+                        $sections[] = $html;
                     }
                 }
             }
@@ -84,8 +86,8 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             $headBlock->getTitle();
             $response['title'] = $headBlock->getData('title');
         }
-
-        Mage::app()->getResponse()->setBody(json_encode($response));
+        array_unshift($sections, json_encode($response));
+        Mage::app()->getResponse()->setBody(implode($js->getSectionSeparator(), $sections));
     }
 
     #region Dependencies

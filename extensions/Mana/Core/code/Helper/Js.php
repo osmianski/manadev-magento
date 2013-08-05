@@ -252,6 +252,11 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         }
         return $this->_fileConfig;
     }
+
+    public function getSectionSeparator() {
+        return "\n91b5970cd70e2353d866806f8003c1cd56646961\n";
+    }
+
     protected function _compareByModuleAndSortOrder($a, $b) {
         if (($result = $this->_compareByModule($a, $b)) != 0) return $result;
         return $this->_compareBySortOrder($a, $b);

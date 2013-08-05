@@ -274,10 +274,10 @@ function ($, layout, json, core, config, undefined)
                 });
             }
             if (response.blocks) {
-                $.each(response.blocks, function (blockName, html) {
+                $.each(response.blocks, function (blockName, sectionIndex) {
                     var block = layout.getBlock(blockName);
                     if (block) {
-                        block.setContent(html);
+                        block.setContent(response.sections[sectionIndex]);
                     }
                 });
             }
@@ -290,6 +290,9 @@ function ($, layout, json, core, config, undefined)
             if (response.title) {
                 document.title = response.title;
             }
+        },
+        getSectionSeparator: function() {
+            return "\n91b5970cd70e2353d866806f8003c1cd56646961\n";
         },
         _before: function(options, url, data) {
             var page = layout.getPageBlock();
@@ -320,7 +323,10 @@ function ($, layout, json, core, config, undefined)
             try {
                 var content = response;
                 try {
+                    var sections = response.split(this.getSectionSeparator());
+                    response = sections.shift();
                     response = json.parse(response);
+                    response.sections = sections;
                 }
                 catch (e) {
                     callback(content, { url:url});
