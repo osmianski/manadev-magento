@@ -28,10 +28,8 @@
 		<resources>
 			<admin>
 				<children>
-					<mana translate="title" module="mana_seo">
-                        <title>Configure Mana Extensions</title>
-                        <sort_order>79</sort_order>
-						<children>
+                    <mana>
+                        <children>
 							<seo_schema translate="title" module="mana_seo">
 								<title>SEO Schemas</title>
 		                        <sort_order>300</sort_order>

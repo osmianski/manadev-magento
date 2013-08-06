@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <mana_louvre translate="title" module="manatheme_louvre">
+                            <title>Louvre Theme</title>
+                            <action>adminhtml/system_config/edit/section/mana_louvre</action>
+                            <sort_order>10200</sort_order>
+                        </mana_louvre>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <mana_louvre translate="title" module="manatheme_louvre">
+                                        <title>Louvre Theme</title>
+                                        <sort_order>10200</sort_order>
+                                    </mana_louvre>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<mana_louvre translate="title" module="manatheme_louvre">
 										<title>MANAdev Louvre Theme</title>
-									</mana_louvre>
+                                        <sort_order>60200</sort_order>
+                                    </mana_louvre>
 								</children>
 							</config>
 						</children>

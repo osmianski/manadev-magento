@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
-		<resources>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <mana_featured translate="title" module="manapro_featured">
+                            <title>Product Slider</title>
+                            <action>adminhtml/system_config/edit/section/mana_featured</action>
+                            <sort_order>500</sort_order>
+                        </mana_featured>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
+        <resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <mana_featured translate="title" module="manapro_featured">
+                                        <title>Product Slider</title>
+                                        <sort_order>500</sort_order>
+                                    </mana_featured>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<mana_featured translate="title" module="manapro_featured">
 										<title>MANAdev Featured Product Settings</title>
-									</mana_featured>
+                                        <sort_order>50500</sort_order>
+                                    </mana_featured>
 								</children>
 							</config>
 						</children>

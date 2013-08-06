@@ -6,17 +6,45 @@
 @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <mana_productlists translate="title" module="mana_productlists">
+                            <title>Product Lists</title>
+                            <action>adminhtml/system_config/edit/section/mana_productlists</action>
+                            <sort_order>300</sort_order>
+                        </mana_productlists>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <mana_productlists translate="title" module="mana_productlists">
+                                        <title>Product Lists</title>
+                                        <sort_order>300</sort_order>
+                                    </mana_productlists>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<mana_productlists translate="title" module="mana_productlists">
 										<title>MANAdev Product Lists Configuration</title>
-									</mana_productlists>
+                                        <sort_order>50300</sort_order>
+                                    </mana_productlists>
 								</children>
 							</config>
 						</children>

@@ -7,17 +7,45 @@
  -->
 <!-- This file defines new permissions in system -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <local_demo translate="title" module="local_demo">
+                            <title>Demo</title>
+                            <action>adminhtml/system_config/edit/section/local_demo</action>
+                            <sort_order>10300</sort_order>
+                        </local_demo>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <local_demo translate="title" module="local_demo">
+                                        <title>Demo</title>
+                                        <sort_order>10300</sort_order>
+                                    </local_demo>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<local_demo translate="title" module="local_demo">
 										<title>MANAdev Demo</title>
-									</local_demo>
+                                        <sort_order>60300</sort_order>
+                                    </local_demo>
 								</children>
 							</config>
 						</children>

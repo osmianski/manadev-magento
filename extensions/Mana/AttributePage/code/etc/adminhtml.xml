@@ -29,9 +29,7 @@
 		<resources>
 			<admin>
 				<children>
-					<mana translate="title" module="mana_attributepage">
-                        <title>Configure Mana Extensions</title>
-                        <sort_order>79</sort_order>
+					<mana>
 						<children>
 							<attributepage translate="title" module="mana_attributepage">
 								<title>Attribute Pages</title>
