@@ -12,7 +12,7 @@
 		<Mana_Filters>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.08.05.08</version>
+		    <version>13.08.06.09</version>
 		</Mana_Filters>
 	</modules>
 	
@@ -141,6 +141,16 @@
                     </mana_filters>
                 </observers>
             </prepare_catalog_product_index_select>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_filters>
+                        <class>mana_filters/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>hideCmsContentOnFilteredPages</method>
+                        <!-- event handler method name -->
+                    </mana_filters>
+                </observers>
+            </core_block_abstract_to_html_after>
 		</events>
 		<!-- INSERT HERE: blocks, models, ... -->
 	</global>

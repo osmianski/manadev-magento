@@ -118,7 +118,7 @@ examples on what kind of actions can be applied to referenced blocks.
 		<reference name="m_ajax_update">
 		    <action method="setRenderedButNotSentBlocks"><blocks>m_ajax_update,head</blocks></action>
             <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,left,right,breadcrumbs</updated_blocks></action>
-            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>cms.products,mana.catalog.leftnav,mana.catalog.rightnav</updated_blocks></action>
+            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>content,mana.catalog.leftnav,mana.catalog.rightnav</updated_blocks></action>
 		</reference>
     </cms_page_layered>
 </layout>
