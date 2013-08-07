@@ -46,6 +46,11 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_AttributeUrlI
             'option_id' => new Zend_Db_Expr('`o`.`option_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`o`.`option_id`, '-', $urlKeyExpr)"),
             'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
+            'description' => new Zend_Db_Expr(
+                "CONCAT('{$this->seoHelper()->__('Filtered by attribute')} \\'', " .
+                "COALESCE(`l`.`value`, `a`.`frontend_label`), '\\' ({$this->seoHelper()->__('code')} \\'', " .
+                "`a`.`attribute_code`, '\\') {$this->seoHelper()->__('value')} \\'', " .
+                "COALESCE(vs.value, vg.value), '\\' (ID ', `o`.`option_id`, ')')"),
         );
 
         /* @var $select Varien_Db_Select */
@@ -55,7 +60,10 @@ class Mana_Seo_Resource_UrlIndexer_Value extends Mana_Seo_Resource_AttributeUrlI
             ->joinLeft(array('vs' => $this->getTable('eav/attribute_option_value')),
                 $db->quoteInto('o.option_id = vs.option_id AND vs.store_id = ?', $schema->getStoreId()),
                 null)
-            ->columns($fields);
+            ->joinLeft(array('l' => $this->getTable('eav/attribute_label')),
+                $db->quoteInto("`l`.`attribute_id` = `a`.`attribute_id` AND `l`.`store_id` = ?", $schema->getStoreId()),
+                null)
+        ->columns($fields);
 
         if ($core->isManadevLayeredNavigationInstalled()) {
             $select

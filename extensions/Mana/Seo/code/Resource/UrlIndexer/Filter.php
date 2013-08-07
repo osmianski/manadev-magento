@@ -51,6 +51,10 @@ class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_AttributeUrl
             'attribute_id' => new Zend_Db_Expr('`a`.`attribute_id`'),
             'unique_key' => new Zend_Db_Expr("CONCAT(`a`.`attribute_id`, '-', $urlKeyExpr)"),
             'status' => new Zend_Db_Expr("'". Mana_Seo_Model_Url::STATUS_ACTIVE ."'"),
+            'description' => new Zend_Db_Expr(
+                "CONCAT('{$this->seoHelper()->__('Attribute')} \\'', ".
+                "COALESCE(`l`.`value`, `a`.`frontend_label`), '\\' ({$this->seoHelper()->__('code')} \\'', ".
+                "`a`.`attribute_code`, '\\'). ', IF(a.backend_type = 'decimal', '{$this->seoHelper()->__('Always Added before decimal value range')}', '{$this->seoHelper()->__('Added before filter/attribute value(s)/option(s) if showing filter name in URL is enabled')}'))"),
         );
 
         /* @var $select Varien_Db_Select */

@@ -35,6 +35,9 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_Catego
 
         $suffix = $core->addDotToSuffix($categoryHelper->getCategoryUrlSuffix($schema->getStoreId()));
 
+        $nameAttribute = $core->getAttribute('catalog_category', 'name', array('attribute_id', 'backend_type', 'backend_table'));
+        $nameAttributeTable = $core->getAttributeTable($nameAttribute);
+
         $fields = array(
             'url_key' => new Zend_Db_Expr('SUBSTRING(`r`.`request_path`, 1, CHAR_LENGTH(`r`.`request_path`) - ' . $mbstring->strlen($suffix) . ')'),
             'type' => new Zend_Db_Expr("'category'"),
@@ -48,11 +51,22 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_Catego
             'status' => new Zend_Db_Expr("IF(`r`.`options` = '' OR `r`.`options` IS NULL, '" .
                 Mana_Seo_Model_Url::STATUS_ACTIVE . "', '" .
                 Mana_Seo_Model_Url::STATUS_OBSOLETE . "')"),
+            'description' => new Zend_Db_Expr(
+                "CONCAT('{$this->seoHelper()->__('Category')} \\'', ".
+                "COALESCE(`ns`.`value`, `ng`.`value`), '\\' (ID ', `r`.`category_id`, ') {$this->seoHelper()->__('page')}')"),
         );
 
         /* @var $select Varien_Db_Select */
         $select = $db->select()
             ->from(array('r' => $this->getTable('core/url_rewrite')), null)
+            ->joinLeft(array('ng' => $this->_resources->getTableName($nameAttributeTable)),
+                "`ng`.`entity_id` = `r`.`category_id`" .
+                $db->quoteInto(" AND `ng`.`attribute_id` = ?", $nameAttribute['attribute_id']) .
+                " AND `ng`.`store_id` = 0", null)
+            ->joinLeft(array('ns' => $this->_resources->getTableName($nameAttributeTable)),
+                "`ns`.`entity_id` = `r`.`category_id`" .
+                $db->quoteInto(" AND `ns`.`attribute_id` = ?", $nameAttribute['attribute_id']) .
+                $db->quoteInto(" AND `ns`.`store_id` = ?", $schema->getStoreId()), null)
             ->columns($fields)
             ->where('`r`.`category_id` IS NOT NULL')
             ->where('`r`.`store_id` = ?', $schema->getStoreId())

@@ -30,6 +30,8 @@ class Mana_Seo_Resource_UrlIndexer_CategoryValue extends Mana_Seo_Resource_Categ
         $urlKeyAttributeTable = $core->getAttributeTable($urlKeyAttribute);
         $isActiveAttribute = $core->getAttribute('catalog_category', 'is_active', array('attribute_id', 'backend_type', 'backend_table'));
         $isActiveAttributeTable = $core->getAttributeTable($isActiveAttribute);
+        $nameAttribute = $core->getAttribute('catalog_category', 'name', array('attribute_id', 'backend_type', 'backend_table'));
+        $nameAttributeTable = $core->getAttributeTable($nameAttribute);
 
         /* @var $rootCategory Mage_Catalog_Model_Category */
         $rootCategory = Mage::getModel('catalog/category');
@@ -53,6 +55,9 @@ class Mana_Seo_Resource_UrlIndexer_CategoryValue extends Mana_Seo_Resource_Categ
             'status' => new Zend_Db_Expr("IF (COALESCE(`as`.`value`, `ag`.`value`) = 1, ".
                 "'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "', ".
                 "'" . Mana_Seo_Model_Url::STATUS_DISABLED . "')"),
+            'description' => new Zend_Db_Expr(
+                "CONCAT('{$this->seoHelper()->__('Filtered by category')} \\'', " .
+                "COALESCE(`ns`.`value`, `ng`.`value`), '\\' (ID ', `e`.`entity_id`, ')')"),
         );
 
         /* @var $select Varien_Db_Select */
@@ -74,6 +79,14 @@ class Mana_Seo_Resource_UrlIndexer_CategoryValue extends Mana_Seo_Resource_Categ
                 "`as`.`entity_id` = `e`.`entity_id`" .
                 $db->quoteInto(" AND `as`.`attribute_id` = ?", $isActiveAttribute['attribute_id']) .
                 $db->quoteInto(" AND `as`.`store_id` = ?", $schema->getStoreId()), null)
+            ->joinLeft(array('ng' => $this->_resources->getTableName($nameAttributeTable)),
+                "`ng`.`entity_id` = `e`.`entity_id`" .
+                $db->quoteInto(" AND `ng`.`attribute_id` = ?", $nameAttribute['attribute_id']) .
+                " AND `ng`.`store_id` = 0", null)
+            ->joinLeft(array('ns' => $this->_resources->getTableName($nameAttributeTable)),
+                "`ns`.`entity_id` = `e`.`entity_id`" .
+                $db->quoteInto(" AND `ns`.`attribute_id` = ?", $nameAttribute['attribute_id']) .
+                $db->quoteInto(" AND `ns`.`store_id` = ?", $schema->getStoreId()), null)
             ->columns($fields)
             ->where('`e`.`path` LIKE ?', $pathPattern);
 

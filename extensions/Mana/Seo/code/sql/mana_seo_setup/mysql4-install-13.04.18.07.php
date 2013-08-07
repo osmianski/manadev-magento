@@ -98,3 +98,4 @@ $schema
     ->save();
 
 $setup->scheduleReindexing('mana_db');
+$setup->scheduleReindexing('mana_seo_url');

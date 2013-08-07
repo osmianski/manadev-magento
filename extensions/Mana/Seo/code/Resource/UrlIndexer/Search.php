@@ -35,6 +35,7 @@ class Mana_Seo_Resource_UrlIndexer_Search extends Mana_Seo_Resource_UrlIndexer {
             'schema_id' => new Zend_Db_Expr($schema->getId()),
             'unique_key' => new Zend_Db_Expr($urlKeyExpr),
             'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
+            'description' => new Zend_Db_Expr("'{$this->seoHelper()->__('Quick search result page')}'"),
         );
 
         $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_page` = 1) AND (`type` = 'search')";

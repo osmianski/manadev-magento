@@ -38,6 +38,7 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
                 'internal_name' => new Zend_Db_Expr("'" . $urlKey['internal_name'] . "'"),
                 'position' => new Zend_Db_Expr($urlKey['position']),
                 'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
+                'description' => new Zend_Db_Expr("'{$this->getDescription($urlKey['internal_name'])}'"),
             );
 
             $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_parameter` = 1) AND (`type` = '".
@@ -52,6 +53,17 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
             // run the statement
             $this->makeAllRowsObsolete($options, $obsoleteCondition);
             $db->raw_query($sql);
+        }
+    }
+
+    protected function getDescription($internalName) {
+        switch ($internalName) {
+            case 'p': return $this->seoHelper()->__('URL key for page number');
+            case 'order': return $this->seoHelper()->__('URL key for sorting (position, price, etc)');
+            case 'dir': return $this->seoHelper()->__('URL key for sorting direction (ascending or descending)');
+            case 'mode': return $this->seoHelper()->__('URL key for grid mode (list or grid)');
+            case 'limit': return $this->seoHelper()->__('URL key for number of products per page');
+            default: throw new Exception('Not implemented');
         }
     }
 }

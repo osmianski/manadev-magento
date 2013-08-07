@@ -52,6 +52,9 @@ class Mana_Seo_Resource_UrlIndexer_CmsPage extends Mana_Seo_Resource_UrlIndexer 
             'status' => new Zend_Db_Expr("IF(`p`.`is_active`, '" .
                 Mana_Seo_Model_Url::STATUS_ACTIVE . "', '".
                 Mana_Seo_Model_Url::STATUS_DISABLED . "')"),
+            'description' => new Zend_Db_Expr(
+                "CONCAT('{$this->seoHelper()->__('CMS page')} \\'', " .
+                "`p`.`title`, '\\' (ID ', `p`.`page_id`, ')')"),
         );
 
         /* @var $select Varien_Db_Select */

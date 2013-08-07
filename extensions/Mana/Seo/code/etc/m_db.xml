@@ -10,6 +10,7 @@
         <mana_seo version="13.04.18.07">
             <installer_versions>
                 <v13.04.18.07>13.01.21.22</v13.04.18.07>
+                <v13.08.07.09>13.01.21.22</v13.08.07.09>
             </installer_versions>
             <entities>
                 <schema>
@@ -216,6 +217,7 @@
                                 <on_delete>set null</on_delete>
                             </foreign>
                         </conflict_id>
+                        <description version="13.08.07.09"><type>varchar(255)</type></description>
                     </fields>
                 </url>
                 <urlHistory>

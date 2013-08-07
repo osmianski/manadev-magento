@@ -41,6 +41,9 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ActiveCategoryPage extends Mana_Seo
                 'category_id' => new Zend_Db_Expr("CAST($categoryIdExpr AS unsigned)"),
                 'unique_key' => new Zend_Db_Expr("CONCAT($categoryIdExpr, '-', `r`.`is_system`)"),
                 'status' => new Zend_Db_Expr("'" . Mana_Seo_Model_Url::STATUS_ACTIVE . "'"),
+                'description' => new Zend_Db_Expr(
+                    "CONCAT('{$this->seoHelper()->__('Category')} ID ', ",
+                    "CAST($categoryIdExpr AS unsigned), ' {$this->seoHelper()->__('page')}')"),
             );
 
             /* @var $select Varien_Db_Select */

@@ -79,6 +79,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
             'schema_id' => new Zend_Db_Expr($schema->getId()),
             'unique_key' => new Zend_Db_Expr($urlKeyExpr),
             'status' => new Zend_Db_Expr("'". Mana_Seo_Model_Url::STATUS_ACTIVE."'"),
+            'description' => new Zend_Db_Expr("'{$this->seoHelper()->__('When filtering by category is enabled (Redirect to subcategory = No), this URL key is added before applied category name to distinguish filtering by category from subcategory pages and from attribute values')}'"),
         );
 
         $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_parameter` = 1) AND (`type` = '" .

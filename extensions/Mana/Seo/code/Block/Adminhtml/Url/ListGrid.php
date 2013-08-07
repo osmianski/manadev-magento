@@ -29,6 +29,7 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
             'header' => $this->__('URL Key'),
             'index' => 'final_url_key',
             'align' => 'left',
+            'width' => '200px',
         ));
         $this->addColumn('status', array(
             'header' => $this->__('Status'),
@@ -60,14 +61,9 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
                 'store_all' => false,
                 'store_view' => true,
                 'sortable' => true,
+                'width' => '200px',
             ));
         }
-        $this->addColumn('internal_name', array(
-            'header' => $this->__('Internal Name'),
-            'index' => 'internal_name',
-            'align' => 'left',
-            'width' => '50px',
-        ));
         $this->addColumn('final_include_filter_name', array(
             'header' => $this->__('Include Filter Name'),
             'index' => 'final_include_filter_name',
@@ -76,43 +72,10 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
             'type' => 'options',
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
         ));
-        $this->addColumn('type', array(
-            'header' => $this->__('Type'),
-            'index' => 'type',
-            'align' => 'center',
-            'width' => '100px',
-        ));
-        $this->addColumn('is_page', array(
-            'header' => $this->__('Is Page'),
-            'index' => 'is_page',
-            'align' => 'center',
-            'width' => '50px',
-            'type' => 'options',
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-        ));
-        $this->addColumn('is_parameter', array(
-            'header' => $this->__('Is Parameter'),
-            'index' => 'is_parameter',
-            'align' => 'center',
-            'width' => '50px',
-            'type' => 'options',
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-        ));
-        $this->addColumn('is_attribute_value', array(
-            'header' => $this->__('Is Attribute Value'),
-            'index' => 'is_attribute_value',
-            'align' => 'center',
-            'width' => '50px',
-            'type' => 'options',
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-        ));
-        $this->addColumn('is_category_value', array(
-            'header' => $this->__('Is Category Value'),
-            'index' => 'is_category_value',
-            'align' => 'center',
-            'width' => '50px',
-            'type' => 'options',
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+        $this->addColumn('description', array(
+            'header' => $this->__('Description'),
+            'index' => 'description',
+            'align' => 'left',
         ));
 
         return parent::_prepareColumns();

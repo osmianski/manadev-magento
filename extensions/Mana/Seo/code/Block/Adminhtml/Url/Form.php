@@ -26,29 +26,14 @@ class Mana_Seo_Block_Adminhtml_Url_Form extends Mana_Admin_Block_V2_Form {
             'edit_model' => $this->getEditModel(),
         ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_url_key', array(
-            'title' => $this->__('URL Key'),
-            'legend' => $this->__('URL Key'),
-        ));
-        $this->addField($fieldset, 'url_key', 'label', array(
-            'label' => $this->__('Default URL Key'),
-            'name' => 'url_key',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'manual_url_key', 'text', array(
-            'label' => $this->__('Manual URL Key'),
-            'name' => 'manual_url_key',
-            'note' => $this->__('If not empty, this is used instead of default URL key'),
-        ));
-        $this->addField($fieldset, 'final_url_key', 'label', array(
-            'label' => $this->__('Actually Used URL Key'),
-            'name' => 'final_url_key',
-            'bold' => true,
-        ));
-
         $fieldset = $this->addFieldset($form, 'mfs_general', array(
             'title' => $this->__('General'),
             'legend' => $this->__('General'),
+        ));
+        $this->addField($fieldset, 'description', 'label', array(
+            'label' => $this->__('Description'),
+            'name' => 'description',
+            'bold' => true,
         ));
         $this->addField($fieldset, 'status', 'select_text', array(
             'options' => $this->getStatusSourceModel()->getOptionArray(),
@@ -76,67 +61,52 @@ class Mana_Seo_Block_Adminhtml_Url_Form extends Mana_Admin_Block_V2_Form {
             ));
         }
 
-        $fieldset = $this->addFieldset($form, 'mfs_include_filter_name', array(
-            'title' => $this->__('Include Filter Name'),
-            'legend' => $this->__('Include Filter Name'),
+        $fieldset = $this->addFieldset($form, 'mfs_url_key', array(
+            'title' => $this->__('URL Key'),
+            'legend' => $this->__('URL Key'),
         ));
-        $this->addField($fieldset, 'include_filter_name', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Default Value'),
-            'name' => 'include_filter_name',
+        $this->addField($fieldset, 'url_key', 'label', array(
+            'label' => $this->__('Default URL Key'),
+            'name' => 'url_key',
             'bold' => true,
         ));
-        $this->addField($fieldset, 'force_include_filter_name', 'select', array(
-            'options' => $this->getYesNoDefaultSourceModel()->getOptionArray(),
-            'label' => $this->__('Manual Value'),
-            'name' => 'force_include_filter_name',
-            'note' => $this->__("If not equal to 'Use Default', this is used instead of default value"),
-        ));
-        $this->addField($fieldset, 'final_include_filter_name', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Actually Used Value'),
-            'name' => 'final_include_filter_name',
-            'bold' => true,
-        ));
+        if (!($this->getFlatModel()->getData('is_page') && $this->getFlatModel()->getData('type') == 'category')) {
+            $this->addField($fieldset, 'manual_url_key', 'text', array(
+                'label' => $this->__('Manual URL Key'),
+                'name' => 'manual_url_key',
+                'note' => $this->__('If not empty, this is used instead of default URL key'),
+            ));
+            $this->addField($fieldset, 'final_url_key', 'label', array(
+                'label' => $this->__('Actually Used URL Key'),
+                'name' => 'final_url_key',
+                'bold' => true,
+            ));
+        }
 
-        $fieldset = $this->addFieldset($form, 'mfs_other', array(
-            'title' => $this->__('Other Settings'),
-            'legend' => $this->__('Other Settings'),
-        ));
-        $this->addField($fieldset, 'type', 'label', array(
-            'label' => $this->__('Type'),
-            'name' => 'type',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'is_page', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Is Page'),
-            'name' => 'is_page',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'is_parameter', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Is Parameter'),
-            'name' => 'is_parameter',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'is_attribute_value', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Is Attribute Value'),
-            'name' => 'is_attribute_value',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'is_category_value', 'select_text', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Is Category Value'),
-            'name' => 'is_category_value',
-            'bold' => true,
-        ));
-        $this->addField($fieldset, 'internal_name', 'label', array(
-            'label' => $this->__('Internal Name'),
-            'name' => 'internal_name',
-            'bold' => true,
-        ));
+        if ($this->getFlatModel()->getData('is_attribute_value')) {
+            $fieldset = $this->addFieldset($form, 'mfs_include_filter_name', array(
+                'title' => $this->__('Include Filter Name'),
+                'legend' => $this->__('Include Filter Name'),
+            ));
+            $this->addField($fieldset, 'include_filter_name', 'select_text', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Default Value'),
+                'name' => 'include_filter_name',
+                'bold' => true,
+            ));
+            $this->addField($fieldset, 'force_include_filter_name', 'select', array(
+                'options' => $this->getYesNoDefaultSourceModel()->getOptionArray(),
+                'label' => $this->__('Manual Value'),
+                'name' => 'force_include_filter_name',
+                'note' => $this->__("If not equal to 'Use Default', this is used instead of default value"),
+            ));
+            $this->addField($fieldset, 'final_include_filter_name', 'select_text', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Actually Used Value'),
+                'name' => 'final_include_filter_name',
+                'bold' => true,
+            ));
+        }
 
         $this->setForm($form);
         return parent::_prepareForm();

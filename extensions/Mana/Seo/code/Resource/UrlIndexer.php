@@ -110,5 +110,12 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
     public function logger() {
         return Mage::helper('mana_core/logger');
     }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
     #endregion
 }
