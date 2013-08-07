@@ -219,7 +219,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                             default:
                                 throw new Exception('Not implemented');
                         }
-                        return false;
+                        continue;
                     }
                 }
 
