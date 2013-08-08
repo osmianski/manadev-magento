@@ -24,7 +24,7 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			'method' => 'post',
 			'action' => $this->getUrl('*/*/save', array('_current' => true)),
 			'field_name_suffix' => 'fields',
-			'model' => Mage::registry('m_crud_model'),
+			'model' => $this->getModel(),
 		));
         /** @noinspection PhpUndefinedMethodInspection */
         Mage::helper('mana_core/js')->options('edit-form', array('subforms' => array('#mf_general' => '#mf_general')));
@@ -44,8 +44,8 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			'required' => true,
 			'default_bit' => Mana_Filters_Resource_Filter2::DM_NAME,
 			'default_label' => Mage::helper('mana_admin')->isGlobal() 
-				? $this->__('Use Product Attribute') 
-				: $this->__('Use Product Attribute'),
+				? ($this->getModel()->getType() != 'category' ? $this->__('Use Attribute Configuration') : $this->__('Use Default'))
+				: ($this->getModel()->getType() != 'category' ? $this->__('Use Attribute Configuration') : $this->__('Use Default')),
 		));
 		$field->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
 		
@@ -56,7 +56,7 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			'options' => Mage::getSingleton('mana_filters/source_filterable')->getOptionArray(),
 			'default_bit' => Mana_Filters_Resource_Filter2::DM_IS_ENABLED,
 			'default_label' => Mage::helper('mana_admin')->isGlobal() 
-				? $this->__('Use Product Attribute') 
+				? ($this->getModel()->getType() != 'category' ? $this->__('Use Attribute Configuration') : $this->__('Use Default'))
 				: $this->__('Same For All Stores'),
 		));
         /** @noinspection PhpParamsInspection */
@@ -70,7 +70,7 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			'options' => Mage::getSingleton('mana_filters/source_filterable')->getOptionArray(),
 			'default_bit' => Mana_Filters_Resource_Filter2::DM_IS_ENABLED_IN_SEARCH,
 			'default_label' => Mage::helper('mana_admin')->isGlobal() 
-				? $this->__('Use Product Attribute') 
+				? ($this->getModel()->getType() != 'category' ? $this->__('Use Attribute Configuration') : $this->__('Use Default'))
 				: $this->__('Same For All Stores'),
 		));
 		$field->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
@@ -102,7 +102,7 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			'required' => true,
 			'default_bit' => Mana_Filters_Resource_Filter2::DM_POSITION,
 			'default_label' => Mage::helper('mana_admin')->isGlobal() 
-				? $this->__('Use Product Attribute') 
+				? ($this->getModel()->getType() != 'category' ? $this->__('Use Attribute Configuration') : $this->__('Use Default'))
 				: $this->__('Same For All Stores'),
 		));
 		$field->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
@@ -188,4 +188,14 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 			array('ajax' => 1)
 		);
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Filters_Model_Filter2
+     */
+    public function getModel() {
+        return Mage::registry('m_crud_model');
+    }
+    #endregion
 }

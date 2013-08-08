@@ -599,7 +599,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                     'required' => true,
                     'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
                     'default_label' => $adminHelper->isGlobal()
-                        ? $t->__('Use Product Attribute')
+                        ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
                         : $t->__('Same For All Stores'),
                 ));
                 /** @noinspection PhpParamsInspection */
