@@ -34,6 +34,7 @@ class Mana_Seo_Block_Adminhtml_Url_ListGrid extends Mana_Admin_Block_V2_Grid  {
         $this->addColumn('status', array(
             'header' => $this->__('Status'),
             'index' => 'status',
+            'filter_index' => 'main_table.status',
             'width' => '50px',
             'align' => 'center',
             'type' => 'options',
