@@ -30,7 +30,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         /* @var $routerHelper Mana_Core_Helper_Router */
         $routerHelper = Mage::helper('mana_core/router');
 
-        $path = ltrim($request->getPathInfo(), '/');
+        $path = ltrim(urldecode($request->getPathInfo()), '/');
         if ($parsedUrl = $parser->parse($path)) {
             $url = $urlModel->getUrl($parsedUrl->getRoute(), array_merge(
                 array('_use_rewrite' => true, '_nosid' => true),
