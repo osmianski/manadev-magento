@@ -26,11 +26,11 @@
 class Mana_Core_Helper_Logger extends Mage_Core_Helper_Abstract {
     const INDENT_WIDTH = 4;
     protected $_isEnabled = array(
-        'all' => true,
-        'seo_match' => true,
-        'seo_url' => true,
-        'db_indexer_failure' => true,
-        'url_indexer' => true,
+        'all' => false,
+        'seo_match' => false,
+        'seo_url' => false,
+        'db_indexer_failure' => false,
+        'url_indexer' => false,
     );
     protected $_indent = array('all' => 0);
 
