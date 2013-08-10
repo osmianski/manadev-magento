@@ -388,7 +388,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         $core = Mage::helper('mana_core');
 
         if ($core->isManadevLayeredNavigationTreeInstalled()) {
-            $filterCollection = $this->getFilterOptionsCollection();
+            $filterCollection = $this->getFilterOptionsCollection(true);
             foreach ($filterCollection as $filter) {
                 /* @var $filter Mana_Filters_Model_Filter2_Store */
                 if ($filter->getType() == 'category') {
@@ -400,4 +400,14 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
        }
        return false;
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    #endregion
 }
