@@ -296,7 +296,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         foreach ($categoryIds as $key) {
             $result[] = $urlKeys[$key];
         }
-        return implode('/', $result);
+        return implode($this->getSchema()->getCategorySeparator(), $result);
     }
 
     /**

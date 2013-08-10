@@ -30,6 +30,7 @@ class Mana_Seo_Block_Adminhtml_Schema_ListGrid extends Mana_Admin_Block_V2_Grid 
         $this->addColumn('name', array(
             'header' => $this->__('Name'),
             'index' => 'name',
+            'width' => '200px',
             'align' => 'left',
         ));
         $this->addColumn('updated_at', array(
@@ -38,29 +39,10 @@ class Mana_Seo_Block_Adminhtml_Schema_ListGrid extends Mana_Admin_Block_V2_Grid 
             'type' => 'datetime',
             'width' => '150px',
         ));
-        $this->addColumn('query_separator', array(
-            'header' => $this->__('Query Separator'),
-            'index' => 'query_separator',
-            'width' => '50px',
-            'align' => 'center',
-        ));
-        $this->addColumn('param_separator', array(
-            'header' => $this->__('Parameter Separator'),
-            'index' => 'param_separator',
-            'width' => '50px',
-            'align' => 'center',
-        ));
-        $this->addColumn('first_value_separator', array(
-            'header' => $this->__('Value Separator'),
-            'index' => 'first_value_separator',
-            'width' => '50px',
-            'align' => 'center',
-        ));
-        $this->addColumn('multiple_value_separator', array(
-            'header' => $this->__('Multiple Value Separator'),
-            'index' => 'multiple_value_separator',
-            'width' => '50px',
-            'align' => 'center',
+        $this->addColumn('sample', array(
+            'header' => $this->__('Sample URL'),
+            'index' => 'sample',
+            'align' => 'left',
         ));
 
         return parent::_prepareColumns();

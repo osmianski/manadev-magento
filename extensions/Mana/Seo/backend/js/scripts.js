@@ -16,6 +16,38 @@ function ($, Container, ajax, core)
             this._super();
             this._messages['create_seo_schema_duplicate_advice'] = 1;
         },
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _updateSample() {
+                self._updateSample();
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    $('#mf_url_query_separator').on('change', _updateSample);
+                    $('#mf_url_param_separator').on('change', _updateSample);
+                    $('#mf_url_first_value_separator').on('change', _updateSample);
+                    $('#mf_url_multiple_value_separator').on('change', _updateSample);
+                    $('#mf_url_price_separator').on('change', _updateSample);
+                    $('#mf_url_category_separator').on('change', _updateSample);
+                    $('#mf_url_redirect_to_subcategory').on('click', _updateSample);
+                    $('#mf_url_include_filter_name').on('click', _updateSample);
+                    $('#mf_url_use_range_bounds').on('click', _updateSample);
+                })
+                .on('unbind', this, function () {
+                    $('#mf_url_query_separator').off('change', _updateSample);
+                    $('#mf_url_param_separator').off('change', _updateSample);
+                    $('#mf_url_first_value_separator').off('change', _updateSample);
+                    $('#mf_url_multiple_value_separator').off('change', _updateSample);
+                    $('#mf_url_price_separator').off('change', _updateSample);
+                    $('#mf_url_category_separator').off('change', _updateSample);
+                    $('#mf_url_redirect_to_subcategory').off('click', _updateSample);
+                    $('#mf_url_include_filter_name').off('click', _updateSample);
+                    $('#mf_url_use_range_bounds').off('click', _updateSample);
+                });
+        },
         _subscribeToBlockEvents: function () {
             return this
                 ._super()
@@ -57,6 +89,47 @@ function ($, Container, ajax, core)
                     }
                 });
 //            });
+        },
+        _updateSample: function() {
+            // page URL and query separator
+            var url = this.$().find('#mf_url_redirect_to_subcategory').val() == '1' ? '/electronics/computers/monitors' : '/electronics';
+            url += this.$().find('#mf_url_query_separator').val();
+
+            // attribute filter
+            if (this.$().find('#mf_url_include_filter_name').val() == '1') {
+                url += 'color';
+                url += this.$().find('#mf_url_first_value_separator').val();
+            }
+            url += 'red';
+            url += this.$().find('#mf_url_multiple_value_separator').val();
+            url += 'green';
+
+            // price filter
+            url += this.$().find('#mf_url_param_separator').val();
+            url += 'price';
+            url += this.$().find('#mf_url_first_value_separator').val();
+            url += this.$().find('#mf_url_use_range_bounds').val() == '1' ? '200' : '2';
+            url += this.$().find('#mf_url_price_separator').val();
+            url += this.$().find('#mf_url_use_range_bounds').val() == '1' ? '300' : '100';
+
+            // category filter
+            if (this.$().find('#mf_url_redirect_to_subcategory').val() != '1') {
+                url += this.$().find('#mf_url_param_separator').val();
+                url += 'category';
+                url += this.$().find('#mf_url_first_value_separator').val();
+                url += 'computers';
+                url += this.$().find('#mf_url_category_separator').val();
+                url += 'monitors';
+            }
+
+            // toolbar parameter
+            url += this.$().find('#mf_url_param_separator').val();
+            url += 'mode';
+            url += this.$().find('#mf_url_first_value_separator').val();
+            url += 'grid';
+
+            url += '.html';
+            this.$().find('#mf_url_tr_sample .value strong').html(url);
         }
     });
 });

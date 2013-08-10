@@ -17,6 +17,7 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
         $form = new Varien_Data_Form(array(
             'id' => 'mf_url',
             'html_id_prefix' => 'mf_url_',
+            'field_container_id_prefix' => 'mf_url_tr_',
             'use_container' => true,
             'method' => 'post',
             'action' => $this->getUrl('*/*/save', array('_current' => true)),
@@ -30,6 +31,12 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             'legend' => $this->__('General'),
         ));
 
+        $this->addField($fieldset, 'sample', 'label', array(
+            'label' => $this->__('Sample URL'),
+            'note' => $this->__("Demonstrates how URL separators and parameters/filters of different kind appear in URL"),
+            'name' => 'sample',
+            'bold' => true,
+        ));
         $this->addField($fieldset, 'name', 'text', array(
             'label' => $this->__('Name'),
             'name' => 'name',
@@ -89,6 +96,12 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             'name' => 'price_separator',
             'required' => true,
         ));
+        $this->addField($fieldset, 'category_separator', 'text', array(
+            'label' => $this->__('Category Separator'),
+            'note' => $this->__('Used in category filter to separate 2 or more subcategories'),
+            'name' => 'category_separator',
+            'required' => true,
+        ));
 
         $fieldset = $this->addFieldset($form, 'mfs_redirect', array(
             'title' => $this->__('Redirects'),
@@ -114,6 +127,7 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
         $this->addField($fieldset, 'include_filter_name', 'select', array(
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'label' => $this->__('Include Filter Names Before Values'),
+            'note' => $this->__('Only applicable to attribute-based filters'),
             'name' => 'include_filter_name',
             'required' => true,
         ));

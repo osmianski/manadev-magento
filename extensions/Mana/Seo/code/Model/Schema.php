@@ -17,6 +17,8 @@
  * @method Mana_Seo_Model_Schema overrideMultipleValueSeparator(string $value)
  * @method string getPriceSeparator()
  * @method Mana_Seo_Model_Schema overridePriceSeparator(string $value)
+ * @method string getCategorySeparator()
+ * @method Mana_Seo_Model_Schema overrideCategorySeparator(string $value)
  * @method string getStatus()
  * @method Mana_Seo_Model_Schema overrideStatus(string $value)
  * @method int getUseFilterLabels()
@@ -53,6 +55,8 @@
  * @method Mana_Seo_Model_Schema overrideCanonicalLimitAll(bool $value)
  * @method bool getPrevNextProductList()
  * @method Mana_Seo_Model_Schema overridePrevNextProductList(bool $value)
+ * @method string getSample()
+ * @method Mana_Seo_Model_Schema overrideSample(string $value)
  */
 class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
     const STATUS_ACTIVE = 'active';
@@ -112,6 +116,50 @@ class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
 
     protected function _beforeSave() {
         $this->overrideUpdatedAt(now());
+        $this->_updateSample();
         return parent::_beforeSave();
+    }
+
+    protected function _updateSample() {
+        // page URL and query separator
+        $url = $this->getRedirectToSubcategory() ? '/electronics/computers/monitors' : '/electronics';
+        $url .= $this->getQuerySeparator();
+
+        // attribute filter
+        if ($this->getIncludeFilterName()) {
+            $url .= 'color';
+            $url .= $this->getFirstValueSeparator();
+        }
+        $url .= 'red';
+        $url .= $this->getMultipleValueSeparator();
+        $url .= 'green';
+
+        // price filter
+        $url .= $this->getParamSeparator();
+        $url .= 'price';
+        $url .= $this->getFirstValueSeparator();
+        $url .= $this->getUseRangeBounds() ? '200' : '2';
+        $url .= $this->getPriceSeparator();
+        $url .= $this->getUseRangeBounds() ? '300' : '100';
+
+        // category filter
+        if (!$this->getRedirectToSubcategory()) {
+            $url .= $this->getParamSeparator();
+            $url .= 'category';
+            $url .= $this->getFirstValueSeparator();
+            $url .= 'computers';
+            $url .= $this->getCategorySeparator();
+            $url .= 'monitors';
+        }
+
+        // toolbar parameter
+        $url .= $this->getParamSeparator();
+        $url .= 'mode';
+        $url .= $this->getFirstValueSeparator();
+        $url .= 'grid';
+
+        $url .= '.html';
+        $this->overrideSample($url);
+        return $this;
     }
 }

@@ -11,6 +11,8 @@
             <installer_versions>
                 <v13.04.18.07>13.01.21.22</v13.04.18.07>
                 <v13.08.07.09>13.01.21.22</v13.08.07.09>
+                <v13.08.10.13>13.01.21.22</v13.08.10.13>
+                <v13.08.10.14>13.01.21.22</v13.08.10.14>
             </installer_versions>
             <entities>
                 <schema>
@@ -61,6 +63,8 @@
                         <canonical_filters><type>tinyint</type><no>18</no><default_value>1</default_value><affects_url/></canonical_filters>
                         <canonical_limit_all><type>tinyint</type><no>19</no><default_value>1</default_value><affects_url/></canonical_limit_all>
                         <prev_next_product_list><type>tinyint</type><no>20</no><default_value>1</default_value><affects_url/></prev_next_product_list>
+                        <sample version="13.08.10.13"><type>varchar(255)</type><no>21</no></sample>
+                        <category_separator version="13.08.10.14"><type>varchar(10)</type><no>22</no><affects_url/></category_separator>
                     </fields>
                     <scopes>
                         <global/>
@@ -120,6 +124,8 @@
                                 <canonical_filters><default_formula>{{= global.canonical_filters}}</default_formula></canonical_filters>
                                 <canonical_limit_all><default_formula>{{= global.canonical_limit_all}}</default_formula></canonical_limit_all>
                                 <prev_next_product_list><default_formula>{{= global.prev_next_product_list}}</default_formula></prev_next_product_list>
+                                <sample version="13.08.10.13"><default_formula>{{= global.sample}}</default_formula></sample>
+                                <category_separator version="13.08.10.14"><default_formula>{{= global.category_separator}}</default_formula></category_separator>
                             </fields>
                         </store_flat>
                     </scopes>

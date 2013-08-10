@@ -309,13 +309,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $categoryPath = $seo->getCategoryPath($categoryId);
 
         // scan subcategory URL key
-        if ($urlKey = $this->_scanSingleUntilSeparator($token, '/')) {
+        if ($urlKey = $this->_scanSingleUntilSeparator($token, $this->_schema->getCategorySeparator())) {
             $token = $urlKey;
             if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
                 $categoryId = $subCategoryId;
                 $categoryPath.='/'. $subCategoryId;
                 while ($token->getTextToBeParsed()) {
-                    if ($urlKey = $this->_scanSingleUntilSeparator($token, '/')) {
+                    if ($urlKey = $this->_scanSingleUntilSeparator($token, $this->_schema->getCategorySeparator())) {
                         $token = $urlKey;
                         if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
                             $categoryId = $subCategoryId;
