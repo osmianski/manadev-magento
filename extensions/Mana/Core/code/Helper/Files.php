@@ -20,7 +20,8 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 		return $noExistanceCheck || file_exists($result) ? $result : false;
 	}
 	public function getBaseUrl($type) {
-		return Mage::getBaseUrl('media').'m-'.str_replace(DS, '/', $type);
+		return Mage::getBaseUrl('med
+		ia').'m-'.str_replace(DS, '/', $type);
 	}
 	public function getBasePath($type) {
 		return Mage::getConfig()->getOptions()->getMediaDir().DS.'m-'.str_replace('/', DS, $type);

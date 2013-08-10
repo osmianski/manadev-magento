@@ -11,7 +11,7 @@
  */
 class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttributes_Resource_Type   {
     public function process($indexer, $options){
-        $attributeCode = $this-> _getStockStatusAttributeCode();
+        $attributeCode = $this-> getStockStatusAttributeCode();
         $db = $this->_getWriteAdapter();
 
         /* @var $res Mage_Core_Model_Resource */
@@ -23,7 +23,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
             ? $attribute['backend_table']
             : 'catalog_product_entity_' . $attribute['backend_type'];
 
-        $values = $this->_getStockStatusAttributeValues($attributeCode, $attribute['attribute_id']);
+        $values = $this->_getStockStatusAttributeValues($attribute['attribute_id']);
         //IF(`s`.`is_in_stock` = 0, 128, 129)
         $v = $this->_getIfExpr("`s`.`is_in_stock`", $values);
 
@@ -72,15 +72,23 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
         return  "stock_status";
     }
 
-    protected function _getStockStatusAttributeValues ( $attributeCode, $attributeId) {
+    protected function _getStockStatusAttributeValues ( $attributeId) {
         $inStockOptionPosition = Mage::getStoreConfig('mana_filters/general/instock_option_position');
 
-    	$v = $this->_getReadAdapter()->fetchAll("
+/*    	$v = $this->_getReadAdapter()->fetchAll("
             SELECT `o`.`sort_order`, `o`.`option_id`
               FROM `eav_attribute_option` `o`
              WHERE `o`.`attribute_id` = $attributeId
             ORDER BY `o`.`sort_order`");
+*/
+        $db = $this->_getReadAdapter();
 
+        $select = $db->select()
+            ->from(array('o' => $this->getTable('eav/attribute_option')), array('sort_order', 'option_id'))
+            ->where("`o`.`attribute_id` = ?", $attributeId)
+            ->order('sort_order');
+
+        $v = $db->fetchAll($select);
         $values = array();
         foreach ($v as $value)
             {if ($value['sort_order'] == $inStockOptionPosition)
@@ -91,10 +99,6 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
                     $values[0] = $value['option_id'];
                 }
             }
-        // Out of stock option value
-/*        $values[0] = 128;
-        // In stock option value
-        $values[1] = 129;*/
         return  $values;
     }
 

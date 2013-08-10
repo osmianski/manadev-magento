@@ -28,7 +28,8 @@ class ManaPro_FilterAttributes_Model_Indexer  extends Mana_Core_Model_Indexer {
         $object      = $event->getDataObject();
 
         $event->addNewData('product_id', $object->getProductId());
-        // TODO: Implement _registerEvent() method.
+        Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_attribute')
+            ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
     }
 
     /**
@@ -45,6 +46,18 @@ class ManaPro_FilterAttributes_Model_Indexer  extends Mana_Core_Model_Indexer {
         }
     }
 
+    /**
+     * @return Mage_Index_Model_Process
+     */
+    protected function _getProductAttributesProcess() {
+		return Mage::getModel('index/process')->load('catalog_product_attribute', 'indexer_code');
+	}
+	/* BASED ON SNIPPET: Models/Event handler */
+	/**
+	 * Catches moment after database upgrade to rerun data replication actions (handles events
+	 * "controller_action_predispatch", "core_config_data_save_commit_after")
+	 * @param Varien_Event_Observer $observer
+	 */
     public function reindexAll() {
         foreach ($this->getXml()->types->children() as $typeXml) {
             /* @var $type ManaPro_FilterAttributes_Resource_Type */
@@ -52,6 +65,7 @@ class ManaPro_FilterAttributes_Model_Indexer  extends Mana_Core_Model_Indexer {
 
             $type->process($this, array());
         }
+        $this->_getProductAttributesProcess()->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX)->reindexAll();
         return $this;
     }
 
