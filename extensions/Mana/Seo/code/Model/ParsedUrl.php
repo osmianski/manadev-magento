@@ -40,6 +40,10 @@
  * @method Mana_Seo_Model_ParsedUrl setAttributeCode(mixed $value)
  * @method bool getIsRedirectToSubcategoryPossible() - code of attribute of which values are currently expected
  * @method Mana_Seo_Model_ParsedUrl setIsRedirectToSubcategoryPossible(bool $value)
+ * @method int getCategoryId() - id of category of which children category URL keys are currently expected
+ * @method Mana_Seo_Model_ParsedUrl setCategoryId(int $value)
+ * @method string getCategoryPath() - current category ID path
+ * @method Mana_Seo_Model_ParsedUrl setCategoryPath(string $value)
  *
  * Data operation properties
  *

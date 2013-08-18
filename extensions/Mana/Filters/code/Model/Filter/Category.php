@@ -316,6 +316,22 @@ class Mana_Filters_Model_Filter_Category
     }
     #endregion
 
+    public function getResetValue() {
+        if ($this->_appliedCategory) {
+            /**
+             * Revert path ids
+             */
+            $pathIds = array_reverse($this->_appliedCategory->getPathIds());
+            $curCategoryId = $this->getLayer()->getCurrentCategory()->getId();
+
+            if ($pathIds[0] != $curCategoryId && in_array($curCategoryId, $pathIds) && isset($pathIds[1]) && $pathIds[1] != $curCategoryId) {
+                return $pathIds[1];
+            }
+        }
+
+        return null;
+    }
+
     #region Dependencies
 
     /**

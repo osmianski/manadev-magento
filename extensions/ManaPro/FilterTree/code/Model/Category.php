@@ -162,6 +162,10 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
         }
     }
 
+    public function getResetValue() {
+        return null;
+    }
+
     #region Dependencies
 
     /**

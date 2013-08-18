@@ -228,7 +228,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 if (!$this->_setCurrentAttribute($subToken, false, false)) {
                     return false;
                 }
-                return $this->_parseAttributeValues($subToken);
+                if ($this->_parseAttributeValues($subToken)) {
+                    return true;
+                }
             }
         }
 
@@ -305,41 +307,32 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $seo = Mage::helper('mana_seo');
 
         // get category id defined by page URL key, or store root category is for non category pages
-        $categoryId = $this->_getCategoryIdByPageUrlKey($token);
-        $categoryPath = $seo->getCategoryPath($categoryId);
+        if (!$token->getCategoryPath()) {
+            $token
+                ->setCategoryId($this->_getCategoryIdByPageUrlKey($token))
+                ->setCategoryPath($seo->getCategoryPath($token->getCategoryId()));
+        }
 
-        // scan subcategory URL key
-        if ($urlKey = $this->_scanSingleUntilSeparator($token, $this->_schema->getCategorySeparator())) {
-            $token = $urlKey;
-            if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
-                $categoryId = $subCategoryId;
-                $categoryPath.='/'. $subCategoryId;
-                while ($token->getTextToBeParsed()) {
-                    if ($urlKey = $this->_scanSingleUntilSeparator($token, $this->_schema->getCategorySeparator())) {
-                        $token = $urlKey;
-                        if ($subCategoryId = $this->_getCategoryIdByFilterUrlKey($token, $categoryPath)) {
-                            $categoryId = $subCategoryId;
-                            $categoryPath .= '/' . $subCategoryId;
-                        }
-                        else {
-                            if (!$this->_correct($token, $cNotFound, __LINE__, $token->getText())) {
-                                return false;
-                            }
-                            break;
-                        }
-                    }
-                    else {
-                        break;
+        if (($text = $token->getTextToBeParsed()) && ($tokens = $this->_scanUntilSeparator($token, $this->_schema->getCategorySeparator()))) {
+            // get all valid attribute value URL keys
+            if ($tokens = $this->_getCategoryValueUrlKeys($tokens)) {
+                foreach ($tokens as $token) {
+                    // read the rest values. Return if exact match found
+                    if ($this->_parseCategoryValues($token)) {
+                        return true;
                     }
                 }
-                $this->_setCategoryFilter($token, $categoryId);
+
+                return false;
             }
             else {
-                if (!$this->_correct($token, $cNotFound, __LINE__, $token->getText())) {
+                if (!$this->_correct($token, $cNotFound, __LINE__, $text)) {
                     return false;
                 }
             }
         }
+
+        $this->_setCategoryFilter($token, $token->getCategoryId());
 
         return $this->_parseParameters($token->zoomOut());
     }
@@ -845,25 +838,43 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     }
 
     /**
-     * @param Mana_Seo_Model_ParsedUrl $token
-     * @param int $categoryId
-     * @return int | bool
+     * @param Mana_Seo_Model_ParsedUrl[] $tokens
+     * @return Mana_Seo_Model_ParsedUrl[] | bool
      */
-    protected function _getCategoryIdByFilterUrlKey($token, $categoryPath) {
-        /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
-        $urlCollection = $urls = $this->_getUrls(array($token->getText() => $token), Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
-        $urlCollection->addParentCategoryFilter($categoryPath);
-
-        $result = false;
-        foreach ($urls as $url) {
-            if ($result === false) {
-                $result = $url->getCategoryId();
-            }
-            else {
-                $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_CATEGORY_VALUE);
-            }
+    protected function _getCategoryValueUrlKeys($tokens) {
+        if (!$tokens) {
+            return false;
         }
-        return $result;
+        $result = array();
+
+        /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
+        $urlCollection = $urls = $this->_getUrls($tokens, Mana_Seo_Resource_Url_Collection::TYPE_CATEGORY_VALUE);
+        /* @var $token Mana_Seo_Model_ParsedUrl */
+        $token = current($tokens);
+        $urlCollection->addParentCategoryFilter($token->getCategoryPath());
+
+        foreach ($urls as $url) {
+            if (isset($result[$url->getFinalUrlKey()])) {
+                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
+                $conflictingToken = $result[$url->getFinalUrlKey()];
+                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
+                    unset($result[$url->getFinalUrlKey()]);
+                }
+            }
+            if (!isset($result[$url->getFinalUrlKey()])) {
+                $token = $tokens[$url->getFinalUrlKey()];
+                $token->setCategoryId($url->getCategoryId());
+                $token->setCategoryPath($token->getCategoryPath().'/'. $url->getCategoryId());
+                $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
+                $result[$url->getFinalUrlKey()] = $token;
+            }
+            elseif (!$url->getFinalIncludeFilterName()) {
+                $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_ATTRIBUTE_VALUE);
+            }
+
+        }
+
+        return count($result) ? $result : false;
     }
 
     /**

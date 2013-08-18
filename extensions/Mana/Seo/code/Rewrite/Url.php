@@ -111,6 +111,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                                 $path = $this->_generateAttributeParameter($url, $value);
                                 break;
                             case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
+                                $this->logger()->logTemp(json_encode($queryParams));
                                 list($path, $category_id) = $this->_generateCategoryParameter($url, $value);
                                 break;
                             case Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE:
@@ -481,4 +482,13 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 
         return $this;
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Logger
+     */
+    public function logger() {
+        return Mage::helper('mana_core/logger');
+    }
+    #endregion
 }

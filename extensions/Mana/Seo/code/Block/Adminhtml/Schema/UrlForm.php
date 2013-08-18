@@ -98,7 +98,7 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
         ));
         $this->addField($fieldset, 'category_separator', 'text', array(
             'label' => $this->__('Category Separator'),
-            'note' => $this->__('Used in category filter to separate 2 or more subcategories'),
+            'note' => $this->__('Used when filtering by category (Redirect to Subcategory Page = No) to separate 2 or more subcategories'),
             'name' => 'category_separator',
             'required' => true,
         ));
