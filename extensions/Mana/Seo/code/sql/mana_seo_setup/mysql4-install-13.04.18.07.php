@@ -46,7 +46,7 @@ $schema
         array('internal_name' => 'mode', 'name' => 'mode', 'position' => 9930),
         array('internal_name' => 'limit', 'name' => 'show', 'position' => 9940),
     )))
-    ->overrideIncludeFilterName(0)
+    ->overrideIncludeFilterName(1)
     ->overrideRedirectToSubcategory(1)
     ->overrideCanonicalCategory(1)
     ->overrideCanonicalSearch(1)
