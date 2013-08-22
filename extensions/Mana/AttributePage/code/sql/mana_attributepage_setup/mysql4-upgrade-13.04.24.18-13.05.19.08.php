@@ -6,6 +6,8 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 
+Mage::register('m_prevent_indexing_on_save', true, true);
+
 /* @var $setup Mana_Db_Model_Setup */
 $setup = Mage::getModel('mana_db/setup');
 $setup->run($this, 'mana_attributepage', '13.05.19.08');
@@ -24,4 +26,5 @@ $db = Mage::helper('mana_db');
 //    ->setRedirectToOptionPage(0)
 //    ->save();
 
+Mage::unregister('m_prevent_indexing_on_save');
 $setup->scheduleReindexing('mana_db');
