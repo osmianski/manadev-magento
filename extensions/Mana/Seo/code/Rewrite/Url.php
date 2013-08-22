@@ -318,6 +318,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return string
      */
     protected function _generateAttributeParameter($parameterUrl, $value) {
+        if ($value == '__0__') {
+            return $value;
+        }
         $path = '';
         $includeFilterName = false;
         $urlKeys = array();
