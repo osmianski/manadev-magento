@@ -44,6 +44,7 @@
 /* Javascript operates with these classes */
 .col-main .block-layered-nav.m-topmenu dl dt.m-ln {  }
 .col-main .block-layered-nav.m-topmenu dl dd.m-ln {  }
+.col-main .block-layered-nav.m-topmenu dl dd.m-ln li { white-space: nowrap; }
 
 /* Classes added on Mouse Over */
 .col-main .block-layered-nav.m-topmenu dl dt.m-popup-filter { background: #DEE5E8; }

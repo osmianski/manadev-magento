@@ -19,6 +19,7 @@
                     <fields>
                         <expand translate="label">
                             <label>Expand All Tree Items on Initial Page Load</label>
+                            <comment>Tree remembers collapsed/expanded state of each category, so on subsequent page loads remembered collapsed/expanded state is restored and not touched items are processed as specified here</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>100</sort_order>
