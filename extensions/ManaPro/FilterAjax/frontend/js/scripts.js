@@ -58,7 +58,7 @@ function($, ajax, config, layout)
 
                 if (isProductListToolbarClicked && config.getData('layeredNavigation.ajax.scrollToTop')) {
                     var offset = -1;
-                    $.each(response.blocks, function (index, blockName) {
+                    $.each(response.blocks, function (blockName) {
                         var block = layout.getBlock(blockName);
                         if (block) {
                             offset = block.$().offset().top;

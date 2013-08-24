@@ -109,7 +109,7 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
         {
             $url = Mage::getModel('core/url');
             /* @var $url Mana_Seo_Rewrite_Url */
-            $urlValue = $url->encodeValue($this->getFilter()->getRequestVar(), $urlValue);
+            $urlValue = $url->getValueUrl($this->getFilter()->getRequestVar(), $urlValue);
        }
        return $urlValue;
 	}

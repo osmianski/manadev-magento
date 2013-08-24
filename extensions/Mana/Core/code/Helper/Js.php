@@ -38,6 +38,24 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         $insertEverywhere = array();
         $delete = array();
 
+        $onDemandInsertPlace = null;
+        $xpath = '';
+        foreach ($this->_getFileConfig() as $name => $fileConfig) {
+            /* @var $config array */
+            /* @var $options array */
+            extract($fileConfig);
+
+            if ($xpath) {
+                $xpath .= ' | ';
+            }
+            $xpath .= $this->_getActionsXPath($config);
+
+        }
+        foreach ($layoutXPath->query($xpath) as $element) {
+            $onDemandInsertPlace = $element;
+            break;
+        }
+
         // handle javascript minification, merging and inclusion on all pages
         foreach ($this->_getFileConfig() as $name => $fileConfig) {
             /* @var $config array */
@@ -57,7 +75,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             // insert script where and if appropriate
             if (in_array('ondemand', $options)) {
                 if ($fileAction = $this->_getFirstElement($fileActions)) {
-                    $insertOnDemand[] = array($action, $fileAction);
+                    $insertOnDemand[] = array($action, $onDemandInsertPlace);
                 }
                 $delete[] = $fileActions;
             }
@@ -76,7 +94,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         }
 
         // insert configurable on demand js files
-        foreach (array_reverse($insertOnDemand) as $insertOptions) {
+        foreach ($insertOnDemand as $insertOptions) {
             list($action, $fileAction) = $insertOptions;
             /* @var $fileAction DOMElement */
 
@@ -153,7 +171,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
     }
 
     /**
-     * @param DOMNodeList $elements
+     * @param DOMNodeLIst | DOMNode[] $elements
      * @return DOMElement | null
      */
     protected function _getFirstElement($elements) {
@@ -187,11 +205,15 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
     /**
      * @param DOMXPath $layoutXPath
      * @param array $config
-     * @return DOMNodeList
+     * @return DOMNode[]
      */
     protected function _findDomActions($layoutXPath, $config) {
         $xpath = $this->_getActionsXPath($config);
-        return $layoutXPath->query($xpath);
+        $result = array();
+        foreach ($layoutXPath->query($xpath) as $element) {
+            $result[] = $element;
+        }
+        return $result;
     }
 
     /**

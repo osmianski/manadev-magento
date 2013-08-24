@@ -111,7 +111,6 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                                 $path = $this->_generateAttributeParameter($url, $value);
                                 break;
                             case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
-                                $this->logger()->logTemp(json_encode($queryParams));
                                 list($path, $category_id) = $this->_generateCategoryParameter($url, $value);
                                 break;
                             case Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE:
@@ -484,6 +483,38 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
 
         return $this;
+    }
+
+    public function getValueUrl($key, $value) {
+        if ($url = $this->_getParameterUrl($key)) {
+            switch ($url->getType()) {
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE:
+                    if ($urlKey = $this->_getValueUrlKey($value)) {
+                        return json_encode(array(
+                            'url' => $urlKey['final_url_key'],
+                            'prefix' => $urlKey['final_include_filter_name']
+                                ? $url->getFinalUrlKey().$this->getSchema()->getFirstValueSeparator()
+                                : '',
+                            'position' => $urlKey['position'],
+                        ));
+                    }
+                    break;
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
+                    if ($urlKey = $this->_getCategoryUrlKeys($value)) {
+                        return json_encode(
+                            array(
+                                'url' => $urlKey['final_url_key'],
+                                'prefix' => $url->getFinalUrlKey() . $this->getSchema()->getFirstValueSeparator(),
+                                'position' => 0,
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    throw new Exception('Not implemented');
+            }
+        }
+        return $value;
     }
 
     #region Dependencies
