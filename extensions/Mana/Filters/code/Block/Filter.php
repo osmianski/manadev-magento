@@ -109,7 +109,7 @@ class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract
         if ($item->getMShowSelected()) {
             $result .= 'm-selected-ln-item';
         }
-        if (!$item->getCount()) {
+        if (!($item->getCount() || $item->getMSelected())) {
             if ($result) {
                 $result .= ' ';
             }

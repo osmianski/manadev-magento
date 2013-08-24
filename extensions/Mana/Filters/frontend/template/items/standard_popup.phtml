@@ -27,7 +27,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                 <?php if ($_item->getMSelected()): ?>
                 <span class="m-selected-filter-item"><?php echo $this->escapeHtml($_item->getLabel()) ?></span>
                 <?php else : ?>
-                <?php if ($_item->getCount() > 0): ?>
+                <?php if ($_item->getCount() > 0 || $_item->getMSelected()): ?>
                     <a href="#" onClick="return jQuery.mShowMorePopupApply('<?php echo $_item->getSeoValue() ?>');"
                        title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
                     <?php else: echo $this->escapeHtml($_item->getLabel()) ?>
