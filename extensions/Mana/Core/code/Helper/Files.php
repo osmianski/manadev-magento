@@ -44,7 +44,7 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 	public function getUrl($relativeUrl, $type, $baseUrl = null) {
 		if (is_array($type)) {
 			foreach ($type as $candidate) {
-				if ($url = $this->getUrl($relativeUrl, $candidate, $storeId)) {
+				if ($url = $this->getUrl($relativeUrl, $candidate, $baseUrl)) {
 					return $url;
 				}
 			}

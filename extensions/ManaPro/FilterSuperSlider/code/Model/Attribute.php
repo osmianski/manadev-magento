@@ -219,16 +219,17 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
     }
 
     public function addToState() {
-        $rangeAndLabels = $this->_getRangeAndLabels();
-        extract($rangeAndLabels);
-        /* @var $text array */
-        $this->getLayer()->getState()->addFilter($this->_createItemEx(array(
-            'label' => $text[0] . ' - ' . $text[count($text) - 1],
-            'value' => Mage::app()->getRequest()->getParam($this->_requestVar),
-            'm_selected' => true,
-            'm_show_selected' => false,
-            'remove_url' => $this->getRemoveUrl(),
-        )));
+        if ($rangeAndLabels = $this->_getRangeAndLabels()) {
+            extract($rangeAndLabels);
+            /* @var $text array */
+            $this->getLayer()->getState()->addFilter($this->_createItemEx(array(
+                'label' => $text[0] . ' - ' . $text[count($text) - 1],
+                'value' => Mage::app()->getRequest()->getParam($this->_requestVar),
+                'm_selected' => true,
+                'm_show_selected' => false,
+                'remove_url' => $this->getRemoveUrl(),
+            )));
+        }
     }
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock) {
         return $this;
