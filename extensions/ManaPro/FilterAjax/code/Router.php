@@ -23,6 +23,10 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
         /* @var $core Mana_Core_Helper_Data */
         $core = Mage::helper('mana_core');
 
+        if ($core->getRoutePath() != '//') {
+            return false;
+        }
+
         /* @var $routerHelper Mana_Core_Helper_Router */
         $routerHelper = Mage::helper('mana_core/router');
 

@@ -9,6 +9,8 @@
  * Model type for holding information in memory about possible or applied filter which is based on an attribute
  * @author Mana Team
  * Injected instead of standard catalog/layer_filter_attribute in Mana_Filters_Block_Filter_Attribute constructor.
+ *
+ * @method Mana_Filters_Model_Filter2_Store getFilterOptions()
  */
 class Mana_Filters_Model_Filter_Attribute
     extends Mage_Catalog_Model_Layer_Filter_Attribute

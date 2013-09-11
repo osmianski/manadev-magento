@@ -21,6 +21,10 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
             exit;
         }
 
+        if ($this->coreHelper()->getRoutePath() != '//') {
+            return false;
+        }
+
         /* @var $parser Mana_Seo_Helper_UrlParser */
         $parser = Mage::helper('mana_seo/urlParser');
 
@@ -59,4 +63,13 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
 
         return false;
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    #endregion
 }

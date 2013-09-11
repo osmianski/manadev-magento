@@ -179,11 +179,14 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         /* @var $request Mage_Core_Controller_Request_Http */
         $request = $this->getRequest();
         $route = explode('/', $route);
-        if (isset($route[0]) && $route[0] == '*') $route[0] = $request->getRouteName();
+        if ($originalRoute = Mage::registry('m_original_route_path')) {
+            $originalRoute = explode('/', $originalRoute);
+        }
+        if (isset($route[0]) && $route[0] == '*') $route[0] = $originalRoute ? $originalRoute[0] : $request->getRouteName();
         if (!isset($route[1])) $route[2] = 'index';
-        if (isset($route[1]) && $route[1] == '*') $route[1] = $request->getControllerName();
+        if (isset($route[1]) && $route[1] == '*') $route[1] = $originalRoute ? $originalRoute[1] : $request->getControllerName();
         if (!isset($route[2])) $route[2] = 'index';
-        if (isset($route[2]) && $route[2] == '*') $route[2] = $request->getActionName();
+        if (isset($route[2]) && $route[2] == '*') $route[2] = $originalRoute ? $originalRoute[2] : $request->getActionName();
 
         return $route[0] . (isset($route[1]) ? '/' . $route[1] : '') . (isset($route[2]) ? '/' . $route[2] : '');
     }
@@ -251,6 +254,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     protected function _getCategoryUrlKeys($categoryId) {
+        if ($categoryId == '__0__') {
+            return $categoryId;
+        }
         /* @var $layeredNavigation Mana_Filters_Helper_Data */
         $layeredNavigation = Mage::helper('mana_filters');
 
@@ -272,6 +278,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             if ($this->_routePath == 'catalog/category/view') {
                 $routeParams = $this->getData('route_params');
                 $rootCategoryId = $routeParams['id'];
+            }
+            elseif (!$this->_routePath && $this->coreHelper()->getRoutePath() == 'manapro_filtershowmore/popup/view' &&
+                Mage::registry('m_original_route_path') == 'catalog/category/view')
+            {
+                $rootCategoryId = Mage::app()->getRequest()->getParam('m-show-more-cat');
             }
             else {
                 $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
@@ -372,7 +383,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             in_array($parameterUrl->getFilterDisplay(), array('slider', 'range'));
 
         $path = '';
-        if ($value != '__0__,__1__') {
+        if ($value == '__0__') {
+            return $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $value;
+        }
+        elseif ($value != '__0__,__1__') {
             $values = array();
             foreach (explode('_', $value) as $singleValue) {
                 $values[] = explode(',', $singleValue);
@@ -485,31 +499,73 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return $this;
     }
 
-    public function getValueUrl($key, $value) {
+    public function getItemData($key, $value) {
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
+
+        $this->_schema = $seo->getActiveSchema($this->getStore()->getId());
         if ($url = $this->_getParameterUrl($key)) {
             switch ($url->getType()) {
                 case Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE:
                     if ($urlKey = $this->_getValueUrlKey($value)) {
-                        return json_encode(array(
+                        return array(
                             'url' => $urlKey['final_url_key'],
                             'prefix' => $urlKey['final_include_filter_name']
                                 ? $url->getFinalUrlKey().$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
-                        ));
-                    }
-                    break;
-                case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
-                    if ($urlKey = $this->_getCategoryUrlKeys($value)) {
-                        return json_encode(
-                            array(
-                                'url' => $urlKey['final_url_key'],
-                                'prefix' => $url->getFinalUrlKey() . $this->getSchema()->getFirstValueSeparator(),
-                                'position' => 0,
-                            )
+                            'id' => $value,
                         );
                     }
                     break;
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
+                    if ($this->getSchema()->getRedirectToSubcategory()) {
+                        $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
+                        $params['_current'] = true;
+                        $params['_use_rewrite'] = true;
+                        $params['_m_escape'] = '';
+                        $params['_query'] = array(
+                            'cat' => $value,
+                            'm-seo-enabled' => null,
+                            'm-show-more-cat' => null,
+                            'm-show-more-popup' => null,
+                        );
+
+                        $url = Mage::helper('mana_filters')->markLayeredNavigationUrl(
+                            Mage::getUrl('*/*/*', $params), '*/*/*', $params);
+
+                        return array(
+                            'full_url' => $url
+                        );
+                    }
+                    elseif ($urlKey = $this->_getCategoryUrlKeys($value)) {
+                        return
+                            array(
+                                'url' => $urlKey,
+                                'prefix' => $url->getFinalUrlKey() . $this->getSchema()->getFirstValueSeparator(),
+                                'position' => 0,
+                                'id' => 0,
+                            );
+                    }
+                    break;
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_PRICE:
+                    list($from, $to) = explode(',', $value);
+                    $index = $from;
+                    $range = $to;
+                    if ($this->_schema->getUseRangeBounds()) {
+                        $from = ($index - 1) * $range;
+                        $to = $from + $range;
+                        $path = $from . $this->_schema->getPriceSeparator() . $to;
+                    } else {
+                        $path = $index . $this->_schema->getPriceSeparator() . $range;
+                    }
+
+                    return array(
+                        'url' => $path,
+                        'prefix' => '',
+                        'position' => 0,
+                        'id' => 0,
+                    );
                 default:
                     throw new Exception('Not implemented');
             }
@@ -523,6 +579,14 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      */
     public function logger() {
         return Mage::helper('mana_core/logger');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper()
+    {
+        return Mage::helper('mana_core');
     }
     #endregion
 }

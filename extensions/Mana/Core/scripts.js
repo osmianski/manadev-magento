@@ -224,7 +224,13 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
                 return childId;
             }
         },
-
+        count: function(obj) {
+            var result = 0;
+            $.each(obj, function() {
+                result++;
+            });
+            return result;
+        },
         // from underscore.js
         isFunction: function(obj) {
             return !!(obj && obj.constructor && obj.call && obj.apply);
@@ -477,7 +483,7 @@ function ($, layout, json, core, config, undefined)
         }
     });
 });
-Mana.define('Mana/Core/Json', ['jquery'], function($) {
+Mana.define('Mana/Core/Json', ['jquery', 'singleton:Mana/Core'], function($, core) {
     return Mana.Object.extend('Mana/Core/Json', {
         parse: function(what) {
             return $.parseJSON(what);
@@ -486,13 +492,18 @@ Mana.define('Mana/Core/Json', ['jquery'], function($) {
             return Object.toJSON(what);
         },
         decodeAttribute: function(what) {
-            var encoded = what.split("\"");
-            var decoded = [];
-            $.each(encoded, function(key, value) {
-                decoded.push(value.replace(/'/g, "\""));
-            });
-            var result = decoded.join("'");
-            return this.parse(result);
+            if (core.isString(what)) {
+                var encoded = what.split("\"");
+                var decoded = [];
+                $.each(encoded, function (key, value) {
+                    decoded.push(value.replace(/'/g, "\""));
+                });
+                var result = decoded.join("'");
+                return this.parse(result);
+            }
+            else {
+                return what;
+            }
         }
     });
 });
@@ -923,6 +934,11 @@ Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana
 function ($, Block, config)
 {
     return Block.extend('Mana/Core/PageBlock', {
+        _init: function () {
+            this._defaultOverlayFadeout = { overlayTime: 0, popupTime: 0, callback: null };
+            this._overlayFadeout = this._defaultOverlayFadeout;
+            this._super();
+        },
         _subscribeToHtmlEvents: function() {
             var self = this;
             var inResize = false;
@@ -956,14 +972,22 @@ function ($, Block, config)
         resize: function () {
             this.trigger('resize', {}, false, true);
         },
-        showOverlay: function() {
-            var overlay = $('<div class="m-overlay"></div>');
+        showOverlay: function(overlayClass, fadeout) {
+            this._overlayFadeout = fadeout || this._defaultOverlayFadeout;
+            var overlay = overlayClass ? $('<div class="m-overlay ' + overlayClass + '"></div>') : $('<div class="m-overlay"></div>');
             overlay.appendTo(this.getElement());
             overlay.css({left:0, top:0}).width($(document).width()).height($(document).height());
-            return this;
+            return overlay;
         },
         hideOverlay: function() {
-            $('.m-overlay').remove();
+            var self = this;
+            $('.m-overlay').fadeOut(this._overlayFadeout.overlayTime, function () {
+                $('.m-overlay').remove();
+                if (self._overlayFadeout.callback) {
+                    self._overlayFadeout.callback();
+                }
+                self._overlayFadeout = self._defaultOverlayFadeout;
+            })
             return this;
         },
         showWait: function() {
@@ -1147,6 +1171,84 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             else {
                 return null;
             }
+        },
+        showPopup: function(options) {
+            var self = this;
+
+            Mana.requireOptional([options.popup.blockName], function (PopupBlockClass) {
+                var fadeoutCallback = options.fadeout.callback;
+                options.fadeout.callback = function() {
+                    $('#m-popup').fadeOut(options.fadeout.popupTime, function () {
+                        if (fadeoutCallback) {
+                            fadeoutCallback();
+                        }
+                    });
+                };
+                var overlay = self.getPageBlock().showOverlay('m-popup-overlay', options.fadeout);
+                var $popup = $('#m-popup');
+                overlay.animate({ opacity: options.overlay.opacity }, options.fadein.overlayTime, function () {
+                    $popup
+                        .css({"width": "auto", "height": "auto"})
+                        .html(options.content);
+
+                    if (options.popup.class) {
+                        $popup.addClass(options.popup.class);
+                    }
+                    $popup.show();
+
+                    var popupBlock = new PopupBlockClass();
+                    popupBlock.setElement($popup[0]);
+                    popupBlock.prepare(options.popupBlock);
+
+                    $('.m-popup-overlay').on('click', function() { self.hidePopup(); return false; });
+                    if (!self._popupEscListenerInitialized) {
+                        self._popupEscListenerInitialized = true;
+                        $(document).keydown(function (e) {
+                            if ($('.m-popup-overlay').length) {
+                                if (e.keyCode == 27) {
+                                    self.hidePopup();
+                                    return false;
+                                }
+                            }
+                            return true;
+                        });
+                    }
+
+                    $popup
+                        .css("top", (($(window).height() - $popup.outerHeight()) / 2) + $(window).scrollTop() + "px")
+                        .css("left", (($(window).width() - $popup.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+
+                    var popupHeight = $popup.height();
+                    $popup.hide().css({"height": "auto"});
+
+                    var css = {
+                        left: $popup.css('left'),
+                        top: $popup.css('top'),
+                        width: $popup.width() + "px",
+                        height: $popup.height() + "px"
+                    };
+
+                    $popup.children().each(function () {
+                        $(this).css({
+                            width: ($popup.width() + $(this).width() - $(this).outerWidth()) + "px",
+                            height: ($popup.height() + $(this).height() - $(this).outerHeight()) + "px"
+                        });
+                    });
+                    $popup
+                        .css({
+                            top: ($(window).height() / 2) + $(window).scrollTop() + "px",
+                            left: ($(window).width() / 2) + $(window).scrollLeft() + "px",
+                            width: 0 + "px",
+                            height: 0 + "px"
+                        })
+                        .show();
+
+                    $popup.animate(css, options.fadein.popupTime, options.fadein.callback);
+                });
+            });
+        },
+        hidePopup: function() {
+            this.getPageBlock().hideOverlay();
         }
     });
 });
@@ -1495,16 +1597,5 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
         return false;
     };
 
-    $(function () {
-        $('.m-popup-overlay').live('click', $.mClosePopup);
-        $('#m-popup .m-close-popup').live('click', $.mClosePopup);
-        $(document).keydown(function (e) {
-            if ($('.m-popup-overlay').length) {
-                if (e.keyCode == 27) {
-                    return $.mClosePopup();
-                }
-            }
-        });
-    });
 })(jQuery);
 //endregion/
