@@ -14,8 +14,20 @@
  */
 /* @var $this Mana_Filters_Block_Filter_Attribute */
 /* @var $filters Mana_Filters_Helper_Data */ $filters = Mage::helper(strtolower('Mana_Filters'));
+/* @var $radios ManaPro_FilterRadios_Helper_Data */
+$radios = Mage::helper('manapro_filterradios');
 ?>
 <ol class="m-filter-radios">
+    <li>
+        <?php if (Mage::getStoreConfigFlag('mana_filters/radio/show_all')): ?>
+        <input type="radio" id="<?php echo 'filter_'. $filters->getFilterName($this, $this->getFilter()).'_' ?>" name="<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
+			value="" <?php if (!count($this->getFilter()->getMSelectedValues())): ?>checked="checked"<?php else : ?>
+			onClick="setLocation('<?php echo $this->urlEscape($this->getFilter()->getRemoveUrl()) ?>');"<?php endif; ?> />
+		<label for="<?php echo 'filter_' . $filters->getFilterName($this, $this->getFilter()) . '_' ?>">
+		    <span <?php if (!count($this->getFilter()->getMSelectedValues())): ?>class="m-selected-radio-button"<?php endif; ?>
+                title="<?php echo $this->escapeHtml($radios->__('All')) ?>"><?php echo $this->escapeHtml($radios->__('All')) ?></span></label>
+        <?php endif; ?>
+    </li>
 <?php foreach ($this->getItems() as $_item): ?>
     <li  <?php echo $this->getListItemClass($_item) ?> >
         <?php // MANA BEGIN ?>
