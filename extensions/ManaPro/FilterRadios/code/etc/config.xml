@@ -79,7 +79,8 @@
 					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
 					<template>manapro/filterradios/items.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>400</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</radios>
+                    <popup_class>Mana/LayeredNavigation/Popup/Radio</popup_class>
+                </radios>
 			</attribute>
 			<price> <!-- available display options for price filter -->
 				<radios translate="title" module="manapro_filterradios">
@@ -92,7 +93,8 @@
 					<reverse_resource>mana_filters/filter_reverse_price</reverse_resource>
 					<template>manapro/filterradios/items.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>400</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</radios>
+                    <popup_class>Mana/LayeredNavigation/Popup/Radio</popup_class>
+                </radios>
 			</price>
 			<category> <!-- available display options for category filter -->
 				<radios translate="title" module="manapro_filterradios">
@@ -102,7 +104,8 @@
 					<solr_model>mana_filters/solr_category</solr_model>
 					<template>manapro/filterradios/items.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>400</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</radios>
+                    <popup_class>Mana/LayeredNavigation/Popup/Radio</popup_class>
+                </radios>
 			</category>
 			<decimal> <!-- available display options for price filter -->
 				<radios translate="title" module="manapro_filterradios">
@@ -115,8 +118,16 @@
                     <reverse_resource>mana_filters/filter_reverse_decimal</reverse_resource>
 					<template>manapro/filterradios/items.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>400</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</radios>
+                    <popup_class>Mana/LayeredNavigation/Popup/Radio</popup_class>
+                </radios>
 			</decimal>
 		</display>
 	</mana_filters>
+    <default>
+        <mana_filters>
+            <radio>
+                <show_all>1</show_all>
+            </radio>
+        </mana_filters>
+    </default>
 </config>
