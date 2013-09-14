@@ -62,7 +62,7 @@ class Mana_Core_Test_Case extends PHPUnit_Framework_TestCase {
         // we can't use translations here as some Magento code is not executed under nested transactions
         //$db->beginTransaction();
 
-        return $db->fetchPairs("SELECT `module`, `version` FROM `{$res->getTableName('m_test_version')}");
+        return $db->fetchPairs("SELECT `module`, `version` FROM `{$res->getTableName('m_test_version')}`");
     }
 
     protected static function _finishModuleInstall($moduleName, $version) {
