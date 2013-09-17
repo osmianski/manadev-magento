@@ -22,7 +22,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		foreach ($this->getProductStocks($productId) as $stockData) {
 			return $stockData;
 		}
-		throw new Exception('Not implemented');
+		return array('stock_id' => 0, 'is_qty_decimal' => 0, 'qty' => 0);
+		//throw new Exception('Not implemented');
 	}
 	/**
 	 * This method performs core calculation of the whole module. 
