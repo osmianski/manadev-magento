@@ -196,33 +196,6 @@
                         </store_flat>
                     </scopes>
                 </page>
-                <!--<page_attribute>
-                    <editable_in_grid>1</editable_in_grid>
-                    <fields>
-                        <page_id>
-                            <type>bigint</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>mana_attributepage/page/global</entity>
-                                <field>id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </page_id>
-                        <attribute_id>
-                            <type>smallint(5) unsigned</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>eav/attribute</entity>
-                                <field>attribute_id</field>
-                                <on_update>restrict</on_update>
-                                <on_delete>restrict</on_delete>
-                            </foreign>
-                            <validation><isNotEmpty /></validation>
-                        </attribute_id>
-                        <position><type>int</type><default_value>0</default_value></position>
-                    </fields>
-                </page_attribute>-->
                 <option_page>
                     <max_defaultable_fields>60</max_defaultable_fields>
                     <fields>
@@ -297,7 +270,7 @@
                         <attribute_page_id>
                             <type>bigint</type>
                             <foreign>
-                                <entity>mana_attributepage/page/global</entity>
+                                <entity>mana_attributepage/page/flat</entity>
                                 <field>id</field>
                                 <on_update>cascade</on_update>
                                 <on_delete>cascade</on_delete>
@@ -390,7 +363,7 @@
                                 <option_id_2><default_formula>{{= option2.option_id}}</default_formula></option_id_2>
                                 <option_id_3><default_formula>{{= option3.option_id}}</default_formula></option_id_3>
                                 <option_id_4><default_formula>{{= option4.option_id}}</default_formula></option_id_4>
-                                <attribute_page_id><default_formula>{{= attribute_page.primary_id}}</default_formula></attribute_page_id>
+                                <attribute_page_id><default_formula>{{= attribute_page.id}}</default_formula></attribute_page_id>
                             </fields>
                         </flat>
                         <store>
@@ -447,40 +420,6 @@
                         </store_flat>
                     </scopes>
                 </option_page>
-                <!--<option_page_option>
-                    <editable_in_grid>1</editable_in_grid>
-                    <fields>
-                        <page_id>
-                            <type>bigint</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>mana_attributepage/option_page/global</entity>
-                                <field>id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </page_id>
-                        <attribute_id>
-                            <type>bigint</type>
-                            <nullable>1</nullable>
-                            <foreign>
-                                <entity>mana_attributepage/page_attribute</entity>
-                                <field>id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </attribute_id>
-                        <option_id>
-                            <type>int(10) unsigned</type>
-                            <foreign>
-                                <entity>eav/attribute_option</entity>
-                                <field>option_id</field>
-                                <on_update>cascade</on_update>
-                                <on_delete>cascade</on_delete>
-                            </foreign>
-                        </option_id>
-                    </fields>
-                </option_page_option>-->
             </entities>
         </mana_attributepage>
         <mana_seo>
