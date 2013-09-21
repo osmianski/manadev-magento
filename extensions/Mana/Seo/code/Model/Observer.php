@@ -72,7 +72,7 @@ class Mana_Seo_Model_Observer {
                     $pageNo = $collection->getCurPage();
                     if ($pageNo > 1) {
                         $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
-                        $head->addLinkRel('prev', Mage::getUrl('*/*/*', array_merge($params,
+                        $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
                             array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
                     }
                     if ($pageNo < $pageCount) {
@@ -153,6 +153,23 @@ class Mana_Seo_Model_Observer {
         return $filters;
     }
 
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @param string $rel
+     * @param string $url
+     */
+    public function addLinkRel($head, $rel, $url) {
+        $items = $head->getData('items');
+        $items['link_rel_prev/' . $url] = array(
+            'type' => 'link_rel',
+            'name' => $url,
+            'params' => 'rel="' . $rel . '"',
+            'if' => null,
+            'cond' => null,
+        );
+        $head->setData('items', $items);
+    }
+
     #region Dependencies
 
     /**
@@ -182,7 +199,6 @@ class Mana_Seo_Model_Observer {
     public function layerHelper() {
         return Mage::helper('mana_core/layer');
     }
-
 
     #endregion
 }

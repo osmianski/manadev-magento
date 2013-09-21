@@ -101,6 +101,12 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $seoParams = array();
             foreach ($this->getQueryParams() as $key => $value) {
                 $path = false;
+
+                if ($key == 'p' && $value == 1) {
+                    unset($queryParams[$key]);
+                    continue;
+                }
+
                 if ($value !== null) {
                     if ($url = $this->_getParameterUrl($key)) {
                         $position = $url->getPosition();
