@@ -18,6 +18,7 @@ $res = Mage::getSingleton('core/resource');
 $db = $res->getConnection('write');
 
 /* @var $history Mana_Seo_Model_UrlHistory */
+/* @var $schema Mana_Seo_Model_Schema */
 /* @var $filter Mana_Filters_Model_Filter2 */
 /* @var $urlKeyCollection Mana_Seo_Resource_Url_Collection */
 /* @var $urlKey Mana_Seo_Model_Url */
@@ -28,6 +29,14 @@ $db = $res->getConnection('write');
 $dot = '.';
 if (Mage::getStoreConfig('catalog/seo/category_url_suffix') == 'html') {
     $dot = '';
+}
+
+$schemaCollection = $dbHelper->getResourceModel('mana_seo/schema/global_collection');
+$schemaCollection->addFieldToFilter('status', 'active');
+foreach ($schemaCollection as $schema) {
+    $schema
+        ->overrideIncludeFilterName(0)
+        ->save();
 }
 
 switch ($this->getTestVariation()) {
