@@ -566,44 +566,60 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             case 'mana_filters/filter2_store':
                 /* @var $filter Mana_filters_Model_Filter2 */
                 $filter = $form->getData('model');
-                /** @noinspection PhpParamsInspection */
-                $fieldset = $form->addFieldset('mfs_seo', array(
-                    'title' => $t->__('Search Engine Optimization'),
-                    'legend' => $t->__('Search Engine Optimization'),
-                ));
 
-                if ($form->getId() == 'mf_general' && $filter->getData('type') == 'attribute') {
+                if ($form->getId() == 'mf_general') {
                     /** @noinspection PhpParamsInspection */
-                    $fieldset->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_fieldset'));
-
-                    /* @var $includeInUrlSource Mana_Seo_Model_Source_IncludeInUrl */
-                    $includeInUrlSource = Mage::getSingleton('mana_seo/source_includeInUrl');
-                    $field = $fieldset->addField('include_in_url', 'select', array_merge(
+                    $fieldset = $form->addFieldset(
+                        'mfs_seo',
                         array(
-                            'label' => $t->__('Include Filter Name In URL'),
-                            'name' => 'include_in_url',
-                            'options' => $includeInUrlSource->getOptionArray(),
-                            'required' => true,
-                        ), $adminHelper->isGlobal() ? array() : array(
-                            'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL,
-                            'default_label' => $t->__('Same For All Stores'),
+                            'title' => $t->__('Search Engine Optimization'),
+                            'legend' => $t->__('Search Engine Optimization'),
                         )
-                    ));
+                    );
+
+                    if ($filter->getData('type') == 'attribute') {
+                        /** @noinspection PhpParamsInspection */
+                        $fieldset->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_fieldset'));
+
+                        /* @var $includeInUrlSource Mana_Seo_Model_Source_IncludeInUrl */
+                        $includeInUrlSource = Mage::getSingleton('mana_seo/source_includeInUrl');
+                        $field = $fieldset->addField(
+                            'include_in_url',
+                            'select',
+                            array_merge(
+                                array(
+                                    'label' => $t->__('Include Filter Name In URL'),
+                                    'name' => 'include_in_url',
+                                    'options' => $includeInUrlSource->getOptionArray(),
+                                    'required' => true,
+                                ),
+                                $adminHelper->isGlobal() ? array() : array(
+                                    'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL,
+                                    'default_label' => $t->__('Same For All Stores'),
+                                )
+                            )
+                        );
+                        /** @noinspection PhpParamsInspection */
+                        $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
+                    }
+
+                    $field = $fieldset->addField(
+                        'url_position',
+                        'text',
+                        array(
+                            'label' => $t->__('Position in URL'),
+                            'name' => 'url_position',
+                            'required' => true,
+                            'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
+                            'default_label' => $adminHelper->isGlobal()
+                                ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
+                                : $t->__('Same For All Stores'),
+                        )
+                    );
                     /** @noinspection PhpParamsInspection */
                     $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
                 }
 
-                $field = $fieldset->addField('url_position', 'text', array(
-                    'label' => $t->__('Position in URL'),
-                    'name' => 'url_position',
-                    'required' => true,
-                    'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
-                    'default_label' => $adminHelper->isGlobal()
-                        ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
-                        : $t->__('Same For All Stores'),
-                ));
-                /** @noinspection PhpParamsInspection */
-                $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
                 break;
         }
     }
