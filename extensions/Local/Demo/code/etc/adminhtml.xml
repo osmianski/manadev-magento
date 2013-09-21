@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Local_Demo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- This file defines new permissions in system -->
+<config>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <local_demo translate="title" module="local_demo">
+                            <title>Demo</title>
+                            <action>adminhtml/system_config/edit/section/local_demo</action>
+                            <sort_order>10300</sort_order>
+                        </local_demo>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
+		<resources>
+			<admin>
+				<children>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <local_demo translate="title" module="local_demo">
+                                        <title>Demo</title>
+                                        <sort_order>10300</sort_order>
+                                    </local_demo>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<local_demo translate="title" module="local_demo">
+										<title>MANAdev Demo</title>
+                                        <sort_order>60300</sort_order>
+                                    </local_demo>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

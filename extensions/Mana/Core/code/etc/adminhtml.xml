@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Core
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <menu>
+        <mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+            <children>
+                <system_configuration translate="title" module="mana_core">
+                    <title>Global Configuration</title>
+                    <sort_order>20000</sort_order>
+                    <children>
+                        <mana translate="title" module="mana_core">
+                            <title>General</title>
+                            <action>adminhtml/system_config/edit/section/mana</action>
+                            <sort_order>50</sort_order>
+                        </mana>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
+        <resources>
+			<admin>
+				<children>
+                    <mana translate="title" module="mana_core">
+                        <title>Configure Mana Extensions</title>
+                        <sort_order>79</sort_order>
+                        <children>
+                            <system_configuration translate="title" module="mana_core">
+                                <title>Global Configuration</title>
+                                <sort_order>20000</sort_order>
+                                <children>
+                                    <mana translate="title" module="mana_core">
+                                        <title>General</title>
+                                        <sort_order>50</sort_order>
+                                    </mana>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana translate="title" module="mana_core">
+										<title>MANAdev General Settings</title>
+                                        <sort_order>50050</sort_order>
+                                    </mana>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

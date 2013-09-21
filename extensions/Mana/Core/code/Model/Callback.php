@@ -14,15 +14,15 @@
  * 
  * 
  * @method string | object getTarget()
- * @method bool hasTarget(()
- * @method Mana_Core_Model_Callback unsTarget(()
- * @method Mana_Core_Model_Callback setTarget(()
+ * @method bool hasTarget()
+ * @method Mana_Core_Model_Callback unsTarget()
+ * @method Mana_Core_Model_Callback setTarget()
  * 
  * 
  * @method string getMethod()
- * @method bool hasMethod(()
- * @method Mana_Core_Model_Callback unsMethod(()
- * @method Mana_Core_Model_Callback setMethod(()
+ * @method bool hasMethod()
+ * @method Mana_Core_Model_Callback unsMethod()
+ * @method Mana_Core_Model_Callback setMethod()
  * 
  */
 class Mana_Core_Model_Callback extends Mana_Core_Model_Object {

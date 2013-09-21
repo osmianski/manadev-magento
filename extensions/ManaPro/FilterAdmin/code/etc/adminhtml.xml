@@ -8,30 +8,43 @@
 <config>
 	<menu>
 		<mana>
-            <title>MANAdev</title>
-            <sort_order>79</sort_order>
 			<children>
                 <filters translate="title" module="manapro_filteradmin">
                     <title>Layered Navigation</title>
                     <action>adminhtml/mana_filters/</action>
                     <sort_order>100</sort_order>
                 </filters>
-			</children>
+                <system_configuration>
+                    <children>
+                        <mana_filters translate="title" module="manapro_filteradmin">
+                            <title>Layered Navigation</title>
+                            <action>adminhtml/system_config/edit/section/mana_filters</action>
+                            <sort_order>100</sort_order>
+                        </mana_filters>
+                    </children>
+                </system_configuration>
+            </children>
 		</mana>
 	</menu>
 	<acl>
 		<resources>
 			<admin>
 				<children>
-					<mana translate="title" module="manapro_filteradmin">
-                        <title>Configure Mana Extensions</title>
-                        <sort_order>79</sort_order>
+					<mana>
 						<children>
 							<filters translate="title" module="manapro_filteradmin">
 								<title>Layered Navigation</title>
-		                        <sort_order>100</sort_order>
-							</filters>
-						</children>
+                                <sort_order>100</sort_order>
+                            </filters>
+                            <system_configuration>
+                                <children>
+                                    <mana_filters translate="title" module="manapro_filteradmin">
+                                        <title>Layered Navigation</title>
+                                        <sort_order>100</sort_order>
+                                    </mana_filters>
+                                </children>
+                            </system_configuration>
+                        </children>
 					</mana>
 					<system>
 						<children>
@@ -39,7 +52,8 @@
 								<children>
 									<mana_filters translate="title" module="manapro_filteradmin">
 										<title>MANAdev Layered Navigation</title>
-									</mana_filters>
+                                        <sort_order>50100</sort_order>
+                                    </mana_filters>
 								</children>
 							</config>
 						</children>

@@ -11,17 +11,17 @@
             <title>MANAdev</title>
             <sort_order>79</sort_order>
 			<children>
-                <shopby translate="title" module="mana_attributepage">
-                    <title>Shop By</title>
+                <attributepage translate="title" module="mana_attributepage">
+                    <title>Attribute Pages</title>
                     <sort_order>500</sort_order>
                     <children>
                         <new translate="title" module="mana_attributepage">
-                            <title>Enable 'Shop By' Feature For Attribute ...</title>
-                            <action>adminhtml/mana_attributepage/new</action>
+                            <title>Add</title>
+                            <action>adminhtml/mana_attribute_page/new</action>
                             <sort_order>100</sort_order>
                         </new>
                     </children>
-                </shopby>
+                </attributepage>
 			</children>
 		</mana>
 	</menu>
@@ -29,14 +29,12 @@
 		<resources>
 			<admin>
 				<children>
-					<mana translate="title" module="mana_attributepage">
-                        <title>Configure Mana Extensions</title>
-                        <sort_order>79</sort_order>
+					<mana>
 						<children>
-							<shopby translate="title" module="mana_attributepage">
-								<title>Shop By</title>
+							<attributepage translate="title" module="mana_attributepage">
+								<title>Attribute Pages</title>
 		                        <sort_order>500</sort_order>
-							</shopby>
+							</attributepage>
 						</children>
 					</mana>
                     <!--<system>
@@ -44,7 +42,7 @@
                             <config>
                                 <children>
                                     <mana_attributepage translate="title" module="mana_attributepage">
-                                        <title>MANAdev Shop By Attribute</title>
+                                        <title>MANAdev Attribute Pages</title>
                                     </mana_attributepage>
                                 </children>
                             </config>

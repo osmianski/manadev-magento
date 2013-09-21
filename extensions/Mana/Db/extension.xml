@@ -5,6 +5,7 @@
 
     <!-- modules files for both frontend and backend -->
     <sync extension-dir="code" project-dir="app/code/local/{Extension/Name}"/>
+    <sync extension-dir="tests" project-dir="tests/{Extension/Name}/Test" no-pack="1"/>
     <sync extension-file="module.xml" project-file="app/etc/modules/{Extension_Name}.xml"/>
     <sync extension-dir="email" project-dir="app/locale/en_US/template/email/{extension_name}"/>
     <sync extension-file="translate.csv" project-file="app/locale/en_US/{Extension_Name}.csv"/>

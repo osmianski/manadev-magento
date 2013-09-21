@@ -11,6 +11,8 @@
  * @author Mana Team
  */
 class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
+    protected $_pageTypes;
+
     /**
      * Retrieve config value for store by path. By default uses standard Magento function to query core_config_data
      * table and use config.xml for default value. Though this could be replaced by extensions (in later versions).
@@ -345,7 +347,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $val;
     }
-        public function jsonForceObjectAndEncode($data) {
+    public function jsonForceObjectAndEncode($data) {
         return json_encode($this->_forceObjectRecursively($data));
     }
     protected function _forceObjectRecursively($data) {
@@ -403,6 +405,16 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return $request->getRouteName() . '/' . $request->getControllerName() . '/' . $request->getActionName();
         }
     }
+    public function getRouteParams() {
+        $request = Mage::app()->getRequest();
+
+        $result = '';
+        foreach ($request->getUserParams() as $key => $value) {
+            $result .= '/'.$key.'/'.$value;
+        }
+        return $result;
+    }
+
     public function isMageVersionEqualOrGreater($version) {
         $version = explode('.', $version);
         $mageVersion = array_values(Mage::getVersionInfo());
@@ -522,6 +534,138 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return base64_encode(Mage::getSingleton('core/url')->sessionUrlVar($url));
     }
 
+    public function inAdmin() {
+        return $this->getRequestModule(Mage::app()->getRequest()) ==
+            ((string)Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName'));
+    }
+
+    public function getRequestModule(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getModuleName()) {
+            $result = $request->getModuleName();
+        }
+        else {
+            $result = $p[0];
+        }
+
+        return $result;
+    }
+
+    public function getRequestController(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getControllerName()) {
+            $result = $request->getControllerName();
+        }
+        else {
+            $result = $p[1];
+        }
+
+        return $result;
+    }
+
+    public function getRequestAction(Zend_Controller_Request_Http $request) {
+        $p = $this->getExplodedPath($request);
+        if ($request->getActionName()) {
+            $result = $request->getActionName();
+        }
+        else {
+            $result = $p[2];
+        }
+
+        return $result;
+    }
+
+    public function getExplodedPath(Zend_Controller_Request_Http $request) {
+        $defaultPath = array(
+            !empty($defaultPath[0]) ? $defaultPath[0] : '',
+            !empty($defaultPath[1]) ? $defaultPath[1] : 'index',
+            !empty($defaultPath[2]) ? $defaultPath[2] : 'index'
+        );
+
+        $path = trim($request->getPathInfo(), '/');
+
+        if ($path) {
+            $path = explode('/', $path);
+        }
+        else {
+            $path = $defaultPath;
+        }
+
+        return $path;
+    }
+
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     */
+    public function getBlockAlias($block) {
+        if (($parent = $block->getParentBlock()) && $this->startsWith($block->getNameInLayout(), $parent->getNameInLayout().'.')) {
+            return substr($block->getNameInLayout(), strlen($parent->getNameInLayout() . '.'));
+        }
+        else {
+            return $block->getNameInLayout();
+        }
+    }
+
+    public function indexArray($source, $key) {
+        $result = array();
+        foreach ($source as $value) {
+            $result[$value[$key]] = $value;
+        }
+
+        return $result;
+    }
+
+    protected $_attributes = array();
+
+    public function getAttribute($entityType, $attributeCode, $columns) {
+        /* @var $res Mage_Core_Model_Resource */
+        $res = Mage::getSingleton('core/resource');
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $res->getConnection('core_read');
+
+        $key = $entityType . '-' . $attributeCode . '-' . implode('-', $columns);
+        if (!isset($this->_attributes[$key])) {
+            $this->_attributes[$key] = $db->fetchRow($db->select()
+                ->from(array('a' => $res->getTableName('eav_attribute')), $columns)
+                ->join(array('t' => $res->getTableName('eav_entity_type')), 't.entity_type_id = a.entity_type_id', null)
+                ->where('a.attribute_code = ?', $attributeCode)
+                ->where('t.entity_type_code = ?', $entityType));
+        }
+
+        return $this->_attributes[$key];
+    }
+
+    public function getAttributeTable($attribute) {
+        return $attribute['backend_table'] ?
+            $attribute['backend_table'] :
+            'catalog_category_entity_' . $attribute['backend_type'];
+    }
+
+    /**
+     * @param Varien_Db_Adapter_Pdo_Mysql $connection
+     * @param $tableName
+     * @param array $fields
+     * @param bool $onDuplicate
+     * @return string
+     */
+    public function insert($connection, $tableName, $fields = array(), $onDuplicate = true) {
+        $sql = "INSERT INTO `{$tableName}` ";
+        $sql .= "(`" . implode('`,`', array_keys($fields)) . "`) ";
+        $sql .= "VALUES (" . implode(',', $fields) . ") ";
+
+        if ($onDuplicate && $fields) {
+            $sql .= " ON DUPLICATE KEY UPDATE";
+            $updateFields = array();
+            foreach ($fields as $key => $field) {
+                $key = $connection->quoteIdentifier($key);
+                $updateFields[] = "{$key}=VALUES({$key})";
+            }
+            $sql .= " " . implode(', ', $updateFields);
+        }
+
+        return $sql;
+    }
+
     public function addDotToSuffix($suffix) {
         if ($suffix && $suffix != '/' && strpos($suffix, '.') !== 0) {
             $suffix = '.' . $suffix;
@@ -529,4 +673,56 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $suffix;
     }
+
+    /**
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType[]
+     */
+    public function getPageTypes($helper = 'helper') {
+        if (!isset($this->_pageTypes[$helper])) {
+            $result = array();
+
+            foreach ($this->getSortedXmlChildren(Mage::getConfig()->getNode('mana_core'), 'page_types') as $key => $pageTypeXml) {
+                /* @var $pageType Mana_Seo_Helper_PageType */
+                $pageType = Mage::helper((string)$pageTypeXml->$helper);
+                $pageType->setCode($key);
+                $result[$key] = $pageType;
+            }
+            $this->_pageTypes[$helper] = $result;
+        }
+
+        return $this->_pageTypes[$helper];
+    }
+
+    /**
+     * @param string $type
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType
+     */
+    public function getPageType($type, $helper = 'helper') {
+        $pageTypes = $this->getPageTypes($helper);
+
+        return $pageTypes[$type];
+    }
+
+    public function isManadevLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('Mana_Filters');
+    }
+
+    public function isManadevSeoLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
+    }
+
+    public function isManadevAttributePageInstalled() {
+        return $this->isModuleEnabled('Mana_AttributePage');
+    }
+
+    public function isManadevLayeredNavigationTreeInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterTree');
+    }
+
+    public function isEnterpriseUrlRewriteInstalled() {
+        return $this->isModuleEnabled('Enterprise_UrlRewrite');
+    }
+
 }

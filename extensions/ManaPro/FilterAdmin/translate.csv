@@ -30,3 +30,7 @@
 "If set, system remembers filters applied to each CMS page containing layered navigation, so when customer navigates to a CMS page to which he/she had applied filters earlier, those filtered are still applied.","If set, system remembers filters applied to each CMS page containing layered navigation, so when customer navigates to a CMS page to which he/she had applied filters earlier, those filtered are still applied."
 "Globally Applied Filters","Globally Applied Filters"
 "One or more attribute codes separated by comma (','). If not empty, specified filters are remembered globally across different categories, CMS pages and search.","One or more attribute codes separated by comma (','). If not empty, specified filters are remembered globally across different categories, CMS pages and search."
+"Make All Categories Anchored","Make All Categories Anchored"
+"'Is Anchor' is set to 'Yes' for all categories successfully.","'Is Anchor' is set to 'Yes' for all categories successfully."
+"Hide CMS Page Content When Filters Are Applied","Hide CMS Page Content When Filters Are Applied"
+"Applicable to all CMS pages including home page where layered navigation is present","Applicable to all CMS pages including home page where layered navigation is present"

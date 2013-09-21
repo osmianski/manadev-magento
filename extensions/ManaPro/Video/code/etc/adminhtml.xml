@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <manapro_video translate="title" module="manapro_video">
+                            <title>Image and Video Gallery</title>
+                            <action>adminhtml/system_config/edit/section/manapro_video</action>
+                            <sort_order>600</sort_order>
+                        </manapro_video>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <manapro_video translate="title" module="manapro_video">
+                                        <title>Image and Video Gallery</title>
+                                        <sort_order>600</sort_order>
+                                    </manapro_video>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<manapro_video translate="title" module="manapro_video">
 										<title>MANAdev Video Settings</title>
-									</manapro_video>
+                                        <sort_order>50600</sort_order>
+                                    </manapro_video>
 								</children>
 							</config>
 						</children>

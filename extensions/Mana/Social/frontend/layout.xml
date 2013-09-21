@@ -9,6 +9,7 @@
     <default>
         <reference name="head">
 			<action method="addCss"><stylesheet>css/mana_social.css</stylesheet></action>
+            <block type="mana_social/facebook_meta" name="facebook_meta" as="facebook_meta"/>
         </reference>
         <reference name="header">
             <block type="mana_social/links" name="m_social_links" as="m_social_links" />

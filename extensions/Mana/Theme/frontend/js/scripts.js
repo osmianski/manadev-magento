@@ -183,7 +183,7 @@
         }, options);
         function _doBeautifySelects() {
             // ignore Opera
-            if ($.browser.opera) {
+            if ($.browser.opera || $.browser.msie && parseInt($.browser.version) < 9) {
                 return;
             }
 
@@ -210,12 +210,19 @@
                     // change markup
                     $(this)
                         .wrap('<span class="m-select" />')
-                        .after('<span style="width: ' + width + 'px; height: ' + height + 'px;">' + title + '</span>')
+                        .after('<span style="width: ' + width + 'px; height: ' + height + 'px;' +
+                            ($(this).is(':visible') ? '' : ' display: none;') + '">' + title + '</span>')
                         .parent().show();
                     //.css({ width: $(this).width() + 'px', height: $(this).height() + 'px' });
                 }
                 else {
                     $(this).next().css({ width:width + 'px', height:height + 'px' });
+                    if ($(this).is(':visible')) {
+                        $(this).next().show();
+                    }
+                    else {
+                        $(this).next().hide();
+                    }
                 }
 
             });
@@ -238,6 +245,8 @@
                 // do update text
                 val = $('option:selected', this).text();
                 $(this).next().text(val);
+
+                _doBeautifySelects();
             });
         });
 

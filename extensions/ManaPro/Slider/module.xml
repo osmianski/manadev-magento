@@ -16,9 +16,9 @@
             <codePool>local</codePool>
             <depends>
                 <Mage_Cms />
+                <Mage_Widget/>
                 <Mana_Db />
                 <Mana_Admin/>
-                <Mana_Widget/>
             </depends>
         </ManaPro_Slider>
     </modules>

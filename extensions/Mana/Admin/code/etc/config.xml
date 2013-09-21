@@ -12,7 +12,7 @@
 		<Mana_Admin>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>12.10.25.17</version>
+		    <version>13.08.05.11</version>
 		</Mana_Admin>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -37,8 +37,18 @@
 			getModel() and getSingleton() calls. -->
 			<mana_admin>
 				<class>Mana_Admin_Model</class>
-				<!-- INSERT HERE: resource section name -->
+                <!-- This tells Magento to read config/global/models/mana_admin_resources sections and register
+                    resource model information from there -->
+                <resourceModel>mana_admin_resources</resourceModel>
 			</mana_admin>
+            <!-- This says that string 'mana_admin' corresponds to Mana_Admin_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <mana_admin_resources>
+                <class>Mana_Admin_Resource</class>
+                <entities>
+                    <!-- INSERT HERE: table-entity mappings -->
+                </entities>
+            </mana_admin_resources>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
 		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
@@ -97,5 +107,22 @@
             </adminhtml>
         </routers>
     </admin>
-	<!-- INSERT HERE: adminhtml, frontend, ... -->
+    <default>
+        <web>
+            <routers>
+                <!-- add router for default admin page handling -->
+                <mana_entity><area>admin</area><class>Mana_Admin_Router</class></mana_entity>
+            </routers>
+        </web>
+    </default>
+    <stores>
+        <default>
+            <web>
+                <routers>
+                    <!-- add router for default admin page handling -->
+                    <mana_entity><area>admin</area><class>Mana_Admin_Router</class></mana_entity>
+                </routers>
+            </web>
+        </default>
+    </stores>
 </config>

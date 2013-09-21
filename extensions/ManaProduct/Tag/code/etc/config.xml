@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaProduct_Tag
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <ManaProduct_Tag>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>13.01.10.11</version>
+        </ManaProduct_Tag>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. ManaProduct_Tag_Helper_Data
+		class is accessible through Mage::helper('manaproduct_tag') call, other ManaProduct_Tag_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('manaproduct_tag/xxx_yyy') call. -->
+        <helpers>
+            <manaproduct_tag>
+                <!-- This says that string 'manaproduct_tag' corresponds to ManaProduct_Tag_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>ManaProduct_Tag_Helper</class>
+            </manaproduct_tag>
+        </helpers>
+        <!-- This section registers block classes ManaProduct_Tag_Block_XXX_YYY to be accessible through
+            'manaproduct_tag/xxx_yyy' shortcuts. -->
+        <blocks>
+            <!-- This says that string 'manaproduct_tag' corresponds to ManaProduct_Tag_Block pseudo-namespace. -->
+            <manaproduct_tag>
+                <class>ManaProduct_Tag_Block</class>
+            </manaproduct_tag>
+            <!-- INSERT HERE: rewrites, ... -->
+        </blocks>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- This section enables static visual changes in frontend area. -->
+    <frontend>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manaproduct_tag>
+                    <file>manaproduct_tag.xml</file>
+                </manaproduct_tag>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

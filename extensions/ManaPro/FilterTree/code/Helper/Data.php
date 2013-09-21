@@ -10,5 +10,16 @@
  * @author Mana Team
  */
 class ManaPro_FilterTree_Helper_Data extends Mage_Core_Helper_Abstract {
-    // INSERT HERE: helper functions that should be available from any other place in the system
+    protected $_rootCategory;
+
+    /**
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getRootCategory() {
+        if (!$this->_rootCategory) {
+            $this->_rootCategory = Mage::getModel('catalog/category')->load(
+                Mage::app()->getStore()->getRootCategoryId());
+        }
+        return $this->_rootCategory;
+    }
 }

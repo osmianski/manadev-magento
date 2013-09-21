@@ -18,6 +18,30 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
         }
         return $this->_countedCategories;
     }
+
+    public function getCategory() {
+        if ($this->coreHelper()->getRoutePath() == 'catalog/category/view' &&
+            $this->coreHelper()->isManadevSeoLayeredNavigationInstalled())
+        {
+            if (($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId())) &&
+                $schema->getRedirectToSubcategory())
+            {
+                return $this->treeHelper()->getRootCategory();
+            }
+            else {
+                return parent::getCategory();
+            }
+        }
+        return $this->treeHelper()->getRootCategory();
+    }
+
+    public function countOnCollection($collection) {
+        $collection->addCategoryFilter($this->getCategory());
+        $this->addCountToCategories($this->getCountedCategories(), $collection);
+
+        return $this->getCountedCategories();
+    }
+
     protected function _getItemsData() {
         $key = $this->getLayer()->getStateKey() . '_SUBCATEGORIES';
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
@@ -31,7 +55,7 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
             foreach ($counts as $category) {
                 $result[] = $category->getData();
             }
-            $data = $this->_getCategoryItemsDataRecursively($this->getLayer()->getCurrentCategory()->getData(), $result);
+            $data = $this->_getCategoryItemsDataRecursively($this->getCategory()->getData(), $result);
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
@@ -93,13 +117,13 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
                 //$childCategory['level'] == $category['level'] + 1 &&
                 strpos($childCategory['path'], $category['path'] . '/') === 0 &&
                 strpos($childCategory['path'], '/', strlen($category['path'] . '/')) === false &&
-                $childCategory['product_count'])
+                ($this->filterHelper()->isFilterEnabled($this->getFilterOptions()) == 2 || $childCategory['product_count']))
             {
                 $data[] = array(
                     'label' => Mage::helper('core')->htmlEscape($childCategory['name']),
                     'value' => $childCategory['entity_id'],
                     'count' => $childCategory['product_count'],
-                    'm_selected' => false, // filled out during apply phase
+                    'm_selected' => $childCategory['entity_id'] == $this->getLayer()->getCurrentCategory()->getId(),
                     'items' => $this->_getCategoryItemsDataRecursively($childCategory, $children),
                 );
             }
@@ -133,10 +157,37 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
 
     protected function _markSelectedCategoryRecursively($items) {
         foreach ($items as $item) {
-            if ($item->getValue() == $this->getAppliedCategory()->getId())  {
-                $item->setMSelected(true);
-            }
+            $item->setMSelected($item->getValue() == $this->getAppliedCategory()->getId());
             $this->_markSelectedCategoryRecursively($item->getItems());
         }
     }
+
+    public function getResetValue() {
+        return null;
+    }
+
+    #region Dependencies
+
+    /**
+     * @return ManaPro_FilterTree_Helper_Data
+     */
+    public function treeHelper() {
+        return Mage::helper('manapro_filtertree');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
+
+    #endregion
 }

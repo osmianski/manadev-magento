@@ -12,7 +12,9 @@
  *
  */
 class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
-	public function getFilename($relativeUrl, $type, $noExistanceCheck = false) {
+    protected $skip = array('.', '..');
+
+    public function getFilename($relativeUrl, $type, $noExistanceCheck = false) {
 		$result = $this->getBasePath($type).DS.str_replace('/', DS, $relativeUrl);
         if (!is_dir(dirname($result))) {
         	mkdir(dirname($result), 0777, true);
@@ -42,7 +44,7 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 	public function getUrl($relativeUrl, $type, $baseUrl = null) {
 		if (is_array($type)) {
 			foreach ($type as $candidate) {
-				if ($url = $this->getUrl($relativeUrl, $candidate, $storeId)) {
+				if ($url = $this->getUrl($relativeUrl, $candidate, $baseUrl)) {
 					return $url;
 				}
 			}
@@ -75,4 +77,29 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 			$i++;
 		}
 	}
+
+    public function walkRecursively($dir, $callback) {
+        if (file_exists($dir)) {
+            $this->_walkRecursively($dir, $callback);
+        }
+    }
+
+    protected function _walkRecursively($dir, $callback) {
+        if ($handle = opendir($dir)) {
+            $files = array();
+            while (false !== ($file = readdir($handle))) {
+                $files[] = $file;
+            }
+            closedir($handle);
+            foreach ($files as $file) {
+                if (!in_array($file, $this->skip)) {
+                    $filename = $dir . '/' . $file;
+                    $isDir = is_dir($filename);
+                    if (call_user_func($callback, $dir . '/' . $file, $isDir) && $isDir) {
+                        $this->_walkRecursively($filename, $callback);
+                    }
+                }
+            }
+        }
+    }
 }

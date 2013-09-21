@@ -7,17 +7,45 @@
  -->
 <!-- This file defines new permissions in system -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <manapro_productfaces translate="title" module="manapro_productfaces">
+                            <title>Representing Products</title>
+                            <action>adminhtml/system_config/edit/section/manapro_productfaces</action>
+                            <sort_order>200</sort_order>
+                        </manapro_productfaces>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <manapro_productfaces translate="title" module="manapro_productfaces">
+                                        <title>Representing Products</title>
+                                        <sort_order>200</sort_order>
+                                    </manapro_productfaces>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<manapro_productfaces translate="title" module="manapro_productfaces">
-										<title>Representing Products</title>
-									</manapro_productfaces>
+										<title>MANAdev Representing Products</title>
+                                        <sort_order>50200</sort_order>
+                                    </manapro_productfaces>
 								</children>
 							</config>
 						</children>

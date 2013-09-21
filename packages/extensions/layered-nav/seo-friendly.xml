@@ -5,6 +5,7 @@
     <part name="Mana/Core"/>
     <part name="Mana/Db"/>
     <part name="Mana/Filters"/>
+    <part name="Mana/Seo"/>
     <part name="ManaPro/FilterAdmin"/>
     <part name="ManaPro/FilterSeoLinks"/>
 </config>

@@ -1,4 +1,3 @@
-"Configure Mana Extensions","Configure Mana Extensions"
 "Loader ""%s"" argument ""%s"" not provided.","Loader ""%s"" argument ""%s"" not provided."
 "General","General"
 "General Information","General Information"
@@ -9,3 +8,5 @@
 "%s is not non-negative number","%s is not non-negative number"
 "%s is not positive number","%s is not positive number"
 "Please select at least one grid row first.","Please select at least one grid row first."
+"Same For All Stores","Same For All Stores"
+"Hide this message","Hide this message"

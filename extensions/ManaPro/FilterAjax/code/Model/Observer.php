@@ -19,157 +19,54 @@ class ManaPro_FilterAjax_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function renderOptions($observer) {
-	    $actionName = str_replace('/', '_', Mage::helper('mana_core')->getRoutePath());
-        if ($config = Mage::getConfig()->getNode('mana_ajax/urls/'.$actionName)) {
-            $class = (string)$config->class;
-            $method = (string)$config->method;
-            $obj = new $class;
-            $options = $obj->$method();
+	    /* @var $core Mana_Core_Helper_Data */
+	    $core = Mage::helper('mana_core');
 
-            $generalUrlExceptions = array();
-            foreach (Mage::app()->getStores() as $store) {
-                /* @var $store Mage_Core_Model_Store */
-                if ($store->getId() != Mage::app()->getStore()->getId()) {
-                    $generalUrlExceptions[$store->getCurrentUrl()] = $store->getCurrentUrl();
+        /* @var $js Mana_Core_Helper_Js */
+        $js = Mage::helper('mana_core/js');
+
+        /* @var $layeredNavigation Mana_Filters_Helper_Data */
+        $layeredNavigation = Mage::helper('mana_filters');
+
+        /* @var $filterAjax ManaPro_FilterAjax_Helper_Data */
+	    $filterAjax = Mage::helper('manapro_filterajax');
+
+        /* @var $urlModel Mage_Core_Model_Url */
+        $urlModel = Mage::getSingleton('core/url');
+
+        foreach ($filterAjax->getPageTypes() as $pageType) {
+	        if ($pageType->matchRoute($core->getRoutePath())) {
+                $unfilteredUrl = $layeredNavigation->getClearUrl(false, true, true, true);
+                $suffix = $core->addDotToSuffix($pageType->getCurrentSuffix());
+                if ($suffix && $core->endsWith($unfilteredUrl, $suffix)) {
+                    $unfilteredUrl = substr($unfilteredUrl, 0, strlen($unfilteredUrl) - strlen($suffix));
                 }
-            }
+                $unfilteredUrl = array($unfilteredUrl);
+                if ($layeredNavigation->isTreeVisible() && $core->getRoutePath() == 'catalog/category/view') {
+                    $unfilteredUrl = array();
+                    /* @var $treeHelper ManaPro_FilterTree_Helper_Data */
+                    $treeHelper = Mage::helper('manapro_filtertree');
+                    foreach ($treeHelper->getRootCategory()->getChildrenCategories() as $category) {
+                        /* @var $category Mage_Catalog_Model_Category */
+                        $url = $urlModel->sessionUrlVar($category->getUrl());
+                        if ($suffix && $core->endsWith($url, $suffix)) {
+                            $url = substr($url, 0, strlen($url) - strlen($suffix));
+                        }
+                        $unfilteredUrl[] = $url;
 
-            $options = array_merge(array(
-                'scroll' => Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'),
-            ), $options);
-            $options['urlExceptions'] = isset($options['urlExceptions'])
-                ? array_merge($generalUrlExceptions, $options['urlExceptions'])
-                : $generalUrlExceptions;
-            Mage::helper('mana_core/js')->options('#m-filter-ajax', $options);
-        }
+                    }
+                }
+                $js
+                    ->setConfig('layeredNavigation.ajax.urlKey', Mage::getStoreConfig('mana/ajax/url_key_filter'))
+                    ->setConfig('layeredNavigation.ajax.routeSeparator', Mage::getStoreConfig('mana/ajax/route_separator_filter'))
+                    ->setConfig('layeredNavigation.ajax.scrollToTop', Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'))
+                    ->setConfig('url.unfiltered', $unfilteredUrl)
+                    ->setConfig('url.suffix', $suffix);
+
+                break;
+            }
+	    }
 	}
-
-	public function getCategoryOptions() {
-	    $exactUrls = array();
-	    $partialUrls = array();
-	    $urlExceptions = array();
-
-        /* @var $category Mage_Catalog_Model_Category */
-        $category = Mage::registry('current_category');
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper(strtolower('Mana_Core'));
-
-        Mana_Core_Profiler::start('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . '$category->getUrl()');
-        $url = Mage::helper('mana_filters')->getClearUrl(false, true); //$category->getUrl();
-        if (($pos = mb_strrpos($url, '?')) !== false) {
-            $url = mb_substr($url, 0, $pos);
-        }
-        Mana_Core_Profiler::stop('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . '$category->getUrl()');
-        //if ($core->endsWith($url, '/')) {
-        //	$url = substr($url, 0, strlen($url) - 1);
-        //}
-
-        $exactUrls[$url] = $url;
-        $partialUrls[$url . '?'] = $url . '?';
-        if ($categorySuffix = $core->addDotToSuffix(Mage::helper('catalog/category')->getCategoryUrlSuffix())) {
-            if (($pos = mb_strrpos($url, $categorySuffix)) !== false) {
-                if ($pos + mb_strlen($categorySuffix) < mb_strlen($url)) {
-                    $url = mb_substr($url, 0, $pos) . mb_substr($url, $pos + mb_strlen($categorySuffix));
-                } else {
-                    $url = mb_substr($url, 0, $pos);
-                }
-            }
-            if ($conditionalWord = $core->getStoreConfig('mana_filters/seo/conditional_word')) {
-                $partialUrls[$url . '/' . $conditionalWord] = $url . '/' . $conditionalWord;
-            }
-        } else {
-            if ($conditionalWord = $core->getStoreConfig('mana_filters/seo/conditional_word')) {
-                $partialUrls[$url . '/' . $conditionalWord] = $url . '/' . $conditionalWord;
-            }
-        }
-
-        Mana_Core_Profiler::start('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . '$category->getChildrenCategories()');
-        $childCategories = $category->getChildrenCategories();
-        Mana_Core_Profiler::stop('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . '$category->getChildrenCategories()');
-        foreach ($childCategories as $childCategory) {
-            $url = $childCategory->getUrl();
-            if (Mage::app()->getFrontController()->getRequest()->isSecure()) {
-                $url = str_replace('http://', 'https://', $url);
-            }
-            if ($core->endsWith($url, '/')) {
-                $url = substr($url, 0, strlen($url) - 1);
-            }
-            if ($categorySuffix = Mage::helper('catalog/category')->getCategoryUrlSuffix()) {
-                $url = str_replace($categorySuffix, '', $url);
-            }
-            $urlExceptions[$url] = $url;
-        }
-
-        return compact('exactUrls', 'partialUrls', 'urlExceptions');
-    }
-
-    public function getSearchOptions() {
-        $exactUrls = array();
-        $partialUrls = array();
-        $urlExceptions = array();
-
-        /* @var $category Mage_Catalog_Model_Category */
-        $category = Mage::registry('current_category');
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper(strtolower('Mana_Core'));
-        $request = Mage::app()->getRequest();
-
-        $url = Mage::getSingleton('core/url')->sessionUrlVar(Mage::helper('core')->escapeUrl(Mage::getUrl()));
-        if ($core->endsWith($url, '/')) {
-            $url = substr($url, 0, strlen($url) - 1);
-        }
-        $url .= $request->getOriginalPathInfo();
-        $partialUrls[$url] = $url;
-
-        return compact('exactUrls', 'partialUrls', 'urlExceptions');
-    }
-
-    public function getPageOptions() {
-        $exactUrls = array();
-        $partialUrls = array();
-        $urlExceptions = array();
-
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper(strtolower('Mana_Core'));
-        $request = Mage::app()->getRequest();
-
-        $url = Mage::helper('cms/page')->getPageUrl($request->getParam('page_id'));
-        $exactUrls[$url] = $url;
-        $partialUrls[$url . '?'] = $url . '?';
-        if ($conditionalWord = $core->getStoreConfig('mana_filters/seo/conditional_word')) {
-            $partialUrls[$url . '/' . $conditionalWord] = $url . '/' . $conditionalWord;
-        }
-
-        return compact('exactUrls', 'partialUrls', 'urlExceptions');
-    }
-
-    public function getHomeOptions() {
-
-        $exactUrls = array();
-        $partialUrls = array();
-        $urlExceptions = array();
-
-        /* @var $core Mana_Core_Helper_Data */
-        $core = Mage::helper(strtolower('Mana_Core'));
-
-        $url = Mage::getUrl();
-        $exactUrls[$url] = $url;
-        if ($core->endsWith($url, '___SID=U')) {
-            $url = substr($url, 0, strlen($url) - strlen('___SID=U'));
-        }
-        if ($core->endsWith($url, '?')) {
-            $url = substr($url, 0, strlen($url) - 1);
-        }
-        if ($core->endsWith($url, '/')) {
-            $url = substr($url, 0, strlen($url) - 1);
-        }
-        $partialUrls[$url . '?'] = $url . '?';
-        if ($conditionalWord = $core->getStoreConfig('mana_filters/seo/conditional_word')) {
-            $partialUrls[$url . '/' . $conditionalWord] = $url . '/' . $conditionalWord;
-        }
-
-        return compact('exactUrls', 'partialUrls', 'urlExceptions');
-    }
 
     /* obsolete handlers. Kept here for easier upgrade */
     public function registerUrl($observer) { }

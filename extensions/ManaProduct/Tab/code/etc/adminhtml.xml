@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <manaproduct_tab translate="title" module="manaproduct_tab">
+                            <title>Product Tabs</title>
+                            <action>adminhtml/system_config/edit/section/manaproduct_tab</action>
+                            <sort_order>800</sort_order>
+                        </manaproduct_tab>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <manaproduct_tab translate="title" module="manaproduct_tab">
+                                        <title>Product Tabs</title>
+                                        <sort_order>800</sort_order>
+                                    </manaproduct_tab>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<manaproduct_tab translate="title" module="manaproduct_tab">
 										<title>MANAdev Product Tabs</title>
-									</manaproduct_tab>
+                                        <sort_order>50800</sort_order>
+                                    </manaproduct_tab>
 								</children>
 							</config>
 						</children>

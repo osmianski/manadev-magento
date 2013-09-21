@@ -1,0 +1,75 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+
+/* @var $this Mage_Core_Block_Template */
+$_url = Mage::getStoreConfig('local_demo/main_site/url');
+$_title = Mage::getStoreConfig('local_demo/main_site/title');
+$_logoUrl = Mage::getStoreConfig('local_demo/main_site/logo_url');
+$_addUrl = Mage::getStoreConfig('local_demo/main_site/add_url');
+$_brand = Mage::getStoreConfig('local_demo/main_site/brand');
+$_product = Mage::helper('local_demo')->product(array('entity_id', 'name', 'short_description', 'url_key',
+'final_price', 'discount_percent'));
+?>
+<div class="top-banner-container">
+
+</div>
+<div id="live-demo-banner">
+    <div class="container-954">
+        <div class="demo-logo"><a href="http://<?php echo $_url ?>/" target="_blank" title="<?php echo $_title ?>"><img
+                src="http://<?php echo $_url ?>/<?php echo $_logoUrl ?>" alt="<?php echo $_brand ?>"></a></div>
+        <div class="demo-product">
+            <strong>Product Live Demo:</strong> <br/>
+            <span class="demo-title"><?php echo $_product['name'] ?></span><br/>
+            <span class="demo-description"><?php echo $_product['short_description'] ?></span>
+            <a href="http://<?php echo $_url ?>/<?php echo $_product['url_key'] ?>" target="_blank"
+               class="demo-description">read more</a>
+        </div>
+        <div class="demo-price">
+            <?php if ($_product['final_price'] > 0) : ?>
+            <a title="Purchase now"
+               href="http://<?php echo $_url ?>/<?php echo sprintf($_addUrl, $_product['entity_id']) ?>">
+                <?php if ($_product['discount_percent'] > 0) : ?>
+                <div class="discounted-price">
+                    <div class="discount"><?php echo round($_product['discount_percent']) ?></div>
+                    <div class="price"><?php echo round($_product['final_price']) ?></div>
+                </div>
+                <?php else : ?>
+                <div class="full-price">
+                    <div class="price"><?php echo round($_product['final_price']) ?></div>
+                </div>
+                <?php endif; ?>
+            </a>
+            <?php else : ?>
+            <a href="http://<?php echo $_url ?>/<?php echo $_product['url_key'] ?>" target="_blank">
+                <img src="<?php echo $this->getSkinUrl('images/local_demo/btn-download-free.png')?>"
+                     title="Download FREE"/>
+            </a>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

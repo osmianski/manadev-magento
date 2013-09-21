@@ -16,7 +16,6 @@
             <codePool>local</codePool>
             <depends>
                 <Mage_Catalog />
-                <Mana_Widget/>
             </depends>
         </Mana_Social>
     </modules>

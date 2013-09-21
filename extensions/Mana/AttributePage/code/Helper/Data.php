@@ -10,5 +10,11 @@
  * @author Mana Team
  */
 class Mana_AttributePage_Helper_Data extends Mage_Core_Helper_Abstract {
-    // INSERT HERE: helper functions that should be available from any other place in the system
+    public function getOptionPageSuffix() {
+        return '.html';
+    }
+
+    public function getAttributePageSuffix() {
+        return '.html';
+    }
 }

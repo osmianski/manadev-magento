@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <mana_social translate="title" module="mana_social">
+                            <title>Social Networks</title>
+                            <action>adminhtml/system_config/edit/section/mana_social</action>
+                            <sort_order>900</sort_order>
+                        </mana_social>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <mana_social translate="title" module="mana_social">
+                                        <title>Social Networks</title>
+                                        <sort_order>900</sort_order>
+                                    </mana_social>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<mana_social translate="title" module="mana_social">
 										<title>MANAdev Social Networking</title>
-									</mana_social>
+                                        <sort_order>50900</sort_order>
+                                    </mana_social>
 								</children>
 							</config>
 						</children>

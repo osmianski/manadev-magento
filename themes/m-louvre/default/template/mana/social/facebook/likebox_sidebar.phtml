@@ -1,0 +1,30 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Social
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Social_Block_Facebook_Likebox */
+?>
+<div class="block m-fb-like-box <?php echo Mage::helper('mana_theme')->getCssClass($this, 'facebook_likebox') ?>">
+    <div class="block-content">
+        <div class="fb-like-box"
+            data-href="<?php echo $this->getPageUrl() ?>"
+            data-width="<?php echo $this->getWidth() ?>"
+        <?php if ($this->getHeight()): ?>
+            data-height="<?php echo $this->getHeight() ?>"
+        <?php endif ?>
+            data-show-faces="<?php echo $this->getShowFaces() ? 'true' : 'false' ?>"
+            data-stream="<?php echo $this->getShowStream() ? 'true' : 'false' ?>"
+            data-header="<?php echo $this->getShowHeader() ? 'true' : 'false' ?>"
+        <?php if ($this->getColorScheme()): ?>
+            data-colorscheme="<?php echo $this->getColorScheme() ?>"
+        <?php endif ?>
+        <?php if ($this->getBorderColor()): ?>
+            data-border-color="<?php echo $this->getBorderColor() ?>"
+        <?php endif ?>
+        >
+        </div>
+      </div>
+</div>

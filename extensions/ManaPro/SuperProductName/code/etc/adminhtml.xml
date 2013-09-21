@@ -7,17 +7,45 @@
  -->
 <!-- This file defines new permissions in system -->
 <config>
-	<acl>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <manapro_superproductname translate="title" module="manapro_superproductname">
+                            <title>Super Product Name</title>
+                            <action>adminhtml/system_config/edit/section/manapro_superproductname</action>
+                            <sort_order>700</sort_order>
+                        </manapro_superproductname>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
 		<resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <manapro_superproductname translate="title" module="manapro_superproductname">
+                                        <title>Super Product Name</title>
+                                        <sort_order>700</sort_order>
+                                    </manapro_superproductname>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<manapro_superproductname translate="title" module="manapro_superproductname">
 										<title>MANAdev Super Product Name Settings</title>
-									</manapro_superproductname>
+                                        <sort_order>50700</sort_order>
+                                    </manapro_superproductname>
 								</children>
 							</config>
 						</children>

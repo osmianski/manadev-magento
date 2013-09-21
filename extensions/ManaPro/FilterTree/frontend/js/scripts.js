@@ -74,10 +74,16 @@
                 if (li.children('ul').length) {
                     var treeId = tree[0].id;
                     var itemId = item[0].id;
+                    var isCollapsed;
 
-                    var isCollapsed = _state[treeId] && _state[treeId][itemId] == 1;
-                    if (_isCollapsedByDefault) {
-                        isCollapsed = !isCollapsed;
+                    if (item.parent().find('.m-selected-filter-item').length) {
+                        isCollapsed = false;
+                    }
+                    else {
+                        isCollapsed = _state[treeId] && _state[treeId][itemId] == 1;
+                        if (_isCollapsedByDefault) {
+                            isCollapsed = !isCollapsed;
+                        }
                     }
 
                     if (isCollapsed) {
@@ -97,7 +103,10 @@
 
     $(function () {
         _loadState();
-        $('.m-tree-item').live('click', function () {
+        $('.m-tree-item').live('click', function (e) {
+            if ($(e.target).prop("tagName").toLowerCase() == 'a') {
+                return true;
+            }
             if ($(this).parent().hasClass('m-collapsed')) {
                 _expand($(this), true);
                 return false;

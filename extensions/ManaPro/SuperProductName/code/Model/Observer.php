@@ -23,7 +23,7 @@ class ManaPro_SuperProductName_Model_Observer {
         $transport = $observer->getEvent()->getTransport();
 
         /* @var $nameBlock Mage_Core_Block_Abstract */
-        if (($nameBlock = $this->_getNameBlock($block->getLayout())) && $block == $nameBlock->getParentBlock()) {
+        if ($block->getLayout() && ($nameBlock = $this->_getNameBlock($block->getLayout())) && $block == $nameBlock->getParentBlock()) {
             $productHtml = $transport->getHtml();
             $product = $nameBlock->getProduct();
             $defaultNameHtml = Mage::helper('manapro_superproductname')->formatProductName($product);
