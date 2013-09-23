@@ -60,6 +60,7 @@ class ManaPro_FilterAjax_Model_Observer {
                     ->setConfig('layeredNavigation.ajax.urlKey', Mage::getStoreConfig('mana/ajax/url_key_filter'))
                     ->setConfig('layeredNavigation.ajax.routeSeparator', Mage::getStoreConfig('mana/ajax/route_separator_filter'))
                     ->setConfig('layeredNavigation.ajax.scrollToTop', Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'))
+                    ->setConfig('layeredNavigation.ajax.disableIfPageChanged', Mage::getStoreConfigFlag('mana/ajax/disable_if_page_changed'))
                     ->setConfig('url.unfiltered', $unfilteredUrl)
                     ->setConfig('url.suffix', $suffix);
 
