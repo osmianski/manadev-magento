@@ -27,7 +27,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
             <li  <?php echo $this->getListItemClass($_item) ?> >
                 <?php /* @var $_item Mana_Filters_Model_Item */ ?>
-                <?php if ($_item->getCount() || $_item->getMSelected()): ?>
+                <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                 <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
                    data-item="<?php echo $jsonHelper->encodeAttribute($_item->getSeoData()) ?>"
                    data-is-reverse="<?php echo $this->getFilterOptions()->getIsReverse() ?>"

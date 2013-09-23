@@ -27,7 +27,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
             <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
             <li  <?php echo $this->getListItemClass($_item) ?> >
-                <?php if ($_item->getCount() || $_item->getMSelected()): ?>
+                <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                     <input type="radio" id="popup_<?php echo $_item->getUniqueId($this) ?>"
                            name="popup_<?php echo $filters->getFilterName($this, $this->getFilter()) ?>"
                            value="<?php echo $_item->getSeoValue() ?>" <?php if ($_item->getMSelected()): ?>checked="checked"<?php endif; ?>

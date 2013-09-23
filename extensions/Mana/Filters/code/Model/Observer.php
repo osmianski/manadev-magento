@@ -29,6 +29,7 @@ class Mana_Filters_Model_Observer {
 			'mana_filters/display/category',
 			'mana_filters/display/decimal',
             'mana_filters/display/sort_method',
+            'mana_filters/display/disable_no_result_options',
 		));
 	}
 	/**
