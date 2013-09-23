@@ -34,6 +34,12 @@ class ManaPro_FilterAjax_Model_Observer {
         /* @var $urlModel Mage_Core_Model_Url */
         $urlModel = Mage::getSingleton('core/url');
 
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton('core/layout');
+
+        /* @var $ajaxUpdateBlock Mana_Ajax_Block_Update */
+        $ajaxUpdateBlock = $layout->getBlock('m_ajax_update');
+
         foreach ($filterAjax->getPageTypes() as $pageType) {
 	        if ($pageType->matchRoute($core->getRoutePath())) {
                 $unfilteredUrl = $layeredNavigation->getClearUrl(false, true, true, true);
@@ -60,6 +66,7 @@ class ManaPro_FilterAjax_Model_Observer {
                     ->setConfig('layeredNavigation.ajax.urlKey', Mage::getStoreConfig('mana/ajax/url_key_filter'))
                     ->setConfig('layeredNavigation.ajax.routeSeparator', Mage::getStoreConfig('mana/ajax/route_separator_filter'))
                     ->setConfig('layeredNavigation.ajax.scrollToTop', Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'))
+                    ->setConfig('layeredNavigation.ajax.containers', $ajaxUpdateBlock->getInterceptedLinkContainers())
                     ->setConfig('url.unfiltered', $unfilteredUrl)
                     ->setConfig('url.suffix', $suffix);
 

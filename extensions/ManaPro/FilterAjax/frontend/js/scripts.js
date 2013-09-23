@@ -28,6 +28,14 @@ function($, ajax, config, layout)
                 );
         },
         match: function (url, element) {
+            if (element) {
+                var ajaxContainerSelector = config.getData('layeredNavigation.ajax.containers');
+                if (ajaxContainerSelector) {
+                    if (!$(ajaxContainerSelector).has(element).length) {
+                        return false;
+                    }
+                }
+            }
             var result = false;
             $.each(config.getData('url.unfiltered'), function(key, unfilteredUrl) {
                 if (url.indexOf(unfilteredUrl) != 0) {
