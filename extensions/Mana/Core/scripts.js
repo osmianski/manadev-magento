@@ -14,6 +14,7 @@ var Mana = Mana || {};
 
     $.extend(Mana, {
         _singletons: {},
+        _defines: { jquery: $ },
 
         /**
          * Defines JavaScript class/module
@@ -23,51 +24,72 @@ var Mana = Mana || {};
          */
         define:function (name, dependencies, callback) {
             var resolved = Mana._resolveDependencyNames(dependencies);
-            return define(name, resolved.names, function() {
+            return Mana._define(name, resolved.names, function() {
                 return callback.apply(this, Mana._resolveDependencies(arguments, resolved.deps));
             });
         },
 
         require:function(dependencies, callback) {
             var resolved = Mana._resolveDependencyNames(dependencies);
-            return require(resolved.names, function () {
+            return Mana._define(null, resolved.names, function () {
                 return callback.apply(this, Mana._resolveDependencies(arguments, resolved.deps));
             });
         },
 
+        _define: function(name, deps, callback) {
+            var args = [];
+            $.each(deps, function(index, dep) {
+                args.push(Mana._resolveDefine(dep));
+            });
+
+            var result = callback.apply(this, args);
+            if (name) {
+                Mana._defines[name] = result;
+            }
+
+            return result;
+        },
+        _resolveDefine: function(name) {
+            return Mana._defines[name];
+        },
+
         requireOptional: function (dependencies, callback) {
             var resolved = Mana._resolveDependencyNames(dependencies);
-            var args = [];
-            var argResolved = [];
-            function _finishRequire() {
-                var allResolved = true;
-                $.each(argResolved, function(index, isResolved) {
-                    if (!isResolved) {
-                        allResolved = false;
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                });
-                if (allResolved) {
-                    return callback.apply(this, Mana._resolveDependencies(args, resolved.deps));
-                }
-            }
-            $.each(resolved.names, function () {
-                args.push(undefined);
-                argResolved.push(false);
+            return Mana._define(null, resolved.names, function () {
+                return callback.apply(this, Mana._resolveDependencies(arguments, resolved.deps));
             });
-            $.each(resolved.names, function(index, name) {
-                require([name], function(arg) {
-                    args[index] = arg;
-                    argResolved[index] = true;
-                    return _finishRequire.apply(this);
-                }, function() {
-                    argResolved[index] = true;
-                    return _finishRequire.apply(this);
-                });
-            });
+//            var resolved = Mana._resolveDependencyNames(dependencies);
+//            var args = [];
+//            var argResolved = [];
+//            function _finishRequire() {
+//                var allResolved = true;
+//                $.each(argResolved, function(index, isResolved) {
+//                    if (!isResolved) {
+//                        allResolved = false;
+//                        return false;
+//                    }
+//                    else {
+//                        return true;
+//                    }
+//                });
+//                if (allResolved) {
+//                    return callback.apply(this, Mana._resolveDependencies(args, resolved.deps));
+//                }
+//            }
+//            $.each(resolved.names, function () {
+//                args.push(undefined);
+//                argResolved.push(false);
+//            });
+//            $.each(resolved.names, function(index, name) {
+//                require([name], function(arg) {
+//                    args[index] = arg;
+//                    argResolved[index] = true;
+//                    return _finishRequire.apply(this);
+//                }, function() {
+//                    argResolved[index] = true;
+//                    return _finishRequire.apply(this);
+//                });
+//            });
         },
 
         _resolveDependencyNames: function(dependencies) {
@@ -237,6 +259,483 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
         },
         isString: function (obj) {
             return Object.prototype.toString.call(obj) == '[object String]';
+        }
+    });
+});
+Mana.define('Mana/Core/Config', ['jquery'], function ($) {
+    return Mana.Object.extend('Mana/Core/Config', {
+        _init: function () {
+            this._data = {
+                debug: true,
+                showOverlay: true,
+                showWait: true
+            };
+        },
+        getData: function (key) {
+            return this._data[key];
+        },
+        setData: function (key, value) {
+            this._data[key] = value;
+            return this;
+        },
+        set: function (data) {
+            $.extend(this._data, data);
+            return this;
+        }
+    });
+});
+Mana.define('Mana/Core/Json', ['jquery', 'singleton:Mana/Core'], function ($, core) {
+    return Mana.Object.extend('Mana/Core/Json', {
+        parse: function (what) {
+            return $.parseJSON(what);
+        },
+        stringify: function (what) {
+            return Object.toJSON(what);
+        },
+        decodeAttribute: function (what) {
+            if (core.isString(what)) {
+                var encoded = what.split("\"");
+                var decoded = [];
+                $.each(encoded, function (key, value) {
+                    decoded.push(value.replace(/'/g, "\""));
+                });
+                var result = decoded.join("'");
+                return this.parse(result);
+            }
+            else {
+                return what;
+            }
+        }
+    });
+});
+Mana.define('Mana/Core/Utf8', [], function () {
+    return Mana.Object.extend('Mana/Core/Utf8', {
+        decode: function (str_data) {
+            // Converts a UTF-8 encoded string to ISO-8859-1
+            //
+            // version: 1109.2015
+            // discuss at: http://phpjs.org/functions/utf8_decode
+            // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+            // +      input by: Aman Gupta
+            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // +   improved by: Norman "zEh" Fuchs
+            // +   bugfixed by: hitwork
+            // +   bugfixed by: Onno Marsman
+            // +      input by: Brett Zamir (http://brett-zamir.me)
+            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // *     example 1: utf8_decode('Kevin van Zonneveld');
+            // *     returns 1: 'Kevin van Zonneveld'
+            var tmp_arr = [],
+                i = 0,
+                ac = 0,
+                c1 = 0,
+                c2 = 0,
+                c3 = 0;
+
+            str_data += '';
+
+            while (i < str_data.length) {
+                c1 = str_data.charCodeAt(i);
+                if (c1 < 128) {
+                    tmp_arr[ac++] = String.fromCharCode(c1);
+                    i++;
+                } else if (c1 > 191 && c1 < 224) {
+                    c2 = str_data.charCodeAt(i + 1);
+                    tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = str_data.charCodeAt(i + 1);
+                    c3 = str_data.charCodeAt(i + 2);
+                    tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+
+            return tmp_arr.join('');
+        }
+    });
+});
+Mana.define('Mana/Core/Base64', ['singleton:Mana/Core/Utf8'], function (utf8) {
+    return Mana.Object.extend('Mana/Core/Base64', {
+        encode: function (what) {
+            /*
+             * Caudium - An extensible World Wide Web server
+             * Copyright C 2002 The Caudium Group
+             *
+             * This program is free software; you can redistribute it and/or
+             * modify it under the terms of the GNU General Public License as
+             * published by the Free Software Foundation; either version 2 of the
+             * License, or (at your option) any later version.
+             *
+             * This program is distributed in the hope that it will be useful, but
+             * WITHOUT ANY WARRANTY; without even the implied warranty of
+             * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+             * General Public License for more details.
+             *
+             * You should have received a copy of the GNU General Public License
+             * along with this program; if not, write to the Free Software
+             * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+             *
+             */
+
+            /*
+             * base64.js - a JavaScript implementation of the base64 algorithm,
+             *             (mostly) as defined in RFC 2045.
+             *
+             * This is a direct JavaScript reimplementation of the original C code
+             * as found in the Exim mail transport agent, by Philip Hazel.
+             *
+             */
+            var base64_encodetable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            var result = "";
+            var len = what.length;
+            var x, y;
+            var ptr = 0;
+
+            while (len-- > 0) {
+                x = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( x >> 2 ) & 63);
+
+                if (len-- <= 0) {
+                    result += base64_encodetable.charAt(( x << 4 ) & 63);
+                    result += "==";
+                    break;
+                }
+
+                y = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( ( x << 4 ) | ( ( y >> 4 ) & 15 ) ) & 63);
+
+                if (len-- <= 0) {
+                    result += base64_encodetable.charAt(( y << 2 ) & 63);
+                    result += "=";
+                    break;
+                }
+
+                x = what.charCodeAt(ptr++);
+                result += base64_encodetable.charAt(( ( y << 2 ) | ( ( x >> 6 ) & 3 ) ) & 63);
+                result += base64_encodetable.charAt(x & 63);
+
+            }
+
+            return result;
+        },
+        decode: function (data) {
+            // Decodes string using MIME base64 algorithm
+            //
+            // version: 1109.2015
+            // discuss at: http://phpjs.org/functions/base64_decode
+            // +   original by: Tyler Akins (http://rumkin.com)
+            // +   improved by: Thunder.m
+            // +      input by: Aman Gupta
+            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // +   bugfixed by: Onno Marsman
+            // +   bugfixed by: Pellentesque Malesuada
+            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // +      input by: Brett Zamir (http://brett-zamir.me)
+            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+            // -    depends on: utf8_decode
+            // *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
+            // *     returns 1: 'Kevin van Zonneveld'
+            // mozilla has this native
+            // - but breaks in 2.0.0.12!
+            //if (typeof this.window['btoa'] == 'function') {
+            //    return btoa(data);
+            //}
+            var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+            var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+                ac = 0,
+                dec = "",
+                tmp_arr = [];
+
+            if (!data) {
+                return data;
+            }
+
+            data += '';
+
+            do { // unpack four hexets into three octets using index points in b64
+                h1 = b64.indexOf(data.charAt(i++));
+                h2 = b64.indexOf(data.charAt(i++));
+                h3 = b64.indexOf(data.charAt(i++));
+                h4 = b64.indexOf(data.charAt(i++));
+
+                bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+
+                o1 = bits >> 16 & 0xff;
+                o2 = bits >> 8 & 0xff;
+                o3 = bits & 0xff;
+
+                if (h3 == 64) {
+                    tmp_arr[ac++] = String.fromCharCode(o1);
+                } else if (h4 == 64) {
+                    tmp_arr[ac++] = String.fromCharCode(o1, o2);
+                } else {
+                    tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+                }
+            } while (i < data.length);
+
+            dec = tmp_arr.join('');
+            dec = utf8.decode(dec);
+
+            return dec;
+        }
+    });
+});
+Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:Mana/Core/Config'], function (base64, config) {
+    return Mana.Object.extend('Mana/Core/UrlTemplate', {
+        decodeAttribute: function (data) {
+            if (config.getData('debug')) {
+                return data;
+            }
+            else {
+                return base64.decode(data.replace('-', '+').replace('_', '/').replace(',', '='));
+            }
+        }
+    });
+});
+Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, core, undefined) {
+    return Mana.Object.extend('Mana/Core/Layout', {
+        _init: function () {
+            this._pageBlock = null;
+        },
+        getPageBlock: function () {
+            return this._pageBlock;
+        },
+        getBlock: function (blockName) {
+            return this._getBlockRecursively(this.getPageBlock(), blockName);
+        },
+        _getBlockRecursively: function (block, blockName) {
+            if (block.getId() == blockName) {
+                return block;
+            }
+
+            var self = this, result = null;
+            $.each(block.getChildren(), function (index, child) {
+                result = self._getBlockRecursively(child, blockName);
+                return result ? false : true;
+            });
+            return result;
+        },
+        beginGeneratingBlocks: function (parentBlock) {
+            var vars = {
+                parentBlock: parentBlock,
+                namedBlocks: {}
+            };
+            if (parentBlock) {
+                parentBlock.trigger('unload', {}, false, true);
+                parentBlock.trigger('unbind', {}, false, true);
+                vars.namedBlocks = this._removeAnonymousBlocks(parentBlock);
+            }
+            return vars;
+        },
+        endGeneratingBlocks: function (vars) {
+            var parentBlock = vars.parentBlock, namedBlocks = vars.namedBlocks;
+            var self = this;
+            this._collectBlockTypes(parentBlock ? parentBlock.getElement() : document, function (blockTypes) {
+                if (!self._pageBlock) {
+                    var body = document.body, $body = $(body);
+                    var typeName = $body.attr('data-m-block');
+                    var PageBlock = typeName ? blockTypes[typeName] : blockTypes['Mana/Core/PageBlock'];
+                    self._pageBlock = new PageBlock()
+                        .setElement($('body')[0])
+                        .setId('page');
+                }
+                var initialPageLoad = (parentBlock === undefined);
+                if (initialPageLoad) {
+                    parentBlock = self.getPageBlock();
+                }
+
+                self._generateBlocksInElement(parentBlock.getElement(), parentBlock, blockTypes, namedBlocks);
+                $.each(namedBlocks, function (id, namedBlock) {
+                    namedBlock.parent.removeChild(namedBlock.child);
+                });
+                parentBlock.trigger('bind', {}, false, true);
+                parentBlock.trigger('load', {}, false, true);
+
+                // BREAKPOINT: all generated client side blocks
+                var a = 1;
+            });
+        },
+        _collectBlockTypes: function (element, callback) {
+            var blockTypeNames = ['Mana/Core/PageBlock'];
+            this._collectBlockTypesInElement(element, blockTypeNames);
+            Mana.requireOptional(blockTypeNames, function () {
+                var blockTypeValues = arguments;
+                ;
+                var blockTypes = {};
+                $.each(blockTypeNames, function (key, value) {
+                    blockTypes[value] = blockTypeValues[key];
+//                    if (blockTypeValues[key]) {
+//                        blockTypes[value] = blockTypeValues[key];
+//                    }
+//                    else {
+//                        throw "Block type '" + value + "' is not defined.";
+//                    }
+                });
+                callback(blockTypes);
+            });
+        },
+        _collectBlockTypesInElement: function (element, blockTypeNames) {
+            var layout = this;
+            $(element).children().each(function () {
+                var blockInfo = layout._getElementBlockInfo(this);
+                if (blockInfo) {
+                    if (blockTypeNames.indexOf(blockInfo.typeName) == -1) {
+                        blockTypeNames.push(blockInfo.typeName);
+                    }
+                }
+                layout._collectBlockTypesInElement(this, blockTypeNames);
+            });
+        },
+        _removeAnonymousBlocks: function (parentBlock) {
+            var self = this, result = {};
+            $.each(parentBlock.getChildren().slice(0), function (key, block) {
+                if (block.getId()) {
+                    result[block.getId()] = { parent: parentBlock, child: block};
+                    self._removeAnonymousBlocks(block);
+                }
+                else {
+                    parentBlock.removeChild(block);
+                }
+            });
+            return result;
+        },
+        _getElementBlockInfo: function (element) {
+            var $element = $(element);
+            var id, typeName;
+
+            if ((id = core.getPrefixedClass(element, 'mb-'))
+                || (typeName = $element.attr('data-m-block'))
+                || $element.hasClass('m-block')) {
+                return {
+                    id: id || element.id,
+                    typeName: typeName || $element.attr('data-m-block') || 'Mana/Core/Block'
+                };
+            }
+
+            return null;
+        },
+        _generateBlocksInElement: function (element, block, blockTypes, namedBlocks) {
+            var layout = this;
+            $(element).children().each(function () {
+                var childBlock = layout._createBlockFromElement(this, block, blockTypes, namedBlocks);
+                layout._generateBlocksInElement(this, childBlock || block, blockTypes, namedBlocks);
+            });
+        },
+        _createBlockFromElement: function (element, parent, blockTypes, namedBlocks) {
+            var blockInfo = this._getElementBlockInfo(element);
+
+            if (blockInfo) {
+                var type = blockTypes[blockInfo.typeName], block, exists = false;
+                if (blockInfo.id) {
+                    block = parent.getChild(core.getBlockAlias(parent.getId(), blockInfo.id));
+                    if (block) {
+                        exists = true;
+                        delete namedBlocks[blockInfo.id];
+                    }
+                    else if (type) {
+                        block = new type();
+                    }
+                    block.setId(blockInfo.id);
+                }
+                else if (type) {
+                    block = new type();
+                }
+                if (block) {
+                    block.setElement(element);
+                    if (!exists) {
+                        parent.addChild(block);
+                    }
+                    return block;
+                }
+                else {
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        },
+        showPopup: function (options) {
+            var self = this;
+
+            Mana.requireOptional([options.popup.blockName], function (PopupBlockClass) {
+                var fadeoutCallback = options.fadeout.callback;
+                options.fadeout.callback = function () {
+                    $('#m-popup').fadeOut(options.fadeout.popupTime, function () {
+                        if (fadeoutCallback) {
+                            fadeoutCallback();
+                        }
+                    });
+                };
+                var overlay = self.getPageBlock().showOverlay('m-popup-overlay', options.fadeout);
+                var $popup = $('#m-popup');
+                overlay.animate({ opacity: options.overlay.opacity }, options.fadein.overlayTime, function () {
+                    $popup
+                        .css({"width": "auto", "height": "auto"})
+                        .html(options.content);
+
+                    if (options.popup.class) {
+                        $popup.addClass(options.popup.class);
+                    }
+                    $popup.show();
+
+                    var popupBlock = new PopupBlockClass();
+                    popupBlock.setElement($popup[0]);
+                    popupBlock.prepare(options.popupBlock);
+
+                    $('.m-popup-overlay').on('click', function () {
+                        self.hidePopup();
+                        return false;
+                    });
+                    if (!self._popupEscListenerInitialized) {
+                        self._popupEscListenerInitialized = true;
+                        $(document).keydown(function (e) {
+                            if ($('.m-popup-overlay').length) {
+                                if (e.keyCode == 27) {
+                                    self.hidePopup();
+                                    return false;
+                                }
+                            }
+                            return true;
+                        });
+                    }
+
+                    $popup
+                        .css("top", (($(window).height() - $popup.outerHeight()) / 2) + $(window).scrollTop() + "px")
+                        .css("left", (($(window).width() - $popup.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+
+                    var popupHeight = $popup.height();
+                    $popup.hide().css({"height": "auto"});
+
+                    var css = {
+                        left: $popup.css('left'),
+                        top: $popup.css('top'),
+                        width: $popup.width() + "px",
+                        height: $popup.height() + "px"
+                    };
+
+                    $popup.children().each(function () {
+                        $(this).css({
+                            width: ($popup.width() + $(this).width() - $(this).outerWidth()) + "px",
+                            height: ($popup.height() + $(this).height() - $(this).outerHeight()) + "px"
+                        });
+                    });
+                    $popup
+                        .css({
+                            top: ($(window).height() / 2) + $(window).scrollTop() + "px",
+                            left: ($(window).width() / 2) + $(window).scrollLeft() + "px",
+                            width: 0 + "px",
+                            height: 0 + "px"
+                        })
+                        .show();
+
+                    $popup.animate(css, options.fadein.popupTime, options.fadein.callback);
+                });
+            });
+        },
+        hidePopup: function () {
+            this.getPageBlock().hideOverlay();
         }
     });
 });
@@ -480,237 +979,6 @@ function ($, layout, json, core, config, undefined)
                 this._matchedInterceptorCache[url] = interceptor;
             }
             return this._matchedInterceptorCache[url];
-        }
-    });
-});
-Mana.define('Mana/Core/Json', ['jquery', 'singleton:Mana/Core'], function($, core) {
-    return Mana.Object.extend('Mana/Core/Json', {
-        parse: function(what) {
-            return $.parseJSON(what);
-        },
-        stringify: function(what) {
-            return Object.toJSON(what);
-        },
-        decodeAttribute: function(what) {
-            if (core.isString(what)) {
-                var encoded = what.split("\"");
-                var decoded = [];
-                $.each(encoded, function (key, value) {
-                    decoded.push(value.replace(/'/g, "\""));
-                });
-                var result = decoded.join("'");
-                return this.parse(result);
-            }
-            else {
-                return what;
-            }
-        }
-    });
-});
-Mana.define('Mana/Core/Utf8', [], function() {
-    return Mana.Object.extend('Mana/Core/Utf8', {
-        decode:function (str_data) {
-            // Converts a UTF-8 encoded string to ISO-8859-1
-            //
-            // version: 1109.2015
-            // discuss at: http://phpjs.org/functions/utf8_decode
-            // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
-            // +      input by: Aman Gupta
-            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // +   improved by: Norman "zEh" Fuchs
-            // +   bugfixed by: hitwork
-            // +   bugfixed by: Onno Marsman
-            // +      input by: Brett Zamir (http://brett-zamir.me)
-            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // *     example 1: utf8_decode('Kevin van Zonneveld');
-            // *     returns 1: 'Kevin van Zonneveld'
-            var tmp_arr = [],
-                i = 0,
-                ac = 0,
-                c1 = 0,
-                c2 = 0,
-                c3 = 0;
-
-            str_data += '';
-
-            while (i < str_data.length) {
-                c1 = str_data.charCodeAt(i);
-                if (c1 < 128) {
-                    tmp_arr[ac++] = String.fromCharCode(c1);
-                    i++;
-                } else if (c1 > 191 && c1 < 224) {
-                    c2 = str_data.charCodeAt(i + 1);
-                    tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
-                    i += 2;
-                } else {
-                    c2 = str_data.charCodeAt(i + 1);
-                    c3 = str_data.charCodeAt(i + 2);
-                    tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                    i += 3;
-                }
-            }
-
-            return tmp_arr.join('');
-        }
-    });
-});
-Mana.define('Mana/Core/Base64', ['singleton:Mana/Core/Utf8'], function (utf8) {
-    return Mana.Object.extend('Mana/Core/Base64', {
-        encode:function (what) {
-            /*
-             * Caudium - An extensible World Wide Web server
-             * Copyright C 2002 The Caudium Group
-             *
-             * This program is free software; you can redistribute it and/or
-             * modify it under the terms of the GNU General Public License as
-             * published by the Free Software Foundation; either version 2 of the
-             * License, or (at your option) any later version.
-             *
-             * This program is distributed in the hope that it will be useful, but
-             * WITHOUT ANY WARRANTY; without even the implied warranty of
-             * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-             * General Public License for more details.
-             *
-             * You should have received a copy of the GNU General Public License
-             * along with this program; if not, write to the Free Software
-             * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-             *
-             */
-
-            /*
-             * base64.js - a JavaScript implementation of the base64 algorithm,
-             *             (mostly) as defined in RFC 2045.
-             *
-             * This is a direct JavaScript reimplementation of the original C code
-             * as found in the Exim mail transport agent, by Philip Hazel.
-             *
-             */
-            var base64_encodetable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-            var result = "";
-            var len = what.length;
-            var x, y;
-            var ptr = 0;
-
-            while (len-- > 0) {
-                x = what.charCodeAt(ptr++);
-                result += base64_encodetable.charAt(( x >> 2 ) & 63);
-
-                if (len-- <= 0) {
-                    result += base64_encodetable.charAt(( x << 4 ) & 63);
-                    result += "==";
-                    break;
-                }
-
-                y = what.charCodeAt(ptr++);
-                result += base64_encodetable.charAt(( ( x << 4 ) | ( ( y >> 4 ) & 15 ) ) & 63);
-
-                if (len-- <= 0) {
-                    result += base64_encodetable.charAt(( y << 2 ) & 63);
-                    result += "=";
-                    break;
-                }
-
-                x = what.charCodeAt(ptr++);
-                result += base64_encodetable.charAt(( ( y << 2 ) | ( ( x >> 6 ) & 3 ) ) & 63);
-                result += base64_encodetable.charAt(x & 63);
-
-            }
-
-            return result;
-        },
-        decode:function (data) {
-            // Decodes string using MIME base64 algorithm
-            //
-            // version: 1109.2015
-            // discuss at: http://phpjs.org/functions/base64_decode
-            // +   original by: Tyler Akins (http://rumkin.com)
-            // +   improved by: Thunder.m
-            // +      input by: Aman Gupta
-            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // +   bugfixed by: Onno Marsman
-            // +   bugfixed by: Pellentesque Malesuada
-            // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // +      input by: Brett Zamir (http://brett-zamir.me)
-            // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-            // -    depends on: utf8_decode
-            // *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
-            // *     returns 1: 'Kevin van Zonneveld'
-            // mozilla has this native
-            // - but breaks in 2.0.0.12!
-            //if (typeof this.window['btoa'] == 'function') {
-            //    return btoa(data);
-            //}
-            var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-            var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-                ac = 0,
-                dec = "",
-                tmp_arr = [];
-
-            if (!data) {
-                return data;
-            }
-
-            data += '';
-
-            do { // unpack four hexets into three octets using index points in b64
-                h1 = b64.indexOf(data.charAt(i++));
-                h2 = b64.indexOf(data.charAt(i++));
-                h3 = b64.indexOf(data.charAt(i++));
-                h4 = b64.indexOf(data.charAt(i++));
-
-                bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
-
-                o1 = bits >> 16 & 0xff;
-                o2 = bits >> 8 & 0xff;
-                o3 = bits & 0xff;
-
-                if (h3 == 64) {
-                    tmp_arr[ac++] = String.fromCharCode(o1);
-                } else if (h4 == 64) {
-                    tmp_arr[ac++] = String.fromCharCode(o1, o2);
-                } else {
-                    tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
-                }
-            } while (i < data.length);
-
-            dec = tmp_arr.join('');
-            dec = utf8.decode(dec);
-
-            return dec;
-        }
-    });
-});
-Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:Mana/Core/Config'], function (base64, config) {
-    return Mana.Object.extend('Mana/Core/UrlTemplate', {
-        decodeAttribute:function (data) {
-            if (config.getData('debug')) {
-                return data;
-            }
-            else {
-                return base64.decode(data.replace('-', '+').replace('_', '/').replace(',', '='));
-            }
-        }
-    });
-});
-Mana.define('Mana/Core/Config', ['jquery'], function($) {
-    return Mana.Object.extend('Mana/Core/Config', {
-        _init:function () {
-            this._data = {
-                debug:true,
-                showOverlay:true,
-                showWait:true
-            };
-        },
-        getData:function (key) {
-            return this._data[key];
-        },
-        setData:function (key, value) {
-            this._data[key] = value;
-            return this;
-        },
-        set: function(data) {
-            $.extend(this._data, data);
-            return this;
         }
     });
 });
@@ -1006,249 +1274,6 @@ function ($, Block, config)
         },
         getShowWait:function () {
             return config.getData('showWait');
-        }
-    });
-});
-Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, core, undefined) {
-    return Mana.Object.extend('Mana/Core/Layout', {
-        _init: function() {
-            this._pageBlock = null;
-        },
-        getPageBlock: function() {
-            return this._pageBlock;
-        },
-        getBlock: function(blockName) {
-            return this._getBlockRecursively(this.getPageBlock(), blockName);
-        },
-        _getBlockRecursively: function(block, blockName) {
-            if (block.getId() == blockName) {
-                return block;
-            }
-
-            var self = this, result = null;
-            $.each(block.getChildren(), function(index, child) {
-                result = self._getBlockRecursively(child, blockName);
-                return result ? false : true;
-            });
-            return result;
-        },
-        beginGeneratingBlocks: function(parentBlock) {
-            var vars = {
-                parentBlock: parentBlock,
-                namedBlocks: {}
-            };
-            if (parentBlock) {
-                parentBlock.trigger('unload', {}, false, true);
-                parentBlock.trigger('unbind', {}, false, true);
-                vars.namedBlocks = this._removeAnonymousBlocks(parentBlock);
-            }
-            return vars;
-        },
-        endGeneratingBlocks: function(vars) {
-            var parentBlock = vars.parentBlock, namedBlocks = vars.namedBlocks;
-            var self = this;
-            this._collectBlockTypes(parentBlock ? parentBlock.getElement() : document, function (blockTypes) {
-                if (!self._pageBlock) {
-                    var body = document.body, $body = $(body);
-                    var typeName = $body.attr('data-m-block');
-                    var PageBlock = typeName ? blockTypes[typeName] : blockTypes['Mana/Core/PageBlock'];
-                    self._pageBlock = new PageBlock()
-                        .setElement($('body')[0])
-                        .setId('page');
-                }
-                var initialPageLoad = (parentBlock === undefined);
-                if (initialPageLoad) {
-                    parentBlock = self.getPageBlock();
-                }
-
-                self._generateBlocksInElement(parentBlock.getElement(), parentBlock, blockTypes, namedBlocks);
-                $.each(namedBlocks, function (id, namedBlock) {
-                    namedBlock.parent.removeChild(namedBlock.child);
-                });
-                parentBlock.trigger('bind', {}, false, true);
-                parentBlock.trigger('load', {}, false, true);
-
-                // BREAKPOINT: all generated client side blocks
-                var a = 1;
-            });
-        },
-        _collectBlockTypes: function(element, callback) {
-            var blockTypeNames = ['Mana/Core/PageBlock'];
-            this._collectBlockTypesInElement(element, blockTypeNames);
-            Mana.requireOptional(blockTypeNames, function() {
-                var blockTypeValues = arguments;;
-                var blockTypes = {};
-                $.each(blockTypeNames, function(key, value) {
-                    blockTypes[value] = blockTypeValues[key];
-//                    if (blockTypeValues[key]) {
-//                        blockTypes[value] = blockTypeValues[key];
-//                    }
-//                    else {
-//                        throw "Block type '" + value + "' is not defined.";
-//                    }
-                });
-                callback(blockTypes);
-            });
-        },
-        _collectBlockTypesInElement: function(element, blockTypeNames) {
-            var layout = this;
-            $(element).children().each(function () {
-                var blockInfo = layout._getElementBlockInfo(this);
-                if (blockInfo) {
-                    if (blockTypeNames.indexOf(blockInfo.typeName) == -1) {
-                        blockTypeNames.push(blockInfo.typeName);
-                    }
-                }
-                layout._collectBlockTypesInElement(this, blockTypeNames);
-            });
-        },
-        _removeAnonymousBlocks: function(parentBlock) {
-            var self = this, result = {};
-            $.each(parentBlock.getChildren().slice(0), function(key, block) {
-                if (block.getId()) {
-                    result[block.getId()] = { parent: parentBlock, child: block};
-                    self._removeAnonymousBlocks(block);
-                }
-                else {
-                    parentBlock.removeChild(block);
-                }
-            });
-            return result;
-        },
-        _getElementBlockInfo: function(element) {
-            var $element = $(element);
-            var id, typeName;
-
-            if ((id = core.getPrefixedClass(element, 'mb-'))
-                || (typeName = $element.attr('data-m-block'))
-                || $element.hasClass('m-block'))
-            {
-                return {
-                    id: id || element.id,
-                    typeName: typeName || $element.attr('data-m-block') || 'Mana/Core/Block'
-                };
-            }
-
-            return null;
-        },
-        _generateBlocksInElement: function(element, block, blockTypes, namedBlocks) {
-            var layout = this;
-            $(element).children().each(function() {
-                var childBlock = layout._createBlockFromElement(this, block, blockTypes, namedBlocks);
-                layout._generateBlocksInElement(this, childBlock || block, blockTypes, namedBlocks);
-            });
-        },
-        _createBlockFromElement: function(element, parent, blockTypes, namedBlocks) {
-            var blockInfo = this._getElementBlockInfo(element);
-
-            if (blockInfo) {
-                var type = blockTypes[blockInfo.typeName], block, exists = false;
-                if (blockInfo.id) {
-                    block = parent.getChild(core.getBlockAlias(parent.getId(), blockInfo.id));
-                    if (block) {
-                        exists = true;
-                        delete namedBlocks[blockInfo.id];
-                    }
-                    else if (type) {
-                        block = new type();
-                    }
-                    block.setId(blockInfo.id);
-                }
-                else if (type) {
-                    block = new type();
-                }
-                if (block) {
-                    block.setElement(element);
-                    if (!exists) {
-                        parent.addChild(block);
-                    }
-                    return block;
-                }
-                else {
-                    return null;
-                }
-            }
-            else {
-                return null;
-            }
-        },
-        showPopup: function(options) {
-            var self = this;
-
-            Mana.requireOptional([options.popup.blockName], function (PopupBlockClass) {
-                var fadeoutCallback = options.fadeout.callback;
-                options.fadeout.callback = function() {
-                    $('#m-popup').fadeOut(options.fadeout.popupTime, function () {
-                        if (fadeoutCallback) {
-                            fadeoutCallback();
-                        }
-                    });
-                };
-                var overlay = self.getPageBlock().showOverlay('m-popup-overlay', options.fadeout);
-                var $popup = $('#m-popup');
-                overlay.animate({ opacity: options.overlay.opacity }, options.fadein.overlayTime, function () {
-                    $popup
-                        .css({"width": "auto", "height": "auto"})
-                        .html(options.content);
-
-                    if (options.popup.class) {
-                        $popup.addClass(options.popup.class);
-                    }
-                    $popup.show();
-
-                    var popupBlock = new PopupBlockClass();
-                    popupBlock.setElement($popup[0]);
-                    popupBlock.prepare(options.popupBlock);
-
-                    $('.m-popup-overlay').on('click', function() { self.hidePopup(); return false; });
-                    if (!self._popupEscListenerInitialized) {
-                        self._popupEscListenerInitialized = true;
-                        $(document).keydown(function (e) {
-                            if ($('.m-popup-overlay').length) {
-                                if (e.keyCode == 27) {
-                                    self.hidePopup();
-                                    return false;
-                                }
-                            }
-                            return true;
-                        });
-                    }
-
-                    $popup
-                        .css("top", (($(window).height() - $popup.outerHeight()) / 2) + $(window).scrollTop() + "px")
-                        .css("left", (($(window).width() - $popup.outerWidth()) / 2) + $(window).scrollLeft() + "px");
-
-                    var popupHeight = $popup.height();
-                    $popup.hide().css({"height": "auto"});
-
-                    var css = {
-                        left: $popup.css('left'),
-                        top: $popup.css('top'),
-                        width: $popup.width() + "px",
-                        height: $popup.height() + "px"
-                    };
-
-                    $popup.children().each(function () {
-                        $(this).css({
-                            width: ($popup.width() + $(this).width() - $(this).outerWidth()) + "px",
-                            height: ($popup.height() + $(this).height() - $(this).outerHeight()) + "px"
-                        });
-                    });
-                    $popup
-                        .css({
-                            top: ($(window).height() / 2) + $(window).scrollTop() + "px",
-                            left: ($(window).width() / 2) + $(window).scrollLeft() + "px",
-                            width: 0 + "px",
-                            height: 0 + "px"
-                        })
-                        .show();
-
-                    $popup.animate(css, options.fadein.popupTime, options.fadein.callback);
-                });
-            });
-        },
-        hidePopup: function() {
-            this.getPageBlock().hideOverlay();
         }
     });
 });

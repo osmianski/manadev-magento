@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.09.21.14</version>
+		    <version>13.09.24.16</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -249,13 +249,13 @@
 	</adminhtml>
 	<mana_core>
         <js>
-            <require module="mana_core">
+            <!--<require module="mana_core">
                 <type>library</type>
                 <skinnable>0</skinnable>
                 <full_path>jquery/require.js</full_path>
                 <minified_path>jquery/require.min.js</minified_path>
                 <sort_order>50</sort_order>
-            </require>
+            </require>-->
             <jquery module="mana_core">
                 <type>library</type>
                 <skinnable>0</skinnable>
@@ -280,7 +280,7 @@
         </mana_dev>
         <mana>
             <js>
-                <require>min_ondemand</require>
+                <!--<require>min_ondemand</require>-->
                 <jquery>min_ondemand</jquery>
             </js>
             <seo_symbols>
