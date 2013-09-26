@@ -25,6 +25,9 @@ class Mana_Page_Model_Observer {
             if (strpos($condition, 'e.entity_id = ') !== false || strpos($condition, '`e`.`entity_id` = ') !== false) {
                 $result[$key] = $key;
             }
+            elseif (strpos($condition, '`mp_') !== false) {
+                $result[$key] = $key;
+            }
         }
 
         $preserved->setPreserved($result);
