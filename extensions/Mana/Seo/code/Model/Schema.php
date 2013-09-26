@@ -125,6 +125,16 @@ class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
         $url = $this->getRedirectToSubcategory() ? '/electronics/computers/monitors' : '/electronics';
         $url .= $this->getQuerySeparator();
 
+        // category filter
+        if (!$this->getRedirectToSubcategory()) {
+            $url .= 'category';
+            $url .= $this->getFirstValueSeparator();
+            $url .= 'computers';
+            $url .= $this->getCategorySeparator();
+            $url .= 'monitors';
+            $url .= $this->getParamSeparator();
+        }
+
         // attribute filter
         if ($this->getIncludeFilterName()) {
             $url .= 'color';
@@ -141,16 +151,6 @@ class Mana_Seo_Model_Schema extends Mana_Db_Model_Entity {
         $url .= $this->getUseRangeBounds() ? '200' : '2';
         $url .= $this->getPriceSeparator();
         $url .= $this->getUseRangeBounds() ? '300' : '100';
-
-        // category filter
-        if (!$this->getRedirectToSubcategory()) {
-            $url .= $this->getParamSeparator();
-            $url .= 'category';
-            $url .= $this->getFirstValueSeparator();
-            $url .= 'computers';
-            $url .= $this->getCategorySeparator();
-            $url .= 'monitors';
-        }
 
         // toolbar parameter
         $url .= $this->getParamSeparator();
