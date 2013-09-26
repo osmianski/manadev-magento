@@ -37,6 +37,26 @@ function($, ajax, config, layout)
                 }
             }
             var result = false;
+            var exception = false;
+            $.each(config.getData('layeredNavigation.ajax.exceptions'), function (key, exceptionUrl) {
+                if (url.indexOf(exceptionUrl) != 0) {
+                    return true;
+                }
+
+                var suffixPos = false;
+                if (config.getData('url.suffix')) {
+                    suffixPos = url.indexOf(config.getData('url.suffix'), exceptionUrl.length);
+                    if (suffixPos === -1) {
+                        return true;
+                    }
+                }
+
+                exception = true;
+                return false;
+            });
+            if (exception) {
+                return result;
+            }
             $.each(config.getData('url.unfiltered'), function(key, unfilteredUrl) {
                 if (url.indexOf(unfilteredUrl) != 0) {
                     return true;

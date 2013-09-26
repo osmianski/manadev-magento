@@ -48,7 +48,10 @@ class ManaPro_FilterAjax_Model_Observer {
                     $unfilteredUrl = substr($unfilteredUrl, 0, strlen($unfilteredUrl) - strlen($suffix));
                 }
                 $unfilteredUrl = array($unfilteredUrl);
-                if ($layeredNavigation->isTreeVisible() && $core->getRoutePath() == 'catalog/category/view') {
+                $exceptions = array();
+                if ($layeredNavigation->isTreeVisible() && $core->getRoutePath() == 'catalog/category/view' &&
+                    !Mage::getStoreConfigFlag('mana/ajax/disable_for_category_redirects'))
+                {
                     $unfilteredUrl = array();
                     /* @var $treeHelper ManaPro_FilterTree_Helper_Data */
                     $treeHelper = Mage::helper('manapro_filtertree');
@@ -62,12 +65,23 @@ class ManaPro_FilterAjax_Model_Observer {
 
                     }
                 }
+                if (Mage::getStoreConfigFlag('mana/ajax/disable_for_category_redirects')) {
+                    foreach ($layeredNavigation->getLayer()->getCurrentCategory()->getChildrenCategories() as $category) {
+                        /* @var $category Mage_Catalog_Model_Category */
+                        $url = $urlModel->sessionUrlVar($category->getUrl());
+                        if ($suffix && $core->endsWith($url, $suffix)) {
+                            $url = substr($url, 0, strlen($url) - strlen($suffix));
+                        }
+                        $exceptions[] = $url;
+
+                    }
+                }
                 $js
                     ->setConfig('layeredNavigation.ajax.urlKey', Mage::getStoreConfig('mana/ajax/url_key_filter'))
                     ->setConfig('layeredNavigation.ajax.routeSeparator', Mage::getStoreConfig('mana/ajax/route_separator_filter'))
                     ->setConfig('layeredNavigation.ajax.scrollToTop', Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'))
                     ->setConfig('layeredNavigation.ajax.containers', $ajaxUpdateBlock->getInterceptedLinkContainers())
-                    ->setConfig('layeredNavigation.ajax.disableIfPageChanged', Mage::getStoreConfigFlag('mana/ajax/disable_if_page_changed'))
+                    ->setConfig('layeredNavigation.ajax.exceptions', $exceptions)
                     ->setConfig('url.unfiltered', $unfilteredUrl)
                     ->setConfig('url.suffix', $suffix);
 
