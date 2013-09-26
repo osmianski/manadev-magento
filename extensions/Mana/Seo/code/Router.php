@@ -52,7 +52,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                         array_merge($_GET, $parsedUrl->getImplodedQueryParameters()))
                     ->changePath($parsedUrl->getPageUrlKey().$parsedUrl->getSuffix());
             }
-            else {
+            elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
                 /* @var $front Mage_Core_Controller_Varien_Front */
                 $front = $this->getFront();
 
