@@ -9,6 +9,8 @@
  * Block type for showing options for filter based on custom attribute
  * @author Mana Team
  * Injected into layout instead of standard catalog/layer_filter_attribute in Mana_Filters_Block_View_Category::_initBlocks.
+ *
+ * @method Mana_Filters_Model_Filter2_Store getFilterOptions()
  */
 class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract {
     protected $_isBlockPrepared = false;

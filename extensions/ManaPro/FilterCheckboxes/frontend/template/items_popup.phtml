@@ -26,7 +26,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
             <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
             <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
             <li <?php echo $this->getListItemClass($_item) ?> >
-                <?php if ($_item->getCount() || $_item->getMSelected()): ?>
+                <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                     <input type="checkbox" id="<?php echo $_item->getUniqueId($this) ?>"
                            value="<?php echo $_item->getValue() ?>" <?php if ($_item->getMShowSelected()): ?>checked="checked"<?php endif; ?>
                            data-item="<?php echo $jsonHelper->encodeAttribute($_item->getSeoData()) ?>"

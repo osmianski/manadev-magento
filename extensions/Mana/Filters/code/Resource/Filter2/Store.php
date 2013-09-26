@@ -53,6 +53,7 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
                 'global.sort_method AS sort_method',
                 'global.operation AS operation',
                 'global.is_reverse AS is_reverse',
+                'global.disable_no_result_options AS disable_no_result_options',
             ));
 		if ($options['trackKeys']) {
 			if (($keys = $options['targets'][$globalEntityName]->getSavedKeys()) && count($keys)) {
@@ -107,6 +108,9 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
         if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_IS_REVERSE)) {
             $object->setIsReverse($values['is_reverse']);
         }
+        if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_DISABLE_NO_RESULT_OPTIONS)) {
+            $object->setDisableNoResultOptions($values['disable_no_result_options']);
+        }
     }
 	/**
 	 * Enter description here ...
@@ -137,6 +141,7 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
                 'global.sort_method AS sort_method',
                 'global.operation AS operation',
                 'global.is_reverse AS is_reverse',
+                'global.disable_no_result_options AS disable_no_result_options',
             ));
 		if ($options['trackKeys']) {
 			if (($keys = $options['targets'][$globalEntityName]->getSavedKeys()) && count($keys)) {
@@ -170,6 +175,7 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
         $object->setSortMethod($values['sort_method']);
         $object->setOperation($values['operation']);
         $object->setIsReverse($values['is_reverse']);
+        $object->setDisableNoResultOptions($values['disable_no_result_options']);
     }
 	/**
 	 * Enter description here ...

@@ -20,7 +20,7 @@
     <?php $_itemUrl = $this->urlEscape($_item->getMSelected() ? $_item->getRemoveUrl() : $_item->getUrl()); ?>
     <li <?php echo $this->getListItemClass($_item) ?> >
         <?php // MANA BEGIN ?>
-            <?php if ($_item->getCount() || $_item->getMSelected()): ?>
+            <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                 <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
                    onclick="this.className='<?php echo $_item->getMShowSelected() ? 'm-checkbox-unchecked' : 'm-checkbox-checked' ?>'"
                    href="<?php echo $_itemUrl ?>" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>

@@ -22,7 +22,11 @@ class Mana_Page_Model_Observer {
         $result = $preserved->getPreserved();
 
         foreach ($where as $key => $condition) {
-            if (strpos($condition, 'e.entity_id = ') !== false || strpos($condition, '`e`.`entity_id` = ') !== false) {
+            if (strpos($condition, 'e.entity_id = ') !== false ||
+                strpos($condition, '`e`.`entity_id` = ') !== false ||
+                strpos($condition, '`e`.`entity_id` IN ') !== false ||
+                strpos($condition, '`mp_') !== false)
+            {
                 $result[$key] = $key;
             }
         }

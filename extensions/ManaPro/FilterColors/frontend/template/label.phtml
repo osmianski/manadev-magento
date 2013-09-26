@@ -10,13 +10,13 @@
  * @author Mana Team
  * Injected instead of standard catalog/layer/filter.phtml in Mana_Filters_Block_Filter_Attribute init() method.
  */
-/* @var $this Mana_Filters_Block_Filter_Attribute */
+/* @var $this Mana_Filters_Block_Filter */
 ?>
 <ol class="m-filter-colors labels <?php echo $this->getFilterClass() ?> <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
     <?php foreach ($this->getItems() as $_item): ?>
 
     <li <?php echo $this->getListItemClass($_item) ?> >
-        <?php if ($_item->getCount() || $_item->getMSelected()): ?>
+        <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
             <a href="#"
                onclick="jQuery(this).find('div').<?php echo $_item->getMShowSelected() ? 'removeClass' : 'addClass' ?>('selected'); setLocation('<?php echo $this->urlEscape($_item->getMSelected() ? $_item->getRemoveUrl() : $_item->getUrl()) ?>'); return false;">
                 <div class="m-color <?php if ($_item->getMShowSelected()): ?>selected<?php endif; ?> <?php echo $this->getFilterValueClass($_item) ?>"

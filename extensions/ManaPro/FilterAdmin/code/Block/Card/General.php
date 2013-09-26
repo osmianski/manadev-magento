@@ -142,6 +142,18 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
                 'default_label' => $this->__('Same For All Stores'),
             )))->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
         }
+
+        $fieldset->addField('disable_no_result_options', 'select', array(
+            'label' => $this->__('Filterable (no results) Links Are Not Clickable'),
+            'name' => 'disable_no_result_options',
+            'options' => Mage::getSingleton('mana_core/source_yesno')->getOptionArray(),
+            'required' => true,
+            'default_bit' => Mana_Filters_Resource_Filter2::DM_DISABLE_NO_RESULT_OPTIONS,
+			'default_label' => Mage::helper('mana_admin')->isGlobal()
+				? $this->__('Use System Configuration')
+				: $this->__('Same For All Stores'),
+        ))->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
+
         $this->setForm($form);
         return parent::_prepareForm();
 	}

@@ -27,7 +27,7 @@ examples on what kind of actions can be applied to referenced blocks.
 	<jquery_core>
 		<reference name="head">
 		    <!-- BEGIN: files which are managed in System->Configuration->MANAdev->General->JavaScript Libraries -->
-            <action method="addJs"><script>jquery/require.js</script></action>
+            <!--<action method="addJs"><script>jquery/require.js</script></action>-->
             <action method="addJs"><script>jquery/jquery.js</script></action>
             <!-- END: files which are managed in System->Configuration->MANAdev->General->JavaScript Libraries -->
 

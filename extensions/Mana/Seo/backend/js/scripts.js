@@ -95,6 +95,16 @@ function ($, Container, ajax, core)
             var url = this.$().find('#mf_url_redirect_to_subcategory').val() == '1' ? '/electronics/computers/monitors' : '/electronics';
             url += this.$().find('#mf_url_query_separator').val();
 
+            // category filter
+            if (this.$().find('#mf_url_redirect_to_subcategory').val() != '1') {
+                url += 'category';
+                url += this.$().find('#mf_url_first_value_separator').val();
+                url += 'computers';
+                url += this.$().find('#mf_url_category_separator').val();
+                url += 'monitors';
+                url += this.$().find('#mf_url_param_separator').val();
+            }
+
             // attribute filter
             if (this.$().find('#mf_url_include_filter_name').val() == '1') {
                 url += 'color';
@@ -111,16 +121,6 @@ function ($, Container, ajax, core)
             url += this.$().find('#mf_url_use_range_bounds').val() == '1' ? '200' : '2';
             url += this.$().find('#mf_url_price_separator').val();
             url += this.$().find('#mf_url_use_range_bounds').val() == '1' ? '300' : '100';
-
-            // category filter
-            if (this.$().find('#mf_url_redirect_to_subcategory').val() != '1') {
-                url += this.$().find('#mf_url_param_separator').val();
-                url += 'category';
-                url += this.$().find('#mf_url_first_value_separator').val();
-                url += 'computers';
-                url += this.$().find('#mf_url_category_separator').val();
-                url += 'monitors';
-            }
 
             // toolbar parameter
             url += this.$().find('#mf_url_param_separator').val();
