@@ -63,6 +63,7 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
         $core = Mage::helper('mana_core');
 
         $response = array('blocks' => array());
+        $sections = array();
         if ($blocks = $layout->getBlock('m_ajax_update')) {
             $key = 'rendered_but_not_sent_blocks';
             if ($blocks->getData($key)) {
@@ -76,7 +77,6 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
                 : 'updated_blocks_if_page_changed';
 
             if ($blocks->hasData($key)) {
-                $sections = array();
                 foreach (explode(',', $blocks->getData($key)) as $blockName) {
                     if ($html = $layoutHelper->renderBlock($blockName)) {
                         $response['blocks'][$js->getClientSideBlockName($blockName)] = count($sections);
