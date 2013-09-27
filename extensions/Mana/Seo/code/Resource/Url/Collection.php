@@ -18,7 +18,7 @@ class Mana_Seo_Resource_Url_Collection extends Mana_Db_Resource_Entity_Collectio
     public function addParentCategoryFilter($categoryPath) {
         $this->getSelect()
             ->joinInner(array('c' => $this->getTable('catalog/category')),
-                $this->getConnection()->quoteInto("`c`.`entity_id` = `main_table`.`category_id` AND `c`.`path` LIKE ?", $categoryPath.'/%'),
+                "`c`.`entity_id` = `main_table`.`category_id` AND `c`.`path` LIKE '$categoryPath/%' AND `c`.`path` NOT LIKE '$categoryPath/%/%'",
                 null);
 
         return $this;
