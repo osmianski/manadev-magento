@@ -82,6 +82,7 @@ class ManaPro_FilterAjax_Model_Observer {
                     ->setConfig('layeredNavigation.ajax.scrollToTop', Mage::getStoreConfigFlag('mana/ajax/scroll_to_top_filter'))
                     ->setConfig('layeredNavigation.ajax.containers', $ajaxUpdateBlock->getInterceptedLinkContainers())
                     ->setConfig('layeredNavigation.ajax.exceptions', $exceptions)
+                    ->setConfig('layeredNavigation.ajax.exceptionPatterns', $ajaxUpdateBlock->getExceptions())
                     ->setConfig('url.unfiltered', $unfilteredUrl)
                     ->setConfig('url.suffix', $suffix);
 

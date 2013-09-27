@@ -38,6 +38,13 @@ function($, ajax, config, layout)
             }
             var result = false;
             var exception = false;
+            var pattern = config.getData('layeredNavigation.ajax.exceptionPatterns');
+            if (pattern) {
+                pattern = new RegExp(pattern);
+                if (pattern.test(url)) {
+                    return result;
+                }
+            }
             $.each(config.getData('layeredNavigation.ajax.exceptions'), function (key, exceptionUrl) {
                 if (url.indexOf(exceptionUrl) != 0) {
                     return true;

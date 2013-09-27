@@ -52,6 +52,7 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,left,right,breadcrumbs,top.menu</updated_blocks></action>
             <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>category.products,mana.catalog.leftnav,mana.catalog.rightnav</updated_blocks></action>
             <action method="setInterceptedLinkContainers"><css_selector>.mb-mana-catalog-leftnav,.mb-mana-catalog-rightnav,.block-layered-nav.m-topmenu,.block-layered-nav.m-top,.category-products .toolbar</css_selector></action>
+            <action method="setExceptions"><regular_expr>options=|checkout/cart/add|catalog/product_compare/add|wishlist/index/add</regular_expr></action>
 		</reference>
 	</catalog_category_layered>
 	<catalogsearch_result_index> <!-- find all catalog search result page -->
@@ -90,6 +91,7 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,left,right,breadcrumbs,top.menu</updated_blocks></action>
             <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>search.result,mana.catalogsearch.leftnav,mana.catalogsearch.rightnav</updated_blocks></action>
             <action method="setInterceptedLinkContainers"><css_selector>.mb-mana-catalog-leftnav,.mb-mana-catalog-rightnav,.block-layered-nav.m-topmenu,.block-layered-nav.m-top,.category-products .toolbar</css_selector></action>
+            <action method="setExceptions"><regular_expr>options=|checkout/cart/add|catalog/product_compare/add|wishlist/index/add</regular_expr></action>
 		</reference>
 	</catalogsearch_result_index>
     <cms_page_layered>
@@ -128,6 +130,7 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,left,right,breadcrumbs,top.menu</updated_blocks></action>
             <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>content,mana.catalog.leftnav,mana.catalog.rightnav</updated_blocks></action>
             <action method="setInterceptedLinkContainers"><css_selector>.mb-mana-catalog-leftnav,.mb-mana-catalog-rightnav,.block-layered-nav.m-topmenu,.block-layered-nav.m-top,.category-products .toolbar</css_selector></action>
+            <action method="setExceptions"><regular_expr>options=|checkout/cart/add|catalog/product_compare/add|wishlist/index/add</regular_expr></action>
 		</reference>
     </cms_page_layered>
 </layout>
