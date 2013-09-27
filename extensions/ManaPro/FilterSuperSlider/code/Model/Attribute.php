@@ -73,14 +73,10 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
     public function getExistingValues() {
         $result = array();
         foreach ($this->getItems() as $item) {
-            $urlValue = $item['value'];
-            if (((string)Mage::getConfig()->getNode('modules/ManaPro_FilterSeoLinks/active')) == 'true' &&
-                Mage::helper('mana_core')->getRoutePath() != 'catalogsearch/result/index')
-            {
-                $url = Mage::getModel('manapro_filterseolinks/url');
-                $urlValue = $url->encodeValue($this->getAttributeModel()->getAttributeCode(), $urlValue);
-            }
-            $result[] = array('value' => $item['value'], 'label' => $item['label'], 'urlValue' => $urlValue);
+            /* @var $item Mana_Filters_Model_Item */
+            $itemData = $item->getSeoData();
+            $itemData['label'] = $item->getData('label');
+            $result[] = $itemData;
         }
         return $result;
     }

@@ -40,7 +40,8 @@ ManaPro.filterAttributeSlider('<?php echo $_id ?>', {
 	appliedFormat: '<?php echo $_helper->__('__0__ to __1__') ?>',
 	url: '<?php echo  Mage::helper('mana_core')->base64EncodeUrl($_superHelper->getAttributeUrl($_filter->getRequestVar())) ?>',
 	clearUrl: '<?php echo  Mage::helper('mana_core')->base64EncodeUrl($_slider->getClearUrl($_filter->getRequestVar())) ?>',
-    existingValues: <?php echo json_encode($_filter->getExistingValues()) ?>
+    existingValues: <?php echo json_encode($_filter->getExistingValues()) ?>,
+    separator: '<?php echo $this->getMultipleValueSeparator() ?>'
 });
 //]]>
 </script>
