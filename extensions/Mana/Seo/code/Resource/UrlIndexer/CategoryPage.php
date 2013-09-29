@@ -90,6 +90,6 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_Catego
 
         // run the statement
         $this->makeAllRowsObsolete($options, $obsoleteCondition);
-        $db->raw_query($sql);
+        $db->exec($sql);
     }
 }

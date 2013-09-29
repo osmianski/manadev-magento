@@ -88,10 +88,11 @@ class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_AttributeUrl
         $this->logger()->logUrlIndexer($schema->getId());
         $this->logger()->logUrlIndexer($obsoleteCondition);
         $this->logger()->logUrlIndexer(json_encode($options));
+        $selectSql = $select->__toString();
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
         // run the statement
         $this->makeAllRowsObsolete($options, $obsoleteCondition);
-        $db->raw_query($sql);
+        $db->exec($sql);
     }
 }

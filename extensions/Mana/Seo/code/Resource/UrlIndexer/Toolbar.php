@@ -52,7 +52,7 @@ class Mana_Seo_Resource_UrlIndexer_Toolbar extends Mana_Seo_Resource_UrlIndexer 
 
             // run the statement
             $this->makeAllRowsObsolete($options, $obsoleteCondition);
-            $db->raw_query($sql);
+            $db->exec($sql);
         }
     }
 

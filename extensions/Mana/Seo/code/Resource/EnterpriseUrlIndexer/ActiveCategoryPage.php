@@ -72,7 +72,7 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ActiveCategoryPage extends Mana_Seo
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
             // run the statement
-            $db->raw_query($sql);
+            $db->exec($sql);
         }
     }
 }

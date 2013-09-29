@@ -111,6 +111,6 @@ class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_U
 
         // run the statement
         $this->makeAllRowsObsolete($options, $obsoleteCondition);
-        $db->raw_query($sql);
+        $db->exec($sql);
     }
 }

@@ -80,7 +80,7 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ObsoleteCategoryPage extends Mana_S
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
             // run the statement
-            $db->raw_query($sql);
+            $db->exec($sql);
         }
     }
 }
