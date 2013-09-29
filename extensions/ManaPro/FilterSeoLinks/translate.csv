@@ -26,3 +26,7 @@
 "Attribute Value Ampersand ('&') Symbol Shown in URL As","Attribute Value Ampersand ('&') Symbol Shown in URL As"
 "Injected into SEO friendly layered navigation URLs instead of ampersands ('&'). Must be uniquely recognizable when system converts URL back to attribute value.","Injected into SEO friendly layered navigation URLs instead of ampersands ('&'). Must be uniquely recognizable when system converts URL back to attribute value."
 "Any filter applied","Any filter applied"
+"Search Engines Do Follow Links on Any of These Non Indexed Pages","Search Engines Do Follow Links on Any of These Non Indexed Pages"
+"NOINDEX, NOFOLLOW in robots meta tag","NOINDEX, NOFOLLOW in robots meta tag"
+"Changes NOFOLLOW to FOLLOW in robots meta tag","Changes NOFOLLOW to FOLLOW in robots meta tag"
+"Position in URL","Position in URL"

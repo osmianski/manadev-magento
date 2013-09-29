@@ -6,17 +6,45 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-	<acl>
-		<resources>
+    <menu>
+        <mana>
+            <children>
+                <system_configuration>
+                    <children>
+                        <mana_performance translate="title" module="manapro_catalogperformance">
+                            <title>Performance</title>
+                            <action>adminhtml/system_config/edit/section/mana_performance</action>
+                            <sort_order>50000</sort_order>
+                        </mana_performance>
+                    </children>
+                </system_configuration>
+            </children>
+        </mana>
+    </menu>
+    <acl>
+        <resources>
 			<admin>
 				<children>
-					<system>
+                    <mana>
+                        <children>
+                            <system_configuration>
+                                <children>
+                                    <mana_performance translate="title" module="manapro_catalogperformance">
+                                        <title>Performance</title>
+                                        <sort_order>50000</sort_order>
+                                    </mana_performance>
+                                </children>
+                            </system_configuration>
+                        </children>
+                    </mana>
+                    <system>
 						<children>
 							<config>
 								<children>
 									<mana_performance translate="title" module="manapro_catalogperformance">
 										<title>MANAdev Performance Settings</title>
-									</mana_performance>
+                                        <sort_order>100000</sort_order>
+                                    </mana_performance>
 								</children>
 							</config>
 						</children>

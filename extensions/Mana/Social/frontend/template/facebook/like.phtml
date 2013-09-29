@@ -10,11 +10,12 @@
 <div class="fb-like"
     data-href="<?php echo $this->getPageUrl() ?>"
     data-width="<?php echo $this->getWidth() ?>"
+    data-layout="<?php echo $this->getFbLayout() ?>"
     data-send="<?php echo $this->getShowSend() ? 'true' : 'false' ?>"
     data-show-faces="<?php echo $this->getShowFaces() ? 'true' : 'false' ?>"
-    data-font="<?php echo $this->getFontFamily() ?>"
-    data-colorscheme="<?php echo $this->getColorScheme() ?>"
-    data-action="<?php echo $this->getFbAction() ?>"
+    <?php if ($this->getFontFamily()) : ?>data-font="<?php echo $this->getFontFamily() ?>"<?php endif; ?>
+    <?php if ($this->getColorScheme()) : ?>data-colorscheme="<?php echo $this->getColorScheme() ?>"<?php endif; ?>
+    <?php if ($this->getFbAction()) : ?>data-action="<?php echo $this->getFbAction() ?>"<?php endif; ?>
 >
 </div>
 

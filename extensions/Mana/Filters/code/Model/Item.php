@@ -14,6 +14,8 @@
  * method.
  */
 class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
+    protected $_seoData;
+
     /**
      * Returns URL which should be loaded if person chooses to add this filter item into active filters
      * @return string
@@ -101,18 +103,42 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
 		return 'filter_'.$helper->getFilterName($block, $this->getFilter()).'_'.$this->getValue();
 	}
 
-	public function getSeoValue() {
-	    $urlValue = $this->getValue();
-	    /* @var $core Mana_Core_Helper_Data */ $core = Mage::helper(strtolower('Mana_Core'));
-        if (Mage::app()->getRequest()->getParam('m-seo-enabled', true) &&
-            ((string)Mage::getConfig()->getNode('modules/ManaPro_FilterSeoLinks/active')) == 'true' &&
-            $this->getFilter()->getMode() != 'search'
-        )
-        {
-            $url = Mage::getModel('manapro_filterseolinks/url');
-            /* @var $url ManaPro_FilterSeoLinks_Model_Url */
-            $urlValue = $url->encodeValue($this->getFilter()->getRequestVar(), $urlValue);
+    /**
+     * @return string
+     */
+    public function getSeoValue() {
+	    return $this->getSeoData('url');
+	}
+
+    public function getSeoPrefix()
+    {
+        return $this->getSeoData('prefix');
+    }
+
+    public function getSeoPosition()
+    {
+        return $this->getSeoData('position');
+    }
+
+    public function getSeoData($key = false) {
+	    if (!$this->_seoData) {
+            if (Mage::app()->getRequest()->getParam('m-seo-enabled', true) &&
+                    ((string)Mage::getConfig()->getNode('modules/ManaPro_FilterSeoLinks/active')) == 'true'
+            ) {
+                /* @var $url Mana_Seo_Rewrite_Url */
+                $url = Mage::getModel('core/url');
+                $this->_seoData = $url->getItemData($this->getFilter()->getRequestVar(), $this->getValue());
+            }
+            else {
+                $this->_seoData = array(
+                    'url' => $this->getValue(),
+                    'prefix' => '',
+                    'position' => 0,
+                    'id' => 0,
+                );
+            }
        }
-       return $urlValue;
+
+	    return $key !== false ? $this->_seoData[$key] : $this->_seoData;
 	}
 }

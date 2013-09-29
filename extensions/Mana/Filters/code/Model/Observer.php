@@ -29,6 +29,7 @@ class Mana_Filters_Model_Observer {
 			'mana_filters/display/category',
 			'mana_filters/display/decimal',
             'mana_filters/display/sort_method',
+            'mana_filters/display/disable_no_result_options',
 		));
 	}
 	/**
@@ -73,4 +74,43 @@ class Mana_Filters_Model_Observer {
                 ->where("NOT((m_configurable_product.type_id = 'configurable') AND (m_configurable_attribute.is_configurable = 1))");
         }
     }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "core_block_abstract_to_html_after")
+     * @param Varien_Event_Observer $observer
+     */
+    public function hideCmsContentOnFilteredPages($observer) {
+        /* @var $block Mage_Core_Block_Abstract */
+        $block = $observer->getEvent()->getBlock();
+        /* @var $transport Varien_Object */
+        $transport = $observer->getEvent()->getData('transport');
+
+        if ($block->getNameInLayout() == 'cms_page' &&
+            ($block->getData('hide_cms_content_when_filters_applied') || Mage::getStoreConfigFlag('mana_filters/display/hide_cms_page_content')) &&
+            in_array($this->coreHelper()->getRoutePath(), array('cms/page/view', 'cms/index/index')) &&
+            ($state = $this->filterHelper()->getLayer()->getState()) &&
+            $state->getFilters())
+
+        {
+            $transport->setData('html', '');
+        }
+        // INSERT HERE: event handler code
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filterHelper() {
+        return Mage::helper('mana_filters');
+    }
+    #endregion
 }

@@ -22,7 +22,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		foreach ($this->getProductStocks($productId) as $stockData) {
 			return $stockData;
 		}
-		throw new Exception('Not implemented');
+		return array('stock_id' => 0, 'is_qty_decimal' => 0, 'qty' => 0);
+		//throw new Exception('Not implemented');
 	}
 	/**
 	 * This method performs core calculation of the whole module. 
@@ -286,8 +287,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         	$stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
 			foreach ($calculation['qties'] as $linkedProductId => $qty) {
 				$qtyUpdate = $linkedProductId != $representedProductId ? '`qty` = 0, ' : '';
-				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')} 
-					SET $qtyUpdate`m_represented_qty` = $qty, `is_in_stock` = IF ($qty > `min_qty`, 1, 0), `m_represents` = 1
+				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
+					SET $qtyUpdate`m_represented_qty` = $qty, {$this->isInStockUpdate("$qty > `min_qty`")}, `m_represents` = 1
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -300,8 +301,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$productIds[$linkedProductId] = $linkedProductId;
 			}
 			foreach ($options['potentiallyObsoleteIds'] as $linkedProductId) {
-				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')} 
-					SET `m_represented_qty` = 0, `is_in_stock` = IF (0 >= `min_qty`, 1, 0), `m_represents` = 0
+                $sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
+					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -346,7 +347,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			foreach ($representingProductData as $key => $link) {
 				$idIndex = isset($link['entity_id']) ? 'entity_id' : 'linked_product_id';
 				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')} 
-					SET `m_represented_qty` = 0, `is_in_stock` = IF (`qty` >= `min_qty`, 1, 0), `m_represents` = 0
+					SET `m_represented_qty` = 0, {$this->isInStockUpdate("`qty` > `min_qty`")}, `m_represents` = 0
 					WHERE (`product_id` = {$link[$idIndex]}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -411,7 +412,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 					$diff = round($stock['qty']) - round($expectedQty);
 				}
         		$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')} 
-					SET `qty` = `qty` + $diff, `is_in_stock` = IF (`qty` + $diff >= `min_qty`, 1, 0)
+					SET `qty` = `qty` + $diff, {$this->isInStockUpdate("`qty` + $diff >= `min_qty`")}
 					WHERE (`product_id` = {$representedProductId}) AND (`stock_id` = $stockId);
 					";
 			}
@@ -460,7 +461,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         	foreach ($representedProducts as $representedProductId => $delta) {
         		$diff = $multiplier * $delta;
         		$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')} 
-					SET `qty` = `qty` + $diff, `is_in_stock` = IF (`qty` + $diff >= `min_qty`, 1, 0)
+					SET `qty` = `qty` + $diff, {$this->isInStockUpdate("`qty` + $diff >= `min_qty`")}
 					WHERE (`product_id` = {$representedProductId}) AND (`stock_id` = $stockId);
 					";
         	}
@@ -516,7 +517,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         if ($productIds = $link->getAllRepresentingProductIds()) {
 		    $productIds = implode(',', $productIds);
             $sql = "UPDATE {$this->getTable('cataloginventory/stock_item')}
-			SET `m_represented_qty` = 0, `is_in_stock` = IF (`qty` > `min_qty`, 1, 0), `m_represents` = 0
+			SET `m_represented_qty` = 0, {$this->isInStockUpdate("`qty` > `min_qty`")}, `m_represents` = 0
 			WHERE `product_id` IN ($productIds)";
             $this->_getWriteAdapter()->multi_query($sql);
         }
@@ -538,5 +539,21 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         }
 		
 		return $this;
+    }
+
+    public function noBackOrders() {
+        return Mage_CatalogInventory_Model_Stock::BACKORDERS_NO;
+    }
+
+    public function configBackOrders() {
+        return (int)Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_BACKORDERS);
+    }
+
+    public function isInStockUpdate($condition) {
+        return "`is_in_stock` = IF((use_config_backorders = 1 AND " .
+                "{$this->noBackOrders()} <> {$this->configBackOrders()})" .
+                " OR (use_config_backorders = 0 AND backorders <> {$this->noBackOrders()}), 1," .
+                " IF ($condition, 1, 0))";
+
     }
 }

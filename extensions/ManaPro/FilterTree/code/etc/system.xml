@@ -19,6 +19,7 @@
                     <fields>
                         <expand translate="label">
                             <label>Expand All Tree Items on Initial Page Load</label>
+                            <comment>Tree remembers collapsed/expanded state of each category, so on subsequent page loads remembered collapsed/expanded state is restored and not touched items are processed as specified here</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>100</sort_order>
@@ -30,5 +31,28 @@
                 </tree>
             </groups>
         </mana_filters>
+        <mana>
+            <groups>
+                <message translate="label" module="mana_core">
+                    <label>Advices, Warnings and Messages</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <make_all_categories_anchor_for_tree_filter translate="label" module="manapro_filtertree">
+                            <label>Offer to Make All Categories Anchored if Category Tree Filter Is Selected</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </make_all_categories_anchor_for_tree_filter>
+                    </fields>
+                </message>
+            </groups>
+        </mana>
     </sections>
 </config>

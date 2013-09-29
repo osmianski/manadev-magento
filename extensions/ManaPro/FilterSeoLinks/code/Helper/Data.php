@@ -55,12 +55,11 @@ class ManaPro_FilterSeoLinks_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     public function getCategoryUrlSuffix() {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
         /* @var $helper Mage_Catalog_Helper_Category */
         $helper = Mage::helper('catalog/category');
-        $result = $helper->getCategoryUrlSuffix();
-        if ($result && strpos($result, '.') !== 0) {
-            $result = '.'.$result;
-        }
-        return $result;
+        return $core->addDotToSuffix($helper->getCategoryUrlSuffix());
     }
 }

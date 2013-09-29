@@ -10,7 +10,7 @@
  *
  */
 class ManaPage_Bestseller_Block_Filter extends Mana_Page_Block_Filter {
-    protected function _prepareProductCollection() {
+    public function prepareProductCollection() {
         $to = $this->getDate()->addDay(1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
         $from = $this->getDate()->addYear(-1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
 
@@ -27,7 +27,7 @@ class ManaPage_Bestseller_Block_Filter extends Mana_Page_Block_Filter {
         }
         $select->setPart(Varien_Db_Select::COLUMNS, $columns);
         $select
-            ->join(array('stats' => new Zend_Db_Expr("(SELECT stats.product_id AS product_id, SUM(stats.qty_ordered - IFNULL(stats.qty_canceled, 0)) AS qty_ordered".
+            ->joinLeft(array('stats' => new Zend_Db_Expr("(SELECT stats.product_id AS product_id, SUM(stats.qty_ordered - IFNULL(stats.qty_canceled, 0)) AS qty_ordered".
                 " FROM {$res->getTableName('sales/order_item')} AS stats".
                 " INNER JOIN {$res->getTableName('sales/order')} AS o ON".
                 " (o.entity_id = stats.order_id AND".
@@ -35,6 +35,8 @@ class ManaPage_Bestseller_Block_Filter extends Mana_Page_Block_Filter {
                 $db->quoteInto(" o.store_id = ?", Mage::app()->getStore()->getId()).
                 " GROUP BY stats.product_id)")),
                 "stats.product_id = e.entity_id", array('cat_index_position' => new Zend_Db_Expr('-stats.qty_ordered')));
+
+        $this->_condition = 'stats.qty_ordered > 0';
 
         return $this;
     }

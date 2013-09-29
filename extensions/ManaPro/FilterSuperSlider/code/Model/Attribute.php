@@ -73,14 +73,10 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
     public function getExistingValues() {
         $result = array();
         foreach ($this->getItems() as $item) {
-            $urlValue = $item['value'];
-            if (((string)Mage::getConfig()->getNode('modules/ManaPro_FilterSeoLinks/active')) == 'true' &&
-                Mage::helper('mana_core')->getRoutePath() != 'catalogsearch/result/index')
-            {
-                $url = Mage::getModel('manapro_filterseolinks/url');
-                $urlValue = $url->encodeValue($this->getAttributeModel()->getAttributeCode(), $urlValue);
-            }
-            $result[] = array('value' => $item['value'], 'label' => $item['label'], 'urlValue' => $urlValue);
+            /* @var $item Mana_Filters_Model_Item */
+            $itemData = $item->getSeoData();
+            $itemData['label'] = $item->getData('label');
+            $result[] = $itemData;
         }
         return $result;
     }
@@ -219,16 +215,17 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
     }
 
     public function addToState() {
-        $rangeAndLabels = $this->_getRangeAndLabels();
-        extract($rangeAndLabels);
-        /* @var $text array */
-        $this->getLayer()->getState()->addFilter($this->_createItemEx(array(
-            'label' => $text[0] . ' - ' . $text[count($text) - 1],
-            'value' => Mage::app()->getRequest()->getParam($this->_requestVar),
-            'm_selected' => true,
-            'm_show_selected' => false,
-            'remove_url' => $this->getRemoveUrl(),
-        )));
+        if ($rangeAndLabels = $this->_getRangeAndLabels()) {
+            extract($rangeAndLabels);
+            /* @var $text array */
+            $this->getLayer()->getState()->addFilter($this->_createItemEx(array(
+                'label' => $text[0] . ' - ' . $text[count($text) - 1],
+                'value' => Mage::app()->getRequest()->getParam($this->_requestVar),
+                'm_selected' => true,
+                'm_show_selected' => false,
+                'remove_url' => $this->getRemoveUrl(),
+            )));
+        }
     }
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock) {
         return $this;

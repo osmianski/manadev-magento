@@ -58,6 +58,8 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $head->getTitle();
             $globalVars = array(
                 'title' => $this->_getInitialTitle($head),
+                'keywords' => $this->_getInitialKeywords($head),
+                'description' => $this->_getInitialDescription($head),
                 'page' => $page,
                 'site' => (object)array(
                     'title' => $head->getDefaultTitle(),
@@ -67,6 +69,10 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 '_filterPattern' => null,
                 '_valuePattern' => null,
                 '_valuePatterns' => array(),
+                '_keyword_valuePattern' => null,
+                '_keyword_valuePatterns' => array(),
+                '_description_valuePattern' => null,
+                '_description_valuePatterns' => array(),
             );
 
             foreach ($appliedFilters as /* @var $item Mana_Filters_Model_Item */$item) {
@@ -90,6 +96,12 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                     case 'values':
                         $this->_processValues($rule, $globalVars);
                         break;
+                    case 'keyword_values':
+                        $this->_processValues($rule, $globalVars);
+                        break;
+                    case 'description_values':
+                        $this->_processValues($rule, $globalVars);
+                        break;
                     case 'filters':
                         $this->_processFilters($rule, $globalVars);
                         break;
@@ -107,7 +119,10 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 }
             }
 
-            $head->setTitle($globalVars['title']);
+            $head
+                ->setTitle($globalVars['title'])
+                ->setData('keywords', $globalVars['keywords'])
+                ->setData('description', $globalVars['description']);
         }
     }
     protected function _addAppliedFiltersToSearchTitle($head, $appliedFilters, $page) {
@@ -186,17 +201,36 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
 	    }
 	    return eval(' return "'.$__template.'";');
 	}
-	protected function _processValues($rule, &$globalVars) {
-	    $locals = array();
+	protected function _getValuePatternVarName($var) {
+        return '_'. substr($var, 0, strlen($var) - 1).'Pattern';
+    }
+
+    protected function _getFinalVarName($var) {
+        switch ($var) {
+            case 'values':
+                return 'title';
+            case 'keyword_values':
+                return 'keywords';
+            case 'description_values':
+                return 'description';
+            default:
+                throw new Exception('Not implemented');
+
+        }
+    }
+
+    protected function _processValues($rule, &$globalVars) {
+        $patternVar = $this->_getValuePatternVarName($rule->getName());
+        $locals = array();
         foreach ($rule->children() as $instructionName => $instruction) { /* @var $instruction SimpleXMLElement */
             switch ($instructionName) {
                 case 'if': $this->_processApplyIf($instruction, $globalVars, $locals); break;
                 case 'apply':
                     if (isset($locals['code'])) {
-                        $this->_processApply($instruction, $globalVars, '_valuePatterns', $locals['code']);
+                        $this->_processApply($instruction, $globalVars, $patternVar . 's', $locals['code']);
                     }
                     else {
-                        $this->_processApply($instruction, $globalVars, '_valuePattern');
+                        $this->_processApply($instruction, $globalVars, $patternVar);
                     }
                     break;
                 default: throw new Exception('Not implemented');
@@ -237,18 +271,19 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $globalVars[$var][$key] = $pattern;
         }
     }
-    protected function _processFinally($rule, &$globalVars) {
+    protected function _prepareProcessFinally($var, &$globalVars) {
+        $patternVar = $this->_getValuePatternVarName($var);
         $valuePattern = array('pattern' => '{$value->title}', 'glue' => ', ', 'lastGlue' => ', ', 'prefix' => ': ');
-        $valuePattern = $globalVars['_valuePattern'] ? $globalVars['_valuePattern'] : $valuePattern;
-        if ($globalVars['_filterPattern']) {
+        $valuePattern = $globalVars[$patternVar] ? $globalVars[$patternVar] : $valuePattern;
+        if ($globalVars['_filterPattern'] && $var == 'values') {
             $filters = array();
             $filterValues = array();
             foreach ($globalVars['_values'] as $value) {
                 $code = $value->_obj->getFilter()->getFilterOptions()->getCode();
                 if (!isset($filters[$code])) {
                     $filters[$code] = array(
-                        'pattern' => isset($globalVars['_valuePatterns'][$code])
-                            ? $globalVars['_valuePatterns'][$code]
+                        'pattern' => isset($globalVars[$patternVar.'s'][$code])
+                            ? $globalVars[$patternVar.'s'][$code]
                             : $valuePattern,
                         'options' => $value->_obj->getFilter()->getFilterOptions(),
                         'values' => array(),
@@ -271,12 +306,16 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             foreach ($globalVars['_values'] as $value) {
                 $values[] = $this->_processValue($valuePattern['pattern'], $globalVars, compact('value'));
             }
-            $globalVars['values'] = $this->_implode($values, $valuePattern);
-            if ($globalVars['values']) {
-                $globalVars['values'] = $valuePattern['prefix'] . $globalVars['values'];
+            $globalVars[$var] = $this->_implode($values, $valuePattern);
+            if ($globalVars[$var] && ($this->_getFinalVarName($var) != 'keywords' || $globalVars[$this->_getFinalVarName($var)])) {
+                $globalVars[$var] = $valuePattern['prefix'] . $globalVars[$var];
             }
         }
-
+    }
+    protected function _processFinally($rule, &$globalVars) {
+        $this->_prepareProcessFinally('values', $globalVars);
+        $this->_prepareProcessFinally('keyword_values', $globalVars);
+        $this->_prepareProcessFinally('description_values', $globalVars);
         foreach ($rule->children() as $instructionName => $instruction) { /* @var $instruction SimpleXMLElement */
             switch ($instructionName) {
                 case 'set': $this->_processSet($instruction, $globalVars); break;
@@ -305,16 +344,36 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
             /* @var $head Mage_Page_Block_Html_Head */
             $robots = $head->getRobots();
+            $noIndex = false;
+            $follow = false;
             /* @var $layer Mage_Catalog_Model_Layer */ $layer = Mage::getSingleton($layerModel);
-            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noindexProcessorName) {
-                if (!$noindexProcessorName) {
+            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noIndexProcessorName) {
+                if (!$noIndexProcessorName) {
                     continue;
                 }
 
-                $noindexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$noindexProcessorName->model);
-                $noindexProcessor->process($robots, $layerModel);
+                $noIndexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$noIndexProcessorName->model);
+                if ($noIndexProcessor->detect($layerModel)) {
+                    $noIndex = true;
+                    break;
+                }
             }
-            $head->setRobots($robots);
+
+            foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/follow')) as $followProcessorName) {
+                if (!$followProcessorName) {
+                    continue;
+                }
+
+                $followProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$followProcessorName->model);
+                if ($followProcessor->detect($layerModel)) {
+                    $follow = true;
+                    break;
+                }
+            }
+
+            if ($noIndex) {
+                $head->setRobots($follow ? 'NOINDEX, FOLLOW' : 'NOINDEX, NOFOLLOW');
+            }
         }
     }
     /**
@@ -364,6 +423,23 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         }
         return $title;
     }
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @return string
+     */
+    protected function _getInitialKeywords($head) {
+        $result = $head->getData('keywords');
+        return $result;
+    }
+
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @return string
+     */
+    protected function _getInitialDescription($head) {
+        $result = $head->getData('description');
+        return $result;
+    }
 
     //region Obsolete event handlers. Left here for easier upgrade
     public function addCategoryTitle($observer) {
@@ -371,5 +447,208 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
     public function addSearchTitle($observer) {
     }
     //endregion
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds columns to replication update select (handles event "m_db_update_columns")
+     * @param Varien_Event_Observer $observer
+     */
+    public function prepareUpdateColumns($observer) {
+        /* @var $target Mana_Db_Model_Replication_Target */
+        $target = $observer->getEvent()->getData('target');
+
+        switch ($target->getEntityName()) {
+            case 'mana_filters/filter2_store':
+                $target->getSelect('main')->columns(array(
+                    'global.include_in_url AS include_in_url',
+                    'global.url_position AS url_position',
+                ));
+                break;
+        }
+    }
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds values to be updated (handles event "m_db_update_process")
+     * @param Varien_Event_Observer $observer
+     */
+    public function processUpdate($observer) {
+        /* @var $object Mana_Db_Model_Object */
+        $object = $observer->getEvent()->getData('object');
+        /* @var $values array */
+        $values = $observer->getEvent()->getData('values');
+
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+        switch ($object->getEntityName()) {
+            case 'mana_filters/filter2':
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL)) {
+                    $object->setData('include_in_url', Mana_Seo_Model_Source_IncludeInUrl::AS_IN_SCHEMA);
+                }
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_URL_POSITION)) {
+                    $object->setData('url_position', $values['position']);
+                }
+                break;
+            case 'mana_filters/filter2_store':
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL)) {
+                    $object->setData('include_in_url', $values['include_in_url']);
+                }
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_URL_POSITION)) {
+                    $object->setData('url_position', $values['url_position']);
+                }
+                break;
+        }
+    }
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds columns to replication insert select (handles event "m_db_insert_columns")
+     * @param Varien_Event_Observer $observer
+     */
+    public function prepareInsertColumns($observer) {
+        /* @var $target Mana_Db_Model_Replication_Target */
+        $target = $observer->getEvent()->getData('target');
+
+        switch ($target->getEntityName()) {
+            case 'mana_filters/filter2_store':
+                $target->getSelect('main')->columns(array(
+                    'global.include_in_url AS include_in_url',
+                    'global.url_position AS url_position',
+                ));
+                break;
+        }
+    }
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds values to be inserted (handles event "m_db_insert_process")
+     * @param Varien_Event_Observer $observer
+     */
+    public function processInsert($observer) {
+        /* @var $object Mana_Db_Model_Object */
+        $object = $observer->getEvent()->getData('object');
+        /* @var $values array */
+        $values = $observer->getEvent()->getData('values');
+
+        switch ($object->getEntityName()) {
+            case 'mana_filters/filter2':
+                $object->setData('include_in_url', Mana_Seo_Model_Source_IncludeInUrl::AS_IN_SCHEMA);
+                $object->setData('url_position', $values['position']);
+                break;
+            case 'mana_filters/filter2_store':
+                $object->setData('include_in_url', $values['include_in_url']);
+                $object->setData('url_position', $values['url_position']);
+                break;
+        }
+    }
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds fields into CRUD form (handles event "m_crud_form")
+     * @param Varien_Event_Observer $observer
+     */
+    public function addFields($observer) {
+        /* @var $formBlock Mana_Admin_Block_Crud_Card_Form */
+        $formBlock = $observer->getEvent()->getData('form');
+        $form = $formBlock->getForm();
+
+        /* @var $t ManaPro_FilterSeoLinks_Helper_Data */
+        $t = Mage::helper('manapro_filterseolinks');
+
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton('core/layout');
+
+        /* @var $adminHelper Mana_Admin_Helper_Data */
+        $adminHelper = Mage::helper('mana_admin');
+
+        switch ($formBlock->getEntityName()) {
+            case 'mana_filters/filter2':
+            case 'mana_filters/filter2_store':
+                /* @var $filter Mana_filters_Model_Filter2 */
+                $filter = $form->getData('model');
+
+                if ($form->getId() == 'mf_general') {
+                    /** @noinspection PhpParamsInspection */
+                    $fieldset = $form->addFieldset(
+                        'mfs_seo',
+                        array(
+                            'title' => $t->__('Search Engine Optimization'),
+                            'legend' => $t->__('Search Engine Optimization'),
+                        )
+                    );
+
+                    if ($filter->getData('type') == 'attribute') {
+                        /** @noinspection PhpParamsInspection */
+                        $fieldset->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_fieldset'));
+
+                        /* @var $includeInUrlSource Mana_Seo_Model_Source_IncludeInUrl */
+                        $includeInUrlSource = Mage::getSingleton('mana_seo/source_includeInUrl');
+                        $field = $fieldset->addField(
+                            'include_in_url',
+                            'select',
+                            array_merge(
+                                array(
+                                    'label' => $t->__('Include Filter Name In URL'),
+                                    'name' => 'include_in_url',
+                                    'options' => $includeInUrlSource->getOptionArray(),
+                                    'required' => true,
+                                ),
+                                $adminHelper->isGlobal() ? array() : array(
+                                    'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL,
+                                    'default_label' => $t->__('Same For All Stores'),
+                                )
+                            )
+                        );
+                        /** @noinspection PhpParamsInspection */
+                        $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
+                    }
+
+                    $field = $fieldset->addField(
+                        'url_position',
+                        'text',
+                        array(
+                            'label' => $t->__('Position in URL'),
+                            'name' => 'url_position',
+                            'required' => true,
+                            'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
+                            'default_label' => $adminHelper->isGlobal()
+                                ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
+                                : $t->__('Same For All Stores'),
+                        )
+                    );
+                    /** @noinspection PhpParamsInspection */
+                    $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
+                }
+
+                break;
+        }
+    }
+
+    /* BASED ON SNIPPET: Models/Event handler */
+    /**
+     * Adds edited data received via HTTP to specified model (handles event "m_db_add_edited_data")
+     * @param Varien_Event_Observer $observer
+     */
+    public function addEditedData($observer) {
+        /* @var $object Mana_Db_Model_Object */
+        $object = $observer->getEvent()->getData('object');
+        /* @var $fields array */
+        $fields = $observer->getEvent()->getData('fields');
+        /* @var $useDefault array */
+        $useDefault = $observer->getEvent()->getData('use_default');
+
+        /* @var $dbHelper Mana_Db_Helper_Data */
+        $dbHelper = Mage::helper('mana_db');
+
+        switch ($object->getEntityName()) {
+            case 'mana_filters/filter2':
+            case 'mana_filters/filter2_store':
+                $dbHelper->updateDefaultableField($object, 'include_in_url', Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL, $fields, $useDefault);
+                $dbHelper->updateDefaultableField($object, 'url_position', Mana_Filters_Resource_Filter2::DM_URL_POSITION, $fields, $useDefault);
+                break;
+        }
+    }
+
+    #endregion
 
 }

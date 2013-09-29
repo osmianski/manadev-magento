@@ -38,7 +38,8 @@ class ManaPro_FilterAdmin_Block_List_Grid extends Mana_Admin_Block_Crud_List_Gri
 		$this->addColumn('position', array(
 			'header' => $this->__('Position'),
 			'index' => 'position',
-			'width' => '50px',
+            'filter_index' => 'main_table.position',
+            'width' => '50px',
 			'align' => 'center', 
 		));
 		$this->addColumn('code', array(
@@ -49,11 +50,13 @@ class ManaPro_FilterAdmin_Block_List_Grid extends Mana_Admin_Block_Crud_List_Gri
 		$this->addColumn('name', array(
 			'header' => $this->__('Name'),
 			'index' => 'name',
+			'filter_index' => 'main_table.name',
 		));
 		$this->addColumn('is_enabled', array(
 			'header' => $this->__('In Category'),
 			'index' => 'is_enabled',
-			'width' => '100px',
+            'filter_index' => 'main_table.is_enabled',
+            'width' => '100px',
 			'align' => 'center',
 			'type' => 'options',
 			'options' => Mage::getSingleton('mana_filters/source_filterable')->getOptionArray(), 
@@ -61,7 +64,8 @@ class ManaPro_FilterAdmin_Block_List_Grid extends Mana_Admin_Block_Crud_List_Gri
 		$this->addColumn('is_enabled_in_search', array(
 			'header' => $this->__('In Search'),
 			'index' => 'is_enabled_in_search',
-			'width' => '100px',
+            'filter_index' => 'main_table.is_enabled_in_search',
+            'width' => '100px',
 			'align' => 'center',
 			'type' => 'options',
 			'options' => Mage::getSingleton('mana_filters/source_filterable')->getOptionArray(), 
@@ -69,7 +73,8 @@ class ManaPro_FilterAdmin_Block_List_Grid extends Mana_Admin_Block_Crud_List_Gri
 		$this->addColumn('display', array(
 			'header' => $this->__('Display As'),
 			'index' => 'display',
-			'width' => '150px',
+            'filter_index' => 'main_table.display',
+            'width' => '150px',
 			'align' => 'center',
 			'type' => 'options',
 			'options' => Mage::getSingleton('mana_filters/source_display_all')->getOptionArray(), 

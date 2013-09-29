@@ -13,33 +13,35 @@
 ;(function($) {
     $.fn.mSlider = function(options) {
         var slider = this;
-        var visibleContent = slider.children('.m-visible-content');
-        var content = visibleContent.children('.m-content');
+        $(function() {
+            var visibleContent = slider.children('.m-visible-content');
+            var content = visibleContent.children('.m-content');
 
-        var totalWidth = 0;
-        var width = 0;
-        var height = 0;
-        content.children().each(function (index) {
-            var item = $(this);
-            item
-                .width(visibleContent.innerWidth() - item.outerWidth() + item.width())
-                .height(visibleContent.innerHeight() - item.outerHeight() + item.height());
-            totalWidth += item.outerWidth();
-            width = item.outerWidth();
-            height = item.outerHeight();
-        });
-        content.width(totalWidth).height(height);
+            var totalWidth = 0;
+            var width = 0;
+            var height = 0;
+            content.children().each(function (index) {
+                var item = $(this);
+                item
+                    .width(visibleContent.innerWidth() - item.outerWidth() + item.width())
+                    .height(visibleContent.innerHeight() - item.outerHeight() + item.height());
+                totalWidth += item.outerWidth();
+                width = item.outerWidth();
+                height = item.outerHeight();
+            });
+            content.width(totalWidth).height(height);
 
-        if (content.children().length > 1) {
-            if (options.hideEffect == 'slide') {
-                content.children().show();
-                options = $.extend({}, { hideEffectOptions:{slideBy:width}}, options);
+            if (content.children().length > 1) {
+                if (options.hideEffect == 'slide') {
+                    content.children().show();
+                    options = $.extend({}, { hideEffectOptions:{slideBy:width}}, options);
+                }
+                content.mAdvListRotator($.extend({/*debug: true*/}, options));
             }
-            content.mAdvListRotator($.extend(/*{debug: true}, */options));
-        }
-        else {
-            content.children().show();
-        }
+            else {
+                content.children().show();
+            }
+        });
     };
 
 })(jQuery);

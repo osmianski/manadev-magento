@@ -26,8 +26,11 @@ examples on what kind of actions can be applied to referenced blocks.
     </default>
     <jquery_core>
 		<reference name="head">
-            <action method="addJs" ifconfig="mana_dev/debug/jquery"><script>jquery/jquery.js</script></action>
-            <action method="addJs" ifconfig="mana_dev/debug/jquery_min"><script>jquery/jquery.min.js</script></action>
+		    <!-- BEGIN: files which are managed in System->Configuration->MANAdev->General->JavaScript Libraries -->
+            <!--<action method="addJs"><script>jquery/require.js</script></action>-->
+            <action method="addJs"><script>jquery/jquery.js</script></action>
+            <!-- END: files which are managed in System->Configuration->MANAdev->General->JavaScript Libraries -->
+
             <action method="addJs"><script>jquery/jquery.printf.js</script></action>
             <action method="addJs"><script>mana/core.js</script></action>
 			<action method="addCss"><stylesheet>css/mana_core.css</stylesheet></action>

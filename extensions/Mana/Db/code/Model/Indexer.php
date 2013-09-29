@@ -20,7 +20,7 @@ class Mana_Db_Model_Indexer extends Mage_Index_Model_Indexer_Abstract {
     }
     public function getName()
     {
-        return Mage::helper('mana_db')->__('Default Values');
+        return Mage::helper('mana_db')->__('Default Values (MANAdev)');
     }
     public function getDescription()
     {

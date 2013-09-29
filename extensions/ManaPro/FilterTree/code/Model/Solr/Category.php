@@ -148,4 +148,8 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
     {
         return false;
     }
+
+    public function getResetValue() {
+        return null;
+    }
 }

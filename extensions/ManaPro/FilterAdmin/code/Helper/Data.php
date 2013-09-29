@@ -11,5 +11,37 @@
  * @author Mana Team
  */
 class ManaPro_FilterAdmin_Helper_Data extends Mage_Core_Helper_Abstract {
-	// INSERT HERE: helper functions that should be available from any other place in the system
+    /**
+     * @param Mage_Core_Model_Store $store
+     * @param bool $startingFromRoot
+     */
+    public function makeCategoriesAnchor($store, $startingFromRoot = true) {
+        $this->_makeCategoryAnchorRecursively($store->getRootCategoryId(), $startingFromRoot);
+	}
+
+    /**
+     * @param int $categoryId
+     * @param bool $forceAnchor
+     */
+    protected function _makeCategoryAnchorRecursively($categoryId, $forceAnchor) {
+        $category = $this->getCategoryModel()->setStoreId(0)->load($categoryId);
+        if ($forceAnchor) {
+            $category->setData('is_anchor', 1);
+            $category->save();
+        }
+        /* @var $category Mage_Catalog_Model_Category */
+        foreach ($category->getChildrenCategories() as $childCategory) {
+            $this->_makeCategoryAnchorRecursively($childCategory->getId(), $category->getData('is_anchor'));
+        }
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCategoryModel() {
+        return Mage::getModel('catalog/category');
+    }
+    #endregion
 }

@@ -13,6 +13,8 @@
  */
 class Mana_Filters_Model_Filter2_Store extends Mana_Filters_Model_Filter2 {
     protected $_eventPrefix = 'mana_filter_store';
+    protected $_entity = 'mana_filters/filter2_store';
+
     /**
      * Invoked during model creation process, this method associates this model with resource and resource
      * collection classes

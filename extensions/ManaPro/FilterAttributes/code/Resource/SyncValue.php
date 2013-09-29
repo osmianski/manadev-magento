@@ -48,7 +48,7 @@ class ManaPro_FilterAttributes_Resource_SyncValue  extends ManaPro_FilterAttribu
                             if (($targetLabel = (string)$targetXml)
                                 && ($targetId = $this->_getOptionIdByLabel($targetAttribute['attribute_id'], $targetLabel)))
                             {
-                                $targets[] = $targetId;
+                                $targets[$targetId] = $targetId;
                             }
                         }
                         if (count($targets)) {

@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.04.10.22</version>
+		    <version>13.09.24.16</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -131,7 +131,57 @@
                     </mana_core>
                 </observers>
             </controller_action_layout_render_before>
-		</events>
+            <controller_action_layout_generate_blocks_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>processJsCssFiles</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_action_layout_generate_blocks_before>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addClientSideBlockMarkup</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <core_block_abstract_to_html_after><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core_require>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderRequireSettings</method>
+                        <!-- event handler method name -->
+                    </mana_core_require>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <controller_front_send_response_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderCustomResponse</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_front_send_response_before>
+            <controller_front_init_before><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>registerEarlyRouters</method>
+                        <!-- event handler method name -->
+                    </mana_core>
+                </observers>
+            </controller_front_init_before>
+        </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
 		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
@@ -170,7 +220,7 @@
 
         <!-- INSERT HERE: layout, translate, routers -->
 	</frontend>
-	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+    <!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
 	<adminhtml>
 		<!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
@@ -197,12 +247,54 @@
 		</layout>
 		<!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
+	<mana_core>
+        <js>
+            <!--<require module="mana_core">
+                <type>library</type>
+                <skinnable>0</skinnable>
+                <full_path>jquery/require.js</full_path>
+                <minified_path>jquery/require.min.js</minified_path>
+                <sort_order>50</sort_order>
+            </require>-->
+            <jquery module="mana_core">
+                <type>library</type>
+                <skinnable>0</skinnable>
+                <full_path>jquery/jquery.js</full_path>
+                <minified_path>jquery/jquery.min.js</minified_path>
+                <sort_order>100</sort_order>
+            </jquery>
+        </js>
+        <page_types>
+            <category><helper>mana_core/pageType_category</helper></category>
+            <cms_page><helper>mana_core/pageType_cmsPage</helper></cms_page>
+            <home_page><helper>mana_core/pageType_homePage</helper></home_page>
+            <search><helper>mana_core/pageType_search</helper></search>
+        </page_types>
+	</mana_core>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
-	<default>
+    <default>
         <mana_dev>
             <debug>
                 <jquery_min>1</jquery_min>
             </debug>
         </mana_dev>
+        <mana>
+            <js>
+                <!--<require>min_ondemand</require>-->
+                <jquery>min_ondemand</jquery>
+            </js>
+            <seo_symbols>
+                <dash>--to-</dash>
+                <space>-</space>
+                <slash>--per-</slash>
+                <plus>--plus-</plus>
+                <underscore>--uscore-</underscore>
+                <quote>--qt-</quote>
+                <double_quote>--dqt-</double_quote>
+                <hash>--no-</hash>
+                <percent>--percent-</percent>
+                <ampersand>--and-</ampersand>
+            </seo_symbols>
+        </mana>
 	</default>
 </config>

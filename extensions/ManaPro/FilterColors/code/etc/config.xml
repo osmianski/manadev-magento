@@ -12,7 +12,7 @@
 		<ManaPro_FilterColors>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.05.16.20</version>
+		    <version>13.09.23.17</version>
 		</ManaPro_FilterColors>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -289,6 +289,7 @@
 					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
                     <template>manapro/filtercolors/vertical.phtml</template><!-- PHTML to be rendered -->
                     <sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
+                    <popup_class>Mana/LayeredNavigation/Popup/Color</popup_class>
                 </colors_vertical>
                 <colors_label translate="title" module="manapro_filtercolors">
                     <title>Colors and Images (with Labels)</title>
@@ -303,6 +304,7 @@
 					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
                     <template>manapro/filtercolors/label.phtml</template> <!-- PHTML to be rendered -->
                     <sort_order>300</sort_order> <!-- Position in "Display as" list. The item with least position is the default one. -->
+                    <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
                 </colors_label>
             </attribute>
 		</display>

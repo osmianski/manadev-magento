@@ -12,7 +12,7 @@
 		<ManaPro_FilterAjax>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.01.16.16</version>
+		    <version>13.09.27.17</version>
 		</ManaPro_FilterAjax>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -83,50 +83,24 @@
 		<layout>
 			<updates>
 				<manapro_filterajax>
-					<file>manapro_filterajax2.xml</file>
+					<file>manapro_filterajax3.xml</file>
 				</manapro_filterajax>
 			</updates>
 		</layout>
 	</frontend>
-	<mana_ajax>
-        <allowed_actions>
-            <catalog_category_view>
-                <filter />
-            </catalog_category_view>
-            <catalogsearch_result_index>
-                <filter/>
-            </catalogsearch_result_index>
-            <cms_index_index>
-                <filter/>
-            </cms_index_index>
-            <cms_page_view>
-                <filter/>
-            </cms_page_view>
-        </allowed_actions>
-        <urls>
-            <catalog_category_view>
-                <class>ManaPro_FilterAjax_Model_Observer</class>
-                <method>getCategoryOptions</method>
-            </catalog_category_view>
-            <catalogsearch_result_index>
-                <class>ManaPro_FilterAjax_Model_Observer</class>
-                <method>getSearchOptions</method>
-            </catalogsearch_result_index>
-            <cms_index_index>
-                <class>ManaPro_FilterAjax_Model_Observer</class>
-                <method>getHomeOptions</method>
-            </cms_index_index>
-            <cms_page_view>
-                <class>ManaPro_FilterAjax_Model_Observer</class>
-                <method>getPageOptions</method>
-            </cms_page_view>
-        </urls>
-	</mana_ajax>
-	<default>
+    <mana_core>
+        <routers>
+            <manapro_filterajax>
+                <class>ManaPro_FilterAjax_Router</class>
+                <sort_order>100</sort_order>
+            </manapro_filterajax>
+        </routers>
+    </mana_core>
+    <default>
 		<mana>
 			<ajax>
-                <overlay_filter>1</overlay_filter>
-                <progress_filter>1</progress_filter>
+                <url_key_filter>ajax/layered-navigation</url_key_filter>
+                <route_separator_filter>requested-url</route_separator_filter>
                 <scroll_to_top_filter>1</scroll_to_top_filter>
 			</ajax>
 		</mana>

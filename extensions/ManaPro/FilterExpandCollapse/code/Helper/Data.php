@@ -38,6 +38,9 @@ class ManaPro_FilterExpandCollapse_Helper_Data extends Mage_Core_Helper_Abstract
         elseif ($block->getData("collapsed_{$filterOptions->getCode()}")) {
             return 'collapse';
         }
+        elseif ($block->getData("dropdown_{$filterOptions->getCode()}")) {
+            return 'dropdown';
+        }
         elseif ($block->getData("not_collapseable_{$filterOptions->getCode()}")) {
             return '';
         }

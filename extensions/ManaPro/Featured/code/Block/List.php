@@ -145,6 +145,7 @@ abstract class ManaPro_Featured_Block_List extends Mage_Catalog_Block_Product_Ab
     }
     protected function _beforeToHtml() {
         $this->getCollection()->load();
+        $this->getCollection()->addUrlRewrite($this->getCurrentCategory()->getId());
         Mage::getModel('review/review')->appendSummary($this->getCollection());
         $items = $this->getCollection()->getItems();
         if (Mage::getStoreConfig($this->getConfigSource() . '/sort') == 'random') {

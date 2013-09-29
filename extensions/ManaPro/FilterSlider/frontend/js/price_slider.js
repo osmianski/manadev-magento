@@ -277,14 +277,16 @@ Control.PriceSlider.prototype = {
           // find the handle (prevents issues with Safari)
           while((this.handles.indexOf(handle) == -1) && handle.parentNode) 
             handle = handle.parentNode;
-        
-          this.activeHandle    = handle;
-          this.activeHandleIdx = this.handles.indexOf(this.activeHandle);
-          this.updateStyles();
-        
-          var offsets  = Position.cumulativeOffset(this.activeHandle);
-          this.offsetX = (pointer[0] - offsets[0]);
-          this.offsetY = (pointer[1] - offsets[1]);
+
+          if (this.handles.indexOf(handle) != -1) {
+              this.activeHandle = handle;
+              this.activeHandleIdx = this.handles.indexOf(this.activeHandle);
+              this.updateStyles();
+
+              var offsets = Position.cumulativeOffset(this.activeHandle);
+              this.offsetX = (pointer[0] - offsets[0]);
+              this.offsetY = (pointer[1] - offsets[1]);
+          }
         }
       }
       Event.stop(event);
@@ -353,6 +355,9 @@ Control.PriceSlider.prototype = {
   },
   needsResize: function () {
     var trackLength = this.trackLength;
+    if (this.maximumOffset() == this.minimumOffset()) { // don't do anything if slider is hidden
+        return false;
+    }
     this.trackLength = this.maximumOffset() - this.minimumOffset();
     var range = this.getRange(0);
     var span = this.spans[0];

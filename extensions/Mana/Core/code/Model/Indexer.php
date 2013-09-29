@@ -46,6 +46,7 @@ abstract class Mana_Core_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
      * @return string
      */
     public function getName() {
+        /** @noinspection PhpUndefinedFieldInspection */
         return (string)$this->getXml()->name;
     }
 
@@ -55,6 +56,7 @@ abstract class Mana_Core_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
      * @return string
      */
     public function getDescription() {
+        /** @noinspection PhpUndefinedFieldInspection */
         return (string)$this->getXml()->description;
     }
 }

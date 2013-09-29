@@ -53,6 +53,12 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
     const DM_HELP_WIDTH = 33;
 
     const DM_IS_REVERSE = 34;
+
+    const DM_INCLUDE_IN_URL = 35;
+    const DM_URL_POSITION = 36;
+
+    const DM_DISABLE_NO_RESULT_OPTIONS = 37;
+
     #endregion
 
     /**
@@ -161,6 +167,9 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
         if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_SORT_METHOD)) {
             $object->setSortMethod(Mage::helper('mana_db')->getLatestConfig('mana_filters/display/sort_method'));
         }
+        if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_DISABLE_NO_RESULT_OPTIONS)) {
+            $object->setDisableNoResultOptions(Mage::helper('mana_db')->getLatestConfig('mana_filters/display/disable_no_result_options'));
+        }
     }
 	
 	/**
@@ -238,6 +247,7 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
 		$object->setIsEnabledInSearch($values['is_enabled_in_search']);
 		$object->setPosition($values['position']);
         $object->setSortMethod(Mage::helper('mana_db')->getLatestConfig('mana_filters/display/sort_method'));
+        $object->setDisableNoResultOptions(Mage::helper('mana_db')->getLatestConfig('mana_filters/display/disable_no_result_options'));
     }
 	/**
 	 * Enter description here ...
@@ -265,6 +275,8 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
 				'target.code = eav_attribute.attribute_code'.$attributeJoin, null)
 			->joinLeft(array('eav_attribute_additional' => Mage::getSingleton('core/resource')->getTableName('catalog/eav_attribute')), 
 				'eav_attribute.attribute_id = eav_attribute_additional.attribute_id', null)
+			->joinLeft(array('eav_entity_type' => Mage::getSingleton('core/resource')->getTableName('eav/entity_type')),
+				"eav_entity_type.entity_type_id = eav_attribute.entity_type_id AND eav_entity_type.entity_type_code = 'catalog_product'", null)
 			->distinct()
 			->where('(eav_attribute.attribute_id IS NULL) OR (eav_attribute_additional.is_filterable = 0)')
 			->where("target.code <> 'category'");
@@ -292,6 +304,7 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
         Mage::helper('mana_db')->updateDefaultableField($object, 'sort_method', Mana_Filters_Resource_Filter2::DM_SORT_METHOD, $fields, $useDefault);
         Mage::helper('mana_db')->updateDefaultableField($object, 'operation', Mana_Filters_Resource_Filter2::DM_OPERATION, $fields, $useDefault);
         Mage::helper('mana_db')->updateDefaultableField($object, 'is_reverse', Mana_Filters_Resource_Filter2::DM_IS_REVERSE, $fields, $useDefault);
+        Mage::helper('mana_db')->updateDefaultableField($object, 'disable_no_result_options', Mana_Filters_Resource_Filter2::DM_DISABLE_NO_RESULT_OPTIONS, $fields, $useDefault);
     }
     protected function _afterSave(Mage_Core_Model_Abstract $object) {
         if ($edit = $object->getValueData()) {

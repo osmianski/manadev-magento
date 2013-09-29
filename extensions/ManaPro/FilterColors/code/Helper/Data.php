@@ -22,6 +22,7 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     protected function _renderBackgrounds() {
         $backgrounds = func_get_args();
+        $filterOptions = array_shift($backgrounds);
         $selector = array_shift($backgrounds);
         /* @var $files Mana_Core_Helper_Files */ $files = Mage::helper(strtolower('Mana_Core/Files'));
         $layerIndex = 0;
@@ -29,7 +30,7 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
         foreach (array_reverse($backgrounds) as $background) {
             $layerSelector = ".$selector" . ($layerIndex ? " .m-layer$layerIndex" : '');
             $layerIndex++;
-            if ($background && ($url = $files->getUrl($background, 'image'))) {
+            if ($background && ($url = $files->getUrl($background, 'image', '../'))) {
                 $result .= "$layerSelector { background-image: url($url); }\n";
             }
             else {
@@ -62,13 +63,13 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
     background-color: <?php echo $color ?>;
 <?php endif; ?>
 }
-<?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()),
+<?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()),
     $filterOptions->getImageNormal(), $value->getNormalImage()) ?>
-<?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.hovered',
+<?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.hovered',
     $filterOptions->getImageNormalHovered(), $value->getNormalHoveredImage()) ?>
-<?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected',
+<?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected',
     $filterOptions->getImageSelected(), $value->getSelectedImage()) ?>
-<?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected.hovered',
+<?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected.hovered',
     $filterOptions->getImageSelectedHovered(), $value->getSelectedHoveredImage()) ?>
 .<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state,
 .<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state .m-layer1 {
@@ -83,7 +84,7 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
     background-color: <?php echo $color ?>;
 <?php endif; ?>
 }
-<?php echo $this->_renderBackgrounds($this->getFilterValueClass($filterOptions, $value->getOptionId()) . '-state',
+<?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '-state',
     $filterOptions->getStateImage(), $value->getStateImage()) ?>
 
 <?php endforeach; ?>

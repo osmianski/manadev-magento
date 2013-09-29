@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Seo
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <seo_schema translate="title" module="mana_seo">
+                    <title>SEO Schemas</title>
+                    <sort_order>300</sort_order>
+                    <action>adminhtml/mana_seo_schema/</action>
+                </seo_schema>
+                <seo_url translate="title" module="mana_seo">
+                    <title>SEO URL Keys</title>
+                    <sort_order>400</sort_order>
+                    <action>adminhtml/mana_seo_url/</action>
+                </seo_url>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+                    <mana>
+                        <children>
+							<seo_schema translate="title" module="mana_seo">
+								<title>SEO Schemas</title>
+		                        <sort_order>300</sort_order>
+							</seo_schema>
+                            <seo_url translate="title" module="mana_seo">
+                                <title>SEO URL Keys</title>
+                                <sort_order>400</sort_order>
+                            </seo_url>
+                        </children>
+					</mana>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

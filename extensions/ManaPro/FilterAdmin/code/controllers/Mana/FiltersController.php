@@ -54,7 +54,7 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 
 		// page
 		$this->_title('Mana')->_title($this->__('%s - Layered Navigation Filter', $model->getName()));
-        
+
 		// layout
 		$update = $this->getLayout()->getUpdate();
         $update->addHandle('default');
@@ -142,4 +142,27 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 		// render AJAX result
 		$this->renderLayout(); 
 	}
+
+	public function makeAllCategoriesAnchorAction() {
+	    if ($storeId = $this->getRequest()->getParam('store')) {
+	        $this->filterAdminHelper()->makeCategoriesAnchor(Mage::app()->getStore($storeId));
+	    }
+	    else {
+	        foreach (Mage::app()->getStores() as $store) {
+                $this->filterAdminHelper()->makeCategoriesAnchor($store);
+            }
+	    }
+        $this->getResponse()->setBody($this->filterAdminHelper()->__("'Is Anchor' is set to 'Yes' for all categories successfully."));
+    }
+
+	#region Dependencies
+
+    /**
+     * @return ManaPro_FilterAdmin_Helper_Data
+     */
+    public function filterAdminHelper() {
+        return Mage::helper('manapro_filteradmin');
+    }
+
+    #endregion
 }

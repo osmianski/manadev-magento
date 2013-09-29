@@ -16,6 +16,15 @@
                     <action>adminhtml/manapro_guestbook/</action>
                     <sort_order>200</sort_order>
                 </guestbook>
+                <system_configuration>
+                    <children>
+                        <manapro_guestbook translate="title" module="manapro_guestbook">
+                            <title>Guest Book</title>
+                            <action>adminhtml/system_config/edit/section/manapro_guestbook</action>
+                            <sort_order>400</sort_order>
+                        </manapro_guestbook>
+                    </children>
+                </system_configuration>
             </children>
         </mana>
     </menu>
@@ -23,14 +32,20 @@
 		<resources>
 			<admin>
 				<children>
-                    <mana translate="title" module="mana_core">
-                        <title>Configure Mana Extensions</title>
-                        <sort_order>79</sort_order>
+                    <mana>
                         <children>
-                            <filters translate="title" module="manapro_guestbook">
+                            <guestbook translate="title" module="manapro_guestbook">
                                 <title>Guest Book</title>
                                 <sort_order>200</sort_order>
-                            </filters>
+                            </guestbook>
+                            <system_configuration>
+                                <children>
+                                    <manapro_guestbook translate="title" module="manapro_guestbook">
+                                        <title>Guest Book</title>
+                                        <sort_order>400</sort_order>
+                                    </manapro_guestbook>
+                                </children>
+                            </system_configuration>
                         </children>
                     </mana>
 					<system>
@@ -39,7 +54,8 @@
 								<children>
 									<manapro_guestbook translate="title" module="manapro_guestbook">
 										<title>MANAdev Guest Book Configuration</title>
-									</manapro_guestbook>
+                                        <sort_order>50400</sort_order>
+                                    </manapro_guestbook>
 								</children>
 							</config>
 						</children>

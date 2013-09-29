@@ -20,6 +20,7 @@
                 <Mana_Core/>
                 <Mana_Db/>
                 <Mana_Admin/>
+                <Mana_Seo/>
             </depends>
         </Mana_AttributePage>
     </modules>

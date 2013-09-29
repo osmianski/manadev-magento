@@ -10,20 +10,6 @@
  * @author Mana Team
  */
 class Mana_Ajax_Helper_Data extends Mage_Core_Helper_Abstract {
-    public function getAllowedActions($actionName) {
-        $actionNodes = Mage::helper('mana_core')->getSortedXmlChildren(
-            Mage::getConfig()->getNode('mana_ajax/allowed_actions'), $actionName);
-        if (count($actionNodes)) {
-            $result = array();
-            foreach ($actionNodes as $actionNode) {
-                $result[] = $actionNode->getName();
-            }
-            return $result;
-        }
-        else {
-            return false;
-        }
-    }
     protected $_detected = false;
     protected $_enabled = false;
     public function isEnabled() {

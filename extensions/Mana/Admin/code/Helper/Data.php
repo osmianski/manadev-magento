@@ -336,4 +336,70 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
         return $html;
     }
 
+    public function isAjax() {
+        return Mage::app()->getRequest()->isXmlHttpRequest() || Mage::app()->getRequest()->getParam('isAjax');
+    }
+
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     * @return Mana_Admin_Block_Data|null
+     */
+    public function getDataSource($block) {
+        foreach ($block->getChild() as $child) {
+            if ($child instanceof Mana_Admin_Block_Data) {
+                return $child;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Mana_Db_Model_Entity $model
+     * @param $field
+     * @return bool|Varien_Simplexml_Element
+     */
+    public function getFieldXml($model, $field) {
+        if ($model) {
+            if ($scope = $model->getScope()) {
+                return $this->dbConfigHelper()->getFieldXml($scope, $field);
+            }
+        }
+
+        return false;
+    }
+
+    public function getDefaultFormula($model, $field) {
+        if ($fieldXml = $this->getFieldXml($model, $field)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            return $fieldXml->default_formula;
+        }
+
+        return false;
+    }
+
+    public function getDefaultLabel($model, $field) {
+        if ($formula = $this->getDefaultFormula($model, $field)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            if ($result = $this->getFieldXml($model, $field)->default_label) {
+                return $result;
+            }
+            elseif ($formula == '{{= global.' . $field . '}}') {
+                return $this->__('Same For All Stores');
+            }
+        }
+
+        return $formula;
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Db_Helper_Config
+     */
+    public function dbConfigHelper() {
+        return Mage::helper('mana_db/config');
+    }
+
+    #endregion
 }

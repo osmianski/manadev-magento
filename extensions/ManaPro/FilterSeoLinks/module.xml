@@ -17,6 +17,7 @@
             <codePool>local</codePool>
 			<depends>
 				<ManaPro_FilterAdmin />
+				<Mana_Seo />
 			</depends>
         </ManaPro_FilterSeoLinks>
     </modules>

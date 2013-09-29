@@ -30,6 +30,7 @@ examples on what kind of actions can be applied to referenced blocks.
         <reference name="right">
             <block type="mana_filters/view" name="mana.catalog.rightnav" before="-" template="catalog/layer/view.phtml">
                 <action method="setShowInFilter"><showIn>right</showIn></action>
+                <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
             </block>
         </reference>
         <reference name="category.products">

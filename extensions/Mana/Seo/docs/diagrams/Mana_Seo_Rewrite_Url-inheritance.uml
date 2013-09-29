@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>\Mana_Seo_Rewrite_Url</OriginalElement>
+  <nodes>
+    <node x="2.0" y="156.0">\Mage_Core_Model_Url</node>
+    <node x="22.0" y="78.0">\Varien_Object</node>
+    <node x="26.0" y="0.0">\ArrayAccess</node>
+    <node x="0.0" y="234.0">\Mana_Seo_Rewrite_Url</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\Mage_Core_Model_Url" target="\Varien_Object">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="\Mana_Seo_Rewrite_Url" target="\Mage_Core_Model_Url">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="\Varien_Object" target="\ArrayAccess">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="73.0" y="131.0" />
+  <SelectedNodes />
+  <Categories />
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

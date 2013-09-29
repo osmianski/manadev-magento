@@ -193,7 +193,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     public function fetchView($fileName)
     {
         Varien_Profiler::start($fileName);
-
+        //Mage::log("begin $fileName (". get_class($this) . ")", Zend_Log::DEBUG, 'blocks.log');
         // EXTR_SKIP protects from overriding
         // already defined variables
         extract ($this->_viewVars, EXTR_SKIP);
@@ -229,6 +229,8 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             $html = '';
         }
         Varien_Profiler::stop($fileName);
+        //Mage::log("end $fileName (" . get_class($this) . ")", Zend_Log::DEBUG, 'blocks.log');
+
         return $html;
     }
 

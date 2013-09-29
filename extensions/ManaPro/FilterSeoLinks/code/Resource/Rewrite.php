@@ -71,7 +71,7 @@ class ManaPro_FilterSeoLinks_Resource_Rewrite extends Mage_Core_Model_Mysql4_Url
 		Mana_Core_Profiler::stop('mln' . '::' . __CLASS__ . '::' . __METHOD__ . '::' . 'select');
 		return $result['entity_id'];
 	}
-	
+
 	public function getFilterValue($model, $name, $candidates) {
 		/* @var $core Mana_Core_Helper_Data */ $core = Mage::helper(strtolower('Mana_Core'));
 		/* @var $helper Mana_Filters_Helper_Data */ $helper = Mage::helper(strtolower('Mana_Filters'));
