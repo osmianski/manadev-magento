@@ -675,8 +675,8 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         .css({"width": "auto", "height": "auto"})
                         .html(options.content);
 
-                    if (options.popup.class) {
-                        $popup.addClass(options.popup.class);
+                    if (options.popup['class']) {
+                        $popup.addClass(options.popup['class']);
                     }
                     $popup.show();
 

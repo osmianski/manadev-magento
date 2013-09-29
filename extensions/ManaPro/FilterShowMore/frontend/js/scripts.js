@@ -68,7 +68,7 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                 layout.showPopup({
                     content: response,
                     overlay: { opacity: 0.2},
-                    popup: { class: 'm-showmore-popup-container', blockName: self.getPopupBlockName()},
+                    popup: { 'class': 'm-showmore-popup-container', blockName: self.getPopupBlockName()},
                     popupBlock: { host: self },
                     fadein: { overlayTime: 0, popupTime: 300, callback: function(popupBlock) {
                         self._popupBlock = popupBlock;
