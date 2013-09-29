@@ -52,7 +52,6 @@ class ManaPro_FilterAjax_Model_Observer {
                 if ($layeredNavigation->isTreeVisible() && $core->getRoutePath() == 'catalog/category/view' &&
                     !Mage::getStoreConfigFlag('mana/ajax/disable_for_category_redirects'))
                 {
-                    $unfilteredUrl = array();
                     /* @var $treeHelper ManaPro_FilterTree_Helper_Data */
                     $treeHelper = Mage::helper('manapro_filtertree');
                     foreach ($treeHelper->getRootCategory()->getChildrenCategories() as $category) {
