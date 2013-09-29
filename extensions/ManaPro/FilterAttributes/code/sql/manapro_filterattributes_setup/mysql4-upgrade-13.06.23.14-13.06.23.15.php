@@ -20,14 +20,19 @@ $connection = $installer->getConnection();
 
 $installer->startSetup();
 
-$RatingAttributeCode = Mage::getResourceModel('manapro_filterattributes/rating')->getRatingAttributeCode();
-
-$attributeOptions = array(1=>'1 star & up', 2=>'2 star & up', 3=>'3 star & up', 4=>'4 star & up');
-$installer->addAttribute('catalog_product', $RatingAttributeCode, array(
-    'input'         => 'select',
+$ratingModel = Mage::getResourceModel('manapro_filterattributes/rating');
+$ratingAttributeCode = $ratingModel->getRatingAttributeCode();
+$attributeOptions = array(
+    0 => $ratingModel->getOptionName(4),
+    1 => $ratingModel->getOptionName(3),
+    2 => $ratingModel->getOptionName(2),
+    3 => $ratingModel->getOptionName(1),
+    4 => $ratingModel->getOptionName(0));
+$installer->addAttribute('catalog_product', $ratingAttributeCode, array(
+    'input'         => 'multiselect',
 	'source'        => 'eav/entity_attribute_source_table',
-    'type'          => 'int',
-    'backend'       => '',
+    'type'          => 'varchar',
+    'backend'       => 'eav/entity_attribute_backend_array',
     'label'         => 'Rating',
     'user_defined'  => true,
 	'required'      => false,
@@ -43,14 +48,13 @@ $installer->addAttribute('catalog_product', $RatingAttributeCode, array(
 ));
 
 $model = Mage::getModel('eav/entity_attribute')
-     ->load($installer->getAttributeId('catalog_product', $RatingAttributeCode));
+     ->load($installer->getAttributeId('catalog_product', $ratingAttributeCode));
 $model
-     ->setDefaultValue($model->getSource()->getOptionId('1 star & up'))
-     ->save();
+     ->setDefaultValue($model->getSource()->getOptionId($ratingModel->getOptionName(1)))->save();
 
 $installer->addAttributeOption($options);
 // add attribute to all attributesets
-$attributeId= $installer->getAttributeId('catalog_product', $RatingAttributeCode);
+$attributeId= $installer->getAttributeId('catalog_product', $ratingAttributeCode);
 $model=Mage::getModel('eav/entity_setup','core_setup');
 $allAttributeSetIds=$model->getAllAttributeSetIds('catalog_product');
 foreach ($allAttributeSetIds as $attributeSetId) {
@@ -83,21 +87,21 @@ $dbHelper->updateDefaultableField($filter, 'state_height', Mana_Filters_Resource
 $dbHelper->updateDefaultableField($filter, 'state_border_radius', Mana_Filters_Resource_Filter2::DM_STATE_BORDER_RADIUS, array(
     'state_border_radius' => 0), false);
 $filter
-    ->setData('code', $RatingAttributeCode)
+    ->setData('code', $ratingAttributeCode)
     ->setData('type', 'attribute')
-    ->setData('_m_prevent_replication', true);
+    /*->setData('_m_prevent_replication', true)*/;
 $filter->save();
-
+Mage::dispatchEvent('m_saved', array('object' => $filter));
 
 $model = Mage::getModel('eav/entity_attribute')
-     ->load($installer->getAttributeId('catalog_product', $RatingAttributeCode));
+     ->load($installer->getAttributeId('catalog_product', $ratingAttributeCode));
 
 /* @var $files Mana_Core_Helper_Files */
 $files = Mage::helper(strtolower('Mana_Core/Files'));
 $skinBaseDir = Mage::getDesign()->getSkinBaseDir(array('_package' => 'base'));
 foreach ($attributeOptions as $i=>$attributeOption) {
 
-    $imageFile = 'filterattributes/i_rating-' . $i . 'star.gif';
+    $imageFile = 'filterattributes/i_rating-' . (4 - $i) . 'star.gif';
     $sourcePath = $skinBaseDir . "/images/manapro_" . $imageFile;
     $targetPath = $files->getFilename($imageFile, 'image', true);
     if (file_exists($targetPath)) {
@@ -127,7 +131,7 @@ foreach ($attributeOptions as $i=>$attributeOption) {
         ->setData('filter_id', $filter->getId())
         ->setData('option_id', $optionId)
         ->setData('value_id', $valueId)
-        ->setData('_m_prevent_replication', true);
+        /*->setData('_m_prevent_replication', true)*/;
     $filterValue->save();
 }
 

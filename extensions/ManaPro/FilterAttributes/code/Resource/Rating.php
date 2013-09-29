@@ -24,7 +24,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             : 'catalog_product_entity_' . $attribute['backend_type'];
 
         $values = $this->_getAttributeValues( $attribute['attribute_id']);
-        $v = $this->_getIfExprBySortOrderDesc("`ss`.`average_rating`", $values);
+        $v = $this->_getIfExprByGroupedValues("`ss`.`average_rating`", $values);
 
         $db->beginTransaction();
 
@@ -53,7 +53,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             /* @var $select Varien_Db_Select */
             $select = $db->select()
                 ->from(array('e' => $this->getTable('catalog/product')), null)
-                ->joinInner(array('ss' =>  new Zend_Db_Expr('('.$subSelect.')')), "`e`.`entity_id` = `ss`.`product_id`", null)
+                ->joinLeft(array('ss' =>  new Zend_Db_Expr('('.$subSelect.')')), "`e`.`entity_id` = `ss`.`product_id`", null)
                 ->columns($fields);
 
             if (isset($options['product_id'])) {
@@ -112,7 +112,16 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
 
 
     public function getRatingAttributeCode ( ) {
-        return  "rating1";
+        return  "rating";
+    }
+
+    public function getOptionName( $optionValue ) {
+        if ($optionValue > 0) {
+            return $optionValue . Mage::helper("manapro_filterattributes")->__(" & up");
+        }
+        else {
+            return Mage::helper("manapro_filterattributes")-> __("non rated");
+        }
     }
 
     public function _getMinRatingValue ( ) {

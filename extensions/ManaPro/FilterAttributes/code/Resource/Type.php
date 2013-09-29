@@ -40,11 +40,22 @@ abstract class ManaPro_FilterAttributes_Resource_Type extends Mage_Core_Model_My
     protected function _getAttributeValues ( $attributeId) {
         $db = $this->_getReadAdapter();
 
-        $select = $db->select()
-            ->from(array('o' => $this->getTable('eav/attribute_option')), array('sort_order' => new Zend_Db_Expr('@curRow := @curRow + 1'), 'option_id'))
-            ->where("`o`.`attribute_id` = ?", $attributeId)
-            -> join(array('s' =>  new Zend_Db_Expr('(SELECT @curRow := 0)')), null, null)
-            ->order('sort_order ' .  Zend_Db_Select::SQL_DESC);;
+        $select =
+        'SELECT `g` . `sort_order`, GROUP_CONCAT(`g` . `option_id`) AS option_id FROM(
+           SELECT
+              if (`o`.`sort_order` = 4, 0, if (`o`.`option_id` <> @option_id,
+              @rn := 4 -`o`.`sort_order` + least(0, @option_id := `o`.`option_id`),
+              @rn := @rn + 1)) sort_order,
+              (@option_id := `o`.`option_id`) AS option_id
+            FROM `' . $this->getTable('eav/attribute_option') .'` AS `o`
+              INNER JOIN `' . $this->getTable('eav/attribute_option') .'` AS `o2`
+                ON `o`.`attribute_id` = `o2`.`attribute_id`
+                   AND (`o`.`sort_order` >= `o2`.`sort_order` AND `o`.`sort_order` < 4
+                          OR `o`.`sort_order` = `o2`.`sort_order` AND `o`.`sort_order` = 4)
+              CROSS JOIN (SELECT (@option_id := 0)) AS x
+            WHERE (`o`.`attribute_id` = ' . $attributeId . ')
+            ORDER BY `o`.`sort_order` ASC) `g`
+          GROUP BY `g`.`sort_order`';
 
         return $db->fetchAll($select);
     }
@@ -64,18 +75,16 @@ abstract class ManaPro_FilterAttributes_Resource_Type extends Mage_Core_Model_My
         return $result;
     }
 
-    protected function _getIfExprBySortOrderDesc($fieldExpr, $values) {
+    protected function _getIfExprByGroupedValues($fieldExpr, $values) {
         foreach ($values as $source => $target) {
 
             $sort_order = $target["sort_order"];
             $option_id = $target["option_id"];
-            if (empty($result))
-                {
-                    $result = "'$option_id'";
-                }
+            if (empty($result)) {
+                $result = "'$option_id'";
+            }
             $result = "IF($fieldExpr = $sort_order, '$option_id', $result)";
         }
-
         return $result;
     }
 

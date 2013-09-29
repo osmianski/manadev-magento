@@ -127,6 +127,19 @@
 
     </global>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <frontend>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterAttributes>
+                    <files>
+                        <default>ManaPro_FilterAttributes.csv</default>
+                    </files>
+                </ManaPro_FilterAttributes>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
     <adminhtml>
         <!-- This section registers additional translation file with our module-specific strings to be loaded -->
         <translate>

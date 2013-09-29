@@ -17,9 +17,9 @@ if (method_exists($this->getConnection(), 'allowDdlCache')) {
 }
 
 $installer->startSetup();
-$StockStatusAttributeCode = Mage::getResourceModel('manapro_filterattributes/stockstatus')->getStockStatusAttributeCode();
+$stockStatusAttributeCode = Mage::getResourceModel('manapro_filterattributes/stockstatus')->getstockStatusAttributeCode();
 
-$installer->addAttribute('catalog_product', $StockStatusAttributeCode, array(
+$installer->addAttribute('catalog_product', $stockStatusAttributeCode, array(
     'input'         => 'select',
 	'source'        => 'eav/entity_attribute_source_table',
     'type'          => 'int',
@@ -39,14 +39,14 @@ $installer->addAttribute('catalog_product', $StockStatusAttributeCode, array(
 ));
 
 $model = Mage::getModel('eav/entity_attribute')
-     ->load($installer->getAttributeId('catalog_product', $StockStatusAttributeCode));
+     ->load($installer->getAttributeId('catalog_product', $stockStatusAttributeCode));
 $model
      ->setDefaultValue($model->getSource()->getOptionId('In Stock'))
      ->save();
 
 $installer->addAttributeOption($options);
 // add attribute to all attributesets
-$attributeId= $installer->getAttributeId('catalog_product', $StockStatusAttributeCode);
+$attributeId= $installer->getAttributeId('catalog_product', $stockStatusAttributeCode);
 $model=Mage::getModel('eav/entity_setup','core_setup');
 $allAttributeSetIds=$model->getAllAttributeSetIds('catalog_product');
 foreach ($allAttributeSetIds as $attributeSetId) {
