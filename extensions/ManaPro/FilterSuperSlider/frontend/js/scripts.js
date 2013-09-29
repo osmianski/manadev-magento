@@ -251,7 +251,12 @@ ManaPro.filterAttributeSlider = function (id, o) {
 
     function _urlValueOf(index) {
         index = index.round();
-        return o.existingValues[index].urlValue;
+        return o.existingValues[index].url;
+    }
+
+    function _prefixOf(index) {
+        index = index.round();
+        return o.existingValues[index].prefix;
     }
 
     function _change(value, undefined) {
@@ -265,37 +270,8 @@ ManaPro.filterAttributeSlider = function (id, o) {
             window.setLocation(jQuery.base64_decode(o.clearUrl));
         }
         else {
-            var sortedItems = [];
-            jQuery.each(o.existingValues, function (index, value) {
-                if (index >= indexes[0] && index <= indexes[1]) {
-                    sortedItems.push(value);
-                }
-            });
-            sortedItems.sort(function (a, b) {
-                if (a.position < b.position) return -1;
-                if (a.position > b.position) return 11;
-
-                if (a.id < b.id) return -1;
-                if (a.id > b.id) return 1;
-
-                if (a.index < b.index) return -1;
-                if (a.index > b.index) return 1;
-
-                return 0;
-            });
-            var param = '';
-            var prefix = '';
-            var separator = o.separator;
-            jQuery.each(sortedItems, function (index, value) {
-                if (value.prefix) {
-                    prefix = value.prefix;
-                }
-                if (param) {
-                    param += separator;
-                }
-                param += value.url;
-            });
-            setLocation(jQuery.base64_decode(o.url).replace('__0__', prefix + param));
+            var formattedValue = _prefixOf(indexes[0]) + _urlValueOf(indexes[0]) + o.separator + _urlValueOf(indexes[1]);
+            window.setLocation(jQuery.base64_decode(o.url).replace("__0__", formattedValue));
         }
     }
 

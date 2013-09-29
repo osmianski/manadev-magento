@@ -516,7 +516,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     if ($urlKey = $this->_getValueUrlKey($value)) {
                         return array(
                             'url' => $urlKey['final_url_key'],
-                            'prefix' => $urlKey['final_include_filter_name']
+                            'prefix' => $urlKey['final_include_filter_name'] || $url->getFilterDisplay() == 'slider'
                                 ? $url->getFinalUrlKey().$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
