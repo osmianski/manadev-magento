@@ -38,6 +38,9 @@ function($, ajax, config, layout)
             }
             var result = false;
             var exception = false;
+            if (url == location.href + '#') {
+                return result;
+            }
             var pattern = config.getData('layeredNavigation.ajax.exceptionPatterns');
             if (pattern) {
                 pattern = new RegExp(pattern);
