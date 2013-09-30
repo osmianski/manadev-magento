@@ -132,5 +132,6 @@ foreach (array('black', 'blue', 'dress', 'color') as $key) {
     }
 }
 
+$utils->setStoreConfig('mana/seo/max_correction_count', 1);
 $utils->reindex('mana_db');
 $utils->reindex('mana_seo_url');
