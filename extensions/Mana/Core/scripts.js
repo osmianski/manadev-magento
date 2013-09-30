@@ -967,7 +967,7 @@ function ($, layout, json, core, config, undefined)
                 var interceptor = false;
                 if (config.getData('ajax.enabled')) {
                     $.each(this._interceptors, function(index, candidateInterceptor) {
-                        if (candidateInterceptor.match(url, element)) {
+                        if (candidateInterceptor.match(decodeURIComponent(url), element)) {
                             interceptor = candidateInterceptor;
                             return false;
                         }
