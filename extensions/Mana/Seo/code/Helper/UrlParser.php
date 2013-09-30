@@ -471,7 +471,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     if ($single) {
                         return $clonedToken;
                     }
-                    $tokens[$clonedToken->getText()] = $clonedToken;
+                    $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
                     $pos = $nextPos + $separatorLength;
                 }
             }
@@ -485,7 +485,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 if ($single) {
                     return $clonedToken;
                 }
-                $tokens[$clonedToken->getText()] = $clonedToken;
+                $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
 
                 $pos = $nextPos;
             }
@@ -781,18 +781,19 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $urlCollection->addFieldToFilter('attribute_id', $attributeId);
         }
         foreach ($urls as $url) {
-            if (isset($result[$url->getFinalUrlKey()])) {
+            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
-                $conflictingToken = $result[$url->getFinalUrlKey()];
+                $conflictingToken = $result[$finalUrlKey];
                 if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
-                    unset($result[$url->getFinalUrlKey()]);
+                    unset($result[$finalUrlKey]);
                 }
             }
-            if (!isset($result[$url->getFinalUrlKey()])) {
-                $token = $tokens[$url->getFinalUrlKey()];
+            if (!isset($result[$finalUrlKey])) {
+                $token = $tokens[$finalUrlKey];
                 $token->setAttributeValueUrl($url);
                 $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
-                $result[$url->getFinalUrlKey()] = $token;
+                $result[$finalUrlKey] = $token;
             }
             elseif (!$url->getFinalIncludeFilterName()) {
                 $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_ATTRIBUTE_VALUE);
@@ -856,19 +857,20 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $urlCollection->addParentCategoryFilter($token->getCategoryPath());
 
         foreach ($urls as $url) {
-            if (isset($result[$url->getFinalUrlKey()])) {
+            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
-                $conflictingToken = $result[$url->getFinalUrlKey()];
+                $conflictingToken = $result[$finalUrlKey];
                 if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
-                    unset($result[$url->getFinalUrlKey()]);
+                    unset($result[$finalUrlKey]);
                 }
             }
-            if (!isset($result[$url->getFinalUrlKey()])) {
-                $token = $tokens[$url->getFinalUrlKey()];
+            if (!isset($result[$finalUrlKey])) {
+                $token = $tokens[$finalUrlKey];
                 $token->setCategoryId($url->getCategoryId());
                 $token->setCategoryPath($token->getCategoryPath().'/'. $url->getCategoryId());
                 $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
-                $result[$url->getFinalUrlKey()] = $token;
+                $result[$finalUrlKey] = $token;
             }
             elseif (!$url->getFinalIncludeFilterName()) {
                 $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_ATTRIBUTE_VALUE);
@@ -1329,5 +1331,22 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         return $this;
     }
 
+    #endregion
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Logger
+     */
+    public function logger() {
+        return Mage::helper('mana_core/logger');
+    }
     #endregion
 }
