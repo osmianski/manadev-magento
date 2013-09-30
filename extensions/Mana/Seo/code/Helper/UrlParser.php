@@ -896,6 +896,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 ->from(array('a' => $res->getTableName('eav/attribute')), 'attribute_code')
                 ->joinInner(array('ca' => $res->getTableName('catalog/eav_attribute')),
                     "`ca`.`attribute_id` = `a`.`attribute_id` AND `ca`.`used_for_sort_by` = 1", null));
+            $this->_toolbarOrders[] = 'position';
         }
         return $this->_toolbarOrders;
     }
