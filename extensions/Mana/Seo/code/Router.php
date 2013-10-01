@@ -34,6 +34,9 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         /* @var $routerHelper Mana_Core_Helper_Router */
         $routerHelper = Mage::helper('mana_core/router');
 
+        /* @var $front Mage_Core_Controller_Varien_Front */
+        $front = $this->getFront();
+
         $path = ltrim(urldecode(str_replace('+', '%2B', $request->getPathInfo())), '/');
         if ($parsedUrl = $parser->parse($path)) {
             $url = $urlModel->getUrl($parsedUrl->getRoute(), array_merge(
@@ -43,19 +46,20 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     ? array('_query' => $parsedUrl->getImplodedQueryParameters())
                     : array()));
 
-            if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK &&
-                $urlModel->getRoutePath() == $path)
-            {
-                $routerHelper
-                    ->forward($parsedUrl->getRoute(), $request,
-                        array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
-                        array_merge($_GET, $parsedUrl->getImplodedQueryParameters()))
-                    ->changePath($parsedUrl->getPageUrlKey().$parsedUrl->getSuffix());
+            if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK) {
+                if (rawurldecode($urlModel->getRoutePath()) == $path) {
+                    $routerHelper
+                        ->forward($parsedUrl->getRoute(), $request,
+                            array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
+                            array_merge($_GET, $parsedUrl->getImplodedQueryParameters()))
+                        ->changePath($parsedUrl->getPageUrlKey().$parsedUrl->getSuffix());
+                }
+                else {
+                    $front->getResponse()->setRedirect($url);
+                    $request->setDispatched(true);
+                }
             }
             elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
-                /* @var $front Mage_Core_Controller_Varien_Front */
-                $front = $this->getFront();
-
                 $front->getResponse()->setRedirect($url);
                 $request->setDispatched(true);
             }

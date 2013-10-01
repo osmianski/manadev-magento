@@ -41,10 +41,11 @@ function($, ajax, config, layout)
             if (url == location.href + '#') {
                 return result;
             }
+            var decodedUrl = decodeURIComponent(url);
             var pattern = config.getData('layeredNavigation.ajax.exceptionPatterns');
             if (pattern) {
                 pattern = new RegExp(pattern);
-                if (pattern.test(url)) {
+                if (pattern.test(decodedUrl)) {
                     return result;
                 }
             }
@@ -87,6 +88,7 @@ function($, ajax, config, layout)
         },
         intercept: function (url, element) {
             var isProductListToolbarClicked = this._isProductListToolbarClicked(element);
+            url = decodeURIComponent(url);
             url = this._getBaseUrl(url) + config.getData('layeredNavigation.ajax.urlKey') +
                 '/' + config.getData('ajax.currentRoute') +
                 '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' + url.substr(this._getBaseUrl(url).length);

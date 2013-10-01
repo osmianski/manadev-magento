@@ -139,7 +139,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $this->_redirectToSubcategory($seoParams);
             uasort($seoParams, array($this, '_compareSeoParams'));
 
-            $routePath = $this->_pageUrlKey;
+            $routePath = str_replace('%2F', '/', rawurlencode($this->_pageUrlKey));
             $first = true;
             foreach ($seoParams as $path) {
                 if ($first) {
@@ -353,10 +353,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             if ($path) {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
-            $path .= $urlKey['final_url_key'];
+            $path .= rawurlencode($urlKey['final_url_key']);
         }
         if ($includeFilterName) {
-            $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $path;
+            $path = rawurlencode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
         }
         return $path;
     }
@@ -369,8 +369,8 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     protected function _generateCategoryParameter($parameterUrl, $value) {
         if ($urlKey = $this->_getCategoryUrlKeys($value)) {
 
-            return array($parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator().
-                $urlKey, $value);
+            return array(rawurlencode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator().
+                rawurlencode($urlKey), $value);
         }
 
         return array(null, null);

@@ -902,11 +902,12 @@ function ($, layout, json, core, config, undefined)
             if (window.History && window.History.enabled) {
                 $(window).on('statechange', self._onStateChange = function () {
                     var State = window.History.getState();
-                    if (self._findMatchingInterceptor(State.url, self._lastAjaxActionSource)) {
-                        self._internalCallInterceptionCallback(State.url, self._lastAjaxActionSource);
+                    var url = State.url; // URL encoded
+                    if (self._findMatchingInterceptor(url, self._lastAjaxActionSource)) {
+                        self._internalCallInterceptionCallback(url, self._lastAjaxActionSource);
                     }
                     else {
-                        self._oldSetLocation(State.url, self._lastAjaxActionSource);
+                        self._oldSetLocation(url, self._lastAjaxActionSource);
                     }
                 });
             }
@@ -921,8 +922,9 @@ function ($, layout, json, core, config, undefined)
 
             // intercept all link clicks
             $(document).on('click', 'a', self._onClick = function () {
-                if (self._findMatchingInterceptor(this.href, this)) {
-                    return self._callInterceptionCallback(this.href, this);
+                var url = this.href; // URL encoded
+                if (self._findMatchingInterceptor(url, this)) {
+                    return self._callInterceptionCallback(url, this);
                 }
                 else {
                     return true;
@@ -948,7 +950,6 @@ function ($, layout, json, core, config, undefined)
         _callInterceptionCallback: function(url, element) {
             if (this._findMatchingInterceptor(url, element)) {
                 this._lastAjaxActionSource = element;
-                url = window.decodeURIComponent(url);
                 if (window.History && window.History.enabled) {
                     //noinspection JSUnresolvedVariable
                     window.History.pushState(null, window.title, url);
@@ -967,7 +968,7 @@ function ($, layout, json, core, config, undefined)
                 var interceptor = false;
                 if (config.getData('ajax.enabled')) {
                     $.each(this._interceptors, function(index, candidateInterceptor) {
-                        if (candidateInterceptor.match(decodeURIComponent(url), element)) {
+                        if (candidateInterceptor.match(url, element)) {
                             interceptor = candidateInterceptor;
                             return false;
                         }

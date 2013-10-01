@@ -1028,7 +1028,7 @@
 			// Unescape hash
 			var tmp;
 			while ( true ) {
-				tmp = window.unescape(result); 
+				tmp = window.unescape(encodeURIComponent(result));
 				if ( tmp === result ) {
 					break;
 				}
