@@ -311,7 +311,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
         $result = array();
         foreach ($categoryIds as $key) {
-            $result[] = $urlKeys[$key];
+            $result[] = rawurlencode($urlKeys[$key]);
         }
         return implode($this->getSchema()->getCategorySeparator(), $result);
     }
@@ -370,7 +370,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         if ($urlKey = $this->_getCategoryUrlKeys($value)) {
 
             return array(rawurlencode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator().
-                rawurlencode($urlKey), $value);
+                $urlKey, $value);
         }
 
         return array(null, null);
