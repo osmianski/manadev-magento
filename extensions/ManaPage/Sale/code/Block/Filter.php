@@ -22,7 +22,10 @@ class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
         $rules = Mage::getModel('catalogrule/rule')->getResourceCollection()
                 ->addFieldToFilter('is_active', 1)
                 ->addWebsiteFilter(Mage::getModel('core/store')->load(Mage::app()->getStore()->getId())->getWebsiteId())
-                ->addFieldToFilter('from_date', array('date' => true, 'to' => $todayDate))
+                ->addFieldToFilter('from_date', array('or' => array(
+                    0 => array('date' => true, 'to' => $todayDate),
+                    1 => array('is' => new Zend_Db_Expr('null')))
+                ))
                 ->addFieldToFilter('to_date', array('or' => array(
                     0 => array('date' => true, 'from' => $todayDate),
                     1 => array('is' => new Zend_Db_Expr('null')))
