@@ -787,4 +787,21 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     public function unaccent($s) {
         return strtr($s, $this->_accentTranslations);
     }
+
+    public function getEmptyBlockHtml($block) {
+        Mage::dispatchEvent('core_block_abstract_to_html_before', array('block' => $block));
+        if (Mage::getStoreConfig('advanced/modules_disable_output/' . $block->getModuleName())) {
+            return '';
+        }
+
+        /**
+         * Use single transport object instance for all blocks
+         */
+        $transportObject = new Varien_Object;
+        $transportObject->setHtml('');
+        Mage::dispatchEvent('core_block_abstract_to_html_after', array('block' => $block, 'transport' => $transportObject));
+        $html = $transportObject->getHtml();
+
+        return $html;
+    }
 }
