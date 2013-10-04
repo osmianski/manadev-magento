@@ -14,11 +14,12 @@ $_core = Mage::helper('mana_core');
 /* @var $core Mana_Filters_Helper_Data */
 $_filters = Mage::helper('mana_filters');
 
-$_isProductListVisible =
+$_hideWhenNoFiltersApplied =
     ($this->hasData('hide_when_no_filters_applied')
         ? $this->getData('hide_when_no_filters_applied')
-        : Mage::getStoreConfigFlag('mana_filters/display/hide_cms_product_list')) &&
-    ($state = $_filters->getLayer()->getState()) && $state->getFilters();
+        : Mage::getStoreConfigFlag('mana_filters/display/hide_cms_product_list'));
+$_isFilterApplied = ($state = $_filters->getLayer()->getState()) && $state->getFilters();
+$_isProductListVisible = $_isFilterApplied || !$_hideWhenNoFiltersApplied;
 
 ?>
 <?php if ($_isProductListVisible) : ?>
