@@ -13,5 +13,11 @@
 (function($) {
     $(function () {
         Mana.Theme.beautifySelects();
+/*
+
+        $('.col-right.sidebar').insertBefore($('.col-wrapper'));
+        $('.col-left.sidebar').insertBefore($('.col-main'));
+*/
+        Mana.Theme.fluidLayout();
     });
 })(jQuery);

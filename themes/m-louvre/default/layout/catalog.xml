@@ -337,8 +337,9 @@ SEO Site Map
 
     <catalog_seo_sitemap translate="label">
         <label>Catalog Seo Sitemap (Common)</label>
+        <!--
         <remove name="right"/>
-        <remove name="left"/>
+        <remove name="left"/>  -->
 
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
