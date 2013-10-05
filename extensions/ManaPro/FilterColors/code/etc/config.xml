@@ -321,7 +321,7 @@
                     <!-- PHTML to be rendered -->
                     <sort_order>300</sort_order>
                     <!-- Position in "Display as" list. The item with least position is the default one. -->
-                    <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
+                    <popup_class>Mana/LayeredNavigation/Popup/ColorOne</popup_class>
                 </colors_label_one>
             </attribute>
 		</display>
