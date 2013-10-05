@@ -22,8 +22,15 @@ class ManaPro_FilterAttributes_Model_Observer {
     {
         /* @var $product Mage_CatalogInventory_Model_Stock_Item */
         $product = $observer->getEvent()->getItem();
-         Mage::getResourceSingleton('manapro_filterattributes/stockstatus')->process($this,
-            array('product_id' => $product->getData('product_id')));
+        if ($product) {
+            $options = array('product_id' => $product->getData('product_id'));
+        }
+        else {
+            $options = array();
+        }
+        Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process(
+            $this,
+            $options);
     }
 
     /**

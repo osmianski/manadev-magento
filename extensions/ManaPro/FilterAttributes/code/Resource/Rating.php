@@ -130,4 +130,5 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
     public function _getMaxRatingValue ( ) {
         return  5;
     }
+
 }

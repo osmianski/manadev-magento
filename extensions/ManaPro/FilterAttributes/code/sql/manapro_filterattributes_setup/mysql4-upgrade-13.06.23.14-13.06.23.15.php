@@ -20,6 +20,7 @@ $connection = $installer->getConnection();
 
 $installer->startSetup();
 
+/* @var $ratingModel ManaPro_FilterAttributes_Resource_Rating */
 $ratingModel = Mage::getResourceModel('manapro_filterattributes/rating');
 $ratingAttributeCode = $ratingModel->getRatingAttributeCode();
 $attributeOptions = array(
@@ -73,7 +74,7 @@ $dbHelper = Mage::helper('mana_db');
 /* @filter Mana_Filters_Model_Filter2 */
 $filter = Mage::getModel('mana_filters/filter2');
 $dbHelper->updateDefaultableField($filter, 'display', Mana_Filters_Resource_Filter2::DM_DISPLAY, array(
-    'display' => 'colors_label'), false);
+    'display' => 'colors_label_one'), false);
 $dbHelper->updateDefaultableField($filter, 'image_width', Mana_Filters_Resource_Filter2::DM_IMAGE_WIDTH, array(
     'image_width' => 69), false);
 $dbHelper->updateDefaultableField($filter, 'image_height', Mana_Filters_Resource_Filter2::DM_IMAGE_HEIGHT, array(
@@ -91,7 +92,6 @@ $filter
     ->setData('type', 'attribute')
     /*->setData('_m_prevent_replication', true)*/;
 $filter->save();
-Mage::dispatchEvent('m_saved', array('object' => $filter));
 
 $model = Mage::getModel('eav/entity_attribute')
      ->load($installer->getAttributeId('catalog_product', $ratingAttributeCode));
@@ -100,7 +100,6 @@ $model = Mage::getModel('eav/entity_attribute')
 $files = Mage::helper(strtolower('Mana_Core/Files'));
 $skinBaseDir = Mage::getDesign()->getSkinBaseDir(array('_package' => 'base'));
 foreach ($attributeOptions as $i=>$attributeOption) {
-
     $imageFile = 'filterattributes/i_rating-' . (4 - $i) . 'star.gif';
     $sourcePath = $skinBaseDir . "/images/manapro_" . $imageFile;
     $targetPath = $files->getFilename($imageFile, 'image', true);
@@ -109,8 +108,9 @@ foreach ($attributeOptions as $i=>$attributeOption) {
     }
     copy($sourcePath, $targetPath);
 
-    /* @filterValue Mana_Filters_Model_Filter2_Value */
+    /* @var $filterValue Mana_Filters_Model_Filter2_Value */
     $filterValue = Mage::getModel('mana_filters/filter2_value');
+    $filterValue->loadByFilterPosition($filter->getId(), $i);
     $dbHelper->updateDefaultableField($filterValue, 'normal_image', Mana_Filters_Resource_Filter2_Value::DM_NORMAL_IMAGE, array(
         'normal_image' => $imageFile), false);
     $dbHelper->updateDefaultableField($filterValue, 'selected_image', Mana_Filters_Resource_Filter2_Value::DM_SELECTED_IMAGE, array(
@@ -135,7 +135,11 @@ foreach ($attributeOptions as $i=>$attributeOption) {
     $filterValue->save();
 }
 
-Mage::register('m_run_db_replication', true);
+Mage::dispatchEvent('m_saved', array('object' => $filter));
+
+if (!Mage::registry('m_run_db_replication')) {
+    Mage::register('m_run_db_replication', true);
+}
 
 Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_attribute')
     ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);

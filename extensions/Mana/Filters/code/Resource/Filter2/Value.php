@@ -22,7 +22,31 @@ class Mana_Filters_Resource_Filter2_Value extends Mana_Db_Resource_Object {
     const DM_NORMAL_HOVERED_IMAGE = 5;
     const DM_SELECTED_HOVERED_IMAGE = 6;
     const DM_STATE_IMAGE = 7;
+
     #endregion
+
+    public function loadByFilterPosition($object, $filterId, $position)
+    {
+        $read = $this->_getReadAdapter();
+
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable())
+            ->where($this->getMainTable() . '.' . 'filter_id' . '=?', $filterId)
+            ->where($this->getMainTable() . '.' . 'position' . '=?', $position);
+
+        if ($read) {
+            $data = $read->fetchRow($select);
+
+            if ($data) {
+                $object->setData($data);
+            }
+        }
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+
+        return $this;
+    }
 
     /**
      * Invoked during resource model creation process, this method associates this resource model with model class

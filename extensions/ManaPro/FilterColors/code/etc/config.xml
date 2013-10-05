@@ -306,6 +306,23 @@
                     <sort_order>300</sort_order> <!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
                 </colors_label>
+                <colors_label_one translate="title" module="manapro_filtercolors">
+                    <title>Colors and Images with Labels (One Item Can Be Selected At A Time) </title>
+                    <!-- this one is displayed in admin -->
+                    <block>manapro_filtercolors/filter</block>
+                    <model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+                    <and_resource>mana_filters/filter_and_attribute</and_resource>
+                    <reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+                    <template>manapro/filtercolors/label_one.phtml</template>
+                    <!-- PHTML to be rendered -->
+                    <sort_order>300</sort_order>
+                    <!-- Position in "Display as" list. The item with least position is the default one. -->
+                    <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
+                </colors_label_one>
             </attribute>
 		</display>
 	</mana_filters>
