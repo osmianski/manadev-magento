@@ -20,15 +20,15 @@ $connection = $installer->getConnection();
 
 $installer->startSetup();
 
-/* @var $ratingModel ManaPro_FilterAttributes_Resource_Rating */
-$ratingModel = Mage::getResourceModel('manapro_filterattributes/rating');
-$ratingAttributeCode = $ratingModel->getRatingAttributeCode();
+/* @var $ratingObserver ManaPro_FilterAttributes_Resource_Rating */
+$ratingObserver = Mage::getResourceModel('manapro_filterattributes/rating');
+$ratingAttributeCode = $ratingObserver->getRatingAttributeCode();
 $attributeOptions = array(
-    0 => $ratingModel->getOptionName(4),
-    1 => $ratingModel->getOptionName(3),
-    2 => $ratingModel->getOptionName(2),
-    3 => $ratingModel->getOptionName(1),
-    4 => $ratingModel->getOptionName(0));
+    0 => $ratingObserver->getOptionName(4),
+    1 => $ratingObserver->getOptionName(3),
+    2 => $ratingObserver->getOptionName(2),
+    3 => $ratingObserver->getOptionName(1),
+    4 => $ratingObserver->getOptionName(0));
 
 $installer->addAttribute('catalog_product', $ratingAttributeCode, array(
     'input'         => 'multiselect',
@@ -52,7 +52,7 @@ $installer->addAttribute('catalog_product', $ratingAttributeCode, array(
 $model = Mage::getModel('eav/entity_attribute')
      ->load($installer->getAttributeId('catalog_product', $ratingAttributeCode));
 $model
-     ->setDefaultValue($model->getSource()->getOptionId($ratingModel->getOptionName(1)))->save();
+     ->setDefaultValue($model->getSource()->getOptionId($ratingObserver->getOptionName(1)))->save();
 
 $installer->addAttributeOption($options);
 // add attribute to all attributesets
