@@ -21,7 +21,7 @@ class Mana_Theme_Block_Links extends Mage_Core_Block_Template
 
         /* @var $parentBlock Mage_Page_Block_Template_Links */
         $parentBlock = $this->getParentBlock();
-        if ($parentBlock && $theme->getPageConfig('general/show_compare_link')) {
+        if ($parentBlock && $theme->getPageConfig('toplinks/show_compare_link')) {
             $count = count($compare->getItemCollection()->load()->getItems());
             if (!$count) {
                 $text = $this->__('Compare', $count);

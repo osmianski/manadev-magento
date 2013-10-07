@@ -27,14 +27,34 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
+<div class="responsive-indicators">
+    <span class="i-any-409">Phones Portrait 409- | </span>
+    <span class="i-410px-589">Phone Landscape 410+ 589-| </span>
+    <span class="i-590-759">Note Landscape 590+ 759-| </span>
+    <span class="i-760px-839">Tablet Portrait and Landscape 760+ 839-| </span>
+    <span class="i-840-any">Tablet Landscape 840+ |</span>
+    <span class="i-any-999">All mobile 999- | </span>
+    <span class="i-1015-any">Default 1015+ |</span>
+    <span class="i-1190-any">Large screen 1190+ | </span>
+    <span class="i-1365-any">Large screen 1365+ |</span>
+    <span class="i-1540-any">Large screen 1540+ |</span>
+    <span class="i-1715-any">Large screen 1715+ |</span>
+    <span class="i-1890-any">Large screen 1890+ |</span>
+</div>
 <div class="header-container">
     <div class="header">
         <div class="quick-access">
-            <?php echo $this->getChildHtml('topSearch') ?>
-            <?php echo $this->getChildHtml('store_language') ?>
-            <?php echo $this->getChildHtml('m_social_links') ?>
-            <?php echo $this->getChildHtml('topLinks') ?>
-            <span class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></span>
+            <div class="forms-box">
+                <?php echo $this->getChildHtml('topSearch') ?>
+                <?php echo $this->getChildHtml('store_language') ?>
+                <?php echo $this->getChildHtml('m_social_links') ?>
+            </div>
+            <div class="user-links">
+                <?php echo $this->getChildHtml('topLinks') ?>
+                <?php if (Mage::getStoreConfigFlag('mana_louvre/toplinks/show_welcome_link')):?>
+                    <span class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></span>
+                <?php endif?>
+            </div>
         </div>
 
         <?php echo $this->getChildHtml('topContainer'); ?>

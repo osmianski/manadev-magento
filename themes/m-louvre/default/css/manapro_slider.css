@@ -78,7 +78,11 @@ box-shadow: inset 0 -8px 10px rgba(32,146,196,0.9);  /* IE6-9 */
 .m-slider-banner .products-list .btn-cart,
 .m-slider-banner .products-list .add-to-links { position: static; float: left; }
 .m-slider-banner .products-list .btn-cart,
-.m-slider-banner .products-list .add-to-links li { float: left; margin: 0 5px 0 0; }
+
+/* nash: .m-slider-banner .products-list .add-to-links li { float: left; margin: 0 5px 0 0; } */
+/* mn: .m-slider-banner .products-list .add-to-links li { float: left; } */
+.m-slider-banner .products-list .add-to-links li { float: left; }
+
 .m-slider-banner .products-list button.btn-cart > span { min-width: 90px; }
 .nav-container+.m-slider-banner .price-from,
 .nav-container+.m-slider-banner .price,

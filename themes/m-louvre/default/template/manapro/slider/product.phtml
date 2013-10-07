@@ -70,6 +70,8 @@ foreach (array('left', 'top', 'width', 'height') as $_field) {
 
 
                 <?php // Product Add To Cart Button ?>
+                <div class="actions">
+                    <div class="actions-wrapper">
                 <?php if ($_slider->getData('product_field_cart')) : ?>
                 <?php if ($_product->isSaleable()): ?>
 
@@ -93,6 +95,8 @@ foreach (array('left', 'top', 'width', 'height') as $_field) {
                     </ul>
                <?php endif; ?>
 
+            </div>
+            </div>
             </div>
         </div>
     </li>

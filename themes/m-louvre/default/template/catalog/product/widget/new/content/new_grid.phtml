@@ -64,7 +64,8 @@
                     <?php echo $this->getPriceHtml($_product, true, '-widget-new-grid') ?>
                 <?php endif ?>
                 <div class="actions">
-                    <?php if ($_theme->isVisibleInProductList($this, 'wishlist') || $_theme->isVisibleInProductList($this, 'compare')): ?>
+                    <div class="actions-wrapper">
+                        <?php if ($_theme->isVisibleInProductList($this, 'wishlist') || $_theme->isVisibleInProductList($this, 'compare')): ?>
                         <ul class="add-to-links">
                             <?php if ($this->helper('wishlist')->isAllow() && $_theme->isVisibleInProductList($this, 'wishlist')) : ?>
                                 <?php if (!($_wishlistItem = $_theme->inWishlist($_product))): ?>
@@ -91,6 +92,7 @@
                             <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
                         <?php endif ?>
                     <?php endif; ?>
+                    </div>
                 </div>
             </li>
         <?php if ($i%$_columnCount==0 || $i==count($_products)): ?>

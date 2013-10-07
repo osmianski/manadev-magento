@@ -2,32 +2,346 @@
 
 <layout version="0.1.0">
 <!-- Blocks =================================================================-->
+
     <!-- Layered Navigation show/hide by setting category to anchor=yes -->
 
-    <!-- Categories Block (category anchor=no) -->
+    <!-- Category non anchor page -->
     <catalog_category_default translate="label">
+        <!-- Categories Block (category anchor=no) -->
         <remove name="catalog.leftnav" />
     </catalog_category_default>
 
-    <!-- Log In/Out form in sidebar -->
+
+    <!-- All page while customer is not loged in -->
     <customer_logged_out>
+       <!-- Log In/Out form in sidebar -->
         <remove name="customer_form_mini_login" />
     </customer_logged_out>
 
-    <!-- Cart Sidebar -->
+    <!-- All pages -->
     <default>
+        <!-- Remove Cart Sidebar show/hide in System->Configuration->Checkout->Shopping Cart Sidebar -->
         <remove name="cart_sidebar" />
+
+        <!-- Remove Wishlist block in sidebar -->
+        <remove name="wishlist_sidebar" />
+
+        <!-- Remove Compare block in sidebar -->
+        <remove name="catalog.compare.sidebar" />
+
+        <reference name="left">
+            <block type="core/text_list" name="cart_left_position" before="-" translate="label">
+                <label>Left Column (After Cart)</label>
+            </block>
+            <block type="core/text_list" name="wishlist_left_position" after="cart_left_position" translate="label">
+                <label>Left Column (After Wishlist)</label>
+            </block>
+            <block type="core/text_list" name="compare_left_position" after="wishlist_left_position" translate="label">
+                <label>Left Column (After Compare)</label>
+            </block>
+        </reference>
+        <reference name="right">
+            <block type="core/text_list" name="cart_right_position" before="-" translate="label">
+                <label>Right Column (After Cart)</label>
+            </block>
+            <block type="core/text_list" name="wishlist_right_position" after="cart_right_position" translate="label">
+                <label>Right Column (After Wishlist)</label>
+            </block>
+            <block type="core/text_list" name="compare_right_position" after="wishlist_right_position" translate="label">
+                <label>Right Column (After Compare)</label>
+            </block>
+        </reference>
    </default>
-    <!-- Compare -->
+
+   <!-- Product View Pages -->
+   <catalog_product_view>
+
+        <!-- Remove Related Products block in sidebar -->
+        <remove name="catalog.product.related" />
+
+        <reference name="left">
+            <block type="core/text_list" name="related_left_position" after="compare_left_position" translate="label">
+                <label>Left Column (After Related Products)</label>
+            </block>
+        </reference>
+        <reference name="right">
+            <block type="core/text_list" name="related_right_position" after="compare_right_position" translate="label">
+                <label>Right Column (After Related Products)</label>
+            </block>
+        </reference>
+   </catalog_product_view>
+
+<!-- Block Positions ============================================================-->
+
+    <!-- Cart Sidebar -->
+	<m_default_cart_right>
+	    <reference name="cart_right_position">
+            <block type="checkout/cart_sidebar" name="cart_right" template="checkout/cart/sidebar.phtml" before="-">
+                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>bundle</type><block>bundle/checkout_cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <block type="core/text_list" name="cart_right.extra_actions" as="extra_actions" translate="label" module="checkout">
+                    <label>Shopping Cart Sidebar Extra Actions</label>
+                </block>
+            </block>
+	    </reference>
+	</m_default_cart_right>
+	<m_default_cart_left>
+	    <reference name="cart_left_position">
+            <block type="checkout/cart_sidebar" name="cart_left" template="checkout/cart/sidebar.phtml" before="-">
+                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>bundle</type><block>bundle/checkout_cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <block type="core/text_list" name="cart_left.extra_actions" as="extra_actions" translate="label" module="checkout">
+                    <label>Shopping Cart Sidebar Extra Actions</label>
+                </block>
+            </block>
+	    </reference>
+	</m_default_cart_left>
+
+    <!-- Wishlist Sidebar -->
+	<m_default_wishlist_right>
+	    <reference name="wishlist_right_position">
+            <block type="wishlist/customer_sidebar" name="wishlist_right" as="wishlist" after="compare_right" template="wishlist/sidebar.phtml"/>
+	    </reference>
+	</m_default_wishlist_right>
+	<m_default_wishlist_left>
+	    <reference name="wishlist_left_position">
+            <block type="wishlist/customer_sidebar" name="wishlist_left" as="wishlist" after="compare_left" template="wishlist/sidebar.phtml"/>
+	    </reference>
+	</m_default_wishlist_left>
+
+    <!-- Compare Sidebar -->
+	<m_default_compare_right>
+	    <reference name="compare_right_position">
+            <block type="catalog/product_compare_sidebar" after="cart_right" name="compare_right" template="catalog/product/compare/sidebar.phtml"/>
+	    </reference>
+	</m_default_compare_right>
+	<m_default_compare_left>
+	    <reference name="compare_left_position">
+            <block type="catalog/product_compare_sidebar" after="cart_left" name="compare_left" template="catalog/product/compare/sidebar.phtml"/>
+	    </reference>
+	</m_default_compare_left>
+
+    <!-- Related Sidebar -->
+	<m_catalog_product_view_related_right>
+	    <reference name="related_right_position">
+            <block type="catalog/product_list_related" name="related_right" before="-" template="catalog/product/list/related.phtml"/>
+	    </reference>
+	</m_catalog_product_view_related_right>
+	<m_catalog_product_view_related_left>
+	    <reference name="related_left_position">
+            <block type="catalog/product_list_related" name="related_left" before="-" template="catalog/product/list/related.phtml"/>
+	    </reference>
+	</m_catalog_product_view_related_left>
 
 <!-- Page Layouts ============================================================-->
 
-    <!-- Page Layouts -->
+
+    <!-- Default layout, loads most of the pages -->
+    <default translate="label" module="page">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </default>
+
+    <!-- All Pages (Print Version) -->
+    <print translate="label" module="page">
+        <reference name="root">
+            <action method="setTemplate"><template>page/print.phtml</template></action>
+        </reference>
+    </print>
+
+    <!--Category Non Anchor default layout-->
+    <catalog_category_default translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_category_default>
+
+    <!-- Category layered navigation (anchor=yea) layout -->
+    <catalog_category_layered translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_category_layered>
+
+    <!-- Product View (Any) page -->
+    <catalog_product_view translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_product_view>
+
+    <!-- Product View (Simple) page -->
+    <PRODUCT_TYPE_simple translate="label" module="catalog">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_simple>
+
+    <!-- Product View (Configurable) page -->
+    <PRODUCT_TYPE_configurable translate="label" module="catalog">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_configurable>
+
+    <!-- Product View (Grouped) page -->
+    <PRODUCT_TYPE_grouped translate="label" module="catalog">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_grouped>
+
+    <!-- Product View (Virtual) page -->
+    <PRODUCT_TYPE_virtual translate="label" module="catalog">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_virtual>
+
+    <!-- Compare products page -->
+    <catalog_product_compare_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/popup.phtml</template></action>
+        </reference>
+    </catalog_product_compare_index>
+
+    <!-- Shopping Cart Page -->
+    <checkout_cart_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+    </checkout_cart_index>
+
+    <!-- One Page Checkout -->
+    <checkout_onepage_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </checkout_onepage_index>
+
+    <!-- Customer account pages, rendered for all tabs in dashboard -->
+    <customer_account translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </customer_account>
+
+    <!-- Log In Page -->
     <customer_account_login translate="label">
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
     </customer_account_login>
+
+    <!-- Log Out Success Page -->
+    <customer_account_logoutsuccess translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </customer_account_logoutsuccess>
+
+    <!-- Register Page -->
+    <customer_account_create translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </customer_account_create>
+
+    <!-- Forgot Password Page -->
+    <customer_account_forgotpassword translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </customer_account_forgotpassword>
+
+    <!-- Contact Us Page -->
+    <contacts_index_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </contacts_index_index>
+
+    <!-- Email To Friend Page -->
+    <catalog_product_send translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_product_send>
+
+    <!-- Sitemap Page (Common) -->
+    <catalog_seo_sitemap translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_seo_sitemap>
+
+    <!-- Catalog Seo Sitemap (Category List) -->
+    <catalog_seo_sitemap_category translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+    </catalog_seo_sitemap_category>
+
+    <!-- Catalog Seo Sitemap (Category Tree) when set in System->Configuration->Catalog->Sitemap -->
+    <catalog_seo_sitemap_category_tree translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </catalog_seo_sitemap_category_tree>
+
+    <!-- Catalog Seo Sitemap (Product List) -->
+    <catalog_seo_sitemap_product translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+    </catalog_seo_sitemap_product>
+
+    <!-- Quick Search Results Page -->
+    <catalogsearch_result_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </catalogsearch_result_index>
+
+    <!-- Advanced Search Page -->
+    <catalogsearch_advanced_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </catalogsearch_advanced_index>
+
+    <!-- Advanced search results -->
+    <catalogsearch_advanced_result translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </catalogsearch_advanced_result>
+
+    <!-- Popular Search Terms Page -->
+    <catalog_seo_searchterm_popular translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+    </catalog_seo_searchterm_popular>
+
+    <!-- Tag List Page -->
+    <tag_list_index translate="label">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </tag_list_index>
+
+    <!-- Gueat Book -->
+    <manapro_guestbook_book_index translate="label" module="manapro_guestbook">
+        <reference name="root">
+            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+        </reference>
+    </manapro_guestbook_book_index>
 
 </layout>
 

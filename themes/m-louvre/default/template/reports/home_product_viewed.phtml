@@ -45,6 +45,7 @@
                 <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
                 <?php echo $this->getPriceHtml($_product, true, '-home-viewed') ?>
                 <div class="actions">
+                    <div class="actions-wrapper">
                     <ul class="add-to-links">
                         <?php if ($this->helper('wishlist')->isAllow()) : ?>
                             <li><a href="<?php echo $this->getAddToWishlistUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
@@ -58,6 +59,7 @@
                     <?php else: ?>
                         <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
                     <?php endif; ?>
+                </div>
                 </div>
             </li>
         <?php if ($i%$_columnCount==0 || $i==count($_products)): ?>
