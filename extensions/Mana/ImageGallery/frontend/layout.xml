@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+  <default>
+        <reference name="head">
+        	<block  type="mana_imagegallery/head" name="lightbox.initialize"
+            	template="mana/imagegallery/product/view/head.phtml" />
+            <action method="addItem"><type>skin_js</type><name>js/lightbox.js</name><params/></action>
+            <action method="addCss"><stylesheet>css/lightbox.css</stylesheet><params>media="screen"</params></action>
+        </reference>
+  </default>
+	<catalog_product_view>
+        <reference name="product.info.media">
+            <action method="setTemplate"><template>mana/imagegallery/product/view/media.phtml</template></action>
+        </reference>
+	</catalog_product_view>
+	<review_product_list>
+        <reference name="product.info.media">
+            <action method="setTemplate"><template>mana/imagegallery/product/view/media.phtml</template></action>
+        </reference>
+	</review_product_list>
+</layout>

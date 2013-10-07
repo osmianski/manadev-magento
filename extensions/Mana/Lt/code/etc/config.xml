@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Lt
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_Lt>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.20.09</version>
+        </Mana_Lt>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Lt_Helper_Data
+		class is accessible through Mage::helper('mana_lt') call, other Mana_Lt_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_lt/xxx_yyy') call. -->
+        <helpers>
+            <mana_lt>
+                <!-- This says that string 'mana_lt' corresponds to Mana_Lt_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_Lt_Helper</class>
+            </mana_lt>
+        </helpers>
+        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+            Mage::getSingleton('<model type>') calls. That is, Mana_Lt_Model_XXX_YYY classes are accessible as
+            'mana_lt/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+        <models>
+            <!-- This says that string 'mana_lt' corresponds to Mana_Lt_Model pseudo-namespace in
+                getModel() and getSingleton() calls. -->
+            <mana_lt>
+                <class>Mana_Lt_Model</class>
+                <!-- This tells Magento to read config/global/models/mana_lt_resources sections and register
+                    resource model information from there -->
+                <resourceModel>mana_lt_resources</resourceModel>
+            </mana_lt>
+            <!-- This says that string 'mana_lt' corresponds to Mana_Lt_Resource pseudo-namespace in
+                getResourceModel() calls. -->
+            <mana_lt_resources>
+                <class>Mana_Lt_Resource</class>
+                <entities>
+                    <rate><table>m_ltl_rate</table></rate>
+                </entities>
+            </mana_lt_resources>
+            <!-- INSERT HERE: rewrites, ... -->
+        </models>
+        <!-- This tells Magento to analyze sql/mana_lt_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <mana_lt_setup>
+                <setup>
+                    <module>Mana_Lt</module>
+                </setup>
+            </mana_lt_setup>
+        </resources>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

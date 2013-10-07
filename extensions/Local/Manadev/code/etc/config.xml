@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Local_Manadev
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: New Module/etc/config.xml -->
+<config>
+	<!-- This section registers module with Magento system. -->
+	<modules>
+		<Local_Manadev>
+		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
+		  	the last number used only the were more than one change in database structure during the same release.  -->
+		    <version>12.08.23.07</version>
+		</Local_Manadev>
+	</modules>
+	<!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+	<global>
+		<!-- This section registers helper classes to be accessible through Mage::helper() method. Local_Manadev_Helper_Data
+		class is accessible through Mage::helper('local_manadev') call, other Local_Manadev_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('local_manadev/xxx_yyy') call. -->
+		<helpers>
+			<local_manadev>
+				<!-- This says that string 'local_manadev' corresponds to Local_Manadev_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+				<class>Local_Manadev_Helper</class>
+			</local_manadev>
+		</helpers>
+		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
+		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
+		Local_Manadev_Block_XXX_YYY classes are accessible as 'local_manadev/xxx_yyy' type strings both in layout files
+		and in createBlock() calls. -->
+		<blocks>
+			<!-- This says that string 'local_manadev' corresponds to Local_Manadev_Block pseudo-namespace in 
+			layout xml files and in createBlock() calls. -->
+			<local_manadev>
+				<class>Local_Manadev_Block</class>
+			</local_manadev>
+			<!-- BASED ON SNIPPET: Blocks/Rewrite support (config.xml) -->
+			<!-- This declares that current module will rewrite some block types in module shortnamed 'review'. -->
+			<review>
+				<rewrite>
+					<helper>Local_Manadev_Block_Review</helper>
+					<!-- INSERT HERE: individual type rewrites -->
+				</rewrite>
+			</review>
+			<adminhtml>
+				<rewrite>
+					<sales_order_invoice_view>Local_Manadev_Block_Invoice_View</sales_order_invoice_view>
+					<sales_invoice_grid>Local_Manadev_Block_Invoice_Grid</sales_invoice_grid>
+					<sales_order_creditmemo_view>Local_Manadev_Block_Creditmemo_View</sales_order_creditmemo_view>
+					<sales_creditmemo_grid>Local_Manadev_Block_Creditmemo_Grid</sales_creditmemo_grid>
+                    <sales_order_grid>Local_Manadev_Block_Order_Grid</sales_order_grid>
+                </rewrite>
+			</adminhtml>
+		</blocks>
+		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
+		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
+		Mage::getSingleton('<model type>') calls. That is, Local_Manadev_Model_XXX_YYY classes are accessible as 
+		'local_manadev/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
+		<models>
+			<!-- This says that string 'local_manadev' corresponds to Local_Manadev_Model pseudo-namespace in 
+			getModel() and getSingleton() calls. -->
+			<local_manadev>
+				<class>Local_Manadev_Model</class>
+				<!-- BASED ON SNIPPET: Resources/Declare resource section (config.xml) -->
+				<!-- This tells Magento to read config/global/models/local_manadev_resources sections and register
+				resource model information from there -->
+				<resourceModel>local_manadev_resources</resourceModel>
+			</local_manadev>
+			<!-- BASED ON SNIPPET: Resources/Resource support (config.xml) -->
+			<!-- This says that string 'local_manadev' corresponds to Local_Manadev_Resource pseudo-namespace in 
+			getResourceModel() calls. -->
+			<local_manadev_resources>
+				<class>Local_Manadev_Resource</class>
+				<entities>
+					<!-- INSERT HERE: table-entity mappings -->
+					<download><table>m_download</table></download>
+					<download_failure><table>m_download_failure</table></download_failure>
+					<request><table>m_request</table></request>
+				</entities>
+			</local_manadev_resources>
+			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
+			<!-- This declares that current module will rewrite some model types in module shortnamed 'customer'. -->
+			<customer>
+				<rewrite>
+					<customer>Local_Manadev_Model_Customer</customer>
+					<address>Local_Manadev_Model_Address_Customer</address>
+					<!-- INSERT HERE: individual type rewrites -->
+				</rewrite>
+			</customer>
+			<tax>
+                <rewrite>
+                    <sales_total_quote_tax>Local_Manadev_Model_Tax</sales_total_quote_tax>
+                </rewrite>
+			</tax>
+			<salesrule>
+                <rewrite>
+                    <validator>Local_Manadev_Model_Discount</validator>
+                </rewrite>
+			</salesrule>
+			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
+			<!-- This declares that current module will rewrite some model types in module shortnamed 'checkout'. -->
+			<checkout>
+				<rewrite>
+					<type_onepage>Local_Manadev_Model_Onepage</type_onepage>
+					<!-- INSERT HERE: individual type rewrites -->
+				</rewrite>
+			</checkout>
+			<sales>
+                <rewrite>
+                    <order_address>Local_Manadev_Model_Address_Order</order_address>
+                    <quote_address>Local_Manadev_Model_Address_Quote</quote_address>
+                </rewrite>
+			</sales>
+			<mana_checkout>
+                <rewrite>
+                    <processing>Local_Manadev_Model_Checkout_Processing</processing>
+                </rewrite>
+			</mana_checkout>
+			<!-- INSERT HERE: rewrites, ... -->
+		</models>
+		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
+		<!-- This section registers event handlers of this module defined in Local_Manadev_Model_Observer with events defined in other
+		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler
+		method of Local_Manadev_Model_Observer class gets called. -->
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<sales_order_invoice_save_before><!-- this is event name this module listens for -->
+				<observers>
+					<local_manadev>
+						<class>local_manadev/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareInvoiceForAccounting</method> <!-- event handler method name -->
+					</local_manadev>
+				</observers>
+			</sales_order_invoice_save_before>
+			<sales_order_creditmemo_save_before><!-- this is event name this module listens for -->
+				<observers>
+					<local_manadev>
+						<class>local_manadev/observer</class> <!-- model name of class containing event handler methods -->
+						<method>prepareCreditmemoForAccounting</method> <!-- event handler method name -->
+					</local_manadev>
+				</observers>
+			</sales_order_creditmemo_save_before>
+            <adminhtml_block_html_before><!-- this is event name this module listens for -->
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>extendBackendForms</method>
+                        <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </adminhtml_block_html_before>
+            <controller_action_predispatch_adminhtml_customer_group_save><!-- this is event name this module listens for -->
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>saveIndependentTaxCode</method>
+                        <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </controller_action_predispatch_adminhtml_customer_group_save>
+		</events>
+		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
+		<!-- This tells Magento to analyze sql/local_manadev_setup directory for install/upgrade scripts. 
+		Installation scripts should be named as 'mysql4-install-<new version>.php'. 
+		Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+		<resources>
+			<local_manadev_setup>
+				<setup>
+					<module>Local_Manadev</module>
+					<class>Local_Manadev_Resource_Setup</class>
+				</setup>
+			</local_manadev_setup>
+		</resources>
+		<!-- This section registers email template files to be accessible from global system configuration. 
+		Typically these files are default email templates for specific email situations. -->
+		<template>
+            <email>
+               <local_manadev_emails_new_request_to_customer_template translate="label" module="local_manadev">
+                   <label>local_manadev/customer/request_new.html</label>
+                   <file>local_manadev/customer/request_new.html</file>
+                   <type>html</type>
+               </local_manadev_emails_new_request_to_customer_template>
+               <local_manadev_emails_new_request_to_owner_template translate="label" module="local_manadev">
+                   <label>local_manadev/owner/request_new.html</label>
+                   <file>local_manadev/owner/request_new.html</file>
+                   <type>html</type>
+               </local_manadev_emails_new_request_to_owner_template>
+            </email>
+		</template>
+		<!-- INSERT HERE: blocks, models, ... -->
+		<cms>
+			<!-- here we specify class to be responsible for template directive processing in content -->
+			<page><tempate_filter>local_manadev/template_filter</tempate_filter></page>
+			<block><tempate_filter>local_manadev/template_filter</tempate_filter></block>
+		</cms>
+		<customer>
+			<address>
+				<formats>
+                    <pdf translate="title" module="customer">
+                        <title>PDF (EN)</title>
+                    </pdf>
+                    <pdf_lt translate="title" module="customer">
+                        <title>PDF (LT)</title>
+                    </pdf_lt>
+				</formats>
+			</address>
+		</customer>
+		<fieldsets>
+            <m_customer_address>
+                <prefix>
+                    <from_quote_address>*</from_quote_address>
+                </prefix>
+                <firstname>
+                    <from_quote_address>*</from_quote_address>
+                </firstname>
+                <middlename>
+                    <from_quote_address>*</from_quote_address>
+                </middlename>
+                <lastname>
+                    <from_quote_address>*</from_quote_address>
+                </lastname>
+                <suffix>
+                    <from_quote_address>*</from_quote_address>
+                </suffix>
+                <company>
+                    <from_quote_address>*</from_quote_address>
+                </company>
+                <street>
+                    <from_quote_address>street_full</from_quote_address>
+                </street>
+                <city>
+                    <from_quote_address>*</from_quote_address>
+                </city>
+                <region>
+                    <from_quote_address>*</from_quote_address>
+                </region>
+                <region_id>
+                    <from_quote_address>*</from_quote_address>
+                </region_id>
+                <postcode>
+                    <from_quote_address>*</from_quote_address>
+                </postcode>
+                <country_id>
+                    <from_quote_address>*</from_quote_address>
+                </country_id>
+                <telephone>
+                    <from_quote_address>*</from_quote_address>
+                </telephone>
+                <fax>
+                    <from_quote_address>*</from_quote_address>
+                </fax>
+                <m_company_code>
+                    <from_quote_address>*</from_quote_address>
+                </m_company_code>
+                <m_vat_number>
+                    <from_quote_address>*</from_quote_address>
+                </m_vat_number>
+            </m_customer_address>
+            <sales_copy_order_billing_address>
+                <m_company_code>
+                    <to_order>*</to_order>
+                </m_company_code>
+                <m_vat_number>
+                    <to_order>*</to_order>
+                </m_vat_number>
+            </sales_copy_order_billing_address>
+            <sales_copy_order_shipping_address>
+                <m_company_code>
+                    <to_order>*</to_order>
+                </m_company_code>
+                <m_vat_number>
+                    <to_order>*</to_order>
+                </m_vat_number>
+            </sales_copy_order_shipping_address>
+            <sales_convert_quote_address>
+                <m_company_code>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </m_company_code>
+                <m_vat_number>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </m_vat_number>
+            </sales_convert_quote_address>
+            <sales_convert_order_address>
+                <m_company_code>
+                    <to_quote_address>*</to_quote_address>
+                </m_company_code>
+                <m_vat_number>
+                    <to_quote_address>*</to_quote_address>
+                </m_vat_number>
+            </sales_convert_order_address>
+            <customer_address>
+                <m_company_code>
+                    <to_quote_address>*</to_quote_address>
+                </m_company_code>
+                <m_vat_number>
+                    <to_quote_address>*</to_quote_address>
+                </m_vat_number>
+            </customer_address>
+        </fieldsets>
+	</global>
+	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
+	<!-- This section enables static visual changes in store frontend. -->
+	<frontend>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<local_manadev>
+					<file>local_manadev.xml</file>
+				</local_manadev>
+			</updates>
+		</layout>
+		<!-- BASED ON SNIPPET: Dispatch/Module frontend URI (config.xml) -->
+		<!-- This section registers controllers of module Local_Manadev to be accessible by URI "actions". When 
+		Magento gets request to process (be it full page rendering, partial AJAX refresh, AJAX server call or 
+		other), it decides which controller class should process the request (this process is known as 
+		request dispatching). Standard way of dispatching to parse URI as 
+		.../index.php/<module>/<controller>/<action> and then to find corresponding Magento module, controller
+		and action method. Magento module is sought in global configuration merged from etc/config.xml files of
+		all modules, where frontend/routers/*/args/frontName is equal to <module> part of URI. This is what
+		this section is for - to define correspondence between <module> URI and this module. -->
+		<routers>
+			<local_manadev>
+				<use>standard</use>
+				<args>
+					<module>Local_Manadev</module>
+					<frontName>actions</frontName>
+				</args>
+			</local_manadev>
+		</routers>
+        <events>
+            <controller_action_layout_render_before_checkout_index_index><!-- this is event name this module listens for -->
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>addCheckoutOptions</method>
+                        <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </controller_action_layout_render_before_checkout_index_index>
+            <m_ajax_response><!-- this is event name this module listens for -->
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>renderAjaxResponse</method>
+                        <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </m_ajax_response>
+            <m_ajax_request><!-- this is event name this module listens for -->
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>prepareAjaxRequest</method>
+                        <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </m_ajax_request>
+        </events>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</frontend>
+	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
+	<!-- This section enables static visual changes in admin area. -->
+	<adminhtml>
+		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
+		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+		and executes during page rendering. -->
+		<layout>
+			<updates>
+				<local_manadev>
+					<file>local_manadev.xml</file>
+				</local_manadev>
+			</updates>
+		</layout>
+		<!-- INSERT HERE: layout, translate, routers -->
+	</adminhtml>
+	<!-- BASED ON SNIPPET: Controllers/Subscribe to adminhtml router (config.xml) -->
+	<!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action 
+	method in this modules controllers folder. That is for /admin/a/b it will search for controllers/A.php, in it
+	it will expect Local_Manadev_AController class, and in class it will expect bAction() method. In most cases, 
+	when it does not find suitable method, dispatcher continues with searching in Mage_Adminhtml module. -->
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<local_manadev before="Mage_Adminhtml">Local_Manadev</local_manadev>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <!-- This section contains default values for setting in global System Configuration specified in 
+	system.xml -->
+    <mana_ajax>
+        <allowed_actions>
+            <checkout_index_index>
+                <update/>
+            </checkout_index_index>
+        </allowed_actions>
+    </mana_ajax>
+    <default>
+		<local_manadev_emails>
+			<new_request_to_customer>
+				<enabled>1</enabled>
+				<identity>general</identity>
+				<copy_method>bcc</copy_method>
+			</new_request_to_customer>
+			<new_request_to_owner>
+				<enabled>1</enabled>
+				<identity>general</identity>
+				<copy_method>bcc</copy_method>
+			</new_request_to_owner>
+		</local_manadev_emails>
+	</default>
+	<!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>

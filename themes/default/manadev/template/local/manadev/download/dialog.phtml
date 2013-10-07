@@ -1,0 +1,73 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Local_Manadev
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Local_Manadev_Block_Download_Dialog */
+?>
+<div id="download-dialog">
+<ul class="intro">
+<li class="register"><p><?php echo $this->__('<strong>Register</strong> now and get instant access to our updates section.') ?></p></li>
+<li class="login"><p><?php echo $this->__('Or just <strong>log in</strong> if you are already registered!') ?></p></li>
+</ul>
+<ul class="form">
+<li class="register">
+<form id="register-and-download-form" method="post" action="#">
+	<input type="hidden" name="product_id" value="<?php echo $this->getProductId() ?>" />
+	<div id="reg-details-for-download">
+	<table>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Your Name') ?></td>
+			<td class="field-value"><input type="text" id="register-and-download-name" name="customer_name" 
+				title="<?php echo $this->__('To be displayed when you logged in.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Email') ?></td>
+			<td class="field-value"><input type="text" id="register-and-download-email" name="customer_email" 
+				title="<?php echo $this->__('To be used as a login name and for communication.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Password') ?></td>
+			<td class="field-value"><input type="password" id="register-and-download-password" name="customer_password" 
+				title="<?php echo $this->__('Password should be at least 7 symbol length, containing both alphabeticand numeric characters.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Confirm Your Password') ?></td>
+			<td class="field-value"><input type="password" id="register-and-download-password-confirmed" name="customer_password_confirmed"
+				title="<?php echo $this->__('Enter your password once again.') ?>" /></td>
+		</tr>
+	</table>
+	</div>
+	<p>
+		<input id="download-no-thanks" name="customer_is_guest" type="checkbox" />
+		<label id="download-no-thanks-label" for="download-no-thanks" 
+			title="<?php echo $this->__('No thanks. Just proceed to download.') ?>">
+			<?php echo $this->__('No thanks. Just proceed to download.') ?></label>
+	</p>
+</form>
+</li>
+<li class="login">
+<form id="login-and-download-form" method="post" action="#">
+	<input type="hidden" name="product_id" value="<?php echo $this->getProductId() ?>" />
+	<table>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Email') ?></td>
+			<td class="field-value"><input type="text" id="login-and-download-email" name="customer_email" 
+				title="<?php echo $this->__('To be used as a login name and for communication.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Password') ?></td>
+			<td class="field-value"><input type="password" id="login-and-download-password" name="customer_password" 
+				title="<?php echo $this->__('Password should be at least 7 symbol length, containing both alphabeticand numeric characters.') ?>" /></td>
+		</tr>
+	</table>
+</form>
+</li>
+</ul>
+<ul class="buttons">
+<li class="register"><button title="<?php echo $this->__('Submit and Download') ?>"><?php echo $this->__('Submit and Download') ?></button></li>
+<li class="login"><button title="<?php echo $this->__('Login and Download') ?>"><?php echo $this->__('Login and Download') ?></button></li>
+</ul>
+</div>

@@ -1,0 +1,95 @@
+<?php echo $this->getIgLightBoxJsConfig() ?>
+
+<div id="ig-lightbox-back"></div>
+<div id="ig-lightbox-image"></div>
+<div id="ig-lightbox-loading"></div>
+<img id="ig-lightbox-image-src" />
+<table id="ig-lightbox-image-commands">
+	<tbody>
+		<tr>
+			<td style="text-align: center" width="64"><a href="#" onclick="ig_lightbox_prev()"><img id="ig-lightbox-prev" src="<?php echo $this->getSkinUrl('images/ig_lightbox/prev.png') ?>" alt="prev" /></a></td>
+			<td id="ig-lightbox-image-commands-label-td"><div id="image-label"></div></td>
+			<td style="text-align: center" width="64"><a href="#" onclick="ig_lightbox_next()"><img id="ig-lightbox-next" src="<?php echo $this->getSkinUrl('images/ig_lightbox/next.png') ?>" alt="next" /></a></td>
+		</tr>
+	</tbody>
+</table>
+<div id="ig-lightbox-image-close" style="display:none"><a href="#" onclick="ig_lightbox_hide()"><img id="ig-lightbox-image-close-img" src="<?php echo $this->getSkinUrl('images/ig_lightbox/close.png') ?>" alt="close" /></a></div>
+
+<?php
+	$_ig_lightbox_images_count = 0;
+	
+    $_product = $this->getProduct();
+    $_helper = $this->helper('catalog/output');
+?>
+
+<a href="#" onclick="ig_lightbox_show(-1)">
+<?php
+	list($width, $height)=$this->getIgLightBoxMainImageSize();
+	$_imgHelper = $this->helper('catalog/image')->init($_product, 'image')->keepFrame(false);
+	if ($_imgHelper->getOriginalWidth() > $width) {
+    $_imgHelper->resize($width, $height);  
+  }
+	$_img = '<img id="image" src="'.$_imgHelper.'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+	echo $_helper->productAttribute($_product, $_img, 'image')
+?>
+</a>
+
+<?php
+	$js_load=array();
+	if (count($this->getGalleryImages()) > 1)
+	{
+?>
+<div class="more-views">
+    <h4><?php echo $this->__('More Views') ?></h4>
+    <ul>
+    <?php
+		$c=0;
+    	foreach ($this->getGalleryImages() as $_image)
+    	{
+    		list($width, $height)=$this->getIgLightBoxBigImageSize();
+    		$src=$this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepFrame(false)->constrainOnly(true)->resize($width, $height);
+			
+			if ($_image->getFile() == $_product->getImage())
+			{
+				array_push($js_load, "ig_lightbox_main_img=$c;");
+			}
+		
+			$lbl=$this->__("Photo %d of %d", $c+1, sizeof($this->getGalleryImages()));
+			
+			if ($_image->getLabel())
+				$lbl.=' - '.$this->htmlEscape($_image->getLabel());
+    					
+			array_push($js_load, "ig_lightbox_img_sequence.push('$src');");
+			array_push($js_load, "ig_lightbox_img_labels.push(".json_encode($lbl).");");
+			
+			list($width, $height)=$this->getIgLightBoxThumbnailImageSize();
+    ?>
+        <li>
+        	<a href="#" onclick="ig_lightbox_show('<?php echo $_ig_lightbox_images_count; ?>')">
+        		<img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepFrame(true)->resize($width, $height); ?>" alt="<?php echo $this->htmlEscape($_image->getLabel()) ?>" title="<?php echo $this->htmlEscape($_image->getLabel()) ?>" />
+        	</a>
+        </li>
+    <?php
+    		$_ig_lightbox_images_count++;
+			$c++;
+    	}
+    ?>
+    </ul>
+</div>
+<?php
+	}
+	else
+	{
+		list($width, $height)=$this->getIgLightBoxBigImageSize();
+		$src = $this->helper('catalog/image')->init($_product, 'image')->keepFrame(false)->resize($width, $height);		
+		
+		array_push($js_load, "ig_lightbox_img_sequence.push('$src');");
+		array_push($js_load, "ig_lightbox_img_labels.push(".json_encode($_product->getName()).");");
+	}
+?>
+
+<script type="text/javascript">
+	Event.observe(window, 'load', function() {
+ 		<?php foreach ($js_load as $line) echo "$line\n" ?>
+	});
+</script>

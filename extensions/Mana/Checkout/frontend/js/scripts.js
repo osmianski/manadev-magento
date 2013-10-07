@@ -12,7 +12,7 @@
  *            would not interfere with other global variables.
  *        b.    we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
  */
-;(function ($, p$) {
+(function ($, p$) {
     function _showPaymentMethodForm() {
         $('.payment-method-form ul').hide('fast');
         $('.payment-method:checked').each(function() {

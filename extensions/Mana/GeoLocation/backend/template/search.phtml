@@ -1,0 +1,27 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_GeoLocation
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+?>
+<div class="entry-edit">
+    <div class="box-left">
+        <form id="search_form" action="<?php echo $this->getUrl('*/*/search') ?>" method="post">
+            <?php echo $this->getBlockHtml('formkey')?>
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Enter IP or Email and Find the Country') ?></h4>
+            </div>
+            <fieldset>
+                <legend><?php echo $this->__('Country Search') ?></legend>
+                <input type="text" name="search" class="required-entry" value="<?php echo $_SERVER['REMOTE_ADDR'] ?>"/>
+                <?php echo $this->getButtonHtml('Search', "this.form.submit()") ?>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+            var importForm = new varienForm('search_form');
+        </script>
+    </div>
+    <div class="clear"></div>
+</div>

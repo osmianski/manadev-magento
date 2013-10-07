@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_modern
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<div class="header-container">
+    <div class="header">
+        <?php if ($this->getIsHomePage()):?>
+        <div class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></div>
+        <?php else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php endif?>
+        
+        
+        <h1 class="top-promo" title="<?php echo $this->__('Development, Themes, Extensions, Widgets and Customization for Magento ecommerce platform'); ?>"><?php echo $this->__('Development and Customization for <span>Magento</span> Ecommerce Platform'); ?></h1>
+        
+        
+    </div>
+    <div class="header-menu">
+        <p class="welcome-msg">&nbsp;</p>
+        <?php echo $this->getChildHtml('topLinks') ?>
+    </div>
+    <div class="quick-access">
+        <?php echo $this->getChildHtml('topMenu') ?>
+    </div>
+    <!-- MANA <?php echo $this->getChildHtml('topBar') ?>
+    -->
+    <div class="f-right">
+    	<?php echo $this->getChildHtml('newsletter') ?>
+    </div>
+    <?php echo $this->getChildHtml('topContainer'); ?>
+</div>

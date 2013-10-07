@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <modules>
+    <Mana_ImageGallery>
+      <version>1.0.0</version>
+    </Mana_ImageGallery>
+  </modules>
+	<global>
+		<helpers>
+			<mana_imagegallery>
+				<class>Mana_ImageGallery_Helper</class>
+			</mana_imagegallery>
+		</helpers>
+		<blocks>
+			<mana_imagegallery>
+				<class>Mana_ImageGallery_Block</class>
+			</mana_imagegallery>
+		</blocks>
+	</global>
+  	<frontend>
+  		<layout>
+  			<updates>
+  				<mana_imagegallery>
+  					<file>mana_imagegallery.xml</file>
+  				</mana_imagegallery>
+  			</updates>
+  		</layout>
+		<translate>
+			<modules>
+				<Mana_ImageGallery>
+					<files>
+						<default>Mana_ImageGallery.csv</default>
+					</files>
+				</Mana_ImageGallery>
+			</modules>
+		</translate>
+  	</frontend>
+</config>

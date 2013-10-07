@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file defines new permissions in system -->
+<config>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<local_manadev translate="title" module="local_manadev">
+										<title>manadev.com</title>
+									</local_manadev>
+									<local_manadev_emails translate="title" module="local_manadev">
+										<title>manadev.com Emails</title>
+									</local_manadev_emails>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

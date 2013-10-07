@@ -1,0 +1,63 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_GeoLocation
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+ /* @var $this Mana_GeoLocation_Block_Import */
+?>
+<div class="entry-edit">
+    <div class="box-left">
+        <form id="import_v4_form" action="<?php echo $this->getUrl('*/*/importV4') ?>" method="post"
+              enctype="multipart/form-data">
+            <?php echo $this->getBlockHtml('formkey')?>
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Import IPv4 addresses') ?></h4>
+            </div>
+            <fieldset>
+                <legend><?php echo $this->__('Import IPv4 addresses') ?></legend>
+                <input type="file" name="file" class="input-file required-entry"/>
+                <?php echo $this->getButtonHtml('Import', "this.form.submit()") ?>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+            var importForm = new varienForm('import_v4_form');
+        </script>
+    </div>
+    <div class="box-left">
+        <form id="import_v6_form" action="<?php echo $this->getUrl('*/*/importV6') ?>" method="post"
+              enctype="multipart/form-data">
+            <?php echo $this->getBlockHtml('formkey')?>
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Import IPv6 addresses') ?></h4>
+            </div>
+            <fieldset>
+                <legend><?php echo $this->__('Import IPv6 addresses') ?></legend>
+                <input type="file" name="file" class="input-file required-entry"/>
+                <?php echo $this->getButtonHtml('Import', "this.form.submit()") ?>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+            var importForm = new varienForm('import_v6_form');
+        </script>
+    </div>
+    <div class="box-left">
+        <form id="import_domain_form" action="<?php echo $this->getUrl('*/*/importDomain') ?>" method="post"
+              enctype="multipart/form-data">
+            <?php echo $this->getBlockHtml('formkey')?>
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Import Internet Domains') ?></h4>
+            </div>
+            <fieldset>
+                <legend><?php echo $this->__('Import Internet Domains') ?></legend>
+                <input type="file" name="file" class="input-file required-entry"/>
+                <?php echo $this->getButtonHtml('Import', "this.form.submit()") ?>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+            var importForm = new varienForm('import_domain_form');
+        </script>
+    </div>
+    <div class="clear"></div>
+</div>

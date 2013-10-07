@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_GeoLocation
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <geolocation translate="title" module="mana_geolocation">
+                    <title>Geo Location</title>
+                    <action>adminhtml/mana_geolocation/</action>
+                    <sort_order>400</sort_order>
+                </geolocation>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana translate="title" module="mana_geolocation">
+                        <title>Configure Mana Extensions</title>
+                        <sort_order>79</sort_order>
+						<children>
+							<geolocation translate="title" module="mana_geolocation">
+								<title>Geo Location</title>
+		                        <sort_order>400</sort_order>
+							</geolocation>
+						</children>
+					</mana>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

@@ -95,7 +95,10 @@
                 </observers>
             </checkout_type_onepage_save_order_after>
         </events>
-        <!-- INSERT HERE: layout, translate, routers -->
+        <secure_url>
+            <checkout_index>/checkout/index</checkout_index>
+            <checkout_smart>/checkout/smart</checkout_smart>
+        </secure_url>
     </frontend>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
 </config>

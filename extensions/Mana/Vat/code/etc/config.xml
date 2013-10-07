@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Vat
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <!-- This section registers module with Magento system. -->
+    <modules>
+        <Mana_Vat>
+            <!-- This version number identifies version of database tables specific to this extension. It is written to
+		  	core_resource table.  -->
+            <version>12.08.18.15</version>
+        </Mana_Vat>
+    </modules>
+    <!-- This section contains module settings which are merged into global configuration during each page load, 
+	each ajax request. -->
+    <global>
+        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_Vat_Helper_Data
+		class is accessible through Mage::helper('mana_vat') call, other Mana_Vat_Helper_XXX_YYY classes are accessible 
+		through  Mage::helper('mana_vat/xxx_yyy') call. -->
+        <helpers>
+            <mana_vat>
+                <!-- This says that string 'mana_vat' corresponds to Mana_Vat_Helper pseudo-namespace in 
+				Mage::helper() calls. -->
+                <class>Mana_Vat_Helper</class>
+            </mana_vat>
+        </helpers>
+        <!-- INSERT HERE: blocks, models, ... -->
+    </global>
+    <!-- INSERT HERE: adminhtml, frontend, ... -->
+</config>
