@@ -663,8 +663,8 @@ a.m-twitter:hover { background-position: bottom right; }
 
 /********** < Navigation */
 .nav-container { position: relative; margin: 0 75px; text-align: center; background: transparent url(../images/nav-shadow.png) center 40px repeat-x; }
-.nav-border-left { position: absolute; bottom:12px; left: -75px; width:75px; height: 10px; background: transparent url(../images/nav-shadow-left.png) 0 0 no-repeat; }
-.nav-border-right { position: absolute; bottom:12px; right: -75px; width:75px; height: 10px; background: transparent url(../images/nav-shadow-right.png) 0 0 no-repeat; }
+.nav-border-left { position: absolute; bottom:12px; left: -75px; width:75px; height: 10px; background: transparent url(../images/nav-shadow.png) 0 0; }
+.nav-border-right { position: absolute; bottom:12px; right: -75px; width:75px; height: 10px; background: transparent url(../images/nav-shadow.png) 0 0; }
 
 #nav { padding:5px 0; margin:10px 0; display: inline-block;}
 
@@ -939,7 +939,7 @@ transition: all 1s ease-in;
 .category-description { margin:0 0 10px; }
 .category-products {}
 /* View Type: Grid */
-.actions-wrapper {  width: 115px; margin: 0 auto; }
+.actions-wrapper {  width: 115px; margin: 0 auto; padding-bottom: 28px; }
 .products-grid { position:relative; margin: 0 auto 20px;}
 .products-grid.last { border-bottom:0; }
 .products-grid.first { border-top:0; }
@@ -961,7 +961,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .products-grid .product-name a {}
 .products-grid .price-box { margin:5px 0; }
 .products-grid .availability { line-height:21px; }
-.products-grid .actions { position:absolute; bottom: 0; text-align: center; width: 155px; background: url(../images/border.png) bottom repeat-x; padding-bottom: 20px;}
+.products-grid .actions { position:absolute; bottom: 0; text-align: center; width: 155px; background: url(../images/border.png) bottom repeat-x; }
 .products-grid .actions .add-to-links {}
 
 .col2-left-layout .products-grid,
@@ -1233,7 +1233,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .add-to-links .separator { display:none; }
 .add-to-links {}
 .add-to-links li { line-height: 25px; margin-bottom: 5px; }
-.add-to-links li a{ line-height: 25px; color:#646464; text-decoration: none; padding: 0 0px; background: gainsboro;  border-radius: 5px; display: inline-block; margin: 0; font-weight: normal; font-size: 12px; width: 100% !important;}
+.add-to-links li a{ line-height: 25px; color:#646464; text-decoration: none; padding: 0 0px; background: gainsboro;  border-radius: 5px; display: inline-block; margin: 0; font-weight: normal; font-size: 12px; width: 100%; }
 .add-to-links li a:hover { color:#535353; background-color: #cbcbcb; }
 .in-wishlist .add-to-links li a.link-wishlist,
 .in-compare .add-to-links li a.link-compare { color: #dcdcdc; background-color: #969696;}
@@ -1982,7 +1982,8 @@ m-register-login-actions {}
 .double-list .price-box:after,
 .img-desc:after,
 .cart .crosssell ul:after,
-.product-view .box-tags ul:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+.product-view .box-tags ul:after,
+.main-container:after  { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
 /* ======================================================================================= */
 #live-demo-banner, .top-banner-container { display: none; }
 
@@ -2004,177 +2005,66 @@ m-register-login-actions {}
 .i-1715-any { display: none; }
 .i-1890-any { display: none; }
 
-/* General styles ===================================================================== */
-.page { margin:0 auto; }
-.col-wrapper,
-.col-main { width:auto !important; }
-.main { position: relative; }
-.col-wrapper,
-.col-main,
-.col-right,
-.col-left { float: none !important; }
-.col-wrapper { padding-right: 220px;}
-.col-main { padding-left: 225px; }
-.col1-layout .col-main { padding-left: 0; }
-.col2-right-layout .col-main { padding-left: 0; padding-right: 220px; }
-.col-right { position: absolute; top:40px; right:0; }
-.col-left { position: absolute; top:40px; left:0; }
-
-/*Grids and Lists*/
-.products-grid li.item { position: relative; }
-.widget-products .products-list { overflow: hidden; margin: 0 auto; }
-.widget-products .products-list .product-shop { width: 140px !important; }
-
-
-.col-wrapper:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
-
-/* Phones to tablets ===================================================================== */
-
-/* Phones Portrait ===================================================================== */
+/* Phones portrait ===================================================================== */
 @media (max-width: 409px) {
 .i-any-409 { display: inline; }
-.page { width:310px; }
 }
 /* Phones landscape ===================================================================== */
 /*1 col with left sidebar*/
 @media (min-width: 410px) and (max-width: 589px) {
 .i-410px-589 { display: inline; }
-.page { width:410px; }
-.col-right,
-.col-left { position: static !important; float:left !important; }
-.col-wrapper { padding: 0 !important; height: 0 !important; }
-.col3-layout .col-main { padding: 5px !important;  margin:0 0 0 5px;  width: 175px !important; float: right !important; }
-.col-main { padding: 5px !important;  margin:0 0 0 5px;  width: 390px !important; float: right !important; }
-.widget-products .products-list li.item { width:380px !important; }
-.widget-products .products-list .product-shop { width:265px !important; }
 }
 
 /*2 col with left sidebar*/
 @media (min-width: 590px) and (max-width: 759px) {
 .i-590px-759 { display: inline; }
-.page { width:585px; }
-.col-right,
-.col-left { position: static !important; float:left !important; }
-.col-wrapper { padding: 0 !important; height: 0 !important; }
-.col3-layout .col-main { padding: 5px !important;  margin:0 0 0 5px;  width: 350px !important; float: right !important; }
-.col-main { padding: 5px !important;  margin:0 0 0 5px;  width: 570px !important; float: right !important; }
-.widget-products .products-list li.item { width:560px !important; }
-.widget-products .products-list .product-shop { width:265px !important; }
 }
 
 /* Tablet Portrait ===================================================================== */
 /*3 col with left sidebar*/
 @media (min-width: 760px) and (max-width: 839px) {
 .i-760px-839 { display: inline; }
-.page { width:760px; }
-.col-right,
-.col-left { position: static !important; float:left !important; }
-.col-wrapper { padding: 0 !important; height: 0 !important; }
-.col3-layout .col-main { padding: 5px !important; margin:0 0 0 5px; width: 525px !important; float: right !important; }
-.col-main { padding: 5px !important; margin:0; width: 750px !important; float: right !important; }
-
-/* 3 Columns Layout */
-.col3-layout .col-right { width: 75px; }
-
-
-.widget-products .products-list li.item { width:730px !important; }
-.widget-products .products-list .product-shop { width:435px !important; }
-
 }
 /* Tablet Landscape ===================================================================== */
 /*2 col*/
 @media (min-width: 840px) and (max-width: 1014px) {
 .i-840-any { display: inline; }
-.page { width:820px; }
-.widget-products .products-list li.item { width:779px !important; }
-.widget-products .products-list .product-shop { width:485px !important; }
-
-.col-right { right:-100px; }
-
-/*
-.col1-layout .products-grid li.item { margin:0 !important; width:145px !important; }
-*/
-
 }
 
 /* Default ===================================================================== */
 /*3 col*/
 @media (min-width: 1015px) and (max-width: 1189px) {
 .i-1015-any { display: inline; }
-.page { width:995px; }
-.widget-products .products-list li.item { width:455px !important; }
-.widget-products .products-list .product-shop { width: 165px !important; }
-button.btn-cart > span, .add-to-links li a { width: auto;}
-/*
-.widget-products .products-list .actions-block { width:125px; }
-*/
 }
 /* Large screen ===================================================================== */
 /*4 col*/
 @media (min-width: 1190px) {
 .i-1190-any { display: inline; }
-.page { width:1170px; }
-.widget-products .products-list li.item { width:542px !important; }
-.widget-products .products-list .product-shop { width: 245px !important; }
 }
 /*5 col*/
 @media (min-width: 1365px) {
 .i-1365-any { display: inline; }
-.page { width:1345px; }
-.widget-products .products-list li.item { width:630px !important; }
-.widget-products .products-list .product-shop { width: 335px !important; }
 }
 /*6 col*/
 @media (min-width: 1540px) {
 .i-1540-any { display: inline; }
-.page { width:1520px; }
 }
 /*7 col*/
 @media (min-width: 1715px) {
 .i-1715-any { display: inline; }
-.page { width:1695px; }
 }
 /*8 col*/
 @media (min-width: 1890px) {
 .i-1890-any { display: inline; }
-.page { width:1870px; }
 }
 
 /* All mobile ===================================================================== */
 @media (max-width: 1014px) {
 .i-any-999 { display: inline; }
-.widget-bestseller .products-list li.item.odd { margin:0 !important; }
-.footer .block-subscribe .col-2 { display: none; }
-.footer .block-subscribe .col-1,
-.footer .block-subscribe .col-3 { width:50%; }
-
-.col4-set .col-1 { float:left; width:50%; }
-.col4-set .col-2 { float:left; width:50%; margin:0; }
-.col4-set .col-3 { float:left; width:50%; }
-.col4-set .col-4 { float:right; width:50%; }
 }
 
 /* Phones ===================================================================== */
 @media (max-width: 759px) {
-
-/* Content Columns */
-.col2-set .col-1 { float:left; width:99%; }
-.col2-set .col-2 { float:left; width:99%; }
-.col2-set .col-narrow { width:99%; }
-.col2-set .col-wide { width:99%; }
-
-.col3-set .col-1 { float:left; width:100%; }
-.col3-set .col-2 { float:left; width:100%; margin-left:0; }
-.col3-set .col-3 { float:left; width:100%; }
-
-.col4-set .col-1 { float:left; width:99%; }
-.col4-set .col-2 { float:left; width:99%; margin:0; }
-.col4-set .col-3 { float:left; width:99%; }
-.col4-set .col-4 { float:right; width:99%; }
-
-.footer .block-subscribe .col-1 { display: none; }
-.footer .block-subscribe .col-3 { width:100%; }
-
 }
 
 
