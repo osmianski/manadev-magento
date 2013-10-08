@@ -24,12 +24,14 @@
 				modal: true, // lock other UI elements while dialog is active
 				resizable: false, // disable resizable corner in dialog
 //				title: $.__("Download Extension \"%s\"", $.options("#download-dialog").productName), // specify dialog title here
-				width: 800 // set dialog width here
+				width: 800, // set dialog width here
+				buttons: [
+				]
 			});
 			$("#download-dialog button").button();
 			
 			// handle register and download button
-			$("#download-dialog .register button").click(function() { 
+			$("#download-dialog .register button").click(function() {
 				if ($("#download-no-thanks:checked").length) {
 					// in case user have said "No, thanks" we ask server add download permission 
 					// into current session  
@@ -42,7 +44,7 @@
 							if (!data || !data.error) {
 								// close dialog and just open download page. Server should have been
 								// prepared to accept this download attempt
-								$(this).dialog("close");
+                                $("#download-dialog").dialog("close");
 								window.location.href = _downloadDialogOptions.downloadUrl;
 							}
 							else {
@@ -66,7 +68,7 @@
 							if (!data || !data.error) {
 								// close dialog and just open download page. Server should have been
 								// prepared to accept this download attempt
-								$(this).dialog("close");
+                                $("#download-dialog").dialog("close");
 								window.location.href = _downloadDialogOptions.downloadUrl;
 							}
 							else {
@@ -93,7 +95,7 @@
 						if (!data || !data.error) {
 							// close dialog and just open download page. Server should have been
 							// prepared to accept this download attempt
-							$(this).dialog("close");
+                            $("#download-dialog").dialog("close");
 							window.location.href = _downloadDialogOptions.downloadUrl;
 						}
 						else {
@@ -188,7 +190,7 @@
 						if (typeof(data) === 'string') { data = $.parseJSON(data); }
 						if (!data || !data.error) {
 							// close dialog and just post the form that should have been posted
-							$(this).dialog("close");
+                            $("#register-dialog").dialog("close");
 							_formToSubmitAfterRegistration.submit();
 							_formToSubmitAfterRegistration = null;
 						}
@@ -214,7 +216,7 @@
 						if (typeof(data) === 'string') { data = $.parseJSON(data); }
 						if (!data || !data.error) {
 							// close dialog and just post the form that should have been posted
-							$(this).dialog("close");
+                            $("#register-dialog").dialog("close");
 							_formToSubmitAfterRegistration.submit();
 							_formToSubmitAfterRegistration = null;
 						}
