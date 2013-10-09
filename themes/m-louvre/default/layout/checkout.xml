@@ -37,8 +37,8 @@ Default layout, loads most of the pages
         <!-- Mage_Checkout -->
         <reference name="top.links">
             <block type="checkout/links" name="checkout_cart_link">
-                <action method="addCartLink"></action>
-                <action method="addCheckoutLink"></action>
+                <action method="addCartLink" ifconfig="mana_louvre/toplinks/show_mycart_link"></action>
+                <action method="addCheckoutLink" ifconfig="mana_louvre/toplinks/show_checkout_link"></action>
             </block>
         </reference>
         <reference name="right">
@@ -55,8 +55,9 @@ Default layout, loads most of the pages
 
     <checkout_cart_index translate="label">
         <label>Shopping Cart</label>
+        <!--
         <remove name="right"/>
-        <remove name="left"/>
+        <remove name="left"/> -->
         <!-- Mage_Checkout -->
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -302,7 +303,7 @@ One page checkout main layout
     <checkout_onepage_index translate="label">
         <label>One Page Checkout</label>
         <!-- Mage_Checkout -->
-        <remove name="left"/>
+        <!-- <remove name="left"/> -->
 
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-right.phtml</template></action>

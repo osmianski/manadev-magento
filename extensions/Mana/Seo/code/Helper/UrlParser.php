@@ -713,7 +713,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     Mana_Seo_Model_Url::STATUS_OBSOLETE
                 )
             ));
-
+        $collection->getSelect()->order('status');
         if ($tokens !== false) {
             $keys = array();
             foreach (array_keys($tokens) as $key) {
@@ -785,7 +785,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
                 $conflictingToken = $result[$finalUrlKey];
-                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
+                if ($url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE && $conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
                     unset($result[$finalUrlKey]);
                 }
             }
@@ -795,7 +795,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
                 $result[$finalUrlKey] = $token;
             }
-            elseif (!$url->getFinalIncludeFilterName()) {
+            elseif ($url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE && !$url->getFinalIncludeFilterName()) {
                 $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_ATTRIBUTE_VALUE);
             }
 

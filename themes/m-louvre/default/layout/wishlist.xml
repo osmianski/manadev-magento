@@ -36,7 +36,7 @@ Default layout, loads most of the pages
 
         <reference name="top.links">
             <block type="wishlist/links" name="wishlist_link"/>
-            <action method="addLinkBlock"><blockName>wishlist_link</blockName></action>
+            <action method="addLinkBlock" ifconfig="mana_louvre/toplinks/show_wishlist_link"><blockName>wishlist_link</blockName></action>
         </reference>
 
         <!-- Mage_Wishlist -->
