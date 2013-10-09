@@ -423,7 +423,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 }
             }
         }
-        $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $path;
+        $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
 
         return $path;
     }
@@ -434,7 +434,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return string
      */
     protected function _generateToolbarParameter($parameterUrl, $value) {
-            $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $value;
+            $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $value;
 
         return $path;
     }

@@ -1026,14 +1026,19 @@
 			var result = str;
 
 			// Unescape hash
-			var tmp;
-			while ( true ) {
+			var tmp, success = false;
+			for (var i = 0; i < 3; i++) {
 				tmp = window.unescape(encodeURIComponent(result));
 				if ( tmp === result ) {
+				    success = true;
 					break;
 				}
 				result = tmp;
 			}
+
+            if (!success) {
+                throw 'History.unescapeString(): unable to unescape ' + str;
+            }
 
 			// Return result
 			return result;

@@ -221,8 +221,8 @@
                 </view>
                 <menu>
                     <template>manapro/filterpositioning/horizontal/menu.phtml</template>
-                    <show_more_disabled>1</show_more_disabled>
-                    <show_more_scrollbar_disabled>1</show_more_scrollbar_disabled>
+                    <show_more_disabled>0</show_more_disabled>
+                    <show_more_scrollbar_disabled>0</show_more_scrollbar_disabled>
                     <label>Drop Down Menu</label>
                 </menu>
             </above_products>
