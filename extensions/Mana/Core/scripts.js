@@ -814,7 +814,7 @@ function ($, layout, json, core, config, undefined)
                 page.showWait();
             }
 
-            $(document).trigger('m-ajax-before', [[], url, '']);
+            $(document).trigger('m-ajax-before', [[], url, '', options]);
             return options;
         },
         _done:function (response, callback, options, url, data) {
@@ -884,7 +884,7 @@ function ($, layout, json, core, config, undefined)
             }
         },
         _complete:function (options, url, data) {
-            $(document).trigger('m-ajax-after', [[], url, '']);
+            $(document).trigger('m-ajax-after', [[], url, '', options]);
         },
         addInterceptor: function (interceptor) {
             this._interceptors.push(interceptor);
