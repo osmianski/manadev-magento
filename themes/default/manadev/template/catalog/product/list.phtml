@@ -64,7 +64,7 @@
 	                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
 	                    <?php endif; ?>
                     <?php else : ?>
-				    	<?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+				    	<?php Mage::helper('mana_core/debug')->logLayout('list'); echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
                     <?php endif; ?>
                     <div class="desc std">
                         <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
