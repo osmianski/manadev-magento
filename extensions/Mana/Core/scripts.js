@@ -488,7 +488,7 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
                 return data;
             }
             else {
-                return base64.decode(data.replace('-', '+').replace('_', '/').replace(',', '='));
+                return base64.decode(data.replace(/-/g, '+').replace(/_/g, '/').replace(/,/g, '='));
             }
         }
     });

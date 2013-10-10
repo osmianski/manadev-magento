@@ -139,7 +139,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $this->_redirectToSubcategory($seoParams);
             uasort($seoParams, array($this, '_compareSeoParams'));
 
-            $routePath = str_replace('%2F', '/', rawurlencode($this->_pageUrlKey));
+            $routePath = $this->_encode($this->_pageUrlKey);
             $first = true;
             foreach ($seoParams as $path) {
                 if ($first) {
@@ -311,7 +311,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
         $result = array();
         foreach ($categoryIds as $key) {
-            $result[] = rawurlencode($urlKeys[$key]);
+            $result[] = $this->_encode($urlKeys[$key]);
         }
         return implode($this->getSchema()->getCategorySeparator(), $result);
     }
@@ -353,10 +353,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             if ($path) {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
-            $path .= rawurlencode($urlKey['final_url_key']);
+            $path .= $this->_encode($urlKey['final_url_key']);
         }
         if ($includeFilterName) {
-            $path = rawurlencode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
+            $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
         }
         return $path;
     }
@@ -369,7 +369,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     protected function _generateCategoryParameter($parameterUrl, $value) {
         if ($urlKey = $this->_getCategoryUrlKeys($value)) {
 
-            return array(rawurlencode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator().
+            return array($this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator().
                 $urlKey, $value);
         }
 
@@ -423,7 +423,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 }
             }
         }
-        $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $path;
+        $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
 
         return $path;
     }
@@ -434,7 +434,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return string
      */
     protected function _generateToolbarParameter($parameterUrl, $value) {
-            $path = $parameterUrl->getFinalUrlKey() . $this->_schema->getFirstValueSeparator() . $value;
+            $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $value;
 
         return $path;
     }
@@ -515,9 +515,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 case Mana_Seo_Model_ParsedUrl::PARAMETER_ATTRIBUTE:
                     if ($urlKey = $this->_getValueUrlKey($value)) {
                         return array(
-                            'url' => $urlKey['final_url_key'],
+                            'url' => $this->_encode($urlKey['final_url_key']),
                             'prefix' => $urlKey['final_include_filter_name'] || $url->getFilterDisplay() == 'slider'
-                                ? $url->getFinalUrlKey().$this->getSchema()->getFirstValueSeparator()
+                                ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
                             'id' => $value,
@@ -547,8 +547,8 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     elseif ($urlKey = $this->_getCategoryUrlKeys($value)) {
                         return
                             array(
-                                'url' => $urlKey,
-                                'prefix' => $url->getFinalUrlKey() . $this->getSchema()->getFirstValueSeparator(),
+                                'url' => $this->_encode($urlKey),
+                                'prefix' => $this->_encode($url->getFinalUrlKey()) . $this->getSchema()->getFirstValueSeparator(),
                                 'position' => 0,
                                 'id' => 0,
                             );
@@ -577,6 +577,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             }
         }
         return $value;
+    }
+
+    protected function _encode($s) {
+        return str_replace('%2F', '/', rawurlencode($s));
     }
 
     #region Dependencies

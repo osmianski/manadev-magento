@@ -17,6 +17,7 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
 
             function _openPopup() {
                 self._openPopup();
+                return false;
             }
 
             return this
