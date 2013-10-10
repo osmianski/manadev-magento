@@ -3,6 +3,67 @@
 include_once 'app/code/core/Mage/Checkout/controllers/OnepageController.php';
 
 class Local_Manadev_CheckoutController extends Mage_Checkout_OnepageController {
+    public function updateOrderDetailsAction() {
+        /* @var $routerHelper Mana_Core_Helper_Router */
+        $routerHelper = Mage::helper('mana_core/router');
+
+        if (($vat = $this->getRequest()->getParam('vat', false)) !== false) {
+            Mage::getSingleton('checkout/session')->setMVat($vat);
+            Mage::getSingleton('checkout/session')->setMIsVatValid(Mage::helper('mana_vat')->validateVat($vat));
+        }
+        Mage::getSingleton('checkout/session')->setMCountryId(Mage::app()->getRequest()->getParam('country'));
+
+        $routerHelper
+            ->changePath('checkout/index/index')
+            ->processWithoutRendering($this, 'renderOrderDetails');
+    }
+
+    public function renderOrderDetails() {
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton('core/layout');
+
+        /* @var $layoutHelper Mana_Core_Helper_Layout */
+        $layoutHelper = Mage::helper('mana_core/layout');
+
+        /* @var $js Mana_Core_Helper_Js */
+        $js = Mage::helper('mana_core/js');
+
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
+
+        $sections = array();
+        $blocks = array();
+        foreach (array('mana_checkout_order_info') as $blockName) {
+            if ($html = $layoutHelper->renderBlock($blockName)) {
+                $blocks[$js->getClientSideBlockName($blockName)] = count($sections);
+                $sections[] = $html;
+            }
+        }
+
+        $vat = null;
+        if (Mage::app()->getRequest()->getParam('vat', false) !== false) {
+            switch (Mage::getSingleton('checkout/session')->getMIsVatValid()) {
+                case Mana_Vat_Helper_Data::NON_EU:
+                    $vat = array('na' => true);
+                    break;
+                case Mana_Vat_Helper_Data::INVALID:
+                    $vat = array('error' => Mage::helper('local_manadev')->__('Invalid VAT number'));
+                    break;
+                case Mana_Vat_Helper_Data::VALID:
+                    $vat = array('success' => true);
+                    break;
+            }
+        }
+        $response = array(
+            'blocks' => $blocks,
+            'config' => $js->getConfig(),
+            'vat' => $vat,
+        );
+        array_unshift($sections, json_encode($response));
+        Mage::app()->getResponse()->setBody(implode($js->getSectionSeparator(), $sections));
+    }
+
 	public function saveOrderAction() {
         if ($this->_expireAjax()) {
             return;

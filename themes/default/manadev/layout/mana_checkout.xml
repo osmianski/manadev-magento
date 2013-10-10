@@ -28,9 +28,9 @@ examples on what kind of actions can be applied to referenced blocks.
 			<action method="addCss"><stylesheet>css/mana_checkout.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/mana_checkout.js</name><params/></action>
         </reference>
-		<reference name="m_ajax_update">
+		<!--<reference name="m_ajax_update">
             <action method="addBlock"><block>mana_checkout_order_info</block><on>update</on></action>
-		</reference>
+		</reference>-->
         <reference name="content">
             <block type="mana_checkout/container" name="mana_checkout_container" as="container">
                 <block type="mana_checkout/billing_address" name="mana_checkout_billing_address" as="billing_address" />
@@ -45,6 +45,7 @@ examples on what kind of actions can be applied to referenced blocks.
                 </block>
                 <block type="mana_checkout/order_review" name="mana_checkout_order_review" as="order_review">
                     <block type="mana_checkout/order_info" name="mana_checkout_order_info" as="info">
+                        <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
                         <action method="addItemRender">
                             <type>default</type>
                             <block>mana_checkout/item_default</block>
