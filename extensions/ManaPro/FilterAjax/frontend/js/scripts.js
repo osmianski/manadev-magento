@@ -97,7 +97,7 @@ function($, ajax, config, layout)
                 ajax.update(response);
                 layout.getPageBlock().resize();
 
-                if ($('#nav')) {
+                if ($('#nav') && mainNav) {
                     mainNav("nav", {"show_delay": "100", "hide_delay": "100"});
                 }
 

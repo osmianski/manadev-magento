@@ -54,7 +54,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </overlay>
-                        <debug translate="label comment">
+                        <!--<debug translate="label comment">
                             <label>Show network errors in frontend</label>
                             <comment>Enable this option to see error messages if AJAX features do not work as intended</comment>
                             <frontend_type>select</frontend_type>
@@ -63,7 +63,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </debug>
+                        </debug>-->
                     </fields>
                 </ajax>
             </groups>

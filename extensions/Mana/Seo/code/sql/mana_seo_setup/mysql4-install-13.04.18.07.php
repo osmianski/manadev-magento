@@ -29,6 +29,7 @@ $schema
         array('symbol' => ':', 'substitute' => '-'),
         array('symbol' => '%', 'substitute' => ''),
         array('symbol' => '#', 'substitute' => ''),
+        array('symbol' => '?', 'substitute' => ''),
         array('symbol' => '&', 'substitute' => '+'),
         array('symbol' => ' ', 'substitute' => '-'),
     )))
