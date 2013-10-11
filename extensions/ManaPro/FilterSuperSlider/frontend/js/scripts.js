@@ -30,10 +30,10 @@ ManaPro.filterSuperSlider = function(id, o) {
             value = parseFloat(o.existingValues[found]);
         }
         if (o.formatThreshold && value >= o.formatThreshold) {
-            return o.decimalDigits2 ? value.toFixed(o.decimalDigits2) : value.round();
+            return o.decimalDigits2 ? parseFloat(value.toFixed(o.decimalDigits2)) : value.round();
         }
         else {
-            return o.decimalDigits ? value.toFixed(o.decimalDigits) : value.round();
+            return o.decimalDigits ? parseFloat(value.toFixed(o.decimalDigits)) : value.round();
         }
     }
     function _format(value) {

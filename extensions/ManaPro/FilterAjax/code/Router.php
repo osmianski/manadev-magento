@@ -103,7 +103,7 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
      * @return Mage_Catalog_Model_Session
      */
     public function getCatalogSession() {
-        Mage::getSingleton('core/session', array('name' => Mage_Core_Controller_Front_Action::SESSION_NAMESPACE));
+        Mage::getSingleton('core/session', array('name' => 'frontend'));
         return Mage::getSingleton('catalog/session');
     }
     #endregion
