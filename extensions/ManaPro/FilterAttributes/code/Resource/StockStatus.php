@@ -60,6 +60,13 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
             $db->query($sql);
 
             $db->commit();
+
+            if (isset($options['product_id'])) {
+                $this->getIndexer()->processEntityAction( new Varien_Object(array(
+                    'attributes_data' => array($attributeCode => $attributeCode),
+                    'product_ids' => array($options['product_id']),
+                )), Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION );
+            }
         }
         catch (Exception $e) {
             $db->rollBack();
@@ -116,5 +123,12 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
             $model->addAttributeToSet('catalog_product',$attributeSetId,$attributeGroupId, $attributeId);
         }
         return  "stock_status";
-   }
+    }
+
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexer() {
+        return Mage::getSingleton('index/indexer');
+    }
 }

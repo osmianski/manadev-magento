@@ -102,6 +102,13 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             // run the statement
             $db->query($sql);
             $db->commit();
+            if (isset($options['product_id'])) {
+                $this->getIndexer()->processEntityAction( new Varien_Object(array(
+                    'attributes_data' => array($attributeCode => $attributeCode),
+                    'product_ids' => array($options['product_id']),
+                )), Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION );
+            }
+
         }
         catch (Exception $e) {
             $db->rollBack();
@@ -131,4 +138,11 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
         return  5;
     }
 
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexer()
+    {
+        return Mage::getSingleton('index/indexer');
+    }
 }
