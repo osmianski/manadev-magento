@@ -1,0 +1,17 @@
+{
+    "name": "manadev/magento-extensions",
+    "type": "library",
+    "description": "MANAdev Magento 1.x Extensions - all extensions and themes in one repository",
+    "keywords": ["manadev"],
+    "homepage": "http://www.manadev.com",
+    "authors": [
+        {
+            "name": "Mana Team",
+            "email": "team@manadev.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "minimum-stability": "dev"
+}
