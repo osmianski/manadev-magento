@@ -2,5 +2,6 @@
 <config>
     <name>extensions/manadev_many-sku-one-inventory</name>
     <part name="Mana/Core"/>
+    <part name="Mana/CatalogInventory"/>
     <part name="ManaPro/ProductFaces"/>
 </config>
