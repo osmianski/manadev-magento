@@ -20,4 +20,15 @@ class Mana_Filters_Model_Filter2_Value extends Mana_Db_Model_Object {
 	protected function _construct() {
 		$this->_init(strtolower('Mana_Filters/Filter2_Value'));
 	}
+
+	public function loadByFilterPosition($filterId, $position) {
+	    /* @var $resource Mana_Filters_Resource_Filter2_Value */
+	    $resource = $this->_getResource();
+        $resource->loadByFilterPosition($this, $filterId, $position);
+        $this->_afterLoad();
+        $this->setOrigData();
+        $this->_hasDataChanges = false;
+
+        return $this;
+    }
 }

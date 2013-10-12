@@ -18,7 +18,7 @@
             <codePool>local</codePool>
 			<depends>
 				<Mage_Catalog />
-				<Mage_CatalogInventory />
+				<Mana_CatalogInventory />
 				<Mana_Core />
 			</depends>
         </ManaPro_ProductFaces>

@@ -245,6 +245,23 @@ function ($, Popup) {
     });
 });
 
+Mana.define('Mana/LayeredNavigation/Popup/ColorOne', ['jquery', 'Mana/LayeredNavigation/Popup'],
+function ($, Popup) {
+    return Popup.extend('Mana/LayeredNavigation/Popup/ColorOne', {
+        prepare: function(options) {
+            this._super(options);
+            var self = this;
+            this.$().find('ol.m-columns > li > a').on('click', function() {
+                return self._toggle(this);
+            });
+        },
+        _toggle: function (element) {
+            this._setItem(element);
+            return this._apply();
+        }
+
+    });
+});
 Mana.define('Mana/LayeredNavigation/Popup/List', ['jquery', 'Mana/LayeredNavigation/Popup'],
 function ($, Popup) {
     return Popup.extend('Mana/LayeredNavigation/Popup/List', {

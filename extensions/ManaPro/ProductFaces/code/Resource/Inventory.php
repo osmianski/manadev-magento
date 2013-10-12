@@ -529,7 +529,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         	}
         	Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexAll();
         	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexAll();
-        	
+        	Mage::dispatchEvent('m_product_faces_reindex_all');
+
 			if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
         catch (Exception $e) {

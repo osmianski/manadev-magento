@@ -721,6 +721,11 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('ManaPro_FilterTree');
     }
 
+    public function isManadevLayeredNavigationColorInstalled()
+    {
+        return $this->isModuleEnabled('ManaPro_FilterColors');
+    }
+
     public function isEnterpriseUrlRewriteInstalled() {
         return $this->isModuleEnabled('Enterprise_UrlRewrite');
     }

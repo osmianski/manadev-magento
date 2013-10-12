@@ -49,7 +49,7 @@ class ManaPro_FilterColors_Block_Tab extends Mage_Adminhtml_Block_Text_List impl
      * @return boolean
      */
     public function isHidden() {
-    	return !in_array(Mage::registry('m_crud_model')->getDisplay(), array('colors', 'colors_vertical', 'colors_label'));
+    	return !in_array(Mage::registry('m_crud_model')->getDisplay(), array('colors', 'colors_vertical', 'colors_label', 'colors_label_one'));
     }
     
     public function getAjaxUrl() {
