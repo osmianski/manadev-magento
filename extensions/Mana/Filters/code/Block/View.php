@@ -175,9 +175,18 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
         $availableResCount = (int) Mage::app()->getStore()
             ->getConfig(Mage_CatalogSearch_Model_Layer::XML_PATH_DISPLAY_LAYER_COUNT);
 
-        if ($availableResCount && $availableResCount<$this->getLayer()->getProductCollection()->getSize()) {
+        if (!$this->layerHelper()->useSolr() && $availableResCount &&
+            $availableResCount < $this->getLayer()->getProductCollection()->getSize())
+        {
             return false;
         }
         return $this->_canShowBlockInCategory();
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function layerHelper() {
+        return Mage::helper('mana_filters');
     }
 }
