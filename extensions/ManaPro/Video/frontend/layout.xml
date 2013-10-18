@@ -22,6 +22,7 @@ examples on what kind of actions can be applied to referenced blocks.
         <update handle="jquery_core"/>
         <update handle="jquery_ui"/>
         <reference name="head">
+            <action method="addJs"><script>jquery/froogaloop.min.js</script></action>
             <action method="addCss"><stylesheet>css/manapro_video.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/manapro_video.js</name><params/></action>
         </reference>
