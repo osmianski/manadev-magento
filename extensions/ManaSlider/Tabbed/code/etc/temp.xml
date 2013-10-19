@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <height>200</height>
+    <tabs>
+        <tab1>
+            <label>Tab 1</label>
+            <title>Tab 1 hint</title>
+            <data_source>new_products</data_source>
+            <ignore_new_products>0</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>10</max_product_count>
+            <condition>or</condition>
+        </tab1>
+        <!--<tab position="2">
+            <label>Tab 2</label>
+            <title>Tab 2 hint</title>
+            <data_source>products_on_sale</data_source>
+        </tab>-->
+    </tabs>
+</config>
