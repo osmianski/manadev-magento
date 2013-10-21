@@ -20,6 +20,8 @@
 .m-filter-slider.style2 { border: 2px solid #c8c8c8; border-width: 0 1px; background: transparent url(../images/manapro_filterslider/bkg_slider2.png) center 0 repeat-x; }
 .m-filter-slider.style2 > .m-slider-span { height: 6px; border-bottom: 5px solid #969696; }
 .m-filter-slider.style2 > .m-slider-from, .m-filter-slider.style2 > .m-slider-to { height: 17px; width: 5px; background: #26b1e8 none; }
+.m-filter-slider.style2 > .m-slider-from { margin-right: 1px; }
+.m-filter-slider.style2 > .m-slider-to { margin-left: 1px; }
 
 /* Style3 */
 .m-filter-slider.style3 { background-image: none; border-bottom: 4px solid #c8c8c8; margin-bottom: 7px; bottom: 5px; }
