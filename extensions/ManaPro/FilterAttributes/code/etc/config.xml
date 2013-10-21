@@ -60,7 +60,7 @@
             <manapro_filterattributes_setup>
                 <setup>
                     <module>ManaPro_FilterAttributes</module>
-                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
                 </setup>
             </manapro_filterattributes_setup>
         </resources>

@@ -48,6 +48,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
 
             if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK) {
                 if (rawurldecode($urlModel->getRoutePath()) == $path) {
+                    Mage::register('m_temporary_query_parameters', $parsedUrl->getQueryParameters());
                     $routerHelper
                         ->changePath($parsedUrl->getPageUrlKey() . $parsedUrl->getSuffix())
                         ->forward($parsedUrl->getRoute(), $request,
@@ -58,6 +59,10 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     $front->getResponse()->setRedirect($url);
                     $request->setDispatched(true);
                 }
+            }
+            elseif ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE) {
+                $front->getResponse()->setRedirect($url);
+                $request->setDispatched(true);
             }
             elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
                 $front->getResponse()->setRedirect($url);

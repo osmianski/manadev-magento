@@ -749,6 +749,7 @@ function ($, layout, json, core, config, undefined)
             this._matchedInterceptorCache = {};
             this._lastAjaxActionSource = undefined;
             this._oldSetLocation = undefined;
+            this._preventClicks = 0;
         },
         get:function (url, callback, options) {
             var self = this;
@@ -813,7 +814,9 @@ function ($, layout, json, core, config, undefined)
             if (options.showWait) {
                 page.showWait();
             }
-
+            if (options.preventClicks) {
+                this._preventClicks++;
+            }
             $(document).trigger('m-ajax-before', [[], url, '', options]);
             return options;
         },
@@ -884,6 +887,9 @@ function ($, layout, json, core, config, undefined)
             }
         },
         _complete:function (options, url, data) {
+            if (options.preventClicks) {
+                this._preventClicks--;
+            }
             $(document).trigger('m-ajax-after', [[], url, '', options]);
         },
         addInterceptor: function (interceptor) {
@@ -923,6 +929,9 @@ function ($, layout, json, core, config, undefined)
             // intercept all link clicks
             $(document).on('click', 'a', self._onClick = function () {
                 var url = this.href; // URL encoded
+                if (self._preventClicks && url == location.href + '#') {
+                    return false;
+                }
                 if (self._findMatchingInterceptor(url, this)) {
                     return self._callInterceptionCallback(url, this);
                 }

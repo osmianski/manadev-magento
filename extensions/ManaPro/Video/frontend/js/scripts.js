@@ -111,6 +111,11 @@
     }
     function _close() {
         $('.m-popup-overlay').fadeOut(500, function () {
+            $('.m-video-popup .product-image iframe.m-vimeo').each(function() {
+                var player = $f(this);
+                player.api('pause');
+
+            });
             $('.m-popup-overlay').remove();
             $('#m-popup').fadeOut(1000);
         });

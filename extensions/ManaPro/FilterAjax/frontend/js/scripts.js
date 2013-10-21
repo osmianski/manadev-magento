@@ -118,7 +118,7 @@ function($, ajax, config, layout)
                         scroll(0, offset);
                     }
                 }
-            });
+            }, { preventClicks: true });
         }
     });
 });

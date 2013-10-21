@@ -580,7 +580,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     protected function _encode($s) {
-        return str_replace('%2F', '/', rawurlencode($s));
+        return str_replace('%2B', '+', str_replace('%2F', '/', rawurlencode($s)));
     }
 
     #region Dependencies

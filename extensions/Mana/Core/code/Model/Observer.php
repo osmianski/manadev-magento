@@ -324,6 +324,20 @@ class Mana_Core_Model_Observer {
         }
     }
 
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "controller_front_send_response_before")
+     * @param Varien_Event_Observer $observer
+     */
+    public function helpSavingInFullPageCache($observer) {
+        if ($queryParameters = Mage::registry('m_temporary_query_parameters')) {
+            foreach (array_keys($queryParameters) as $queryParameter) {
+                if (isset($_GET[$queryParameter])) {
+                    unset($_GET[$queryParameter]);
+                }
+            }
+        }
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data

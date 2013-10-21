@@ -52,7 +52,8 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ActiveCategoryPage extends Mana_Seo
                 ->joinLeft(array('rel' => $this->getTable('enterprise_urlrewrite/redirect_rewrite')), "rel.url_rewrite_id = r.url_rewrite_id", null)
                 ->columns($fields)
                 ->where("`r`.`target_path` LIKE 'catalog/category/view/id/%'")
-                ->where('rel.url_rewrite_id IS NULL');
+                ->where('rel.url_rewrite_id IS NULL')
+                ->where("`r`.`store_id` = ?", $schema->getStoreId());
 
             if (isset($options['category_id'])) {
                 $categoryIds = $this->_getChildCategoryIds($options['category_id'], $options['category_path']);
