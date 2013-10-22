@@ -64,6 +64,15 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 if ($this->_pageType = $this->_getPageType($this->_routePath)) {
                     $this->_suffix = $this->_pageType->getCurrentSuffix();
                     $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    if (Mage::getStoreConfig('web/default/front') == 'cms' &&
+                        $this->_pageUrlKey == Mage::getStoreConfig('web/default/cms_home_page'))
+                    {
+                        $this->_routePath = 'cms/index/index';
+                        unset($this->_routeParams['page_id']);
+                        $this->_pageType = $this->_getPageType($this->_routePath);
+                        $this->_suffix = $this->_pageType->getCurrentSuffix();
+                        $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    }
                 }
             }
         }
