@@ -11,7 +11,7 @@
         <ManaPro_FilterAttributes>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.10.12.15</version>
+            <version>13.10.24.03</version>
         </ManaPro_FilterAttributes>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -60,7 +60,7 @@
             <manapro_filterattributes_setup>
                 <setup>
                     <module>ManaPro_FilterAttributes</module>
-                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
                 </setup>
             </manapro_filterattributes_setup>
         </resources>

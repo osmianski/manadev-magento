@@ -11,7 +11,7 @@ if (defined('COMPILER_INCLUDE_PATH')) {
 }
 
 /* @var $this Mage_Core_Model_Resource_Setup */
-/* @var $installer Mage_Core_Model_Resource_Setup */
+/* @var $installer Mage_Catalog_Model_Resource_Eav_Mysql4_Setup */
 $installer = $this;
 if (method_exists($this->getConnection(), 'allowDdlCache')) {
     $this->getConnection()->allowDdlCache();
@@ -31,6 +31,7 @@ $attributeOptions = array(
     4 => $ratingObserver->getOptionName(0));
 
 $installer->addAttribute('catalog_product', $ratingAttributeCode, array(
+    'group'         => 'General',
     'input'         => 'multiselect',
 	'source'        => 'eav/entity_attribute_source_table',
     'type'          => 'varchar',
@@ -45,29 +46,35 @@ $installer->addAttribute('catalog_product', $ratingAttributeCode, array(
     'comparable'    => true,
     'html_allowed_on_front' => true,
     'visible_in_advanced_search' => false,
-    'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
-    'option'        => array('values' => $attributeOptions)
+    'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE
 ));
 
 $model = Mage::getModel('eav/entity_attribute')
      ->load($installer->getAttributeId('catalog_product', $ratingAttributeCode));
+// add options
+$tableOptions = $installer->getTable('eav_attribute_option');
+$tableOptionValues = $installer->getTable('eav_attribute_option_value');
+$attributeId = $installer->getAttributeId('catalog_product', $ratingAttributeCode);
+
+foreach ($attributeOptions as $sortOrder => $label) {
+    $data = array(
+        'attribute_id' => $attributeId,
+        'sort_order' => $sortOrder,
+    );
+    $installer->getConnection()->insert($tableOptions, $data);
+    $optionId = (int)$installer->getConnection()->lastInsertId($tableOptions, 'option_id');
+    $data = array(
+        'option_id' => $optionId,
+        'store_id' => 0,
+        'value' => $label,
+    );
+    $installer->getConnection()->insert($tableOptionValues, $data);
+}
+
 $model
      ->setDefaultValue($model->getSource()->getOptionId($ratingObserver->getOptionName(1)))->save();
 
 $installer->addAttributeOption($options);
-// add attribute to all attributesets
-$attributeId= $installer->getAttributeId('catalog_product', $ratingAttributeCode);
-$model=Mage::getModel('eav/entity_setup','core_setup');
-$allAttributeSetIds=$model->getAllAttributeSetIds('catalog_product');
-foreach ($allAttributeSetIds as $attributeSetId) {
-    try{
-        $attributeGroupId=$model->getAttributeGroup('catalog_product',$attributeSetId,'General');
-    }
-    catch(Exception $e) {
-        $attributeGroupId=$model->getDefaultArrtibuteGroupId('catalog/product',$attributeSetId);
-    }
-    $model->addAttributeToSet('catalog_product',$attributeSetId,$attributeGroupId, $attributeId);
-}
 /* @var $dbHelper Mana_Db_Helper_Data */
 $dbHelper = Mage::helper('mana_db');
 
