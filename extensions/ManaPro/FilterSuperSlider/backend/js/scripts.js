@@ -16,11 +16,17 @@
     function _change() {
         if ($('#mfs_range').hasClass('m-decimal')) {
             var $this = $('#mf_general_display');
-            if ($this.val() != 'slider' && $this.val() != 'range') {
+            if ($this.val() != 'slider' && $this.val() != 'range' && $this.val() != 'min_max_slider') {
                 $('#mfs_range').show();
             }
             else {
                 $('#mfs_range').hide();
+            }
+            if ($this.val() != 'min_max_slider') {
+                $('#mf_general_min_max_slider_role').parent().parent().hide();
+            }
+            else {
+                $('#mf_general_min_max_slider_role').parent().parent().show();
             }
             if ($this.val() != 'slider') {
                 $('#mf_general_slider_manual_entry').parent().parent().hide();
