@@ -18,6 +18,13 @@ $installer->run("
     );
 ");
 
+$table = 'mana_filters/filter2_store';
+$installer->run("
+    ALTER TABLE `{$this->getTable($table)}` ADD COLUMN (
+        `min_max_slider_role` varchar(10) NOT NULL default '0'
+    );
+");
+
 $installer->endSetup();
 
 if (!Mage::registry('m_run_db_replication')) {

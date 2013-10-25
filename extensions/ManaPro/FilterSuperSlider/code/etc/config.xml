@@ -139,26 +139,6 @@
                     </manapro_filtersuperslider>
                 </observers>
             </m_advanced_filter_menu_visible>
-            <m_db_virtual_columns><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filtersuperslider>
-                        <class>manapro_filtersuperslider/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>addVirtualColumns</method>
-                        <!-- event handler method name -->
-                    </manapro_filtersuperslider>
-                </observers>
-            </m_db_virtual_columns>
-            <m_db_virtual_collection_columns><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filtersuperslider>
-                        <class>manapro_filtersuperslider/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>addVirtualColumnsToCollection</method>
-                        <!-- event handler method name -->
-                    </manapro_filtersuperslider>
-                </observers>
-            </m_db_virtual_collection_columns>
         </events>
         <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
             Mage::getSingleton('<model type>') calls. That is, ManaPro_FilterSuperSlider_Model_XXX_YYY classes are accessible as

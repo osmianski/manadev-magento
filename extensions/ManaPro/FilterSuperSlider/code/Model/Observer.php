@@ -41,7 +41,8 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                         'required' => true,
                         'options' => Mage::getSingleton('manapro_filtersuperslider/source_minMaxRole')->getOptionArray(),
 					), $admin->isGlobal() ? array() : array(
-					    'disabled' => true,
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE,
+                        'default_label' => Mage::helper('manapro_filtersuperslider')->__('Same For All Stores'),
 					)), 'display');
 					$field->setRenderer(Mage::getSingleton('core/layout')->getBlockSingleton('mana_admin/crud_card_field'));
 
@@ -175,6 +176,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                     'global.slider_decimal_digits2 AS slider_decimal_digits2',
                     'global.range_step AS range_step',
                     'global.thousand_separator AS thousand_separator',
+                    'global.min_max_slider_role AS min_max_slider_role',
                 ));
 				break;
 		}
@@ -225,6 +227,9 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_THOUSAND_SEPARATOR)) {
                     $object->setThousandSeparator($values['thousand_separator']);
                 }
+                if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE)) {
+                    $object->setData('min_max_slider_role', $values['min_max_slider_role']);
+                }
                 break;
 		}
 	}
@@ -248,6 +253,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                     'global.slider_decimal_digits2 AS slider_decimal_digits2',
                     'global.range_step AS range_step',
                     'global.thousand_separator AS thousand_separator',
+                    'global.min_max_slider_role AS min_max_slider_role',
                 ));
 				break;
 		}
@@ -276,6 +282,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 $object->setSliderDecimalDigits2($values['slider_decimal_digits2']);
                 $object->setRangeStep($values['range_step']);
                 $object->setThousandSeparator($values['thousand_separator']);
+                $object->setData('min_max_slider_role', $values['min_max_slider_role']);
                 break;
 		}
 	}
@@ -301,9 +308,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 Mage::helper('mana_db')->updateDefaultableField($object, 'slider_decimal_digits2', Mana_Filters_Resource_Filter2::DM_SLIDER_DECIMAL_DIGITS2, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'range_step', Mana_Filters_Resource_Filter2::DM_RANGE_STEP, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'thousand_separator', Mana_Filters_Resource_Filter2::DM_THOUSAND_SEPARATOR, $fields, $useDefault);
-                if ($object->getEntityName() == 'mana_filters/filter2') {
-                    $object->setData('min_max_slider_role', $fields['min_max_slider_role']);
-                }
+                Mage::helper('mana_db')->updateDefaultableField($object, 'min_max_slider_role', Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE, $fields, $useDefault);
                 break;
         }
     }
@@ -352,10 +357,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 if ($object->getRangeStep() && !is_numeric($object->getRangeStep())) {
                     $result->addError($t->__('%s is not a number', $t->__('Range Step')));
                 }
-                if ($object->getDisplay() == 'min_max_slider' &&
-                    $object->getEntityName() == 'mana_filters/filter2' &&
-                    !$object->getMinMaxSliderRole())
-                {
+                if ($object->getDisplay() == 'min_max_slider' && !$object->getMinMaxSliderRole()) {
                     $result->addError($t->__('Please fill in %s field', $t->__('Role in Min/Max Slider')));
                 }
                 break;
@@ -444,64 +446,6 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
             if (Mage::getStoreConfig('mana_filters/positioning_menu/inline_slider') == 'inline') {
                 $result->setResult(true);
             }
-        }
-    }
-
-    /**
-     * REPLACE THIS WITH DESCRIPTION (handles event "m_db_virtual_columns")
-     * @param Varien_Event_Observer $observer
-     */
-    public function addVirtualColumns($observer) {
-        /* @var $entityName string */
-        $entityName = $observer->getEvent()->getEntityName();
-    	/* @var $columns string[] */
-    	$columns = $observer->getEvent()->getColumns();
-    	/* @var $select Varien_Db_Select */
-    	$select = $observer->getEvent()->getSelect();
-    	/* @var $result Mana_Db_Model_Virtual_Result */
-    	$result = $observer->getEvent()->getResult();
-
-
-        switch ($entityName) {
-            case 'mana_filters/filter2_store':
-                $globalEntityName = Mage::helper('mana_db')->getGlobalEntityName($entityName);
-                if (!$columns || in_array('min_max_slider_role', $columns)) {
-                    Mage::helper('mana_db')->joinLeft($select,
-                        'global', Mage::getSingleton('core/resource')->getTableName($globalEntityName),
-                        Mage::getSingleton('core/resource')->getTableName($entityName).'.global_id = global.id');
-                    $select->columns("global.min_max_slider_role AS min_max_slider_role");
-                    $result->addColumn('min_max_slider_role');
-                }
-                break;
-        }
-    }
-
-    /**
-     * REPLACE THIS WITH DESCRIPTION (handles event "m_db_virtual_collection_columns")
-     * @param Varien_Event_Observer $observer
-     */
-    public function addVirtualColumnsToCollection($observer) {
-        /* @var $entityName string */
-        $entityName = $observer->getEvent()->getEntityName();
-    	/* @var $columns string[] */
-    	$columns = $observer->getEvent()->getColumns();
-    	/* @var $select Varien_Db_Select */
-    	$select = $observer->getEvent()->getSelect();
-    	/* @var $result Mana_Db_Model_Virtual_Result */
-    	$result = $observer->getEvent()->getResult();
-
-
-        switch ($entityName) {
-            case 'mana_filters/filter2_store':
-                $globalEntityName = Mage::helper('mana_db')->getGlobalEntityName($entityName);
-                if (!$columns || in_array('min_max_slider_role', $columns)) {
-                    Mage::helper('mana_db')->joinLeft($select,
-                        'global', Mage::getSingleton('core/resource')->getTableName($globalEntityName),
-                        'main_table.global_id = global.id');
-                    $select->columns("global.min_max_slider_role AS min_max_slider_role");
-                    $result->addColumn('min_max_slider_role');
-                }
-                break;
         }
     }
 }
