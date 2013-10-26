@@ -29,8 +29,6 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
         $db->beginTransaction();
 
         try {
-            // Add attribute to all attribute sets
-            //$this ->_addAttributeAllSets ($attribute['attribute_id']);
 
             // INSERT all rating value for default store
             $fields = array(

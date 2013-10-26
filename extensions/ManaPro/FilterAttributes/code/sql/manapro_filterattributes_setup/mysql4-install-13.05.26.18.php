@@ -9,7 +9,7 @@
 if (defined('COMPILER_INCLUDE_PATH')) {
     throw new Exception(Mage::helper('mana_core')->__('This Magento installation contains pending database installation/upgrade scripts. Please turn off Magento compilation feature while installing/upgrading new modules in Admin Panel menu System->Tools->Compilation.'));
 }
-
+/* @var $this Mage_Core_Model_Resource_Setup */
 /* @var $installer Mage_Catalog_Model_Resource_Eav_Mysql4_Setup */
 
 $installer = $this;
@@ -19,6 +19,9 @@ if (method_exists($this->getConnection(), 'allowDdlCache')) {
 
 $installer->startSetup();
 $stockStatusAttributeCode = Mage::getResourceModel('manapro_filterattributes/stockstatus')->getstockStatusAttributeCode();
+$attributeOptions = array(
+    1 => 'In Stock',
+    2 => 'Out of Stock');
 
 $installer->addAttribute('catalog_product', $stockStatusAttributeCode, array(
     'group'         => 'General',
@@ -47,7 +50,7 @@ $tableOptions = $installer->getTable('eav_attribute_option');
 $tableOptionValues = $installer->getTable('eav_attribute_option_value');
 $attributeId = $installer->getAttributeId('catalog_product', $stockStatusAttributeCode);
 
-foreach (array('In Stock', 'Out of Stock') as $sortOrder => $label) {
+foreach ($attributeOptions as $sortOrder => $label) {
     $data = array(
         'attribute_id' => $attributeId,
         'sort_order' => $sortOrder,
