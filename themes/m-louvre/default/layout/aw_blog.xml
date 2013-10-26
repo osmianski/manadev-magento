@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2004-2007 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<layout version="0.1.0">
+	<default>
+        <reference name="footer_links">
+			<block type="blog/blog" name="add.blog.footer">
+				<block type="blog/tags" name="blog_tags" />
+				<action method="addFooterLink" ifconfig="blog/menu/footer"></action>
+			</block>
+		</reference>
+		<reference name="right">
+			<block type="blog/blog" name="right.blog.menu" before="-">
+				<action method="setTemplate" ifconfig="blog/menu/right" ifvalue="1">
+					<template>aw_blog/menu.phtml</template> 
+				</action>
+				<block type="blog/tags" name="blog_tags" />
+			</block>
+        </reference>
+		<reference name="left">
+			<block type="blog/blog" name="left.blog.menu"  before="-">
+				<action method="setTemplate" ifconfig="blog/menu/left">
+					<template>aw_blog/menu.phtml</template> 
+				</action>
+				<block type="blog/tags" name="blog_tags" />
+			</block>
+        </reference>
+		<reference name="top.links">
+			<block type="blog/blog" name="add.blog.link">
+				<action method="addTopLink" ifconfig="blog/menu/top"></action>
+				<block type="blog/tags" name="blog_tags" />
+			</block>
+		</reference>
+		<reference name="head">
+			<action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
+		</reference>
+    </default>
+
+    <blog_index_index>
+        <reference name="footer" >
+              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="blog/blog" name="blog" template="aw_blog/blog.phtml"/>
+        </reference>
+    </blog_index_index>
+	
+    <blog_index_list>
+        <reference name="footer" >
+              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="blog/blog" name="blog" template="aw_blog/blog.phtml"/>
+        </reference>
+    </blog_index_list>	
+	<blog_post_view>
+        <reference name="footer" >
+              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="blog/post" name="post" template="aw_blog/post.phtml" />
+        </reference>
+    </blog_post_view>
+	<blog_cat_view>
+        <reference name="footer" >
+              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="blog/cat" name="cat" template="aw_blog/cat.phtml" />
+        </reference>
+    </blog_cat_view>
+	
+	<blog_rss_index>
+        <reference name="footer" >
+              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
+        </reference>
+        <block type="blog/rss" output="toHtml" name="rss.blog.new"/>
+    </blog_rss_index>
+</layout> 

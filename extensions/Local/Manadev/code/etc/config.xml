@@ -343,6 +343,13 @@
 					<frontName>actions</frontName>
 				</args>
 			</local_manadev>
+            <checkout>
+                <args>
+                    <modules>
+                        <local_manadev before="Mage_Checkout">Local_Manadev_Checkout</local_manadev>
+                    </modules>
+                </args>
+            </checkout>
 		</routers>
         <events>
             <controller_action_layout_render_before_checkout_index_index><!-- this is event name this module listens for -->

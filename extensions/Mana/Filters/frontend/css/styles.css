@@ -9,4 +9,4 @@
 .block-layered-nav .btn-remove { margin-top: 3px; }
 .block-layered-nav .currently li { position: relative; padding: 6px 24px 6px 10px; }
 .block-layered-nav .currently .btn-remove { margin-top: 0; position: absolute; right: 4px; top: 9px; margin-left: 0; }
-.block-layered-nav dt { position: relative; }
+.block-layered-nav dt { position: relative; zoom: 1; left: 0; top: 0; }

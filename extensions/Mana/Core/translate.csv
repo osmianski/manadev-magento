@@ -19,10 +19,9 @@
 "Loading...","Loading..."
 "General","General"
 "MANAdev General Settings","MANAdev General Settings"
-"JavaScript Libraries","JavaScript Libraries"
-
+"JavaScript Libraries for Store Frontend","JavaScript Libraries for Store Frontend"
+"JavaScript Libraries for Admin Panel","JavaScript Libraries for Admin Panel"
 "jQuery (version 1.8.3)","jQuery (version 1.8.3)"
-
 "Always runs in jQuery.noConflict() mode (slight modification) to prevent conflicts with Prototype JavaScript library used by Magento.","Always runs in jQuery.noConflict() mode (slight modification) to prevent conflicts with Prototype JavaScript library used by Magento."
 "Load if required, minified version (recommended)","Load if required, minified version (recommended)"
 "Load on all pages, minified version","Load on all pages, minified version"

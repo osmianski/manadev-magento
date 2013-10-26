@@ -10,6 +10,7 @@
     <sync extension-dir="locale" project-dir="app/design/frontend/{Extension/Name}/locale"/>
 
     <!-- client-side directories go to skin -->
+    <sync extension-dir="aw_blog" project-dir="skin/frontend/{Extension/Name}/aw_blog"/>
     <sync extension-dir="css" project-dir="skin/frontend/{Extension/Name}/css"/>
     <sync extension-dir="images" project-dir="skin/frontend/{Extension/Name}/images"/>
     <sync extension-dir="js" project-dir="skin/frontend/{Extension/Name}/js"/>
