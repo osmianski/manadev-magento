@@ -33,8 +33,24 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
         $db->beginTransaction();
 
         try {
-            // Add attribute to all attribute sets
-            //$this ->_addAttributeAllSets ($attribute['attribute_id']);
+            // DELETE stock status values
+             if (isset($options['product_id'])) {
+                 $deleteCondition = array(
+                     'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                     'store_id  = ?' => new Zend_Db_Expr("0"),
+                     'entity_id = ?' => new Zend_Db_Expr($options['product_id'])
+                 );
+            }
+            else {
+                $deleteCondition = array(
+                    'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                    'store_id  = ?' => new Zend_Db_Expr("0")
+                );
+            }
+            $db->delete(
+                $attributeTable,
+                $deleteCondition
+                   );
 
             // INSERT all stock status values
             $fields = array(

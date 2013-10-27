@@ -69,7 +69,7 @@ $model
      ->setDefaultValue($model->getSource()->getOptionId('In Stock'))
      ->save();
 
-$installer->addAttributeOption($options);
+/*$installer->addAttributeOption($options);*/
 
 if (method_exists($this->getConnection(), 'disallowDdlCache')) {
     $this->getConnection()->disallowDdlCache();

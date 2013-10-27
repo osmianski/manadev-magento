@@ -74,7 +74,7 @@ foreach ($attributeOptions as $sortOrder => $label) {
 $model
      ->setDefaultValue($model->getSource()->getOptionId($ratingObserver->getOptionName(1)))->save();
 
-$installer->addAttributeOption($options);
+/*$installer->addAttributeOption($options)*/;
 
 /* @var $core Mana_Core_Helper_Data */
 $core = Mage::helper('mana_core');
