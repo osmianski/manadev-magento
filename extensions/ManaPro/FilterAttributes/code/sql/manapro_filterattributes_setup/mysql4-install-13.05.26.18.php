@@ -18,7 +18,7 @@ if (method_exists($this->getConnection(), 'allowDdlCache')) {
 }
 
 $installer->startSetup();
-$stockStatusAttributeCode = Mage::getResourceModel('manapro_filterattributes/stockstatus')->getstockStatusAttributeCode();
+$stockStatusAttributeCode = Mage::getResourceModel('manapro_filterattributes/stockStatus')->getstockStatusAttributeCode();
 $attributeOptions = array(
     1 => 'In Stock',
     2 => 'Out of Stock');
