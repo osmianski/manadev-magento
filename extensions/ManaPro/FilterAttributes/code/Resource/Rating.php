@@ -19,9 +19,13 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
 
         $t = Mage::helper("manapro_filterattributes");
         $attribute = $this->_getAttributeByCode($attributeCode);
+        $visibilityAttribute = $this->_getVisibilityAttribute();
         $attributeTable = $attribute['backend_table']
             ? $attribute['backend_table']
             : 'catalog_product_entity_' . $attribute['backend_type'];
+        $visibilityAttributeTable = $visibilityAttribute['backend_table']
+                ? $visibilityAttribute['backend_table']
+                : 'catalog_product_entity_' . $visibilityAttribute['backend_type'];
 
         $values = $this->_getAttributeValues( $attribute['attribute_id']);
         $v = $this->_getIfExprByGroupedValues("`ss`.`average_rating`", $values);
@@ -29,6 +33,23 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
         $db->beginTransaction();
 
         try {
+            // DELETE stock status values
+            if (isset($options['product_id'])) {
+                $deleteCondition = array(
+                    'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                    'store_id  = ?' => new Zend_Db_Expr("0"),
+                    'entity_id = ?' => new Zend_Db_Expr($options['product_id'])
+                );
+            } else {
+                $deleteCondition = array(
+                    'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                    'store_id  = ?' => new Zend_Db_Expr("0")
+                );
+            }
+            $db->delete(
+                $attributeTable,
+                $deleteCondition
+            );
 
             // INSERT all rating value for default store
             $fields = array(
@@ -52,6 +73,12 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             $select = $db->select()
                 ->from(array('e' => $this->getTable('catalog/product')), null)
                 ->joinLeft(array('ss' =>  new Zend_Db_Expr('('.$subSelect.')')), "`e`.`entity_id` = `ss`.`product_id`", null)
+                 ->joinInner(array('v' => $visibilityAttributeTable),
+                 $db->quoteInto("`e`.`entity_id` = `v`.`entity_id` ".
+                 " AND `v`.`store_id` = 0 ".
+                 " AND `v`.`value` <> 1".
+                 " AND `v`.`attribute_id` = ?", $visibilityAttribute['attribute_id']), null)
+
                 ->columns($fields);
 
             if (isset($options['product_id'])) {

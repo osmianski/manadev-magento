@@ -19,7 +19,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
 
         $t = Mage::helper("manapro_filterattributes");
         $attribute = $this->_getAttributeByCode($attributeCode);
-        $visibilityAttribute = $this->_getAttributeByCode('visibility');
+        $visibilityAttribute = $this->_getVisibilityAttribute();
         $attributeTable = $attribute['backend_table']
             ? $attribute['backend_table']
             : 'catalog_product_entity_' . $attribute['backend_type'];
