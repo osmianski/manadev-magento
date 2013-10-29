@@ -39,7 +39,7 @@ $installer->addAttribute('catalog_product', $ratingAttributeCode, array(
     'label'         => 'Rating',
     'user_defined'  => true,
 	'required'      => false,
-    'configurable'  => false,
+    'is_configurable'  => 0,
     'searchable'    => false,
     'filterable'    => true,
     'filterable_in_search' => true,

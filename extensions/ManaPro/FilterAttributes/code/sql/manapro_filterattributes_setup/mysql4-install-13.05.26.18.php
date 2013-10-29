@@ -32,14 +32,14 @@ $installer->addAttribute('catalog_product', $stockStatusAttributeCode, array(
     'label'         => 'In stock?',
     'user_defined'  => true,
 	'required'      => false,
-    'configurable'  => false,
+    'is_configurable'  => 0,
     'searchable'    => false,
     'filterable'    => true,
     'filterable_in_search' => true,
     'comparable'    => true,
     'html_allowed_on_front' => true,
     'visible_in_advanced_search' => false,
-    'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE
+    'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
 ));
 
 $model = Mage::getModel('eav/entity_attribute')
