@@ -794,7 +794,7 @@ function ($, layout, json, core, config, undefined)
                 $.globalEval(response.script);
             }
             if (response.title) {
-                document.title = response.title;
+                document.title = response.title.replace(/&amp;/g, '&');
             }
         },
         getSectionSeparator: function() {

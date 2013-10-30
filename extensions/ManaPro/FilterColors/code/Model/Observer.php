@@ -55,6 +55,7 @@ class ManaPro_FilterColors_Model_Observer {
                     'global.state_height AS state_height',
                     'global.state_border_radius AS state_border_radius',
                     'global.state_image AS state_image',
+                    'global.color_state_display AS color_state_display',
 				));
 				break;
 			case 'mana_filters/filter2_value_store':
@@ -134,6 +135,9 @@ class ManaPro_FilterColors_Model_Observer {
                 if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_STATE_IMAGE)) {
                     $object->setStateImage($values['state_image']);
                 }
+                if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_COLOR_STATE_DISPLAY)) {
+                    $object->setData('color_state_display', $values['color_state_display']);
+                }
 				break;
 			case 'mana_filters/filter2_value_store':
 				if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2_Value::DM_COLOR)) {
@@ -180,6 +184,7 @@ class ManaPro_FilterColors_Model_Observer {
                     'global.state_height AS state_height',
                     'global.state_border_radius AS state_border_radius',
                     'global.state_image AS state_image',
+                    'global.color_state_display AS color_state_display',
 				));
 				break;
 			case 'mana_filters/filter2_value_store':
@@ -225,6 +230,7 @@ class ManaPro_FilterColors_Model_Observer {
                 $object->setStateHeight($values['state_height']);
                 $object->setStateBorderRadius($values['state_border_radius']);
                 $object->setStateImage($values['state_image']);
+                $object->setData('color_state_display', $values['color_state_display']);
                 break;
             case 'mana_filters/filter2_value_store':
                 $object->setColor($values['color']);
@@ -260,6 +266,7 @@ class ManaPro_FilterColors_Model_Observer {
                 Mage::helper('mana_db')->updateDefaultableField($object, 'state_height', Mana_Filters_Resource_Filter2::DM_STATE_HEIGHT, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'state_border_radius', Mana_Filters_Resource_Filter2::DM_STATE_BORDER_RADIUS, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'state_image', Mana_Filters_Resource_Filter2::DM_STATE_IMAGE, $fields, $useDefault);
+                Mage::helper('mana_db')->updateDefaultableField($object, 'color_state_display', Mana_Filters_Resource_Filter2::DM_COLOR_STATE_DISPLAY, $fields, $useDefault);
 				break;
             case 'mana_filters/filter2_value':
             case 'mana_filters/filter2_value_store':
@@ -418,23 +425,24 @@ class ManaPro_FilterColors_Model_Observer {
 	    /* @var $item Mana_Filters_Model_Item */ $item = $observer->getEvent()->getItem();
         /* @var $result Varien_Object */ $result = $observer->getEvent()->getResult();
 
-	    if (in_array($item->getFilter()->getFilterOptions()->getDisplay(), array('colors', 'colors_vertical'))) {
-	        /* @var $layout Mage_Core_Model_Layout */ $layout = Mage::getSingleton(strtolower('Core/Layout'));
-	        $result->setHtml($layout->getBlockSingleton('manapro_filtercolors/state')
-	            ->setItem($item)
-	            ->setBlock($block)
-	            ->toHtml()
-	        );
-	    }
-	    elseif (in_array($item->getFilter()->getFilterOptions()->getDisplay(), array('colors_label'))) {
-            /* @var $layout Mage_Core_Model_Layout */
-            $layout = Mage::getSingleton(strtolower('Core/Layout'));
-            $result->setHtml($layout->getBlockSingleton('manapro_filtercolors/state')
-                        ->setItem($item)
-                        ->setBlock($block)
-                        ->setTemplate('manapro/filtercolors/state_label.phtml')
-                        ->toHtml()
-            );
+        /* @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton(strtolower('Core/Layout'));
+
+        /* @var $filter Mana_Filters_Model_Filter_Attribute */
+        $filter = $item->getFilter();
+        if (!empty($filter->getFilterOptions()->getDisplayOptions()->color_state_display)) {
+            $display = $filter->getFilterOptions()->getData('color_state_display');
+            if (!$display) {
+                $display = (string)$filter->getFilterOptions()->getDisplayOptions()->color_state_display;
+            }
+            if ($template = (string)Mage::getConfig()->getNode("mana_filters/color_state_display/$display/template")) {
+                $result->setHtml($layout->getBlockSingleton('manapro_filtercolors/state')
+                    ->setItem($item)
+                    ->setBlock($block)
+                    ->setTemplate($template)
+                    ->toHtml()
+                );
+            }
         }
 	}
 }

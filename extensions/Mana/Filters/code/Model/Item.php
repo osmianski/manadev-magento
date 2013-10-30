@@ -141,4 +141,13 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
 
 	    return $key !== false ? $this->_seoData[$key] : $this->_seoData;
 	}
+
+    public function getEscapedLabel() {
+        if ($this->getFilter()->getFilterOptions()->getType() == 'category') {
+            return $this->getLabel();
+        }
+        else {
+            return Mage::helper('core')->escapeHtml($this->getLabel());
+        }
+    }
 }

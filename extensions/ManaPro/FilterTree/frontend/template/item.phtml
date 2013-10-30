@@ -19,12 +19,12 @@
 <li <?php if ($_item->getMSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
     <div class="m-tree-item" id="m-tree-item-<?php echo $_item->getValue() ?>">
         <?php if ($_item->getMSelected()): ?>
-        <span class="m-selected-filter-item"><?php echo $this->escapeHtml($_item->getLabel()) ?></span>
+        <span class="m-selected-filter-item"><?php echo $_item->getEscapedLabel() ?></span>
         <?php else : ?>
         <?php if (!$_item->getFilter()->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() > 0 || $_item->getMSelected()): ?>
             <a href="<?php echo $this->urlEscape($_item->getReplaceUrl()) ?>"
-               title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
-            <?php else: echo $this->escapeHtml($_item->getLabel()) ?>
+               title="<?php echo $_item->getEscapedLabel() ?>"><?php echo $_item->getEscapedLabel() ?></a>
+            <?php else: echo $_item->getEscapedLabel() ?>
             <?php endif; ?>
         <?php endif; ?>
         <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>

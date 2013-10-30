@@ -19,10 +19,13 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
 
         $t = Mage::helper("manapro_filterattributes");
         $attribute = $this->_getAttributeByCode($attributeCode);
+        $visibilityAttribute = $this->_getVisibilityAttribute();
         $attributeTable = $attribute['backend_table']
             ? $attribute['backend_table']
             : 'catalog_product_entity_' . $attribute['backend_type'];
-
+        $visibilityAttributeTable = $visibilityAttribute['backend_table']
+                ? $visibilityAttribute['backend_table']
+                : 'catalog_product_entity_' . $visibilityAttribute['backend_type'];
         $values = $this->_getStockStatusAttributeValues($attribute['attribute_id']);
         //IF(`s`.`is_in_stock` = 0, 128, 129)
         $v = $this->_getIfExpr("`s`.`is_in_stock`", $values);
@@ -30,8 +33,24 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
         $db->beginTransaction();
 
         try {
-            // Add attribute to all attribute sets
-            //$this ->_addAttributeAllSets ($attribute['attribute_id']);
+            // DELETE stock status values
+             if (isset($options['product_id'])) {
+                 $deleteCondition = array(
+                     'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                     'store_id  = ?' => new Zend_Db_Expr("0"),
+                     'entity_id = ?' => new Zend_Db_Expr($options['product_id'])
+                 );
+            }
+            else {
+                $deleteCondition = array(
+                    'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
+                    'store_id  = ?' => new Zend_Db_Expr("0")
+                );
+            }
+            $db->delete(
+                $attributeTable,
+                $deleteCondition
+                   );
 
             // INSERT all stock status values
             $fields = array(
@@ -47,6 +66,11 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
                 ->from(array('e' => $this->getTable('catalog/product')), null)
                  ->joinInner(array('s' =>  $this->getTable('cataloginventory/stock_item')),
                  ("`e`.`entity_id` = `s`.`product_id`"), null)
+                 ->joinInner(array('v' => $visibilityAttributeTable),
+                 $db->quoteInto("`e`.`entity_id` = `v`.`entity_id` ".
+                 " AND `v`.`store_id` = 0 ".
+                 " AND `v`.`value` <> 1".
+                 " AND `v`.`attribute_id` = ?", $visibilityAttribute['attribute_id']), null)
                 ->columns($fields);
 
             if (isset($options['product_id'])) {

@@ -19,7 +19,7 @@
 <?php /* @var $_slider ManaPro_FilterSlider_Helper_Data */ $_slider = Mage::helper(strtolower('ManaPro_FilterSlider'));?>
 <?php /* @var $_filter Mana_Filters_Model_Filter_Price */ $_filter = $this->getFilter(); ?>
 <?php $_id = $_helper->getFilterName($this, $_filter); ?>
-<div id="<?php echo $_id ?>-track" class="m-filter-slider">
+<div id="<?php echo $_id ?>-track" class="m-filter-slider <?php echo Mage::getStoreConfig('mana_filters/slider/style') ?>">
 	<div id="<?php echo $_id ?>-span" class="m-slider-span"></div>
 	<div id="<?php echo $_id ?>-from" class="m-slider-from"></div>
 	<div id="<?php echo $_id ?>-to" class="m-slider-to"></div>

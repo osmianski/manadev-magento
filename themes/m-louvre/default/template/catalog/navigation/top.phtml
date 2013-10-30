@@ -45,10 +45,13 @@
 <div class="nav-border-left"></div>
     <ul id="nav">
         <li <?php if(Mage::helper('mana_theme')->isHomePage() ) : ?>class="active"<?php endif; ?> data="<?php echo Mage::helper('mana_theme')->getFullActionName() ?>">
-          <a href="<?php echo $this->getUrl('') ?>"><?php echo $this->__('Home') ?></a>
+          <a href="<?php echo $this->getUrl() ?>"><?php echo $this->__('Home') ?></a>
         </li>
         <?php echo $_menu ?>
+        <li><a href="<?php echo $this->getUrl() ?>blog/">Blog & Documentation</a></li>
     </ul>
 <div class="nav-border-right"></div>
+
 </div>
+
 <?php endif ?>
