@@ -12,7 +12,7 @@
 		<ManaPro_FilterColors>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.10.27.19</version>
+		    <version>13.10.30.15</version>
 		</ManaPro_FilterColors>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -276,7 +276,8 @@
 					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
 					<template>manapro/filtercolors/horizontal.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</colors>
+                    <color_state_display>color</color_state_display>
+                </colors>
                 <colors_vertical translate="title" module="manapro_filtercolors">
                     <title>Colors and Images (Vertical)</title><!-- this one is displayed in admin -->
                     <block>manapro_filtercolors/filter</block>
@@ -290,6 +291,7 @@
                     <template>manapro/filtercolors/vertical.phtml</template><!-- PHTML to be rendered -->
                     <sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/Color</popup_class>
+                    <color_state_display>color</color_state_display>
                 </colors_vertical>
                 <colors_label translate="title" module="manapro_filtercolors">
                     <title>Colors and Images (with Labels)</title>
@@ -305,6 +307,7 @@
                     <template>manapro/filtercolors/label.phtml</template> <!-- PHTML to be rendered -->
                     <sort_order>300</sort_order> <!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
+                    <color_state_display>color_label</color_state_display>
                 </colors_label>
                 <colors_label_one translate="title" module="manapro_filtercolors">
                     <title>Colors and Images with Labels (One Item Can Be Selected At A Time) </title>
@@ -318,12 +321,28 @@
                     <and_resource>mana_filters/filter_and_attribute</and_resource>
                     <reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
                     <template>manapro/filtercolors/label_one.phtml</template>
-                    <!-- PHTML to be rendered -->
                     <sort_order>300</sort_order>
-                    <!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/ColorOne</popup_class>
+                    <color_state_display>color_label</color_state_display>
                 </colors_label_one>
             </attribute>
 		</display>
+		<color_state_display>
+            <label translate="title" module="manapro_filtercolors">
+                <title>Label</title>
+                <template />
+                <sort_order>100</sort_order>
+            </label>
+            <color translate="title" module="manapro_filtercolors">
+                <title>Color and Image</title>
+                <template>manapro/filtercolors/state.phtml</template>
+                <sort_order>200</sort_order>
+            </color>
+            <color_label translate="title" module="manapro_filtercolors">
+                <title>Color, Image and Label</title>
+                <template>manapro/filtercolors/state_label.phtml</template>
+                <sort_order>300</sort_order>
+            </color_label>
+		</color_state_display>
 	</mana_filters>
 </config>
