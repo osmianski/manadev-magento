@@ -14,14 +14,14 @@ $installer->startSetup();
 $table = 'mana_filters/filter2';
 $installer->run("
     ALTER TABLE `{$this->getTable($table)}` ADD COLUMN (
-        `min_max_slider_role` varchar(10) NOT NULL default '0'
+        `min_slider_code` varchar(80) NOT NULL default ''
     );
 ");
 
 $table = 'mana_filters/filter2_store';
 $installer->run("
     ALTER TABLE `{$this->getTable($table)}` ADD COLUMN (
-        `min_max_slider_role` varchar(10) NOT NULL default '0'
+        `min_slider_code` varchar(80) NOT NULL default ''
     );
 ");
 

@@ -62,6 +62,11 @@ class Mana_Filters_Model_Query extends Varien_Object
         $isApplied = $model->isApplied();
         $this->_filters[$code] = array('model' => $model, 'isApplied' => $isApplied, 'isApplyProcessed' => false);
     }
+
+    public function getFilters() {
+        return $this->_filters;
+    }
+
     public function apply() {
         foreach ($this->_filters as $code => $filter) {
             if (!$filter['isApplyProcessed']) {
