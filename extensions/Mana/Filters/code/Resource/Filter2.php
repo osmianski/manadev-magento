@@ -58,7 +58,9 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
     const DM_URL_POSITION = 36;
 
     const DM_DISABLE_NO_RESULT_OPTIONS = 37;
+    const DM_MIN_MAX_SLIDER_ROLE = 38;
     const DM_COLOR_STATE_DISPLAY = 39;
+    const DM_MIN_SLIDER_CODE = 40;
 
     #endregion
 

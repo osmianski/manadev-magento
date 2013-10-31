@@ -14,15 +14,16 @@
  */
 ;(function($) {
     function _change() {
-        if ($('#mfs_range').hasClass('m-decimal')) {
-            var $this = $('#mf_general_display');
-            if ($this.val() != 'slider' && $this.val() != 'range') {
-                $('#mfs_range').show();
+        var $display = $('#mf_general_display');
+        var $range = $('#mfs_range');
+        if ($range.hasClass('m-decimal')) {
+            if ($display.val() != 'slider' && $display.val() != 'range' && $display.val() != 'min_max_slider') {
+                $range.show();
             }
             else {
-                $('#mfs_range').hide();
+                $range.hide();
             }
-            if ($this.val() != 'slider') {
+            if ($display.val() != 'slider') {
                 $('#mf_general_slider_manual_entry').parent().parent().hide();
                 $('#mf_general_slider_use_existing_values').parent().parent().hide();
             }
@@ -31,7 +32,37 @@
                 $('#mf_general_slider_use_existing_values').parent().parent().show();
             }
         }
+        var $minMaxRole = $('#mf_general_min_max_slider_role');
+        if ($display.val() != 'min_max_slider') {
+            $minMaxRole.parent().parent().hide();
+            $('#mf_general_min_slider_code').parent().parent().hide();
+        }
+        else {
+            $minMaxRole.parent().parent().show();
+            if ($minMaxRole.val() == 'max') {
+                $('#mf_general_min_slider_code').parent().parent().show();
+            }
+            else {
+                $('#mf_general_min_slider_code').parent().parent().hide();
+            }
+        }
+    }
+    function _minMaxRoleChange() {
+        var $display = $('#mf_general_display');
+        var $minMaxRole = $('#mf_general_min_max_slider_role');
+        if ($display.val() != 'min_max_slider') {
+            $('#mf_general_min_slider_code').parent().parent().hide();
+        }
+        else {
+            if ($minMaxRole.val() == 'max') {
+                $('#mf_general_min_slider_code').parent().parent().show();
+            }
+            else {
+                $('#mf_general_min_slider_code').parent().parent().hide();
+            }
+        }
     }
     $(_change);
     $('#mf_general_display').live('change', _change);
+    $('#mf_general_min_max_slider_role').live('change', _minMaxRoleChange);
 })(jQuery);
