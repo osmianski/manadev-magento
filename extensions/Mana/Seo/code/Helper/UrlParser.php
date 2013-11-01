@@ -432,7 +432,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $unSuffixedToken = clone $token;
             $unSuffixedToken
                 ->setSuffix($suffix)
-                ->setTextToBeParsed(!$suffix == '/' || $mbstring->endsWith($text, '/')
+                ->setTextToBeParsed($suffix != '/' || $mbstring->endsWith($text, '/')
                     ? $mbstring->substr($text, 0, $mbstring->strlen($text) - $mbstring->strlen($suffix))
                     : $text);
 
