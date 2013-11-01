@@ -54,6 +54,11 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                         ->forward($parsedUrl->getRoute(), $request,
                             array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
                             array_merge($_GET, $parsedUrl->getImplodedQueryParameters()));
+
+                    // invoke CMS router before Standard Router
+                    if (($cmsRouter = $front->getRouter('cms'))) {
+                        return $cmsRouter->match($request);
+                    }
                 }
                 else {
                     $front->getResponse()->setRedirect($url);

@@ -39,6 +39,12 @@ class Mana_Db_Model_Observer {
                     ->reindexAll();
             }
         }
+	    if ($savedObjects = Mage::registry('m_objects_to_be_saved')) {
+            Mage::unregister('m_objects_to_be_saved');
+            foreach ($savedObjects as $object) {
+                Mage::dispatchEvent('m_saved', compact('object'));
+            }
+        }
 
     }
 	/**

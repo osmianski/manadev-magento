@@ -356,22 +356,31 @@ class Mana_Filters_Model_Filter_Decimal
     protected $_isMinMaxCalculated = false;
     protected $_minMax;
 
+    public function getDecimalMinMax() {
+        /* @var $query Mana_Filters_Model_Query */
+        $query = $this->getQuery();
+        $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode());
+        $minMax = $queryResult;
+        if (!$minMax['min'] && !($minMax['max']) && $this->_getIsFilterable() == 2) {
+            $rootCategory = Mage::getModel('catalog/category')
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load(Mage::app()->getStore()->getRootCategoryId());
+            $currentCategory = $this->getLayer()->getCurrentCategory();
+            $this->getLayer()->setCurrentCategory($rootCategory);
+            $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode(), false,
+                $this->getLayer()->getProductCollection(), false);
+            $this->getLayer()->setCurrentCategory($currentCategory);
+            $minMax = $queryResult;
+            $minMax['hasNoResults'] = true;
+        }
+        return $minMax;
+    }
+
     protected function _calculateMinMax() {
         if (!$this->_isMinMaxCalculated) {
-            /* @var $query Mana_Filters_Model_Query */
-            $query = $this->getQuery();
-            $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode());
-            $this->_minMax = $queryResult;
-            if (!$this->_minMax['min'] && !($this->_minMax['max']) && $this->_getIsFilterable() == 2) {
-                $rootCategory = Mage::getModel('catalog/category')
-                    ->setStoreId(Mage::app()->getStore()->getId())
-                    ->load(Mage::app()->getStore()->getRootCategoryId());
-                $currentCategory = $this->getLayer()->getCurrentCategory();
-                $this->getLayer()->setCurrentCategory($rootCategory);
-                $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode(), false,
-                    $this->getLayer()->getProductCollection(), false);
-                $this->getLayer()->setCurrentCategory($currentCategory);
-                $this->_minMax = $queryResult;
+            $this->_minMax = $this->getDecimalMinMax();
+            if (!empty($this->_minMax['hasNoResults'])) {
+                unset($this->_minMax['hasNoResults']);
                 $this->_hasNoResults = true;
             }
             $this->_isMinMaxCalculated = true;

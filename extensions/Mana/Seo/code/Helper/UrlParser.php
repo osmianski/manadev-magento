@@ -432,7 +432,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $unSuffixedToken = clone $token;
             $unSuffixedToken
                 ->setSuffix($suffix)
-                ->setTextToBeParsed($mbstring->substr($text, 0, $mbstring->strlen($text) - $mbstring->strlen($suffix)));
+                ->setTextToBeParsed($suffix != '/' || $mbstring->endsWith($text, '/')
+                    ? $mbstring->substr($text, 0, $mbstring->strlen($text) - $mbstring->strlen($suffix))
+                    : $text);
 
             $this->_activate($unSuffixedToken, $active);
             $tokens[$suffix] = $unSuffixedToken;
@@ -1009,7 +1011,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $core = Mage::helper('mana_core');
 
         $isSlider = $core->isManadevLayeredNavigationInstalled() &&
-            in_array($token->getParameterUrl()->getFilterDisplay(), array('slider', 'range'));
+            in_array($token->getParameterUrl()->getFilterDisplay(), array('slider', 'range', 'min_max_slider'));
         if ($this->_schema->getUseRangeBounds() || $isSlider) {
             $from = 0 + $from;
             $to = 0 + $to;

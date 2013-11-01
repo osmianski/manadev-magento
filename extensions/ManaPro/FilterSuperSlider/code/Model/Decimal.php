@@ -27,7 +27,8 @@ class ManaPro_FilterSuperSlider_Model_Decimal extends Mana_Filters_Model_Filter_
 
     public function isFilterAppliedWhenCounting($modelToBeApplied) {
         if ($this->_getIsFilterable() != 2) {
-            return $modelToBeApplied != $this && $modelToBeApplied->getFilterOptions()->getDisplay() != 'slider';
+            return $modelToBeApplied != $this &&
+                !in_array($modelToBeApplied->getFilterOptions()->getDisplay(), array('slider', 'range', 'min_max_slider'));
         }
         else {
             return false;
