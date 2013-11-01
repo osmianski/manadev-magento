@@ -19,5 +19,10 @@
 				<ManaPro_FilterAdmin />
 			</depends>
         </ManaPro_FilterColors>
+        <ManaPro_FilterAttributes>
+            <depends>
+                <ManaPro_FilterColors/>
+            </depends>
+        </ManaPro_FilterAttributes>
     </modules>
 </config>

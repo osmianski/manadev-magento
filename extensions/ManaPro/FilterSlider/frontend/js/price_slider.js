@@ -64,7 +64,9 @@ Control.PriceSlider.prototype = {
     this.alignY = parseInt(this.options.alignY || '0');
     
     this.trackLength = this.maximumOffset() - this.minimumOffset();
-    this.handleLength = this.isVertical() ? this.handles[0].offsetHeight : this.handles[0].offsetWidth;
+    this.handleLength = this.isVertical()
+        ? this.handles[0].offsetHeight
+        : this.handles[0].offsetWidth;
 
     this.active   = false;
     this.dragging = false;
@@ -265,14 +267,15 @@ Control.PriceSlider.prototype = {
         //var pointer  = [Event.pointerX(event), Event.pointerY(event)];
         var pointer = (event.touches ? [event.touches[0].clientX, event.touches[0].clientY] : [Event.pointerX(event), Event.pointerY(event)]);
         if(handle==this.track) {
-          var offsets  = Position.cumulativeOffset(this.track); 
-          this.event = event;
-          this.setValue(this.translateToValue( 
-           (this.isVertical() ? pointer[1]-offsets[1] : pointer[0]-offsets[0])-(this.handleLength/2)
-          ));
-          var offsets  = Position.cumulativeOffset(this.activeHandle);
-          this.offsetX = (pointer[0] - offsets[0]);
-          this.offsetY = (pointer[1] - offsets[1]);
+          this.active = false;
+//          var offsets  = Position.cumulativeOffset(this.track);
+//          this.event = event;
+//          this.setValue(this.translateToValue(
+//           (this.isVertical() ? pointer[1]-offsets[1] : pointer[0]-offsets[0])-(this.handleLength/2)
+//          ));
+//          var offsets  = Position.cumulativeOffset(this.activeHandle);
+//          this.offsetX = (pointer[0] - offsets[0]);
+//          this.offsetY = (pointer[1] - offsets[1]);
         } else {
           // find the handle (prevents issues with Safari)
           while((this.handles.indexOf(handle) == -1) && handle.parentNode) 
@@ -286,6 +289,9 @@ Control.PriceSlider.prototype = {
               var offsets = Position.cumulativeOffset(this.activeHandle);
               this.offsetX = (pointer[0] - offsets[0]);
               this.offsetY = (pointer[1] - offsets[1]);
+          }
+          else {
+              this.active = false;
           }
         }
       }

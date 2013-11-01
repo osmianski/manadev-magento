@@ -64,6 +64,15 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 if ($this->_pageType = $this->_getPageType($this->_routePath)) {
                     $this->_suffix = $this->_pageType->getCurrentSuffix();
                     $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    if (Mage::getStoreConfig('web/default/front') == 'cms' &&
+                        $this->_pageUrlKey == Mage::getStoreConfig('web/default/cms_home_page'))
+                    {
+                        $this->_routePath = 'cms/index/index';
+                        unset($this->_routeParams['page_id']);
+                        $this->_pageType = $this->_getPageType($this->_routePath);
+                        $this->_suffix = $this->_pageType->getCurrentSuffix();
+                        $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    }
                 }
             }
         }
@@ -386,7 +395,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         $core = Mage::helper('mana_core');
 
         $isSlider = $core->isManadevLayeredNavigationInstalled() &&
-            in_array($parameterUrl->getFilterDisplay(), array('slider', 'range'));
+            in_array($parameterUrl->getFilterDisplay(), array('slider', 'range', 'min_max_slider'));
 
         $path = '';
         if ($value == '__0__') {
@@ -516,7 +525,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     if ($urlKey = $this->_getValueUrlKey($value)) {
                         return array(
                             'url' => $this->_encode($urlKey['final_url_key']),
-                            'prefix' => $urlKey['final_include_filter_name'] || $url->getFilterDisplay() == 'slider'
+                            'prefix' => $urlKey['final_include_filter_name'] || in_array($url->getFilterDisplay(), array('slider', 'range', 'min_max_slider'))
                                 ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],

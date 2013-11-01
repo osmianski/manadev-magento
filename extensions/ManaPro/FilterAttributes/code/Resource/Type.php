@@ -88,4 +88,7 @@ abstract class ManaPro_FilterAttributes_Resource_Type extends Mage_Core_Model_My
         return $result;
     }
 
+    protected function _getVisibilityAttribute() {
+        return $this->_getAttributeByCode ('visibility');
+    }
 }

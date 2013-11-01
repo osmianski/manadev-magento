@@ -34,6 +34,29 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
             case 'mana_filters/filter2':
             case 'mana_filters/filter2_store':
                 if ($form->getId() == 'mf_general') {
+					$field = $form->getElement('mfs_display')->addField('min_max_slider_role', 'select', array_merge(array(
+						'label' => Mage::helper('manapro_filtersuperslider')->__('Role in Min/Max Slider'),
+						'note' => Mage::helper('manapro_filtersuperslider')->__("Min/Max Slider displays two attributes at once, so assign 'Minimum Value' role to one filter , 'Maximum Value' role to other filter."),
+						'name' => 'min_max_slider_role',
+                        'required' => true,
+                        'options' => Mage::getSingleton('manapro_filtersuperslider/source_minMaxRole')->getOptionArray(),
+					), $admin->isGlobal() ? array() : array(
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE,
+                        'default_label' => Mage::helper('manapro_filtersuperslider')->__('Same For All Stores'),
+					)), 'display');
+					$field->setRenderer(Mage::getSingleton('core/layout')->getBlockSingleton('mana_admin/crud_card_field'));
+
+					$field = $form->getElement('mfs_display')->addField('min_slider_code', 'select', array_merge(array(
+						'label' => Mage::helper('manapro_filtersuperslider')->__('Minimum Value Attribute'),
+						'name' => 'min_slider_code',
+                        'required' => true,
+                        'options' => Mage::getSingleton('manapro_filtersuperslider/source_minSlider')->getOptionArray(),
+					), $admin->isGlobal() ? array() : array(
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_MIN_SLIDER_CODE,
+                        'default_label' => Mage::helper('manapro_filtersuperslider')->__('Same For All Stores'),
+					)), 'min_max_slider_role');
+					$field->setRenderer(Mage::getSingleton('core/layout')->getBlockSingleton('mana_admin/crud_card_field'));
+
                     // fieldset - collection of fields
                     /** @noinspection PhpParamsInspection */
                     $fieldset = $form->addFieldset('mfs_slider', array(
@@ -164,6 +187,8 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                     'global.slider_decimal_digits2 AS slider_decimal_digits2',
                     'global.range_step AS range_step',
                     'global.thousand_separator AS thousand_separator',
+                    'global.min_max_slider_role AS min_max_slider_role',
+                    'global.min_slider_code AS min_slider_code',
                 ));
 				break;
 		}
@@ -214,6 +239,12 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_THOUSAND_SEPARATOR)) {
                     $object->setThousandSeparator($values['thousand_separator']);
                 }
+                if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE)) {
+                    $object->setData('min_max_slider_role', $values['min_max_slider_role']);
+                }
+                if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_MIN_SLIDER_CODE)) {
+                    $object->setData('min_slider_code', $values['min_slider_code']);
+                }
                 break;
 		}
 	}
@@ -237,6 +268,8 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                     'global.slider_decimal_digits2 AS slider_decimal_digits2',
                     'global.range_step AS range_step',
                     'global.thousand_separator AS thousand_separator',
+                    'global.min_max_slider_role AS min_max_slider_role',
+                    'global.min_slider_code AS min_slider_code',
                 ));
 				break;
 		}
@@ -265,6 +298,8 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 $object->setSliderDecimalDigits2($values['slider_decimal_digits2']);
                 $object->setRangeStep($values['range_step']);
                 $object->setThousandSeparator($values['thousand_separator']);
+                $object->setData('min_max_slider_role', $values['min_max_slider_role']);
+                $object->setData('min_slider_code', $values['min_slider_code']);
                 break;
 		}
 	}
@@ -290,6 +325,8 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 Mage::helper('mana_db')->updateDefaultableField($object, 'slider_decimal_digits2', Mana_Filters_Resource_Filter2::DM_SLIDER_DECIMAL_DIGITS2, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'range_step', Mana_Filters_Resource_Filter2::DM_RANGE_STEP, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'thousand_separator', Mana_Filters_Resource_Filter2::DM_THOUSAND_SEPARATOR, $fields, $useDefault);
+                Mage::helper('mana_db')->updateDefaultableField($object, 'min_max_slider_role', Mana_Filters_Resource_Filter2::DM_MIN_MAX_SLIDER_ROLE, $fields, $useDefault);
+                Mage::helper('mana_db')->updateDefaultableField($object, 'min_slider_code', Mana_Filters_Resource_Filter2::DM_MIN_SLIDER_CODE, $fields, $useDefault);
                 break;
         }
     }
@@ -337,6 +374,12 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
                 }
                 if ($object->getRangeStep() && !is_numeric($object->getRangeStep())) {
                     $result->addError($t->__('%s is not a number', $t->__('Range Step')));
+                }
+                if ($object->getDisplay() == 'min_max_slider' && !$object->getMinMaxSliderRole()) {
+                    $result->addError($t->__('Please fill in %s field', $t->__('Role in Min/Max Slider')));
+                }
+                if ($object->getDisplay() == 'min_max_slider' && $object->getMinMaxSliderRole() == 'max' && !$object->getMinSliderCode()) {
+                    $result->addError($t->__('Please fill in %s field', $t->__('Minimum Value Attribute')));
                 }
                 break;
         }
@@ -405,7 +448,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
         /* @var $block Mana_Filters_Block_View */ $block = $observer->getEvent()->getBlock();
         /* @var $filter Mana_Filters_Block_Filter */ $filter = $observer->getEvent()->getFilter();
     		
-        if ($filter->getFilterOptions()->getDisplay() == 'slider') {
+        if (in_array($filter->getFilterOptions()->getDisplay(), array('slider', 'range', 'min_max_slider'))) {
             if (Mage::getStoreConfig('mana_filters/positioning_menu/inline_slider') == 'inline') {
                 echo ' m-inline';
             }
@@ -420,7 +463,7 @@ class ManaPro_FilterSuperSlider_Model_Observer extends Mage_Core_Helper_Abstract
         /* @var $filter Mana_Filters_Block_Filter */ $filter = $observer->getEvent()->getFilter();
         /* @var $result Varien_Object */ $result = $observer->getEvent()->getResult();
 
-        if ($filter->getFilterOptions()->getDisplay() == 'slider') {
+        if (in_array($filter->getFilterOptions()->getDisplay(), array('slider', 'range', 'min_max_slider'))) {
             if (Mage::getStoreConfig('mana_filters/positioning_menu/inline_slider') == 'inline') {
                 $result->setResult(true);
             }

@@ -247,11 +247,12 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         if (is_null($this->_fileConfig)) {
             $this->_fileConfig = array();
             $jsConfig = Mage::getConfig()->getNode('mana_core/js');
+            $section = Mage::app()->getStore()->isAdmin() ? 'js_admin' : 'js';
             if ($jsConfig) {
                 $jsChildren = (array)$jsConfig->children();
                 uasort($jsChildren, array($this, '_compareByModuleAndSortOrder'));
                 foreach ($jsChildren as $name => $config) {
-                    $options = Mage::getStoreConfig("mana/js/$name");
+                    $options = Mage::getStoreConfig("mana/$section/$name");
 
                     /* @var $config Varien_Simplexml_Element */
                     if (empty($config->full_path) || !$options) {

@@ -11,7 +11,7 @@
         <ManaPro_FilterSuperSlider>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.10.11.16</version>
+            <version>13.10.31.18</version>
         </ManaPro_FilterSuperSlider>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -258,6 +258,16 @@
                     <template>manapro/filtersuperslider/range.phtml</template>
                     <sort_order>350</sort_order>
                 </range>
+                <min_max_slider>
+                    <title>Min/Max Slider</title>
+                    <block>mana_filters/filter</block>
+                    <model>manapro_filtersuperslider/minMax_decimal</model>
+                    <solr_model>manapro_filtersuperslider/solr_minMax_decimal</solr_model>
+                    <resource>manapro_filtersuperslider/minMax_decimal</resource>
+                    <solr_resource>manapro_filtersuperslider/solr_minMax_decimal</solr_resource>
+                    <template>manapro/filtersuperslider/price.phtml</template><!-- PHTML to be rendered -->
+                    <sort_order>340</sort_order>
+                </min_max_slider>
             </decimal>
             <attribute>
                 <slider>

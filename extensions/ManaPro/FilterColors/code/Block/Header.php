@@ -126,6 +126,18 @@ class ManaPro_FilterColors_Block_Header extends Mana_Admin_Block_Crud_Card_Form 
 		));
 		$fieldset->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_fieldset'));
 
+        $field = $fieldset->addField('color_state_display', 'select', array_merge(array(
+			'label' => $this->__('Display In State'),
+			'name' => 'color_state_display',
+			'required' => true,
+			'options' => Mage::getSingleton('manapro_filtercolors/source_stateDisplay')->getOptionArray(),
+        ), Mage::helper('mana_admin')->isGlobal() ? array() : array(
+            'default_bit' => Mana_Filters_Resource_Filter2::DM_COLOR_STATE_DISPLAY,
+            'default_label' => $this->__('Same For All Stores'),
+        )));
+        /** @noinspection PhpParamsInspection */
+        $field->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
+
         $field = $fieldset->addField('state_width', 'text', array(
             'label' => $this->__('Width'),
             'name' => 'state_width',

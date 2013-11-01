@@ -95,6 +95,8 @@ class ManaPro_CatalogPerformance_Model_Observer extends Mage_Core_Helper_Abstrac
      * @param Varien_Event_Observer $observer
      */
     public function refreshQuoteCache($observer) {
-        Mage::app()->cleanCache('m_quote_' . $observer->getDataObject()->getId());
+        if (Mage::getStoreConfigFlag('mana_performance/checkout_cart_sidebar/is_enabled')) {
+            Mage::app()->cleanCache('m_quote_' . $observer->getDataObject()->getId());
+        }
     }
 }
