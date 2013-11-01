@@ -89,5 +89,10 @@ class ManaSlider_Tabbed_Block_Slider extends Mage_Core_Block_Template
     public function getLayout() {
         return Mage::getSingleton('core/layout');
     }
+
+    public function jsHelper() {
+        return Mage::helper('mana_core/js');
+    }
+
     #endregion
 }

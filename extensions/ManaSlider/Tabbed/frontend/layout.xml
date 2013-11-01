@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaSlider_Tabbed
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <manaslider_tabbed_slider>
+        <update handle="jquery_core"/>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/manaslider_tabbed.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manaslider_tabbed.js</name><params/></action>
+        </reference>
+    </manaslider_tabbed_slider>
+</layout>

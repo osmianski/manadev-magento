@@ -76,7 +76,22 @@
                 </ManaSlider_Tabbed>
             </modules>
         </translate>
+        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
+            and executes during page rendering. -->
+        <layout>
+            <updates>
+                <manaslider_tabbed module="ManaSlider_Tabbed">
+                    <file>manaslider_tabbed.xml</file>
+                </manaslider_tabbed>
+            </updates>
+        </layout>
         <!-- INSERT HERE: layout, translate, routers -->
     </frontend>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <m_block_layout_handle>
+        <manaslider_tabbed_slider>
+            <if type="manaslider_tabbed/slider" />
+            <load_handle>manaslider_tabbed_slider</load_handle>
+        </manaslider_tabbed_slider>
+    </m_block_layout_handle>
 </config>
