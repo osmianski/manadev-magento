@@ -21,10 +21,11 @@ function($, ajax, config, layout)
                 ? config.getData('url.base')
                 : config.getData('url.secureBase');
         },
-        _isProductListToolbarClicked: function(element) {
+        _isProductListToolbarClicked: function (element) {
             return element !== undefined && (
                 $(element).parents().hasClass('mb-category-products') ||
-                    $(element).parents().hasClass('mb-cms-products')
+                    $(element).parents().hasClass('mb-cms-products') ||
+                    $(element).parents().hasClass('mb-search-result')
                 );
         },
         match: function (url, element) {
