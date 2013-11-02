@@ -12,6 +12,7 @@
                 <v13.01.18.23>13.01.21.22</v13.01.18.23>
                 <v13.04.24.18>13.01.21.22</v13.04.24.18>
                 <v13.05.19.08>13.01.21.22</v13.05.19.08>
+                <v13.11.02.20>13.01.21.22</v13.11.02.20>
             </installer_versions>
             <entities>
                 <page>
@@ -289,15 +290,11 @@
                         <global />
                         <flat>
                             <flattens>mana_attributepage/option_page/global</flattens>
-                            <unique>
-                                <primary>
-                                    <attribute_page_id />
-                                    <option_id_0 />
-                                    <option_id_1 />
-                                    <option_id_2 />
-                                    <option_id_3 />
-                                    <option_id_4 />
-                                </primary>
+                            <unique version="13.11.02.20">
+                                <key>
+                                    <attribute_page_id/>
+                                    <unique_key/>
+                                </key>
                             </unique>
                             <formula>
                                 <base>
@@ -307,11 +304,6 @@
                                         </attribute_page>
                                     </from>
                                     <join>
-                                        <!--<default>
-                                            <type>inner</type>
-                                            <entity>mana_attributepage/option_page/default</entity>
-                                            <on>{{= default.attribute_page_id }} = {{= attribute_page.primary_id }}</on>
-                                        </default>-->
                                         <option0>
                                             <type>left</type>
                                             <entity>eav/attribute_option</entity>
@@ -364,6 +356,10 @@
                                 <option_id_3><default_formula>{{= option3.option_id}}</default_formula></option_id_3>
                                 <option_id_4><default_formula>{{= option4.option_id}}</default_formula></option_id_4>
                                 <attribute_page_id><default_formula>{{= attribute_page.id}}</default_formula></attribute_page_id>
+                                <unique_key version="13.11.02.20">
+                                    <type>varchar(255)</type>
+                                    <default_formula>{{= GLUE(option.option_id, ',')}}</default_formula>
+                                </unique_key>
                             </fields>
                         </flat>
                         <store>
