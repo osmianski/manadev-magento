@@ -59,6 +59,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryPage extends Mana_Seo_Resource_Catego
         /* @var $select Varien_Db_Select */
         $select = $db->select()
             ->from(array('r' => $this->getTable('core/url_rewrite')), null)
+            ->joinInner(array('cat' => $this->getTable('catalog/category')), "cat.entity_id = `r`.`category_id`", null)
             ->joinLeft(array('ng' => $this->_resources->getTableName($nameAttributeTable)),
                 "`ng`.`entity_id` = `r`.`category_id`" .
                 $db->quoteInto(" AND `ng`.`attribute_id` = ?", $nameAttribute['attribute_id']) .
