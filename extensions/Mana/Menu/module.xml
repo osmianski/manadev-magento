@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Menu
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Menu>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mana_Core/>
+            </depends>
+        </Mana_Menu>
+    </modules>
+</config>

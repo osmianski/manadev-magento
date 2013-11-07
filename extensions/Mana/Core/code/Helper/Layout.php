@@ -10,12 +10,14 @@
  *
  */
 class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
+    protected $_delayedLayoutIsBeingProcessed;
+
     protected $_delayPrepareLayoutBlocks = array();
     /**
      * @param Mage_Core_Block_Abstract $block
      */
     public function delayPrepareLayout($block, $sortOrder = 0) {
-        if (Mage::registry('m_page_is_being_rendered')) {
+        if ($this->_delayedLayoutIsBeingProcessed || Mage::registry('m_page_is_being_rendered')) {
             $block->delayedPrepareLayout();
         }
         else {
@@ -23,6 +25,7 @@ class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
         }
     }
     public function prepareDelayedLayoutBlocks() {
+        $this->_delayedLayoutIsBeingProcessed = true;
         uasort($this->_delayPrepareLayoutBlocks, array($this, '_compareBlocks'));
         foreach ($this->_delayPrepareLayoutBlocks as $block) {
             $block['block']->delayedPrepareLayout();

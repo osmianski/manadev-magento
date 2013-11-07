@@ -210,6 +210,15 @@
 	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
 	<!-- This section enables static visual changes in store frontend. -->
 	<frontend>
+	    <routers>
+            <mana>
+                <use>standard</use>
+                <args>
+                    <module>Mana_Core</module>
+                    <frontName>mana</frontName>
+                </args>
+            </mana>
+        </routers>
 		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
 		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
 		and executes during page rendering. -->

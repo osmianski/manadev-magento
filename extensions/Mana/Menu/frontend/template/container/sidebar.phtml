@@ -1,0 +1,17 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     Mana_Menu
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Menu_Block_Tree_Container */
+?>
+<div class="block m-container">
+    <div class="block-title">
+        <strong><span><?php echo $this->getTitle() ?></span></strong>
+    </div>
+    <div class="block-content">
+        <?php echo $this->getChildHtml('content') ?>
+    </div>
+</div>

@@ -633,13 +633,25 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         exists = true;
                         delete namedBlocks[blockInfo.id];
                     }
-                    else if (type) {
+                    else {
+                        if (type) {
+                            block = new type();
+                        }
+                        else {
+                            console.error("Block '" + blockInfo.typeName + "' is not defined");
+                        }
+                    }
+                    if (block) {
+                        block.setId(blockInfo.id);
+                    }
+                }
+                else  {
+                    if (type) {
                         block = new type();
                     }
-                    block.setId(blockInfo.id);
-                }
-                else if (type) {
-                    block = new type();
+                    else {
+                        console.error("Block '" + blockInfo.typeName + "' is not defined");
+                    }
                 }
                 if (block) {
                     block.setElement(element);

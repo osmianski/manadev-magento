@@ -1,0 +1,34 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     Mana_Menu
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Menu_Block_Tree_Item */
+/* @var $childItem Mana_Menu_Block_Tree_Item */
+/* @var $tree Mana_Menu_Block_Tree */
+$tree = $this->getData('tree');
+?>
+<?php if (!$this->getData('hidden')) : ?>
+<li <?php if ($this->getData('selected')): ?>class="m-selected"<?php endif; ?>>
+    <div class="m-item" data-id="<?php echo $this->getData('id') ?>">
+        <?php if ($this->getData('selected')): ?>
+            <span><?php echo $this->getData('label') ?></span>
+        <?php elseif (!$this->getData('disabled')): ?>
+            <a href="<?php echo $this->escapeUrl($this->getData('url')) ?>" title="<?php echo $this->getData('label') ?>">
+                <?php echo $this->getData('label') ?>
+            </a>
+        <?php else: ?>
+            <span class="m-disabled"><?php echo $this->getData('label') ?></span>
+        <?php endif; ?>
+    </div>
+    <?php if (count($this->getChild())) : ?>
+    <ul>
+        <?php foreach($this->getChild() as $childItem) : ?>
+            <?php echo $childItem->toHtml() ?>
+        <?php endforeach ?>
+    </ul>
+    <?php endif; ?>
+</li>
+<?php endif; ?>

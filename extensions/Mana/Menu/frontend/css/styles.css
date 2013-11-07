@@ -1,0 +1,19 @@
+/**
+ * @category    Mana
+ * @package     Mana_Menu
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-menu-tree .m-expanded > .m-item,
+.m-menu-tree .m-collapsed > .m-item,
+.m-menu-tree .m-leaf > .m-item { padding-left: 15px; }
+.m-menu-tree .m-expanded > .m-item,
+.m-menu-tree .m-collapsed > .m-item { cursor: pointer; }
+.m-menu-tree .m-expanded > .m-item { background: transparent url(../images/mana_menu/expanded.png) 0 4px no-repeat; }
+.m-menu-tree .m-collapsed > .m-item { background: transparent url(../images/mana_menu/collapsed.png) 0 4px no-repeat; }
+.m-menu-tree .m-expanded > .m-item:hover { background: transparent url(../images/mana_menu/expanded_over.png) 0 4px no-repeat; }
+.m-menu-tree .m-collapsed > .m-item:hover { background: transparent url(../images/mana_menu/collapsed_over.png) 0 4px no-repeat; }
+.m-menu-tree .m-expanded > ul,
+.m-menu-tree .m-collapsed > ul { margin-left: 10px; }
+
+.m-container .block-content { padding: 5px 10px; }

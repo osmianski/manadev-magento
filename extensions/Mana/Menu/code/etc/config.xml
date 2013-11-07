@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Menu
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Menu>
+            <version>13.11.06.12</version>
+        </Mana_Menu>
+    </modules>
+    <global>
+        <helpers>
+            <mana_menu>
+                <class>Mana_Menu_Helper</class>
+            </mana_menu>
+        </helpers>
+        <blocks>
+            <mana_menu>
+                <class>Mana_Menu_Block</class>
+            </mana_menu>
+        </blocks>
+        <models>
+            <mana_menu>
+                <class>Mana_Menu_Model</class>
+            </mana_menu>
+        </models>
+    </global>
+    <frontend>
+        <routers>
+            <mana>
+                <args>
+                    <modules>
+                        <mana_menu before="Mana_Core">Mana_Menu</mana_menu>
+                    </modules>
+                </args>
+            </mana>
+        </routers>
+        <layout>
+            <updates module="Mana_Menu">
+                <mana_menu>
+                    <file>mana_menu.xml</file>
+                </mana_menu>
+            </updates>
+        </layout>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mana_Menu>
+                    <files>
+                        <default>Mana_Menu.csv</default>
+                    </files>
+                </Mana_Menu>
+            </modules>
+        </translate>
+    </adminhtml>
+    <m_block_layout_handle>
+        <mana_menu_tree>
+            <if type="mana_menu/tree_container"/>
+            <load_handle>mana_menu_tree</load_handle>
+        </mana_menu_tree>
+        <mana_menu_category_tree>
+            <if type="mana_menu/category_tree"/>
+            <load_handle>mana_menu_category_tree</load_handle>
+        </mana_menu_category_tree>
+    </m_block_layout_handle>
+</config>
