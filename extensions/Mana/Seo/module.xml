@@ -15,5 +15,10 @@
             <!-- This instructs Magento to search for module code in app/code/local directory. -->
             <codePool>local</codePool>
         </Mana_Seo>
+        <ManaPro_FilterAttributes>
+            <depends>
+                <Mana_Seo/>
+            </depends>
+        </ManaPro_FilterAttributes>
     </modules>
 </config>

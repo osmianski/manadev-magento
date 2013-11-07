@@ -37,6 +37,7 @@ class ManaPro_FilterTree_Block_Filter extends Mana_Filters_Block_Filter {
         Mage::helper('mana_core/js')->options('#m-tree', array_merge(array(
             'url' => $this->getUrl('manapro_filtertree/state/save'),
             'collapsedByDefault' => !Mage::getStoreConfigFlag('mana_filters/tree/expand'),
+            'expandSelected' => Mage::getStoreConfigFlag('mana_filters/tree/expand_selected'),
         ), !$state ? array() : array(
             'state' => $state
         )));

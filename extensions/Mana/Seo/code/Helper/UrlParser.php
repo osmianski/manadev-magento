@@ -460,6 +460,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $separatorLength = $mbstring->strlen($separator);
         while ($pos !== false) {
             if (($nextPos = $mbstring->strpos($text, $separator, $pos)) !== false) {
+                if ($nextPos < $pos) {
+                    break;
+                }
                 if ($nextPos === 0) {
                     $pos = $separatorLength;
                 }
