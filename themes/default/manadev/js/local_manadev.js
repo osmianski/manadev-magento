@@ -145,9 +145,6 @@
 		}
 
 		/***************** CLIENT LOGIC FOR DOWNLOAD INITIATOR CONTROL **********************/
-		if ($.options("#download-initiator")) {
-			window.location.href = $.options("#download-initiator").fileUrl;
-		}
 
 		/***************** CLIENT LOGIC FOR FILE UPLOAD CONTROLS **********************/
 		$('input.file').change(function() {
@@ -314,4 +311,9 @@
 		});
         //endregion
 	});
+    $(window).on('load', function () {
+        if ($.options("#download-initiator")) {
+            window.location.href = $.options("#download-initiator").fileUrl;
+        }
+    });
 })(jQuery);
