@@ -476,7 +476,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     if ($single) {
                         return $clonedToken;
                     }
-                    $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
+                    $tokens[$this->unaccent($clonedToken->getText())] = $clonedToken;
                     $pos = $nextPos + $separatorLength;
                 }
             }
@@ -490,7 +490,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 if ($single) {
                     return $clonedToken;
                 }
-                $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
+                $tokens[$this->unaccent($clonedToken->getText())] = $clonedToken;
 
                 $pos = $nextPos;
             }
@@ -709,6 +709,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
         /* @var $collection Mana_Seo_Resource_Url_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
+        $select = $collection->getSelect();
+        $connection = $collection->getConnection();
+
+        $accentSensitive = $this->_schema->getData('accent_insensitive')
+            ? ''
+            : ' COLLATE utf8_bin';
         $collection
             ->setSchemaFilter($this->_schema)
             ->addTypeFilter($type)
@@ -718,15 +724,17 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     Mana_Seo_Model_Url::STATUS_OBSOLETE
                 )
             ));
-        $collection->getSelect()->order('status');
+        $select->order('status');
         if ($tokens !== false) {
             $keys = array();
             foreach (array_keys($tokens) as $key) {
-                $keys[] = is_numeric($key)
+                $keys[] = $connection->quoteInto("(main_table.final_url_key = ?{$accentSensitive})", is_numeric($key)
                     ? new Zend_Db_Expr("'$key'")
-                    : new Zend_Db_Expr($collection->getConnection()->quote($key));
+                    : new Zend_Db_Expr($connection->quote($key)));
             }
-            $collection->addFieldToFilter('final_url_key', array('in' => $keys));
+            //$collection->addFieldToFilter('final_url_key', array('in' => $keys));
+            $select->where(implode(' OR ', $keys));
+
         }
         return $collection;
     }
@@ -786,7 +794,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $urlCollection->addFieldToFilter('attribute_id', $attributeId);
         }
         foreach ($urls as $url) {
-            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
             if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
                 $conflictingToken = $result[$finalUrlKey];
@@ -862,7 +870,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $urlCollection->addParentCategoryFilter($token->getCategoryPath());
 
         foreach ($urls as $url) {
-            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
             if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
                 $conflictingToken = $result[$finalUrlKey];
@@ -1353,6 +1361,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     public function logger() {
         return Mage::helper('mana_core/logger');
+    }
+
+    protected function unaccent($s) {
+        return $this->_schema->getData('accent_insensitive')
+            ? $this->coreHelper()->unaccent($s)
+            : $s;
     }
     #endregion
 }

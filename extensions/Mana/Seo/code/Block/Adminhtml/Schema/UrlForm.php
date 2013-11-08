@@ -143,6 +143,12 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             'name' => 'use_range_bounds',
             'required' => true,
         ));
+        $this->addField($fieldset, 'accent_insensitive', 'select', array(
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'label' => $this->__('Accent Insensitive (Deprecated)'),
+            'name' => 'accent_insensitive',
+            'required' => true,
+        ));
 
         $this->setForm($form);
         return parent::_prepareForm();
