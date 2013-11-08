@@ -128,7 +128,7 @@
                                 <prev_next_product_list><default_formula>{{= global.prev_next_product_list}}</default_formula></prev_next_product_list>
                                 <sample version="13.08.10.13"><default_formula>{{= global.sample}}</default_formula></sample>
                                 <category_separator version="13.08.10.14"><default_formula>{{= global.category_separator}}</default_formula></category_separator>
-                                <accent_insensitive version="13.11.08.16"><default_formula>{{= global.accent}}</default_formula></accent_insensitive>
+                                <accent_insensitive version="13.11.08.16"><default_formula>{{= global.accent_insensitive}}</default_formula></accent_insensitive>
                             </fields>
                         </store_flat>
                     </scopes>
