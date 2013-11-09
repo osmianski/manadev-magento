@@ -18,6 +18,7 @@ function ($, Block, json)
             this._paddingWidth = 0;
             this._columnCount = 0;
             this._ids = null;
+            this._idCount = 0;
             this._index = 0;
         },
         _subscribeToBlockEvents: function() {
@@ -50,6 +51,8 @@ function ($, Block, json)
                 return;
             }
 
+            this.getIds();
+
             if (!this._itemWidth) {
                 this._itemWidth = $items.outerWidth(true);
                 this._paddingWidth = $items.outerWidth(true) - $items.width();
@@ -58,6 +61,7 @@ function ($, Block, json)
             var width = $slider.width();
             this._columnCount = Math.floor(width/itemWidth);
             var newItemWidth = Math.floor(width / this._columnCount - this._paddingWidth);
+            var newItemHeight = 0;
             this._currentItemWidth = Math.ceil(width / this._columnCount);
 
             $items.each(function () {
@@ -65,8 +69,27 @@ function ($, Block, json)
                 $(this).find('.product-image').width(newItemWidth).height(newItemWidth);
                 $(this).find('.product-image img').attr('width', newItemWidth).attr('height', newItemWidth);
                 $(this).find('.actions').width(newItemWidth);
+                newItemHeight = $(this).height();
             });
 
+            // add items to the right
+            var startIndex = this.getNextIndex(this._index);
+            var endIndex = this.getNextIndex(startIndex);
+            for (var i = $items.length; i < endIndex; i++) {
+                var $newItem = this.getNewItem (i, newItemWidth, newItemHeight);
+                $items.push($newItem);
+                this.$products().append($newItem);
+            }
+            // add items to the left
+            var startIndex = this._index;
+            var endIndex = this.getPrevIndex(startIndex);
+            for (var i = startIndex; i > endIndex; i--) {
+                var newIndex = this._idCount -1 + i;
+                var $newItem = this.getNewItem(newIndex, newItemWidth, newItemHeight);
+//                $items.unshift($newItem);
+                $items.push($newItem);
+                this.$products().prepend($newItem);
+            }
             this.$products().width(this._currentItemWidth * $items.length);
 
         },
@@ -76,6 +99,7 @@ function ($, Block, json)
         getIds: function() {
             if (!this._ids) {
                 this._ids = json.decodeAttribute(this.$().data('ids'));
+                this._idCount = 26;
             }
             return this._ids;
         },
@@ -86,13 +110,22 @@ function ($, Block, json)
             return this._effectDuration;
         },
         getCount: function() {
-            return this.ids().length;
+            return this._ids.length;
+        },
+        getNewItem: function (index, width, height) {
+            return  $('<li class="item item-' + index + '" style="width: ' + width + 'px; height: ' + height + 'px;"> </li>');
+        },
+        getNextIndex: function(startIndex) {
+            return (startIndex + this._columnCount) % this._idCount;
+        },
+        getPrevIndex: function (startIndex) {
+            return (startIndex + this._index - this._columnCount) % this._idCount;
         },
         next: function () {
             var width = this._currentItemWidth * this._columnCount;
-            var newIndex = (this._index + this._columnCount) % this.getCount();
-
-            var status = this.getItemStatus(0, this._columnCount);
+            //var newIndex = this.getNextIndex();
+            //this._index = newIndex;
+  /*          var status = this.getItemStatus(0, this._columnCount);
             if (status.status == 'not_loaded') {
                 this.load(status.missingIds, function() {
                     this.arrange();
@@ -107,14 +140,17 @@ function ($, Block, json)
             else if (status.status == 'not_arranged') {
                 this.arrange();
             }
+            */
             this.$products().animate({left: "-=" + width}, this.getEffectDuration());
         },
         previous: function () {
             var width = this._currentItemWidth * this._columnCount;
-            var newIndex = (this.getCount() + this._index -  this._columnCount) % this.getCount();
+           // var newIndex = this.getPrevIndex();
+           //this._index = newIndex;
             this.$products().animate({left: "+=" + width}, this.getEffectDuration());
-        }
+        },
         areItemsInPlace: function(relativeIndex, count) {
+            return;
         }
     });
 });
