@@ -7,19 +7,60 @@
 
 ; // make JS merging easier
 
-Mana.define('ManaSlider/Tabbed/ProductSlider', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Json'],
-function ($, Block, json)
+Mana.define('ManaSlider/Tabbed/ProductSlider', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Json',
+    'singleton:Mana/Core/Ajax'],
+function ($, Block, json, ajax)
 {
     return Block.extend('ManaSlider/Tabbed/ProductSlider', {
         _init: function () {
             this._super();
+
+            this._isInitialized = false;
+            this._visibleIndex = 0;
+
+            this._loadedCount = 0;
+            this._fakeCount = 0;
+            this._duplicateCount = 0;
+            this._visibleCount = 0;
+
+            this._collectionIds = null;
+
+            this._originalItemWidth = 0;
+            this._originalPaddingWidth = 0;
+            this._containerWidth = 0;
+
+            this._itemInnerWidth = 0;
+            this._itemOuterWidth = 0;
+            this._mode = '';
+
+            // obsolete
             this._itemWidth = 0;
             this._currentItemWidth = 0;
             this._paddingWidth = 0;
-            this._columnCount = 0;
-            this._ids = null;
-            this._idCount = 0;
-            this._index = 0;
+        },
+        _initialize: function() {
+            if (!this._isInitialized) {
+                var $li = this.$loadedFakeAndDuplicatedElements();
+                var self = this;
+                this._isInitialized = true;
+
+                this._loadedCount = $li.length;
+                if (!this._loadedCount) {
+                    return;
+                }
+
+                this._originalItemWidth = $li.outerWidth(true);
+                this._originalPaddingWidth = $li.outerWidth(true) - $li.width();
+
+                if (this._loadedCount < this.getCollectionIds().length) {
+//                    throw 'Not implemented';
+//                    ajax.get('url', function(response) {
+//                        self.loadAjaxItems(response);
+//                    }, { showOverlay: false, showWait: false});
+
+                    this._addFakeItems($li, this.getCollectionIds().length - this._loadedCount);
+                }
+            }
         },
         _subscribeToBlockEvents: function() {
             return this
@@ -45,63 +86,78 @@ function ($, Block, json)
                 });
         },
         resize: function() {
-            var $slider = this.$();
-            var $items = $slider.find('li.item');
-            if (!$items.length) {
+            var self = this;
+            this._initialize();
+            var $li = this.$loadedFakeAndDuplicatedElements();
+
+            if (!this._loadedCount) {
                 return;
             }
 
-            this.getIds();
+            this._containerWidth = this.$().width();
+            this._visibleCount = Math.floor(this._containerWidth / this._originalItemWidth);
+            this._mode = (this._visibleCount >= this.getCollectionIds().length) ? 'center' : 'slide';
 
-            if (!this._itemWidth) {
-                this._itemWidth = $items.outerWidth(true);
-                this._paddingWidth = $items.outerWidth(true) - $items.width();
+            if (this._mode == 'slide') {
+                if (this._areDuplicatesNeeded()) {
+                    if (this._duplicateCount == 0) {
+                        this._addDuplicateItems($li);
+                        $li = this.$loadedFakeAndDuplicatedElements();
+                    }
+                }
+                else {
+                    if (this._duplicateCount != 0) {
+                        this._removeDuplicateItems($li);
+                        $li = this.$loadedFakeAndDuplicatedElements();
+                    }
+                }
             }
-            var itemWidth = this._itemWidth;
-            var width = $slider.width();
-            this._columnCount = Math.floor(width/itemWidth);
-            var newItemWidth = Math.floor(width / this._columnCount - this._paddingWidth);
-            var newItemHeight = 0;
-            this._currentItemWidth = Math.ceil(width / this._columnCount);
+            else {
+                if (this._duplicateCount != 0) {
+                    this._removeDuplicateItems($li);
+                    $li = this.$loadedFakeAndDuplicatedElements();
+                }
+            }
 
-            $items.each(function () {
-                $(this).width(newItemWidth);
-                $(this).find('.product-image').width(newItemWidth).height(newItemWidth);
-                $(this).find('.product-image img').attr('width', newItemWidth).attr('height', newItemWidth);
-                $(this).find('.actions').width(newItemWidth);
-                newItemHeight = $(this).height();
+            // do resize everyhting
+            this._itemInnerWidth = this._mode == 'slide'
+                ? Math.floor(this._containerWidth / this._visibleCount - this._originalPaddingWidth)
+                : this._originalItemWidth;
+            this._itemOuterWidth = Math.ceil(this._containerWidth / this._visibleCount);
+            $li.each(function () {
+                $(this).width(self._itemInnerWidth);
+                $(this).find('.product-image').width(self._itemInnerWidth).height(self._itemInnerWidth);
+                $(this).find('.product-image img').attr('width', self._itemInnerWidth).attr('height', self._itemInnerWidth);
+                $(this).find('.actions').width(self._itemInnerWidth);
             });
+            this.$products().width(this._itemOuterWidth * $li.length);
 
-            // add items to the right
-            var startIndex = this.getNextIndex(this._index);
-            var endIndex = this.getNextIndex(startIndex);
-            for (var i = $items.length; i < endIndex; i++) {
-                var $newItem = this.getNewItem (i, newItemWidth, newItemHeight);
-                $items.push($newItem);
-                this.$products().append($newItem);
-            }
             // add items to the left
-            var startIndex = this._index;
-            var endIndex = this.getPrevIndex(startIndex);
-            for (var i = startIndex; i > endIndex; i--) {
-                var newIndex = this._idCount -1 + i;
-                var $newItem = this.getNewItem(newIndex, newItemWidth, newItemHeight);
-//                $items.unshift($newItem);
-                $items.push($newItem);
-                this.$products().prepend($newItem);
-            }
-            this.$products().width(this._currentItemWidth * $items.length);
+//            startIndex = this._visibleIndex;
+//            endIndex = this.getPrevIndex(startIndex);
+//            for (var i = startIndex; i > endIndex; i--) {
+//                var newIndex = this.getCollectionCount() -1 + i;
+//                $newItem = this._createFakeItem(newIndex, itemWidth, itemHeight);
+//                $li.splice(0, 0, $newItem);
+//                this.$products().prepend($newItem);
+//            }
 
+        },
+        loadAjaxItems: function(response) {
+            throw 'Not implemented';
         },
         $products: function() {
             return this.$().find('ul.products-grid');
         },
-        getIds: function() {
-            if (!this._ids) {
-                this._ids = json.decodeAttribute(this.$().data('ids'));
-                this._idCount = 26;
+        /**
+         * IDs of all items in server collection
+         * @returns number
+         */
+        getCollectionIds: function() {
+            if (!this._collectionIds) {
+                this._collectionIds = json.decodeAttribute(this.$().data('ids'));
             }
-            return this._ids;
+            return this._collectionIds;
         },
         getEffectDuration: function() {
             if (!this._effectDuration) {
@@ -109,48 +165,74 @@ function ($, Block, json)
             }
             return this._effectDuration;
         },
-        getCount: function() {
-            return this._ids.length;
+
+        /**
+         * All loaded, fake and duplicated items
+         * @returns jQuery
+         */
+        $loadedFakeAndDuplicatedElements: function() {
+            return this.$().find('li.item');
         },
-        getNewItem: function (index, width, height) {
-            return  $('<li class="item item-' + index + '" style="width: ' + width + 'px; height: ' + height + 'px;"> </li>');
+        _getMaxCount: function() {
+            var collectionCount = this.getCollectionIds().length;
+            return !this._areDuplicatesNeeded() ? collectionCount : collectionCount * 2;
         },
-        getNextIndex: function(startIndex) {
-            return (startIndex + this._columnCount) % this._idCount;
+        _areDuplicatesNeeded: function() {
+            return this.getCollectionIds().length < this._visibleCount * 2;
         },
-        getPrevIndex: function (startIndex) {
-            return (startIndex + this._index - this._columnCount) % this._idCount;
+        _addFakeItems: function($li, count) {
+            for (var i = 0; i < count; i++) {
+                this.$products().append(this._createFakeItem(i + this._loadedCount + this._fakeCount));
+            }
+            this._fakeCount += count;
+        },
+        _addDuplicateItems: function ($li) {
+            throw 'Not implemented';
+        },
+        _removeDuplicateItems: function ($li) {
+            throw 'Not implemented';
+        },
+        _createFakeItem: function (index) {
+            return  $('<li class="item item-' + index + '"> </li>');
+        },
+        getIndex: function(startIndex) {
+            return (startIndex + this.getCollectionIds().length) % this.getCollectionIds().length;
         },
         next: function () {
-            var width = this._currentItemWidth * this._columnCount;
-            //var newIndex = this.getNextIndex();
-            //this._index = newIndex;
-  /*          var status = this.getItemStatus(0, this._columnCount);
-            if (status.status == 'not_loaded') {
-                this.load(status.missingIds, function() {
-                    this.arrange();
+            var $li = this.$loadedFakeAndDuplicatedElements();
+            var nextVisibleIndex = this._visibleIndex + this._visibleCount;
+            var rotateCount = nextVisibleIndex + this._visibleCount - $li.length;
+            if (rotateCount > 0) {
+                var liArray = $.makeArray($li);
+                for (var i = 0; i < rotateCount; i++) {
+                    this.$products().append(liArray[i]);
+                }
+                this._visibleIndex -= rotateCount;
+                nextVisibleIndex -= rotateCount;
+                this.$products().animate({left: "+=" + (this._itemOuterWidth * rotateCount)}, 0);
+            }
 
-                });
-                return;
-            }
-            else if (status.status == 'not_enough') {
-                this.duplicate();
-                this.arrange();
-            }
-            else if (status.status == 'not_arranged') {
-                this.arrange();
-            }
-            */
-            this.$products().animate({left: "-=" + width}, this.getEffectDuration());
+            this._visibleIndex = this.getIndex(nextVisibleIndex);
+            this.$products().animate({left: "-=" + (this._itemOuterWidth * this._visibleCount)},
+                this.getEffectDuration());
         },
         previous: function () {
-            var width = this._currentItemWidth * this._columnCount;
-           // var newIndex = this.getPrevIndex();
-           //this._index = newIndex;
-            this.$products().animate({left: "+=" + width}, this.getEffectDuration());
-        },
-        areItemsInPlace: function(relativeIndex, count) {
-            return;
+            var $li = this.$loadedFakeAndDuplicatedElements();
+            var nextVisibleIndex = this._visibleIndex - this._visibleCount;
+            var rotateCount = -nextVisibleIndex;
+            if (rotateCount > 0) {
+                var liArray = $.makeArray($li);
+                for (var i = 0; i < rotateCount; i++) {
+                    this.$products().prepend(liArray[liArray.length - i - 1]);
+                }
+                this._visibleIndex += rotateCount;
+                nextVisibleIndex += rotateCount;
+                this.$products().animate({left: "-=" + (this._itemOuterWidth * rotateCount)}, 0);
+            }
+
+            this._visibleIndex = this.getIndex(nextVisibleIndex);
+            this.$products().animate({left: "+=" + (this._itemOuterWidth * this._visibleCount)},
+                this.getEffectDuration());
         }
     });
 });

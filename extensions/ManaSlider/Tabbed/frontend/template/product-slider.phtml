@@ -12,7 +12,8 @@ $_products = $this->getDataSource();
 $_sql = $_products->getSelect()->__toString();
 ?>
 <div class="widget-products m-product-slider mb-<?php echo $this->jsHelper()->getClientSideBlockName($this->getNameInLayout()) ?>"
-    data-m-block="ManaSlider/Tabbed/ProductSlider" data-ids="<?php echo $this->jsonHelper()->encodeAttribute($_products->getAllIds()) ?>"
+    data-m-block="ManaSlider/Tabbed/ProductSlider"
+    data-ids="<?php echo $this->jsonHelper()->encodeAttribute($_products->getAllIds()) ?>"
     data-effect-duration="<?php echo $this->getData('effect_duration')?>">
     <a href="#" class="previous">Previous</a>
     <a href="#" class="next">Next</a>

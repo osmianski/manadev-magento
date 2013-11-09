@@ -8,7 +8,7 @@
             <data_source>new_products</data_source>
             <ignore_new_products>1</ignore_new_products>
             <days_products_are_new>3000</days_products_are_new>
-            <max_product_count>10</max_product_count>
+            <max_product_count>3</max_product_count>
             <condition>or</condition>
             <effect_duration>1000</effect_duration>
         </tab1>
