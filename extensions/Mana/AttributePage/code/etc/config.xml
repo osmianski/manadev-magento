@@ -160,11 +160,20 @@
     </adminhtml>
     <!-- This section enables static visual changes in frontend area. -->
     <frontend>
+        <routers>
+            <mana>
+                <args>
+                    <modules>
+                        <mana_attributepage before="Mana_Core">Mana_AttributePage</mana_attributepage>
+                    </modules>
+                </args>
+            </mana>
+        </routers>
         <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
             and executes during page rendering. -->
         <layout>
             <updates>
-                <mana_attributepage>
+                <mana_attributepage module="Mana_Attribute_Page">
                     <file>mana_attributepage.xml</file>
                 </mana_attributepage>
             </updates>

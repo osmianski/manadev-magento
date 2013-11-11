@@ -72,4 +72,16 @@ class Mana_AttributePage_Model_Page extends Mana_Db_Model_Entity {
             throw new Mana_Db_Exception_Validation(Mage::helper('mana_attributepage')->__('Attribute pages for selected attribute(s) already exists.'));
         }
     }
+
+    public function canShow() {
+        if (!$this->getId()) {
+            return false;
+        }
+
+        if (!$this->getData('is_active')) {
+            return false;
+        }
+
+        return true;
+    }
 }
