@@ -6,5 +6,26 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 /* @var $this Mana_AttributePage_Block_Option_View */
+$_optionPage = $this->getOptionPage();
+$_filesHelper = $this->filesHelper();
+$_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+if ($_imgUrl = $_optionPage->getImageUrl()) {
+    $_imgHtml = '<p class="category-image"><img src="' . $_imgUrl . '" alt="' . $this->htmlEscape($_category->getName()) . '" title="' . $this->htmlEscape($_category->getName()) . '" /></p>';
+    $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+}
 ?>
+<div class="page-title category-title m-option-page-title">
+    <h1><?php echo $_escapedTitle ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php if (($_imgUrl = $_optionPage->getData('image')) && ($_imgUrl = $_filesHelper->getUrl($_imgUrl, 'image'))): ?>
+    <p class="category-image m-option-page-image">
+        <img src="<?php echo $_imgUrl ?>" alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"/>
+    </p>
+<?php endif; ?>
+<?php if ($_description = $_optionPage->getData('description')): ?>
+    <div class="category-description m-option-page-description std">
+        <?php echo $_description ?>
+    </div>
+<?php endif; ?>
 <?php echo $this->getProductListHtml() ?>

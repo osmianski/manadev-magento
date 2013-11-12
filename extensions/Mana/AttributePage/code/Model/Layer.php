@@ -15,10 +15,10 @@ class Mana_AttributePage_Model_Layer {
      */
     protected function _getResource() {
         if (Mage::helper('mana_attributepage')->useSolrForNavigation()) {
-            return Mage::getResourceSingleton('mana_attributepage/solr_layer');
+            return Mage::getResourceSingleton('mana_attributepage/layer_solr');
         }
         else {
-            return Mage::getResourceSingleton('mana_attributepage/mysql_layer');
+            return Mage::getResourceSingleton('mana_attributepage/layer_mysql');
         }
     }
 

@@ -11,7 +11,7 @@
         <Mana_AttributePage>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.11.02.20</version>
+            <version>13.11.11.13</version>
         </Mana_AttributePage>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -97,26 +97,11 @@
                 </mana_db>
                 <mana_seo_url>
                     <sources>
-                        <filter><resource>mana_seo/urlIndexer_filter</resource></filter>
-                        <filter_value><resource>mana_seo/urlIndexer_value</resource></filter_value>
+                        <option_page><resource>mana_attributepage/urlIndexer_optionPage</resource></option_page>
                     </sources>
                 </mana_seo_url>
             </indexer>
         </index>
-        <indexer>
-            <mana_seo_url>
-                <sources>
-                    <filter>
-                        <resource>mana_seo/urlIndexer_filter</resource>
-                        <parameter_type>manapro_filterseolinks/url_filter</parameter_type>
-                    </filter>
-                    <filter_value>
-                        <resource>mana_seo/urlIndexer_value</resource>
-                        <parameter_type>manapro_filterseolinks/url_value</parameter_type>
-                    </filter_value>
-                </sources>
-            </mana_seo_url>
-        </indexer>
         <!-- INSERT HERE: blocks, models, ... -->
     </global>
     <!-- This section enables static visual changes in admin area. -->

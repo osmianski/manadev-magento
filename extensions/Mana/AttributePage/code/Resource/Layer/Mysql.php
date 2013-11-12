@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Resource_Mysql_Layer extends Mage_Core_Model_Mysql4_Abstract  {
+class Mana_AttributePage_Resource_Layer_Mysql extends Mage_Core_Model_Mysql4_Abstract  {
     /**
      * Resource initialization
      */

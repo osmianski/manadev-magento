@@ -13,6 +13,7 @@
                 <v13.04.24.18>13.01.21.22</v13.04.24.18>
                 <v13.05.19.08>13.01.21.22</v13.05.19.08>
                 <v13.11.02.20>13.01.21.22</v13.11.02.20>
+                <v13.11.11.13>13.01.21.22</v13.11.11.13>
             </installer_versions>
             <entities>
                 <page>
@@ -131,14 +132,14 @@
                                 </base>
                             </formula>
                             <fields>
-                                <title><default_formula>Shop By {{= GLUE(attribute.frontend_label, ', ', ' and ')}} in {{= category.name}}</default_formula></title>
-                                <description><default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}]]></default_formula></description>
-                                <image><default_formula>{{= SKIN_URL('images/mana_attributepage/attribute_icon.png')}}</default_formula></image>
+                                <title><default_formula>Shop By {{= GLUE(attribute.frontend_label, ', ', ' and ')}}</default_formula></title>
+                                <description><default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore! </p>]]></default_formula></description>
+                                <!--<image><default_formula>{{= SKIN_URL('images/mana_attributepage/attribute_icon.png')}}</default_formula></image>-->
                                 <include_in_menu><default_formula>{{= IF(COUNT(attribute.frontend_label) - 1, 1, 0)}}</default_formula></include_in_menu>
                                 <url_key><default_formula>{{= GLUE(attribute.frontend_label, ' ')}}</default_formula></url_key>
                                 <meta_title><default_formula>{{= title}}</default_formula></meta_title>
                                 <meta_keywords><default_formula>{{= GLUE(attribute.frontend_label, ',')}},{{= category.meta_keywords}}</default_formula></meta_keywords>
-                                <meta_description><default_formula>{{= description}}</default_formula></meta_description>
+                                <meta_description><default_formula><![CDATA[We proudly present each {{= LOWER(GLUE(attribute.frontend_label, ', ', ' and '))}} below. Just click on a link to explore!]]></default_formula></meta_description>
                                 <attribute_id_0><default_formula>{{= primary.attribute_id_0}}</default_formula></attribute_id_0>
                                 <attribute_id_1><default_formula>{{= primary.attribute_id_1}}</default_formula></attribute_id_1>
                                 <attribute_id_2><default_formula>{{= primary.attribute_id_2}}</default_formula></attribute_id_2>
@@ -342,14 +343,14 @@
                                 </base>
                             </formula>
                             <fields>
-                                <title><default_formula>Shop By {{= GLUE(option.global_label, ', ', ' and ')}} in {{= category.name}}</default_formula></title>
-                                <description><default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(option.global_label, ', ', ' and '))}} below. Just click on a link to explore! </p> {{= category.description }}]]></default_formula></description>
-                                <image><default_formula>{{= SKIN_URL('images/mana_attributepage/option_icon.png')}}</default_formula></image>
+                                <title><default_formula>{{= GLUE(option.global_label, ', ', ' and ')}} Products</default_formula></title>
+                                <description><default_formula><![CDATA[<p>We proudly present each {{= LOWER(GLUE(option.global_label, ', ', ' and '))}} product below. Just click on a link to explore! </p>]]></default_formula></description>
+                                <!--<image><default_formula>{{= SKIN_URL('images/mana_attributepage/option_icon.png')}}</default_formula></image>-->
                                 <include_in_menu><default_formula>{{= IF(COUNT(option.global_label) - 1, 1, 0)}}</default_formula></include_in_menu>
                                 <url_key><default_formula>{{= GLUE(option.global_label, ' ')}}</default_formula></url_key>
                                 <meta_title><default_formula>{{= title}}</default_formula></meta_title>
-                                <meta_keywords><default_formula>{{= GLUE(option.global_label, ',')}},{{= category.meta_keywords}}</default_formula></meta_keywords>
-                                <meta_description><default_formula>{{= description}}</default_formula></meta_description>
+                                <meta_keywords><default_formula>{{= GLUE(option.global_label, ',')}}</default_formula></meta_keywords>
+                                <meta_description><default_formula><![CDATA[We proudly present each {{= LOWER(GLUE(option.global_label, ', ', ' and '))}} product below. Just click on a link to explore!]]></default_formula></meta_description>
                                 <option_id_0><default_formula>{{= option0.option_id}}</default_formula></option_id_0>
                                 <option_id_1><default_formula>{{= option1.option_id}}</default_formula></option_id_1>
                                 <option_id_2><default_formula>{{= option2.option_id}}</default_formula></option_id_2>
@@ -433,12 +434,6 @@
                     </scopes>
                 </schema>
                 <url>
-                    <!--<unique>
-                        <primary>
-                            <attribute_page_id module="mana_attributepage" version="13.04.24.18"/>
-                            <option_page_id module="mana_attributepage" version="13.04.24.18"/>
-                        </primary>
-                    </unique>-->
                     <fields>
                         <attribute_page_id module="mana_attributepage" version="13.04.24.18">
                             <type>bigint</type>
@@ -460,6 +455,86 @@
                                 <on_delete>cascade</on_delete>
                             </foreign>
                         </option_page_id>
+                        <attribute_page_store_id module="mana_attributepage" version="13.11.11.13">
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_attributepage/page/store</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </attribute_page_store_id>
+                        <attribute_page_global_id module="mana_attributepage" version="13.11.11.13">
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_attributepage/page/global</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </attribute_page_global_id>
+                        <option_page_store_id module="mana_attributepage" version="13.11.11.13">
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_attributepage/option_page/store</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </option_page_store_id>
+                        <option_page_global_id module="mana_attributepage" version="13.11.11.13">
+                            <type>bigint</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>mana_attributepage/option_page/global</entity>
+                                <field>id</field>
+                                <on_update>set null</on_update>
+                                <on_delete>set null</on_delete>
+                            </foreign>
+                        </option_page_global_id>
+                        <attribute_id_1 module="mana_attributepage" version="13.11.11.13">
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id_1>
+                        <attribute_id_2 module="mana_attributepage" version="13.11.11.13">
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id_2>
+                        <attribute_id_3 module="mana_attributepage" version="13.11.11.13">
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id_3>
+                        <attribute_id_4 module="mana_attributepage" version="13.11.11.13">
+                            <type>smallint(5) unsigned</type>
+                            <nullable>1</nullable>
+                            <foreign>
+                                <entity>eav/attribute</entity>
+                                <field>attribute_id</field>
+                                <on_update>cascade</on_update>
+                                <on_delete>cascade</on_delete>
+                            </foreign>
+                        </attribute_id_4>
                     </fields>
                 </url>
 
