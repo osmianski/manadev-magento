@@ -14,6 +14,7 @@
                 <v13.05.19.08>13.01.21.22</v13.05.19.08>
                 <v13.11.02.20>13.01.21.22</v13.11.02.20>
                 <v13.11.11.13>13.01.21.22</v13.11.11.13>
+                <v13.11.12.13>13.01.21.22</v13.11.12.13>
             </installer_versions>
             <entities>
                 <page>
@@ -36,6 +37,11 @@
                         <meta_title><type>varchar(255)</type><no>14</no></meta_title>
                         <meta_keywords><type>mediumtext</type><no>15</no></meta_keywords>
                         <meta_description><type>mediumtext</type><no>16</no></meta_description>
+                        <include_in_option_page_url_0 version="13.11.12.13"><type>tinyint</type><no>17</no><default_value>0</default_value></include_in_option_page_url_0>
+                        <include_in_option_page_url_1 version="13.11.12.13"><type>tinyint</type><no>18</no><default_value>0</default_value></include_in_option_page_url_1>
+                        <include_in_option_page_url_2 version="13.11.12.13"><type>tinyint</type><no>19</no><default_value>0</default_value></include_in_option_page_url_2>
+                        <include_in_option_page_url_3 version="13.11.12.13"><type>tinyint</type><no>20</no><default_value>0</default_value></include_in_option_page_url_3>
+                        <include_in_option_page_url_4 version="13.11.12.13"><type>tinyint</type><no>21</no><default_value>0</default_value></include_in_option_page_url_4>
                         <attribute_id_0>
                             <type>smallint(5) unsigned</type>
                             <foreign>
@@ -102,25 +108,6 @@
                                 <hasAtLeastOneAttribute />
                                 <hasUniqueAttributeCombination />
                             </post_validation>
-                            <formula>
-<!--                                <aggregate>
-                                    <attribute>
-                                        <entity>eav/attribute</entity>
-                                        <from>
-                                            <attribute/>
-                                        </from>
-                                        <join>
-                                            <page_attribute>
-                                                <entity>mana_attributepage/page_attribute</entity>
-                                                <on>{{= attribute.attribute_id }} = {{= page_attribute.attribute_id }}</on>
-                                            </page_attribute>
-                                        </join>
-                                        <order>{{= page_attribute.position }} ASC</order>
-                                        <where>{{= parent.context.id }} = {{= page_attribute.page_id }}</where>
-                                        <title>Product Attribute</title>
-                                    </attribute>
-                                </aggregate>-->
-                            </formula>
                         </global>
                         <flat>
                             <flattens>mana_attributepage/page/global</flattens>
@@ -194,6 +181,11 @@
                                 <attribute_id_2><default_formula>{{= global.attribute_id_2}}</default_formula></attribute_id_2>
                                 <attribute_id_3><default_formula>{{= global.attribute_id_3}}</default_formula></attribute_id_3>
                                 <attribute_id_4><default_formula>{{= global.attribute_id_4}}</default_formula></attribute_id_4>
+                                <include_in_option_page_url_0 version="13.11.12.13">{{= global.include_in_option_page_url_0}}</include_in_option_page_url_0>
+                                <include_in_option_page_url_1 version="13.11.12.13">{{= global.include_in_option_page_url_1}}</include_in_option_page_url_1>
+                                <include_in_option_page_url_2 version="13.11.12.13">{{= global.include_in_option_page_url_2}}</include_in_option_page_url_2>
+                                <include_in_option_page_url_3 version="13.11.12.13">{{= global.include_in_option_page_url_3}}</include_in_option_page_url_3>
+                                <include_in_option_page_url_4 version="13.11.12.13">{{= global.include_in_option_page_url_4}}</include_in_option_page_url_4>
                             </fields>
                         </store_flat>
                     </scopes>
