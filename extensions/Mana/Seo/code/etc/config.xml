@@ -97,11 +97,13 @@
         </events>
         <index>
             <indexer>
-                <mana_db>
+                <mana_db translate="name description" module="mana_db">
+                    <model>mana_db/entity_indexer</model>
+                    <name>SEO Schemas (MANAdev)</name>
+                    <description>Recalculates SEO Schema store-level settings</description>
                     <targets>
                         <schema translate="description" module="mana_seo">
                             <entity>mana_seo/schema</entity>
-                            <description>SEO Schemas</description>
                         </schema>
                     </targets>
                 </mana_db>
