@@ -120,6 +120,22 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         return $collection;
     }
 
+    public function seoifyExpr($expr, $schema = null) {
+        if (!$schema) {
+            $schema = $this->getActiveSchema(Mage::app()->getStore()->getId());
+        }
+        $res = Mage::getSingleton('core/resource');
+        $db = $res->getConnection('read');
+
+        $expr = "LOWER($expr)";
+        foreach ($schema->getSortedSymbols() as $symbol) {
+            $expr = "REPLACE($expr, {$db->quote($symbol['symbol'])}, {$db->quote($symbol['substitute'])})";
+        }
+
+        return $expr;
+
+    }
+
     #region Test Helpers
     public function clearParameterUrlCache() {
         $this->_parameterUrls = array();
@@ -138,5 +154,6 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $this->_categoryPaths[$id];
     }
+
     #endregion
 }

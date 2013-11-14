@@ -31,6 +31,7 @@
                 <class>Mana_AttributePage_Resource</class>
                 <entities>
 					<attributePage_global><table>m_attribute_page_global</table></attributePage_global>
+					<attributePage_globalCustomSettings><table>m_attribute_page_global_custom_settings</table></attributePage_globalCustomSettings>
 					<attributePage_store><table>m_attribute_page_store</table></attributePage_store>
 					<attributePage_storeCustomSettings><table>m_attribute_page_store_custom_settings</table></attributePage_storeCustomSettings>
 					<optionPage_global><table>m_option_page_global</table></optionPage_global>
@@ -49,6 +50,11 @@
         </resources>
         <index>
             <indexer>
+                <mana_attribute_page translate="name description" module="mana_attributepage">
+                    <model>mana_attributepage/attributePage_indexer</model>
+                    <name>Attribute Pages (MANAdev)</name>
+                    <description>Recalculates attribute page global and store-level settings</description>
+                </mana_attribute_page>
                 <!--<mana_seo_url>
                     <sources>
                         <option_page><resource>mana_attributepage/urlIndexer_optionPage</resource></option_page>

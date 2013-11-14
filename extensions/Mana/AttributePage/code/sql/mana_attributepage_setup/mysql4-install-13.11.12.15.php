@@ -21,11 +21,45 @@ $table = $this->getTable('mana_attributepage/attributePage_global');
 $installer->run("
     CREATE TABLE `$table` (
       `id` bigint(20) NOT NULL AUTO_INCREMENT,
+
+      `is_active` tinyint NOT NULL DEFAULT '1',
+      `title` varchar(255) NOT NULL DEFAULT '',
+      `description` mediumtext NOT NULL,
+      `image` varchar(255) NOT NULL DEFAULT '',
+      `include_in_menu` tinyint NOT NULL DEFAULT '1',
+      `url_key` varchar(128) NOT NULL DEFAULT '',
+      `template` varchar(20) NOT NULL DEFAULT '',
+      `show_alphabetic_search` tinyint NOT NULL DEFAULT '1',
+      `page_layout` varchar(128) NOT NULL DEFAULT '',
+      `layout_xml` mediumtext NOT NULL,
+      `custom_design_active_from` datetime DEFAULT NULL,
+      `custom_design_active_to` datetime DEFAULT NULL,
+      `custom_design` varchar(128) NOT NULL DEFAULT '',
+      `custom_layout_xml` mediumtext NOT NULL,
+      `meta_title` varchar(255) NOT NULL DEFAULT '',
+      `meta_keywords` mediumtext NOT NULL,
+      `meta_description` mediumtext NOT NULL,
+
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+");
+
+// attribute page: global custom settings
+$table = $this->getTable('mana_attributepage/attributePage_globalCustomSettings');
+$installer->run("
+    CREATE TABLE `$table` (
+      `id` bigint(20) NOT NULL AUTO_INCREMENT,
+      `attribute_page_global_id` bigint(20) NOT NULL,
       `attribute_id_0` smallint(5) unsigned NOT NULL,
       `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_3` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_4` smallint(5) unsigned DEFAULT NULL,
+
+      `default_mask0` int(10) unsigned NOT NULL,
+      `default_mask1` int(10) unsigned NOT NULL,
+      `default_mask2` int(10) unsigned NOT NULL,
+      `default_mask3` int(10) unsigned NOT NULL,
 
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
@@ -46,6 +80,7 @@ $installer->run("
       `meta_description` mediumtext NOT NULL,
 
       PRIMARY KEY (`id`),
+      KEY `attribute_page_global_id` (`attribute_page_global_id`),
       KEY `attribute_id_0` (`attribute_id_0`),
       KEY `attribute_id_1` (`attribute_id_1`),
       KEY `attribute_id_2` (`attribute_id_2`),
@@ -54,6 +89,9 @@ $installer->run("
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
     ALTER TABLE `$table`
+        ADD CONSTRAINT `FK_{$table}_attr_page_g` FOREIGN KEY (`attribute_page_global_id`)
+            REFERENCES `{$this->getTable('mana_attributepage/attributePage_global')}` (`id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT `FK_{$table}_attr_0` FOREIGN KEY (`attribute_id_0`)
             REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
             ON DELETE CASCADE ON UPDATE CASCADE,
