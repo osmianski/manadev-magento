@@ -59,4 +59,17 @@ examples on what kind of actions can be applied to referenced blocks.
             <block type="core/template" name="cms.products" template="mana/filters/cms.phtml" />
         </reference>
 	</cms_page_layered>
+	<mana_optionpage_view> <!-- find all category pages with layered navigation -->
+		<reference name="left"> <!-- find left column block -->
+			<remove name="catalog.leftnav"/> <!-- remove standard layered navigation -->
+            <remove name="enterprisecatalog.leftnav"/> <!-- remove enterprise layered navigation -->
+            <block type="mana_filters/view" name="mana.catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
+		</reference>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/mana_filters.css</stylesheet></action>
+		</reference>
+        <reference name="mana.catalog.leftnav">
+            <action method="setTemplate" ifconfig="mana_filters/advanced/enabled"><template>manapro/filteradvanced/view.phtml</template></action>
+        </reference>
+	</mana_optionpage_view>
 </layout>

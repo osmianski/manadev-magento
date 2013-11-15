@@ -40,4 +40,11 @@ examples on what kind of actions can be applied to referenced blocks.
         	<action method="addItem"><type>skin_js</type><name>js/manapro_filterslider.js</name><params/></action>
 		</reference>
     </cms_page_layered>
+	<mana_optionpage_view> 
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filterslider.css</stylesheet></action>
+        	<action method="addItem"><type>skin_js</type><name>js/price_slider.js</name><params/></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filterslider.js</name><params/></action>
+		</reference>
+	</mana_optionpage_view>
 </layout>

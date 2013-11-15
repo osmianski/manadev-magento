@@ -42,4 +42,12 @@ examples on what kind of actions can be applied to referenced blocks.
             <block type="core/template" name="m_filter_clear" template="manapro/filterclear/link.phtml" />
 		</reference>
     </cms_page_layered>
+    <mana_optionpage_view>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/manapro_filterclear.css</stylesheet></action>
+        </reference>
+		<reference name="root">
+            <block type="core/template" name="m_filter_clear" template="manapro/filterclear/link.phtml" />
+		</reference>
+    </mana_optionpage_view>
 </layout>

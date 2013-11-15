@@ -23,5 +23,10 @@
                 <Mana_Seo/>
             </depends>
         </Mana_AttributePage>
+        <ManaPro_FilterPositioning>
+            <depends>
+                <Mana_AttributePage/>
+            </depends>
+        </ManaPro_FilterPositioning>
     </modules>
 </config>

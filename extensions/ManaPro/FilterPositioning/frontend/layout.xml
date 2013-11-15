@@ -111,4 +111,30 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setTemplate" ifconfig="mana_filters/advanced/enabled"><template>manapro/filteradvanced/view.phtml</template></action>
         </reference>
     </cms_page_layered>
+	<mana_optionpage_view> 
+		<update handle="jquery_core" />
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filterpositioning.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filterpositioning.js</name><params/></action>
+		</reference>
+		<reference name="mana.catalog.leftnav">
+            <action method="setShowInFilter"><showIn>left</showIn></action>
+		</reference>
+        <reference name="right">
+            <block type="mana_filters/view" name="mana.catalog.rightnav" before="-" template="catalog/layer/view.phtml">
+                <action method="setShowInFilter"><showIn>right</showIn></action>
+                <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+            </block>
+        </reference>
+        <reference name="option.products">
+            <block type="mana_core/list" name="catalog.above_products" as="above_products" before="-">
+                <block type="mana_filters/view" name="mana.catalog.above_products.nav" before="-" template="catalog/layer/view.phtml">
+                    <action method="setShowInFilter"><showIn>above_products</showIn></action>
+                </block>
+            </block>
+        </reference>
+        <reference name="mana.catalog.rightnav">
+            <action method="setTemplate" ifconfig="mana_filters/advanced/enabled"><template>manapro/filteradvanced/view.phtml</template></action>
+        </reference>
+    </mana_optionpage_view>
 </layout>
