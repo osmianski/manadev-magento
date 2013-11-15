@@ -9,8 +9,8 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Model_AttributePage_Global extends Mana_AttributePage_Model_AttributePage_Abstract {
-    const ENTITY = 'mana_attributepage/attributePage_global';
+class Mana_AttributePage_Model_OptionPage_Store extends Mana_AttributePage_Model_OptionPage_Abstract {
+    const ENTITY = 'mana_attributepage/optionPage_store';
 
     protected function _construct() {
         $this->_init(self::ENTITY);

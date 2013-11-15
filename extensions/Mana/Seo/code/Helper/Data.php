@@ -133,7 +133,6 @@ class Mana_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         return $expr;
-
     }
 
     #region Test Helpers

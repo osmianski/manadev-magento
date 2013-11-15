@@ -55,11 +55,23 @@
                     <name>Attribute Pages (MANAdev)</name>
                     <description>Recalculates attribute page global and store-level settings</description>
                 </mana_attribute_page>
-                <!--<mana_seo_url>
+                <mana_option_page translate="name description" module="mana_attributepage">
+                    <model>mana_attributepage/optionPage_indexer</model>
+                    <name>Option Pages (MANAdev)</name>
+                    <description>Recalculates option page global and store-level settings</description>
+                    <depends>
+                        <mana_attribute_page/>
+                    </depends>
+                </mana_option_page>
+                <mana_seo_url>
                     <sources>
-                        <option_page><resource>mana_attributepage/urlIndexer_optionPage</resource></option_page>
+                        <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
                     </sources>
-                </mana_seo_url>-->
+                    <depends>
+                        <mana_attribute_page/>
+                        <mana_option_page/>
+                    </depends>
+                </mana_seo_url>
             </indexer>
         </index>
     </global>

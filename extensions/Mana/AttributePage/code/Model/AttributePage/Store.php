@@ -11,4 +11,8 @@
  */
 class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Model_AttributePage_Abstract {
     const ENTITY = 'mana_attributepage/attributePage_store';
+
+    protected function _construct() {
+        $this->_init(self::ENTITY);
+    }
 }

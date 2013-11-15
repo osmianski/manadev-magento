@@ -10,7 +10,17 @@
  *
  */
 class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
-    protected $_tableAlias;
+    protected static $_seoSymbols = array(
+        array('symbol' => '\\', 'substitute' => ''),
+        array('symbol' => '_', 'substitute' => '-'),
+        array('symbol' => '\'', 'substitute' => ''),
+        array('symbol' => ':', 'substitute' => '-'),
+        array('symbol' => '%', 'substitute' => ''),
+        array('symbol' => '#', 'substitute' => ''),
+        array('symbol' => '?', 'substitute' => ''),
+        array('symbol' => '&', 'substitute' => '+'),
+        array('symbol' => ' ', 'substitute' => '-'),
+    );
 
     public function getMaskIndex($bit) {
         return ((int)floor($bit / 32));
@@ -20,12 +30,8 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return 1 << ($bit % 32);
     }
 
-    public function setTableAlias($tableAlias) {
-        $this->_tableAlias = $tableAlias;
-        return $this;
-    }
-    public function isCustom($bit) {
-        return "`{$this->_tableAlias}`.`default_mask{$this->getMaskIndex($bit)}` ".
+    public function isCustom($tableAlias, $bit) {
+        return "`{$tableAlias}`.`default_mask{$this->getMaskIndex($bit)}` ".
             "& {$this->getMask($bit)} = {$this->getMask($bit)}";
     }
 
@@ -37,4 +43,19 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return $result;
     }
 
+    public function seoifyExpr($expr) {
+        $res = Mage::getSingleton('core/resource');
+        $db = $res->getConnection('read');
+
+        $expr = "LOWER($expr)";
+        foreach ($this->getSeoSymbols() as $symbol) {
+            $expr = "REPLACE($expr, {$db->quote($symbol['symbol'])}, {$db->quote($symbol['substitute'])})";
+        }
+
+        return $expr;
+    }
+
+    public function getSeoSymbols() {
+        return self::$_seoSymbols;
+    }
 }
