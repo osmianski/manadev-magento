@@ -29,5 +29,4 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_META_TITLE = 16;
     const DM_META_KEYWORDS = 17;
     const DM_META_DESCRIPTION = 18;
-
 }

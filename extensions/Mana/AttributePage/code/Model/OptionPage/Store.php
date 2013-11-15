@@ -15,4 +15,8 @@ class Mana_AttributePage_Model_OptionPage_Store extends Mana_AttributePage_Model
     protected function _construct() {
         $this->_init(self::ENTITY);
     }
+
+    public function canShow() {
+        return $this->getData('is_active');
+    }
 }

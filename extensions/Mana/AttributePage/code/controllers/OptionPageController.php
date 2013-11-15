@@ -28,9 +28,9 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
             return false;
         }
 
-        /* @var $optionPage Mana_AttributePage_Model_Option_Page */
-        $optionPage = Mage::helper('mana_db')->getModel('mana_attributepage/option_page/store_flat');
-        $optionPage->loadForStore($optionPageId, Mage::app()->getStore()->getId());
+        /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
+        $optionPage = Mage::getModel('mana_attributepage/optionPage_store');
+        $optionPage->load($optionPageId);
 
         if (!$optionPage->canShow()) {
             return false;
@@ -43,12 +43,9 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
             return false;
         }
 
-        /* @var $attributePage Mana_AttributePage_Model_Page */
-        $attributePage = Mage::helper('mana_db')->getModel('mana_attributepage/page/store_flat');
-        $attributePage->loadForStore($optionPage->getData('attribute_page_id'), Mage::app()->getStore()->getId());
-        if (!$attributePage->canShow()) {
-            return false;
-        }
+        /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
+        $attributePage = Mage::getModel('mana_attributepage/attributePage_store');
+        $attributePage->loadByOptionPageStoreId($optionPage->getId());
 
         Mage::register('current_attribute_page', $attributePage );
 

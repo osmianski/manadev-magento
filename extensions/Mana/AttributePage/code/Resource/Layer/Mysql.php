@@ -24,10 +24,10 @@ class Mana_AttributePage_Resource_Layer_Mysql extends Mage_Core_Model_Mysql4_Abs
 
         $connection = $this->_getReadAdapter();
 
-        /* @var $attributePage Mana_AttributePage_Model_Page */
+        /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
         $attributePage = Mage::registry('current_attribute_page');
 
-        /* @var $optionPage Mana_AttributePage_Model_Option_Page */
+        /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
         $optionPage = Mage::registry('current_option_page');
 
         // fix select to work even if category is not root
@@ -38,7 +38,8 @@ class Mana_AttributePage_Resource_Layer_Mysql extends Mage_Core_Model_Mysql4_Abs
         }
 
         // apply option page filters
-        for ($i = 0; $i < Mana_AttributePage_Model_Page::MAX_ATTRIBUTE_COUNT; $i++) {
+        $select->distinct();
+        for ($i = 0; $i < Mana_AttributePage_Model_AttributePage_Store::MAX_ATTRIBUTE_COUNT; $i++) {
             if (($attributeId = $attributePage->getData("attribute_id_$i")) && ($optionId = $optionPage->getData("option_id_$i"))) {
                 $tableAlias = "mapidx_$attributeId";
                 $conditions = array(
@@ -48,13 +49,13 @@ class Mana_AttributePage_Resource_Layer_Mysql extends Mage_Core_Model_Mysql4_Abs
                     $connection->quoteInto("{$tableAlias}.value = ?", $optionId),
                 );
                 $conditions = join(' AND ', $conditions);
-                $select
-                    ->distinct()
-                    ->join(array($tableAlias => $this->getMainTable()), $conditions, null);
-
-                return $this;
-
+                $select->joinInner(array($tableAlias => $this->getMainTable()), $conditions, null);
+            }
+            else {
+                break;
             }
         }
+
+        return $this;
     }
 }

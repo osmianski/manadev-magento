@@ -115,7 +115,7 @@
         </routers>
         <layout>
             <updates>
-                <mana_attributepage module="Mana_Attribute_Page">
+                <mana_attributepage module="Mana_AttributePage">
                     <file>mana_attributepage.xml</file>
                 </mana_attributepage>
             </updates>
@@ -132,10 +132,12 @@
             </adminhtml>
         </routers>
     </admin>
-    <mana_seo>
-        <url_types>
-            <filter><page_helper>mana_attributepage/url_attributePage</page_helper></filter>
-            <value><page_helper>mana_attributepage/url_optionPage</page_helper></value>
-        </url_types>
-    </mana_seo>
+    <mana_core>
+        <page_types>
+            <option_page>
+                <helper>mana_attributepage/pageType_optionPage</helper>
+                <seo_helper>mana_attributepage/pageType_optionPage</seo_helper>
+            </option_page>
+        </page_types>
+    </mana_core>
 </config>
