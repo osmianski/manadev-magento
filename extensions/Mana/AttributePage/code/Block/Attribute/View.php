@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Option_View extends Mage_Core_Block_Template {
+class Mana_AttributePage_Block_Attribute_View extends Mage_Core_Block_Template {
     protected function _prepareLayout() {
         parent::_prepareLayout();
 
@@ -23,31 +23,21 @@ class Mana_AttributePage_Block_Option_View extends Mage_Core_Block_Template {
             $breadcrumbsBlock->addCrumb('m-attribute-page', array(
                     'label' => $this->getAttributePage()->getData('title'),
                     'title' => $this->getAttributePage()->getData('title'),
-                    'link' => $this->getAttributePage()->getUrl(),
-            ));
-            $breadcrumbsBlock->addCrumb('m-option-page', array(
-                    'label' => $this->getOptionPage()->getData('title'),
-                    'title' => $this->getOptionPage()->getData('title'),
                     'last' => true,
-            ));
-
-            $title = $this->getOptionPage()->getData('title') . $this->getTitleSeparator() .
-                $this->getAttributePage()->getData('title');
+                ));
         }
-        else {
-            $title = $this->getOptionPage()->getData('title');
-        }
+        $title = $this->getAttributePage()->getData('title');
 
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             /* @var $headBlock Mage_Page_Block_Html_Head */
-            $optionPage = $this->getOptionPage();
+            $attributePage = $this->getAttributePage();
             if ($title) {
                 $headBlock->setTitle($title);
             }
-            if ($description = $optionPage->getData('meta_description')) {
+            if ($description = $attributePage->getData('meta_description')) {
                 $headBlock->setData('description', $description);
             }
-            if ($keywords = $optionPage->getData('meta_keywords')) {
+            if ($keywords = $attributePage->getData('meta_keywords')) {
                 $headBlock->setData('keywords', $keywords);
             }
         }
@@ -68,13 +58,6 @@ class Mana_AttributePage_Block_Option_View extends Mage_Core_Block_Template {
     }
 
     #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_OptionPage_Store
-     */
-    public function getOptionPage() {
-        return Mage::registry('current_option_page');
-    }
-
     /**
      * @return Mana_AttributePage_Model_AttributePage_Store
      */

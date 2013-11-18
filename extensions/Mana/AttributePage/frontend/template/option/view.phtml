@@ -9,10 +9,6 @@
 $_optionPage = $this->getOptionPage();
 $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
-if ($_imgUrl = $_optionPage->getImageUrl()) {
-    $_imgHtml = '<p class="category-image"><img src="' . $_imgUrl . '" alt="' . $this->htmlEscape($_category->getName()) . '" title="' . $this->htmlEscape($_category->getName()) . '" /></p>';
-    $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
-}
 ?>
 <div class="page-title category-title m-option-page-title">
     <h1><?php echo $_escapedTitle ?></h1>
@@ -28,4 +24,4 @@ if ($_imgUrl = $_optionPage->getImageUrl()) {
         <?php echo $_description ?>
     </div>
 <?php endif; ?>
-<?php echo $this->getProductListHtml() ?>
+<?php echo $this->getChildHtml('product_list') ?>

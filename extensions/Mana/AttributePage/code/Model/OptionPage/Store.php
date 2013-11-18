@@ -19,4 +19,12 @@ class Mana_AttributePage_Model_OptionPage_Store extends Mana_AttributePage_Model
     public function canShow() {
         return $this->getData('is_active');
     }
+
+    public function getUrl() {
+        return Mage::getUrl('mana/optionPage/view', array(
+            'id' => $this->getId(),
+            '_use_rewrite' => true,
+            '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
+        ));
+    }
 }

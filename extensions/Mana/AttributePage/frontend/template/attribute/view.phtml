@@ -1,0 +1,27 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Attribute_View */
+$_attributePage = $this->getAttributePage();
+$_filesHelper = $this->filesHelper();
+$_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
+?>
+<div class="page-title category-title m-attribute-page-title">
+    <h1><?php echo $_escapedTitle ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php if (($_imgUrl = $_attributePage->getData('image')) && ($_imgUrl = $_filesHelper->getUrl($_imgUrl, 'image'))): ?>
+    <p class="category-image m-attribute-page-image">
+        <img src="<?php echo $_imgUrl ?>" alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"/>
+    </p>
+<?php endif; ?>
+<?php if ($_description = $_attributePage->getData('description')): ?>
+    <div class="category-description m-attribute-page-description std">
+        <?php echo $_description ?>
+    </div>
+<?php endif; ?>
+<?php echo $this->getChildHtml('option_list') ?>

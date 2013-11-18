@@ -1,0 +1,24 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Option_List */
+?>
+<?php if(count($this->getAttributePage()->getOptionPages())) :?>
+<ul>
+    <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) :?>
+    <?php
+        /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
+        $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+    ?>
+    <li>
+        <a href="<?php echo $_optionPage->getUrl() ?>" title="<?php echo $_escapedTitle; ?>">
+            <?php echo $_escapedTitle; ?>
+        </a>
+    </li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
