@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resource_AttributeUrlIndexer {
+class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Resource_AttributeUrlIndexer {
     protected $_matchedEntities = array(
         // inherited
         Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY => array(
@@ -22,19 +22,6 @@ class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resourc
             Mage_Index_Model_Event::TYPE_SAVE
         ),
 
-        // custom
-        'mana_attributepage/page' => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
-        'mana_attributepage/page_store' => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
-        'mana_attributepage/option_page' => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
-        'mana_attributepage/option_page_store' => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
     );
 
     /**
@@ -49,12 +36,6 @@ class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resourc
         }
         if ($event->getEntity() == 'mana_attributepage/page/store') {
             $event->addNewData('attribute_page_store_id', $event->getData('data_object')->getId());
-        }
-        if ($event->getEntity() == 'mana_attributepage/option_page/global') {
-            $event->addNewData('option_page_global_id', $event->getData('data_object')->getId());
-        }
-        if ($event->getEntity() == 'mana_attributepage/option_page/store') {
-            $event->addNewData('option_page_store_id', $event->getData('data_object')->getId());
         }
     }
 
@@ -74,31 +55,31 @@ class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resourc
         $db = $this->_getWriteAdapter();
 
         $fields = array(
-            'url_key' => new Zend_Db_Expr("`op`.`url_key`"),
-            'type' => new Zend_Db_Expr("'option_page'"),
+            'url_key' => new Zend_Db_Expr("`ap`.`url_key`"),
+            'type' => new Zend_Db_Expr("'attribute_page'"),
             'is_page' => new Zend_Db_Expr('1'),
             'is_parameter' => new Zend_Db_Expr('0'),
             'is_attribute_value' => new Zend_Db_Expr('0'),
             'is_category_value' => new Zend_Db_Expr('0'),
             'schema_id' => new Zend_Db_Expr($schema->getId()),
-            'option_page_id' => new Zend_Db_Expr('`op`.`id`'),
-            'unique_key' => new Zend_Db_Expr("CONCAT(`op`.`id`, '-', `op`.`url_key`)"),
-            'status' => new Zend_Db_Expr("IF(`op`.`is_active`, '" .
+            'attribute_page_id' => new Zend_Db_Expr('`ap`.`id`'),
+            'unique_key' => new Zend_Db_Expr("CONCAT(`ap`.`id`, '-', `ap`.`url_key`)"),
+            'status' => new Zend_Db_Expr("IF(`ap`.`is_active`, '" .
                 Mana_Seo_Model_Url::STATUS_ACTIVE . "', '".
                 Mana_Seo_Model_Url::STATUS_DISABLED . "')"),
             'description' => new Zend_Db_Expr(
-                "CONCAT('{$this->seoHelper()->__('Option page')} \\'', " .
-                "`op`.`title`, '\\' (ID ', `op`.`id`, ')')"),
+                "CONCAT('{$this->seoHelper()->__('Attribute page')} \\'', " .
+                "`ap`.`title`, '\\' (ID ', `ap`.`id`, ')')"),
         );
 
         /* @var $select Varien_Db_Select */
         $select = $db->select()
             ->distinct()
-            ->from(array('op' => $this->getTable('mana_attributepage/optionPage_store')), null)
+            ->from(array('ap' => $this->getTable('mana_attributepage/attributePage_store')), null)
             ->columns($fields)
-            ->where('`op`.`store_id` = ?', $schema->getStoreId());
+            ->where('`ap`.`store_id` = ?', $schema->getStoreId());
 
-        $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_page` = 1) AND (`type` = 'option_page')";
+        $obsoleteCondition = "(`schema_id` = " . $schema->getId() . ") AND (`is_page` = 1) AND (`type` = 'attribute_page')";
 
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
         $this->logger()->logUrlIndexer('-----------------------------');

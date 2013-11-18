@@ -66,6 +66,7 @@
                 <mana_seo_url>
                     <sources>
                         <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
+                        <attribute_page><resource>mana_attributepage/attributePage_urlIndexer</resource></attribute_page>
                     </sources>
                     <depends>
                         <mana_attribute_page/>
@@ -138,6 +139,10 @@
                 <helper>mana_attributepage/pageType_optionPage</helper>
                 <seo_helper>mana_attributepage/pageType_optionPage</seo_helper>
             </option_page>
+            <attribute_page>
+                <helper>mana_attributepage/pageType_attributePage</helper>
+                <seo_helper>mana_attributepage/pageType_attributePage</seo_helper>
+            </attribute_page>
         </page_types>
     </mana_core>
 </config>
