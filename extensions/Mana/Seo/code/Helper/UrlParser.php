@@ -51,6 +51,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected $_toolbarModes = array('grid', 'list');
     protected $_toolbarOrders;
 
+    public function __construct() {
+        if ($additionalToolbarModes = Mage::getStoreConfig('mana/seo/additional_toolbar_modes')) {
+            $this->_toolbarModes = array_merge($this->_toolbarModes, explode(',', $additionalToolbarModes));
+        }
+    }
+
     #region Facade
 
     /**

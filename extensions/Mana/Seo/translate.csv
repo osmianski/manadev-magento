@@ -90,3 +90,5 @@
 "Demonstrates how URL separators and parameters/filters of different kind appear in URL","Demonstrates how URL separators and parameters/filters of different kind appear in URL"
 "Used when filtering by category (Redirect to Subcategory Page = No) to separate 2 or more subcategories","Used when filtering by category (Redirect to Subcategory Page = No) to separate 2 or more subcategories"
 "Accent Insensitive (Deprecated)","Accent Insensitive (Deprecated)"
+"Additional Toolbar Modes","Additional Toolbar Modes"
+"Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces","Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces"
