@@ -44,6 +44,7 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             Mage::register('m_original_request_uri', $_SERVER['REQUEST_URI']);
             $_SERVER['REQUEST_URI'] = $baseUrl['path'] . ($path ? ltrim($path, '/') : '/');
 
+            Mage::register('manapro_filterajax_request', 1);
             $this->getCatalogSession()->setData('manapro_filterajax_request', 1);
             if ($core->isEnterpriseUrlRewriteInstalled()) {
                 $this->_getRequestRewriteController()->rewrite();
@@ -56,8 +57,6 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
     }
 
     public function render() {
-        $this->getCatalogSession()->unsetData('manapro_filterajax_request');
-
         /* @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getSingleton('core/layout');
 
