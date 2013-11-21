@@ -99,9 +99,10 @@ function ($, Block, json, ajax)
             this._mode = (this._visibleCount >= this.getCollectionIds().length) ? 'center' : 'slide';
 
             if (this._mode == 'slide') {
-                if (this._areDuplicatesNeeded()) {
+                var neededDuplicateCount = this._getDuplicatesNeededCount();
+                if (neededDuplicateCount>0) {
                     if (this._duplicateCount == 0) {
-                        this._addDuplicateItems($li);
+                        this._addDuplicateItems($li, neededDuplicateCount);
                         $li = this.$loadedFakeAndDuplicatedElements();
                     }
                 }
@@ -177,8 +178,16 @@ function ($, Block, json, ajax)
             var collectionCount = this.getCollectionIds().length;
             return !this._areDuplicatesNeeded() ? collectionCount : collectionCount * 2;
         },
-        _areDuplicatesNeeded: function() {
+        _areDuplicatesNeeded: function () {
             return this.getCollectionIds().length < this._visibleCount * 2;
+        },
+        _getDuplicatesNeededCount: function() {
+            var count;
+            count = this._visibleCount * 2 - this.getCollectionIds().length;
+            if (count < 0) {
+                count = 0;
+            }
+            return count;
         },
         _addFakeItems: function($li, count) {
             for (var i = 0; i < count; i++) {
@@ -186,14 +195,23 @@ function ($, Block, json, ajax)
             }
             this._fakeCount += count;
         },
-        _addDuplicateItems: function ($li) {
-            throw 'Not implemented';
+        _addDuplicateItems: function ($li, count) {
+            //throw 'Not implemented';
+            for (var i = 0; i < count; i++) {
+//                this.$products().append(this._createFakeItem(i + this._loadedCount + this._fakeCount + this._duplicateCount));
+                this.$products().append(this._createDuplicateItem($li, i, i + this._loadedCount + this._fakeCount + this._duplicateCount));
+            }
+            this._duplicateCount += count;
+
         },
         _removeDuplicateItems: function ($li) {
             throw 'Not implemented';
         },
         _createFakeItem: function (index) {
             return  $('<li class="item item-' + index + '"> </li>');
+        },
+        _createDuplicateItem: function ($li, indexFrom, indexTo) {
+            return $li[indexFrom].clone(true);
         },
         getIndex: function(startIndex) {
             return (startIndex + this.getCollectionIds().length) % this.getCollectionIds().length;
