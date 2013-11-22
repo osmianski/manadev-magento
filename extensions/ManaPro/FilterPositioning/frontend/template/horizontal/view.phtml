@@ -12,9 +12,18 @@
  *
  * @see Mage_Catalog_Block_Layer_View
  */
+/* @var $_filterHelper Mana_Filters_Helper_Data */
+$_filterHelper = Mage::helper('mana_filters');
+
 ?>
 <?php if($this->canShowBlock()): ?>
-<div class="block block-layered-nav m-top">
+<div class="block block-layered-nav m-top mb-top-layered-navigation" data-m-block="Mana/LayeredNavigation/Top"
+    data-expand-collapse-behavior="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/expand_collapse_behavior') ?>"
+    data-expand-collapse-duration="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/expand_collapse_duration') ?>"
+    data-one-column="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/one_column_width') ?>"
+    data-two-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/two_columns_width') ?>"
+    data-three-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/three_columns_width') ?>"
+    data-four-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/four_columns_width') ?>">
     <div class="block-content">
         <?php echo $this->getStateHtml() ?>
         <?php if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7') && $this->getLayer()->getState()->getFilters()) : ?>
@@ -23,27 +32,36 @@
         <?php if($this->canShowOptions()): ?>
             <div id="narrow-by-list">
               <?php if (Mage::getStoreConfigFlag('mana_filters/positioning/shop_by_title')) : ?>
-                <div class="block-subtitle">
-                        <strong><span><?php echo $this->__('Shop By') ?></span></strong>
+                <div class="m-shop-by block-subtitle">
+                    <div class="m-subtitle-actions">
+                        <div class="m-expand-collapse">
+                            <div class="btn-expand-collapse"></div>
+                        </div>
+                    </div>
+                    <strong><span><?php echo $this->__('Shop By') ?></span></strong>
                 </div>                
-                <div class="hidden"></div>
               <?php endif; ?>
-
+                <div>
 
                 <?php $_filters = $this->getFilters() ?>
-                  <?php foreach ($_filters as $_filter): ?>
-                  <?php if($_filter->getItemsCount()): ?>
-              <dl <?php if ($_height = Mage::getStoreConfig('mana_filters/positioning_horizontal/height')) : ?> style="min-height: <?php echo $_height?>px;"<?php endif; ?>
-                <?php if($_filter->getFilterOptions()) : ?>class="m-<?php echo $_filter->getFilterOptions()->getDisplay() ?>"<?php endif; ?>>
-                      <dt class="m-ln">
-                          <?php Mage::helper('mana_filters')->renderHtml($this, 'horizontal_name_before', array('filter' => $_filter)); ?>
-                          <?php echo $this->__($_filter->getName()) ?>
-                      </dt>
-                      <dd class="m-ln"><?php echo $_filter->getHtml() ?></dd>
-              </dl>
-                  <?php endif; ?>
-                  <?php endforeach; ?>
-                  
+                <?php foreach ($_filters as $_filter): ?>
+                    <?php if($_filter->getItemsCount()): ?>
+                    <dl <?php if ($_height = Mage::getStoreConfig('mana_filters/positioning_horizontal/height')) : ?> style="min-height: <?php echo $_height?>px;"<?php endif; ?>
+                        <?php if($_filter->getFilterOptions()) : ?>class="m-<?php echo $_filter->getFilterOptions()->getDisplay() ?>"<?php endif; ?>>
+                        <dt class="m-ln" data-id="<?php echo $_filterHelper->getFilterLayoutName($this, $_filter->getFilterOptions()) ?>">
+                            <div class="m-horizontal-actions">
+                                <?php Mage::helper('mana_filters')->renderHtml($this, 'horizontal_name_before', array('filter' => $_filter)); ?>
+                                <div class="m-expand-collapse">
+                                    <div class="btn-expand-collapse"></div>
+                                </div>
+                            </div>
+                            <?php echo $this->__($_filter->getName()) ?>
+                        </dt>
+                        <dd class="m-ln"><?php echo $_filter->getHtml() ?></dd>
+                    </dl>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                </div>
             </div>
             <script type="text/javascript">decorateDataList('narrow-by-list')</script>
         <?php endif; ?>

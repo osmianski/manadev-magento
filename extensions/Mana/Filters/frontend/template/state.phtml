@@ -18,7 +18,14 @@
 <?php if(!empty($_filters)): ?>
 <div class="currently">
     <?php if (Mage::helper('mana_filters')->renderHtml($this->getParentBlock(), 'currently_shopping_by')) : ?>
-    <p class="block-subtitle"><?php echo $this->__('Currently Shopping by:') ?></p>
+    <div class="block-subtitle">
+        <div class="m-subtitle-actions">
+            <div class="m-expand-collapse">
+                <div class="btn-expand-collapse"></div>
+            </div>
+        </div>
+        <span><?php echo $this->__('Currently Shopping by:') ?></span>
+    </div>
     <?php endif; ?>
     <ol>
     <?php foreach ($_filters as $_filter): ?>

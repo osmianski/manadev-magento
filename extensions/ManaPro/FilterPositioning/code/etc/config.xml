@@ -11,7 +11,7 @@
         <ManaPro_FilterPositioning>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.10.19.19</version>
+            <version>13.11.22.17</version>
         </ManaPro_FilterPositioning>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -205,6 +205,12 @@
             </positioning_menu>
             <positioning_horizontal>
                 <height>100</height>
+                <expand_collapse_behavior>accordion</expand_collapse_behavior>
+                <expand_collapse_duration>500</expand_collapse_duration>
+                <one_column_width>450</one_column_width>
+                <two_columns_width />
+                <three_columns_width>600</three_columns_width>
+                <four_columns_width>750</four_columns_width>
             </positioning_horizontal>
         </mana_filters>
     </default>

@@ -54,19 +54,28 @@
 /* Top LN =================================================================================================================================== */
 
 .col-main .block-layered-nav.m-top .m-filter-slider { position: relative; right: 6px; }
-/* 1 Column Layout */
-.col1-layout .col-main .block-layered-nav.m-top dl { width:20%; }
-.col1-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 160px; }
 
-/* 2 Columns Layout */
-.col2-left-layout .col-main .block-layered-nav.m-top dl,
-.col2-right-layout .col-main .block-layered-nav.m-top dl { width:25%; }
-.col2-left-layout .col-main .block-layered-nav.m-top .m-filter-slider,
-.col2-right-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 160px; }
+.col-main .block-layered-nav.m-top dl { width: 20%; }
+.col-main .block-layered-nav.m-top.one-filter-column dl { width: 100%; }
+.col-main .block-layered-nav.m-top.two-filter-columns dl { width: 50%; }
+.col-main .block-layered-nav.m-top.three-filter-columns dl { width: 33%; }
+.col-main .block-layered-nav.m-top.four-filter-columns dl { width: 25%; }
 
-/* 3 Columns Layout */
-.col3-layout .col-main .block-layered-nav.m-top dl { width:33%; }
-.col3-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 140px; }
+.col-main .block-layered-nav.m-top .m-horizontal-actions,
+.col-main .block-layered-nav.m-top .m-subtitle-actions { position: absolute; right: 4px; margin: 0; }
+.col-main .block-layered-nav.m-top .m-horizontal-actions { top: 4px; }
+.col-main .block-layered-nav.m-top .m-subtitle-actions { top: 0; }
+.col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 4px; }
+
+.col-main .block-layered-nav.m-top .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-top: 4px; display: none; }
+.col-main .block-layered-nav.m-top .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+.col-main .block-layered-nav.m-top .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
+.col-main .block-layered-nav.m-top .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
+
+.col-main .block-layered-nav.m-top.one-filter-column .m-expand-collapse { display: block; }
+.col-main .block-layered-nav.m-top.one-filter-column dl dt.m-ln,
+.col-main .block-layered-nav.m-top.one-filter-column .block-subtitle { cursor: pointer; }
+.col-main .block-layered-nav.m-top.one-filter-column .currently + div .block-subtitle { display: none; }
 
 /* SHOP BY bar */
 .col-main .block-layered-nav.m-top dl { float: left; }
