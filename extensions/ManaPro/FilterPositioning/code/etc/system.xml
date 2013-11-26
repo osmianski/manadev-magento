@@ -94,10 +94,55 @@
                         </currently_shopping_by_title>
                     </fields>
                 </positioning>
+                <mobile translate="label" module="manapro_filterpositioning">
+                    <label>Mobile Layered Navigation</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>227</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <is_active>
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </is_active>
+                        <max_width translate="label comment">
+                            <label>Hide If Content Width Is Wider Than</label>
+                            <comment>in pixels. Leave empty to show on device of any width</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_width>
+                        <behavior translate="label comment">
+                            <label>Behavior</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_expandCollapseBehavior</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </behavior>
+                        <duration translate="label">
+                            <label>Effect Duration</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </duration>
+                    </fields>
+                </mobile>
                 <positioning_menu translate="label" module="manapro_filterpositioning">
                     <label>'Above Products' Filters As Drop Down Menu Options</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>226</sort_order>
+                    <sort_order>228</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -116,7 +161,7 @@
                 <positioning_horizontal translate="label" module="manapro_filterpositioning">
                     <label>'Above Products' Filters As Horizontally Laid Filter Options</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>227</sort_order>
+                    <sort_order>229</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -130,15 +175,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </height>
-                        <one_column_width translate="label comment">
-                            <label>One Column Mode Maximum Width</label>
-                            <comment>In this mode, filters become expandable/collapseable. When horizontal layered navigation is wider than specified number of pixels, this mode is not used. Leave empty to disable this mode. If none of width modes is used, five column layout is used.</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>200</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </one_column_width>
                         <two_columns_width translate="label comment">
                             <label>Two Columns Mode Maximum Width</label>
                             <comment>When horizontal layered navigation is wider than specified number of pixels, this mode is not used. Leave empty to disable this mode. If none of width modes is used, five column layout is used.</comment>
@@ -166,23 +202,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </four_columns_width>
-                        <expand_collapse_behavior translate="label comment">
-                            <label>Expand/Collapse Behavior on Mobile Devices</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>manapro_filterpositioning/source_expandCollapseBehavior</source_model>
-                            <sort_order>600</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </expand_collapse_behavior>
-                        <expand_collapse_duration translate="label">
-                            <label>Expand/Collapse Duration on Mobile Devices</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>700</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </expand_collapse_duration>
                     </fields>
                 </positioning_horizontal>
             </groups>

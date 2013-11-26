@@ -18,9 +18,9 @@ $_filterHelper = Mage::helper('mana_filters');
 ?>
 <?php if($this->canShowBlock()): ?>
 <div class="block block-layered-nav m-top mb-top-layered-navigation" data-m-block="Mana/LayeredNavigation/Top"
-    data-expand-collapse-behavior="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/expand_collapse_behavior') ?>"
-    data-expand-collapse-duration="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/expand_collapse_duration') ?>"
-    data-one-column="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/one_column_width') ?>"
+    data-expand-collapse-behavior="<?php echo Mage::getStoreConfig('mana_filters/mobile/behavior') ?>"
+    data-expand-collapse-duration="<?php echo Mage::getStoreConfig('mana_filters/mobile/duration') ?>"
+    data-one-column="<?php echo Mage::getStoreConfig('mana_filters/mobile/max_width') ?>"
     data-two-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/two_columns_width') ?>"
     data-three-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/three_columns_width') ?>"
     data-four-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/four_columns_width') ?>">

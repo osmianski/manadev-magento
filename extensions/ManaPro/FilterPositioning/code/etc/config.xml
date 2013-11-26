@@ -200,14 +200,17 @@
                 <currently_shopping_by_title>1</currently_shopping_by_title>
                 <categories>none</categories>
             </positioning>
+            <mobile>
+                <is_active>1</is_active>
+                <max_width>450</max_width>
+                <behavior>accordion</behavior>
+                <duration>500</duration>
+            </mobile>
             <positioning_menu>
                 <width>200</width>
             </positioning_menu>
             <positioning_horizontal>
                 <height>100</height>
-                <expand_collapse_behavior>accordion</expand_collapse_behavior>
-                <expand_collapse_duration>500</expand_collapse_duration>
-                <one_column_width>450</one_column_width>
                 <two_columns_width />
                 <three_columns_width>600</three_columns_width>
                 <four_columns_width>750</four_columns_width>
