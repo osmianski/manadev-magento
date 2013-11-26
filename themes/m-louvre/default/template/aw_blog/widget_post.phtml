@@ -1,10 +1,16 @@
 <?php if ($posts = $this->getRecent()): ?>
 	<div class="widget-latest">
-		<h2><?php echo Mage::helper('blog')->__('Latest Posts');?></h2>
+	<div class="block">
+	    <div class="block-title">
+		<strong><?php echo Mage::helper('blog')->__('Latest Posts');?></strong>
+		</div>
+		<div class="block-content">
 		<ul>
 		<?php foreach ($posts as $post): ?>
 			<li><a href="<?php echo $post->getAddress(); ?>" ><?php echo $post->getTitle();?></a></li>
 		<?php endforeach; ?>
        	</ul>
+       	</div>
+	</div>
 	</div>
 <?php endif; ?>

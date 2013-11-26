@@ -113,6 +113,10 @@
 				<param>mana_louvre/positioning/related</param>
 				<value>left</value>
 			</m_catalog_product_view_related_left>
+			<m_catalog_product_view_related_inside_product action="addAfter" handle="m_catalog_product_view_related_inside_product" if="valueEquals">
+				<param>mana_louvre/positioning/related</param>
+				<value>inside_product</value>
+			</m_catalog_product_view_related_inside_product>
         </catalog_product_view>
 	</m_layout>
 
