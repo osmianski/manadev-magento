@@ -7,6 +7,7 @@
 
 ;(function($) {
     var _isCollapsedByDefault = false;
+    var _expandSelected = false;
 
     function _collapse(item, showEffect) {
         var li = item.parent();
@@ -63,6 +64,7 @@
 
     function _loadState() {
         _isCollapsedByDefault = $.options && $.options('#m-tree') && $.options('#m-tree').collapsedByDefault;
+        _expandSelected = $.options && $.options('#m-tree') && $.options('#m-tree').expandSelected;
         if (!_state.length && $.options && $.options('#m-tree') && $.options('#m-tree').state) {
             _state = $.options('#m-tree').state;
         }
@@ -76,7 +78,10 @@
                     var itemId = item[0].id;
                     var isCollapsed;
 
-                    if (item.parent().find('.m-selected-filter-item').length) {
+                    if (li.find('ul .m-selected-filter-item').length) {
+                        isCollapsed = false;
+                    }
+                    else if (li.find('.m-selected-filter-item').length && _expandSelected) {
                         isCollapsed = false;
                     }
                     else {

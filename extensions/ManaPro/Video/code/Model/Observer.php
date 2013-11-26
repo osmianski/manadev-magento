@@ -22,6 +22,10 @@ class ManaPro_Video_Model_Observer {
         $block = $observer->getEvent()->getBlock();
         if ($block instanceof Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs) {
             $product = $block->getProduct();
+            if (!$product->getId()) {
+                return;
+            }
+
             if (!($setId = $product->getAttributeSetId())) {
                 $setId = $block->getRequest()->getParam('set', null);
             }

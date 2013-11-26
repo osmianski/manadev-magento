@@ -12,7 +12,7 @@
 		<ManaPro_FilterAjax>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.10.21.23</version>
+		    <version>13.11.20.16</version>
 		</ManaPro_FilterAjax>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -55,6 +55,14 @@
                     </manapro_filterajax>
                 </observers>
             </m_ajax_options>
+            <http_response_send_before>
+                <observers>
+                    <manapro_filterajax>
+                        <class>manapro_filterajax/observer</class>
+                        <method>unsetFlagInCatalogSession</method>
+                    </manapro_filterajax>
+                </observers>
+            </http_response_send_before>
         </events>
 	</global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->

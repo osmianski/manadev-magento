@@ -16,9 +16,9 @@ class Mana_Seo_Model_Source_IncludeInUrl extends Mana_Core_Model_Source_Abstract
 
     protected function _getAllOptions() {
         return array(
-            array('value' => self::AS_IN_SCHEMA, 'label' => Mage::helper('catalog')->__('As specified in current SEO schema settings')),
-            array('value' => self::ALWAYS, 'label' => Mage::helper('catalog')->__('Always')),
-            array('value' => self::NEVER, 'label' => Mage::helper('catalog')->__('Never')),
+            array('value' => self::AS_IN_SCHEMA, 'label' => Mage::helper('mana_seo')->__('As specified in current SEO schema settings')),
+            array('value' => self::ALWAYS, 'label' => Mage::helper('mana_seo')->__('Always')),
+            array('value' => self::NEVER, 'label' => Mage::helper('mana_seo')->__('Never')),
         );
     }
 }

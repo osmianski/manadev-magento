@@ -59,6 +59,7 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ObsoleteCategoryPage extends Mana_S
                 ->from(array('r' => $this->getTable('enterprise_urlrewrite/url_rewrite')), null)
                 ->joinInner(array('rel' => $this->getTable('enterprise_urlrewrite/redirect_rewrite')), "rel.url_rewrite_id = r.url_rewrite_id", null)
                 ->joinInner(array('red' => $this->getTable('enterprise_urlrewrite/redirect')), "red.redirect_id = rel.redirect_id", null)
+                ->joinInner(array('cat' => $this->getTable('catalog/category')), "cat.entity_id = CAST($categoryIdExpr AS unsigned)", null)
                 ->columns($fields)
                 ->where("`r`.`target_path` LIKE 'catalog/category/view/id/%'")
                 ->where("`r`.`store_id` = ?", $schema->getStoreId());
