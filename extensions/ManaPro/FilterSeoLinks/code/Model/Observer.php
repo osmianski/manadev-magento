@@ -347,7 +347,6 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $robots = $head->getRobots();
             $noIndex = false;
             $follow = false;
-            /* @var $layer Mage_Catalog_Model_Layer */ $layer = Mage::getSingleton($layerModel);
             foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noIndexProcessorName) {
                 if (!$noIndexProcessorName) {
                     continue;
