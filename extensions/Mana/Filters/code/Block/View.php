@@ -82,6 +82,7 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
                     'layer' => $layer,
                     'attribute_model' => $filterOptions->getAttribute(),
                     'mode' => $this->getMode(),
+                    'mobile' => $helper->isMobileFilter($this, $filterOptions),
                 ));
                 $block->init();
                 $this->setChild($filterOptions->getCode() . '_filter', $block);

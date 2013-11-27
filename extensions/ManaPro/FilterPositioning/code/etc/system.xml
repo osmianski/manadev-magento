@@ -102,24 +102,24 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <is_active>
-                            <label>Enabled</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        <max_width translate="label comment">
+                            <label>Hide If Content Width Is Wider Than</label>
+                            <comment>in pixels. Leave empty to disable mobile layout feature. Note that mobile layout may require theme-related CSS changes.</comment>
+                            <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </is_active>
-                        <max_width translate="label comment">
-                            <label>Hide If Content Width Is Wider Than</label>
-                            <comment>in pixels. Leave empty to show on device of any width</comment>
-                            <frontend_type>text</frontend_type>
+                        </max_width>
+                        <column_filters>
+                            <label>Left and Right Column Filters</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_columnFilters</source_model>
                             <sort_order>200</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </max_width>
+                        </column_filters>
                         <behavior translate="label comment">
                             <label>Behavior</label>
                             <frontend_type>select</frontend_type>
