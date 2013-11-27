@@ -9,21 +9,20 @@
 
 /* Containers of Layered Navigation */
 .col-main .block-layered-nav,
-.col-main .block-layered-nav .block-content { background: #d8d8d8; border-radius:5px; border: none; padding: 0; margin: 0; }
-.col-main .block-layered-nav { margin: 0 0 10px; padding:0 5px; }
+.col-main .block-layered-nav .block-content { background: transparent; border: none; padding: 0; margin: 0; position: relative;}
 
 /* Titles SHOP BY and CURRENTLY SHOPPING BY */
 .col-main .block-layered-nav .block-subtitle,
-.col-main .block-layered-nav .currently .block-subtitle { cursor: auto; margin: 0; padding: 5px 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
+.col-main .block-layered-nav .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
 
 /* CURRENTLY SHOPPING BY bar */
-.col-main .block-layered-nav .currently { border-bottom: 1px solid #F8FAF9; width:100%; border-radius: 5px 5px 0 0; background: transparent; padding: 0; right: 0; }
 .col-main .block-layered-nav .currently,
 .col-main .block-layered-nav .currently ol { float: left; }
-.col-main .block-layered-nav .currently li { float: left; white-space: nowrap; background: transparent; border: none; padding-left: 0; }
+.col-main .block-layered-nav .currently li { float: left; white-space: nowrap; margin-right: 10px; background: transparent; border: none; padding-left: 0; }
 
-.col-main .block-layered-nav #narrow-by-list { clear: both; border-top: 1px solid #BDC1C4; }
-.col-main .block-layered-nav .actions { background: transparent; border: none; float: left; padding-top: 5px; right:5px; bottom:0; }
+.col-main .block-layered-nav #narrow-by-list { clear: both; position: relative; }
+.col-main .block-layered-nav .actions { background: transparent; border: none; float: left; padding-top: 5px; }
+
 /* Top (as Menu) LN =================================================================================================================================== */
 
 /* Price slider width */
@@ -33,43 +32,85 @@
 .col-main .block-layered-nav.m-topmenu dl { float: left; height: 32px; }
 .col-main .block-layered-nav.m-topmenu dl dt { float: left; padding: 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
 .col-main .block-layered-nav.m-topmenu dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
-.col-main .block-layered-nav.m-topmenu dl dd { background: #c8c8c8; position: absolute; width: auto; padding: 10px 20px 10px 10px; border-radius:0 5px 5px; display: block; z-index: 9999; box-shadow: 0px 5px 5px -2px rgba(0, 0, 0, 0.5); }
-.col-main .block-layered-nav.m-topmenu dl dd li {  }
-.col-main .block-layered-nav.m-topmenu dl dd li:hover {   }
-.col-main .block-layered-nav.m-topmenu dl dd a { color: #646464; text-decoration: none; padding: 5px 10px; }
-.col-main .block-layered-nav.m-topmenu dl dd span { color: #979797; text-decoration: none; padding: 0 0 0 22px; position: relative; right: 13px; top: 0;  background: transparent url(../images/i-in.png)5px center no-repeat; }
-.col-main .block-layered-nav.m-topmenu dl dd li:hover {}
-.col-main .block-layered-nav.m-topmenu dl dd li:hover a { color: #26B1ED; background-color: #737373; border-radius:5px; }
-
+.col-main .block-layered-nav.m-topmenu dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
+/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea'); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(white));
+    background: -moz-linear-gradient(top,  white,  #eaeaea);
+*/
+    filter: alpha(opacity=90); 
+  	-moz-opacity: 0.9;       
+  	opacity: 0.9;               
+    
+    }     
 /* Javascript operates with these classes */
 .col-main .block-layered-nav.m-topmenu dl dt.m-ln {  }
 .col-main .block-layered-nav.m-topmenu dl dd.m-ln {  }
+.col-main .block-layered-nav.m-topmenu dl dd.m-ln li { white-space: nowrap; }
 
 /* Classes added on Mouse Over */
-.col-main .block-layered-nav.m-topmenu dl dt.m-popup-filter { background: #c8c8c8; border-radius: 5px 5px 0 0; }
-.col-main .block-layered-nav.m-topmenu dl dd {  }
-.col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter { opacity: 1; -webkit-transition: opacity .3s ease-in-out; }
-.col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter a {  }
-.col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter a:hover {  }
-
+.col-main .block-layered-nav.m-topmenu dl dt.m-popup-filter { background: #DEE5E8; }
+.col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter {  }
 
 
 /* Top LN =================================================================================================================================== */
 
-.col-main .block-layered-nav.m-top .m-filter-slider { position: relative; right: 6px; }
-/* 1 Column Layout */
-.col1-layout .col-main .block-layered-nav.m-top dl { width:20%; }
-.col1-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 160px; }
+.col-main .block-layered-nav.m-top .m-filter-slider {  }
 
-/* 2 Columns Layout */
-.col2-left-layout .col-main .block-layered-nav.m-top dl,
-.col2-right-layout .col-main .block-layered-nav.m-top dl { width:25%; }
-.col2-left-layout .col-main .block-layered-nav.m-top .m-filter-slider,
-.col2-right-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 160px; }
+.col-main .block-layered-nav.m-top dl { width: 19%; }
+.col-main .block-layered-nav.m-top.one-filter-column dl { width: 100%; }
+.col-main .block-layered-nav.m-top.two-filter-columns dl { width: 50%; }
+.col-main .block-layered-nav.m-top.three-filter-columns dl { width: 33%; }
+.col-main .block-layered-nav.m-top.four-filter-columns dl { width: 23%; }
 
-/* 3 Columns Layout */
-.col3-layout .col-main .block-layered-nav.m-top dl { width:33%; }
-.col3-layout .col-main .block-layered-nav.m-top .m-filter-slider { width: 140px; }
+.col-main .block-layered-nav.m-top .m-horizontal-actions,
+.col-main .block-layered-nav.m-top .m-subtitle-actions { position: absolute; right: 8px; top:8px; margin: 0; }
+.col-main .block-layered-nav.m-top .m-horizontal-actions { }
+.col-main .block-layered-nav.m-top .m-subtitle-actions { }
+.col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 4px; }
+
+.col-main .block-layered-nav.m-top .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin: 0; display: none; }
+.col-main .block-layered-nav.m-top .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 15px; height: 15px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+.col-main .block-layered-nav.m-top .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/infortis/ultra-megamenu/opener-active.png) -27px -27px no-repeat; }
+.col-main .block-layered-nav.m-top .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/infortis/ultra-megamenu/opener.png) -27px -27px no-repeat; }
+
+/* Responsive design accordion */
+.col-main .block-layered-nav.m-top.one-filter-column .m-expand-collapse { display: block; }
+
+.col-main .block-layered-nav.m-top.one-filter-column .currently { width: 100%; margin:0; }
+.col-main .block-layered-nav.m-top.one-filter-column .currently ol { margin:0; padding:0 5px; }
+.col-main .block-layered-nav.m-top.one-filter-column .currently ol li { padding: 1px 24px 1px 10px !important; margin: 0 !important; line-height: 25px  !important; }
+.col-main .block-layered-nav.m-top.one-filter-column .currently .btn-remove { top: 5px !important; }
+
+.col-main .block-layered-nav.m-top.one-filter-column dt,
+.col-main .block-layered-nav.m-top.one-filter-column .block-subtitle strong {}
+.col-main .block-layered-nav.m-top.one-filter-column .m-filter-slider {  }
+.col-main .block-layered-nav.m-top.one-filter-column dl dt.m-ln,
+.col-main .block-layered-nav.m-top.one-filter-column .block-subtitle { background-color: #f5f5f5; padding: 7px; margin: 0; border-bottom: 1px solid #e5e5e5; display: block; cursor: pointer; }
+.col-main .block-layered-nav.m-top.one-filter-column .currently + div .block-subtitle { display: none; }
+.col-main .block-layered-nav.m-top.one-filter-column dl { padding: 0;  }
+.col-main .block-layered-nav.m-top.one-filter-column dd { padding: 7px 0;  }
+.col-main .block-layered-nav.m-top.one-filter-column .m-slider dd {  }
+.col-main .block-layered-nav.m-top.one-filter-column .m-slider-values { margin: 5px 0; }
+.col-main .block-layered-nav.m-top.one-filter-column .m-slider-values span { padding: 3px 0; }
+.col-main .block-layered-nav.m-top.one-filter-column input.m-slider { width: 50px; padding: 3px; margin: 0 3px; }
+.col-main .block-layered-nav.m-top.one-filter-column dl dt:hover {background: #e5e5e5;
+transition: background 300ms ease-in-out;
+-moz-transition: background 300ms ease-in-out;
+-webkit-transition: background 300ms ease-in-out;
+-o-transition: background 300ms ease-in-out;}
+.col-main .block-layered-nav.m-top.one-filter-column.m-over .block-subtitle.m-shop-by,
+.col-main .block-layered-nav.m-top.one-filter-column.m-expanded .block-subtitle.m-shop-by { background: #e5e5e5;
+transition: background 300ms ease-in-out;
+-moz-transition: background 300ms ease-in-out;
+-webkit-transition: background 300ms ease-in-out;
+-o-transition: background 300ms ease-in-out;}
+.col-main .block-layered-nav.m-top.one-filter-column.m-collapsed.m-over .block-subtitle .m-expand-collapse .btn-expand-collapse { background: transparent url(../images/infortis/ultra-megamenu/opener-w.png) -27px -27px no-repeat; }
+.col-main .block-layered-nav.m-top.one-filter-column.m-expanded .block-subtitle .m-expand-collapse .btn-expand-collapse { background: transparent url(../images/infortis/ultra-megamenu/opener-active-w.png) -27px -27px no-repeat; }
+.col-main .block-layered-nav.m-top.one-filter-column .actions { z-index:3; position: absolute; top: 2px; right: 30px; }
+.col-main .block-layered-nav.m-top.one-filter-column .actions a,
+.col-main .block-layered-nav.m-top.one-filter-column.m-collapsed.m-over .actions a {   }
+.col-main .block-layered-nav.m-top.one-filter-column.m-collapsed .actions a {   }
+.col-main .block-layered-nav.m-top.one-filter-column .actions a:hover {  }
 
 /* SHOP BY bar */
 .col-main .block-layered-nav.m-top dl { float: left; }
@@ -81,7 +122,7 @@
 .m-standard {} /* One item can be selected at the time */
 .m-list {} /* Text, multiple select */
 .m-checkboxes {} /* checkboxes - form elements */
-.m-css_checkboxws {} /* checkboxes - images */
+.m-css_checkboxes {} /* checkboxes - images */
 .m-colors {} /* Colors and Images - horizontal */ 
 .m-colors_vertical {} /* Colors and Images - vertical */ 
 .m-colors_label {} /* Colors and Images with labels */
