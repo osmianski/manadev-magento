@@ -17,8 +17,8 @@
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
 <div class="currently">
-    <?php if (Mage::helper('mana_filters')->renderHtml($this->getParentBlock(), 'currently_shopping_by')) : ?>
-    <div class="block-subtitle">
+
+    <div class="block-subtitle <?php echo Mage::helper('mana_filters')->renderHtml($this->getParentBlock(), 'currently_shopping_by') ? '' : 'hidden' ?>">
         <div class="m-subtitle-actions">
             <div class="m-expand-collapse">
                 <div class="btn-expand-collapse"></div>
@@ -26,7 +26,6 @@
         </div>
         <span><?php echo $this->__('Currently Shopping by:') ?></span>
     </div>
-    <?php endif; ?>
     <ol>
     <?php foreach ($_filters as $_filter): ?>
     <?php if ($_html = $this->getValueHtml($_filter)) : ?>

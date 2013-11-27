@@ -9,7 +9,7 @@
 ; // make JS merging easier
 
 Mana.define('Mana/LayeredNavigation/TopBlock', ['jquery', 'Mana/Core/Block'],
-function($, Block)
+function($, Block, undefined)
 {
     return Block.extend('Mana/LayeredNavigation/TopBlock', {
         _init: function () {
@@ -18,6 +18,7 @@ function($, Block)
             this._accordionExpandedId = undefined;
             this._mobileLayout = false;
             this._subTitleExpanded = false;
+            this._replacedTitles = [];
         },
         _subscribeToHtmlEvents: function () {
             var self = this;
@@ -37,6 +38,7 @@ function($, Block)
             return this
                 ._super()
                 .on('bind', this, function () {
+                    this._replacedTitles = [];
                     if (!this.$().hasClass("one-filter-column")) {
                         this._prepareWideLayout();
                     }
@@ -137,6 +139,17 @@ function($, Block)
             }
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
+            this._replacedTitles = [];
+            this.$().find('.block-subtitle').each(function() {
+                var $text = $(this).find('span');
+                self._replacedTitles.push({
+                    element: this,
+                    title: $(this).html(),
+                    hidden: $(this).hasClass('hidden')
+                });
+                $(this).removeClass('hidden');
+                $text.html(self.getMobileTitle());
+            });
             $filters.each(function () {
                 self._prepareFilterForMobileLayout(this);
             });
@@ -192,6 +205,15 @@ function($, Block)
             }
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
+            $.each(this._replacedTitles, function(index, replacement) {
+                var $element = $(replacement.element);
+                var $text = $element.find('span');
+                $text.html(replacement.title);
+                if (replacement.hidden) {
+                    $element.addClass('hidden');
+                }
+            });
+            this._replacedTitles = [];
             $filters.each(function () {
                 self._prepareFilterForWideLayout(this);
                 self.expand(this, 0);
@@ -242,6 +264,12 @@ function($, Block)
                 }
             }
             return this._duration;
+        },
+        getMobileTitle: function() {
+            if (this._mobileTitle === undefined) {
+                this._mobileTitle = this.$().data('title');
+            }
+            return this._mobileTitle;
         },
         getHideSidebars: function() {
             if (this._hideColumnFilters === undefined) {
