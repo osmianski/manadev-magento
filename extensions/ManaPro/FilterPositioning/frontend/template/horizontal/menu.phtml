@@ -23,14 +23,14 @@ $_filterHelper = Mage::helper('mana_filters');
      data-duration="<?php echo Mage::getStoreConfig('mana_filters/mobile/duration') ?>"
      data-hide-sidebars="<?php echo Mage::getStoreConfig('mana_filters/mobile/column_filters') == 'move' ? '1' : '0' ?>"
      data-one-column="<?php echo Mage::getStoreConfig('mana_filters/mobile/max_width') ?>"
+     data-title="<?php echo $this->__('Filter') ?>"
      data-column-filters="<?php echo Mage::getStoreConfig('mana_filters/mobile/column_filters') ?>">
     <div class="block-content">
         <?php echo $this->getStateHtml() ?>
         <?php if($this->canShowOptions()): ?>
             <div id="narrow-by-list">
-            <?php if (Mage::getStoreConfigFlag('mana_filters/positioning/shop_by_title')) : ?>
             <dl class="m-shop-by">
-              <dt class="block-subtitle">
+              <dt class="block-subtitle <?php echo Mage::getStoreConfigFlag('mana_filters/positioning/shop_by_title') ? '' : 'hidden' ?>">
                 <div class="m-subtitle-actions">
                     <div class="m-expand-collapse">
                         <div class="btn-expand-collapse"></div>
@@ -40,7 +40,6 @@ $_filterHelper = Mage::helper('mana_filters');
               </dt>
               <dd class="hidden"></dd>
             </dl>
-            <?php endif; ?>
                 <div>
                 <?php $_filters = $this->getFilters() ?>
                 <?php foreach ($_filters as $_filter): ?>
