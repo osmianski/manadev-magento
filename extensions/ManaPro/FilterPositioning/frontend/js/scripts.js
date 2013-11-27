@@ -8,16 +8,15 @@
 
 ; // make JS merging easier
 
-Mana.define('Mana/LayeredNavigation/Top', ['jquery', 'Mana/Core/Block'],
-function($, Block, undefined)
+Mana.define('Mana/LayeredNavigation/TopBlock', ['jquery', 'Mana/Core/Block'],
+function($, Block)
 {
-    return Block.extend('Mana/LayeredNavigation/Top', {
+    return Block.extend('Mana/LayeredNavigation/TopBlock', {
         _init: function () {
             this._super();
             this._expandCollapseStates = {};
             this._accordionExpandedId = undefined;
-            this._minHeights = {};
-            this._expandCollapseEnabled = false;
+            this._mobileLayout = false;
             this._subTitleExpanded = false;
         },
         _subscribeToHtmlEvents: function () {
@@ -39,7 +38,7 @@ function($, Block, undefined)
                 ._super()
                 .on('bind', this, function () {
                     if (!this.$().hasClass("one-filter-column")) {
-                        this._expandAll();
+                        this._prepareWideLayout();
                     }
                     this.$().find('dl dt.m-ln').on('click', _expandCollapse);
                     this.$().find('.block-subtitle').on('click', _expandCollapseSubTitle);
@@ -73,45 +72,45 @@ function($, Block, undefined)
             });
             var isOneColumn = this.$().hasClass("one-filter-column");
             if (wasOneColumn && !isOneColumn) {
-                this._expandAll();
+                this._prepareWideLayout();
             }
             else if (isOneColumn && !wasOneColumn) {
-                this._expandCollapseAll();
+                this._prepareMobileLayout();
             }
         },
         expandCollapse: function(dt) {
             var id = $(dt).data('id');
-            if (this._expandCollapseEnabled) {
-                switch (this.getExpandCollapseBehavior()) {
+            if (this._mobileLayout) {
+                switch (this.getBehavior()) {
                     case 'initially-collapsed':
                         if (this._expandCollapseStates[id]) {
                             this._expandCollapseStates[id] = false;
-                            this.collapse(dt, this.getExpandCollapseDuration());
+                            this.collapse(dt, this.getDuration());
                         }
                         else {
                             this._expandCollapseStates[id] = true;
-                            this.expand(dt, this.getExpandCollapseDuration());
+                            this.expand(dt, this.getDuration());
                         }
                         break;
                     case 'initially-expanded':
                         if (this._expandCollapseStates[id]) {
                             this._expandCollapseStates[id] = false;
-                            this.expand(dt, this.getExpandCollapseDuration());
+                            this.expand(dt, this.getDuration());
                         }
                         else {
                             this._expandCollapseStates[id] = true;
-                            this.collapse(dt, this.getExpandCollapseDuration());
+                            this.collapse(dt, this.getDuration());
                         }
                         break;
                     case 'accordion':
                     default:
                         if (this._accordionExpandedId != id) {
-                            this.collapse(this.$().find('dl dt.m-ln[data-id="' + this._accordionExpandedId + '"]'), this.getExpandCollapseDuration());
-                            this.expand(dt, this.getExpandCollapseDuration());
+                            this.collapse(this.$().find('dl dt.m-ln[data-id="' + this._accordionExpandedId + '"]'), this.getDuration());
+                            this.expand(dt, this.getDuration());
                             this._accordionExpandedId = id;
                         }
                         else if (this._accordionExpandedId !== '') {
-                            this.collapse(this.$().find('dl dt.m-ln[data-id="' + this._accordionExpandedId + '"]'), this.getExpandCollapseDuration());
+                            this.collapse(this.$().find('dl dt.m-ln[data-id="' + this._accordionExpandedId + '"]'), this.getDuration());
                             this._accordionExpandedId = '';
                         }
                         break;
@@ -119,39 +118,39 @@ function($, Block, undefined)
             }
         },
         expandCollapseSubTitle: function() {
-            if (this._expandCollapseEnabled) {
+            if (this._mobileLayout) {
                 if (this._subTitleExpanded) {
                     this._subTitleExpanded = false;
-                    this.collapseSubTitle(this.getExpandCollapseDuration());
+                    this.collapseSubTitle(this.getDuration());
                 }
                 else {
                     this._subTitleExpanded = true;
-                    this.expandSubTitle(this.getExpandCollapseDuration());
+                    this.expandSubTitle(this.getDuration());
                 }
             }
         },
-        _expandCollapseAll: function() {
-            this._expandCollapseEnabled = true;
+        _prepareMobileLayout: function() {
+            this._mobileLayout = true;
+            this.$().removeClass('m-wide');
+            if (this.getHideSidebars()) {
+                $(this.getSidebarLayeredNavSelector()).hide();
+            }
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
             $filters.each(function () {
-                var minHeight;
-                if (minHeight = $(this).parent().css('min-height')) {
-                    self._minHeights[$(this).data('id')] = minHeight;
-                    $(this).parent().css('min-height', '');
-                }
+                self._prepareFilterForMobileLayout(this);
             });
 
-            switch (this.getExpandCollapseBehavior()) {
+            switch (this.getBehavior()) {
                 case 'initially-collapsed':
-                    this._expandCollapseAllByDefaultCollapsed();
+                    this._prepareMobileLayoutByDefaultCollapsed();
                     break;
                 case 'initially-expanded':
-                    this._expandCollapseAllByDefaultExpanded();
+                    this._prepareMobileLayoutByDefaultExpanded();
                     break;
                 case 'accordion':
                 default:
-                    this._expandCollapseAllAsAccordion();
+                    this._prepareMobileLayoutAsAccordion();
                     break;
             }
             if (this._subTitleExpanded) {
@@ -161,7 +160,7 @@ function($, Block, undefined)
                 this.collapseSubTitle(0);
             }
         },
-        _expandCollapseAllByDefaultExpanded: function() {
+        _prepareMobileLayoutByDefaultExpanded: function() {
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
             $filters.each(function () {
@@ -173,7 +172,7 @@ function($, Block, undefined)
                 }
             });
         },
-        _expandCollapseAllByDefaultCollapsed: function() {
+        _prepareMobileLayoutByDefaultCollapsed: function() {
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
             $filters.each(function () {
@@ -185,20 +184,21 @@ function($, Block, undefined)
                 }
             });
         },
-        _expandAll: function() {
-            this._expandCollapseEnabled = false;
+        _prepareWideLayout: function() {
+            this._mobileLayout = false;
+            this.$().addClass('m-wide');
+            if (this.getHideSidebars()) {
+                $(this.getSidebarLayeredNavSelector()).show();
+            }
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
             $filters.each(function () {
-                var minHeight;
-                if (minHeight = self._minHeights[$(this).data('id')]) {
-                    $(this).parent().css('min-height', minHeight);
-                }
+                self._prepareFilterForWideLayout(this);
                 self.expand(this, 0);
             });
             this.expandSubTitle(0);
         },
-        _expandCollapseAllAsAccordion: function() {
+        _prepareMobileLayoutAsAccordion: function() {
             var $filters = this.$().find('dl dt.m-ln');
             var self = this;
             var firstFilterId = '';
@@ -228,31 +228,39 @@ function($, Block, undefined)
                 }
             });
         },
-        getExpandCollapseBehavior: function() {
-            if (this._expandCollapseBehavior === undefined) {
-                this._expandCollapseBehavior = this.$().data('expand-collapse-behavior');
+        getBehavior: function() {
+            if (this._behavior === undefined) {
+                this._behavior = this.$().data('behavior');
             }
-            return this._expandCollapseBehavior;
+            return this._behavior;
         },
-        getExpandCollapseDuration: function() {
-            if (this._expandCollapseDuration === undefined) {
-                this._expandCollapseDuration = this.$().data('expand-collapse-duration');
-                if (this._expandCollapseDuration === '') {
-                    this._expandCollapseDuration = 500;
+        getDuration: function() {
+            if (this._duration === undefined) {
+                this._duration = this.$().data('duration');
+                if (this._duration === '') {
+                    this._duration = 500;
                 }
             }
-            return this._expandCollapseDuration;
+            return this._duration;
+        },
+        getHideSidebars: function() {
+            if (this._hideColumnFilters === undefined) {
+                this._hideColumnFilters = this.$().data('hide-sidebars');
+            }
+            return this._hideColumnFilters;
+        },
+        getSidebarLayeredNavSelector: function() {
+            return '.col-left .block.block-layered-nav,' +
+                '.mb-mana-catalog-leftnav,' +
+                '.col-right .block.block-layered-nav,' +
+                '.mb-mana-catalog-rightnav';
         },
         getWidths: function() {
-            if (this._widths === undefined) {
-                this._widths = {
-                    "one-filter-column": this.$().data('one-column'),
-                    "two-filter-columns": this.$().data('two-columns'),
-                    "three-filter-columns": this.$().data('three-columns'),
-                    "four-filter-columns": this.$().data('four-columns')
-                };
-            }
-            return this._widths;
+            throw 'Abstract';
+        },
+        _prepareFilterForWideLayout: function(dt) {
+        },
+        _prepareFilterForMobileLayout: function (dt) {
         },
         expand: function (element, duration) {
             $(element).removeClass('m-collapsed').addClass('m-expanded');
@@ -285,80 +293,161 @@ function($, Block, undefined)
             this.$().find('.block-subtitle').removeClass('m-expanded').addClass('m-collapsed');
             $('.m-shop-by').next().slideUp(duration);
         }
+    });
 });
+
+Mana.define('Mana/LayeredNavigation/Top/MenuBlock', ['jquery', 'Mana/LayeredNavigation/TopBlock'],
+function($, TopBlock)
+{
+    return TopBlock.extend('Mana/LayeredNavigation/Top/MenuBlock', {
+        _prepareFilterForWideLayout: function(dt) {
+            $(dt).next().addClass('hidden');
+        },
+        _prepareFilterForMobileLayout: function (dt) {
+            $(dt).next().removeClass('hidden').width('auto');
+        },
+        getWidths: function() {
+            if (this._widths === undefined) {
+                this._widths = {
+                    "one-filter-column": this.$().data('one-column')
+                };
+            }
+            return this._widths;
+        },
+        _calculatePopupWidth: function ($dt, $dd) {
+            var maxWidth = $dd.attr('data-max-width');
+            var result = $dd.width() > $dt.width() ? $dd.width() : $dt.width();
+            return maxWidth ? (result <= maxWidth ? result : maxWidth) : result;
+        },
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+            function _mouseOverFilter() {
+                self._mouseOverFilter($(this).parent(), $(this), $(this).next());
+            }
+
+            function _mouseOutFilter() {
+                self._mouseOutFilter($(this).parent(), $(this), $(this).next());
+            }
+
+            function _mouseOverOptions() {
+                self._mouseOverOptions($(this).parent(), $(this).prev(), $(this));
+            }
+
+            function _mouseOutOptions() {
+                self._mouseOutOptions($(this).parent(), $(this).prev(), $(this));
+            }
+
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$().find('dl dt.m-ln').on('mouseover', _mouseOverFilter);
+                    this.$().find('dl dt.m-ln').on('mouseout', _mouseOutFilter);
+                    this.$().find('dl dd.m-ln').on('mouseover', _mouseOverOptions);
+                    this.$().find('dl dd.m-ln').on('mouseout', _mouseOutOptions);
+                })
+                .on('unbind', this, function () {
+                    this.$().find('dl dt.m-ln').off('mouseover', _mouseOverFilter);
+                    this.$().find('dl dt.m-ln').off('mouseout', _mouseOutFilter);
+                    this.$().find('dl dd.m-ln').off('mouseover', _mouseOverOptions);
+                    this.$().find('dl dd.m-ln').off('mouseout', _mouseOutOptions);
+                });
+        },
+        _mouseOverFilter: function($dl, $dt, $dd) {
+            if ($dl.hasClass('m-inline') || this._mobileLayout) {
+                return true;
+            }
+
+            $dd
+              .removeClass('hidden')
+              .offset({
+                top: $dt.offset().top + $dt.outerHeight(),
+                left: $dt.offset().left
+              })
+              .width(this._calculatePopupWidth($dt, $dd))
+              .addClass('m-popup-filter');
+            $dt
+              .addClass('m-popup-filter');
+
+            return true;
+        },
+        _mouseOutFilter: function ($dl, $dt, $dd) {
+            if ($dl.hasClass('m-inline') || this._mobileLayout) {
+                return true;
+            }
+
+            $dd
+              .removeClass('m-popup-filter')
+              .addClass('hidden');
+            $dt
+              .removeClass('m-popup-filter');
+
+            return true;
+        },
+        _mouseOverOptions: function ($dl, $dt, $dd) {
+            if ($dl.hasClass('m-inline') || this._mobileLayout) {
+                return true;
+            }
+
+            $dd
+              .removeClass('hidden')
+              .offset({
+                top: $dt.offset().top + $dt.outerHeight(),
+                left: $dt.offset().left
+              })
+              .width(this._calculatePopupWidth($dt, $dd))
+              .addClass('m-popup-filter');
+            $dt
+              .addClass('m-popup-filter');
+
+            return true;
+        },
+        _mouseOutOptions: function ($dl, $dt, $dd) {
+            if ($dl.hasClass('m-inline') || this._mobileLayout) {
+                return true;
+            }
+
+            $dd
+                .removeClass('m-popup-filter')
+                .addClass('hidden');
+            $dt
+                .removeClass('m-popup-filter');
+
+            return true;
+        }
+    });
 });
 
-(function($) {
-    function _width(dt, dd) {
-        var maxWidth = dd.attr('data-max-width');
-        var result = dd.width() > dt.width() ? dd.width() : dt.width();
-        return maxWidth ? (result <= maxWidth ? result : maxWidth) : result;
-    }
-
-  $('.col-main div.block-layered-nav.m-topmenu dl dt.m-ln')
-    .live('mouseover', function() {
-        if ($(this).parent().hasClass('m-inline')) {
-            return true;
+Mana.define('Mana/LayeredNavigation/Top/HorizontalBlock', ['jquery', 'Mana/LayeredNavigation/TopBlock'],
+function($, TopBlock, undefined)
+{
+    return TopBlock.extend('Mana/LayeredNavigation/Top/HorizontalBlock', {
+        _init: function () {
+            this._super();
+            this._minHeights = {};
+        },
+        _prepareFilterForWideLayout: function(dt) {
+            var minHeight;
+            if (minHeight = this._minHeights[$(dt).data('id')]) {
+                $(dt).parent().css('min-height', minHeight);
+            }
+        },
+        _prepareFilterForMobileLayout: function (dt) {
+            var minHeight;
+            if (minHeight = $(dt).parent().css('min-height')) {
+                this._minHeights[$(dt).data('id')] = minHeight;
+                $(dt).parent().css('min-height', '');
+            }
+        },
+        getWidths: function() {
+            if (this._widths === undefined) {
+                this._widths = {
+                    "one-filter-column": this.$().data('one-column'),
+                    "two-filter-columns": this.$().data('two-columns'),
+                    "three-filter-columns": this.$().data('three-columns'),
+                    "four-filter-columns": this.$().data('four-columns')
+                };
+            }
+            return this._widths;
         }
-
-        var dt = $(this);
-        var dd = $(this).next();
-        dd
-          .removeClass('hidden')
-          .offset({
-            top: dt.offset().top + dt.outerHeight(),
-            left: dt.offset().left
-          })
-          .width(_width(dt, dd))
-          .addClass('m-popup-filter');
-        dt
-          .addClass('m-popup-filter');
-      })
-    .live('mouseout', function() {
-        if ($(this).parent().hasClass('m-inline')) {
-            return true;
-        }
-
-        var dt = $(this);
-        var dd = $(this).next();
-        dd
-          .removeClass('m-popup-filter')
-          .addClass('hidden');
-        dt
-          .removeClass('m-popup-filter');
-      });
-  $('.col-main div.block-layered-nav.m-topmenu dl dd.m-ln')
-    .live('mouseover', function() {
-        if ($(this).parent().hasClass('m-inline')) {
-            return true;
-        }
-
-        var dd = $(this);
-        var dt = $(this).prev();
-        dd
-          .removeClass('hidden')
-          .offset({
-            top: dt.offset().top + dt.outerHeight(),
-            left: dt.offset().left
-          })
-          .width(_width(dt, dd))
-          .addClass('m-popup-filter');
-        dt
-          .addClass('m-popup-filter');
-      })
-      .live('mouseout', function() {
-        if ($(this).parent().hasClass('m-inline')) {
-            return true;
-        }
-
-        var dd = $(this);
-        var dt = $(this).prev();
-        dd
-          .removeClass('m-popup-filter')
-          .addClass('hidden');
-        dt
-          .removeClass('m-popup-filter');
-
-      });
-    
-})(jQuery);
+    });
+});
