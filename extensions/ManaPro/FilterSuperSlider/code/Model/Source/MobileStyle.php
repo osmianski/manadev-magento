@@ -15,7 +15,7 @@ class ManaPro_FilterSuperSlider_Model_Source_MobileStyle extends Mana_Core_Model
         return array(
             array('value' => '', 'label' => $t->__('Same as desktop')),
             array('value' => 'm-hide-slider', 'label' => $t->__('Leave only input fields')),
-            array('value' => 'm-responsive-slider-1', 'label' => $t->__('Responsive Style 1')),
+            array('value' => 'style4', 'label' => $t->__('Style 4')),
         );
     }
 }

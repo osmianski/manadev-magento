@@ -16,6 +16,7 @@ class ManaPro_FilterSuperSlider_Model_Source_Style extends Mana_Core_Model_Sourc
             array('value' => '', 'label' => $t->__('Style 1')),
             array('value' => 'style2', 'label' => $t->__('Style 2')),
             array('value' => 'style3', 'label' => $t->__('Style 3')),
+            array('value' => 'style4', 'label' => $t->__('Style 4')),
         );
     }
 }
