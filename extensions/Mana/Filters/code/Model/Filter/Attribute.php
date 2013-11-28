@@ -74,6 +74,8 @@ class Mana_Filters_Model_Filter_Attribute
                 $optionsCount = $query->getAllOptimizedAttributeFilterCounts();
                 $data = array();
                 $onlyWithResults = $this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS;
+                $attributeId = $attribute->getId();
+                $isReverse = $attributeId;
                 foreach ($optionsCount as $option) {
                     if ($option['attribute_id'] != $attribute->getId()) {
                         continue;
@@ -89,7 +91,7 @@ class Mana_Filters_Model_Filter_Attribute
                                 'value' => $option['value'],
                                 'count' => $option['count'],
                                 'm_selected' => $isSelected,
-                                'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
+                                'm_show_selected' => $isReverse ? !$isSelected : $isSelected,
                             );
                         }
                     }
@@ -99,7 +101,7 @@ class Mana_Filters_Model_Filter_Attribute
                             'value' => $option['value'],
                             'count' => $option['count'],
                             'm_selected' => $isSelected,
-                            'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
+                            'm_show_selected' => $isReverse ? !$isSelected : $isSelected,
                         );
                     }
                 }
