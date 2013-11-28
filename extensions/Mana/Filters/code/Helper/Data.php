@@ -220,11 +220,32 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
             if (!is_array($showIn)) {
                 $showIn = explode(',', $showIn);
             }
-            return in_array($showInFilter, $showIn);
+            if (in_array($showInFilter, $showIn)) {
+                return true;
+            }
+            if ($this->isMobileFilter($block, $filter))
+            {
+                return true;
+            }
+            return false;
         }
         else {
             return true;
         }
+    }
+    public function isMobileFilter($block, $filter) {
+        if ($showInFilter = $block->getShowInFilter()) {
+            $showIn = $filter->getShowIn();
+            if (!is_array($showIn)) {
+                $showIn = explode(',', $showIn);
+            }
+            if (in_array(Mage::getStoreConfig('mana_filters/mobile/column_filters'), array('copy', 'move')) &&
+                $showInFilter == 'above_products' && !in_array('above_products', $showIn)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
     public function getFilterLayoutName($block, $filter) {
         if ($showInFilter = $block->getShowInFilter()) {
