@@ -190,9 +190,12 @@ ManaPro.filterSuperSlider = function(id, o) {
             _change();
         });
 
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {

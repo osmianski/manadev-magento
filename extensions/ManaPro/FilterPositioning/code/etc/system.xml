@@ -147,11 +147,20 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <width translate="label comment">
-                            <label>Menu Width</label>
+                        <min_width translate="label comment">
+                            <label>Min Width</label>
                             <comment>Value in pixels (only number). Applied to a part with options which drops down.</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_width>
+                        <width translate="label comment">
+                            <label>Max Width</label>
+                            <comment>Value in pixels (only number). Applied to a part with options which drops down.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>150</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

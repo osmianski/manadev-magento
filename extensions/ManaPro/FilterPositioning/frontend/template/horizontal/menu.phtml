@@ -24,9 +24,14 @@ $_filterHelper = Mage::helper('mana_filters');
      data-hide-sidebars="<?php echo Mage::getStoreConfig('mana_filters/mobile/column_filters') == 'move' ? '1' : '0' ?>"
      data-one-column="<?php echo Mage::getStoreConfig('mana_filters/mobile/max_width') ?>"
      data-title="<?php echo $this->__('Filter') ?>"
-     data-column-filters="<?php echo Mage::getStoreConfig('mana_filters/mobile/column_filters') ?>">
+     data-column-filters="<?php echo Mage::getStoreConfig('mana_filters/mobile/column_filters') ?>"
+     data-min-width="<?php echo Mage::getStoreConfig('mana_filters/positioning_menu/min_width') ?>"
+     data-max-width="<?php echo Mage::getStoreConfig('mana_filters/positioning_menu/width') ?>">
     <div class="block-content">
         <?php echo $this->getStateHtml() ?>
+        <?php if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7') && $this->getLayer()->getState()->getFilters()) : ?>
+        <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
+        <?php endif; ?>
         <?php if($this->canShowOptions()): ?>
             <div id="narrow-by-list">
             <dl class="m-shop-by">
@@ -55,7 +60,7 @@ $_filterHelper = Mage::helper('mana_filters');
                         </div>
                         <?php echo $this->__($_filter->getName()) ?>
                     </dt>
-                    <dd class="<?php if(!$_visible): ?>hidden<?php endif?> m-ln" data-max-width="<?php echo Mage::getStoreConfig('mana_filters/positioning_menu/width') ?>"><?php echo $_filter->getHtml() ?></dd>
+                    <dd class="<?php if(!$_visible): ?>hidden<?php endif?> m-ln"><?php echo $_filter->getHtml() ?></dd>
                 </dl>
                 <?php endif; ?>
                 <?php endforeach; ?>

@@ -207,7 +207,8 @@
                 <duration>500</duration>
             </mobile>
             <positioning_menu>
-                <width>200</width>
+                <min_width>180</min_width>
+                <width>250</width>
             </positioning_menu>
             <positioning_horizontal>
                 <height>100</height>

@@ -22,8 +22,8 @@ function($, Block, undefined)
         },
         _subscribeToHtmlEvents: function () {
             var self = this;
-            function _expandCollapse() {
-                self.expandCollapse(this);
+            function _expandCollapse(e) {
+                self.expandCollapse(this, e);
             }
             function _expandCollapseSubTitle() {
                 self.expandCollapseSubTitle(this);
@@ -80,9 +80,9 @@ function($, Block, undefined)
                 this._prepareMobileLayout();
             }
         },
-        expandCollapse: function(dt) {
-            var id = $(dt).data('id');
-            if (this._mobileLayout) {
+        expandCollapse: function(dt, e) {
+            if (this._mobileLayout && !$(e.target).parents('.m-filterclear').length) {
+                var id = $(dt).data('id');
                 switch (this.getBehavior()) {
                     case 'initially-collapsed':
                         if (this._expandCollapseStates[id]) {
@@ -300,7 +300,7 @@ function($, Block, undefined)
             var id = $(dt).data('id');
             var match = id.match(/m_(.*)_filter/);
             if (match[1] && (resize = _mana_oldResizehandler[match[1]])) {
-                resize();
+                resize(true);
             }
         },
         collapse: function (element, duration) {
@@ -325,13 +325,23 @@ function($, Block, undefined)
 });
 
 Mana.define('Mana/LayeredNavigation/Top/MenuBlock', ['jquery', 'Mana/LayeredNavigation/TopBlock'],
-function($, TopBlock)
+function($, TopBlock, undefined)
 {
     return TopBlock.extend('Mana/LayeredNavigation/Top/MenuBlock', {
         _prepareFilterForWideLayout: function(dt) {
-            $(dt).next().addClass('hidden');
+            var $dl = $(dt).parent();
+            if ($dl.hasClass('m-removed-inline')) {
+                $dl.addClass('m-inline').removeClass('m-removed-inline');
+            }
+            if (!$dl.hasClass('m-inline')) {
+                $(dt).next().addClass('hidden');
+            }
         },
         _prepareFilterForMobileLayout: function (dt) {
+            var $dl = $(dt).parent();
+            if ($dl.hasClass('m-inline')) {
+                $dl.addClass('m-removed-inline').removeClass('m-inline');
+            }
             $(dt).next().removeClass('hidden').width('auto');
         },
         getWidths: function() {
@@ -343,9 +353,12 @@ function($, TopBlock)
             return this._widths;
         },
         _calculatePopupWidth: function ($dt, $dd) {
-            var maxWidth = $dd.attr('data-max-width');
+            var minWidth = this.getMinWidth();
+            var maxWidth = this.getMaxWidth();
             var result = $dd.width() > $dt.width() ? $dd.width() : $dt.width();
-            return maxWidth ? (result <= maxWidth ? result : maxWidth) : result;
+            result = maxWidth ? (result <= maxWidth ? result : maxWidth) : result;
+            result = minWidth ? (result >= minWidth ? result : minWidth) : result;
+            return result;
         },
         _subscribeToHtmlEvents: function () {
             var self = this;
@@ -441,6 +454,18 @@ function($, TopBlock)
                 .removeClass('m-popup-filter');
 
             return true;
+        },
+        getMinWidth: function () {
+            if (this._minWidth === undefined) {
+                this._minWidth = this.$().data('min-width');
+            }
+            return this._minWidth;
+        },
+        getMaxWidth: function () {
+            if (this._maxWidth === undefined) {
+                this._maxWidth = this.$().data('max-width');
+            }
+            return this._maxWidth;
         }
     });
 });
