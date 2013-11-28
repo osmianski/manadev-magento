@@ -27,13 +27,13 @@
 
 /* Price slider width */
 .col-main .block-layered-nav.m-topmenu.m-wide .m-filter-slider { width: 180px; }
-.col-main .block-layered-nav.m-topmenu .m-filterclear { position: absolute; top: 50%; right: 5px; margin-top: -6px; }
-
+/*.col-main .block-layered-nav.m-topmenu .m-filterclear { position: absolute; top: 50%; right: 5px; margin-top: -6px; }
+  */
 /* SHOP BY bar */
 .col-main .block-layered-nav.m-topmenu.m-wide dl { float: left; height: 32px; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt { float: left; padding: 7px 20px 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
-.col-main .block-layered-nav.m-topmenu.m-wide .m-horizontal-actions { top: 7px; right: 0; }
+.col-main .block-layered-nav.m-topmenu.m-wide .m-horizontal-actions { position: absolute; top: 50%; right: 5px; margin-top: -6px; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
 /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea');
     background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(white));
@@ -68,8 +68,8 @@
 .col-main .block-layered-nav.m-top .m-horizontal-actions,
 .col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
 .col-main .block-layered-nav.m-top .m-subtitle-actions,
-.col-main .block-layered-nav.m-top .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
-.col-main .block-layered-nav.m-top .actions { top: -20px; }
+.col-main .block-layered-nav .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
+.col-main .block-layered-nav .actions { top: -20px; }
 .col-main .block-layered-nav.m-top .m-horizontal-actions { }
 .col-main .block-layered-nav.m-top .m-subtitle-actions { }
 .col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 50%; }
@@ -83,8 +83,6 @@
 .col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
 .col-main .block-layered-nav.one-filter-column .m-subtitle-actions,
 .col-main .block-layered-nav.one-filter-column .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
-.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
-.col-main .block-layered-nav.one-filter-column .m-subtitle-actions { width:11px; height:11px; }
 .col-main .block-layered-nav.one-filter-column .currently .m-subtitle-actions { top: 50%; }
 
 .col-main .block-layered-nav.one-filter-column dl { padding:0; margin:0; }
@@ -97,7 +95,7 @@ transition: background 300ms ease-in-out;
 -webkit-transition: background 300ms ease-in-out;
 -o-transition: background 300ms ease-in-out;}
 .col-main .block-layered-nav.one-filter-column dl dd { padding:10px 5px; margin:0; background: transparent; }
-.col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; margin-bottom: -5px; }
+.col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-colors { margin:0; }
 .col-main .block-layered-nav.one-filter-column .currently ol { float: left; width: auto; }
 .col-main .block-layered-nav.one-filter-column .currently .m-expand-collapse {  }
