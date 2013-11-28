@@ -446,8 +446,8 @@ function ($, Popup) {
 		apply(code, true);
 		return false;
 	}
-	
-	$(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time) {
+
+    $(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time) {
 		if (!_inAjax){
 			_states[code] = showAll;
 		}
@@ -463,6 +463,10 @@ function ($, Popup) {
         l.addClass('m-scrollable-filter');
         var heights = _calculateHeights(l, code);
         l.height(heights.less);
+        l.parent().on('m-prepare', function() {
+            var heights = _calculateHeights(l, code);
+            l.height(heights.less);
+        });
     });
     $(document).bind('m-ajax-before', function(e, selectors) {
 		_inAjax = true;

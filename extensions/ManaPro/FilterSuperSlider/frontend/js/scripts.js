@@ -193,7 +193,7 @@ ManaPro.filterSuperSlider = function(id, o) {
     function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
-        if (forceResize) {
+        if (forceResize === true) {
             s.resize();
         }
         if (!_mana_sliderTimers[id]) {
