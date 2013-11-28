@@ -67,36 +67,75 @@ class Mana_Filters_Model_Filter_Attribute
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
 
         if ($data === null) {
-            $options = $attribute->getFrontend()->getSelectOptions();
-            $optionsCount = $query->getFilterCounts($this->getFilterOptions()->getCode());
-            $data = array();
+        }
 
-            foreach ($options as $option) {
-                if (!$option || is_array($option['value'])) {
-                    continue;
-                }
-                if (Mage::helper('core/string')->strlen($option['value'])) {
-                    $isSelected = in_array($option['value'], $selectedOptionIds);
+        if ($data === null) {
+            if ($query->isOptimizedAttributeFilter($this)) {
+                $optionsCount = $query->getAllOptimizedAttributeFilterCounts();
+                $data = array();
+                $onlyWithResults = $this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS;
+                foreach ($optionsCount as $option) {
+                    if ($option['attribute_id'] != $attribute->getId()) {
+                        continue;
+                    }
+
+                    $hasResults = !empty($option['count']);
+                    $isSelected = !empty($option['value']) && in_array($option['value'], $selectedOptionIds);
                     // Check filter type
-                    if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
-                        if (!empty($optionsCount[$option['value']]) || in_array($option['value'], $selectedOptionIds)) {
+                    if ($onlyWithResults) {
+                        if ($hasResults || $isSelected) {
+                            $data[] = array(
+                                'label' => $option['label'],
+                                'value' => $option['value'],
+                                'count' => $option['count'],
+                                'm_selected' => $isSelected,
+                                'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
+                            );
+                        }
+                    }
+                    else {
+                        $data[] = array(
+                            'label' => $option['label'],
+                            'value' => $option['value'],
+                            'count' => $option['count'],
+                            'm_selected' => $isSelected,
+                            'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
+                        );
+                    }
+                }
+            }
+            else {
+                $options = $attribute->getFrontend()->getSelectOptions();
+                $optionsCount = $query->getFilterCounts($this->getFilterOptions()->getCode());
+                $data = array();
+
+                foreach ($options as $option) {
+                    if (!$option || is_array($option['value'])) {
+                        continue;
+                    }
+                    if (Mage::helper('core/string')->strlen($option['value'])) {
+                        $isSelected = in_array($option['value'], $selectedOptionIds);
+                        // Check filter type
+                        if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
+                            if (!empty($optionsCount[$option['value']]) || in_array($option['value'], $selectedOptionIds)) {
+                                $data[] = array(
+                                    'label' => $option['label'],
+                                    'value' => $option['value'],
+                                    'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
+                                    'm_selected' => $isSelected,
+                                    'm_show_selected' => $this->getFilterOptions()->getIsReverse(
+                                    ) ? !$isSelected : $isSelected,
+                                );
+                            }
+                        } else {
                             $data[] = array(
                                 'label' => $option['label'],
                                 'value' => $option['value'],
                                 'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
                                 'm_selected' => $isSelected,
-                                'm_show_selected' => $this->getFilterOptions()->getIsReverse(
-                                ) ? !$isSelected : $isSelected,
+                                'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
                             );
                         }
-                    } else {
-                        $data[] = array(
-                            'label' => $option['label'],
-                            'value' => $option['value'],
-                            'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
-                            'm_selected' => $isSelected,
-                            'm_show_selected' => $this->getFilterOptions()->getIsReverse() ? !$isSelected : $isSelected,
-                        );
                     }
                 }
             }
@@ -182,6 +221,10 @@ class Mana_Filters_Model_Filter_Attribute
     public function countOnCollection($collection)
     {
         return $this->_getResource()->countOnCollection($collection, $this);
+    }
+
+    public function optimizedCountOnCollection($collection, $attributeIds) {
+        return $this->_getResource()->optimizedCountOnCollection($collection, $this, $attributeIds);
     }
 
     public function getRangeOnCollection($collection)
