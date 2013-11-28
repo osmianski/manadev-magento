@@ -296,16 +296,9 @@ function($, Block, undefined)
         },
         expand: function (element, duration) {
             $(element).removeClass('m-collapsed').addClass('m-expanded');
-            this._fixSliderWidth(element);
+            //this._fixSliderWidth(element);
+            $(element).next().trigger('m-prepare');
             $(element).next().slideDown(duration);
-        },
-        _fixSliderWidth: function(dt) {
-            var resize;
-            var id = $(dt).data('id');
-            var match = id.match(/m_(.*)_filter/);
-            if (match[1] && (resize = _mana_oldResizehandler[match[1]])) {
-                resize(true);
-            }
         },
         collapse: function (element, duration) {
             $(element).removeClass('m-expanded').addClass('m-collapsed');
@@ -316,7 +309,7 @@ function($, Block, undefined)
             this.$().removeClass('m-collapsed').addClass('m-expanded');
             this.$().find('.block-subtitle').removeClass('m-collapsed').addClass('m-expanded');
             this.$().find('dl dt.m-ln').each(function() {
-                self._fixSliderWidth(this);
+                $(this).next().trigger('m-prepare');
             });
             $('.m-shop-by').next().slideDown(duration);
         },
