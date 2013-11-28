@@ -21,19 +21,19 @@
 .col-main .block-layered-nav .currently li { float: left; white-space: nowrap; margin-right: 10px; background: transparent; border: none; padding-left: 0; }
 
 .col-main .block-layered-nav #narrow-by-list { clear: both; position: relative; }
-.col-main .block-layered-nav .actions { background: transparent; border: none; float: left; padding-top: 5px; }
 
+/* Actions */
+.col-main .block-layered-nav .actions,
+.col-main .block-layered-nav .m-horizontal-actions,
+.col-main .block-layered-nav .m-subtitle-actions { position: absolute; right: 5px; top:50%; margin: -6px 0 0; }
+.col-main .block-layered-nav .actions { background: transparent; border: none; float: left; padding: 6px 10px; top:-20px; }
+.col-main
 /* Top (as Menu) LN =================================================================================================================================== */
 
-/* Price slider width */
-.col-main .block-layered-nav.m-topmenu.m-wide .m-filter-slider { width: 180px; }
-/*.col-main .block-layered-nav.m-topmenu .m-filterclear { position: absolute; top: 50%; right: 5px; margin-top: -6px; }
-  */
 /* SHOP BY bar */
 .col-main .block-layered-nav.m-topmenu.m-wide dl { float: left; height: 32px; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt { float: left; padding: 7px 20px 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
-.col-main .block-layered-nav.m-topmenu.m-wide .m-horizontal-actions { position: absolute; top: 50%; right: 5px; margin-top: -6px; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
 /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea');
     background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(white));
@@ -53,9 +53,7 @@
 .col-main .block-layered-nav.m-topmenu dl dt.m-popup-filter { background: #DEE5E8; }
 .col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter {  }
 
-/* Top LN =================================================================================================================================== */
-
-.col-main .block-layered-nav.m-top .m-filter-slider {  }
+/* Top LN - Horizontaly laid filters =================================================================================================================================== */
 
 .col-main .block-layered-nav.m-top dl { width: 19%; }
 .col-main .block-layered-nav.m-top.one-filter-column dl { width: 100%; }
@@ -65,11 +63,6 @@
 
 .col-main .block-layered-nav dl.m-mobile { display: none; }
 .col-main .block-layered-nav.one-filter-column dl.m-mobile { display: block; }
-.col-main .block-layered-nav.m-top .m-horizontal-actions,
-.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
-.col-main .block-layered-nav.m-top .m-subtitle-actions,
-.col-main .block-layered-nav .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
-.col-main .block-layered-nav .actions { top: -20px; }
 .col-main .block-layered-nav.m-top .m-horizontal-actions { }
 .col-main .block-layered-nav.m-top .m-subtitle-actions { }
 .col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 50%; }
@@ -79,7 +72,7 @@
 .col-main .block-layered-nav.m-top dl dt {}
 .col-main .block-layered-nav.m-top dl dd { background: transparent; margin-right: 5px;}
 
-/*Responsive accordion menu for mobile divices*/
+/*Responsive accordion menu for mobile divices========================================================================*/
 .col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
 .col-main .block-layered-nav.one-filter-column .m-subtitle-actions,
 .col-main .block-layered-nav.one-filter-column .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
@@ -110,9 +103,6 @@ transition: background 300ms ease-in-out;
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span { background: black; border: none; margin-left: -20px; padding-left: 20px; }
 .col-main .block-layered-nav.one-filter-column .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
 .col-main .block-layered-nav.one-filter-column .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
-
-/*Cia is horizontalo kazkas*/
-
 
 .col-main .block-layered-nav.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
 .col-main .block-layered-nav.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
