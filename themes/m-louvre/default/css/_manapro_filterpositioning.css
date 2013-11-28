@@ -33,15 +33,15 @@
 .col-main .block-layered-nav.m-topmenu dl dt { float: left; padding: 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
 .col-main .block-layered-nav.m-topmenu dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
 .col-main .block-layered-nav.m-topmenu dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
-/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea'); 
+/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea');
     background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(white));
     background: -moz-linear-gradient(top,  white,  #eaeaea);
 */
-    filter: alpha(opacity=90); 
-  	-moz-opacity: 0.9;       
-  	opacity: 0.9;               
-    
-    }     
+    filter: alpha(opacity=90);
+  	-moz-opacity: 0.9;
+  	opacity: 0.9;
+
+    }
 /* Javascript operates with these classes */
 .col-main .block-layered-nav.m-topmenu dl dt.m-ln {  }
 .col-main .block-layered-nav.m-topmenu dl dd.m-ln {  }
@@ -128,8 +128,8 @@ transition: background 300ms ease-in-out;
 .m-colors_label {} /* Colors and Images with labels */
 .m-dropdown {} /* Dropdowns */
 .m-radios {} /* Radio buttons */
-.m-slider {} /* Slider */ 
- 
- 
- 
+.m-slider {} /* Slider */
+
+
+
 
