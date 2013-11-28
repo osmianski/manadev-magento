@@ -287,21 +287,18 @@ function($, Block, undefined)
             throw 'Abstract';
         },
         _prepareFilterForWideLayout: function(dt) {
+            var $dd = $(dt).next();
+            $dd.trigger('m-prepare');
         },
         _prepareFilterForMobileLayout: function (dt) {
+            var $dd = $(dt).next();
+            $dd.trigger('m-prepare');
         },
         expand: function (element, duration) {
             $(element).removeClass('m-collapsed').addClass('m-expanded');
-            this._fixSliderWidth(element);
+            //this._fixSliderWidth(element);
+            $(element).next().trigger('m-prepare');
             $(element).next().slideDown(duration);
-        },
-        _fixSliderWidth: function(dt) {
-            var resize;
-            var id = $(dt).data('id');
-            var match = id.match(/m_(.*)_filter/);
-            if (match[1] && (resize = _mana_oldResizehandler[match[1]])) {
-                resize(true);
-            }
         },
         collapse: function (element, duration) {
             $(element).removeClass('m-expanded').addClass('m-collapsed');
@@ -312,7 +309,7 @@ function($, Block, undefined)
             this.$().removeClass('m-collapsed').addClass('m-expanded');
             this.$().find('.block-subtitle').removeClass('m-collapsed').addClass('m-expanded');
             this.$().find('dl dt.m-ln').each(function() {
-                self._fixSliderWidth(this);
+                $(this).next().trigger('m-prepare');
             });
             $('.m-shop-by').next().slideDown(duration);
         },
@@ -336,6 +333,7 @@ function($, TopBlock, undefined)
             if (!$dl.hasClass('m-inline')) {
                 $(dt).next().addClass('hidden');
             }
+            this._super();
         },
         _prepareFilterForMobileLayout: function (dt) {
             var $dl = $(dt).parent();
@@ -343,6 +341,7 @@ function($, TopBlock, undefined)
                 $dl.addClass('m-removed-inline').removeClass('m-inline');
             }
             $(dt).next().removeClass('hidden').width('auto');
+            this._super();
         },
         getWidths: function() {
             if (this._widths === undefined) {
@@ -484,6 +483,7 @@ function($, TopBlock, undefined)
             if (minHeight = this._minHeights[$(dt).data('id')]) {
                 $(dt).parent().css('min-height', minHeight);
             }
+            this._super();
         },
         _prepareFilterForMobileLayout: function (dt) {
             var minHeight;
@@ -491,6 +491,7 @@ function($, TopBlock, undefined)
                 this._minHeights[$(dt).data('id')] = minHeight;
                 $(dt).parent().css('min-height', '');
             }
+            this._super();
         },
         getWidths: function() {
             if (this._widths === undefined) {
