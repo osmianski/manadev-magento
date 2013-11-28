@@ -60,7 +60,7 @@ background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
 }
 .m-filter-slider.style3:before,
-.m-filter-slider.style3:after { position: absolute; left: 0; height:20px; top:-9px; width: 5px; background-color: #e6e6e6; display: block; content: ""; z-index: 3;}
+.m-filter-slider.style3:after { position: absolute; left: 0; height:22px; top:-8px; width: 5px; background-color: #e6e6e6; display: block; content: ""; z-index: 3;}
 .m-filter-slider.style3:before{}
 .m-filter-slider.style3:after { right: 0; left: auto;}
 
