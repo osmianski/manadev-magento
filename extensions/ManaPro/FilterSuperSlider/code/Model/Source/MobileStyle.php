@@ -14,8 +14,7 @@ class ManaPro_FilterSuperSlider_Model_Source_MobileStyle extends Mana_Core_Model
         /* @var $t ManaPro_FilterSuperSlider_Helper_Data */ $t = Mage::helper(strtolower('ManaPro_FilterSuperSlider'));
         return array(
             array('value' => '', 'label' => $t->__('Same as desktop')),
-            array('value' => 'm-hide-slider', 'label' => $t->__('Leave only input fields')),
-            array('value' => 'style4', 'label' => $t->__('Style 4')),
+            array('value' => 'm-hide-slider', 'label' => $t->__('Hide slider; Leave only input fields/labels')),
         );
     }
 }
