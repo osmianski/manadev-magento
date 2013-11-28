@@ -66,6 +66,7 @@
 .col-main .block-layered-nav dl.m-mobile { display: none; }
 .col-main .block-layered-nav.one-filter-column dl.m-mobile { display: block; }
 .col-main .block-layered-nav.m-top .m-horizontal-actions,
+.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
 .col-main .block-layered-nav.m-top .m-subtitle-actions,
 .col-main .block-layered-nav.m-top .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
 .col-main .block-layered-nav.m-top .actions { top: -20px; }
@@ -73,17 +74,18 @@
 .col-main .block-layered-nav.m-top .m-subtitle-actions { }
 .col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 50%; }
 
-.col-main .block-layered-nav.m-top .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-top: -5px; display: none; }
-.col-main .block-layered-nav.m-top .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
-.col-main .block-layered-nav.m-top .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
-.col-main .block-layered-nav.m-top .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
-
 /* SHOP BY bar */
 .col-main .block-layered-nav.m-top dl { float: left; }
 .col-main .block-layered-nav.m-top dl dt {}
 .col-main .block-layered-nav.m-top dl dd { background: transparent; margin-right: 5px;}
 
 /*Responsive accordion menu for mobile divices*/
+.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
+.col-main .block-layered-nav.one-filter-column .m-subtitle-actions,
+.col-main .block-layered-nav.one-filter-column .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
+.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
+.col-main .block-layered-nav.one-filter-column .m-subtitle-actions { width:11px; height:11px; }
+.col-main .block-layered-nav.one-filter-column .currently .m-subtitle-actions { top: 50%; }
 
 .col-main .block-layered-nav.one-filter-column dl { padding:0; margin:0; }
 .col-main .block-layered-nav.one-filter-column dl dt,
@@ -95,7 +97,7 @@ transition: background 300ms ease-in-out;
 -webkit-transition: background 300ms ease-in-out;
 -o-transition: background 300ms ease-in-out;}
 .col-main .block-layered-nav.one-filter-column dl dd { padding:10px 5px; margin:0; background: transparent; }
-.col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; margin-top: -5px; }
+.col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; margin-bottom: -5px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-colors { margin:0; }
 .col-main .block-layered-nav.one-filter-column .currently ol { float: left; width: auto; }
 .col-main .block-layered-nav.one-filter-column .currently .m-expand-collapse {  }
@@ -108,11 +110,18 @@ transition: background 300ms ease-in-out;
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-from,
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to { background: #aaa none; width:20px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span { background: black; border: none; margin-left: -20px; padding-left: 20px; }
+.col-main .block-layered-nav.one-filter-column .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
+.col-main .block-layered-nav.one-filter-column .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
 
 /*Cia is horizontalo kazkas*/
-.col-main .block-layered-nav.m-top.one-filter-column .m-expand-collapse { display: block; }
-.col-main .block-layered-nav.m-top.one-filter-column .currently + div .block-subtitle,
-.col-main .block-layered-nav.m-top.one-filter-column .currently + div + div .block-subtitle { display: none; }
+
+
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse { display: block; }
+.col-main .block-layered-nav.one-filter-column .currently + div .block-subtitle,
+.col-main .block-layered-nav.one-filter-column .currently + div + div .block-subtitle { display: none; }
 
 
 
