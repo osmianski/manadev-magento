@@ -409,6 +409,7 @@ function($, TopBlock, undefined)
             $dt
               .addClass('m-popup-filter');
 
+            $dd.trigger('m-prepare');
             return true;
         },
         _mouseOutFilter: function ($dl, $dt, $dd) {
