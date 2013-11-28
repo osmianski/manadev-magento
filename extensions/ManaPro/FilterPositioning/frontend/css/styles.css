@@ -14,6 +14,8 @@
 /* Titles SHOP BY and CURRENTLY SHOPPING BY */
 .col-main .block-layered-nav .block-subtitle,
 .col-main .block-layered-nav .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
+.col-main .block-layered-nav dl.m-mobile { display: none; }
+.col-main .block-layered-nav dl { float: left; }
 
 /* CURRENTLY SHOPPING BY bar */
 .col-main .block-layered-nav .currently,
@@ -27,11 +29,11 @@
 .col-main .block-layered-nav .m-horizontal-actions,
 .col-main .block-layered-nav .m-subtitle-actions { position: absolute; right: 5px; top:50%; margin: -6px 0 0; }
 .col-main .block-layered-nav .actions { background: transparent; border: none; float: left; padding: 6px 10px; top:-20px; }
-.col-main
+
 /* Top (as Menu) LN =================================================================================================================================== */
 
 /* SHOP BY bar */
-.col-main .block-layered-nav.m-topmenu.m-wide dl { float: left; height: 32px; }
+.col-main .block-layered-nav.m-topmenu.m-wide dl { height: 32px; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt { float: left; padding: 7px 20px 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
 .col-main .block-layered-nav.m-topmenu.m-wide dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
 .col-main .block-layered-nav.m-topmenu.m-wide dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
@@ -54,31 +56,16 @@
 .col-main .block-layered-nav.m-topmenu dl dd.m-popup-filter {  }
 
 /* Top LN - Horizontaly laid filters =================================================================================================================================== */
-
 .col-main .block-layered-nav.m-top dl { width: 19%; }
-.col-main .block-layered-nav.m-top.one-filter-column dl { width: 100%; }
 .col-main .block-layered-nav.m-top.two-filter-columns dl { width: 50%; }
 .col-main .block-layered-nav.m-top.three-filter-columns dl { width: 33%; }
 .col-main .block-layered-nav.m-top.four-filter-columns dl { width: 23%; }
-
-.col-main .block-layered-nav dl.m-mobile { display: none; }
-.col-main .block-layered-nav.one-filter-column dl.m-mobile { display: block; }
-.col-main .block-layered-nav.m-top .m-horizontal-actions { }
-.col-main .block-layered-nav.m-top .m-subtitle-actions { }
-.col-main .block-layered-nav.m-top .currently .m-subtitle-actions { top: 50%; }
-
-/* SHOP BY bar */
-.col-main .block-layered-nav.m-top dl { float: left; }
-.col-main .block-layered-nav.m-top dl dt {}
 .col-main .block-layered-nav.m-top dl dd { background: transparent; margin-right: 5px;}
 
 /*Responsive accordion menu for mobile divices========================================================================*/
-.col-main .block-layered-nav.one-filter-column .m-horizontal-actions,
-.col-main .block-layered-nav.one-filter-column .m-subtitle-actions,
-.col-main .block-layered-nav.one-filter-column .actions { position: absolute; right: 8px; top:50%; margin: -5px 0 0; }
-.col-main .block-layered-nav.one-filter-column .currently .m-subtitle-actions { top: 50%; }
-
+.col-main .block-layered-nav.one-filter-column dl { width: 100%; }
 .col-main .block-layered-nav.one-filter-column dl { padding:0; margin:0; }
+.col-main .block-layered-nav.one-filter-column dl.m-mobile { display: block; }
 .col-main .block-layered-nav.one-filter-column dl dt,
 .col-main .block-layered-nav.one-filter-column .block-subtitle { cursor: pointer; display:block; padding:5px !important; position: relative; margin:0; background: #eee; border-bottom:1px solid #ddd; border-top:1px solid #f9f9f9;}
 .col-main .block-layered-nav.one-filter-column dl dt:hover,
@@ -91,8 +78,17 @@ transition: background 300ms ease-in-out;
 .col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-colors { margin:0; }
 .col-main .block-layered-nav.one-filter-column .currently ol { float: left; width: auto; }
-.col-main .block-layered-nav.one-filter-column .currently .m-expand-collapse {  }
-.col-main .block-layered-nav.one-filter-column .actions { position: absolute; right: 20px; top:0; margin: 0; padding: 5px 10px; z-index:3; }
+.col-main .block-layered-nav.one-filter-column .actions { right: 20px; top:0; margin: 0; padding: 5px 10px; z-index:3; }
+
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+.col-main .block-layered-nav.one-filter-column .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
+.col-main .block-layered-nav.one-filter-column .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
+.col-main .block-layered-nav.one-filter-column .m-expand-collapse { display: block; }
+.col-main .block-layered-nav.one-filter-column .currently + div .block-subtitle,
+.col-main .block-layered-nav.one-filter-column .currently + div + div .block-subtitle { display: none; }
+
+/* Touch screen slider style */
 .col-main .block-layered-nav.one-filter-column .m-filter-slider,
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-from,
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to,
@@ -101,16 +97,6 @@ transition: background 300ms ease-in-out;
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-from,
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to { background: #aaa none; width:20px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span { background: black; border: none; margin-left: -20px; padding-left: 20px; }
-.col-main .block-layered-nav.one-filter-column .m-expanded .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-expanded.png) 0 0 no-repeat; }
-.col-main .block-layered-nav.one-filter-column .m-collapsed .m-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filterpositioning/m-collapsed.png) 0 0 no-repeat; }
-
-.col-main .block-layered-nav.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
-.col-main .block-layered-nav.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
-
-.col-main .block-layered-nav.one-filter-column .m-expand-collapse { display: block; }
-.col-main .block-layered-nav.one-filter-column .currently + div .block-subtitle,
-.col-main .block-layered-nav.one-filter-column .currently + div + div .block-subtitle { display: none; }
-
 
 
 /* Types styling for Top LN only */
