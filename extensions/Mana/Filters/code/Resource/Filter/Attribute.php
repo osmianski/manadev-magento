@@ -79,7 +79,7 @@ class Mana_Filters_Resource_Filter_Attribute
             ->joinLeft(array('_oc_lg' => $this->getTable('eav/attribute_option_value')),
                 "`_oc_lg`.`option_id` = `_oc_o`.`option_id` AND `_oc_lg`.`store_id` = 0", null)
             ->joinLeft(array('_oc_ls' => $this->getTable('eav/attribute_option_value')),
-                $db->quoteInto("`_oc_ls`.`option_id` = `_oc_o`.`option_id` AND `_oc_lS`.`store_id` = ?", $storeId), null)
+                $db->quoteInto("`_oc_ls`.`option_id` = `_oc_o`.`option_id` AND `_oc_ls`.`store_id` = ?", $storeId), null)
             ->joinLeft(array('_oc_idx' => $this->getMainTable()),
                 "`_oc_idx`.`entity_id` = `e`.`entity_id` AND " .
                 "`_oc_idx`.`attribute_id` = `_oc_o`.`attribute_id` AND " .
