@@ -52,6 +52,50 @@ class Mana_Filters_Resource_Filter_Attribute
     /**
      * @param Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $collection
      * @param Mana_Filters_Model_Filter_Attribute $model
+     * @param int[] $attributeIds
+     * @return array
+     */
+    public function optimizedCountOnCollection($collection, $model, $attributeIds) {
+        $select = $collection->getSelect();
+        // reset columns, order and limitation conditions
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->reset(Zend_Db_Select::ORDER);
+        $select->reset(Zend_Db_Select::GROUP);
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);
+        $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+
+        $db = $this->_getReadAdapter();
+        $storeId = $model->getStoreId();
+        $attributeIds = implode(', ', $attributeIds);
+
+        $columns = array(
+            'attribute_id' => new Zend_Db_Expr("`_oc_o`.`attribute_id`"),
+            'label' => new Zend_Db_Expr("COALESCE(`_oc_ls`.`value`, `_oc_lg`.`value`)"),
+            'value' => new Zend_Db_Expr("`_oc_o`.`option_id`"),
+            'count' => new Zend_Db_Expr("COUNT(DISTINCT `_oc_idx`.`entity_id`)"),
+        );
+        $select
+            ->from(array('_oc_o' => $this->getTable('eav/attribute_option')), null)
+            ->joinLeft(array('_oc_lg' => $this->getTable('eav/attribute_option_value')),
+                "`_oc_lg`.`option_id` = `_oc_o`.`option_id` AND `_oc_lg`.`store_id` = 0", null)
+            ->joinLeft(array('_oc_ls' => $this->getTable('eav/attribute_option_value')),
+                $db->quoteInto("`_oc_ls`.`option_id` = `_oc_o`.`option_id` AND `_oc_ls`.`store_id` = ?", $storeId), null)
+            ->joinLeft(array('_oc_idx' => $this->getMainTable()),
+                "`_oc_idx`.`entity_id` = `e`.`entity_id` AND " .
+                "`_oc_idx`.`attribute_id` = `_oc_o`.`attribute_id` AND " .
+                "`_oc_idx`.`value` = `_oc_o`.`option_id` AND " .
+                $db->quoteInto("`_oc_idx`.`store_id` = ?", $storeId), null)
+            ->where("`_oc_o`.`attribute_id` IN ($attributeIds)")
+            ->columns($columns)
+            ->group(array('attribute_id', 'label', 'value'));
+
+        $sql = $select->__toString();
+        return $db->fetchAll($select);
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $collection
+     * @param Mana_Filters_Model_Filter_Attribute $model
      * @param array $value
      * @return Mana_Filters_Resource_Filter_Attribute
      */

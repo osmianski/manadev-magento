@@ -13,7 +13,7 @@ class ManaPro_FilterSeoLinks_Model_Noindex_Any {
     public function detect($layerModel) {
         $filter = null;
         $result = false;
-        foreach (Mage::getSingleton($layerModel)->getState()->getFilters() as $item) {
+        foreach ($layerModel->getState()->getFilters() as $item) {
             $result = true;
             break;
         }

@@ -92,3 +92,5 @@
 "Accent Insensitive (Deprecated)","Accent Insensitive (Deprecated)"
 "Additional Toolbar Modes","Additional Toolbar Modes"
 "Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces","Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces"
+"Additional Sort By Options","Additional Sort By Options"
+"Sort by options in addition to sortable attributes defined in Catalog->Attributes->Manage Attributes. If more than one, separate them with ',', without spaces","Sort by options in addition to sortable attributes defined in Catalog->Attributes->Manage Attributes. If more than one, separate them with ',', without spaces"
