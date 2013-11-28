@@ -46,6 +46,7 @@
   	opacity: 0.9;
 
     }
+.col-main .block-layered-nav.m-topmenu.m-filter-slider { margin:0 !important; }
 /* Javascript operates with these classes */
 .col-main .block-layered-nav.m-topmenu dl dt.m-ln {  }
 .col-main .block-layered-nav.m-topmenu dl dd.m-ln {  }
