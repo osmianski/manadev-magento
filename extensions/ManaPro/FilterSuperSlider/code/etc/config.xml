@@ -282,4 +282,11 @@
             </attribute>
         </display>
     </mana_filters>
+    <default>
+        <mana_filters>
+            <mobile>
+                <slider>1</slider>
+            </mobile>
+        </mana_filters>
+    </default>
 </config>
