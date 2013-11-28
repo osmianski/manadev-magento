@@ -75,9 +75,9 @@ class Mana_Filters_Model_Filter_Attribute
                 $data = array();
                 $onlyWithResults = $this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS;
                 $attributeId = $attribute->getId();
-                $isReverse = $attributeId;
+                $isReverse = $this->getFilterOptions()->getIsReverse();
                 foreach ($optionsCount as $option) {
-                    if ($option['attribute_id'] != $attribute->getId()) {
+                    if ($option['attribute_id'] != $attributeId) {
                         continue;
                     }
 
