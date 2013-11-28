@@ -77,6 +77,7 @@ transition: background 300ms ease-in-out;
 .col-main .block-layered-nav.one-filter-column dl dd { padding:10px 5px; margin:0; background: transparent; }
 .col-main .block-layered-nav.one-filter-column .m-filterclear { position: relative; right: 5px; }
 .col-main .block-layered-nav.one-filter-column .m-filter-colors { margin:0; }
+.col-main .block-layered-nav.one-filter-column .currently { margin:0; }
 .col-main .block-layered-nav.one-filter-column .currently ol { float: left; width: auto; }
 .col-main .block-layered-nav.one-filter-column .actions { right: 20px; top:0; margin: 0; padding: 5px 10px; z-index:3; }
 
@@ -90,14 +91,45 @@ transition: background 300ms ease-in-out;
 
 /* Touch screen slider style */
 .col-main .block-layered-nav.one-filter-column .m-filter-slider,
+.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span,
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-from,
-.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to,
-.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span { border-radius:10px; height:20px; }
-.col-main .block-layered-nav.one-filter-column .m-filter-slider { background:#ccc; }
+.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to { border-radius:15px; height:10px; }
+.col-main .block-layered-nav.one-filter-column .m-filter-slider {
+background:#e3e3e3;
+box-shadow: inset 1px 1px 3px 1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.2);
+border: 1px solid #f2f2f2;
+margin:10px 0;
+}
 .col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-from,
-.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to { background: #aaa none; width:20px; }
-.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span { background: black; border: none; margin-left: -20px; padding-left: 20px; }
+.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-to {
+background: #aaa none;
+box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.2);
+width:28px;
+height:28px;
+top:-10px;
+border:1px solid #eee;
+background: #ffffff;
+background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed));
+background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+background: -o-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+background: -ms-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
 
+}
+.col-main .block-layered-nav.one-filter-column .m-filter-slider > .m-slider-span {
+background: #838383;
+box-shadow: inset 0px 1px 3px 1px rgba(0,0,0,0.2);
+border: none;
+margin-left: -20px;
+padding-left: 20px;
+}
+.col-main .block-layered-nav.one-filter-column .m-slider-values { line-height: 25px; }
+.col-main .block-layered-nav.one-filter-column .m-slider-values input {
+width: 50px;
+padding: 1px 3px;
+}
 
 /* Types styling for Top LN only */
 .m-standard {} /* One item can be selected at the time */
