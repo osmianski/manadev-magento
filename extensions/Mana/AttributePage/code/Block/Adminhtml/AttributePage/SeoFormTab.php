@@ -15,6 +15,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoFormTab extends Mana_A
         return $this->__('SEO');
     }
 
+    public function getGroup() {
+        return $this->__('Attribute Page');
+    }
+
     public function getAjaxUrl() {
         $id = Mage::app()->getRequest()->getParam('id');
 

@@ -14,6 +14,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignFormTab extends Man
         return $this->__('Design');
     }
 
+    public function getGroup() {
+        return $this->__('Attribute Page');
+    }
+
     public function getAjaxUrl() {
         $id = Mage::app()->getRequest()->getParam('id');
         return $this->adminHelper()->getStoreUrl('*/*/tabDesign',

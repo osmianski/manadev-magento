@@ -14,6 +14,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralFormTab exte
         return $this->__('General');
     }
 
+    public function getGroup() {
+        return $this->__('Option Page Defaults');
+    }
+
     public function getAjaxUrl() {
         $id = Mage::app()->getRequest()->getParam('id');
         return $this->adminHelper()->getStoreUrl('*/*/tabOptionGeneral',
