@@ -6,6 +6,62 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <layout version="0.1.0">
+    <adminhtml_mana_attributepage_index>
+		<update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana_attributepage.js</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block type="mana_attributepage/adminhtml_attributePage_listContainer" name="container" as="container">
+				<block type="mana_attributepage/adminhtml_attributePage_listGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+    </adminhtml_mana_attributepage_index>
+    <adminhtml_mana_attributepage_grid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_attributepage/adminhtml_attributePage_listGrid" name="grid" as="grid"/>
+        </block>
+    </adminhtml_mana_attributepage_grid>
+
+    <adminhtml_mana_attributepage_edit>
+        <update handle="mana_admin2"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana_attributepage.js</name><params/></action>
+        </reference>
+		<reference name="left">
+			<block type="mana_attributepage/adminhtml_attributePage_tabs" name="tabs" as="tabs">
+				<block type="mana_attributepage/adminhtml_attributePage_attributeFormTab" name="attribute_tab" as="attribute_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_attributeForm" name="attribute_form" as="attribute_form" />
+				</block>
+				<block type="mana_attributepage/adminhtml_attributePage_generalFormTab" name="general_tab" as="general_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_generalForm" name="general_form" as="general_form" />
+				</block>
+                <block type="mana_attributepage/adminhtml_attributePage_seoFormTab" name="seo_tab" as="seo_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_seoForm" name="seo_form" as="seo_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_designFormTab" name="design_tab" as="design_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_designForm" name="design_form" as="design_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_optionGeneralFormTab" name="option_general_tab" as="option_general_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_optionGeneralForm" name="option_general_form" as="option_general_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_optionSeoFormTab" name="option_seo_tab" as="option_seo_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_optionSeoForm" name="option_seo_form" as="option_seo_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_optionDesignFormTab" name="option_design_tab" as="option_design_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_optionDesignForm" name="option_design_form" as="option_design_form" />
+                </block>
+			</block>
+		</reference>
+		<reference name="content">
+            <block type="mana_attributepage/adminhtml_attributePage_tabContainer" name="container" as="container" />
+		</reference>
+    </adminhtml_mana_attributepage_edit>
+
+
+
     <adminhtml_mana_attribute_page_new type="page">
         <reference name="content">
             <block type="mana_admin/page" name="page">
