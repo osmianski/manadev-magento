@@ -256,7 +256,7 @@ class Mana_Filters_Model_Filter_Attribute
      */
     public function isFilterAppliedWhenCounting($modelToBeApplied)
     {
-        return $modelToBeApplied != $this;
+        return $modelToBeApplied != $this || $this->getFilterOptions()->getData('operation');
     }
 
 
