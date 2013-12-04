@@ -106,6 +106,10 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
             return $helper->getMode();
         }
     }
+
+    /**
+     * @return Mana_Filters_Block_Filter[]
+     */
     public function getFilters() {
         /* @var $helper Mana_Filters_Helper_Data */
         $helper = Mage::helper(strtolower('Mana_Filters'));
@@ -184,6 +188,14 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
         return $this->_canShowBlockInCategory();
     }
 
+    public function areAllFiltersMobileOnly() {
+        foreach ($this->getFilters() as $filter) {
+            if (!$filter->getData('mobile')) {
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * @return Mana_Filters_Helper_Data
      */
