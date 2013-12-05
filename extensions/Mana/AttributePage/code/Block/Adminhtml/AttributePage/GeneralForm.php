@@ -11,6 +11,13 @@
  */
 class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_Admin_Block_V2_Form
 {
+    protected function _prepareLayout() {
+        parent::_prepareLayout();
+        if (Mage::getSingleton('cms/wysiwyg_config')->isEnabled()) {
+            $this->getLayout()->getBlock('head')->setData('can_load_tiny_mce', true);
+        }
+    }
+
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
      */
@@ -27,15 +34,46 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'edit_model' => $this->getEditModel(),
         ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_general', array(
-            'title' => $this->__('General'),
-            'legend' => $this->__('General'),
+        $fieldset = $this->addFieldset($form, 'mfs_content', array(
+            'title' => $this->__('Content'),
+            'legend' => $this->__('Content'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'title', 'text', array(
+            'label' => $this->__('Title'),
+            'title' => $this->__('Title'),
+            'name' => 'title',
+            'required' => true,
+        ));
+
+        $fieldset->addField('description', 'editor', array(
+            'name'      => 'description',
+            'label'     => Mage::helper('cms')->__('Description'),
+            'title'     => Mage::helper('cms')->__('Description'),
+            //'style'     => 'height:36em',
+            'required'  => true,
+            'config'    => Mage::getSingleton('cms/wysiwyg_config')->getConfig()
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_other', array(
+            'title' => $this->__('Other Settings'),
+            'legend' => $this->__('Other Settings'),
+        ));
+
+        $this->addField($fieldset, 'is_active', 'select', array(
+            'label' => $this->__('Status'),
+            'title' => $this->__('Status'),
+            'options' => $this->getStatusSourceModel()->getOptionArray(),
+            'name' => 'is_active',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'include_in_menu', 'select', array(
+            'label' => $this->__('Include In Menu'),
+            'title' => $this->__('Include In Menu'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'include_in_menu',
+            'required' => true,
         ));
 
         $this->setForm($form);
@@ -55,6 +93,13 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
      */
     public function getEditModel() {
         return Mage::registry('m_edit_model');
+    }
+
+    /**
+     * @return Mana_AttributePage_Model_Source_Status
+     */
+    public function getStatusSourceModel() {
+        return Mage::getSingleton('mana_attributepage/source_status');
     }
 
     #endregion

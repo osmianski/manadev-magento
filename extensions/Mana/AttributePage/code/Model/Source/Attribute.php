@@ -21,6 +21,7 @@ class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_A
             ->distinct(true)
             ->reset('columns')
             ->columns(array('main_table.attribute_id', 'main_table.frontend_label'))
+            ->where("additional_table.is_filterable <> 0")
             ->where(sprintf('(%s) OR (%s) OR (%s)',
                 $db->quoteInto('main_table.backend_model = ?', 'eav/entity_attribute_backend_array'),
                 $db->quoteInto('main_table.source_model = ?', 'eav/entity_attribute_source_table'),

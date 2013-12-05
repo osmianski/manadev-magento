@@ -27,6 +27,7 @@
 
     <adminhtml_mana_attributepage_edit>
         <update handle="mana_admin2"/>
+        <update handle="editor"/>
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>js/mana_attributepage.js</name><params/></action>
         </reference>
