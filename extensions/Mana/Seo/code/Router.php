@@ -52,7 +52,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     $routerHelper
                         ->changePath($parsedUrl->getPageUrlKey() . $parsedUrl->getSuffix())
                         ->forward($parsedUrl->getRoute(), $request,
-                            array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
+                            array_merge($request->getUserParams(), $parsedUrl->getImplodedParameters()),
                             array_merge($_GET, $parsedUrl->getImplodedQueryParameters()));
 
                     // invoke CMS router before Standard Router
