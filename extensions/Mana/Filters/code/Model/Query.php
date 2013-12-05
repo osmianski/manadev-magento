@@ -36,7 +36,7 @@ class Mana_Filters_Model_Query extends Varien_Object
         return $this;
     }
     protected function _init() {
-        Mage::log('---', Zend_Log::DEBUG, 'performance.log');
+        //Mage::log('---', Zend_Log::DEBUG, 'performance.log');
         $this->_productCollection = $this->getLayer()->getProductCollection();
         $this->_productCollectionPrototype = clone $this->_productCollection;
         $this->_selectPrototype = clone $this->_productCollection->getSelect();
@@ -237,7 +237,8 @@ class Mana_Filters_Model_Query extends Varien_Object
 
     public function isOptimizedAttributeFilter($model) {
         return !$this->filtersHelper()->useSolr() &&
-            $model instanceof Mana_Filters_Model_Filter_Attribute;
+            $model instanceof Mana_Filters_Model_Filter_Attribute &&
+            !$model->isApplied();
     }
 
     #region Dependencies

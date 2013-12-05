@@ -48,7 +48,8 @@ class ManaPro_FilterSuperSlider_Helper_Data extends Mage_Core_Helper_Abstract {
             $name => '__0__',
             Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
         );
-        return Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true, '_query' => $query));
+        $params = array('_current' => true, '_use_rewrite' => true, '_query' => $query);
+        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
     public function getDecimalSymbol() {
         $locale = Mage::app()->getLocale()->getLocaleCode();
