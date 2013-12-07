@@ -85,6 +85,15 @@
                 </manaslider_tabbed>
             </updates>
         </layout>
+        <routers>
+            <mana>
+                <args>
+                    <modules>
+                        <manaslider_tabbed before="Mana_Core">ManaSlider_Tabbed</manaslider_tabbed>
+                    </modules>
+                </args>
+            </mana>
+        </routers>
         <!-- INSERT HERE: layout, translate, routers -->
     </frontend>
     <!-- INSERT HERE: adminhtml, frontend, ... -->

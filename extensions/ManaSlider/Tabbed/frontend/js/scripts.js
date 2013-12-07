@@ -8,8 +8,8 @@
 ; // make JS merging easier
 
 Mana.define('ManaSlider/Tabbed/ProductSlider', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Json',
-    'singleton:Mana/Core/Ajax'],
-function ($, Block, json, ajax)
+    'singleton:Mana/Core/Ajax', 'singleton:Mana/Core/UrlTemplate', 'singleton:Mana/Core'],
+function ($, Block, json, ajax, urlTemplate, core)
 {
     return Block.extend('ManaSlider/Tabbed/ProductSlider', {
         _init: function () {
@@ -53,19 +53,18 @@ function ($, Block, json, ajax)
                 this._originalPaddingWidth = $li.outerWidth(true) - $li.width();
 
                 if (this._loadedCount < this.getCollectionIds().length) {
-//                    throw 'Not implemented';
-//                    ajax.get('url', function(response) {
-//                        self.loadAjaxItems(response);
-//                    }, { showOverlay: false, showWait: false});
-
                     this._addFakeItems($li, this.getCollectionIds().length - this._loadedCount);
+                    $li = this.$loadedFakeAndDuplicatedElements();
+                    ajax.post(this.getUrl(), {"xml": this.getXml() }, function(response) {
+                        self.loadAjaxItems(response);
+                    }, { showOverlay: false, showWait: false});
                 }
             }
         },
         _subscribeToBlockEvents: function() {
             return this
                 ._super()
-                .on('resize', this, this.resize);
+                .on('resize', this, this.resize)
         },
         _subscribeToHtmlEvents: function () {
             var self = this;
@@ -77,12 +76,12 @@ function ($, Block, json, ajax)
                 ._super()
                 .on('bind', this, function () {
                     //this.resize();
-                    this.$().find('.next').on('click', _next);
-                    this.$().find('.previous').on('click', _previous);
+                    this.$().find('.m-navigation-next').on('click', _next);
+                    this.$().find('.m-navigation-prev').on('click', _previous);
                 })
                 .on('unbind', this, function () {
-                    this.$().find('.next').off('click', _next);
-                    this.$().find('.previous').off('click', _previous);
+                    this.$().find('.m-navigation-next').off('click', _next);
+                    this.$().find('.m-navigation-prev').off('click', _previous);
                 });
         },
         resize: function() {
@@ -100,7 +99,7 @@ function ($, Block, json, ajax)
 
             if (this._mode == 'slide') {
                 var neededDuplicateCount = this._getDuplicatesNeededCount();
-                if (neededDuplicateCount>0) {
+                if (neededDuplicateCount > 0) {
                     if (this._duplicateCount == 0) {
                         this._addDuplicateItems($li, neededDuplicateCount);
                         $li = this.$loadedFakeAndDuplicatedElements();
@@ -123,29 +122,31 @@ function ($, Block, json, ajax)
             // do resize everyhting
             this._itemInnerWidth = this._mode == 'slide'
                 ? Math.floor(this._containerWidth / this._visibleCount - this._originalPaddingWidth)
-                : this._originalItemWidth;
+                : this._originalItemWidth - this._originalPaddingWidth;
             this._itemOuterWidth = Math.ceil(this._containerWidth / this._visibleCount);
             $li.each(function () {
-                $(this).width(self._itemInnerWidth);
-                $(this).find('.product-image').width(self._itemInnerWidth).height(self._itemInnerWidth);
-                $(this).find('.product-image img').attr('width', self._itemInnerWidth).attr('height', self._itemInnerWidth);
-                $(this).find('.actions').width(self._itemInnerWidth);
+                self.resizeLiItem ($(this));
             });
             this.$products().width(this._itemOuterWidth * $li.length);
 
-            // add items to the left
-//            startIndex = this._visibleIndex;
-//            endIndex = this.getPrevIndex(startIndex);
-//            for (var i = startIndex; i > endIndex; i--) {
-//                var newIndex = this.getCollectionCount() -1 + i;
-//                $newItem = this._createFakeItem(newIndex, itemWidth, itemHeight);
-//                $li.splice(0, 0, $newItem);
-//                this.$products().prepend($newItem);
-//            }
-
         },
         loadAjaxItems: function(response) {
-            throw 'Not implemented';
+            var self = this;
+            var $ajaxUl = $('<ul>' + response + '</ul>');
+            $ajaxUl.children().each(function() {
+                var ajaxLi = this;
+                var index = core.getPrefixedClass(this, 'item-');
+                self.resizeLiItem($(this));
+                self.$().find('li.item-' + index).each(function() {
+                    $(this).replaceWith($(ajaxLi).clone());
+                });
+            });
+        },
+        resizeLiItem: function ($liItem) {
+            $liItem.width(this._itemInnerWidth);
+            $liItem.find('.product-image').width(this._itemInnerWidth).height(this._itemInnerWidth);
+            $liItem.find('.product-image img').attr('width', this._itemInnerWidth).attr('height', this._itemInnerWidth);
+            $liItem.find('.actions').width(this._itemInnerWidth);
         },
         $products: function() {
             return this.$().find('ul.products-grid');
@@ -166,7 +167,24 @@ function ($, Block, json, ajax)
             }
             return this._effectDuration;
         },
-
+        getWidth: function() {
+            if (!this._width) {
+                this._width = this.$().data('width');
+            }
+            return this._width;
+        },
+        getUrl: function() {
+            if (!this._url) {
+                this._url = urlTemplate.decodeAttribute(this.$().data('url'));
+            }
+            return this._url;
+        },
+        getXml: function() {
+            if (!this._xml) {
+                this._xml = this.$().data('xml');
+            }
+            return this._xml;
+        },
         /**
          * All loaded, fake and duplicated items
          * @returns jQuery
@@ -184,8 +202,11 @@ function ($, Block, json, ajax)
         _getDuplicatesNeededCount: function() {
             var count;
             count = this._visibleCount * 2 - this.getCollectionIds().length;
-            if (count < 0) {
+            if (!this._areDuplicatesNeeded()) {
                 count = 0;
+            }
+            else {
+                count = this.getCollectionIds().length;
             }
             return count;
         },
@@ -196,16 +217,14 @@ function ($, Block, json, ajax)
             this._fakeCount += count;
         },
         _addDuplicateItems: function ($li, count) {
-            //throw 'Not implemented';
             for (var i = 0; i < count; i++) {
-//                this.$products().append(this._createFakeItem(i + this._loadedCount + this._fakeCount + this._duplicateCount));
                 this.$products().append(this._createDuplicateItem($li, i, i + this._loadedCount + this._fakeCount + this._duplicateCount));
             }
             this._duplicateCount += count;
 
         },
         _removeDuplicateItems: function ($li) {
-            throw 'Not implemented';
+//            throw 'Not implemented';
         },
         _createFakeItem: function (index) {
             return  $('<li class="item item-' + index + '"> </li>');
@@ -214,7 +233,8 @@ function ($, Block, json, ajax)
             return $li[indexFrom].clone(true);
         },
         getIndex: function(startIndex) {
-            return (startIndex + this.getCollectionIds().length) % this.getCollectionIds().length;
+            var length = this._getMaxCount();
+            return (startIndex + length) % length;
         },
         next: function () {
             var $li = this.$loadedFakeAndDuplicatedElements();
@@ -251,6 +271,44 @@ function ($, Block, json, ajax)
             this._visibleIndex = this.getIndex(nextVisibleIndex);
             this.$products().animate({left: "+=" + (this._itemOuterWidth * this._visibleCount)},
                 this.getEffectDuration());
+        },
+        animate: function(transformX, duration) {
+            this.$products().animate({ transformX: transformX}, {
+                    step: function(now) {
+                        var x = now ? now + 'px' : '0';
+                        $(this).css({
+                            'transform': 'translate(' + x + ', 0)',
+                            '-ms-transform': 'translate(' + x + ', 0)',
+                            '-webkit-transform': 'translate(' + x + ', 0)'
+                        });
+                    },
+                    duration: duration
+                },
+                this.getEffectDuration());
+        }
+    });
+});
+
+Mana.define('ManaSlider/Tabbed/Slider', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout'],
+function ($, Block, layout) {
+    return Block.extend('ManaSlider/Tabbed/Slider', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    var $this = this.$();
+                    if ($this.tabs) {
+                        $this.tabs({
+                            activate: function (event, ui) {
+                                self.trigger('resize', {}, false, true);
+                            }
+                        });
+                    }
+                })
+                .on('unbind', this, function () {
+
+                });
         }
     });
 });

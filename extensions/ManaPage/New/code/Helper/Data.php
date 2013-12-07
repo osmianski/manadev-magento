@@ -48,7 +48,7 @@ class ManaPage_New_Helper_Data extends Mana_Page_Helper_Data
      * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection
      */
     public function getNewProductCollection($block) {
-        $collection = $this->createProductCollection($block->getData('max_product_count'));
+        $collection = $this->createProductCollection($block->getData('starting_from_product'), $block->getData('max_product_count'));
         $condition = $this->getNewProductCollectionCondition($block, $collection);
         if ($condition) {
             $collection->getSelect()->distinct()->where($condition);

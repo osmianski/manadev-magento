@@ -229,7 +229,15 @@
                 </Mana_Core>
             </modules>
         </translate>
-
+        <routers>
+            <mana>
+                <use>standard</use>
+                <args>
+                    <module>Mana_Core</module>
+                    <frontName>mana</frontName>
+                </args>
+            </mana>
+        </routers>
         <!-- INSERT HERE: layout, translate, routers -->
 	</frontend>
     <!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->

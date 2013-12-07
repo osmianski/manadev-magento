@@ -7,5 +7,22 @@
  */
 
 /* @var $this ManaSlider_Tabbed_Block_Slider */
+/* @var $_tab Mage_Core_Block_Template */
 ?>
-tabs
+<div class="m-tabbed-slider mb-<?php echo $this->jsHelper()->getClientSideBlockName($this->getNameInLayout()) ?>"
+    data-m-block="ManaSlider/Tabbed/Slider">
+    <ul class="m-tabs">
+        <?php foreach ($this->getChildGroup('tabs') as $_tab) : ?>
+            <li><a href="#m-<?php echo $_tab->getData('tab_id') ?>" title="<?php echo $this->escapeHtml($_tab->getData('title')) ?>">
+                <?php echo $_tab->getData('label') ?>
+            </a></li>
+        <?php endforeach;?>
+    </ul>
+    <ul class="m-tab-content">
+        <?php foreach ($this->getChildGroup('tabs') as $_tab) : ?>
+            <li id="m-<?php echo $_tab->getData('tab_id') ?>">
+                <?php echo $_tab->toHtml() ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

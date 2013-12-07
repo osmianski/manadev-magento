@@ -27,26 +27,19 @@ class ManaSlider_Tabbed_Block_Slider extends Mage_Core_Block_Template
                     foreach ($propertyXml->children() as $tabXml) {
                         /* @var $tabXml SimpleXmlElement */
 
-                        $data = array();
-                        foreach ($tabXml->children() as $tabPropertyXml) {
-                            /* @var $tabPropertyXml SimpleXmlElement */
-                            $data[$tabPropertyXml->getName()] = (string)$tabPropertyXml;
-                        }
-
-                        if (($dataSource = $data['data_source']) &&
+                        if (($dataSource = (string)$tabXml->data_source) &&
                             ($dataSourceXml = Mage::getConfig()->getNode("manaslider_tabbed/data_sources/$dataSource")) &&
                             !empty($dataSourceXml->block))
                         {
-                            unset($data['data_source']);
+                            /* @var $block ManaSlider_Tabbed_Block_ProductSlider */
                             $block = $this->getLayout()->createBlock((string)$dataSourceXml->block,
-                                $this->getNameInLayout().'.tab.'. $tabXml->getName(), $data);
+                                $this->getNameInLayout().'.tab.'. $tabXml->getName());
 
                             $this->append($block, 'tab.' . $tabXml->getName());
                             $block->addToParentGroup('tabs');
-
-                            list($sourceHelper, $method) = explode('::', (string)$dataSourceXml->source_helper);
-                            $sourceHelper = Mage::helper($sourceHelper);
-                            $block->setData('data_source', $sourceHelper->$method($block));
+                            $block->setData('tab_id', $this->jsHelper()->getClientSideBlockName(
+                                $this->getNameInLayout() . '.tab.' . $tabXml->getName()));
+                            $block->prepare($tabXml, false);
                         }
                     }
                 }
@@ -64,7 +57,7 @@ class ManaSlider_Tabbed_Block_Slider extends Mage_Core_Block_Template
         $tabs = $this->getChildGroup('tabs');
         $count = count($tabs);
         if ($count > 1) {
-            parent::_toHtml();
+            return parent::_toHtml();
         }
         elseif ($count == 1) {
             foreach ($tabs as $tab) {
@@ -90,6 +83,9 @@ class ManaSlider_Tabbed_Block_Slider extends Mage_Core_Block_Template
         return Mage::getSingleton('core/layout');
     }
 
+    /**
+     * @return Mana_Core_Helper_Js
+     */
     public function jsHelper() {
         return Mage::helper('mana_core/js');
     }

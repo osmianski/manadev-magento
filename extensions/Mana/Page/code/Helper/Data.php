@@ -101,7 +101,7 @@ class Mana_Page_Helper_Data extends Mage_Core_Helper_Abstract
      * @param int $maxProductCount
      * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection
      */
-    public function createProductCollection($maxProductCount) {
+    public function createProductCollection($startingFromProduct, $maxProductCount) {
         $collection = Mage::getResourceModel('catalog/product_collection');
         $collection->setVisibility(Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds());
 
@@ -109,9 +109,10 @@ class Mana_Page_Helper_Data extends Mage_Core_Helper_Abstract
             ->addStoreFilter();
 
         if ($maxProductCount) {
-            $collection
-                ->setPageSize($maxProductCount)
-                ->setCurPage(1);
+            $collection->getSelect()->limit($maxProductCount, $startingFromProduct);
+        }
+        else {
+            $collection->getSelect()->limit(PHP_INT_MAX, $startingFromProduct);
         }
 
         return $collection;
