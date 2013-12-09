@@ -38,6 +38,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'options' => $this->getPageLayoutSourceModel()->getOptionArray(),
             'name' => 'option_page_page_layout',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PAGE_LAYOUT,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_layout_xml', 'textarea', array(
@@ -45,6 +48,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'title' => $this->__('Layout XML'),
             'name' => 'option_page_layout_xml',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_LAYOUT_XML,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $fieldset = $this->addFieldset($form, 'mfs_option_product_list', array(
@@ -58,6 +64,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'option_page_show_products',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SHOW_PRODUCTS,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_available_sort_by', 'multiselect', array(
@@ -66,6 +75,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'values' => $this->getSortBySourceModel()->getAllOptions(),
             'name' => 'option_page_available_sort_by',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_AVAILABLE_SORT_BY,
+            'default_label' => $this->__('Use System Configuration'),
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_default_sort_by', 'select', array(
@@ -74,6 +87,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'options' => $this->getSortBySourceModel()->getOptionArray(),
             'name' => 'option_page_available_sort_by',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DEFAULT_SORT_BY,
+            'default_label' => $this->__('Use System Configuration'),
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $fieldset = $this->addFieldset($form, 'mfs_option_layered_nav', array(
@@ -86,6 +103,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'title' => $this->__('Price Step'),
             'name' => 'option_page_price_step',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PRICE_STEP,
+            'default_label' => $this->__('Use System Configuration'),
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $fieldset = $this->addFieldset($form, 'mfs_option_custom_design', array(
@@ -100,6 +121,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_CUSTOM_DESIGN_ACTIVE_FROM,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_custom_design_active_to', 'date', array(
@@ -109,6 +133,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_CUSTOM_DESIGN_ACTIVE_TO,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_custom_design', 'select', array(
@@ -117,6 +144,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'values' => $this->getDesignSourceModel()->getAllOptions(),
             'name' => 'option_page_custom_design',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_CUSTOM_DESIGN,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_custom_layout_xml', 'textarea', array(
@@ -124,6 +154,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'title' => $this->__('Layout XML'),
             'name' => 'option_page_custom_layout_xml',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_CUSTOM_LAYOUT_XML,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->setForm($form);

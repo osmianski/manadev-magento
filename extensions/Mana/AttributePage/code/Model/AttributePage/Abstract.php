@@ -17,7 +17,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_INCLUDE_IN_MENU = 4;
     const DM_URL_KEY = 5;
     const DM_TEMPLATE = 6;
-    const DM_SHOW_ALPHANUMERIC_SEARCH = 7;
+    const DM_SHOW_ALPHABETIC_SEARCH = 7;
     const DM_PAGE_LAYOUT = 8;
     const DM_LAYOUT_XML = 9;
     const DM_CUSTOM_DESIGN_ACTIVE_FROM = 10;

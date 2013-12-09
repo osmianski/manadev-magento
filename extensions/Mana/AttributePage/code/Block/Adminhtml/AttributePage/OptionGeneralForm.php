@@ -45,6 +45,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'options' => $this->getStatusSourceModel()->getOptionArray(),
             'name' => 'option_page_is_active',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IS_ACTIVE,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'option_page_include_in_menu', 'select', array(
@@ -53,6 +56,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'option_page_include_in_menu',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_INCLUDE_IN_MENU,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
 

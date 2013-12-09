@@ -142,7 +142,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     `ap_scs`.`template`,
                     `ap_gcs`.`template`
                 )",
-                'show_alphabetic_search' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_ALPHANUMERIC_SEARCH)},
+                'show_alphabetic_search' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_ALPHABETIC_SEARCH)},
                     `ap_scs`.`show_alphabetic_search`,
                     `ap_gcs`.`show_alphabetic_search`
                 )",

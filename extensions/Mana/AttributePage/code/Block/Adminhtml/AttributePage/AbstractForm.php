@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-abstract class Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm extends Mana_Admin_Block_V2_Form {
+abstract class Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm extends Mana_Admin_Block_V3_Form {
     #region Dependencies
     /**
      * @return Mana_AttributePage_Model_AttributePage_Abstract

@@ -37,6 +37,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'title' => $this->__('URL Key'),
             'name' => 'url_key',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_URL_KEY,
+            'default_label' => $this->__('Use Attribute Labels'),
+            'default_store_label' => $this->__('Use Attribute Labels'),
         ));
 
         $this->addField($fieldset, 'meta_title', 'text', array(
@@ -44,6 +48,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'title' => $this->__('Page Title'),
             'name' => 'meta_title',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_META_TITLE,
+            'default_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'meta_description', 'textarea', array(
@@ -51,6 +59,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'title' => $this->__('Meta Description'),
             'name' => 'meta_description',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_META_DESCRIPTION,
+            'default_label' => $this->__('Use Description'),
+            'default_store_label' => $this->__('Use Description'),
         ));
 
         $this->addField($fieldset, 'meta_keywords', 'textarea', array(
@@ -58,6 +70,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'title' => $this->__('Meta Keywords'),
             'name' => 'meta_keywords',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_META_KEYWORDS,
+            'default_label' => $this->__('Use Attribute Labels'),
+            'default_store_label' => $this->__('Use Attribute Labels'),
         ));
 
         $this->setForm($form);

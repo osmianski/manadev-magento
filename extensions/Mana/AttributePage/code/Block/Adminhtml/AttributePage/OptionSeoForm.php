@@ -38,6 +38,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionSeoForm extends Man
             'name' => 'option_page_include_filter_name',
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_INCLUDE_FILTER_NAME,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->setForm($form);

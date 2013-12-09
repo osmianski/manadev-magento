@@ -38,6 +38,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'show_alphabetic_search',
             'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_ALPHABETIC_SEARCH,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'page_layout', 'select', array(
@@ -46,6 +49,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'options' => $this->getPageLayoutSourceModel()->getOptionArray(),
             'name' => 'page_layout',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_PAGE_LAYOUT,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'layout_xml', 'textarea', array(
@@ -53,6 +59,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'title' => $this->__('Layout XML'),
             'name' => 'layout_xml',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_LAYOUT_XML,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $fieldset = $this->addFieldset($form, 'mfs_custom_design', array(
@@ -67,6 +76,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_CUSTOM_DESIGN_ACTIVE_FROM,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'custom_design_active_to', 'date', array(
@@ -76,6 +88,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_CUSTOM_DESIGN_ACTIVE_TO,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'custom_design', 'select', array(
@@ -84,6 +99,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'values' => $this->getDesignSourceModel()->getAllOptions(),
             'name' => 'custom_design',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_CUSTOM_DESIGN,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->addField($fieldset, 'custom_layout_xml', 'textarea', array(
@@ -91,6 +109,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'title' => $this->__('Layout XML'),
             'name' => 'custom_layout_xml',
             'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_CUSTOM_LAYOUT_XML,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->setForm($form);

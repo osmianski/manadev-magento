@@ -16,8 +16,13 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
     {
         $this->setTemplate('mana/admin/v2/field.phtml');
     }
-	
-	public function getUsedDefault() {
+
+    /**
+     * Returns true if field uses default value (calculated in model indexer), returns false if field
+     * contains custom (overridden) value
+     * @return bool
+     */
+    public function getUsedDefault() {
 	    return $this->getEditModel()->isUsingDefaultData($this->getFieldName());
 	}
     public function checkFieldDisable()
@@ -27,15 +32,29 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
         }
         return $this;
     }
+
+    /**
+     * Returns true if field can use default value (calculated in model indexer) and false otherwise
+     * @return bool
+     */
     public function getDisplayUseDefault()
     {
         return !$this->getElement()->getData('hide_use_default') && $this->adminHelper()->getDefaultFormula($this->getFlatModel(), $this->getFieldName());
     }
+
+    /**
+     * Returns true if "Use Default"  checkbox is currently enabled
+     * @return bool
+     */
     public function getUseDefaultEnabled()
     {
     	return !$this->getElement()->getData('is_default_disabled');
     }
 
+    /**
+     * Returns label text for "Use Default checkbox"
+     * @return string
+     */
     public function getDefaultLabel() {
         return $this->adminHelper()->getDefaultLabel($this->getFlatModel(), $this->getFieldName());
     }
