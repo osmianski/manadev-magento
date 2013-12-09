@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Mana_Admin_Block_V2_Form  {
+class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm  {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
      */
@@ -36,7 +36,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_0',
             'required' => true,
-            'options' => $this->getSourceModel()->getOptionArray(),
+            'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
         $this->addField($fieldset, 'attribute_id_1', 'select', array(
@@ -44,7 +44,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_1',
             'required' => false,
-            'options' => $this->getSourceModel()->getOptionArray(),
+            'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
         $this->addField($fieldset, 'attribute_id_2', 'select', array(
@@ -52,7 +52,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_2',
             'required' => false,
-            'options' => $this->getSourceModel()->getOptionArray(),
+            'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
         $this->addField($fieldset, 'attribute_id_3', 'select', array(
@@ -60,7 +60,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_3',
             'required' => false,
-            'options' => $this->getSourceModel()->getOptionArray(),
+            'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
         $this->addField($fieldset, 'attribute_id_4', 'select', array(
@@ -68,33 +68,10 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_4',
             'required' => false,
-            'options' => $this->getSourceModel()->getOptionArray(),
+            'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
-
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_Source_Attribute
-     */
-    public function getSourceModel() {
-        return Mage::getSingleton('mana_attributepage/source_attribute');
-    }
-    #endregion
 }

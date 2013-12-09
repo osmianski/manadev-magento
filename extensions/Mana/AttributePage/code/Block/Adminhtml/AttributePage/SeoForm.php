@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
@@ -32,30 +32,35 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Admi
             'legend' => $this->__('SEO'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'url_key', 'text', array(
+            'label' => $this->__('URL Key'),
+            'title' => $this->__('URL Key'),
+            'name' => 'url_key',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'meta_title', 'text', array(
+            'label' => $this->__('Page Title'),
+            'title' => $this->__('Page Title'),
+            'name' => 'meta_title',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'meta_description', 'textarea', array(
+            'label' => $this->__('Meta Description'),
+            'title' => $this->__('Meta Description'),
+            'name' => 'meta_description',
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'meta_keywords', 'textarea', array(
+            'label' => $this->__('Meta Keywords'),
+            'title' => $this->__('Meta Keywords'),
+            'name' => 'meta_keywords',
+            'required' => false,
         ));
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
-
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    #endregion
 }

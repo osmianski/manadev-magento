@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionSeoForm extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionSeoForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
@@ -32,30 +32,16 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionSeoForm extends Man
             'legend' => $this->__('SEO'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'option_page_include_filter_name', 'select', array(
+            'label' => $this->__('Include Attribute Name In URL Key'),
+            'title' => $this->__('Include Attribute Name In URL Key'),
+            'name' => 'option_page_include_filter_name',
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'required' => true,
         ));
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
 
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    #endregion
 }

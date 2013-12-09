@@ -50,6 +50,9 @@ var Mana = Mana || {};
             return result;
         },
         _resolveDefine: function(name) {
+            if (Mana._defines[name] === undefined) {
+                console.warn("'" + name + "' is not defined");
+            }
             return Mana._defines[name];
         },
 

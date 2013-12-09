@@ -74,6 +74,9 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
     public function addField($fieldset, $id, $type, $options) {
         /** @noinspection PhpParamsInspection */
         $field = $fieldset->addField($id, $type, $options);
+        if (isset($options['values'])) {
+            $field->setValues($options['values']);
+        }
         $field->setRenderer($this->getFieldRenderer());
 
         return $field;

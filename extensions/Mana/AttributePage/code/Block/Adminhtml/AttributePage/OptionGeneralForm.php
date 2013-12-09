@@ -9,8 +9,15 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
+    protected function _prepareLayout() {
+        parent::_prepareLayout();
+        if (Mage::getSingleton('cms/wysiwyg_config')->isEnabled()) {
+            $this->getLayout()->getBlock('head')->setData('can_load_tiny_mce', true);
+        }
+    }
+
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
      */
@@ -27,35 +34,29 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'edit_model' => $this->getEditModel(),
         ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_option_general', array(
-            'title' => $this->__('General'),
-            'legend' => $this->__('General'),
+        $fieldset = $this->addFieldset($form, 'mfs_option_other', array(
+            'title' => $this->__('Other Settings'),
+            'legend' => $this->__('Other Settings'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'option_page_is_active', 'select', array(
+            'label' => $this->__('Status'),
+            'title' => $this->__('Status'),
+            'options' => $this->getStatusSourceModel()->getOptionArray(),
+            'name' => 'option_page_is_active',
+            'required' => true,
         ));
+
+        $this->addField($fieldset, 'option_page_include_in_menu', 'select', array(
+            'label' => $this->__('Include In Menu'),
+            'title' => $this->__('Include In Menu'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'option_page_include_in_menu',
+            'required' => true,
+        ));
+
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
-
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    #endregion
 }

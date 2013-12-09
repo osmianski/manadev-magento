@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
     protected function _prepareLayout() {
         parent::_prepareLayout();
@@ -79,28 +79,4 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
         $this->setForm($form);
         return parent::_prepareForm();
     }
-
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_Source_Status
-     */
-    public function getStatusSourceModel() {
-        return Mage::getSingleton('mana_attributepage/source_status');
-    }
-
-    #endregion
 }

@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
@@ -32,30 +32,101 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'legend' => $this->__('Design'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'option_page_page_layout', 'select', array(
+            'label' => $this->__('Page Layout'),
+            'title' => $this->__('Page Layout'),
+            'options' => $this->getPageLayoutSourceModel()->getOptionArray(),
+            'name' => 'option_page_page_layout',
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'option_page_layout_xml', 'textarea', array(
+            'label' => $this->__('Layout XML'),
+            'title' => $this->__('Layout XML'),
+            'name' => 'option_page_layout_xml',
+            'required' => false,
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_option_product_list', array(
+            'title' => $this->__('Product List'),
+            'legend' => $this->__('Product List'),
+        ));
+
+        $this->addField($fieldset, 'option_page_show_products', 'select', array(
+            'label' => $this->__('Show Products'),
+            'title' => $this->__('Show Products'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'option_page_show_products',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'option_page_available_sort_by', 'multiselect', array(
+            'label' => $this->__('Available Sort By'),
+            'title' => $this->__('Available Sort By'),
+            'values' => $this->getSortBySourceModel()->getAllOptions(),
+            'name' => 'option_page_available_sort_by',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'option_page_default_sort_by', 'select', array(
+            'label' => $this->__('Default Sort By'),
+            'title' => $this->__('Default Sort By'),
+            'options' => $this->getSortBySourceModel()->getOptionArray(),
+            'name' => 'option_page_available_sort_by',
+            'required' => true,
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_option_layered_nav', array(
+            'title' => $this->__('Layered Navigation'),
+            'legend' => $this->__('Layered Navigation'),
+        ));
+
+        $this->addField($fieldset, 'option_page_price_step', 'text', array(
+            'label' => $this->__('Price Step'),
+            'title' => $this->__('Price Step'),
+            'name' => 'option_page_price_step',
+            'required' => false,
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_option_custom_design', array(
+            'title' => $this->__('Custom Design'),
+            'legend' => $this->__('Custom Design'),
+        ));
+
+        $this->addField($fieldset, 'option_page_custom_design_active_from', 'date', array(
+            'label' => $this->__('Active From'),
+            'title' => $this->__('Active From'),
+            'name' => 'option_page_custom_design_active_from',
+            'image' => $this->getSkinUrl('images/grid-cal.gif'),
+            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'option_page_custom_design_active_to', 'date', array(
+            'label' => $this->__('Active To'),
+            'title' => $this->__('Active To'),
+            'name' => 'option_page_custom_design_active_to',
+            'image' => $this->getSkinUrl('images/grid-cal.gif'),
+            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'option_page_custom_design', 'select', array(
+            'label' => $this->__('Theme'),
+            'title' => $this->__('Theme'),
+            'values' => $this->getDesignSourceModel()->getAllOptions(),
+            'name' => 'option_page_custom_design',
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'option_page_custom_layout_xml', 'textarea', array(
+            'label' => $this->__('Layout XML'),
+            'title' => $this->__('Layout XML'),
+            'name' => 'option_page_custom_layout_xml',
+            'required' => false,
         ));
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
-
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    #endregion
 }

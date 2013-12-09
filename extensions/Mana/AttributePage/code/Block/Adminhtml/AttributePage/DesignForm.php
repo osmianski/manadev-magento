@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_Admin_Block_V2_Form
+class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm
 {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
@@ -32,30 +32,69 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'legend' => $this->__('Design'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample'),
-            'name' => 'sample',
-            'bold' => true,
+        $this->addField($fieldset, 'show_alphabetic_search', 'select', array(
+            'label' => $this->__('Show Alphabetic Search'),
+            'title' => $this->__('Show Alphabetic Search'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'show_alphabetic_search',
+            'required' => true,
+        ));
+
+        $this->addField($fieldset, 'page_layout', 'select', array(
+            'label' => $this->__('Page Layout'),
+            'title' => $this->__('Page Layout'),
+            'options' => $this->getPageLayoutSourceModel()->getOptionArray(),
+            'name' => 'page_layout',
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'layout_xml', 'textarea', array(
+            'label' => $this->__('Layout XML'),
+            'title' => $this->__('Layout XML'),
+            'name' => 'layout_xml',
+            'required' => false,
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_custom_design', array(
+            'title' => $this->__('Custom Design'),
+            'legend' => $this->__('Custom Design'),
+        ));
+
+        $this->addField($fieldset, 'custom_design_active_from', 'date', array(
+            'label' => $this->__('Active From'),
+            'title' => $this->__('Active From'),
+            'name' => 'custom_design_active_from',
+            'image' => $this->getSkinUrl('images/grid-cal.gif'),
+            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'custom_design_active_to', 'date', array(
+            'label' => $this->__('Active To'),
+            'title' => $this->__('Active To'),
+            'name' => 'custom_design_active_to',
+            'image' => $this->getSkinUrl('images/grid-cal.gif'),
+            'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'custom_design', 'select', array(
+            'label' => $this->__('Theme'),
+            'title' => $this->__('Theme'),
+            'values' => $this->getDesignSourceModel()->getAllOptions(),
+            'name' => 'custom_design',
+            'required' => false,
+        ));
+
+        $this->addField($fieldset, 'custom_layout_xml', 'textarea', array(
+            'label' => $this->__('Layout XML'),
+            'title' => $this->__('Layout XML'),
+            'name' => 'custom_layout_xml',
+            'required' => false,
         ));
 
         $this->setForm($form);
         return parent::_prepareForm();
     }
 
-    #region Dependencies
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getFlatModel() {
-        return Mage::registry('m_flat_model');
-    }
-
-    /**
-     * @return Mana_AttributePage_Model_AttributePage_Abstract
-     */
-    public function getEditModel() {
-        return Mage::registry('m_edit_model');
-    }
-
-    #endregion
 }
