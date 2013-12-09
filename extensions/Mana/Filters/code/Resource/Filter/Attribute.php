@@ -72,6 +72,7 @@ class Mana_Filters_Resource_Filter_Attribute
             'attribute_id' => new Zend_Db_Expr("`_oc_o`.`attribute_id`"),
             'label' => new Zend_Db_Expr("COALESCE(`_oc_ls`.`value`, `_oc_lg`.`value`)"),
             'value' => new Zend_Db_Expr("`_oc_o`.`option_id`"),
+            'sort_order' => new Zend_Db_Expr("`_oc_o`.`sort_order`"),
             'count' => new Zend_Db_Expr("COUNT(DISTINCT `_oc_idx`.`entity_id`)"),
         );
         $select
@@ -87,7 +88,8 @@ class Mana_Filters_Resource_Filter_Attribute
                 $db->quoteInto("`_oc_idx`.`store_id` = ?", $storeId), null)
             ->where("`_oc_o`.`attribute_id` IN ($attributeIds)")
             ->columns($columns)
-            ->group(array('attribute_id', 'label', 'value'));
+            ->group(array('attribute_id', 'label', 'value', 'sort_order'))
+            ->order("sort_order ASC");
 
         $sql = $select->__toString();
         return $db->fetchAll($select);
