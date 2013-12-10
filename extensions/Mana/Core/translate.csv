@@ -32,3 +32,4 @@
 "Use Default","Use Default"
 "Advices, Warnings and Messages","Advices, Warnings and Messages"
 "Global Configuration","Global Configuration"
+"You must call setData('store_id', ...) before calling load() on %s objects.","You must call setData('store_id', ...) before calling load() on %s objects."

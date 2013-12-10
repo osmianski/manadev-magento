@@ -15,23 +15,30 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
             if ($this->adminHelper()->isGlobal()) {
                 $customSettings = Mage::getModel('mana_attributepage/attributePage_globalCustomSettings');
                 $finalSettings = Mage::getModel('mana_attributepage/attributePage_global');
+                $finalSettings->setData('_add_option_page_defaults', true);
                 if ($id = $this->getRequest()->getParam('id')) {
                     $finalSettings->load($id);
+                    if (!$finalSettings->getId()) {
+                        throw new Mage_Core_Exception($this->__('This attribute page no longer exists.'));
+                    }
                     $customSettings->load($finalSettings->getData('attribute_page_global_custom_settings_id'));
+                }
+                else {
+                    $finalSettings->setDefaults();
                 }
             }
             else {
-                $customSettings = Mage::getModel('mana_attributepage/attributePage_storeCustomSettings');
-                $finalSettings = Mage::getModel('mana_attributepage/attributePage_store');
-                $storeId = $this->adminHelper()->getStore()->getId();
                 if ($id = $this->getRequest()->getParam('id')) {
-                    $customSettings->loadForStore($id, $storeId);
-                    $finalSettings->loadForStore($id, $storeId, 'primary_global_id');
+                    $customSettings = Mage::getModel('mana_attributepage/attributePage_storeCustomSettings');
+                    $finalSettings = Mage::getModel('mana_attributepage/attributePage_store');
+                    $finalSettings->setData('store_id', $this->adminHelper()->getStore()->getId());
+                    $finalSettings->load($id, 'attribute_page_global_id');
+                    if ($customSettingsId = $finalSettings->getData('attribute_page_store_custom_settings_id')) {
+                        $customSettings->load($customSettingsId);
+                    }
                 }
-                if (!$customSettings->getId()) {
-                    $customSettings
-                        ->setStoreId($this->adminHelper()->getStore()->getId())
-                        ->setData('global_id', $id);
+                else {
+                    throw new Mage_Core_Exception($this->__('Non existent attribute pages can not be customized on store level.'));
                 }
             }
             Mage::register('m_edit_model', $customSettings);
@@ -82,7 +89,15 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
     }
 
     public function editAction() {
-        $models = $this->_registerModels();
+        try {
+            $models = $this->_registerModels();
+        }
+        catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            $this->_redirect('*/*/');
+            return;
+        }
+
         /* @var $model Mana_AttributePage_Model_AttributePage_Abstract */
         $model = $models['finalSettings'];
 
@@ -99,7 +114,7 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
         $update->addHandle('default');
         $this->addActionLayoutHandles();
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if ($model->getId() && !Mage::app()->isSingleStoreMode()) {
             $update->addHandle('mana_admin2_multistore_card');
         }
         $this->loadLayoutUpdates();

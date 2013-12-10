@@ -29,16 +29,51 @@ class Mana_AttributePage_Resource_AttributePage_Store extends Mana_AttributePage
         $this->_init(Mana_AttributePage_Model_AttributePage_Store::ENTITY, 'id');
     }
 
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param Varien_Object $object
+     * @throws Exception
+     * @return Zend_Db_Select
+     */
     protected function _getLoadSelect($field, $value, $object) {
+        if (!$object->getData('store_id')) {
+            throw new Exception($this->attributePageHelper()->__(
+                "You must call setData('store_id', ...) before calling load() on %s objects.",
+                get_class($object)));
+        }
         $db = $this->_getReadAdapter();
         $select = $db->select()
-            ->from(array('main_table' => $this->getMainTable()))
-            ->joinInner(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')),
-                "`ap_g`.`id` = `main_table`.`attribute_page_global_id`", null)
-            ->joinInner(array('ap_gcs' => $this->getTable('mana_attributepage/attributePage_globalCustomSettings')),
-                "`ap_gcs`.`id` = `ap_g`.`attribute_page_global_custom_settings_id`",
-                array('attribute_id_0', 'attribute_id_1', 'attribute_id_2', 'attribute_id_3', 'attribute_id_4'))
-            ->where("`main_table`.`$field`=?", $value);
+            ->from(array('main_table' => $this->getMainTable()));
+
+        $fields = array();
+        $tables = array();
+
+        if (!$object->getData('_skip_non_defaultables')) {
+            $tables['ap_g'] = true;
+            $tables['ap_gcs'] = true;
+            $fields = array_merge($fields, array(
+                'attribute_id_0' => "`ap_gcs`.`attribute_id_0`",
+                'attribute_id_1' => "`ap_gcs`.`attribute_id_1`",
+                'attribute_id_2' => "`ap_gcs`.`attribute_id_2`",
+                'attribute_id_3' => "`ap_gcs`.`attribute_id_3`",
+                'attribute_id_4' => "`ap_gcs`.`attribute_id_4`",
+            ));
+        }
+
+        if (isset($tables['ap_g'])) {
+            $select->joinInner(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')),
+                "`ap_g`.`id` = `main_table`.`attribute_page_global_id`", null);
+        }
+        if (isset($tables['ap_gcs'])) {
+            $select->joinInner(
+                array('ap_gcs' => $this->getTable('mana_attributepage/attributePage_globalCustomSettings')),
+                "`ap_gcs`.`id` = `ap_g`.`attribute_page_global_custom_settings_id`", null);
+        }
+        $select
+            ->columns($this->dbHelper()->wrapIntoZendDbExpr($fields))
+            ->where("`main_table`.`$field`=?", $value)
+            ->where("`main_table`.`store_id`=?", $object->getData('store_id'));
 
         return $select;
     }

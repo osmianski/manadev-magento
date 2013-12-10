@@ -15,4 +15,19 @@ class Mana_AttributePage_Model_AttributePage_Global extends Mana_AttributePage_M
     protected function _construct() {
         $this->_init(self::ENTITY);
     }
+
+    public function setDefaults() {
+        $this->getResource()->setDefaults($this);
+        return $this;
+    }
+
+    /**
+     * Retrieve model resource
+     *
+     * @return Mana_AttributePage_Resource_AttributePage_Global
+     */
+    public function getResource()
+    {
+        return parent::getResource();
+    }
 }
