@@ -23,7 +23,9 @@ $_sql = $_products->getSelect()->__toString();
     data-slide-count="<?php echo $this->getData('slide_count') ?>">
     <a title="Previous" href="#" class="m-navigation-prev"></a>
     <a title="Next" href="#" class="m-navigation-next"></a>
-    <ul class="products-grid">
-    <?php echo $this->getChildHtml('product_list') ?>
-    </ul>
+    <div>
+        <ul class="products-grid">
+        <?php echo $this->getChildHtml('product_list') ?>
+        </ul>
+    </div>
 </div>

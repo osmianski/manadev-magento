@@ -5,9 +5,9 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 
-.m-product-slider { overflow: hidden; position: relative;}
-
-.m-product-slider li.item { position: relative; padding-bottom: 85px; padding-left: 9px !important; padding-right: 9px !important;}
+.m-product-slider { overflow: hidden; position: relative; }
+.m-product-slider > div { overflow: hidden; margin: 0 40px; }
+.m-product-slider li.item { position: relative; padding: 10px 10px 85px;}
 /* Arrows */
 /*.m-product-slider .m-prev {position: relative; float: left; background: red; height: 100px; width: 70px;}*/
 

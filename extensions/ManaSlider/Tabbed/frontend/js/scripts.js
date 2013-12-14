@@ -111,8 +111,8 @@ function ($, Block, json, ajax, urlTemplate, core)
                 return;
             }
 
-            this._containerWidth = this.$().width();
-            this._visibleCount = Math.floor(this._containerWidth / this._originalItemWidth);
+            this._containerWidth = this.$().children('div').width();
+            this._visibleCount = Math.round(this._containerWidth / this._originalItemWidth);
             this._mode = (this._visibleCount >= this.getCollectionIds().length) ? 'center' : 'slide';
 
             if (this._mode == 'slide') {
@@ -191,10 +191,11 @@ function ($, Block, json, ajax, urlTemplate, core)
                      imageVerticalMargin = Math.floor((this._itemInnerWidth - imageHeight) / 2);
                 }
                 $liItem.width(this._itemInnerWidth);
-                $liItem.find('.product-image').width(imageWidth).height(imageHeight);
-                $liItem.find('.m-image-container').width(imageWidth).height(imageHeight).css({
+                var $image = $liItem.find('.product-image');
+                $image.width(imageWidth).height(imageHeight);
+                $liItem.find('.m-image-container')/*.width($image.outerWidth()).height($image.outerHeight())*/.css({
                     "margin-left": imageHorizontalMargin + "px",
-                    "margin-right": imageHorizontalMargin + "px",
+                    "margin-right": imageHorizontalMargin + "px"
                 });
                 $liItem.find('.product-image img').attr('width', imageWidth).attr('height', imageHeight);
                 $liItem.find('.actions').width(this._itemInnerWidth);
