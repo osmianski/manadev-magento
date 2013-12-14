@@ -7,7 +7,7 @@
 
 .m-product-slider { overflow: hidden; position: relative;}
 
-
+.m-product-slider li.item { position: relative; padding-bottom: 85px; padding-left: 40px !important; padding-right: 40px !important;}
 /* Arrows */
 /*.m-product-slider .m-prev {position: relative; float: left; background: red; height: 100px; width: 70px;}*/
 
@@ -30,3 +30,5 @@
 .m-product-slider .m-navigation-prev:active { background-image: url(../images/manaslider_tabbed/i-prev-active.png); opacity: 1; }
 
 .m-tabbed-slider .ui-tabs-active { color: #26B1ED; }
+
+.m-product-slider .product-grid li.item { }

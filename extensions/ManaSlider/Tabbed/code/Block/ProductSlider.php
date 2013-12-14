@@ -64,6 +64,10 @@ class ManaSlider_Tabbed_Block_ProductSlider extends Mage_Catalog_Block_Product_A
             $block->setData('is_visible_add_to_compare', $this->getData('is_visible_add_to_compare'));
 
             $block->setData('starting_from_product', $this->getData('starting_from_product'));
+            $block->setData('rotation_duration', $this->getData('rotation_duration'));
+            $block->setData('slide_count', $this->getData('slide_count'));
+
+
         }
     }
 
