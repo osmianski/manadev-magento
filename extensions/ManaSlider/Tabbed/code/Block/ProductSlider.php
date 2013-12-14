@@ -46,9 +46,9 @@ class ManaSlider_Tabbed_Block_ProductSlider extends Mage_Catalog_Block_Product_A
             $sourceHelper = Mage::helper($sourceHelper);
             $this->setData('data_source', $sourceHelper->$method($this));
 
+
             $block = $this->getLayout()->createBlock('manaslider_tabbed/productList',
                 $this->getNameInLayout().'.product_list');
-
             $this->append($block, 'product_list');
 
             $block->setData('data_source', $this->getData('data_source'));

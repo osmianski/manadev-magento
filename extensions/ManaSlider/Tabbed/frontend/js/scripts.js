@@ -60,7 +60,6 @@ function ($, Block, json, ajax, urlTemplate, core)
 
                 if (this._loadedCount < this.getCollectionIds().length) {
                     this._addFakeItems($li, this.getCollectionIds().length - this._loadedCount);
-                    $li = this.$loadedFakeAndDuplicatedElements();
                     ajax.post(this.getUrl(), {"xml": this.getXml() }, function(response) {
                         self.loadAjaxItems(response);
                     }, { showOverlay: false, showWait: false});
@@ -146,9 +145,9 @@ function ($, Block, json, ajax, urlTemplate, core)
             this._itemInnerWidth = this._mode == 'slide'
                 ? Math.floor(this._containerWidth / this._visibleCount - this._originalPaddingWidth)
                 : this._originalItemWidth - this._originalPaddingWidth;
-            this._itemOuterWidth = Math.ceil(this._containerWidth / this._visibleCount);
+            this._itemOuterWidth = Math.floor(this._containerWidth / this._visibleCount);
             $li.each(function () {
-                self.resizeLiItem ($(this));
+                self.resizeElement ($(this));
             });
             this.$products().width(this._itemOuterWidth * $li.length);
             if (this._mode == 'slide') {
@@ -167,7 +166,7 @@ function ($, Block, json, ajax, urlTemplate, core)
             $ajaxUl.children().each(function() {
                 var ajaxLi = this;
                 var index = core.getPrefixedClass(this, 'item-');
-                self.resizeLiItem($(this));
+                self.resizeElement($(this));
                 self.$().find('li.item-' + index).each(function() {
                     if ($(this).hasClass('li-duplicate')) {
                         $(ajaxLi).addClass("li-duplicate");
@@ -177,11 +176,30 @@ function ($, Block, json, ajax, urlTemplate, core)
             });
             this.equalizeHeights();
         },
-        resizeLiItem: function ($liItem) {
-            $liItem.width(this._itemInnerWidth);
-            $liItem.find('.product-image').width(this._itemInnerWidth).height(this._itemInnerWidth);
-            $liItem.find('.product-image img').attr('width', this._itemInnerWidth).attr('height', this._itemInnerWidth);
-            $liItem.find('.actions').width(this._itemInnerWidth);
+        resizeElement: function ($liItem) {
+            if (this._itemInnerWidth) {
+                var imageWidth = this._itemInnerWidth;
+                var imageHeight = this._itemInnerWidth;
+                var imageHorizontalMargin = 0;
+                var imageVerticalMargin = 0;
+                if (this._itemInnerWidth > this.getWidth()) {
+                    imageWidth = this.getWidth();
+                    imageHorizontalMargin = Math.floor((this._itemInnerWidth - imageWidth) / 2);
+                }
+                if (this._itemInnerWidth > this.getHeight()) {
+                    imageHeight = this.getHeight();
+                     imageVerticalMargin = Math.floor((this._itemInnerWidth - imageHeight) / 2);
+                }
+                $liItem.width(this._itemInnerWidth);
+                $liItem.find('.product-image').width(imageWidth).height(imageHeight);
+                $liItem.find('.m-image-container').width(imageWidth).height(imageHeight).css({
+                    "margin-left": imageHorizontalMargin + "px",
+                    "margin-right": imageHorizontalMargin + "px",
+                });
+                $liItem.find('.product-image img').attr('width', imageWidth).attr('height', imageHeight);
+                $liItem.find('.actions').width(this._itemInnerWidth);
+            }
+
         },
         $products: function() {
             return this.$().find('ul.products-grid');
@@ -217,6 +235,12 @@ function ($, Block, json, ajax, urlTemplate, core)
         getWidth: function() {
             if (!this._width) {
                 this._width = this.$().data('width');
+            }
+            return this._width;
+        },
+        getHeight: function () {
+            if (!this._height) {
+                this._width = this.$().data('height');
             }
             return this._width;
         },
@@ -281,8 +305,6 @@ function ($, Block, json, ajax, urlTemplate, core)
             return  $('<li class="item item-' + index + '"> </li>');
         },
         _createDuplicateItem: function ($li, indexFrom, indexTo) {
-//            return $li[indexFrom].clone(true).addClass('Duplicate');
-
             var $duplicatedLi= $li.eq(indexFrom).clone(true);
             $duplicatedLi.addClass("li-duplicate");
             return $duplicatedLi;
@@ -326,6 +348,11 @@ function ($, Block, json, ajax, urlTemplate, core)
             }
 
             this._visibleIndex = this.getIndex(nextVisibleIndex);
+
+            //$li = $.makeArray(this.$loadedFakeAndDuplicatedElements());
+            //console.log("ul.left: " + this.$products().css('left') + ", slide: " + (this._itemOuterWidth * slideWidth) + ", li.left: " + $($li[this._visibleIndex]).position().left);
+            //console.log('next: ' + new Error().stack);
+
             this.animate({left: "-=" + (this._itemOuterWidth * slideWidth)}, this.getEffectDuration(), true);
 
         },
@@ -358,8 +385,8 @@ function ($, Block, json, ajax, urlTemplate, core)
 
             var self = this;
             this.$products().animate(properties, duration, function() {
-                self.scheduleRotation();
                 if (clearInSlidingFlsg) {
+                    self.scheduleRotation();
                     self._inSliding = false;
                     if (self._mode == 'slide') {
                         self.$products().css({ left: -self._itemOuterWidth * self._visibleIndex });
@@ -403,17 +430,20 @@ function ($, Block, json, ajax, urlTemplate, core)
             }
 
             function _timer() {
+                clearTimeout(self._rotationTimer);
                 self._rotationTimer = null;
                 self.next();
             }
 
             if (!disable && this.getRotationDuration() > 0 && this._mode == 'slide') {
                 if (!this._rotationTimer) {
+                    //console.log('setTimeout: ' + new Error().stack);
                     this._rotationTimer = setTimeout(_timer, this.getRotationDuration());
                 }
             }
             else {
                 if (this._rotationTimer) {
+                    // console.log('clearTimeout: ' + new Error().stack);
                     clearTimeout(this._rotationTimer);
                     this._rotationTimer = null;
                 }

@@ -19,4 +19,7 @@
             <block type="manaslider_tabbed/productSlider" name="product_slider"/>
         </block>
     </mana_tabbedslider_products>
+    <cms_page>
+        <update handle="manaslider_tabbed_slider"/>
+    </cms_page>
 </layout>
