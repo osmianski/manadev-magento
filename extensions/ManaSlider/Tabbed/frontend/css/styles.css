@@ -7,7 +7,7 @@
 
 .m-product-slider { overflow: hidden; position: relative;}
 
-.m-product-slider li.item { position: relative; padding-bottom: 85px; padding-left: 40px !important; padding-right: 40px !important;}
+.m-product-slider li.item { position: relative; padding-bottom: 85px; padding-left: 9px !important; padding-right: 9px !important;}
 /* Arrows */
 /*.m-product-slider .m-prev {position: relative; float: left; background: red; height: 100px; width: 70px;}*/
 
@@ -31,4 +31,3 @@
 
 .m-tabbed-slider .ui-tabs-active { color: #26B1ED; }
 
-.m-product-slider .product-grid li.item { }

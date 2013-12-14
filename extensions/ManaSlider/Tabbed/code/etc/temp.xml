@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <title>New Products</title>
     <tabs>
         <tab1>
             <label>Tabukas Tabas Tabas</label>
@@ -20,7 +21,7 @@
             <is_visible_add_to_compare>1</is_visible_add_to_compare>
             <condition>or</condition>
             <effect_duration>1000</effect_duration>
-            <rotation_duration>0</rotation_duration>
+            <rotation_duration>1000</rotation_duration>
             <slide_count>1</slide_count>
         </tab1>
         <tab2>
@@ -46,4 +47,5 @@
             <slide_count>0</slide_count>
         </tab2>
     </tabs>
+
 </config>
