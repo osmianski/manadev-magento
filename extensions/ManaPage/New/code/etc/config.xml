@@ -38,5 +38,13 @@
         </blocks>
         <!-- INSERT HERE: blocks, models, ... -->
     </global>
+    <manaslider_tabbed>
+        <data_sources>
+            <new_products>
+                <source_helper>manapage_new::getNewProductCollection</source_helper>
+                <block>manaslider_tabbed/productSlider</block>
+            </new_products>
+        </data_sources>
+    </manaslider_tabbed>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
 </config>

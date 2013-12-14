@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <tab1>
+            <label>Tabukas Tabas Tabas</label>
+            <title>Tab 1 hint</title>
+            <data_source>new_products</data_source>
+            <ignore_new_products>1</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>3</max_product_count>
+            <image_width>180</image_width>
+            <image_height>180</image_height>
+            <is_visible_name>1</is_visible_name>
+            <is_visible_rating>1</is_visible_rating>
+            <is_visible_price>1</is_visible_price>
+            <is_visible_description>1</is_visible_description>
+            <is_visible_read_more>1</is_visible_read_more>
+            <is_visible_add_to_cart>1</is_visible_add_to_cart>
+            <is_visible_add_to_wishlist>1</is_visible_add_to_wishlist>
+            <is_visible_add_to_compare>1</is_visible_add_to_compare>
+            <condition>or</condition>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>0</rotation_duration>
+            <slide_count>1</slide_count>
+        </tab1>
+        <tab2>
+            <label>Tab 2</label>
+            <title>Tab 2 hint</title>
+            <data_source>new_products</data_source>
+            <ignore_new_products>1</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>3</max_product_count>
+            <image_width>50</image_width>
+            <image_height>50</image_height>
+            <is_visible_name>0</is_visible_name>
+            <is_visible_rating>0</is_visible_rating>
+            <is_visible_price>1</is_visible_price>
+            <is_visible_description>0</is_visible_description>
+            <is_visible_read_more>0</is_visible_read_more>
+            <is_visible_add_to_cart>0</is_visible_add_to_cart>
+            <is_visible_add_to_wishlist>0</is_visible_add_to_wishlist>
+            <is_visible_add_to_compare>0</is_visible_add_to_compare>
+            <condition>or</condition>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>5000</rotation_duration>
+            <slide_count>0</slide_count>
+        </tab2>
+    </tabs>
+</config>
