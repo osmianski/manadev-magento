@@ -94,6 +94,11 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this attribute page and all related option pages?'),
+            'title_template' => $this->jsonHelper()->encodeAttribute(array(
+                'template' => $this->templateHelper()->parse(Mage::getStoreConfig('mana_attributepage/attribute_page_title/template')),
+                'separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/separator'),
+                'last_separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/last_separator'),
+            )),
         );
 
         if (!$this->adminHelper()->isGlobal()) {
@@ -157,6 +162,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
      */
     public function getGlobalEditModel() {
         return Mage::registry('m_global_edit_model');
+    }
+    /**
+     * @return Mana_Core_Helper_StringTemplate
+     */
+    public function templateHelper() {
+        return Mage::helper('mana_core/stringTemplate');
     }
     #endregion
 }

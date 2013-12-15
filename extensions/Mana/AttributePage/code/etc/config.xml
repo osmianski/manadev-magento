@@ -145,4 +145,13 @@
             </attribute_page>
         </page_types>
     </mana_core>
+    <default>
+        <mana_attributepage>
+            <attribute_page_title>
+                <template>Shop By {{attribute_labels}}</template>
+                <separator>, </separator>
+                <last_separator> and </last_separator>
+            </attribute_page_title>
+        </mana_attributepage>
+    </default>
 </config>

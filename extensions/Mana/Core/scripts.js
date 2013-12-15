@@ -496,6 +496,29 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
         }
     });
 });
+Mana.define('Mana/Core/StringTemplate', ['jquery'], function ($, undefined) {
+    return Mana.Object.extend('Mana/Core/StringTemplate', {
+        concat: function(parsedTemplate, vars) {
+            var result = '';
+            $.each(parsedTemplate, function(i, token) {
+                var type = token[0];
+                var text = token[1];
+                if (type == 'string') {
+                    result += text;
+                }
+                else if (type == 'var') {
+                    if (vars[text] !== undefined) {
+                        result += vars[text];
+                    }
+                    else {
+                        result += '{{' + text + '}}';
+                    }
+                }
+            });
+            return result;
+        }
+    });
+});
 Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, core, undefined) {
     return Mana.Object.extend('Mana/Core/Layout', {
         _init: function () {

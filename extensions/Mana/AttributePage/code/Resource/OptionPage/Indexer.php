@@ -57,7 +57,7 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
             'option_id_2' => "`o2`.`option_id`",
             'option_id_3' => "`o3`.`option_id`",
             'option_id_4' => "`o4`.`option_id`",
-            'unique_key' => $aggregate->glue($aggregate->expr("`oX`.`option_id`", $attrCount), '-'),
+            'all_option_ids' => $aggregate->glue($aggregate->expr("`oX`.`option_id`", $attrCount), '-'),
             'is_active' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IS_ACTIVE)},
                 `op_gcs`.`is_active`,
                 `ap_gcs`.`option_page_is_active`

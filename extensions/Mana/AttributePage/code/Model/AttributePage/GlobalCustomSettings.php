@@ -37,4 +37,17 @@ class Mana_AttributePage_Model_AttributePage_GlobalCustomSettings extends Mana_A
     public function getFinalId() {
         return $this->getResource()->getFinalId($this);
     }
+
+    public function attributeIdsExists() {
+        $allAttributeIds = array();
+        foreach (array('attribute_id_0', 'attribute_id_1', 'attribute_id_2',
+            'attribute_id_3', 'attribute_id_4') as $key)
+        {
+            if ($id = $this->getData($key)) {
+                $allAttributeIds[] = $id;
+            }
+        }
+        $allAttributeIds = implode('-', $allAttributeIds);
+        return $this->getResource()->attributeIdsExists($allAttributeIds);
+    }
 }

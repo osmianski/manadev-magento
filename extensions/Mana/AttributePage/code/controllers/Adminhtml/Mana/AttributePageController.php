@@ -227,6 +227,11 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
             }
         }
 
+        // check uniqueness
+        if ($model->attributeIdsExists()) {
+            throw new Mage_Core_Exception($this->__('Attribute page based on specified attribute(s) already exists.'));
+        }
+
         // check if there are any custom settings
         $hasCustomSettings = false;
         foreach ($model->getData() as $key => $value) {

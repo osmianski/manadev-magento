@@ -100,6 +100,8 @@ $installer->run("
       `id` bigint(20) NOT NULL AUTO_INCREMENT,
       `attribute_page_global_custom_settings_id` bigint(20) NOT NULL,
 
+      `all_attribute_ids` varchar(255) NOT NULL DEFAULT '',
+
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `url_key` varchar(128) NOT NULL DEFAULT '',
@@ -108,7 +110,7 @@ $installer->run("
       `meta_description` mediumtext NOT NULL,
 
       PRIMARY KEY (`id`),
-      UNIQUE KEY `attribute_page_global_custom_settings_id` (`attribute_page_global_custom_settings_id`)
+      UNIQUE KEY `all_attribute_ids` (`all_attribute_ids`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
     ALTER TABLE `$table`
@@ -321,7 +323,7 @@ $installer->run("
       `option_id_2` int(10) unsigned DEFAULT NULL,
       `option_id_3` int(10) unsigned DEFAULT NULL,
       `option_id_4` int(10) unsigned DEFAULT NULL,
-      `unique_key` varchar(255) NOT NULL DEFAULT '',
+      `all_option_ids` varchar(255) NOT NULL DEFAULT '',
 
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
@@ -351,7 +353,7 @@ $installer->run("
       KEY `option_id_2` (`option_id_2`),
       KEY `option_id_3` (`option_id_3`),
       KEY `option_id_4` (`option_id_4`),
-      UNIQUE KEY `unique_key` (`attribute_page_global_id`,`unique_key`)
+      UNIQUE KEY `all_option_ids` (`attribute_page_global_id`,`all_option_ids`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
     ALTER TABLE `$table`
@@ -490,12 +492,6 @@ $installer->run("
             REFERENCES `{$this->getTable('mana_attributepage/optionPage_store')}` (`id`)
             ON DELETE CASCADE ON UPDATE CASCADE;
 ");
-
-$attributePage = Mage::getModel('mana_attributepage/attributePage_globalCustomSettings');
-$attributePage
-    ->setData('attribute_id_0', 102)
-    ->setData('attribute_id_1', 272);
-$attributePage->save();
 
 if (method_exists($this->getConnection(), 'disallowDdlCache')) {
     $this->getConnection()->disallowDdlCache();

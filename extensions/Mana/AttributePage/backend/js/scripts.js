@@ -27,8 +27,9 @@ function ($, Container)
     });
 });
 
-Mana.define('Mana/AttributePage/AttributePage/TabContainer', ['jquery', 'Mana/Admin/Container'],
-function ($, Container)
+Mana.define('Mana/AttributePage/AttributePage/TabContainer', ['jquery', 'Mana/Admin/Container',
+    'singleton:Mana/Core/Json'],
+function ($, Container, json, undefined)
 {
     return Container.extend('Mana/AttributePage/AttributePage/TabContainer', {
         _subscribeToBlockEvents: function () {
@@ -91,13 +92,19 @@ function ($, Container)
         },
         getAttrCount: function() {
             return 5;
+        },
+        getTitleTemplate: function() {
+            if (this._titleTemplate === undefined) {
+                this._titleTemplate = json.decodeAttribute(this.$().data('title-template'));
+            }
+            return this._titleTemplate;
         }
     });
 });
 
 Mana.define('Mana/AttributePage/AttributePage/TabContainer/Global', ['jquery', 'Mana/AttributePage/AttributePage/TabContainer',
-    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate'],
-function ($, TabContainer, layout, aggregate, undefined)
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate', 'singleton:Mana/Core/StringTemplate'],
+function ($, TabContainer, layout, aggregate, template)
 {
     return TabContainer.extend('Mana/AttributePage/AttributePage/TabContainer/Global', {
         _subscribeToBlockEvents: function () {
@@ -176,8 +183,13 @@ function ($, TabContainer, layout, aggregate, undefined)
         updateTitle: function() {
             var field = this.getField('title');
             var titleExpr = aggregate.expr(this._fields, 'attribute_id_X', this.getAttrCount());
+            var title = this.getTitleTemplate();
             if (field.useDefault()) {
-                field.setValue(aggregate.glue(titleExpr, ' ') + ' Products');
+                field.setValue(template.concat(title['template'], {
+                    attribute_labels: title['last_separator']
+                        ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
+                        : aggregate.glue(titleExpr, title['last_separator'])
+                }));
             }
         },
         updateMetaTitle: function() {
@@ -224,8 +236,8 @@ function ($, TabContainer, layout, aggregate, undefined)
     });
 });
 Mana.define('Mana/AttributePage/AttributePage/TabContainer/Store', ['jquery', 'Mana/AttributePage/AttributePage/TabContainer',
-    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate'],
-function ($, TabContainer, layout, aggregate)
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate', 'singleton:Mana/Core/StringTemplate'],
+function ($, TabContainer, layout, aggregate, template)
 {
     return TabContainer.extend('Mana/AttributePage/AttributePage/TabContainer/Store', {
         _subscribeToBlockEvents: function () {
@@ -389,12 +401,17 @@ function ($, TabContainer, layout, aggregate)
         updateTitle: function() {
             var field = this.getField('title');
             var titleExpr = aggregate.expr(this._fields, 'attribute_id_X', this.getAttrCount());
+            var title = this.getTitleTemplate();
             if (field.useDefault()) {
                 if (this.getJsonData('global-is-custom', 'title')) {
                     field.setValue(this.getJsonData('global', 'title'));
                 }
                 else {
-                    field.setValue(aggregate.glue(titleExpr, ' ') + ' Products');
+                    field.setValue(template.concat(title['template'], {
+                        attribute_labels: title['last_separator']
+                            ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
+                            : aggregate.glue(titleExpr, title['last_separator'])
+                    }));
                 }
             }
         },

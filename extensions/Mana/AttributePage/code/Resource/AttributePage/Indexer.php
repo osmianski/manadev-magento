@@ -30,7 +30,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         if (isset($options['store_id']) ||
             !isset($options['attribute_id']) &&
             !isset($options['attribute_page_global_custom_settings_id']) &&
-            !$options['reindex_all']
+            empty($options['reindex_all'])
         )
         {
             return;
@@ -48,12 +48,24 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $titleExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
             ? $aggregate->expr("COALESCE(`fX`.`name`, `aX`.`frontend_label`)", $attrCount)
             : $aggregate->expr("`aX`.`frontend_label`", $attrCount);
+
+        $title = array(
+            'template' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/template'),
+            'separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/separator'),
+            'last_separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/last_separator'),
+        );
+
         $urlKeyExpr = $aggregate->glue($aggregate->wrap($seoifyExpr, $titleExpr), '-');
         $fields = array(
             'attribute_page_global_custom_settings_id' => "`ap_gcs`.`id`",
+            'all_attribute_ids' => $aggregate->glue($aggregate->expr("`aX`.`attribute_id`", $attrCount), '-'),
             'title' => "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_TITLE)},
                 `ap_gcs`.`title`,
-                CONCAT({$aggregate->glue($titleExpr, ' ')}, '{$t->__(' Products')}')
+                {$this->templateHelper()->dbConcat($this->templateHelper()->parse($title['template']), array(
+                    'attribute_labels' => $title['last_separator']
+                        ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
+                        : $aggregate->glue($titleExpr, $title['last_separator'])
+                ))}
             )",
             'url_key' => "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_URL_KEY)},
                 `ap_gcs`.`url_key`,
@@ -112,11 +124,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
     }
 
     protected function _calculateFinalStoreLevelSettings($options) {
-        if (!isset($options['store_id']) ||
-            !isset($options['attribute_id']) &&
+        if (!isset($options['attribute_id']) &&
             !isset($options['attribute_page_global_custom_settings_id']) &&
             !isset($options['attribute_page_global_id']) &&
-            !$options['reindex_all']
+            empty($options['reindex_all'])
         )
         {
             return;
@@ -133,6 +144,12 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
             if (isset($options['store_id']) && $store->getId() != $options['store_id']) {
                 continue;
             }
+
+            $title = array(
+                'template' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/template', $store),
+                'separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/separator', $store),
+                'last_separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/last_separator', $store),
+            );
 
             /* @var $store Mage_Core_Model_Store */
             $schema = $this->coreHelper()->isManadevSeoInstalled()
@@ -157,7 +174,11 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     `ap_scs`.`title`,
                     IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_TITLE)},
                         `ap_g`.`title`,
-                        CONCAT({$aggregate->glue($titleExpr, ' ')}, '{$t->__(' Products')}')
+                        {$this->templateHelper()->dbConcat($this->templateHelper()->parse($title['template']), array(
+                            'attribute_labels' => $title['last_separator']
+                                ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
+                                : $aggregate->glue($titleExpr, $title['last_separator'])
+                        ))}
                     )
                 )",
                 'image' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE)},

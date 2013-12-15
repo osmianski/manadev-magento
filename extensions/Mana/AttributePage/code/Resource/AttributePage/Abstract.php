@@ -73,5 +73,12 @@ abstract class Mana_AttributePage_Resource_AttributePage_Abstract extends Mage_C
     public function getSortBySourceModel() {
         return Mage::getSingleton('mana_attributepage/source_sortBy');
     }
+
+    /**
+     * @return Mana_Core_Helper_StringTemplate
+     */
+    public function templateHelper() {
+        return Mage::helper('mana_core/stringTemplate');
+    }
     #endregion
 }
