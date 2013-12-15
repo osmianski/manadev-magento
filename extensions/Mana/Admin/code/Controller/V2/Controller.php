@@ -55,6 +55,13 @@ class Mana_Admin_Controller_V2_Controller extends Mage_Adminhtml_Controller_Acti
     }
 
     /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function coreDbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
      * @return Mage_Adminhtml_Model_Session
      */
     public function getSessionSingleton() {

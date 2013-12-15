@@ -43,4 +43,96 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_OPTION_PAGE_CUSTOM_LAYOUT_XML = 30;
 
     const MAX_ATTRIBUTE_COUNT = 5;
+
+    public function validate() {
+        $t = Mage::helper('mana_attributepage');
+        $errors = array();
+
+        if ($this->adminHelper()->isGlobal() && !($this->getData('attribute_id_0'))) {
+            $errors[] = $t->__('At least one attribute have to be selected');
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_TITLE) &&
+            !trim($this->getData('title')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Title'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DESCRIPTION) &&
+            !trim($this->getData('description')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Description'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_URL_KEY) &&
+            !trim($this->getData('url_key')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('URL Key'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_META_TITLE) &&
+            !trim($this->getData('meta_title')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Page Title'));
+        }
+        if (($this->adminHelper()->isGlobal() ||
+            $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_OPTION_PAGE_AVAILABLE_SORT_BY)) &&
+            !trim($this->getData('option_page_available_sort_by')))
+        {
+            $errors[] = $t->__('Please choose at least one option in %s field', $t->__('Available Sort By'));
+        }
+        $availableSortBy = explode(',', $this->getData('option_page_available_sort_by'));
+        if ($this->adminHelper()->isGlobal() ||
+            $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_OPTION_PAGE_DEFAULT_SORT_BY))
+        {
+            if (!in_array($this->getData('option_page_default_sort_by'), $availableSortBy)) {
+                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+            }
+        }
+        else {
+            if (($global = Mage::registry('m_global_flat_model')) &&
+                !in_array($global->getData('option_page_default_sort_by'), $availableSortBy))
+            {
+                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+            }
+        }
+        if (count($errors)) {
+			throw new Mana_Core_Exception_Validation($errors);
+        }
+    }
+
+    public function setDefaults() {
+        $this->getResource()->setDefaults($this);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve model resource
+     *
+     * @return Mana_AttributePage_Resource_AttributePage_Abstract
+     */
+    public function getResource() {
+        return parent::getResource();
+    }
+
+    #region Dependencies
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+
+    #endregion
 }

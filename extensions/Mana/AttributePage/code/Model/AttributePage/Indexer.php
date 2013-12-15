@@ -15,6 +15,28 @@ class Mana_AttributePage_Model_AttributePage_Indexer extends Mana_Core_Model_Ind
         Mage_Core_Model_Store::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE,
         ),
+        'mana_seo/schema/global' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        'mana_seo/schema/store' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+        'mana_filters/filter2' => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+        'mana_filters/filter2_store' => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+        Mana_AttributePage_Model_AttributePage_GlobalCustomSettings::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+        Mana_AttributePage_Model_AttributePage_StoreCustomSettings::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+            Mage_Index_Model_Event::TYPE_DELETE
+        ),
     );
 
     protected function _construct() {
@@ -39,6 +61,34 @@ class Mana_AttributePage_Model_AttributePage_Indexer extends Mana_Core_Model_Ind
                 $event->addNewData('store_id', $event->getData('data_object')->getId());
             }
         }
+        elseif ($event->getEntity() == 'mana_seo/schema/global') {
+                $event->addNewData('reindex_all', true);
+        }
+        elseif ($event->getEntity() == 'mana_seo/schema/store') {
+            $event->addNewData('reindex_all', true);
+            $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
+        }
+        elseif ($event->getEntity() == Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY) {
+            $event->addNewData('attribute_id', $event->getData('data_object')->getId());
+        }
+        elseif ($event->getEntity() == 'mana_filters/filter2') {
+            if ($attributeId = $this->getFilterResource()->getAttributeId($event->getData('data_object'))) {
+                $event->addNewData('attribute_id', $attributeId);
+            }
+        }
+        elseif ($event->getEntity() == 'mana_filters/filter2_store') {
+            if ($attributeId = $this->getFilterStoreResource()->getAttributeId($event->getData('data_object'))) {
+                $event->addNewData('attribute_id', $attributeId);
+                $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
+            }
+        }
+        elseif ($event->getEntity() == Mana_AttributePage_Model_AttributePage_GlobalCustomSettings::ENTITY) {
+            $event->addNewData('attribute_page_global_custom_settings_id', $event->getData('data_object')->getId());
+        }
+        elseif ($event->getEntity() == Mana_AttributePage_Model_AttributePage_StoreCustomSettings::ENTITY) {
+            $event->addNewData('attribute_page_global_id', $event->getData('data_object')->getData('attribute_page_global_id'));
+            $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
+        }
     }
 
     /**
@@ -49,4 +99,21 @@ class Mana_AttributePage_Model_AttributePage_Indexer extends Mana_Core_Model_Ind
     protected function _processEvent(Mage_Index_Model_Event $event) {
         $this->_getResource()->process($event->getNewData());
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Filters_Resource_Filter2
+     */
+    public function getFilterResource() {
+        return Mage::getResourceSingleton('mana_filters/filter2');
+    }
+
+    /**
+     * @return Mana_Filters_Resource_Filter2_Store
+     */
+    public function getFilterStoreResource() {
+        return Mage::getResourceSingleton('mana_filters/filter2_store');
+    }
+    #endregion
 }

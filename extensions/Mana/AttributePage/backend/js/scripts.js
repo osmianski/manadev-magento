@@ -119,6 +119,8 @@ function ($, TabContainer, layout, aggregate, undefined)
                     this.getField('meta_keywords').on('change', this, this.metaKeywordsChange);
 
                     this.getField('option_page_price_step').on('change', this, this.optionPagePriceStepChange);
+
+                    if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteClick);
                 })
                 .on('unload', this, function () {
                     this.getField('attribute_id_0').off('change', this, this.attributeIdChange);
@@ -136,6 +138,8 @@ function ($, TabContainer, layout, aggregate, undefined)
                     this.getField('meta_keywords').off('change', this, this.metaKeywordsChange);
 
                     this.getField('option_page_price_step').on('change', this, this.optionPagePriceStepChange);
+
+                    if (this.getChild('delete')) this.getChild('delete').off('click', this, this.deleteClick);
                 });
         },
         attributeIdChange: function() {
@@ -213,12 +217,15 @@ function ($, TabContainer, layout, aggregate, undefined)
             if (field.useDefault()) {
                 field.setValue('');
             }
+        },
+        deleteClick: function () {
+            deleteConfirm(this.getText('delete-confirm'), this.getUrl('delete'));
         }
     });
 });
 Mana.define('Mana/AttributePage/AttributePage/TabContainer/Store', ['jquery', 'Mana/AttributePage/AttributePage/TabContainer',
     'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate'],
-function ($, TabContainer, layout, aggregate, undefined)
+function ($, TabContainer, layout, aggregate)
 {
     return TabContainer.extend('Mana/AttributePage/AttributePage/TabContainer/Store', {
         _subscribeToBlockEvents: function () {

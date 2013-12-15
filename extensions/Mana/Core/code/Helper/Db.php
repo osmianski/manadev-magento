@@ -30,16 +30,39 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return 1 << ($bit % 32);
     }
 
+    public function getModelFieldBitNo($model, $field) {
+        return @constant(get_class($model).'::DM_'.strtoupper($field));
+    }
+
     /**
      * @param Varien_Object $model
-     * @param int $bitNo
+     * @param int|string $bitNo
+     * @param null $value
      * @return bool
      */
-    public function isModelContainsCustomSetting($model, $bitNo) {
-        $mask = $model->getData("default_mask{$this->getMaskIndex($bitNo)}");
+    public function isModelContainsCustomSetting($model, $bitNo, $value = null) {
+        if (is_string($bitNo)) {
+            $bitNo = $this->getModelFieldBitNo($model, $bitNo);
+            if (is_null($bitNo)) {
+                return is_null($value) ? true : $value;
+            }
+        }
+        $maskField = "default_mask{$this->getMaskIndex($bitNo)}";
+        $mask = $model->getData($maskField);
+        if (is_null($mask)) {
+            $mask = 0;
+        }
         $bit = $this->getMask($bitNo);
-        return ($mask & $bit) == $bit;
+        if (is_null($value)) {
+            return ($mask & $bit) == $bit;
+        }
+        else {
+            $model->setData($maskField, $value ? $mask | $bit : $mask & ~$bit);
+            return $value;
+        }
     }
+
+
     public function isCustom($tableAlias, $bit) {
         return "`{$tableAlias}`.`default_mask{$this->getMaskIndex($bit)}` ".
             "& {$this->getMask($bit)} = {$this->getMask($bit)}";

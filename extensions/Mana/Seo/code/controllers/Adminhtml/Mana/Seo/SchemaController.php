@@ -271,50 +271,6 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
             }
         }
     }
-//    public function beforeSaveAction() {
-//        // data
-//        $models = $this->_registerModels();
-//        $response = new Varien_Object();
-//        $messages = array();
-//
-//        try {
-//            $this->_processChanges();
-//
-//            $affectsUrl = false;
-//            if ($models['flat']->getStatus() == Mana_Seo_Model_Schema::STATUS_ACTIVE) {
-//                foreach ($models['flat']->getFieldsAffectingUrl() as $key) {
-//                    if ($models['flat']->isDefaultable($key) &&
-//                        $models['edit']->isUsingDefaultData($key) != $models['edit']->isUsingDefaultData($key, '_origData'))
-//                    {
-//                        $affectsUrl = true;
-//                        break;
-//                    }
-//                    elseif (!$models['edit']->isUsingDefaultData($key) &&
-//                        $models['flat']->getData($key) !== $models['edit']->getData($key))
-//                    {
-//                        $affectsUrl = true;
-//                        break;
-//                    }
-//                }
-//            }
-//
-//            if ($affectsUrl) {
-//                $response->setData('affectsUrl', $this->seoHelper()->__('One or more edited fields affects the way URL is constructed. It is recommended to save previous schema settings as separate obsolete schema when old structure URL may have been indexed by search bots, so that URLs with old structure would be redirected to this schema URLs. Do you want to save previous schema settings as separate obsolete schema?'));
-//            }
-//
-//        } catch (Mana_Db_Exception_Validation $e) {
-//            foreach ($e->getErrors() as $error) {
-//                $messages[] = $error;
-//            }
-//        }
-//        catch (Exception $e) {
-//            $messages[] = $e->getMessage();
-//        }
-//        if (count($messages)) {
-//            $response->setData('messages', $messages);
-//        }
-//        $this->getResponse()->setBody($response->toJson());
-//    }
     public function saveAction() {
         // data
         $models = $this->_registerModels();
@@ -332,12 +288,6 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
                     $activeSchema->overrideStatus(Mana_Seo_Model_Schema::STATUS_OBSOLETE)->save();
                 }
             }
-
-//            if ($this->getRequest()->getPost('createObsoleteCopy')) {
-//                if ($id = $this->getRequest()->getParam('id')) {
-//                    $this->_duplicate($id);
-//                }
-//            }
 
             // do save
             $models['edit']->save();

@@ -16,4 +16,16 @@ class Mana_AttributePage_Resource_AttributePage_GlobalCustomSettings extends Man
     protected function _construct() {
         $this->_init(Mana_AttributePage_Model_AttributePage_GlobalCustomSettings::ENTITY, 'id');
     }
+
+    /**
+     * @param Varien_Object $object
+     * @return int
+     */
+    public function getFinalId($object) {
+        $db = $this->getReadConnection();
+        $select = $db->select()
+            ->from(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')), 'id')
+            ->where("`ap_g`.`attribute_page_global_custom_settings_id` = ?", $object->getId());
+        return $db->fetchOne($select);
+    }
 }

@@ -32,7 +32,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
             ));
         $this->setChild('close_button', $button);
 
-        if ($this->getFlatModel()->getId()) {
+        if ($this->getEditModel()->getId() && $this->adminHelper()->isGlobal()) {
             $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.delete")
                 ->setData(array(
                     'label' => $this->__('Delete'),
@@ -65,12 +65,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
     public function getStoreSpecificUrl($action) {
         if ($this->adminHelper()->isGlobal()) {
             return $this->adminHelper()->getStoreUrl('*/*/'. $action, array(
-                'id' => $this->getEditModel()->getId()
+                'id' => $this->getFlatModel()->getId()
             ));
         }
         else {
             return $this->adminHelper()->getStoreUrl('*/*/'. $action, array(
-                'id' => $this->getFlatModel()->getPrimaryGlobalId(),
+                'id' => $this->getFlatModel()->getData('attribute_page_global_id'),
                 'store' => $this->adminHelper()->getStore()->getId()
             ));
         }
@@ -78,7 +78,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
 
     public function getGlobalUrl($action) {
         return $this->adminHelper()->getStoreUrl('*/*/' . $action, array(
-            'id' => $this->getFlatModel()->getPrimaryId()
+            'id' => $this->getFlatModel()->getId()
         ));
     }
 
@@ -93,7 +93,6 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
             'close_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/index',
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
-            'before_save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('beforeSave')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this attribute page and all related option pages?'),
         );
 

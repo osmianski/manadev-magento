@@ -84,7 +84,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'label' => $this->__('Default Sort By'),
             'title' => $this->__('Default Sort By'),
             'options' => $this->getSortBySourceModel()->getOptionArray(),
-            'name' => 'option_page_available_sort_by',
+            'name' => 'option_page_default_sort_by',
             'required' => true,
 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DEFAULT_SORT_BY,

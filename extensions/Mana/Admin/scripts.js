@@ -568,14 +568,23 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                 field.setValue(this.getJsonData(attributeName, jsonFieldName));
             }
         },
+        _afterSave: function () {
+        },
         save: function(callback) {
             var params = this.getPostParams();
+            var self = this;
 
             ajax.post(this.getUrl('save'), params, function(response) {
                 ajax.update(response);
                 //noinspection JSUnresolvedVariable
-                if (core.isFunction(callback) && !response.failed) {
-                    callback.call();
+                if (!response.failed) {
+                    if (response.forceEditUrl) {
+                        setLocation(response.forceEditUrl);
+                    }
+                    if (core.isFunction(callback)) {
+                        callback.call();
+                    }
+                    self._afterSave();
                 }
             });
         },

@@ -34,7 +34,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_ListGrid extends Mana_Adm
             $collection = Mage::getResourceModel("mana_attributepage/attributePage_global_collection");
         }
         else {
-            $collection = $this->dbHelper()->getResourceModel("mana_attributepage/attributePage_store_collection");
+            $collection = Mage::getResourceModel("mana_attributepage/attributePage_store_collection");
             $collection->addFieldToFilter('store_id', $this->adminHelper()->getStore()->getId());
         }
 

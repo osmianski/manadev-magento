@@ -17,17 +17,25 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $this->_setResource('mana_attributepage');
     }
 
-    public function process($params) {
-        $this->_calculateFinalGlobalSettings($params);
-        $this->_calculateFinalStoreLevelSettings($params);
+    public function process($options) {
+        $this->_calculateFinalGlobalSettings($options);
+        $this->_calculateFinalStoreLevelSettings($options);
     }
 
     public function reindexAll() {
-        $this->_calculateFinalGlobalSettings();
-        $this->_calculateFinalStoreLevelSettings();
+        $this->process(array('reindex_all' => true));
     }
 
-    protected function _calculateFinalGlobalSettings($params = array()) {
+    protected function _calculateFinalGlobalSettings($options) {
+        if (isset($options['store_id']) ||
+            !isset($options['attribute_id']) &&
+            !isset($options['attribute_page_global_custom_settings_id']) &&
+            !$options['reindex_all']
+        )
+        {
+            return;
+        }
+
         $db = $this->_getWriteAdapter();
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
@@ -81,6 +89,20 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         }
         $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
 
+        if (isset($options['attribute_id'])) {
+            $select->where(implode(' OR ', array(
+                $db->quoteInto("(`ap_gcs`.`attribute_id_0` = ?)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_1` = ? OR `ap_gcs`.`attribute_id_1` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_2` = ? OR `ap_gcs`.`attribute_id_2` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_3` = ? OR `ap_gcs`.`attribute_id_3` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_4` = ? OR `ap_gcs`.`attribute_id_4` IS NULL)", $options['attribute_id']),
+            )));
+        }
+
+        if (isset($options['attribute_page_global_custom_settings_id'])) {
+            $select->where("`ap_gcs`.`id` = ?", $options['attribute_page_global_custom_settings_id']);
+        }
+
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
         $selectSql = $select->__toString();
         $sql = $select->insertFromSelect($this->getTable('mana_attributepage/attributePage_global'), array_keys($fields));
@@ -89,7 +111,17 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $db->exec($sql);
     }
 
-    protected function _calculateFinalStoreLevelSettings($params = array()) {
+    protected function _calculateFinalStoreLevelSettings($options) {
+        if (!isset($options['store_id']) ||
+            !isset($options['attribute_id']) &&
+            !isset($options['attribute_page_global_custom_settings_id']) &&
+            !isset($options['attribute_page_global_id']) &&
+            !$options['reindex_all']
+        )
+        {
+            return;
+        }
+
         $db = $this->_getWriteAdapter();
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
@@ -97,6 +129,11 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $t = $this->attributePageHelper();
 
         foreach (Mage::app()->getStores() as $store) {
+            /* @var $store Mage_Core_Model_Store */
+            if (isset($options['store_id']) && $store->getId() != $options['store_id']) {
+                continue;
+            }
+
             /* @var $store Mage_Core_Model_Store */
             $schema = $this->coreHelper()->isManadevSeoInstalled()
                 ? $this->seoHelper()->getActiveSchema($store->getId())
@@ -277,6 +314,24 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     $db->quoteInto("`fsX`.`global_id` = `fX`.`id` AND `fsX`.`store_id` = ?", $store->getId()), $attrCount);
             }
             $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+
+            if (isset($options['attribute_id'])) {
+                $select->where(implode(' OR ', array(
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_0` = ?)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_1` = ? OR `ap_gcs`.`attribute_id_1` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_2` = ? OR `ap_gcs`.`attribute_id_2` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_3` = ? OR `ap_gcs`.`attribute_id_3` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_4` = ? OR `ap_gcs`.`attribute_id_4` IS NULL)", $options['attribute_id']),
+                )));
+            }
+
+            if (isset($options['attribute_page_global_custom_settings_id'])) {
+                $select->where("`ap_gcs`.`id` = ?", $options['attribute_page_global_custom_settings_id']);
+            }
+
+            if (isset($options['attribute_page_global_id'])) {
+                $select->where("`ap_g`.`id` = ?", $options['attribute_page_global_id']);
+            }
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
             $selectSql = $select->__toString();

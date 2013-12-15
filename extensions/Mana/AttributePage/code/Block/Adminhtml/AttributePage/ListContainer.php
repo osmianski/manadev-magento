@@ -39,7 +39,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_ListContainer extends Man
 
         $this->setData('m_client_side_block', array(
             'type' => 'Mana/AttributePage/AttributePage/ListContainer',
-            'create_url' => $urlTemplate->encodeAttribute($this->adminHelper()->getStoreUrl(
+            'create_url' => $urlTemplate->encodeAttribute($this->getUrl(
                 '*/*/new')),
         ));
 
