@@ -28,3 +28,29 @@
     text-align:center;
     z-index:20100;
     }
+
+.m-popup {
+    position: absolute;
+    background: white;
+    z-index: 20100;
+}
+
+.m-popup-overlay {
+    position: absolute;
+    background: black;
+    filter: alpha(opacity=0); /* percent */
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 10000;
+}
+
+.m-overlay {
+    position: absolute;
+    background: white;
+    filter: alpha(opacity=0); /* percent */
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 10000;
+}

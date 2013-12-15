@@ -17,6 +17,48 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
         $this->setTemplate('mana/admin/v2/field.phtml');
     }
 
+    protected function _beforeToHtml() {
+        parent::_beforeToHtml();
+
+        // create client-side block
+        $this->_prepareClientSideBlock();
+
+        return $this;
+
+    }
+
+    protected function _prepareClientSideBlock() {
+        $element = $this->getElement();
+        $type = $element->getType();
+        if ($element instanceof Mana_Admin_Block_V2_Form_Field_Wysiwyg) {
+            $block = array('type' => 'Mana/Admin/Field/Wysiwyg');
+        }
+        elseif ($element instanceof Varien_Data_Form_Element_Multiselect) {
+            $block = array('type' => 'Mana/Admin/Field/MultiSelect');
+        }
+        elseif ($element instanceof Varien_Data_Form_Element_Date) {
+            $block = array('type' => 'Mana/Admin/Field/Date');
+        }
+
+        elseif ($type == 'select') {
+            $block = array('type' => 'Mana/Admin/Field/Select');
+        }
+        elseif ($type == 'text') {
+            $block = array('type' => 'Mana/Admin/Field/Text');
+        }
+        elseif ($type == 'textarea') {
+            $block = array('type' => 'Mana/Admin/Field/TextArea');
+        }
+
+        else {
+            $block = array('type' => 'Mana/Admin/Field');
+        }
+        $block['self_contained'] = true;
+        $this->setData('m_client_side_block', $block);
+
+        return $this;
+    }
+
     /**
      * Returns true if field uses default value (calculated in model indexer), returns false if field
      * contains custom (overridden) value
@@ -96,6 +138,13 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Js
+     */
+    public function jsHelper() {
+        return Mage::helper('mana_core/js');
     }
 
     #endregion

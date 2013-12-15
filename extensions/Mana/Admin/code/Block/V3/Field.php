@@ -37,11 +37,8 @@ class Mana_Admin_Block_V3_Field extends Mana_Admin_Block_V2_Field {
      * @return bool
      */
     public function getUsedDefault() {
-        $bitNo = $this->getElement()->getData('default_bit_no');
-        $mask = $this->getEditModel()->getData("default_mask{$this->dbHelper()->getMaskIndex($bitNo)}");
-        $bit = $this->dbHelper()->getMask($bitNo);
-
-	    return $this->getDisplayUseDefault() && ($mask & $bit) != $bit;
+	    return $this->getDisplayUseDefault() && !$this->dbHelper()->isModelContainsCustomSetting(
+	        $this->getEditModel(), $this->getElement()->getData('default_bit_no'));
 	}
 
 	#region Dependencies

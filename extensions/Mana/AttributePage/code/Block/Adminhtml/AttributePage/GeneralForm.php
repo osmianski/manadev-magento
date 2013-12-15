@@ -50,14 +50,11 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'default_store_label' => $this->__('Use Attribute Labels'),
         ));
 
-        $this->addField($fieldset, 'description', 'editor', array(
+        $this->addField($fieldset, 'description', 'wysiwyg', array(
             'name'      => 'description',
-            'label'     => Mage::helper('cms')->__('Description'),
-            'title'     => Mage::helper('cms')->__('Description'),
-            //'style'     => 'height:36em',
+            'label'     => $this->__('Description'),
+            'title'     => $this->__('Description'),
             'required'  => true,
-            'config'    => Mage::getSingleton('cms/wysiwyg_config')->getConfig(),
-
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_DESCRIPTION,
             'default_label' => $this->__('Use Title'),
             'default_store_label' => $this->__('Same For All Stores'),

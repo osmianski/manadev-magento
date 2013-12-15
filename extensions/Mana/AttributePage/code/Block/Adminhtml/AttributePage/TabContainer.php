@@ -87,16 +87,37 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
         $urlTemplate = Mage::helper('mana_core/urlTemplate');
 
 
-        $this->setData('m_client_side_block', array(
-            'type' => 'Mana/AttributePage/AttributePage/TabContainer',
+        $data = array(
+            'type' => 'Mana/AttributePage/AttributePage/TabContainer/'.($this->adminHelper()->isGlobal() ? 'Global' : 'Store'),
             'save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('save')),
             'close_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/index',
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'before_save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('beforeSave')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this attribute page and all related option pages?'),
-        ));
+        );
 
+        if (!$this->adminHelper()->isGlobal()) {
+            $data = array_merge($data, array(
+                'global' => $this->jsonHelper()->encodeAttribute($this->getGlobalFlatModel()->getData()),
+                'global_is_custom' => $this->jsonHelper()->encodeAttribute(array(
+                    'title' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_TITLE),
+                    'description' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_DESCRIPTION),
+                    'url_key' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_URL_KEY),
+                    'meta_title' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_META_TITLE),
+                    'meta_description' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_META_DESCRIPTION),
+                    'meta_keywords' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_AttributePage_Model_AttributePage_Abstract::DM_META_KEYWORDS),
+                )),
+            ));
+        }
+
+        $this->setData('m_client_side_block', $data);
         return $this;
     }
 
@@ -123,6 +144,20 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
      */
     public function getEditModel() {
         return Mage::registry('m_edit_model');
+    }
+
+    /**
+     * @return Mana_AttributePage_Model_AttributePage_Abstract
+     */
+    public function getGlobalFlatModel() {
+        return Mage::registry('m_global_flat_model');
+    }
+
+    /**
+     * @return Mana_AttributePage_Model_AttributePage_Abstract
+     */
+    public function getGlobalEditModel() {
+        return Mage::registry('m_global_edit_model');
     }
     #endregion
 }

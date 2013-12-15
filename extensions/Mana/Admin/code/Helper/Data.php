@@ -392,6 +392,13 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
         return $formula;
     }
 
+    public function renderSeoSymbols() {
+        $symbols = $this->coreHelper()->isManadevSeoInstalled()
+            ? $this->seoHelper()->getActiveSchema($this->getStore()->getId())->getSortedSymbols()
+            : $this->dbHelper()->getSeoSymbols();
+        $this->jsHelper()->setConfig('url.symbols', $symbols);
+    }
+
     #region Dependencies
 
     /**
@@ -399,6 +406,34 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function dbConfigHelper() {
         return Mage::helper('mana_db/config');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Js
+     */
+    public function jsHelper() {
+        return Mage::helper('mana_core/js');
     }
 
     #endregion

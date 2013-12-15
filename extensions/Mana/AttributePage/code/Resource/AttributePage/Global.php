@@ -102,8 +102,20 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
             $object
                 ->setData('option_page_is_active', 1)
                 ->setData('option_page_include_in_menu', 1)
-                ->setData('option_page_show_products', 1);
+                ->setData('option_page_show_products', 1)
+                ->setData('option_page_available_sort_by', array_keys($this->getSortBySourceModel()->getAllOptions()))
+                ->setData('option_page_default_sort_by', Mage::getConfig('catalog/frontend/default_sort_by'));
         }
         return $this;
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_AttributePage_Model_Source_SortBy
+     */
+    public function getSortBySourceModel() {
+        return Mage::getSingleton('mana_attributepage/source_sortBy');
+    }
+
+    #endregion
 }

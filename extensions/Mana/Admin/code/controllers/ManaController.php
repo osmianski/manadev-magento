@@ -17,6 +17,20 @@ class Mana_Admin_ManaController extends Mage_Adminhtml_Controller_Action {
         $this->getResponse()->setBody('ok');
     }
 
+    public function wysiwygAction() {
+        $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
+        $storeId = $this->getRequest()->getParam('store_id', 0);
+        $storeMediaUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+
+        $content = $this->getLayout()->createBlock('mana_admin/v2_popup_wysiwyg', '', array(
+            'editor_element_id' => $elementId. '_editor',
+            'store_id'          => $storeId,
+            'store_media_url'   => $storeMediaUrl,
+        ));
+
+        $this->getResponse()->setBody($content->toHtml());
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Utils

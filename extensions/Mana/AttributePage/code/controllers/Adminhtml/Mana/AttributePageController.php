@@ -33,9 +33,20 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
                     $finalSettings = Mage::getModel('mana_attributepage/attributePage_store');
                     $finalSettings->setData('store_id', $this->adminHelper()->getStore()->getId());
                     $finalSettings->load($id, 'attribute_page_global_id');
+                    if (!$finalSettings->getId()) {
+                        throw new Mage_Core_Exception($this->__('This attribute page no longer exists.'));
+                    }
                     if ($customSettingsId = $finalSettings->getData('attribute_page_store_custom_settings_id')) {
                         $customSettings->load($customSettingsId);
                     }
+
+                    $customGlobalSettings = Mage::getModel('mana_attributepage/attributePage_globalCustomSettings');
+                    $finalGlobalSettings = Mage::getModel('mana_attributepage/attributePage_global');
+                    $finalGlobalSettings->setData('_add_option_page_defaults', true);
+                    $finalGlobalSettings->load($id);
+                    $customGlobalSettings->load($finalSettings->getData('attribute_page_global_custom_settings_id'));
+                    Mage::register('m_global_edit_model', $customGlobalSettings);
+                    Mage::register('m_global_flat_model', $finalGlobalSettings);
                 }
                 else {
                     throw new Mage_Core_Exception($this->__('Non existent attribute pages can not be customized on store level.'));

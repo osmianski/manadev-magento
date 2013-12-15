@@ -36,6 +36,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_0',
             'required' => true,
+            'disabled' => (bool)$this->getFlatModel()->getId(),
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
@@ -44,6 +45,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_1',
             'required' => false,
+            'disabled' => (bool)$this->getFlatModel()->getId(),
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
@@ -52,6 +54,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_2',
             'required' => false,
+            'disabled' => (bool)$this->getFlatModel()->getId(),
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
@@ -60,6 +63,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_3',
             'required' => false,
+            'disabled' => (bool)$this->getFlatModel()->getId(),
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
@@ -68,6 +72,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'title' => $this->__('Attribute'),
             'name' => 'attribute_id_4',
             'required' => false,
+            'disabled' => (bool)$this->getFlatModel()->getId(),
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 

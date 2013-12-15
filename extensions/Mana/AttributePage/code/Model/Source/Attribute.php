@@ -17,10 +17,36 @@ class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_A
         $db = $collection->getConnection();
 
         $select = $collection->getSelect();
+
+        if ($this->adminHelper()->isGlobal()) {
+            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+                $select->joinLeft(array('f' => $collection->getTable('mana_filters/filter2')),
+                    "`f`.`code` = `main_table`.`attribute_code`", null);
+                $labelExpr = "COALESCE(`f`.`name`, `main_table`.`frontend_label`)";
+            }
+            else {
+                $labelExpr = "main_table.frontend_label";
+            }
+        }
+        else {
+            $storeId = $this->adminHelper()->getStore()->getId();
+            $select->joinLeft(array('l' => $collection->getTable('eav/attribute_label')),
+                $db->quoteInto("`l`.`attribute_id` = `main_table`.`attribute_id` AND `l`.`store_id` = ?", $storeId), null);
+            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+                $select->joinLeft(array('f' => $collection->getTable('mana_filters/filter2')),
+                    "`f`.`code` = `main_table`.`attribute_code`", null);
+                $select->joinLeft(array('fs' => $collection->getTable('mana_filters/filter2_store')),
+                    $db->quoteInto("`fs`.`global_id` = `f`.`id` AND `fs`.`store_id` = ?", $storeId), null);
+                $labelExpr = "COALESCE(`fs`.`name`, `l`.`value`, `main_table`.`frontend_label`)";
+            }
+            else {
+                $labelExpr = "COALESCE(`l`.`value`, `main_table`.`frontend_label`)";
+            }
+        }
         $select
             ->distinct(true)
             ->reset('columns')
-            ->columns(array('main_table.attribute_id', 'main_table.frontend_label'))
+            ->columns(array('main_table.attribute_id', $labelExpr))
             ->where("additional_table.is_filterable <> 0")
             ->where(sprintf('(%s) OR (%s) OR (%s)',
                 $db->quoteInto('main_table.backend_model = ?', 'eav/entity_attribute_backend_array'),
@@ -36,4 +62,19 @@ class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_A
 
         return $result;
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+    #endregion
 }

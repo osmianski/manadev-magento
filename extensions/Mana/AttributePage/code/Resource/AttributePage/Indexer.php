@@ -69,7 +69,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $fields['meta_description'] =
             "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_META_DESCRIPTION)},
                 `ap_gcs`.`meta_description`,
-                {$fields['description']}
+                {$fields['title']}
             )";
 
         $select = $db->select();
@@ -255,7 +255,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     `ap_scs`.`meta_description`,
                     IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_META_DESCRIPTION)},
                         `ap_g`.`meta_description`,
-                        {$fields['description']}
+                        {$fields['title']}
                     )
                 )";
 

@@ -30,6 +30,16 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return 1 << ($bit % 32);
     }
 
+    /**
+     * @param Varien_Object $model
+     * @param int $bitNo
+     * @return bool
+     */
+    public function isModelContainsCustomSetting($model, $bitNo) {
+        $mask = $model->getData("default_mask{$this->getMaskIndex($bitNo)}");
+        $bit = $this->getMask($bitNo);
+        return ($mask & $bit) == $bit;
+    }
     public function isCustom($tableAlias, $bit) {
         return "`{$tableAlias}`.`default_mask{$this->getMaskIndex($bit)}` ".
             "& {$this->getMask($bit)} = {$this->getMask($bit)}";

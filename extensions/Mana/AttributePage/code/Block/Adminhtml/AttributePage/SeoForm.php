@@ -32,6 +32,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'legend' => $this->__('SEO'),
         ));
 
+        $this->adminHelper()->renderSeoSymbols();
         $this->addField($fieldset, 'url_key', 'text', array(
             'label' => $this->__('URL Key'),
             'title' => $this->__('URL Key'),
@@ -61,8 +62,8 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_SeoForm extends Mana_Attr
             'required' => false,
 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_META_DESCRIPTION,
-            'default_label' => $this->__('Use Description'),
-            'default_store_label' => $this->__('Use Description'),
+            'default_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__('Use Title'),
         ));
 
         $this->addField($fieldset, 'meta_keywords', 'textarea', array(

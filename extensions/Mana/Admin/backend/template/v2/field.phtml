@@ -10,10 +10,11 @@ $_element = $this->getElement();
 $_note    = $_element->getNote();
 $_trId    = $_element->getHtmlContainerId();
 $_class   = $_element->getFieldsetHtmlClass();
+$info = $this->jsHelper()->parseClientSideBlockInfo($this);
 $this->checkFieldDisable();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> data-m-block="Mana/Admin/Field">
+<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> <?php echo $info['attribute_html'] ?>>
     <?php if ($_element->getType()=='hidden'): ?>
     <td colspan="3" class="hidden"><?php echo trim($_element->getElementHtml()) ?></td>
     <?php else: ?>

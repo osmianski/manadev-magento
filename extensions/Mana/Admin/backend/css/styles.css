@@ -59,3 +59,7 @@ td div.input-image { margin:  0 auto; }
     text-transform: uppercase;
     color: #306375;
 }
+
+#catalog-wysiwyg-editor.m-editor .textarea {
+    width: 600px !important;
+}
