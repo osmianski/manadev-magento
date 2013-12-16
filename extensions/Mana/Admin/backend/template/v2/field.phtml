@@ -29,10 +29,15 @@ $this->checkFieldDisable();
         <?php endif ?>
     </td>
     <td class="value use-default">
-    	<?php if ($this->getDisplayUseDefault()) : ?>
-        <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
-        <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
-        <?php endif; ?>
+        <ul>
+        	<?php if ($this->getDisplayUseDefault()) : ?>
+                <li>
+                    <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
+                    <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
+                </li>
+            <?php endif; ?>
+            <?php echo trim($_element->getUseDefaultHtml()) ?>
+        </ul>
     </td>
     <?php endif; ?>
 </tr>

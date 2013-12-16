@@ -60,6 +60,16 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'image', 'image', array(
+            'label' => $this->__('Image'),
+            'title' => $this->__('Image'),
+            'name' => 'image',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_other', array(
             'title' => $this->__('Other Settings'),
             'legend' => $this->__('Other Settings'),

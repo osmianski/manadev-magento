@@ -67,5 +67,12 @@ class Mana_Admin_Controller_V2_Controller extends Mage_Adminhtml_Controller_Acti
     public function getSessionSingleton() {
         return Mage::getSingleton('adminhtml/session');
     }
+
+    /**
+     * @return Mana_Core_Helper_Files
+     */
+    public function fileHelper() {
+        return Mage::helper('mana_core/files');
+    }
     #endregion
 }

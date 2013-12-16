@@ -228,7 +228,7 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
         }
 
         // check uniqueness
-        if ($model->attributeIdsExists()) {
+        if ($this->adminHelper()->isGlobal() && !$model->getId() && $model->attributeIdsExists()) {
             throw new Mage_Core_Exception($this->__('Attribute page based on specified attribute(s) already exists.'));
         }
 
@@ -260,6 +260,24 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
                 $model->setData($key, null);
             }
         }
+
+        // process image fields
+        foreach (array('image', 'option_page_image') as $key) {
+            if ($this->coreDbHelper()->isModelContainsCustomSetting($model, $key) &&
+                ($relativeUrl = $model->getData($key)))
+            {
+                if ($sourcePath = $this->fileHelper()->getFilename($relativeUrl, 'temp/image')) {
+                    $targetPath = $this->fileHelper()->getFilename($relativeUrl, 'image', true);
+                    if (file_exists($targetPath)) {
+                        unlink($targetPath);
+                    }
+                    copy($sourcePath, $targetPath);
+                    unlink($sourcePath);
+                }
+
+            }
+        }
+
         // validate if all required data is entered and makes sense
         $model->validate();
     }
@@ -286,4 +304,5 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
         }
         $this->_redirect('*/*/');
     }
+
 }

@@ -34,6 +34,21 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'edit_model' => $this->getEditModel(),
         ));
 
+        $fieldset = $this->addFieldset($form, 'mfs_option_content', array(
+            'title' => $this->__('Content'),
+            'legend' => $this->__('Content'),
+        ));
+
+        $this->addField($fieldset, 'option_page_image', 'image', array(
+            'label' => $this->__('Image'),
+            'title' => $this->__('Image'),
+            'name' => 'option_page_image',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_option_other', array(
             'title' => $this->__('Other Settings'),
             'legend' => $this->__('Other Settings'),

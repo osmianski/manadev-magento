@@ -60,6 +60,7 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
         $fieldset->setRenderer($this->getFieldsetRenderer());
         $fieldset->addType('select_text', 'Mana_Admin_Block_V2_Form_Field_SelectText');
         $fieldset->addType('wysiwyg', 'Mana_Admin_Block_V2_Form_Field_Wysiwyg');
+        $fieldset->addType('image', 'Mana_Admin_Block_V2_Form_Field_Image');
 
         return $fieldset;
     }

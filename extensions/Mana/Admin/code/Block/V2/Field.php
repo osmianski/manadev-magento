@@ -33,6 +33,9 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
         if ($element instanceof Mana_Admin_Block_V2_Form_Field_Wysiwyg) {
             $block = array('type' => 'Mana/Admin/Field/Wysiwyg');
         }
+        elseif ($element instanceof Mana_Admin_Block_V2_Form_Field_Image) {
+            $block = array('type' => 'Mana/Admin/Field/Image');
+        }
         elseif ($element instanceof Varien_Data_Form_Element_Multiselect) {
             $block = array('type' => 'Mana/Admin/Field/MultiSelect');
         }

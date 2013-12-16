@@ -74,6 +74,7 @@ examples on what kind of actions can be applied to referenced blocks.
     <mana_admin2>
         <update handle="jquery_core"/>
 		<reference name="head">
+            <action method="addJs"><script>jquery/fileuploader.js</script></action>
             <action method="addJs"><script>mana/admin.js</script></action>
 			<action method="addCss"><stylesheet>css/mana_admin.css</stylesheet></action>
         </reference>

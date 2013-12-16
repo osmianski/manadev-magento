@@ -568,6 +568,11 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                 field.setValue(this.getJsonData(attributeName, jsonFieldName));
             }
         },
+        updateImageFromJson: function (fieldName, attributeName, jsonFieldName) {
+            this.updateFromJson(fieldName, attributeName, jsonFieldName);
+            var field = this.getField(fieldName);
+            field.setImage();
+        },
         _afterSave: function () {
         },
         save: function(callback) {
@@ -914,6 +919,98 @@ function($, $p, TextArea, urlTemplate, config) {
     });
 });
 
+Mana.define('Mana/Admin/Field/Image', ['jquery', 'Mana/Admin/Field/Text', 'singleton:Mana/Core/Config'],
+function($, Text, config) {
+    return Text.extend('Mana/Admin/Field/Text', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _remove() {
+                self.remove();
+            }
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.updateButtonsAndImage();
+                    this._addUploader = this._createUploader(this.$addButton());
+                    this._changeUploader = this._createUploader(this.$changeButton());
+                    this.$removeButton().on('click', _remove);
+                })
+                .on('unbind', this, function () {
+                    delete this._addUploader;
+                    delete this._changeUploader;
+                    this.$removeButton().off('click', _remove);
+                });
+        },
+        _createUploader: function($button) {
+            var self = this;
+            // file uploader initialization
+            // the following shows the button in specified element with file upload behavior on click
+            return new qq.FileUploader({
+                // pass the dom node (ex. $(selector)[0] for jQuery users)
+                element: $button[0],
+                // path to server-side upload script
+                action: config.getData("url.upload"),
+                params: { type: 'image', form_key: FORM_KEY },
+                // when upload complete we should update image in grid
+                onComplete: function(id, fileName, responseJSON){
+                    if (responseJSON.relativeUrl) {
+                        self.$image().attr('src', responseJSON.url);
+                        $button.val('');
+                        self.setValue(responseJSON.relativeUrl);
+                    }
+                }
+            });
+        },
+        setImage: function() {
+            this.$image().attr('src', config.getData("url.imageBase") + '/' + this.getValue());
+        },
+        $addButton: function() {
+            return this.$().find('.add.m-button');
+        },
+        $changeButton: function() {
+            return this.$().find('.change.m-button');
+        },
+        $removeButton: function() {
+            return this.$().find('.delete.m-button');
+        },
+        $image: function() {
+            return this.$().find('img');
+        },
+        changed: function() {
+            this._super();
+            this.updateButtonsAndImage();
+        },
+        remove: function() {
+            this.setValue('');
+        },
+        updateButtonsAndImage: function() {
+            if (this.$field().val()) {
+                this.$image().show();
+                this.$addButton().hide();
+                if (this.useDefault()) {
+                    this.$changeButton().hide();
+                    this.$removeButton().hide();
+                }
+                else {
+                    this.$changeButton().show();
+                    this.$removeButton().show();
+                }
+            }
+            else {
+                this.$image().hide();
+                if (this.useDefault()) {
+                    this.$addButton().hide();
+                }
+                else {
+                    this.$addButton().show();
+                }
+                this.$changeButton().hide();
+                this.$removeButton().hide();
+            }
+        }
+    });
+});
 
 Mana.define('Mana/Admin/Field/MultiSelect', ['jquery', 'Mana/Admin/Field/Select'], function($, Select) {
     return Select.extend('Mana/Admin/Field/MultiSelect', {

@@ -246,6 +246,7 @@ function ($, TabContainer, layout, aggregate, template)
                 .on('load', this, function () {
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
+                    this.getField('image').on('change', this, this.imageChange);
                     this.getField('is_active').on('change', this, this.isActiveChange);
                     this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
 
@@ -281,6 +282,7 @@ function ($, TabContainer, layout, aggregate, template)
                 .on('unload', this, function () {
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
+                    this.getField('image').off('change', this, this.imageChange);
                     this.getField('is_active').off('change', this, this.isActiveChange);
                     this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
 
@@ -297,6 +299,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').off('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
 
+                    this.getField('option_page_image').off('change', this, this.optionPageImageChange);
                     this.getField('option_page_is_active').off('change', this, this.optionPageIsActiveChange);
                     this.getField('option_page_include_in_menu').off('change', this, this.optionPageIncludeInMenuChange);
 
@@ -319,6 +322,9 @@ function ($, TabContainer, layout, aggregate, template)
         },
         descriptionChange: function() {
             this.updateDescription();
+        },
+        imageChange: function() {
+            this.updateImageFromJson('image', 'global');
         },
         isActiveChange: function() {
             this.updateFromJson('is_active', 'global');
@@ -358,6 +364,9 @@ function ($, TabContainer, layout, aggregate, template)
         },
         customLayoutXmlChange: function() {
             this.updateFromJson('custom_layout_xml', 'global');
+        },
+        optionPageImageChange: function() {
+            this.updateImageFromJson('option_page_image', 'global');
         },
         optionPageIsActiveChange: function() {
             this.updateFromJson('option_page_is_active', 'global');

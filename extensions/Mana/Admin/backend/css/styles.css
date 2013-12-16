@@ -21,7 +21,8 @@ tr.even .m-helper-host { background: white; }
 .m-button.delete:hover { background-image:url(../images/cancel_btn_over_bg.gif); }
 .m-button.delete:active { background-image:url(../images/cancel_btn_active_bg.gif); background-color:#e0612f; }
 .m-button.delete span { background-image:url(../images/cancel_btn_icon.gif); padding-left:20px; }
-.mfi-default { display: inline-block; }
+.use-default > ul > li, .mfi-default { margin: 0 !important; display: inline-block; }
+.use-default > ul > li.m-button { top: 4px; position: relative; }
 .m-hidden { display: none; }
 .ct-color, .ct-image { cursor: pointer; }
 
@@ -50,6 +51,7 @@ td div.input-color { margin:  0 auto; }
 
 /* IMAGE PICKER*/
 td div.input-image { margin:  0 auto; }
+.columns .form-list td.value img { max-width: 280px; }
 
 .tab-group {
     border-top: 1px solid #849ba3;
