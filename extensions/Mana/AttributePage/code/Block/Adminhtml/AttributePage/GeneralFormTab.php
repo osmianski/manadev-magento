@@ -10,6 +10,13 @@
  *
  */
 class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralFormTab extends Mana_Admin_Block_V2_Tab  {
+    protected function _prepareLayout() {
+        parent::_prepareLayout();
+        if ($this->getFlatModel()->getId()) {
+            $this->setData('active', true);
+        }
+    }
+
     public function getTitle() {
         return $this->__('General');
     }
@@ -25,4 +32,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralFormTab extends Ma
             array('ajax' => 1)
         );
     }
+    #region Dependencies
+    /**
+     * @return Mana_AttributePage_Model_AttributePage_Abstract
+     */
+    public function getFlatModel() {
+        return Mage::registry('m_flat_model');
+    }
+    #endregion
 }

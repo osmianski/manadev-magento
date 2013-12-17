@@ -560,12 +560,26 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
             return this._fields[name];
         },
         updateFromJson: function(fieldName, attributeName, jsonFieldName) {
+            var defaults = core.isString(attributeName) ? [[attributeName, jsonFieldName]] : attributeName;
             if (jsonFieldName === undefined) {
                 jsonFieldName = fieldName;
             }
             var field = this.getField(fieldName);
+            var self = this;
             if (field.useDefault()) {
-                field.setValue(this.getJsonData(attributeName, jsonFieldName));
+                $.each(defaults, function(i, rule) {
+                    if (rule[1] === undefined) {
+                        rule[1] = fieldName;
+                    }
+                    if (rule.length < 3 || self.getJsonData(rule[2], rule[1])) {
+                        field.setValue(self.getJsonData(rule[0], rule[1]));
+                        return false; // break
+                    }
+                    else {
+                        return true; // continue
+                    }
+                });
+
             }
         },
         updateImageFromJson: function (fieldName, attributeName, jsonFieldName) {
@@ -657,6 +671,9 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Bloc
         $useDefault: function () {
             return this.$().find('td.use-default input.m-default');
         },
+        $label: function () {
+            return this.$().find('td.label label');
+        },
         $form: function() {
             return $(this.$().parents('form')[0]);
         },
@@ -682,6 +699,9 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Bloc
         },
         getName: function() {
             return this.$()[0].id.substr(this.$form()[0].id.length + '_tr_'.length);
+        },
+        getLabel: function() {
+            return this.$label().text().trim();
         },
         getValue: function() {
             throw 'Not implemented';
@@ -748,6 +768,19 @@ Mana.define('Mana/Admin/Field/Select', ['jquery', 'Mana/Admin/Field'], function(
             this.$field()
                 .val(value)
                 .trigger('change');
+        }
+    });
+});
+Mana.define('Mana/Admin/Field/SelectText', ['jquery', 'Mana/Admin/Field'], function($, Field) {
+    return Field.extend('Mana/Admin/Field/SelectText', {
+        $span: function() {
+            return this.$().find('strong, span');
+        },
+        getValue: function() {
+            return this.$span().data('value');
+        },
+        getText: function () {
+            return this.$span().text();
         }
     });
 });
@@ -1012,13 +1045,32 @@ function($, Text, config) {
     });
 });
 
-Mana.define('Mana/Admin/Field/MultiSelect', ['jquery', 'Mana/Admin/Field/Select'], function($, Select) {
+Mana.define('Mana/Admin/Field/MultiSelect', ['jquery', 'Mana/Admin/Field/Select', 'singleton:Mana/Core'],
+function($, Select, core) {
     return Select.extend('Mana/Admin/Field/MultiSelect', {
+        setValue: function(value) {
+            if (core.isString(value)) {
+                value = value.split(',');
+            }
+            this._super(value);
+        }
     });
 });
 
 Mana.define('Mana/Admin/Field/Date', ['jquery', 'Mana/Admin/Field/Text'], function($, Text) {
     return Text.extend('Mana/Admin/Field/Date', {
+        $picker: function() {
+            return this.$().find('img');
+        },
+        changed: function() {
+            this._super();
+            if (this.useDefault()) {
+                this.$picker().hide();
+            }
+            else {
+                this.$picker().show();
+            }
+        }
     });
 });
 
@@ -1055,15 +1107,23 @@ Mana.define('Mana/Admin/Expression', ['jquery', 'singleton:Mana/Core/Config'], f
         }
     });
 });
-Mana.define('Mana/Admin/Aggregate', ['jquery', 'singleton:Mana/Admin/Expression'],
-function ($, expression, undefined) {
+Mana.define('Mana/Admin/Aggregate', ['jquery', 'singleton:Mana/Admin/Expression', 'singleton:Mana/Core'],
+function ($, expression, core, undefined) {
     return Mana.Object.extend('Mana/Admin/Aggregate', {
-        expr: function(fields, expr, count) {
+        expr: function(fields, expr, count, func) {
             var result = [];
             for (var i = 0; i < count; i++) {
                 var field = expr.replace(/X/g, i);
-                if (fields[field].getValue()) {
-                    result.push(fields[field].getText());
+                if (fields[field] !== undefined && fields[field].getValue()) {
+                    if (func === 'getText') {
+                        result.push(fields[field].getText());
+                    }
+                    else if (func === 'getLabel') {
+                        result.push(fields[field].getLabel());
+                    }
+                    else {
+                        result.push(fields[field].getText());
+                    }
                 }
             }
             return result;
@@ -1082,6 +1142,29 @@ function ($, expression, undefined) {
                 expr[i] = expression.seoify(expr[i]);
             });
             return expr;
+        },
+        concat: function() {
+            var result = [];
+            var count = 0;
+            $.each(arguments, function(argIndex, arg) {
+                var length = core.isString(arg) ? 1 : arg.length;
+                if (length > count) {
+                    count = length;
+                }
+            });
+            for (var i = 0; i < count; i++) {
+                var value = '';
+                $.each(arguments, function(argIndex, arg) {
+                    if (core.isString(arg)) {
+                        value += arg;
+                    }
+                    else if (i < arg.length) {
+                        value += arg[i];
+                    }
+                });
+                result.push(value);
+            }
+            return result;
         }
     });
 });

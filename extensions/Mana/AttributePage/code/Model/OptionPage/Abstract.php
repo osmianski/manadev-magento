@@ -29,4 +29,104 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_META_TITLE = 16;
     const DM_META_KEYWORDS = 17;
     const DM_META_DESCRIPTION = 18;
+
+    public function validate() {
+        $t = Mage::helper('mana_attributepage');
+        $errors = array();
+
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_TITLE) &&
+            !trim($this->getData('title')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Title'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DESCRIPTION) &&
+            !trim($this->getData('description')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Description'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_URL_KEY) &&
+            !trim($this->getData('url_key')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('URL Key'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_META_TITLE) &&
+            !trim($this->getData('meta_title')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Page Title'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_AVAILABLE_SORT_BY) &&
+            !trim($this->getData('available_sort_by')))
+        {
+            $errors[] = $t->__('Please choose at least one option in %s field', $t->__('Available Sort By'));
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DEFAULT_SORT_BY)) {
+            if ($this->adminHelper()->isGlobal()) {
+                if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_AVAILABLE_SORT_BY)) {
+                    if (!in_array($this->getData('default_sort_by'), explode(',', $this->getData('available_sort_by')))) {
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                    }
+                }
+                else {
+                    $attributePage = Mage::registry('m_attribute_page');
+                    if (!in_array($this->getData('default_sort_by'), explode(',', $attributePage->getData('option_page_available_sort_by')))) {
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                    }
+                }
+            }
+            else {
+                $global = Mage::registry('m_global_flat_model');
+                if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_AVAILABLE_SORT_BY)) {
+                    if (!in_array($this->getData('default_sort_by'), explode(',', $this->getData('available_sort_by')))) {
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                    }
+                }
+                elseif ($this->dbHelper()->isModelContainsCustomSetting($global, self::DM_AVAILABLE_SORT_BY)) {
+                    if (!in_array($this->getData('default_sort_by'), explode(',', $global->getData('available_sort_by')))) {
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                    }
+                }
+                else {
+                    $attributePage = Mage::registry('m_attribute_page');
+                    if (!in_array($this->getData('default_sort_by'), explode(',', $attributePage->getData('option_page_available_sort_by')))) {
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                    }
+                }
+            }
+        }
+        if (count($errors)) {
+			throw new Mana_Core_Exception_Validation($errors);
+        }
+    }
+    /**
+     * Retrieve model resource
+     *
+     * @return Mana_AttributePage_Resource_OptionPage_Abstract
+     */
+    public function getResource() {
+        return parent::getResource();
+    }
+
+    #region Dependencies
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+
+    #endregion
 }

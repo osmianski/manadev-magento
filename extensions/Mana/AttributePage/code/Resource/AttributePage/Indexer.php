@@ -127,6 +127,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         if (!isset($options['attribute_id']) &&
             !isset($options['attribute_page_global_custom_settings_id']) &&
             !isset($options['attribute_page_global_id']) &&
+            !isset($options['store_id']) &&
             empty($options['reindex_all'])
         )
         {

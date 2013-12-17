@@ -29,6 +29,7 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
 
         /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
         $attributePage = Mage::getModel('mana_attributepage/attributePage_store');
+        $attributePage->setData('store_id', Mage::app()->getStore()->getId());
         $attributePage->load($attributePageId);
 
         if (!$attributePage->canShow()) {

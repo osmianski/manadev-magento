@@ -59,6 +59,43 @@
                         </last_separator>
                     </fields>
                 </attribute_page_title>
+                <option_page_title translate="label">
+                    <label>Option Page Titles</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template translate="label comment">
+                            <label>Template</label>
+                            <comment>Allowed variable is {{option_labels}} which adds labels of all selected options separated as specified below</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                        <separator translate="label comment">
+                            <label>Separated By</label>
+                            <comment>Option labels are separated by this separator</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </separator>
+                        <last_separator translate="label comment">
+                            <label>Last Label Separated By</label>
+                            <comment>If not empty, last option label is separated by this separator</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </last_separator>
+                    </fields>
+                </option_page_title>
             </groups>
         </mana_attributepage>
     </sections>

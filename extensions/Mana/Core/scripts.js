@@ -1239,7 +1239,7 @@ function($, core, layout, json, undefined) {
             if (this._json[attributeName] === undefined) {
                 this._json[attributeName] = json.decodeAttribute(this.$().data(attributeName));
             }
-            return this._json[attributeName][fieldName];
+            return fieldName === undefined ? this._json[attributeName] : this._json[attributeName][fieldName];
         }
     });
 });

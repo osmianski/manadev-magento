@@ -14,6 +14,6 @@ class Mana_AttributePage_Resource_OptionPage_GlobalCustomSettings extends Mana_A
      * Resource initialization
      */
     protected function _construct() {
-        $this->_init(Mana_AttributePage_Model_OptionPage_Global::ENTITY, 'id');
+        $this->_init(Mana_AttributePage_Model_OptionPage_GlobalCustomSettings::ENTITY, 'id');
     }
 }

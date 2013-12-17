@@ -91,6 +91,13 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
     }
 
     /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
      * @return Mana_Db_Helper_Data
      */
     public function dbHelper() {

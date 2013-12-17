@@ -15,4 +15,23 @@ class Mana_AttributePage_Model_OptionPage_StoreCustomSettings extends Mana_Attri
     protected function _construct() {
         $this->_init(self::ENTITY);
     }
+
+    public function afterCommitCallback() {
+        parent::afterCommitCallback();
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($this, self::ENTITY,
+                Mage_Index_Model_Event::TYPE_SAVE);
+        }
+        return $this;
+    }
+
+    protected function _afterDeleteCommit() {
+        parent::_afterDeleteCommit();
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($this, self::ENTITY,
+                Mage_Index_Model_Event::TYPE_DELETE);
+        }
+        return $this;
+    }
+
 }

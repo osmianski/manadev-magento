@@ -11,7 +11,15 @@
  */
 class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Resource_AttributeUrlIndexer {
     protected $_matchedEntities = array(
-        // inherited
+        Mage_Core_Model_Store::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        'mana_seo/schema/global' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
+        'mana_seo/schema/store' => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+        ),
         Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE
         ),
@@ -21,7 +29,13 @@ class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Reso
         'mana_filters/filter2_store' => array(
             Mage_Index_Model_Event::TYPE_SAVE
         ),
-
+        Mana_AttributePage_Model_AttributePage_GlobalCustomSettings::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE
+        ),
+        Mana_AttributePage_Model_AttributePage_StoreCustomSettings::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+            Mage_Index_Model_Event::TYPE_DELETE
+        ),
     );
 
     /**
@@ -29,13 +43,38 @@ class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Reso
      * @param Mage_Index_Model_Event $event
      */
     public function register($indexer, $event) {
-        parent::register($indexer, $event);
-
-        if ($event->getEntity() == 'mana_attributepage/page/global') {
-            $event->addNewData('attribute_page_global_id', $event->getData('data_object')->getId());
+        if ($event->getEntity() == Mage_Core_Model_Store::ENTITY) {
+            if ($event->getData('data_object')->isObjectNew()) {
+                $event->addNewData('store_id', $event->getData('data_object')->getId());
+            }
         }
-        if ($event->getEntity() == 'mana_attributepage/page/store') {
-            $event->addNewData('attribute_page_store_id', $event->getData('data_object')->getId());
+        elseif ($event->getEntity() == 'mana_seo/schema/global') {
+                $event->addNewData('reindex_all', true);
+        }
+        elseif ($event->getEntity() == 'mana_seo/schema/store') {
+            $event->addNewData('reindex_all', true);
+            $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
+        }
+        elseif ($event->getEntity() == Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY) {
+            $event->addNewData('attribute_id', $event->getData('data_object')->getId());
+        }
+        elseif ($event->getEntity() == 'mana_filters/filter2') {
+            if ($attributeId = $this->getFilterResource()->getAttributeId($event->getData('data_object'))) {
+                $event->addNewData('attribute_id', $attributeId);
+            }
+        }
+        elseif ($event->getEntity() == 'mana_filters/filter2_store') {
+            if ($attributeId = $this->getFilterStoreResource()->getAttributeId($event->getData('data_object'))) {
+                $event->addNewData('attribute_id', $attributeId);
+                $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
+            }
+        }
+        elseif ($event->getEntity() == Mana_AttributePage_Model_AttributePage_GlobalCustomSettings::ENTITY) {
+            $event->addNewData('attribute_page_global_custom_settings_id', $event->getData('data_object')->getId());
+        }
+        elseif ($event->getEntity() == Mana_AttributePage_Model_AttributePage_StoreCustomSettings::ENTITY) {
+            $event->addNewData('attribute_page_global_id', $event->getData('data_object')->getData('attribute_page_global_id'));
+            $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
         }
     }
 
@@ -45,13 +84,18 @@ class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Reso
      * @param array $options
      */
     public function process($indexer, $schema, $options) {
-        if (!isset($options['attribute_page_global_id']) && !isset($options['attribute_page_store_id']) &&
-            !isset($options['option_page_global_id']) && !isset($options['option_page_store_id']) &&
-            !isset($options['attribute_id']) && !isset($options['store_id']) &&
-            !isset($options['schema_global_id']) && !isset($options['schema_store_id']) && !$options['reindex_all']
-        ) {
+        if (!isset($options['attribute_id']) &&
+            !isset($options['attribute_page_global_id']) &&
+            !isset($options['attribute_page_global_custom_settings_id']) &&
+            !isset($options['schema_global_id']) &&
+            !isset($options['schema_store_id']) &&
+            !isset($options['store_id']) &&
+            empty($options['reindex_all'])
+        )
+        {
             return;
         }
+
         $db = $this->_getWriteAdapter();
 
         $fields = array(
@@ -90,8 +134,38 @@ class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Reso
         $this->logger()->logUrlIndexer(json_encode($options));
         $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
 
+        $attributePageIds = false;
+        if (isset($options['attribute_id'])) {
+            $attributePageIds = $this->getAttributePageResource()->getIdsByAttributeId(
+                $options['attribute_id']);
+        }
+        elseif (isset($options['attribute_page_global_id'])) {
+            $attributePageIds = $this->getAttributePageResource()->getIdsByGlobalCustomSettingsId(
+                $options['attribute_page_global_id']);
+        }
+        elseif (isset($options['attribute_page_global_custom_settings_id'])) {
+            $attributePageIds = $this->getAttributePageResource()->getIdsByGlobalId(
+                $options['attribute_page_global_custom_settings_id']);
+        }
+        if ($attributePageIds !== false) {
+            if (!count($attributePageIds)) {
+                return;
+            }
+            $select->where('`ap`.`id` IN (?)', $attributePageIds);
+            $obsoleteCondition .= ' AND (`attribute_page_id` IN (' . $db->quote($attributePageIds) . '))';
+        }
+
         // run the statement
         $this->makeAllRowsObsolete($options, $obsoleteCondition);
         $db->exec($sql);
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_AttributePage_Resource_AttributePage_Store
+     */
+    public function getAttributePageResource() {
+        return Mage::getResourceSingleton('mana_attributepage/attributePage_store');
+    }
+    #endregion
 }

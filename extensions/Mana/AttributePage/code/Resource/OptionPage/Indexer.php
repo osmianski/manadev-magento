@@ -17,17 +17,27 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $this->_setResource('mana_attributepage');
     }
 
-    public function process($params) {
-        $this->_calculateFinalGlobalSettings($params);
-        $this->_calculateFinalStoreLevelSettings($params);
+    public function process($options) {
+        $this->_calculateFinalGlobalSettings($options);
+        $this->_calculateFinalStoreLevelSettings($options);
     }
 
     public function reindexAll() {
-        $this->_calculateFinalGlobalSettings();
-        $this->_calculateFinalStoreLevelSettings();
+        $this->process(array('reindex_all' => true));
     }
 
-    protected function _calculateFinalGlobalSettings($params = array()) {
+    protected function _calculateFinalGlobalSettings($options) {
+        if (isset($options['store_id']) ||
+            !isset($options['attribute_id']) &&
+            !isset($options['attribute_page_global_custom_settings_id']) &&
+            !isset($options['attribute_page_global_id']) &&
+            !isset($options['option_page_global_custom_settings_id']) &&
+            empty($options['reindex_all'])
+        )
+        {
+            return;
+        }
+
         $db = $this->_getWriteAdapter();
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
@@ -38,6 +48,13 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
             ? $this->seoHelper()->seoifyExpr("`X`")
             : $dbHelper->seoifyExpr("`X`");
         $titleExpr = $aggregate->expr("`vgX`.`value`", $attrCount);
+
+        $title = array(
+            'template' => Mage::getStoreConfig('mana_attributepage/option_page_title/template'),
+            'separator' => Mage::getStoreConfig('mana_attributepage/option_page_title/separator'),
+            'last_separator' => Mage::getStoreConfig('mana_attributepage/option_page_title/last_separator'),
+        );
+
         $attributeTitleExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
             ? $aggregate->expr("COALESCE(`fX`.`name`, `aX`.`frontend_label`)", $attrCount)
             : $aggregate->expr("`aX`.`frontend_label`", $attrCount);
@@ -64,7 +81,11 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
             )",
             'title' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_TITLE)},
                 `op_gcs`.`title`,
-                CONCAT({$aggregate->glue($titleExpr, ' ')}, '{$t->__(' Products')}')
+                {$this->templateHelper()->dbConcat($this->templateHelper()->parse($title['template']), array(
+                    'option_labels' => $title['last_separator']
+                        ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
+                        : $aggregate->glue($titleExpr, $title['last_separator'])
+                ))}
             )",
             'image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
                 `op_gcs`.`image`,
@@ -139,7 +160,7 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $fields['meta_description'] =
             "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_META_DESCRIPTION)},
                 `op_gcs`.`meta_description`,
-                {$fields['description']}
+                {$fields['title']}
             )";
 
         $select = $db->select();
@@ -161,13 +182,34 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $select->joinLeft(array('op_gcs' => $this->getTable('mana_attributepage/optionPage_globalCustomSettings')),
             "`op_gcs`.`attribute_page_global_id` = `ap_g`.`id`
             AND `op_gcs`.`option_id_0` = `o0`.`option_id`
-            AND `op_gcs`.`option_id_1` = `o1`.`option_id`
-            AND `op_gcs`.`option_id_2` = `o2`.`option_id`
-            AND `op_gcs`.`option_id_3` = `o3`.`option_id`
-            AND `op_gcs`.`option_id_4` = `o4`.`option_id`", null);
+            AND (`op_gcs`.`option_id_1` = `o1`.`option_id` OR `op_gcs`.`option_id_1` IS NULL)
+            AND (`op_gcs`.`option_id_2` = `o2`.`option_id` OR `op_gcs`.`option_id_2` IS NULL)
+            AND (`op_gcs`.`option_id_3` = `o3`.`option_id` OR `op_gcs`.`option_id_3` IS NULL)
+            AND (`op_gcs`.`option_id_4` = `o4`.`option_id` OR `op_gcs`.`option_id_4` IS NULL)", null);
 
         $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
 
+        if (isset($options['attribute_id'])) {
+            $select->where(implode(' OR ', array(
+                $db->quoteInto("(`ap_gcs`.`attribute_id_0` = ?)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_1` = ? OR `ap_gcs`.`attribute_id_1` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_2` = ? OR `ap_gcs`.`attribute_id_2` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_3` = ? OR `ap_gcs`.`attribute_id_3` IS NULL)", $options['attribute_id']),
+                $db->quoteInto("(`ap_gcs`.`attribute_id_4` = ? OR `ap_gcs`.`attribute_id_4` IS NULL)", $options['attribute_id']),
+            )));
+        }
+
+        if (isset($options['attribute_page_global_custom_settings_id'])) {
+            $select->where("`ap_gcs`.`id` = ?", $options['attribute_page_global_custom_settings_id']);
+        }
+
+        if (isset($options['option_page_global_custom_settings_id'])) {
+            $select->where("`op_gcs`.`id` = ?", $options['option_page_global_custom_settings_id']);
+        }
+
+        if (isset($options['attribute_page_global_id'])) {
+            $select->where("`ap_g`.`id` = ?", $options['attribute_page_global_id']);
+        }
         // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
         $selectSql = $select->__toString();
         $sql = $select->insertFromSelect($this->getTable('mana_attributepage/optionPage_global'), array_keys($fields));
@@ -176,7 +218,19 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $db->exec($sql);
     }
 
-    protected function _calculateFinalStoreLevelSettings($params = array()) {
+    protected function _calculateFinalStoreLevelSettings($options) {
+        if (!isset($options['attribute_id']) &&
+            !isset($options['attribute_page_global_custom_settings_id']) &&
+            !isset($options['attribute_page_global_id']) &&
+            !isset($options['option_page_global_custom_settings_id']) &&
+            !isset($options['option_page_global_id']) &&
+            !isset($options['store_id']) &&
+            empty($options['reindex_all'])
+        )
+        {
+            return;
+        }
+
         $db = $this->_getWriteAdapter();
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
@@ -185,6 +239,9 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
 
         foreach (Mage::app()->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
+            if (isset($options['store_id']) && $store->getId() != $options['store_id']) {
+                continue;
+            }
             $schema = $this->coreHelper()->isManadevSeoInstalled()
                 ? $this->seoHelper()->getActiveSchema($store->getId())
                 : false;
@@ -193,6 +250,11 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 : $dbHelper->seoifyExpr("`X`");
 
             $titleExpr = $aggregate->expr("COALESCE(`vsX`.`value`, `vgX`.`value`)", $attrCount);
+            $title = array(
+                'template' => Mage::getStoreConfig('mana_attributepage/option_page_title/template', $store),
+                'separator' => Mage::getStoreConfig('mana_attributepage/option_page_title/separator', $store),
+                'last_separator' => Mage::getStoreConfig('mana_attributepage/option_page_title/last_separator', $store),
+            );
             $attributeTitleExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
                 ? $aggregate->expr("COALESCE(`fsX`.`name`, `lX`.`value`, `aX`.`frontend_label`)", $attrCount)
                 : $aggregate->expr("COALESCE(`lX`.`value`, `aX`.`frontend_label`)", $attrCount);
@@ -219,7 +281,11 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                     `op_scs`.`title`,
                     IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_TITLE)},
                         `op_g`.`title`,
-                        CONCAT({$aggregate->glue($titleExpr, ' ')}, '{$t->__(' Products')}')
+                        {$this->templateHelper()->dbConcat($this->templateHelper()->parse($title['template']), array(
+                            'option_labels' => $title['last_separator']
+                                ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
+                                : $aggregate->glue($titleExpr, $title['last_separator'])
+                        ))}
                     )
                 )",
                 'image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
@@ -345,7 +411,7 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                     `op_scs`.`meta_description`,
                     IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_META_DESCRIPTION)},
                         `op_g`.`meta_description`,
-                        {$fields['description']}
+                        {$fields['title']}
                     )
                 )";
 
@@ -381,6 +447,32 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 $db->quoteInto("`vsX`.`option_id` = `oX`.`option_id` AND `vsX`.`store_id` = ?", $store->getId()), $attrCount);
 
             $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+
+            if (isset($options['attribute_id'])) {
+                $select->where(implode(' OR ', array(
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_0` = ?)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_1` = ? OR `ap_gcs`.`attribute_id_1` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_2` = ? OR `ap_gcs`.`attribute_id_2` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_3` = ? OR `ap_gcs`.`attribute_id_3` IS NULL)", $options['attribute_id']),
+                    $db->quoteInto("(`ap_gcs`.`attribute_id_4` = ? OR `ap_gcs`.`attribute_id_4` IS NULL)", $options['attribute_id']),
+                )));
+            }
+
+            if (isset($options['attribute_page_global_custom_settings_id'])) {
+                $select->where("`ap_gcs`.`id` = ?", $options['attribute_page_global_custom_settings_id']);
+            }
+
+            if (isset($options['attribute_page_global_id'])) {
+                $select->where("`ap_g`.`id` = ?", $options['attribute_page_global_id']);
+            }
+
+            if (isset($options['option_page_global_custom_settings_id'])) {
+                $select->where("`op_gcs`.`id` = ?", $options['option_page_global_custom_settings_id']);
+            }
+
+            if (isset($options['option_page_global_id'])) {
+                $select->where("`op_g`.`id` = ?", $options['option_page_global_id']);
+            }
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
             $selectSql = $select->__toString();

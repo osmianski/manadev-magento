@@ -30,6 +30,7 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
 
         /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
         $optionPage = Mage::getModel('mana_attributepage/optionPage_store');
+        $optionPage->setData('store_id', Mage::app()->getStore()->getId());
         $optionPage->load($optionPageId);
 
         if (!$optionPage->canShow()) {
@@ -45,7 +46,8 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
 
         /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
         $attributePage = Mage::getModel('mana_attributepage/attributePage_store');
-        $attributePage->loadByOptionPageStoreId($optionPage->getId());
+        $attributePage->setData('store_id', Mage::app()->getStore()->getId());
+        $attributePage->load($optionPage->getData('attribute_page_global_id'), 'attribute_page_global_id');
 
         Mage::register('current_attribute_page', $attributePage );
 

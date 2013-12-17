@@ -38,7 +38,14 @@ function ($, Container, json, undefined)
                 .on('load', this, function () {
                     this.updateAttributes();
                     this.updateTabs();
+                    if (this.getChild('view-option-pages')) this.getChild('view-option-pages').on('click', this, this.viewOptionPages);
+                })
+                .on('unload', this, function () {
+                    if (this.getChild('view-option-pages')) this.getChild('view-option-pages').off('click', this, this.viewOptionPages);
                 });
+        },
+        viewOptionPages: function() {
+            setLocation(this.getUrl('option-page-list'));
         },
         updateAttributes: function() {
             var lastIndex = -1;
@@ -319,6 +326,9 @@ function ($, TabContainer, layout, aggregate, template)
         },
         titleChange: function() {
             this.updateTitle();
+            this.updateDescription();
+            this.updateMetaTitle();
+            this.updateMetaDescription();
         },
         descriptionChange: function() {
             this.updateDescription();
@@ -472,6 +482,445 @@ function ($, TabContainer, layout, aggregate, template)
         updateMetaKeywords: function() {
             var field = this.getField('meta_keywords');
             var titleExpr = aggregate.expr(this._fields, 'attribute_id_X', this.getAttrCount());
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'meta_keywords')) {
+                    field.setValue(this.getJsonData('global', 'meta_keywords'));
+                }
+                else {
+                    field.setValue(aggregate.glue(titleExpr, ','));
+                }
+            }
+        }
+    });
+});
+
+Mana.define('Mana/AttributePage/OptionPage/TabContainer', ['jquery', 'Mana/Admin/Container',
+    'singleton:Mana/Core/Json'],
+function ($, Container, json, undefined)
+{
+    return Container.extend('Mana/AttributePage/OptionPage/TabContainer', {
+        getAttrCount: function() {
+            return 5;
+        },
+        getTitleTemplate: function() {
+            if (this._titleTemplate === undefined) {
+                this._titleTemplate = json.decodeAttribute(this.$().data('title-template'));
+            }
+            return this._titleTemplate;
+        }
+    });
+});
+
+Mana.define('Mana/AttributePage/OptionPage/TabContainer/Global', ['jquery', 'Mana/AttributePage/OptionPage/TabContainer',
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate', 'singleton:Mana/Core/StringTemplate'],
+function ($, TabContainer, layout, aggregate, template)
+{
+    return TabContainer.extend('Mana/AttributePage/OptionPage/TabContainer/Global', {
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.getField('title').on('change', this, this.titleChange);
+                    this.getField('description').on('change', this, this.descriptionChange);
+                    this.getField('image').on('change', this, this.imageChange);
+                    this.getField('is_active').on('change', this, this.isActiveChange);
+                    this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
+
+                    this.getField('url_key').on('change', this, this.urlKeyChange);
+                    this.getField('meta_title').on('change', this, this.metaTitleChange);
+                    this.getField('meta_description').on('change', this, this.metaDescriptionChange);
+                    this.getField('meta_keywords').on('change', this, this.metaKeywordsChange);
+
+                    this.getField('page_layout').on('change', this, this.pageLayoutChange);
+                    this.getField('layout_xml').on('change', this, this.layoutXmlChange);
+                    this.getField('custom_design_active_from').on('change', this, this.customDesignActiveFromChange);
+                    this.getField('custom_design_active_to').on('change', this, this.customDesignActiveToChange);
+                    this.getField('custom_design').on('change', this, this.customDesignChange);
+                    this.getField('custom_layout_xml').on('change', this, this.customLayoutXmlChange);
+
+                    this.getField('show_products').on('change', this, this.showProductsChange);
+                    this.getField('available_sort_by').on('change', this, this.availableSortByChange);
+                    this.getField('default_sort_by').on('change', this, this.defaultSortByChange);
+                    this.getField('price_step').on('change', this, this.priceStepChange);
+                })
+                .on('unload', this, function () {
+                    this.getField('title').off('change', this, this.titleChange);
+                    this.getField('description').off('change', this, this.descriptionChange);
+                    this.getField('image').off('change', this, this.imageChange);
+                    this.getField('is_active').off('change', this, this.isActiveChange);
+                    this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
+
+                    this.getField('url_key').off('change', this, this.urlKeyChange);
+                    this.getField('meta_title').off('change', this, this.metaTitleChange);
+                    this.getField('meta_description').off('change', this, this.metaDescriptionChange);
+                    this.getField('meta_keywords').off('change', this, this.metaKeywordsChange);
+
+                    this.getField('page_layout').off('change', this, this.pageLayoutChange);
+                    this.getField('layout_xml').off('change', this, this.layoutXmlChange);
+                    this.getField('custom_design_active_from').off('change', this, this.customDesignActiveFromChange);
+                    this.getField('custom_design_active_to').off('change', this, this.customDesignActiveToChange);
+                    this.getField('custom_design').off('change', this, this.customDesignChange);
+                    this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
+
+                    this.getField('show_products').off('change', this, this.showProductsChange);
+                    this.getField('available_sort_by').off('change', this, this.availableSortByChange);
+                    this.getField('default_sort_by').off('change', this, this.defaultSortByChange);
+                    this.getField('price_step').off('change', this, this.priceStepChange);
+                });
+        },
+        titleChange: function() {
+            this.updateTitle();
+            this.updateDescription();
+            this.updateMetaTitle();
+            this.updateMetaDescription();
+        },
+        descriptionChange: function () {
+            this.updateDescription();
+        },
+        imageChange: function () {
+            this.updateImageFromJson('image', 'attribute-page', 'option_page_image');
+        },
+        isActiveChange: function () {
+            this.updateFromJson('is_active', 'attribute-page', 'option_page_is_active');
+        },
+        includeInMenuChange: function () {
+            this.updateFromJson('include_in_menu', 'attribute-page', 'option_include_in_menu');
+        },
+        urlKeyChange: function () {
+            this.updateUrlKey();
+        },
+        metaTitleChange: function () {
+            this.updateMetaTitle();
+        },
+        metaDescriptionChange: function () {
+            this.updateMetaDescription();
+        },
+        metaKeywordsChange: function () {
+            this.updateMetaKeywords();
+        },
+        pageLayoutChange: function () {
+            this.updateFromJson('page_layout', 'attribute-page', 'option_page_page_layout');
+        },
+        layoutXmlChange: function () {
+            this.updateFromJson('layout_xml', 'attribute-page', 'option_page_layout_xml');
+        },
+        customDesignActiveFromChange: function () {
+            this.updateFromJson('custom_design_active_from', 'attribute-page', 'option_page_custom_design_active_from');
+        },
+        customDesignActiveToChange: function () {
+            this.updateFromJson('custom_design_active_to', 'attribute-page', 'option_page_custom_design_active_to');
+        },
+        customDesignChange: function () {
+            this.updateFromJson('custom_design', 'attribute-page', 'option_page_custom_design');
+        },
+        customLayoutXmlChange: function () {
+            this.updateFromJson('custom_layout_xml', 'attribute-page', 'option_page_custom_layout_xml');
+        },
+        showProductsChange: function () {
+            this.updateFromJson('show_products', 'attribute-page', 'option_page_show_products');
+        },
+        availableSortByChange: function () {
+            this.updateFromJson('available_sort_by', 'attribute-page', 'option_page_available_sort_by');
+        },
+        defaultSortByChange: function () {
+            this.updateFromJson('default_sort_by', 'attribute-page', 'option_page_default_sort_by');
+        },
+        priceStepChange: function () {
+            this.updateFromJson('price_step', 'attribute-page', 'option_page_price_step');
+        },
+        updateTitle: function() {
+            var field = this.getField('title');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
+            var title = this.getTitleTemplate();
+            if (field.useDefault()) {
+                field.setValue(template.concat(title['template'], {
+                    option_labels: title['last_separator']
+                        ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
+                        : aggregate.glue(titleExpr, title['last_separator'])
+                }));
+            }
+        },
+        updateDescription: function() {
+            var field = this.getField('description');
+            if (field.useDefault()) {
+                field.setValue(this.getField('title').getText());
+            }
+        },
+        updateUrlKey: function() {
+            var field = this.getField('url_key');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
+            var attrExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount(), 'getLabel');
+            if (field.useDefault()) {
+                if (parseInt(this.getJsonData('attribute-page', 'option_page_include_filter_name'))) {
+                    if (titleExpr.length == 1) {
+                        field.setValue(this.getJsonData('attribute-page', 'url_key') + '-' +
+                            aggregate.glue(aggregate.seoify(titleExpr), '-'));
+                    }
+                    else {
+                        field.setValue(aggregate.glue(aggregate.concat(
+                            aggregate.seoify(attrExpr), '-', aggregate.seoify(titleExpr)), '-'));
+                    }
+                }
+                else {
+                    field.setValue(aggregate.glue(aggregate.seoify(titleExpr), '-'));
+                }
+            }
+        },
+        updateMetaTitle: function() {
+            var field = this.getField('meta_title');
+            if (field.useDefault()) {
+                field.setValue(this.getField('title').getText());
+            }
+        },
+        updateMetaDescription: function() {
+            var field = this.getField('meta_description');
+            if (field.useDefault()) {
+                field.setValue(this.getField('title').getText());
+            }
+        },
+        updateMetaKeywords: function() {
+            var field = this.getField('meta_keywords');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
+            if (field.useDefault()) {
+                field.setValue(aggregate.glue(titleExpr, ','));
+            }
+        }
+    });
+});
+Mana.define('Mana/AttributePage/OptionPage/TabContainer/Store', ['jquery', 'Mana/AttributePage/OptionPage/TabContainer',
+    'singleton:Mana/Core/Layout', 'singleton:Mana/Admin/Aggregate', 'singleton:Mana/Core/StringTemplate'],
+function ($, TabContainer, layout, aggregate, template)
+{
+    return TabContainer.extend('Mana/AttributePage/OptionPage/TabContainer/Store', {
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.getField('title').on('change', this, this.titleChange);
+                    this.getField('description').on('change', this, this.descriptionChange);
+                    this.getField('image').on('change', this, this.imageChange);
+                    this.getField('is_active').on('change', this, this.isActiveChange);
+                    this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
+
+                    this.getField('url_key').on('change', this, this.urlKeyChange);
+                    this.getField('meta_title').on('change', this, this.metaTitleChange);
+                    this.getField('meta_description').on('change', this, this.metaDescriptionChange);
+                    this.getField('meta_keywords').on('change', this, this.metaKeywordsChange);
+
+                    this.getField('page_layout').on('change', this, this.pageLayoutChange);
+                    this.getField('layout_xml').on('change', this, this.layoutXmlChange);
+                    this.getField('custom_design_active_from').on('change', this, this.customDesignActiveFromChange);
+                    this.getField('custom_design_active_to').on('change', this, this.customDesignActiveToChange);
+                    this.getField('custom_design').on('change', this, this.customDesignChange);
+                    this.getField('custom_layout_xml').on('change', this, this.customLayoutXmlChange);
+
+                    this.getField('show_products').on('change', this, this.showProductsChange);
+                    this.getField('available_sort_by').on('change', this, this.availableSortByChange);
+                    this.getField('default_sort_by').on('change', this, this.defaultSortByChange);
+                    this.getField('price_step').on('change', this, this.priceStepChange);
+                })
+                .on('unload', this, function () {
+                    this.getField('title').off('change', this, this.titleChange);
+                    this.getField('description').off('change', this, this.descriptionChange);
+                    this.getField('image').off('change', this, this.imageChange);
+                    this.getField('is_active').off('change', this, this.isActiveChange);
+                    this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
+
+                    this.getField('url_key').off('change', this, this.urlKeyChange);
+                    this.getField('meta_title').off('change', this, this.metaTitleChange);
+                    this.getField('meta_description').off('change', this, this.metaDescriptionChange);
+                    this.getField('meta_keywords').off('change', this, this.metaKeywordsChange);
+
+                    this.getField('page_layout').off('change', this, this.pageLayoutChange);
+                    this.getField('layout_xml').off('change', this, this.layoutXmlChange);
+                    this.getField('custom_design_active_from').off('change', this, this.customDesignActiveFromChange);
+                    this.getField('custom_design_active_to').off('change', this, this.customDesignActiveToChange);
+                    this.getField('custom_design').off('change', this, this.customDesignChange);
+                    this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
+
+                    this.getField('show_products').off('change', this, this.showProductsChange);
+                    this.getField('available_sort_by').off('change', this, this.availableSortByChange);
+                    this.getField('default_sort_by').off('change', this, this.defaultSortByChange);
+                    this.getField('price_step').off('change', this, this.priceStepChange);
+                });
+        },
+        titleChange: function() {
+            this.updateTitle();
+            this.updateDescription();
+            this.updateMetaTitle();
+            this.updateMetaDescription();
+        },
+        descriptionChange: function () {
+            this.updateDescription();
+        },
+        imageChange: function () {
+            this.updateImageFromJson('image', [
+                ['global', 'image', 'global-is-custom'],
+                ['attribute-page', 'option_page_image']
+            ]);
+        },
+        isActiveChange: function () {
+            this.updateFromJson('is_active', [
+                ['global', 'is_active', 'global-is-custom'],
+                ['attribute-page', 'option_page_is_active']
+            ]);
+        },
+        includeInMenuChange: function () {
+            this.updateFromJson('include_in_menu', [
+                ['global', 'include_in_menu', 'global-is-custom'],
+                ['attribute-page', 'option_page_include_in_menu']
+            ]);
+        },
+        urlKeyChange: function () {
+            this.updateUrlKey();
+        },
+        metaTitleChange: function () {
+            this.updateMetaTitle();
+        },
+        metaDescriptionChange: function () {
+            this.updateMetaDescription();
+        },
+        metaKeywordsChange: function () {
+            this.updateMetaKeywords();
+        },
+        pageLayoutChange: function () {
+            this.updateFromJson('page_layout', [
+                ['global', 'page_layout', 'global-is-custom'],
+                ['attribute-page', 'option_page_page_layout']
+            ]);
+        },
+        layoutXmlChange: function () {
+            this.updateFromJson('layout_xml', [
+                ['global', 'layout_xml', 'global-is-custom'],
+                ['attribute-page', 'option_page_layout_xml']
+            ]);
+        },
+        customDesignActiveFromChange: function () {
+            this.updateFromJson('custom_design_active_from', [
+                ['global', 'custom_design_active_from', 'global-is-custom'],
+                ['attribute-page', 'option_page_custom_design_active_from']
+            ]);
+        },
+        customDesignActiveToChange: function () {
+            this.updateFromJson('custom_design_active_to', [
+                ['global', 'custom_design_active_to', 'global-is-custom'],
+                ['attribute-page', 'option_page_custom_design_active_to']
+            ]);
+        },
+        customDesignChange: function () {
+            this.updateFromJson('custom_design', [
+                ['global', 'custom_design', 'global-is-custom'],
+                ['attribute-page', 'option_page_custom_design']
+            ]);
+        },
+        customLayoutXmlChange: function () {
+            this.updateFromJson('custom_layout_xml', [
+                ['global', 'custom_layout_xml', 'global-is-custom'],
+                ['attribute-page', 'option_page_custom_layout_xml']
+            ]);
+        },
+        showProductsChange: function () {
+            this.updateFromJson('show_products', [
+                ['global', 'show_products', 'global-is-custom'],
+                ['attribute-page', 'option_page_show_products']
+            ]);
+        },
+        availableSortByChange: function () {
+            this.updateFromJson('available_sort_by', [
+                ['global', 'available_sort_by', 'global-is-custom'],
+                ['attribute-page', 'option_page_available_sort_by']
+            ]);
+        },
+        defaultSortByChange: function () {
+            this.updateFromJson('default_sort_by', [
+                ['global', 'default_sort_by', 'global-is-custom'],
+                ['attribute-page', 'option_page_default_sort_by']
+            ]);
+        },
+        priceStepChange: function () {
+            this.updateFromJson('price_step', [
+                ['global', 'price_step', 'global-is-custom'],
+                ['attribute-page', 'option_page_price_step']
+            ]);
+        },
+        updateTitle: function() {
+            var field = this.getField('title');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
+            var title = this.getTitleTemplate();
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'title')) {
+                    field.setValue(this.getJsonData('global', 'title'));
+                }
+                else {
+                    field.setValue(template.concat(title['template'], {
+                        option_labels: title['last_separator']
+                            ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
+                            : aggregate.glue(titleExpr, title['last_separator'])
+                    }));
+                }
+            }
+        },
+        updateDescription: function() {
+            var field = this.getField('description');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'description')) {
+                    field.setValue(this.getJsonData('global', 'description'));
+                }
+                else {
+                    field.setValue(this.getField('title').getText());
+                }
+            }
+        },
+        updateUrlKey: function() {
+            var field = this.getField('url_key');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
+            var attrExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount(), 'getLabel');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'url_key')) {
+                    field.setValue(this.getJsonData('global', 'url_key'));
+                }
+                else {
+                    if (parseInt(this.getJsonData('attribute-page', 'option_page_include_filter_name'))) {
+                        if (titleExpr.length == 1) {
+                            field.setValue(this.getJsonData('attribute-page', 'url_key') + '-' +
+                                aggregate.glue(aggregate.seoify(titleExpr), '-'));
+                        }
+                        else {
+                            field.setValue(aggregate.glue(aggregate.concat(
+                                aggregate.seoify(attrExpr), '-', aggregate.seoify(titleExpr)), '-'));
+                        }
+                    }
+                    else {
+                        field.setValue(aggregate.glue(aggregate.seoify(titleExpr), '-'));
+                    }
+                }
+            }
+        },
+        updateMetaTitle: function() {
+            var field = this.getField('meta_title');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'meta_title')) {
+                    field.setValue(this.getJsonData('global', 'meta_title'));
+                }
+                else {
+                    field.setValue(this.getField('title').getText());
+                }
+            }
+        },
+        updateMetaDescription: function() {
+            var field = this.getField('meta_description');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'meta_description')) {
+                    field.setValue(this.getJsonData('global', 'meta_description'));
+                }
+                else {
+                    field.setValue(this.getField('title').getText());
+                }
+            }
+        },
+        updateMetaKeywords: function() {
+            var field = this.getField('meta_keywords');
+            var titleExpr = aggregate.expr(this._fields, 'option_id_X', this.getAttrCount());
             if (field.useDefault()) {
                 if (this.getJsonData('global-is-custom', 'meta_keywords')) {
                     field.setValue(this.getJsonData('global', 'meta_keywords'));

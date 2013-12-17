@@ -65,8 +65,8 @@
                 </mana_option_page>
                 <mana_seo_url>
                     <sources>
-                        <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
                         <attribute_page><resource>mana_attributepage/attributePage_urlIndexer</resource></attribute_page>
+                        <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
                     </sources>
                     <depends>
                         <mana_attribute_page/>
@@ -152,6 +152,11 @@
                 <separator>, </separator>
                 <last_separator> and </last_separator>
             </attribute_page_title>
+            <option_page_title>
+                <template>{{option_labels}} Products</template>
+                <separator>, </separator>
+                <last_separator> and </last_separator>
+            </option_page_title>
         </mana_attributepage>
     </default>
 </config>

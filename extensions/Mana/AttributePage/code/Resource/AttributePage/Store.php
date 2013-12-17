@@ -22,6 +22,40 @@ class Mana_AttributePage_Resource_AttributePage_Store extends Mana_AttributePage
             ->where("`op_s`.`id` = ?", $optionPageStoreId));
     }
 
+    public function getIdsByAttributeId($attributeId) {
+        $db = $this->getReadConnection();
+        $select = $db->select()
+            ->from(array('ap_s' => $this->getTable('mana_attributepage/attributePage_store')), 'id')
+            ->joinInner(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')),
+                "`ap_g`.`id` = `ap_s`.`attribute_page_global_id`", null)
+            ->joinInner(array('ap_gcs' => $this->getTable('mana_attributepage/attributePage_globalCustomSettings')),
+                "`ap_gcs`.`id` = `ap_g`.`attribute_page_global_custom_settings_id`", null)
+            ->where("`ap_gcs`.`attribute_id_0` = ? OR ".
+                "`ap_gcs`.`attribute_id_1` = ? OR " .
+                "`ap_gcs`.`attribute_id_2` = ? OR " .
+                "`ap_gcs`.`attribute_id_3` = ? OR " .
+                "`ap_gcs`.`attribute_id_4` = ?", $attributeId);
+        return $db->fetchCol($select);
+    }
+
+    public function getIdsByGlobalCustomSettingsId($globalCustomSettingsId) {
+        $db = $this->getReadConnection();
+        $select = $db->select()
+            ->from(array('ap_s' => $this->getTable('mana_attributepage/attributePage_store')), 'id')
+            ->joinInner(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')),
+                "`ap_g`.`id` = `ap_s`.`attribute_page_global_id`", null)
+            ->where("`ap_g`.`attribute_page_global_custom_settings_id` = ?", $globalCustomSettingsId);
+        return $db->fetchCol($select);
+    }
+
+    public function getIdsByGlobalId($globalId) {
+        $db = $this->getReadConnection();
+        $select = $db->select()
+            ->from(array('ap_s' => $this->getTable('mana_attributepage/attributePage_store')), 'id')
+            ->where("`ap_s`.`attribute_page_global_id` = ?", $globalId);
+        return $db->fetchCol($select);
+    }
+
     /**
      * Resource initialization
      */

@@ -32,13 +32,21 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
             ));
         $this->setChild('close_button', $button);
 
-        if ($this->getEditModel()->getId() && $this->adminHelper()->isGlobal()) {
+        if ($this->getFlatModel()->getId() && $this->adminHelper()->isGlobal()) {
             $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.delete")
                 ->setData(array(
                     'label' => $this->__('Delete'),
                     'class' => 'delete',
                 ));
             $this->setChild('delete_button', $button);
+        }
+        if ($this->getFlatModel()->getId()) {
+            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.view_option_pages")
+                ->setData(array(
+                    'label' => $this->__('View Option Pages'),
+                    'class' => 'go',
+                ));
+            $this->setChild('view_option_pages_button', $button);
         }
 
         $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.apply")
@@ -94,6 +102,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this attribute page and all related option pages?'),
+            'option_page_list_url' => $urlTemplate->encodeAttribute($this->adminHelper()->getStoreUrl('*/mana_optionPage/index', array(
+                'parent_id' => $this->adminHelper()->isGlobal()
+                    ? $this->getFlatModel()->getId()
+                    : $this->getFlatModel()->getData('attribute_page_global_id'),
+                'store' => $this->adminHelper()->isGlobal() ? null : $this->adminHelper()->getStore()->getId(),
+            ))),
             'title_template' => $this->jsonHelper()->encodeAttribute(array(
                 'template' => $this->templateHelper()->parse(Mage::getStoreConfig('mana_attributepage/attribute_page_title/template')),
                 'separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/separator'),
@@ -129,6 +143,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
         $html = '';
         $html .= $this->getChildHtml('close_button');
         $html .= $this->getChildHtml('delete_button');
+        $html .= $this->getChildHtml('view_option_pages_button');
         $html .= $this->getChildHtml('apply_button');
         $html .= $this->getChildHtml('save_button');
         $html .= parent::getButtonsHtml($area);

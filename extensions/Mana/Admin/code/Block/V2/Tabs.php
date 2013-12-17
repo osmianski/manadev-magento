@@ -32,7 +32,7 @@ class Mana_Admin_Block_V2_Tabs extends Mage_Adminhtml_Block_Widget_Tabs {
             foreach ($tabs as $tabId => $tab) {
                 $tab->setTabId($tabId);
                 $this->addTabBlock($tabId, $tab);
-                if (!$activeTabId) {
+                if (!$activeTabId || $tab->getData('active')) {
                     $activeTabId = $tabId;
                 }
             }
