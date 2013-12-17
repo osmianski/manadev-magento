@@ -6,6 +6,11 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <layout version="0.1.0">
+    <m_attribute_page_menu>
+        <reference name="catalog.topnav">
+            <action method="setTemplate"><filename>mana/attributepage/menu/top.phtml</filename></action>
+        </reference>
+    </m_attribute_page_menu>
     <mana_optionpage_view translate="label">
         <label>Option Page (MANAdev)</label>
         <reference name="left">

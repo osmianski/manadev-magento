@@ -147,6 +147,9 @@
     </mana_core>
     <default>
         <mana_attributepage>
+            <general>
+                <add_to_menu>1</add_to_menu>
+            </general>
             <attribute_page_title>
                 <template>Shop By {{attribute_labels}}</template>
                 <separator>, </separator>
@@ -159,4 +162,11 @@
             </option_page_title>
         </mana_attributepage>
     </default>
+    <m_layout>
+        <default>
+            <m_attribute_page_menu action="addAfter" handle="m_attribute_page_menu" if="flagSet">
+                <param>mana_attributepage/general/add_to_menu</param>
+            </m_attribute_page_menu>
+        </default>
+    </m_layout>
 </config>

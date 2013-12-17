@@ -52,6 +52,7 @@ class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_
         }
         $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
         $urlCollection->addFieldToFilter('attribute_page_id', $attributePageId);
+        $urlCollection->getSelect()->where('main_table.option_page_id IS NULL');
         if (!($result = $urlModel->getUrlKey($urlCollection))) {
             $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'attribute page URL key', 'id', $attributePageId));
         }
