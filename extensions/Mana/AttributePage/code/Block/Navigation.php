@@ -16,10 +16,12 @@ class Mana_AttributePage_Block_Navigation extends Mage_Core_Block_Template {
 
     public function getAttributePageCollection() {
         $collection = $this->createAttributePageCollection();
-        $collection->getSelect()
-            ->where('main_table.is_active = ?', 1)
-            ->where('main_table.include_in_menu = ?', 1)
-            ->where('main_table.store_id = ?', Mage::app()->getStore()->getId());
+        $collection
+            ->setOrder('title', 'ASC')
+            ->getSelect()
+                ->where('main_table.is_active = ?', 1)
+                ->where('main_table.include_in_menu = ?', 1)
+                ->where('main_table.store_id = ?', Mage::app()->getStore()->getId());
 
         $collection->load();
         return $collection;
@@ -29,6 +31,7 @@ class Mana_AttributePage_Block_Navigation extends Mage_Core_Block_Template {
         $collection = $this->createOptionPageCollection();
         $collection
             ->addAttributePageFilter($attributePageGlobalId)
+            ->setOrder('title', 'ASC')
             ->getSelect()
                 ->where('main_table.is_active = ?', 1)
                 ->where('main_table.include_in_menu = ?', 1)

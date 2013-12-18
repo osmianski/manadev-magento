@@ -44,6 +44,10 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
             ->addAttributePageFilter($this->getData('attribute_page_global_id'))
             ->addStoreFilter($this->getData('store_id'))
             ->setOrder('title', 'ASC');
+
+        $collection->getSelect()->columns(array(
+            'alpha' => new Zend_Db_Expr("LEFT(main_table.title, 1)"),
+        ));
         return $collection;
     }
 
