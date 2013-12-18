@@ -91,9 +91,66 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 `op_gcs`.`image`,
                 `ap_gcs`.`option_page_image`
             )",
+            'image_width' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_WIDTH)},
+                `op_gcs`.`image_width`,
+                `ap_gcs`.`option_page_image_width`
+            )",
+            'image_height' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_HEIGHT)},
+                `op_gcs`.`image_height`,
+                `ap_gcs`.`option_page_image_height`
+            )",
+            'featured_image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE)},
+                `op_gcs`.`featured_image`,
+                IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                    `op_gcs`.`image`,
+                    `ap_gcs`.`option_page_image`
+                )
+            )",
+            'featured_image_width' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_WIDTH)},
+                `op_gcs`.`featured_image_width`,
+                `ap_gcs`.`option_page_featured_image_width`
+            )",
+            'featured_image_height' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_HEIGHT)},
+                `op_gcs`.`featured_image_height`,
+                `ap_gcs`.`option_page_featured_image_height`
+            )",
+            'product_image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE)},
+                `op_gcs`.`product_image`,
+                IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                    `op_gcs`.`image`,
+                    `ap_gcs`.`option_page_image`
+                )
+            )",
+            'product_image_width' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_WIDTH)},
+                `op_gcs`.`product_image_width`,
+                `ap_gcs`.`option_page_product_image_width`
+            )",
+            'product_image_height' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_HEIGHT)},
+                `op_gcs`.`product_image_height`,
+                `ap_gcs`.`option_page_product_image_height`
+            )",
+            'sidebar_image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE)},
+                `op_gcs`.`sidebar_image`,
+                IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                    `op_gcs`.`image`,
+                    `ap_gcs`.`option_page_image`
+                )
+            )",
+            'sidebar_image_width' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_WIDTH)},
+                `op_gcs`.`sidebar_image_width`,
+                `ap_gcs`.`option_page_sidebar_image_width`
+            )",
+            'sidebar_image_height' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_HEIGHT)},
+                `op_gcs`.`sidebar_image_height`,
+                `ap_gcs`.`option_page_sidebar_image_height`
+            )",
             'include_in_menu' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_INCLUDE_IN_MENU)},
                 `op_gcs`.`include_in_menu`,
                 `ap_gcs`.`option_page_include_in_menu`
+            )",
+            'is_featured' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IS_FEATURED)},
+                `op_gcs`.`is_featured`,
+                `ap_gcs`.`option_page_is_featured`
             )",
             'url_key' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_URL_KEY)},
                 `op_gcs`.`url_key`,
@@ -295,11 +352,113 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                         `ap_s`.`option_page_image`
                     )
                 )",
+                'image_width' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_WIDTH)},
+                    `op_scs`.`image_width`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_WIDTH)},
+                        `op_g`.`image_width`,
+                        `ap_s`.`option_page_image_width`
+                    )
+                )",
+                'image_height' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_HEIGHT)},
+                    `op_scs`.`image_height`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE_HEIGHT)},
+                        `op_g`.`image_height`,
+                        `ap_s`.`option_page_image_height`
+                    )
+                )",
+                'featured_image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE)},
+                    `op_scs`.`featured_image`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE)},
+                        `op_g`.`featured_image`,
+                        IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                            `op_scs`.`image`,
+                            IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                                `op_g`.`image`,
+                                `ap_s`.`option_page_image`
+                            )
+                        )
+                    )
+                )",
+                'featured_image_width' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_WIDTH)},
+                    `op_scs`.`featured_image_width`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_WIDTH)},
+                        `op_g`.`featured_image_width`,
+                        `ap_s`.`option_page_featured_image_width`
+                    )
+                )",
+                'featured_image_height' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_HEIGHT)},
+                    `op_scs`.`featured_image_height`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE_HEIGHT)},
+                        `op_g`.`featured_image_height`,
+                        `ap_s`.`option_page_featured_image_height`
+                    )
+                )",
+                'product_image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE)},
+                    `op_scs`.`product_image`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE)},
+                        `op_g`.`product_image`,
+                        IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                            `op_scs`.`image`,
+                            IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                                `op_g`.`image`,
+                                `ap_s`.`option_page_image`
+                            )
+                        )
+                    )
+                )",
+                'product_image_width' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_WIDTH)},
+                    `op_scs`.`product_image_width`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_WIDTH)},
+                        `op_g`.`product_image_width`,
+                        `ap_s`.`option_page_product_image_width`
+                    )
+                )",
+                'product_image_height' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_HEIGHT)},
+                    `op_scs`.`product_image_height`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_HEIGHT)},
+                        `op_g`.`product_image_height`,
+                        `ap_s`.`option_page_product_image_height`
+                    )
+                )",
+                'sidebar_image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE)},
+                    `op_scs`.`sidebar_image`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE)},
+                        `op_g`.`sidebar_image`,
+                        IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                            `op_scs`.`image`,
+                            IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
+                                `op_g`.`image`,
+                                `ap_s`.`option_page_image`
+                            )
+                        )
+                    )
+                )",
+                'sidebar_image_width' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_WIDTH)},
+                    `op_scs`.`sidebar_image_width`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_WIDTH)},
+                        `op_g`.`sidebar_image_width`,
+                        `ap_s`.`option_page_sidebar_image_width`
+                    )
+                )",
+                'sidebar_image_height' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_HEIGHT)},
+                    `op_scs`.`sidebar_image_height`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE_HEIGHT)},
+                        `op_g`.`sidebar_image_height`,
+                        `ap_s`.`option_page_sidebar_image_height`
+                    )
+                )",
                 'include_in_menu' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_INCLUDE_IN_MENU)},
                     `op_scs`.`include_in_menu`,
                     IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_INCLUDE_IN_MENU)},
                         `op_g`.`include_in_menu`,
                         `ap_s`.`option_page_include_in_menu`
+                    )
+                )",
+                'is_featured' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IS_FEATURED)},
+                    `op_scs`.`is_featured`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IS_FEATURED)},
+                        `op_g`.`is_featured`,
+                        `ap_s`.`option_page_is_featured`
                     )
                 )",
                 'url_key' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_URL_KEY)},

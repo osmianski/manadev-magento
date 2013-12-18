@@ -254,7 +254,12 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
         // process nullable fields
         foreach (array('attribute_id_1', 'attribute_id_2', 'attribute_id_3', 'attribute_id_4',
             'custom_design_active_from', 'custom_design_active_to', 'option_page_price_step',
-            'option_page_custom_design_active_from', 'option_page_custom_design_active_to') as $key)
+            'option_page_custom_design_active_from', 'option_page_custom_design_active_to',
+            'image_width', 'image_height',
+            'option_page_image_width', 'option_page_image_height',
+            'option_page_featured_image_width', 'option_page_featured_image_height',
+            'option_page_product_image_width', 'option_page_product_image_height',
+            'option_page_sidebar_image_width', 'option_page_sidebar_image_height', ) as $key)
         {
             if ($model->hasData($key) && !trim($model->getData($key))) {
                 $model->setData($key, null);

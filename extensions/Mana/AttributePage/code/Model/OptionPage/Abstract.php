@@ -30,6 +30,19 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_META_KEYWORDS = 17;
     const DM_META_DESCRIPTION = 18;
 
+    const DM_IS_FEATURED = 19;
+    const DM_IMAGE_WIDTH = 20;
+    const DM_IMAGE_HEIGHT = 21;
+    const DM_FEATURED_IMAGE = 22;
+    const DM_FEATURED_IMAGE_WIDTH = 23;
+    const DM_FEATURED_IMAGE_HEIGHT = 24;
+    const DM_PRODUCT_IMAGE = 25;
+    const DM_PRODUCT_IMAGE_WIDTH = 26;
+    const DM_PRODUCT_IMAGE_HEIGHT = 27;
+    const DM_SIDEBAR_IMAGE = 28;
+    const DM_SIDEBAR_IMAGE_WIDTH = 29;
+    const DM_SIDEBAR_IMAGE_HEIGHT = 30;
+
     public function validate() {
         $t = Mage::helper('mana_attributepage');
         $errors = array();

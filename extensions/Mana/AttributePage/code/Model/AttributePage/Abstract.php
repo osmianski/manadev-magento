@@ -42,6 +42,20 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_OPTION_PAGE_CUSTOM_DESIGN = 29;
     const DM_OPTION_PAGE_CUSTOM_LAYOUT_XML = 30;
 
+    const DM_COLUMN_COUNT = 32;
+    const DM_SHOW_FEATURED_OPTIONS = 33;
+    const DM_IMAGE_WIDTH = 34;
+    const DM_IMAGE_HEIGHT = 35;
+    const DM_OPTION_PAGE_IS_FEATURED = 36;
+    const DM_OPTION_PAGE_IMAGE_WIDTH = 37;
+    const DM_OPTION_PAGE_IMAGE_HEIGHT = 38;
+    const DM_OPTION_PAGE_FEATURED_IMAGE_WIDTH = 39;
+    const DM_OPTION_PAGE_FEATURED_IMAGE_HEIGHT = 40;
+    const DM_OPTION_PAGE_PRODUCT_IMAGE_WIDTH = 41;
+    const DM_OPTION_PAGE_PRODUCT_IMAGE_HEIGHT = 42;
+    const DM_OPTION_PAGE_SIDEBAR_IMAGE_WIDTH = 43;
+    const DM_OPTION_PAGE_SIDEBAR_IMAGE_HEIGHT = 44;
+
     const MAX_ATTRIBUTE_COUNT = 5;
 
     public function validate() {

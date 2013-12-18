@@ -254,6 +254,8 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
+                    this.getField('image_width').on('change', this, this.imageWidthChange);
+                    this.getField('image_height').on('change', this, this.imageHeightChange);
                     this.getField('is_active').on('change', this, this.isActiveChange);
                     this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
 
@@ -263,6 +265,9 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('meta_keywords').on('change', this, this.metaKeywordsChange);
 
                     this.getField('show_alphabetic_search').on('change', this, this.showAlphabeticSearchChange);
+                    this.getField('show_featured_options').on('change', this, this.showFeaturedOptionsChange);
+                    this.getField('column_count').on('change', this, this.columnCountChange);
+
                     this.getField('page_layout').on('change', this, this.pageLayoutChange);
                     this.getField('layout_xml').on('change', this, this.layoutXmlChange);
                     this.getField('custom_design_active_from').on('change', this, this.customDesignActiveFromChange);
@@ -272,24 +277,39 @@ function ($, TabContainer, layout, aggregate, template)
 
                     this.getField('option_page_is_active').on('change', this, this.optionPageIsActiveChange);
                     this.getField('option_page_include_in_menu').on('change', this, this.optionPageIncludeInMenuChange);
+                    this.getField('option_page_is_featured').on('change', this, this.optionPageIsFeaturedChange);
+
+                    this.getField('option_page_image').on('change', this, this.optionPageImageChange);
+                    this.getField('option_page_image_width').on('change', this, this.optionPageImageWidthChange);
+                    this.getField('option_page_image_height').on('change', this, this.optionPageImageHeightChange);
+
+                    this.getField('option_page_featured_image_width').on('change', this, this.optionPageFeaturedImageWidthChange);
+                    this.getField('option_page_featured_image_height').on('change', this, this.optionPageFeaturedImageHeightChange);
+                    this.getField('option_page_product_image_width').on('change', this, this.optionPageProductImageWidthChange);
+                    this.getField('option_page_product_image_height').on('change', this, this.optionPageProductImageHeightChange);
+                    this.getField('option_page_sidebar_image_width').on('change', this, this.optionPageSidebarImageWidthChange);
+                    this.getField('option_page_sidebar_image_height').on('change', this, this.optionPageSidebarImageHeightChange);
 
                     this.getField('option_page_include_filter_name').on('change', this, this.optionPageIncludeFilterNameChange);
 
                     this.getField('option_page_page_layout').on('change', this, this.optionPagePageLayoutChange);
                     this.getField('option_page_layout_xml').on('change', this, this.optionPageLayoutXmlChange);
-                    this.getField('option_page_show_products').on('change', this, this.optionPageShowProductsChange);
-                    this.getField('option_page_available_sort_by').on('change', this, this.optionPageAvailableSortByChange);
-                    this.getField('option_page_default_sort_by').on('change', this, this.optionPageDefaultSortByChange);
-                    this.getField('option_page_price_step').on('change', this, this.optionPagePriceStepChange);
                     this.getField('option_page_custom_design_active_from').on('change', this, this.optionPageCustomDesignActiveFromChange);
                     this.getField('option_page_custom_design_active_to').on('change', this, this.optionPageCustomDesignActiveToChange);
                     this.getField('option_page_custom_design').on('change', this, this.optionPageCustomDesignChange);
                     this.getField('option_page_custom_layout_xml').on('change', this, this.optionPageCustomLayoutXmlChange);
+
+                    this.getField('option_page_show_products').on('change', this, this.optionPageShowProductsChange);
+                    this.getField('option_page_available_sort_by').on('change', this, this.optionPageAvailableSortByChange);
+                    this.getField('option_page_default_sort_by').on('change', this, this.optionPageDefaultSortByChange);
+                    this.getField('option_page_price_step').on('change', this, this.optionPagePriceStepChange);
                 })
                 .on('unload', this, function () {
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
+                    this.getField('image_width').off('change', this, this.imageWidthChange);
+                    this.getField('image_height').off('change', this, this.imageHeightChange);
                     this.getField('is_active').off('change', this, this.isActiveChange);
                     this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
 
@@ -299,6 +319,9 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('meta_keywords').off('change', this, this.metaKeywordsChange);
 
                     this.getField('show_alphabetic_search').off('change', this, this.showAlphabeticSearchChange);
+                    this.getField('show_featured_options').off('change', this, this.showFeaturedOptionsChange);
+                    this.getField('column_count').off('change', this, this.columnCountChange);
+
                     this.getField('page_layout').off('change', this, this.pageLayoutChange);
                     this.getField('layout_xml').off('change', this, this.layoutXmlChange);
                     this.getField('custom_design_active_from').off('change', this, this.customDesignActiveFromChange);
@@ -306,22 +329,34 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').off('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
 
-                    this.getField('option_page_image').off('change', this, this.optionPageImageChange);
                     this.getField('option_page_is_active').off('change', this, this.optionPageIsActiveChange);
                     this.getField('option_page_include_in_menu').off('change', this, this.optionPageIncludeInMenuChange);
+                    this.getField('option_page_is_featured').off('change', this, this.optionPageIsFeaturedChange);
+
+                    this.getField('option_page_image').off('change', this, this.optionPageImageChange);
+                    this.getField('option_page_image_width').off('change', this, this.optionPageImageWidthChange);
+                    this.getField('option_page_image_height').off('change', this, this.optionPageImageHeightChange);
+
+                    this.getField('option_page_featured_image_width').off('change', this, this.optionPageFeaturedImageWidthChange);
+                    this.getField('option_page_featured_image_height').off('change', this, this.optionPageFeaturedImageHeightChange);
+                    this.getField('option_page_product_image_width').off('change', this, this.optionPageProductImageWidthChange);
+                    this.getField('option_page_product_image_height').off('change', this, this.optionPageProductImageHeightChange);
+                    this.getField('option_page_sidebar_image_width').off('change', this, this.optionPageSidebarImageWidthChange);
+                    this.getField('option_page_sidebar_image_height').off('change', this, this.optionPageSidebarImageHeightChange);
 
                     this.getField('option_page_include_filter_name').off('change', this, this.optionPageIncludeFilterNameChange);
 
                     this.getField('option_page_page_layout').off('change', this, this.optionPagePageLayoutChange);
                     this.getField('option_page_layout_xml').off('change', this, this.optionPageLayoutXmlChange);
-                    this.getField('option_page_show_products').off('change', this, this.optionPageShowProductsChange);
-                    this.getField('option_page_available_sort_by').off('change', this, this.optionPageAvailableSortByChange);
-                    this.getField('option_page_default_sort_by').off('change', this, this.optionPageDefaultSortByChange);
-                    this.getField('option_page_price_step').off('change', this, this.optionPagePriceStepChange);
                     this.getField('option_page_custom_design_active_from').off('change', this, this.optionPageCustomDesignActiveFromChange);
                     this.getField('option_page_custom_design_active_to').off('change', this, this.optionPageCustomDesignActiveToChange);
                     this.getField('option_page_custom_design').off('change', this, this.optionPageCustomDesignChange);
                     this.getField('option_page_custom_layout_xml').off('change', this, this.optionPageCustomLayoutXmlChange);
+
+                    this.getField('option_page_show_products').off('change', this, this.optionPageShowProductsChange);
+                    this.getField('option_page_available_sort_by').off('change', this, this.optionPageAvailableSortByChange);
+                    this.getField('option_page_default_sort_by').off('change', this, this.optionPageDefaultSortByChange);
+                    this.getField('option_page_price_step').off('change', this, this.optionPagePriceStepChange);
                 });
         },
         titleChange: function() {
@@ -335,6 +370,12 @@ function ($, TabContainer, layout, aggregate, template)
         },
         imageChange: function() {
             this.updateImageFromJson('image', 'global');
+        },
+        imageWidthChange: function() {
+            this.updateFromJson('image_width', 'global');
+        },
+        imageHeightChange: function() {
+            this.updateFromJson('image_height', 'global');
         },
         isActiveChange: function() {
             this.updateFromJson('is_active', 'global');
@@ -357,6 +398,12 @@ function ($, TabContainer, layout, aggregate, template)
         showAlphabeticSearchChange: function() {
             this.updateFromJson('show_alphabetic_search', 'global');
         },
+        showFeaturedOptionsChange: function() {
+            this.updateFromJson('show_featured_options', 'global');
+        },
+        columnCountChange: function() {
+            this.updateFromJson('column_count', 'global');
+        },
         pageLayoutChange: function() {
             this.updateFromJson('page_layout', 'global');
         },
@@ -378,8 +425,35 @@ function ($, TabContainer, layout, aggregate, template)
         optionPageImageChange: function() {
             this.updateImageFromJson('option_page_image', 'global');
         },
+        optionPageImageWidthChange: function() {
+            this.updateFromJson('option_page_image_width', 'global');
+        },
+        optionPageImageHeightChange: function() {
+            this.updateFromJson('option_page_image_height', 'global');
+        },
+        optionPageFeaturedImageWidthChange: function() {
+            this.updateFromJson('option_page_featured_image_width', 'global');
+        },
+        optionPageFeaturedImageHeightChange: function() {
+            this.updateFromJson('option_page_featured_image_height', 'global');
+        },
+        optionPageProductImageWidthChange: function() {
+            this.updateFromJson('option_page_product_image_width', 'global');
+        },
+        optionPageProductImageHeightChange: function() {
+            this.updateFromJson('option_page_product_image_height', 'global');
+        },
+        optionPageSidebarImageWidthChange: function() {
+            this.updateFromJson('option_page_sidebar_image_width', 'global');
+        },
+        optionPageSidebarImageHeightChange: function() {
+            this.updateFromJson('option_page_sidebar_image_height', 'global');
+        },
         optionPageIsActiveChange: function() {
             this.updateFromJson('option_page_is_active', 'global');
+        },
+        optionPageIsFeaturedChange: function() {
+            this.updateFromJson('option_page_is_featured', 'global');
         },
         optionPageIncludeInMenuChange: function() {
             this.updateFromJson('option_page_include_in_menu', 'global');
@@ -523,8 +597,21 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
+                    this.getField('image_width').on('change', this, this.imageWidthChange);
+                    this.getField('image_height').on('change', this, this.imageHeightChange);
                     this.getField('is_active').on('change', this, this.isActiveChange);
                     this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
+                    this.getField('is_featured').on('change', this, this.isFeaturedChange);
+
+                    this.getField('featured_image').on('change', this, this.featuredImageChange);
+                    this.getField('featured_image_width').on('change', this, this.featuredImageWidthChange);
+                    this.getField('featured_image_height').on('change', this, this.featuredImageHeightChange);
+                    this.getField('product_image').on('change', this, this.productImageChange);
+                    this.getField('product_image_width').on('change', this, this.productImageWidthChange);
+                    this.getField('product_image_height').on('change', this, this.productImageHeightChange);
+                    this.getField('sidebar_image').on('change', this, this.sidebarImageChange);
+                    this.getField('sidebar_image_width').on('change', this, this.sidebarImageWidthChange);
+                    this.getField('sidebar_image_height').on('change', this, this.sidebarImageHeightChange);
 
                     this.getField('url_key').on('change', this, this.urlKeyChange);
                     this.getField('meta_title').on('change', this, this.metaTitleChange);
@@ -538,7 +625,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').on('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').on('change', this, this.customLayoutXmlChange);
 
-                    this.getField('show_products').on('change', this, this.showProductsChange);
+                    //this.getField('show_products').on('change', this, this.showProductsChange);
                     this.getField('available_sort_by').on('change', this, this.availableSortByChange);
                     this.getField('default_sort_by').on('change', this, this.defaultSortByChange);
                     this.getField('price_step').on('change', this, this.priceStepChange);
@@ -547,8 +634,21 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
+                    this.getField('image_width').off('change', this, this.imageWidthChange);
+                    this.getField('image_height').off('change', this, this.imageHeightChange);
                     this.getField('is_active').off('change', this, this.isActiveChange);
                     this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
+                    this.getField('is_featured').off('change', this, this.isFeaturedChange);
+
+                    this.getField('featured_image').off('change', this, this.featuredImageChange);
+                    this.getField('featured_image_width').off('change', this, this.featuredImageWidthChange);
+                    this.getField('featured_image_height').off('change', this, this.featuredImageHeightChange);
+                    this.getField('product_image').off('change', this, this.productImageChange);
+                    this.getField('product_image_width').off('change', this, this.productImageWidthChange);
+                    this.getField('product_image_height').off('change', this, this.productImageHeightChange);
+                    this.getField('sidebar_image').off('change', this, this.sidebarImageChange);
+                    this.getField('sidebar_image_width').off('change', this, this.sidebarImageWidthChange);
+                    this.getField('sidebar_image_height').off('change', this, this.sidebarImageHeightChange);
 
                     this.getField('url_key').off('change', this, this.urlKeyChange);
                     this.getField('meta_title').off('change', this, this.metaTitleChange);
@@ -562,7 +662,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').off('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
 
-                    this.getField('show_products').off('change', this, this.showProductsChange);
+                    //this.getField('show_products').off('change', this, this.showProductsChange);
                     this.getField('available_sort_by').off('change', this, this.availableSortByChange);
                     this.getField('default_sort_by').off('change', this, this.defaultSortByChange);
                     this.getField('price_step').off('change', this, this.priceStepChange);
@@ -579,12 +679,51 @@ function ($, TabContainer, layout, aggregate, template)
         },
         imageChange: function () {
             this.updateImageFromJson('image', 'attribute-page', 'option_page_image');
+            this.featuredImageChange();
+            this.productImageChange();
+            this.sidebarImageChange();
+        },
+        imageWidthChange: function () {
+            this.updateFromJson('image_width', 'attribute-page', 'option_page_image_width');
+        },
+        imageHeightChange: function () {
+            this.updateFromJson('image_height', 'attribute-page', 'option_page_image_height');
         },
         isActiveChange: function () {
             this.updateFromJson('is_active', 'attribute-page', 'option_page_is_active');
         },
         includeInMenuChange: function () {
-            this.updateFromJson('include_in_menu', 'attribute-page', 'option_include_in_menu');
+            this.updateFromJson('include_in_menu', 'attribute-page', 'option_page_include_in_menu');
+        },
+        isFeaturedChange: function () {
+            this.updateFromJson('is_featured', 'attribute-page', 'option_page_is_featured');
+        },
+        featuredImageChange: function () {
+            this.updateImageFromJson('featured_image', 'attribute-page', 'option_page_featured_image');
+        },
+        featuredImageWidthChange: function () {
+            this.updateFromJson('featured_image_width', 'attribute-page', 'option_page_featured_image_width');
+        },
+        featuredImageHeightChange: function () {
+            this.updateFromJson('featured_image_height', 'attribute-page', 'option_page_featured_image_height');
+        },
+        productImageChange: function () {
+            this.updateImageFromJson('product_image', 'attribute-page', 'option_page_product_image');
+        },
+        productImageWidthChange: function () {
+            this.updateFromJson('product_image_width', 'attribute-page', 'option_page_product_image_width');
+        },
+        productImageHeightChange: function () {
+            this.updateFromJson('product_image_height', 'attribute-page', 'option_page_product_image_height');
+        },
+        sidebarImageChange: function () {
+            this.updateImageFromJson('sidebar_image', 'attribute-page', 'option_page_sidebar_image');
+        },
+        sidebarImageWidthChange: function () {
+            this.updateFromJson('sidebar_image_width', 'attribute-page', 'option_page_sidebar_image_width');
+        },
+        sidebarImageHeightChange: function () {
+            this.updateFromJson('sidebar_image_height', 'attribute-page', 'option_page_sidebar_image_height');
         },
         urlKeyChange: function () {
             this.updateUrlKey();
@@ -699,8 +838,21 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
+                    this.getField('image_width').on('change', this, this.imageWidthChange);
+                    this.getField('image_height').on('change', this, this.imageHeightChange);
                     this.getField('is_active').on('change', this, this.isActiveChange);
                     this.getField('include_in_menu').on('change', this, this.includeInMenuChange);
+                    this.getField('is_featured').on('change', this, this.isFeaturedChange);
+
+                    this.getField('featured_image').on('change', this, this.featuredImageChange);
+                    this.getField('featured_image_width').on('change', this, this.featuredImageWidthChange);
+                    this.getField('featured_image_height').on('change', this, this.featuredImageHeightChange);
+                    this.getField('product_image').on('change', this, this.productImageChange);
+                    this.getField('product_image_width').on('change', this, this.productImageWidthChange);
+                    this.getField('product_image_height').on('change', this, this.productImageHeightChange);
+                    this.getField('sidebar_image').on('change', this, this.sidebarImageChange);
+                    this.getField('sidebar_image_width').on('change', this, this.sidebarImageWidthChange);
+                    this.getField('sidebar_image_height').on('change', this, this.sidebarImageHeightChange);
 
                     this.getField('url_key').on('change', this, this.urlKeyChange);
                     this.getField('meta_title').on('change', this, this.metaTitleChange);
@@ -714,7 +866,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').on('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').on('change', this, this.customLayoutXmlChange);
 
-                    this.getField('show_products').on('change', this, this.showProductsChange);
+                    //this.getField('show_products').on('change', this, this.showProductsChange);
                     this.getField('available_sort_by').on('change', this, this.availableSortByChange);
                     this.getField('default_sort_by').on('change', this, this.defaultSortByChange);
                     this.getField('price_step').on('change', this, this.priceStepChange);
@@ -723,8 +875,21 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
+                    this.getField('image_width').off('change', this, this.imageWidthChange);
+                    this.getField('image_height').off('change', this, this.imageHeightChange);
                     this.getField('is_active').off('change', this, this.isActiveChange);
                     this.getField('include_in_menu').off('change', this, this.includeInMenuChange);
+                    this.getField('is_featured').off('change', this, this.isFeaturedChange);
+
+                    this.getField('featured_image').off('change', this, this.featuredImageChange);
+                    this.getField('featured_image_width').off('change', this, this.featuredImageWidthChange);
+                    this.getField('featured_image_height').off('change', this, this.featuredImageHeightChange);
+                    this.getField('product_image').off('change', this, this.productImageChange);
+                    this.getField('product_image_width').off('change', this, this.productImageWidthChange);
+                    this.getField('product_image_height').off('change', this, this.productImageHeightChange);
+                    this.getField('sidebar_image').off('change', this, this.sidebarImageChange);
+                    this.getField('sidebar_image_width').off('change', this, this.sidebarImageWidthChange);
+                    this.getField('sidebar_image_height').off('change', this, this.sidebarImageHeightChange);
 
                     this.getField('url_key').off('change', this, this.urlKeyChange);
                     this.getField('meta_title').off('change', this, this.metaTitleChange);
@@ -738,7 +903,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('custom_design').off('change', this, this.customDesignChange);
                     this.getField('custom_layout_xml').off('change', this, this.customLayoutXmlChange);
 
-                    this.getField('show_products').off('change', this, this.showProductsChange);
+                    //this.getField('show_products').off('change', this, this.showProductsChange);
                     this.getField('available_sort_by').off('change', this, this.availableSortByChange);
                     this.getField('default_sort_by').off('change', this, this.defaultSortByChange);
                     this.getField('price_step').off('change', this, this.priceStepChange);
@@ -758,6 +923,75 @@ function ($, TabContainer, layout, aggregate, template)
                 ['global', 'image', 'global-is-custom'],
                 ['attribute-page', 'option_page_image']
             ]);
+            this.featuredImageChange();
+            this.productImageChange();
+            this.sidebarImageChange();
+        },
+        imageWidthChange: function () {
+            this.updateFromJson('image_width', [
+                ['global', 'image_width', 'global-is-custom'],
+                ['attribute-page', 'option_page_image_width']
+            ]);
+        },
+        imageHeightChange: function () {
+            this.updateFromJson('image_height', [
+                ['global', 'image_height', 'global-is-custom'],
+                ['attribute-page', 'option_page_image_height']
+            ]);
+        },
+        featuredImageChange: function () {
+            this.updateImageFromJson('featured_image', [
+                ['global', 'featured_image', 'global-is-custom'],
+                ['attribute-page', 'option_page_featured_image']
+            ]);
+        },
+        featuredImageWidthChange: function () {
+            this.updateFromJson('featured_image_width', [
+                ['global', 'featured_image_width', 'global-is-custom'],
+                ['attribute-page', 'option_page_featured_image_width']
+            ]);
+        },
+        featuredImageHeightChange: function () {
+            this.updateFromJson('featured_image_height', [
+                ['global', 'featured_image_height', 'global-is-custom'],
+                ['attribute-page', 'option_page_featured_image_height']
+            ]);
+        },
+        productImageChange: function () {
+            this.updateImageFromJson('product_image', [
+                ['global', 'product_image', 'global-is-custom'],
+                ['attribute-page', 'option_page_product_image']
+            ]);
+        },
+        productImageWidthChange: function () {
+            this.updateFromJson('product_image_width', [
+                ['global', 'product_image_width', 'global-is-custom'],
+                ['attribute-page', 'option_page_product_image_width']
+            ]);
+        },
+        productImageHeightChange: function () {
+            this.updateFromJson('product_image_height', [
+                ['global', 'product_image_height', 'global-is-custom'],
+                ['attribute-page', 'option_page_product_image_height']
+            ]);
+        },
+        sidebarImageChange: function () {
+            this.updateImageFromJson('sidebar_image', [
+                ['global', 'sidebar_image', 'global-is-custom'],
+                ['attribute-page', 'option_page_sidebar_image']
+            ]);
+        },
+        sidebarImageWidthChange: function () {
+            this.updateFromJson('sidebar_image_width', [
+                ['global', 'sidebar_image_width', 'global-is-custom'],
+                ['attribute-page', 'option_page_sidebar_image_width']
+            ]);
+        },
+        sidebarImageHeightChange: function () {
+            this.updateFromJson('sidebar_image_height', [
+                ['global', 'sidebar_image_height', 'global-is-custom'],
+                ['attribute-page', 'option_page_sidebar_image_height']
+            ]);
         },
         isActiveChange: function () {
             this.updateFromJson('is_active', [
@@ -769,6 +1003,12 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateFromJson('include_in_menu', [
                 ['global', 'include_in_menu', 'global-is-custom'],
                 ['attribute-page', 'option_page_include_in_menu']
+            ]);
+        },
+        isFeaturedChange: function () {
+            this.updateFromJson('is_featured', [
+                ['global', 'is_featured', 'global-is-custom'],
+                ['attribute-page', 'option_page_is_featured']
             ]);
         },
         urlKeyChange: function () {

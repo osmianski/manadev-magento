@@ -296,7 +296,11 @@ class Mana_AttributePage_Adminhtml_Mana_OptionPageController extends Mana_Admin_
 
         // process nullable fields
         foreach (array('option_id_1', 'option_id_2', 'option_id_3', 'option_id_4',
-            'custom_design_active_from', 'custom_design_active_to', 'price_step') as $key)
+            'custom_design_active_from', 'custom_design_active_to', 'price_step',
+            'image_width', 'image_height',
+            'featured_image_width', 'featured_image_height',
+            'product_image_width', 'product_image_height',
+            'sidebar_image_width', 'sidebar_image_height',) as $key)
         {
             if ($model->hasData($key) && !trim($model->getData($key))) {
                 $model->setData($key, null);
@@ -304,7 +308,7 @@ class Mana_AttributePage_Adminhtml_Mana_OptionPageController extends Mana_Admin_
         }
 
         // process image fields
-        foreach (array('image') as $key) {
+        foreach (array('image', 'featured_image', 'product_image', 'sidebar_image',) as $key) {
             if ($this->coreDbHelper()->isModelContainsCustomSetting($model, $key) &&
                 ($relativeUrl = $model->getData($key)))
             {

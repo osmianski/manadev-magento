@@ -53,60 +53,6 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionDesignForm extends 
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_option_product_list', array(
-            'title' => $this->__('Product List'),
-            'legend' => $this->__('Product List'),
-        ));
-
-        $this->addField($fieldset, 'option_page_show_products', 'select', array(
-            'label' => $this->__('Show Products'),
-            'title' => $this->__('Show Products'),
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'name' => 'option_page_show_products',
-            'required' => true,
-
-            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SHOW_PRODUCTS,
-            'default_store_label' => $this->__('Same For All Stores'),
-        ));
-
-        $this->addField($fieldset, 'option_page_available_sort_by', 'multiselect', array(
-            'label' => $this->__('Available Sort By'),
-            'title' => $this->__('Available Sort By'),
-            'values' => $this->getSortBySourceModel()->getAllOptions(),
-            'name' => 'option_page_available_sort_by',
-            'required' => true,
-
-            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_AVAILABLE_SORT_BY,
-            'default_store_label' => $this->__('Same For All Stores'),
-        ));
-
-        $this->addField($fieldset, 'option_page_default_sort_by', 'select', array(
-            'label' => $this->__('Default Sort By'),
-            'title' => $this->__('Default Sort By'),
-            'options' => $this->getSortBySourceModel()->getOptionArray(),
-            'name' => 'option_page_default_sort_by',
-            'required' => true,
-
-            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DEFAULT_SORT_BY,
-            'default_store_label' => $this->__('Same For All Stores'),
-        ));
-
-        $fieldset = $this->addFieldset($form, 'mfs_option_layered_nav', array(
-            'title' => $this->__('Layered Navigation'),
-            'legend' => $this->__('Layered Navigation'),
-        ));
-
-        $this->addField($fieldset, 'option_page_price_step', 'text', array(
-            'label' => $this->__('Price Step'),
-            'title' => $this->__('Price Step'),
-            'name' => 'option_page_price_step',
-            'required' => false,
-
-            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PRICE_STEP,
-            'default_label' => $this->__('Use System Configuration'),
-            'default_store_label' => $this->__('Same For All Stores'),
-        ));
-
         $fieldset = $this->addFieldset($form, 'mfs_option_custom_design', array(
             'title' => $this->__('Custom Design'),
             'legend' => $this->__('Custom Design'),

@@ -60,6 +60,11 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $fieldset = $this->addFieldset($form, 'mfs_base_image', array(
+            'title' => $this->__('Base Image'),
+            'legend' => $this->__('Base Image'),
+        ));
+
         $this->addField($fieldset, 'image', 'image', array(
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),
@@ -67,6 +72,26 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'required' => false,
 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'image_width', 'text', array(
+            'label' => $this->__('Width'),
+            'title' => $this->__('Width'),
+            'name' => 'image_width',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE_WIDTH,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'image_height', 'text', array(
+            'label' => $this->__('Height'),
+            'title' => $this->__('Height'),
+            'name' => 'image_height',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE_HEIGHT,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 

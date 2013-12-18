@@ -19,7 +19,9 @@ abstract class Mana_AttributePage_Resource_AttributePage_Abstract extends Mage_C
             $object
                 ->setData('is_active', 1)
                 ->setData('include_in_menu', 1)
-                ->setData('show_alphabetic_search', 1);
+                ->setData('show_alphabetic_search', 1)
+                ->setData('show_featured_options', 1)
+                ->setData('column_count', 4);
         }
         if ($object->getData('_add_option_page_defaults')) {
             $object

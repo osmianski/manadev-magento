@@ -34,9 +34,9 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'edit_model' => $this->getEditModel(),
         ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_option_content', array(
-            'title' => $this->__('Content'),
-            'legend' => $this->__('Content'),
+        $fieldset = $this->addFieldset($form, 'mfs_option_base_image', array(
+            'title' => $this->__('Base Image'),
+            'legend' => $this->__('Base Image'),
         ));
 
         $this->addField($fieldset, 'option_page_image', 'image', array(
@@ -46,6 +46,26 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'required' => false,
 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'option_page_image_width', 'text', array(
+            'label' => $this->__('Width'),
+            'title' => $this->__('Width'),
+            'name' => 'option_page_image_width',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IMAGE_WIDTH,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'option_page_image_height', 'text', array(
+            'label' => $this->__('Height'),
+            'title' => $this->__('Height'),
+            'name' => 'option_page_image_height',
+            'required' => false,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IMAGE_HEIGHT,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
@@ -76,6 +96,16 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'option_page_is_featured', 'select', array(
+            'label' => $this->__('Featured'),
+            'title' => $this->__('Featured'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'option_page_is_featured',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_IS_FEATURED,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
 
         $this->setForm($form);
         return parent::_prepareForm();

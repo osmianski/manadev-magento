@@ -32,17 +32,6 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DesignForm extends Mana_A
             'legend' => $this->__('Design'),
         ));
 
-        $this->addField($fieldset, 'show_alphabetic_search', 'select', array(
-            'label' => $this->__('Show Alphabetic Search'),
-            'title' => $this->__('Show Alphabetic Search'),
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'name' => 'show_alphabetic_search',
-            'required' => true,
-
-            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_ALPHABETIC_SEARCH,
-            'default_store_label' => $this->__('Same For All Stores'),
-        ));
-
         $this->addField($fieldset, 'page_layout', 'select', array(
             'label' => $this->__('Page Layout'),
             'title' => $this->__('Page Layout'),

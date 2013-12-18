@@ -39,6 +39,9 @@
 				<block type="mana_attributepage/adminhtml_attributePage_generalFormTab" name="general_tab" as="general_tab">
                     <block type="mana_attributepage/adminhtml_attributePage_generalForm" name="general_form" as="general_form" />
 				</block>
+				<block type="mana_attributepage/adminhtml_attributePage_displayFormTab" name="display_tab" as="display_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_displayForm" name="display_form" as="display_form" />
+				</block>
                 <block type="mana_attributepage/adminhtml_attributePage_seoFormTab" name="seo_tab" as="seo_tab">
                     <block type="mana_attributepage/adminhtml_attributePage_seoForm" name="seo_form" as="seo_form" />
                 </block>
@@ -47,6 +50,12 @@
                 </block>
                 <block type="mana_attributepage/adminhtml_attributePage_optionGeneralFormTab" name="option_general_tab" as="option_general_tab">
                     <block type="mana_attributepage/adminhtml_attributePage_optionGeneralForm" name="option_general_form" as="option_general_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_optionDisplayFormTab" name="option_display_tab" as="option_display_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_optionDisplayForm" name="option_display_form" as="option_display_form" />
+                </block>
+                <block type="mana_attributepage/adminhtml_attributePage_optionImageFormTab" name="option_image_tab" as="option_image_tab">
+                    <block type="mana_attributepage/adminhtml_attributePage_optionImageForm" name="option_image_form" as="option_image_form" />
                 </block>
                 <block type="mana_attributepage/adminhtml_attributePage_optionSeoFormTab" name="option_seo_tab" as="option_seo_tab">
                     <block type="mana_attributepage/adminhtml_attributePage_optionSeoForm" name="option_seo_form" as="option_seo_form" />
@@ -90,6 +99,12 @@
 			<block type="mana_attributepage/adminhtml_optionPage_tabs" name="tabs" as="tabs">
 				<block type="mana_attributepage/adminhtml_optionPage_generalFormTab" name="general_tab" as="general_tab">
                     <block type="mana_attributepage/adminhtml_optionPage_generalForm" name="general_form" as="general_form" />
+				</block>
+				<block type="mana_attributepage/adminhtml_optionPage_displayFormTab" name="display_tab" as="display_tab">
+                    <block type="mana_attributepage/adminhtml_optionPage_displayForm" name="display_form" as="display_form" />
+				</block>
+				<block type="mana_attributepage/adminhtml_optionPage_imageFormTab" name="image_tab" as="image_tab">
+                    <block type="mana_attributepage/adminhtml_optionPage_imageForm" name="image_form" as="image_form" />
 				</block>
                 <block type="mana_attributepage/adminhtml_optionPage_seoFormTab" name="seo_tab" as="seo_tab">
                     <block type="mana_attributepage/adminhtml_optionPage_seoForm" name="seo_form" as="seo_form" />
