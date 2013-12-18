@@ -51,5 +51,27 @@
         </layout>
         <!-- INSERT HERE: layout, translate, routers -->
     </frontend>
+    <!-- This section enables static visual changes in admin area. -->
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaProduct_Tag>
+                    <files>
+                        <default>ManaProduct_Tag.csv</default>
+                    </files>
+                </ManaProduct_Tag>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <manaproduct_tag>
+            <design>
+                <size_based_css_class><![CDATA[<css class="m-small" max-width="50" />
+<css class="m-medium" min-width="50" max-width="120" />
+<css class="m-large" min-width="120" />]]></size_based_css_class>
+            </design>
+        </manaproduct_tag>
+    </default>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
 </config>

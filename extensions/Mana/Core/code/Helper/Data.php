@@ -352,10 +352,14 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     protected function _forceObjectRecursively($data) {
         if (is_array($data)) {
+            $convert = false;
             foreach ($data as $key => $value) {
+                if (!is_numeric($key)) {
+                    $convert = true;
+                }
                 $data[$key] = $this->_forceObjectRecursively($value);
             }
-            return (object)$data;
+            return $convert ? (object)$data : $data;
         }
         elseif(is_object($data)) {
             foreach ($data as $key => $value) {
