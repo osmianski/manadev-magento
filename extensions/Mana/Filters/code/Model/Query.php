@@ -236,6 +236,7 @@ class Mana_Filters_Model_Query extends Varien_Object
     }
 
     public function isOptimizedAttributeFilter($model) {
+        return false;
         return !$this->filtersHelper()->useSolr() &&
             $model instanceof Mana_Filters_Model_Filter_Attribute &&
             !$model->isApplied();
