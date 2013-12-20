@@ -81,6 +81,9 @@ class Mana_Core_Block_Js extends Mage_Core_Block_Template {
 	    $this
 	        ->setConfig('url.base', Mage::getUrl('', array('_nosid' => true)))
 	        ->setConfig('url.secureBase', Mage::getUrl('', array('_secure' => true, '_nosid' => true)));
+	    if ($value = Mage::getStoreConfig('google/analytics/account')) {
+	        $this->setConfig('ga.account', $value);
+	    }
 	    return $this;
 	}
 }
