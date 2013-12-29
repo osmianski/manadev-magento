@@ -14,9 +14,10 @@ $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
     <h1><?php echo $_escapedTitle ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php if (($_imgUrl = $_attributePage->getData('image')) && ($_imgUrl = $_filesHelper->getUrl($_imgUrl, 'image'))): ?>
+<?php if (($_imgUrl = $_attributePage->getData('image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
     <p class="category-image m-attribute-page-image">
-        <img src="<?php echo $_imgUrl ?>" alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"/>
+        <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
+            <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_attributePage->getData('image_width'), $_attributePage->getData('image_height')) ?> />
     </p>
 <?php endif; ?>
 <?php if ($_description = $_attributePage->getData('description')): ?>
@@ -24,4 +25,5 @@ $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
         <?php echo $_description ?>
     </div>
 <?php endif; ?>
+<?php if ($_attributePage->getData('')) ?>
 <?php echo $this->getChildHtml('option_list') ?>
