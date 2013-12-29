@@ -89,11 +89,14 @@ function($, ajax, config, layout, undefined)
         },
         intercept: function (url, element) {
             var isProductListToolbarClicked = this._isProductListToolbarClicked(element);
-            if (_gaq !== undefined) {
-                var parser = document.createElement('a');
-                parser.href = url;
-                _gaq.push(['_setAccount', config.getData('ga.account')]);
-                _gaq.push(['_trackPageview', url.substring(parser.protocol.length + parser.hostname.length + 2)]);
+            var parser = document.createElement('a');
+            parser.href = url;
+            if (window._gaq !== undefined) {
+                window._gaq.push(['_setAccount', config.getData('ga.account')]);
+                window._gaq.push(['_trackPageview', url.substring(parser.protocol.length + parser.hostname.length + 2)]);
+            }
+            if (window.ga !== undefined) {
+                window.ga('send', 'pageview');
             }
             url = decodeURIComponent(url);
             url = this._getBaseUrl(url) + config.getData('layeredNavigation.ajax.urlKey') +

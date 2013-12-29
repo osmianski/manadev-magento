@@ -37,6 +37,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </url_key_filter>
+                        <google_analytics_account translate="label comment" module="manapro_filterajax">
+                            <label>Google Analytics Account ID</label>
+                            <comment>Used to track layered navigation AJAX refresh requests. Leave empty if standard setting in Google API section is filled in.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </google_analytics_account>
                     </fields>
                 </ajax>
             </groups>
