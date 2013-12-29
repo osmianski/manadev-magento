@@ -28,7 +28,8 @@
         }
     }
 	$(document).bind('m-grid-reset', function(e, id, object, info, edit) {
-		_gridObjects[id] = object;
+        $.hideHelperPopup(true);
+        _gridObjects[id] = object;
 		_gridInfos[id] = info;
 		_gridEdits[id] = $.extend({
 		    pending: {},

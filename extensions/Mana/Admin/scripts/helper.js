@@ -20,7 +20,8 @@
 	var _status = HELPER_HIDDEN;
 	var _timer = null;
 	var _over = false;
-	
+	var _forcedHide = false;
+
 	var _options = {
 		showTime: 100, // ms
 		hideTime: 100 // ms
@@ -51,7 +52,12 @@
 		helper.unbind('mouseover', _helperOver).unbind('mouseout', _helperOut);
 		$(_host.host).unbind('mouseover', _helperOver).unbind('mouseout', _helperOut).removeClass('m-helper-host');
 		_cancelShow(false);
-		_host.onHide(_host.host, _host.helper);
+		if (_forcedHide) {
+            _forcedHide = false;
+		}
+		else {
+            _host.onHide(_host.host, _host.helper);
+        }
 		helper.hide();
 	}
 	function _delayedShow() {
@@ -96,7 +102,13 @@
 			throw 'No ticking timer expected';
 		}
 	}
-	$.hideHelperPopup = _helperOut;
+	$.hideHelperPopup = function(forced) {
+	    if (forced) {
+	        _forcedHide = true;
+	    }
+        _helperOut();
+	};
+
 	$.helperPopup = function(options) {
 		if (!options.host || !options.helper) {
 			throw 'Invalid arguments';
