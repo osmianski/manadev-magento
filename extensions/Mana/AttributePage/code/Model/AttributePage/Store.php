@@ -46,7 +46,7 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
             ->setOrder('title', 'ASC');
 
         $collection->getSelect()->columns(array(
-            'alpha' => new Zend_Db_Expr("LEFT(main_table.title, 1)"),
+            'alpha' => new Zend_Db_Expr("CASE WHEN main_table.title REGEXP '^[0-9]' THEN '#' ELSE LEFT(upper(main_table.title), 1) END"),
         ));
         return $collection;
     }

@@ -32,7 +32,7 @@ $_count = count($this->getAttributePage()->getOptionPages());
             <?php if ($_alpha != $_currentAlpha): ?>
                 <?php $_currentAlpha = $_alpha; ?>
                 <li class="m-alpha">
-                    <span><?php echo $_currentAlpha; ?></span>
+                    <a href="#<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></a>
                 </li>
             <?php endif; ?>
             <li class="m-option-page">
