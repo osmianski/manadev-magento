@@ -96,7 +96,7 @@ function($, ajax, config, layout, undefined)
                 window._gaq.push(['_trackPageview', url.substring(parser.protocol.length + parser.hostname.length + 2)]);
             }
             if (window.ga !== undefined) {
-                window.ga('send', 'pageview');
+                window.ga('send', 'pageview', {'page': url.substring(parser.protocol.length + parser.hostname.length + 2)});
             }
             url = decodeURIComponent(url);
             url = this._getBaseUrl(url) + config.getData('layeredNavigation.ajax.urlKey') +
