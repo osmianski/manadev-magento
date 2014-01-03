@@ -76,7 +76,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionImageForm  extends 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PRODUCT_IMAGE_HEIGHT,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
-
+/*
         $fieldset = $this->addFieldset($form, 'mfs_option_sidebar_image', array(
             'title' => $this->__('Sidebar Image'),
             'legend' => $this->__('Sidebar Image'),
@@ -101,7 +101,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionImageForm  extends 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SIDEBAR_IMAGE_HEIGHT,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
-
+*/
         $this->setForm($form);
         return parent::_prepareForm();
     }

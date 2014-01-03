@@ -11,9 +11,24 @@
  */
 class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front_Action {
     public function viewAction() {
-        if ($this->_initOptionPage()) {
+        if ($optionPage = $this->_initOptionPage()) {
+            $layoutXml = $this->_applyCustomDesign();
             Mage::getSingleton('mana_attributepage/layer')->apply();
-            $this->loadLayout();
+
+            $this->getLayout()->getUpdate()->addHandle('default');
+            $this->addActionLayoutHandles();
+            $this->loadLayoutUpdates();
+            if (trim($layoutXml)) {
+                $this->getLayout()->getUpdate()->addUpdate($layoutXml);
+            }
+            $this->generateLayoutXml();
+            $this->generateLayoutBlocks();
+            $this->_isLayoutLoaded = true;
+            if ($pageLayout = $optionPage->getData('page_layout')) {
+                $this->pageLayoutHelper()->applyTemplate($pageLayout);
+            }
+
+            $this->_setProductListOptions();
             $this->renderLayout();
         }
         else {
@@ -21,6 +36,9 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
         }
     }
 
+    /**
+     * @return bool|Mana_AttributePage_Model_OptionPage_Store
+     */
     protected function _initOptionPage() {
         Mage::dispatchEvent('mana_attributepage_controller_option_page_init_before', array('controller_action' => $this));
         $optionPageId = (int) $this->getRequest()->getParam('id', false);
@@ -53,4 +71,65 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
 
         return $optionPage;
     }
+
+    protected function _setProductListOptions() {
+        /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
+        $optionPage = Mage::registry('current_option_page');
+        if ($productList = $this->getLayout()->getBlock('product_list')) {
+            /* @var $productList Mage_Catalog_Block_Product_List */
+            $availableSortBy = array();
+            $defaultSortBy = $this->getCatalogConfig()->getAttributeUsedForSortByArray();
+            foreach (explode(',', $optionPage->getData('available_sort_by')) as $sortBy) {
+                if (isset($defaultSortBy[$sortBy])) {
+                    $availableSortBy[$sortBy] = $defaultSortBy[$sortBy];
+                }
+            }
+
+            if ($availableSortBy) {
+                $productList->setData('available_orders', $availableSortBy);
+            }
+            $productList->setData('sort_by', $optionPage->getData('default_sort_by'));
+        }
+    }
+
+    protected function _applyCustomDesign() {
+        /* @var $page Mana_AttributePage_Model_OptionPage_Store */
+        $page = Mage::registry('current_option_page');
+
+        $result = $page->getData('layout_xml');
+        if (Mage::app()->getLocale()->isStoreDateInInterval(null,
+            $page->getData('custom_design_active_from'),
+            $page->getData('custom_design_active_to')))
+        {
+            $designInfo = explode("/", $page->getData('custom_design'));
+            if (count($designInfo) == 2) {
+                $this->getDesign()->setPackageName($designInfo[0])->setTheme($designInfo[1]);
+            }
+            $result .= $page->getData('custom_layout_xml');
+        }
+        return $result;
+    }
+    #region Dependencies
+
+    /**
+     * @return Mage_Catalog_Model_Config
+     */
+    public function getCatalogConfig() {
+        return Mage::getSingleton('catalog/config');
+    }
+
+    /**
+     * @return Mage_Core_Model_Design_Package
+     */
+    public function getDesign() {
+        return Mage::getSingleton('core/design_package');
+    }
+
+    /**
+     * @return Mage_Page_Helper_Layout
+     */
+    public function pageLayoutHelper() {
+        return $this->getLayout()->helper('page/layout');
+    }
+    #endregion
 }

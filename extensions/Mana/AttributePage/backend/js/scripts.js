@@ -287,9 +287,10 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('option_page_featured_image_height').on('change', this, this.optionPageFeaturedImageHeightChange);
                     this.getField('option_page_product_image_width').on('change', this, this.optionPageProductImageWidthChange);
                     this.getField('option_page_product_image_height').on('change', this, this.optionPageProductImageHeightChange);
+/*
                     this.getField('option_page_sidebar_image_width').on('change', this, this.optionPageSidebarImageWidthChange);
                     this.getField('option_page_sidebar_image_height').on('change', this, this.optionPageSidebarImageHeightChange);
-
+*/
                     this.getField('option_page_include_filter_name').on('change', this, this.optionPageIncludeFilterNameChange);
 
                     this.getField('option_page_page_layout').on('change', this, this.optionPagePageLayoutChange);
@@ -341,9 +342,10 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('option_page_featured_image_height').off('change', this, this.optionPageFeaturedImageHeightChange);
                     this.getField('option_page_product_image_width').off('change', this, this.optionPageProductImageWidthChange);
                     this.getField('option_page_product_image_height').off('change', this, this.optionPageProductImageHeightChange);
+/*
                     this.getField('option_page_sidebar_image_width').off('change', this, this.optionPageSidebarImageWidthChange);
                     this.getField('option_page_sidebar_image_height').off('change', this, this.optionPageSidebarImageHeightChange);
-
+*/
                     this.getField('option_page_include_filter_name').off('change', this, this.optionPageIncludeFilterNameChange);
 
                     this.getField('option_page_page_layout').off('change', this, this.optionPagePageLayoutChange);
@@ -443,12 +445,14 @@ function ($, TabContainer, layout, aggregate, template)
         optionPageProductImageHeightChange: function() {
             this.updateFromJson('option_page_product_image_height', 'global');
         },
+/*
         optionPageSidebarImageWidthChange: function() {
             this.updateFromJson('option_page_sidebar_image_width', 'global');
         },
         optionPageSidebarImageHeightChange: function() {
             this.updateFromJson('option_page_sidebar_image_height', 'global');
         },
+*/
         optionPageIsActiveChange: function() {
             this.updateFromJson('option_page_is_active', 'global');
         },
@@ -609,10 +613,11 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('product_image').on('change', this, this.productImageChange);
                     this.getField('product_image_width').on('change', this, this.productImageWidthChange);
                     this.getField('product_image_height').on('change', this, this.productImageHeightChange);
+/*
                     this.getField('sidebar_image').on('change', this, this.sidebarImageChange);
-                    this.getField('sidebar_image_width').on('change', this, this.sidebarImageWidthChange);
+                     this.getField('sidebar_image_width').on('change', this, this.sidebarImageWidthChange);
                     this.getField('sidebar_image_height').on('change', this, this.sidebarImageHeightChange);
-
+*/
                     this.getField('url_key').on('change', this, this.urlKeyChange);
                     this.getField('meta_title').on('change', this, this.metaTitleChange);
                     this.getField('meta_description').on('change', this, this.metaDescriptionChange);
@@ -646,10 +651,11 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('product_image').off('change', this, this.productImageChange);
                     this.getField('product_image_width').off('change', this, this.productImageWidthChange);
                     this.getField('product_image_height').off('change', this, this.productImageHeightChange);
+/*
                     this.getField('sidebar_image').off('change', this, this.sidebarImageChange);
                     this.getField('sidebar_image_width').off('change', this, this.sidebarImageWidthChange);
                     this.getField('sidebar_image_height').off('change', this, this.sidebarImageHeightChange);
-
+*/
                     this.getField('url_key').off('change', this, this.urlKeyChange);
                     this.getField('meta_title').off('change', this, this.metaTitleChange);
                     this.getField('meta_description').off('change', this, this.metaDescriptionChange);
@@ -681,7 +687,7 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateImageFromJson('image', 'attribute-page', 'option_page_image');
             this.featuredImageChange();
             this.productImageChange();
-            this.sidebarImageChange();
+//            this.sidebarImageChange();
         },
         imageWidthChange: function () {
             this.updateFromJson('image_width', 'attribute-page', 'option_page_image_width');
@@ -716,6 +722,7 @@ function ($, TabContainer, layout, aggregate, template)
         productImageHeightChange: function () {
             this.updateFromJson('product_image_height', 'attribute-page', 'option_page_product_image_height');
         },
+/*
         sidebarImageChange: function () {
             this.updateImageFromJson('sidebar_image', 'attribute-page', 'option_page_sidebar_image');
         },
@@ -725,6 +732,7 @@ function ($, TabContainer, layout, aggregate, template)
         sidebarImageHeightChange: function () {
             this.updateFromJson('sidebar_image_height', 'attribute-page', 'option_page_sidebar_image_height');
         },
+*/
         urlKeyChange: function () {
             this.updateUrlKey();
         },
@@ -850,10 +858,11 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('product_image').on('change', this, this.productImageChange);
                     this.getField('product_image_width').on('change', this, this.productImageWidthChange);
                     this.getField('product_image_height').on('change', this, this.productImageHeightChange);
+/*
                     this.getField('sidebar_image').on('change', this, this.sidebarImageChange);
                     this.getField('sidebar_image_width').on('change', this, this.sidebarImageWidthChange);
                     this.getField('sidebar_image_height').on('change', this, this.sidebarImageHeightChange);
-
+*/
                     this.getField('url_key').on('change', this, this.urlKeyChange);
                     this.getField('meta_title').on('change', this, this.metaTitleChange);
                     this.getField('meta_description').on('change', this, this.metaDescriptionChange);
@@ -887,10 +896,11 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('product_image').off('change', this, this.productImageChange);
                     this.getField('product_image_width').off('change', this, this.productImageWidthChange);
                     this.getField('product_image_height').off('change', this, this.productImageHeightChange);
+/*
                     this.getField('sidebar_image').off('change', this, this.sidebarImageChange);
                     this.getField('sidebar_image_width').off('change', this, this.sidebarImageWidthChange);
                     this.getField('sidebar_image_height').off('change', this, this.sidebarImageHeightChange);
-
+*/
                     this.getField('url_key').off('change', this, this.urlKeyChange);
                     this.getField('meta_title').off('change', this, this.metaTitleChange);
                     this.getField('meta_description').off('change', this, this.metaDescriptionChange);
@@ -925,7 +935,7 @@ function ($, TabContainer, layout, aggregate, template)
             ]);
             this.featuredImageChange();
             this.productImageChange();
-            this.sidebarImageChange();
+//            this.sidebarImageChange();
         },
         imageWidthChange: function () {
             this.updateFromJson('image_width', [
@@ -975,6 +985,7 @@ function ($, TabContainer, layout, aggregate, template)
                 ['attribute-page', 'option_page_product_image_height']
             ]);
         },
+/*
         sidebarImageChange: function () {
             this.updateImageFromJson('sidebar_image', [
                 ['global', 'sidebar_image', 'global-is-custom'],
@@ -993,6 +1004,7 @@ function ($, TabContainer, layout, aggregate, template)
                 ['attribute-page', 'option_page_sidebar_image_height']
             ]);
         },
+*/
         isActiveChange: function () {
             this.updateFromJson('is_active', [
                 ['global', 'is_active', 'global-is-custom'],

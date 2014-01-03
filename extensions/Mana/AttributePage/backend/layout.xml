@@ -6,6 +6,11 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <layout version="0.1.0">
+    <default>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
+        </reference>
+    </default>
     <adminhtml_mana_attributepage_index>
 		<update handle="mana_admin2" />
         <reference name="head">

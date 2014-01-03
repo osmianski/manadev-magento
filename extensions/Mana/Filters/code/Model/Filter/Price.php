@@ -335,8 +335,14 @@ class Mana_Filters_Model_Filter_Price
             }
             if (!$range) {
                 $currentCategory = Mage::registry('current_category_filter');
+                /* @var $currentOptionPage Mana_AttributePage_Model_OptionPage_Store */
+                $currentOptionPage = Mage::registry('current_option_page');
+
                 if ($currentCategory) {
                     $range = $currentCategory->getFilterPriceRange();
+                }
+                elseif ($currentOptionPage && $currentOptionPage->getData('price_step')) {
+                    $range = $currentOptionPage->getData('price_step');
                 }
                 else {
                     $range = $this->getLayer()->getCurrentCategory()->getFilterPriceRange();
