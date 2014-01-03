@@ -43,8 +43,18 @@
         </reference>
         <reference name="content">
             <block type="mana_attributepage/attribute_view" name="attribute_view" template="mana/attributepage/attribute/view.phtml">
+                <block type="mana_attributepage/option_featured" name="option_featured" template="mana/attributepage/option/featured.phtml"/>
+                <block type="mana_attributepage/option_alpha" name="option_alpha" template="mana/attributepage/option/alpha.phtml"/>
                 <block type="mana_attributepage/option_list" name="option_list" template="mana/attributepage/option/list.phtml"/>
             </block>
         </reference>
     </mana_attributepage_view>
+    <catalog_product_view>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
+        </reference>
+        <reference name="alert.urls">
+            <block type="mana_attributepage/option_product" name="m_option_product" before="-" template="mana/attributepage/option/product.phtml" />
+        </reference>
+    </catalog_product_view>
 </layout>

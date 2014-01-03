@@ -52,6 +52,18 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
     }
 
     /**
+     * @return Mana_AttributePage_Resource_OptionPage_Store_Collection
+     */
+    public function getOptionFeatured() {
+        $collection = $this->createOptionPageCollection()
+            ->addAttributePageFilter($this->getData('attribute_page_global_id'))
+            ->addStoreFilter($this->getData('store_id'))
+            ->addFeaturedFilter()
+            ->setOrder('title', 'ASC');
+        return $collection;
+    }
+
+    /**
      * @return Mana_AttributePage_Resource_AttributePage_Store
      */
     public function getResource() {

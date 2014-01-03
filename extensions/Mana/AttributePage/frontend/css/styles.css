@@ -4,6 +4,14 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-.m-alpha-pager { width: 20px; float: left;}
 
+
+.m-featured-image { float: left; width: 100px; }
+
+.m-alpha-pager { width: 20px; float: left; }
+
+li.category-image.m-option-page-image{ float: left; width: 100px; }
+
+.m-option-featured-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
 .m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+.m-option-page-product:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }

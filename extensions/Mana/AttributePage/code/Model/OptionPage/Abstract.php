@@ -52,11 +52,11 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
         {
             $errors[] = $t->__('Please fill in %s field', $t->__('Title'));
         }
-        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DESCRIPTION) &&
+/*        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DESCRIPTION) &&
             !trim($this->getData('description')))
         {
             $errors[] = $t->__('Please fill in %s field', $t->__('Description'));
-        }
+        }*/
         if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_URL_KEY) &&
             !trim($this->getData('url_key')))
         {
