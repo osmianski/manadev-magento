@@ -102,7 +102,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ImageForm extends Mana_Attri
             'default_label' => $this->__('Same For All Option Pages'),
             'default_store_label' => $this->__('Same For All Stores'),
         ));
-
+/*
         $fieldset = $this->addFieldset($form, 'mfs_sidebar_image', array(
             'title' => $this->__('Sidebar Image'),
             'legend' => $this->__('Sidebar Image'),
@@ -140,7 +140,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ImageForm extends Mana_Attri
             'default_label' => $this->__('Same For All Option Pages'),
             'default_store_label' => $this->__('Same For All Stores'),
         ));
-
+*/
         $this->setForm($form);
         return parent::_prepareForm();
     }

@@ -266,6 +266,19 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
             }
         }
 
+        // process date fields
+        $filterInput = new Zend_Filter_LocalizedToNormalized(array(
+            'date_format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT)
+        ));
+        $filterInternal = new Zend_Filter_NormalizedToLocalized(array(
+            'date_format' => Varien_Date::DATE_INTERNAL_FORMAT
+        ));
+        foreach (array('custom_design_active_from', 'custom_design_active_to') as $key) {
+            if (trim($model->getData($key))) {
+                $model->setData($key, $filterInternal->filter($filterInput->filter($model->getData($key))));
+            }
+        }
+
         // process image fields
         foreach (array('image', 'option_page_image') as $key) {
             if ($this->coreDbHelper()->isModelContainsCustomSetting($model, $key) &&

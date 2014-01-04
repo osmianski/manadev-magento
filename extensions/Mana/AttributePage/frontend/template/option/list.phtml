@@ -15,7 +15,7 @@ $_actualColumn = 0;
 $_currentAlpha = '';
 $_count = count($this->getAttributePage()->getOptionPages());
 ?>
-<?php if($_count) :?>
+<?php if( $_count) :?>
     <ul class="m-option-page-list col<?php echo $_columnCount ?>-set"><li class="col-<?php echo $_actualColumn + 1?>"><ul>
         <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) : $i++;?>
             <?php
@@ -32,7 +32,7 @@ $_count = count($this->getAttributePage()->getOptionPages());
             <?php if ($_alpha != $_currentAlpha): ?>
                 <?php $_currentAlpha = $_alpha; ?>
                 <li class="m-alpha">
-                    <span><?php echo $_currentAlpha; ?></span>
+                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></span>
                 </li>
             <?php endif; ?>
             <li class="m-option-page">

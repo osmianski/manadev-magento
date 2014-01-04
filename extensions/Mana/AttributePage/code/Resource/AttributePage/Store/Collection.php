@@ -1,4 +1,4 @@
-Collection.php<?php
+<?php
 /** 
  * @category    Mana
  * @package     Mana_AttributePage

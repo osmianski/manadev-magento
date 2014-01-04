@@ -11,13 +11,28 @@
  */
 class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Front_Action {
     public function viewAction() {
-        if ($this->_initAttributePage()) {
-            $this->loadLayout();
+
+        if ($attributePage = $this->_initAttributePage()) {
+            $layoutXml = $this->_applyCustomDesign();
+
+            $this->getLayout()->getUpdate()->addHandle('default');
+            $this->addActionLayoutHandles();
+            $this->loadLayoutUpdates();
+            if (trim($layoutXml)) {
+                $this->getLayout()->getUpdate()->addUpdate($layoutXml);
+            }
+            $this->generateLayoutXml();
+            $this->generateLayoutBlocks();
+            $this->_isLayoutLoaded = true;
+            if ($pageLayout = $attributePage->getData('page_layout')) {
+                $this->pageLayoutHelper()->applyTemplate($pageLayout);
+            }
+
             $this->renderLayout();
-        }
-        else {
+        } else {
             $this->_forward('noRoute');
         }
+
     }
 
     protected function _initAttributePage() {
@@ -45,4 +60,41 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
 
         return $attributePage;
     }
+
+     protected function _applyCustomDesign()
+    {
+        /* @var $page Mana_AttributePage_Model_OptionPage_Store */
+        $page = Mage::registry('current_attribute_page');
+
+        $result = $page->getData('layout_xml');
+        if (Mage::app()->getLocale()->isStoreDateInInterval(
+            null,
+            $page->getData('custom_design_active_from'),
+            $page->getData('custom_design_active_to')
+        )
+        ) {
+            $designInfo = explode("/", $page->getData('custom_design'));
+            if (count($designInfo) == 2) {
+                $this->getDesign()->setPackageName($designInfo[0])->setTheme($designInfo[1]);
+            }
+            $result .= $page->getData('custom_layout_xml');
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Mage_Core_Model_Design_Package
+     */
+    public function getDesign() {
+        return Mage::getSingleton('core/design_package');
+    }
+
+    /**
+     * @return Mage_Page_Helper_Layout
+     */
+    public function pageLayoutHelper() {
+        return $this->getLayout()->helper('page/layout');
+    }
+
 }

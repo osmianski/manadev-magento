@@ -46,8 +46,20 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
             ->setOrder('title', 'ASC');
 
         $collection->getSelect()->columns(array(
-            'alpha' => new Zend_Db_Expr("LEFT(main_table.title, 1)"),
+            'alpha' => new Zend_Db_Expr("CASE WHEN main_table.title REGEXP '^[0-9]' THEN '#' ELSE LEFT(upper(main_table.title), 1) END"),
         ));
+        return $collection;
+    }
+
+    /**
+     * @return Mana_AttributePage_Resource_OptionPage_Store_Collection
+     */
+    public function getOptionFeatured() {
+        $collection = $this->createOptionPageCollection()
+            ->addAttributePageFilter($this->getData('attribute_page_global_id'))
+            ->addStoreFilter($this->getData('store_id'))
+            ->addFeaturedFilter()
+            ->setOrder('title', 'ASC');
         return $collection;
     }
 

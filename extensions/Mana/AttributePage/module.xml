@@ -28,5 +28,10 @@
                 <Mana_AttributePage/>
             </depends>
         </ManaPro_FilterPositioning>
+        <ManaPro_FilterAjax>
+            <depends>
+                <Mana_AttributePage/>
+            </depends>
+        </ManaPro_FilterAjax>
     </modules>
 </config>
