@@ -93,18 +93,18 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
                 $global = Mage::registry('m_global_flat_model');
                 if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_AVAILABLE_SORT_BY)) {
                     if (!in_array($this->getData('default_sort_by'), explode(',', $this->getData('available_sort_by')))) {
-                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Display tab)');
                     }
                 }
                 elseif ($this->dbHelper()->isModelContainsCustomSetting($global, self::DM_AVAILABLE_SORT_BY)) {
                     if (!in_array($this->getData('default_sort_by'), explode(',', $global->getData('available_sort_by')))) {
-                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Display tab)');
                     }
                 }
                 else {
                     $attributePage = Mage::registry('m_attribute_page');
                     if (!in_array($this->getData('default_sort_by'), explode(',', $attributePage->getData('option_page_available_sort_by')))) {
-                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                        $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Display tab)');
                     }
                 }
             }
