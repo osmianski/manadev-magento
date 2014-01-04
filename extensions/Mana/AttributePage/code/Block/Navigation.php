@@ -69,6 +69,9 @@ class Mana_AttributePage_Block_Navigation extends Mage_Core_Block_Template {
                 ->where('main_table.include_in_menu = ?', 1)
                 ->where('main_table.store_id = ?', Mage::app()->getStore()->getId());
 
+        if (Mage::getStoreConfigFlag('mana_attributepage/menu/only_non_empty_option_pages')) {
+            $collection->addHavingProductsFilter();
+        }
         if ($pageSize = Mage::getStoreConfig('mana_attributepage/menu/max_option_pages')) {
             $collection
                 ->setPageSize($pageSize)

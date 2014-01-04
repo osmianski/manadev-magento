@@ -27,24 +27,40 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         return $this;
     }
 
+    public function addHavingProductsFilter() {
+        $db = $this->getConnection();
+        for ($i = 0; $i < Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT; $i++) {
+            $productSelect = $db->select()
+                ->from(array("eav_$i" => $this->getTable('catalog/product_index_eav')), 'entity_id')
+                ->where("`eav_$i`.`value` = `op_g`.`option_id_$i`");
+            $this->getSelect()->where("`op_g`.`option_id_$i` IS NULL OR EXISTS($productSelect)");
+        }
+        return $this;
+    }
+
+//    public function addProductCount() {
+//        $db = $this->getConnection();
+//        $productSelect = $db->select()
+//            ->from(array("p" => $this->getTable('catalog/product')),
+//                array('count' => new Zend_Db_Expr("COUNT(DISTINCT `p`.`entity_id`)")));
+//        for ($i = 0; $i < Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT; $i++) {
+//            $productSelect = $db->select()
+//                ->joinLeft(array("eav_$i" => $this->getTable('catalog/product_index_eav')),
+//                    "`eav_$i`.`entity_id` = `p`.`entity_id`", null)
+//                ->where("`eav_$i`.`value` = `op_g`.`option_id_$i`");
+//        }
+//        $this->getSelect()->columns(array(
+//            'product_count' => new Zend_Db_Expr("($productSelect)"),
+//        ));
+//        return $this;
+//    }
+
     /**
      * @param $storeId
      * @param $productId
      * @return $this
      */
     public function addProductFilter($storeId, $productId) {
-/** SELECT *
-  FROM m_option_page_store main_table
-       INNER JOIN m_option_page_global op_g
-          ON op_g.id = main_table.option_page_global_id
-       INNER JOIN m_attribute_page_global_custom_settings ap_gcs
-          ON op_g.attribute_page_global_id = ap_gcs.id
-       INNER JOIN catalog_product_index_eav i
-          ON     ap_gcs.attribute_id_0 = i.attribute_id
-             AND op_g.option_id_0 = i.value
-             AND main_table.store_id = i.store_id
- WHERE main_table.store_id = 1 AND i.entity_id = 16
- */
        $this->getSelect()
             ->joinInner(array('op_g' => $this->getTable('mana_attributepage/optionPage_global')),
                 "`op_g`.`id` = `main_table`.`option_page_global_id`", null)
