@@ -55,6 +55,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_OPTION_PAGE_PRODUCT_IMAGE_HEIGHT = 42;
     const DM_OPTION_PAGE_SIDEBAR_IMAGE_WIDTH = 43;
     const DM_OPTION_PAGE_SIDEBAR_IMAGE_HEIGHT = 44;
+    const DM_POSITION = 45;
 
     const MAX_ATTRIBUTE_COUNT = 5;
 
@@ -107,6 +108,11 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
             {
                 $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
             }
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_POSITION) &&
+            !trim($this->getData('position')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Position'));
         }
         if (count($errors)) {
 			throw new Mana_Core_Exception_Validation($errors);

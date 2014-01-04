@@ -28,8 +28,8 @@ function ($, Container)
 });
 
 Mana.define('Mana/AttributePage/AttributePage/TabContainer', ['jquery', 'Mana/Admin/Container',
-    'singleton:Mana/Core/Json'],
-function ($, Container, json, undefined)
+    'singleton:Mana/Core/Json', 'singleton:Mana/Admin/Aggregate'],
+function ($, Container, json, aggregate, undefined)
 {
     return Container.extend('Mana/AttributePage/AttributePage/TabContainer', {
         _subscribeToBlockEvents: function () {
@@ -105,6 +105,15 @@ function ($, Container, json, undefined)
                 this._titleTemplate = json.decodeAttribute(this.$().data('title-template'));
             }
             return this._titleTemplate;
+        },
+        getAttributePosition: function() {
+            var self = this;
+            var result = 0;
+            var ids = aggregate.expr(this._fields, 'attribute_id_X', this.getAttrCount(), 'getValue');
+            $.each(ids, function(i, id) {
+                result += parseInt(self.getJsonData('attribute', id).position);
+            });
+            return result;
         }
     });
 });
@@ -125,6 +134,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('attribute_id_4').on('change', this, this.attributeIdChange);
 
                     this.getField('title').on('change', this, this.titleChange);
+                    this.getField('position').on('change', this, this.positionChange);
                     this.getField('description').on('change', this, this.descriptionChange);
 
                     this.getField('url_key').on('change', this, this.urlKeyChange);
@@ -144,6 +154,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('attribute_id_4').off('change', this, this.attributeIdChange);
 
                     this.getField('title').off('change', this, this.titleChange);
+                    this.getField('position').off('change', this, this.positionChange);
                     this.getField('description').off('change', this, this.descriptionChange);
 
                     this.getField('url_key').off('change', this, this.urlKeyChange);
@@ -160,6 +171,7 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateAttributes();
             this.updateTabs();
             this.updateTitle();
+            this.updatePosition();
             this.updateUrlKey();
             this.updateMetaKeywords();
         },
@@ -168,6 +180,9 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateMetaTitle();
             this.updateDescription();
             this.updateMetaDescription();
+        },
+        positionChange: function() {
+            this.updatePosition();
         },
         descriptionChange: function() {
             this.updateDescription();
@@ -194,7 +209,7 @@ function ($, TabContainer, layout, aggregate, template)
             if (field.useDefault()) {
                 field.setValue(template.concat(title['template'], {
                     attribute_labels: title['last_separator']
-                        ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
+                       ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
                         : aggregate.glue(titleExpr, title['last_separator'])
                 }));
             }
@@ -209,6 +224,12 @@ function ($, TabContainer, layout, aggregate, template)
             var field = this.getField('description');
             if (field.useDefault()) {
                 field.setValue(this.getField('title').getText());
+            }
+        },
+        updatePosition: function() {
+            var field = this.getField('position');
+            if (field.useDefault()) {
+                field.setValue(this.getAttributePosition());
             }
         },
         updateUrlKey: function() {
@@ -251,6 +272,7 @@ function ($, TabContainer, layout, aggregate, template)
             return this
                 ._super()
                 .on('load', this, function () {
+                    this.getField('position').on('change', this, this.positionChange);
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
@@ -299,12 +321,13 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('option_page_custom_design').on('change', this, this.optionPageCustomDesignChange);
                     this.getField('option_page_custom_layout_xml').on('change', this, this.optionPageCustomLayoutXmlChange);
 
-                    this.getField('option_page_show_products').on('change', this, this.optionPageShowProductsChange);
+                    //this.getField('option_page_show_products').on('change', this, this.optionPageShowProductsChange);
                     this.getField('option_page_available_sort_by').on('change', this, this.optionPageAvailableSortByChange);
                     this.getField('option_page_default_sort_by').on('change', this, this.optionPageDefaultSortByChange);
                     this.getField('option_page_price_step').on('change', this, this.optionPagePriceStepChange);
                 })
                 .on('unload', this, function () {
+                    this.getField('position').off('change', this, this.positionChange);
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
@@ -353,7 +376,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('option_page_custom_design').off('change', this, this.optionPageCustomDesignChange);
                     this.getField('option_page_custom_layout_xml').off('change', this, this.optionPageCustomLayoutXmlChange);
 
-                    this.getField('option_page_show_products').off('change', this, this.optionPageShowProductsChange);
+                    //this.getField('option_page_show_products').off('change', this, this.optionPageShowProductsChange);
                     this.getField('option_page_available_sort_by').off('change', this, this.optionPageAvailableSortByChange);
                     this.getField('option_page_default_sort_by').off('change', this, this.optionPageDefaultSortByChange);
                     this.getField('option_page_price_step').off('change', this, this.optionPagePriceStepChange);
@@ -367,6 +390,9 @@ function ($, TabContainer, layout, aggregate, template)
         },
         descriptionChange: function() {
             this.updateDescription();
+        },
+        positionChange: function () {
+            this.updatePosition();
         },
         imageChange: function() {
             this.updateImageFromJson('image', 'global');
@@ -519,6 +545,17 @@ function ($, TabContainer, layout, aggregate, template)
                 }
             }
         },
+        updatePosition: function() {
+            var field = this.getField('position');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'position')) {
+                    field.setValue(this.getJsonData('global', 'position'));
+                }
+                else {
+                    field.setValue(this.getAttributePosition());
+                }
+            }
+        },
         updateUrlKey: function() {
             var field = this.getField('url_key');
             var titleExpr = aggregate.expr(this._fields, 'attribute_id_X', this.getAttrCount());
@@ -581,6 +618,9 @@ function ($, Container, json, undefined)
                 this._titleTemplate = json.decodeAttribute(this.$().data('title-template'));
             }
             return this._titleTemplate;
+        },
+        getOptionPosition: function () {
+            return this.$().data('option-position');
         }
     });
 });
@@ -594,6 +634,7 @@ function ($, TabContainer, layout, aggregate, template)
             return this
                 ._super()
                 .on('load', this, function () {
+                    this.getField('position').on('change', this, this.positionChange);
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
@@ -631,6 +672,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('price_step').on('change', this, this.priceStepChange);
                 })
                 .on('unload', this, function () {
+                    this.getField('position').off('change', this, this.positionChange);
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
@@ -673,6 +715,9 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateDescription();
             this.updateMetaTitle();
             this.updateMetaDescription();
+        },
+        positionChange: function () {
+            this.updatePosition();
         },
         descriptionChange: function () {
             this.updateDescription();
@@ -805,6 +850,12 @@ function ($, TabContainer, layout, aggregate, template)
                 }
             }
         },
+        updatePosition: function () {
+            var field = this.getField('position');
+            if (field.useDefault()) {
+                field.setValue(this.getOptionPosition());
+            }
+        },
         updateMetaTitle: function() {
             var field = this.getField('meta_title');
             if (field.useDefault()) {
@@ -835,6 +886,7 @@ function ($, TabContainer, layout, aggregate, template)
             return this
                 ._super()
                 .on('load', this, function () {
+                    this.getField('position').on('change', this, this.positionChange);
                     this.getField('title').on('change', this, this.titleChange);
                     this.getField('description').on('change', this, this.descriptionChange);
                     this.getField('image').on('change', this, this.imageChange);
@@ -872,6 +924,7 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('price_step').on('change', this, this.priceStepChange);
                 })
                 .on('unload', this, function () {
+                    this.getField('position').off('change', this, this.positionChange);
                     this.getField('title').off('change', this, this.titleChange);
                     this.getField('description').off('change', this, this.descriptionChange);
                     this.getField('image').off('change', this, this.imageChange);
@@ -914,6 +967,9 @@ function ($, TabContainer, layout, aggregate, template)
             this.updateDescription();
             this.updateMetaTitle();
             this.updateMetaDescription();
+        },
+        positionChange: function () {
+            this.updatePosition();
         },
         descriptionChange: function () {
             this.updateDescription();
@@ -1097,6 +1153,17 @@ function ($, TabContainer, layout, aggregate, template)
                             ? aggregate.glue(titleExpr, title['separator'], title['last_separator'])
                             : aggregate.glue(titleExpr, title['last_separator'])
                     }));
+                }
+            }
+        },
+        updatePosition: function () {
+            var field = this.getField('position');
+            if (field.useDefault()) {
+                if (this.getJsonData('global-is-custom', 'position')) {
+                    field.setValue(this.getJsonData('global', 'position'));
+                }
+                else {
+                    field.setValue(this.getOptionPosition());
                 }
             }
         },

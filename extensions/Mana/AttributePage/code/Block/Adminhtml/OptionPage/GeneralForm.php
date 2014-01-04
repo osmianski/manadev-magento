@@ -141,8 +141,8 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_GeneralForm extends Mana_Att
         ));
 
         $this->addField($fieldset, 'include_in_menu', 'select', array(
-            'label' => $this->__('Include In Menu'),
-            'title' => $this->__('Include In Menu'),
+            'label' => $this->__('Include In Top Menu'),
+            'title' => $this->__('Include In Top Menu'),
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'include_in_menu',
             'required' => true,
@@ -162,6 +162,17 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_GeneralForm extends Mana_Att
             'default_bit_no' => Mana_AttributePage_Model_OptionPage_Abstract::DM_IS_FEATURED,
             'default_label' => $this->__('Same For All Option Pages'),
             'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'position', 'text', array(
+            'label' => $this->__('Position'),
+            'title' => $this->__('Position'),
+            'name' => 'position',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION,
+            'default_label' => $this->__('Use Option Positions'),
+            'default_store_label' => $this->__('Use Option Positions'),
         ));
 
         $this->setForm($form);

@@ -61,13 +61,14 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
         ));
 
         $fieldset = $this->addFieldset($form, 'mfs_base_image', array(
-            'title' => $this->__('Base Image'),
-            'legend' => $this->__('Base Image'),
+            'title' => $this->__('Image'),
+            'legend' => $this->__('Image'),
         ));
 
         $this->addField($fieldset, 'image', 'image', array(
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),
+            'note' => $this->__('Visible on the top of attribute page'),
             'name' => 'image',
             'required' => false,
 
@@ -112,8 +113,8 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
         ));
 
         $this->addField($fieldset, 'include_in_menu', 'select', array(
-            'label' => $this->__('Include In Menu'),
-            'title' => $this->__('Include In Menu'),
+            'label' => $this->__('Include In Top Menu'),
+            'title' => $this->__('Include In Top Menu'),
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'include_in_menu',
             'required' => true,
@@ -122,7 +123,19 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_GeneralForm extends Mana_
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'position', 'text', array(
+            'label' => $this->__('Position'),
+            'title' => $this->__('Position'),
+            'name' => 'position',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION,
+            'default_label' => $this->__('Use Attribute Positions'),
+            'default_store_label' => $this->__('Use Attribute Positions'),
+        ));
+
         $this->setForm($form);
         return parent::_prepareForm();
     }
+
 }

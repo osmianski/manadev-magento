@@ -34,9 +34,6 @@
     </mana_optionpage_view>
     <mana_attributepage_view translate="label">
         <label>Option Page (MANAdev)</label>
-        <reference name="left">
-            <block type="catalog/layer_view" name="catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
-        </reference>
         <reference name="content">
             <block type="mana_attributepage/attribute_view" name="attribute_view" template="mana/attributepage/attribute/view.phtml">
                 <block type="mana_attributepage/option_list" name="option_list" template="mana/attributepage/option/list.phtml"/>

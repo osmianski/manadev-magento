@@ -40,7 +40,6 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
         $aggregate = $this->dbAggregateHelper();
-        $t = $this->attributePageHelper();
 
         $seoifyExpr = $this->coreHelper()->isManadevSeoInstalled()
             ? $this->seoHelper()->seoifyExpr("`X`")
@@ -48,6 +47,9 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $titleExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
             ? $aggregate->expr("COALESCE(`fX`.`name`, `aX`.`frontend_label`)", $attrCount)
             : $aggregate->expr("`aX`.`frontend_label`", $attrCount);
+        $positionExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
+            ? $aggregate->expr("COALESCE(`fX`.`position`, `cX`.`position`, 0)", $attrCount)
+            : $aggregate->expr("COALESCE(`cX`.`position`, 0)", $attrCount);
 
         $title = array(
             'template' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/template'),
@@ -67,6 +69,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                         : $aggregate->glue($titleExpr, $title['last_separator'])
                 ))}
             )",
+            'raw_title' => $aggregate->glue($titleExpr, ','),
             'url_key' => "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_URL_KEY)},
                 `ap_gcs`.`url_key`,
                 {$urlKeyExpr}
@@ -74,6 +77,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
             'meta_keywords' => "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_META_KEYWORDS)},
                 `ap_gcs`.`meta_keywords`,
                 {$aggregate->glue($titleExpr, ',')}
+            )",
+            'position' => "IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION)},
+                `ap_gcs`.`position`,
+                {$aggregate->sum($positionExpr)}
             )",
         );
         $fields['description'] =
@@ -96,6 +103,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $select->from(array('ap_gcs' => $this->getTable('mana_attributepage/attributePage_globalCustomSettings')), null);
 
         $aggregate->joinLeft($select, 'aX', $this->getTable('eav/attribute'), "`aX`.`attribute_id` = `ap_gcs`.`attribute_id_X`", $attrCount);
+        $aggregate->joinLeft($select, 'cX', $this->getTable('catalog/eav_attribute'), "`cX`.`attribute_id` = `aX`.`attribute_id`", $attrCount);
         if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
             $aggregate->joinLeft($select, 'fX', $this->getTable('mana_filters/filter2'), "`fX`.`code` = `aX`.`attribute_code`", $attrCount);
         }
@@ -138,7 +146,6 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
         $aggregate = $this->dbAggregateHelper();
-        $t = $this->attributePageHelper();
 
         foreach (Mage::app()->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
@@ -162,6 +169,9 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
             $titleExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
                 ? $aggregate->expr("COALESCE(`fsX`.`name`, `lX`.`value`, `aX`.`frontend_label`)", $attrCount)
                 : $aggregate->expr("COALESCE(`lX`.`value`, `aX`.`frontend_label`)", $attrCount);
+            $positionExpr = $this->coreHelper()->isManadevLayeredNavigationInstalled()
+                ? $aggregate->expr("COALESCE(`fsX`.`position`, `cX`.`position`, 0)", $attrCount)
+                : $aggregate->expr("COALESCE(`cX`.`position`, 0)", $attrCount);
             $urlKeyExpr = $aggregate->glue($aggregate->wrap($seoifyExpr, $titleExpr), '-');
             $fields = array(
                 'attribute_page_global_id' => "`ap_g`.`id`",
@@ -180,6 +190,14 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                                 ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
                                 : $aggregate->glue($titleExpr, $title['last_separator'])
                         ))}
+                    )
+                )",
+                'raw_title' => $aggregate->glue($titleExpr, ','),
+                'position' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION)},
+                    `ap_scs`.`position`,
+                    IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION)},
+                        `ap_g`.`position`,
+                        {$aggregate->sum($positionExpr)}
                     )
                 )",
                 'image' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE)},
@@ -379,6 +397,7 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     $db->quoteInto("`ap_scs`.`attribute_page_global_id` = `ap_g`.`id` AND `ap_scs`.`store_id` = ?", $store->getId()), null);
 
             $aggregate->joinLeft($select, 'aX', $this->getTable('eav/attribute'), "`aX`.`attribute_id` = `ap_gcs`.`attribute_id_X`", $attrCount);
+            $aggregate->joinLeft($select, 'cX', $this->getTable('catalog/eav_attribute'), "`cX`.`attribute_id` = `aX`.`attribute_id`", $attrCount);
             $aggregate->joinLeft($select, 'lX', $this->getTable('eav/attribute_label'),
                 $db->quoteInto("`lX`.`attribute_id` = `aX`.`attribute_id` AND `lX`.`store_id` = ?", $store->getId()), $attrCount);
             if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {

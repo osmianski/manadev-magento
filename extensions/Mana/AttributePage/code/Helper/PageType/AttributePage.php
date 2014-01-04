@@ -30,7 +30,7 @@ class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_
     public function setPage($token) {
         $token
             ->setRoute($this->getRoutePath())
-            ->setIsRedirectToSubcategoryPossible(true)
+            ->setIsRedirectToSubcategoryPossible(false)
             ->addParameter('id', $token->getPageUrl()->getData('attribute_page_id'));
 
         return true;

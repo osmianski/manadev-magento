@@ -15,12 +15,14 @@ $_collection = $this->getAttributePageCollection();
 <?php foreach($_collection as $_page) : ++$i; ?>
     <?php
         $_childCollection = $this->getOptionPageCollection($_page->getData('attribute_page_global_id'));
-        $_siblingClass = $i == 1 ? 'first' : ($i == count($_collection->getItems()) ? 'last' : '');
         $_hasChildren = count($_childCollection->getItems()) > 0;
-        $_parentClass = $_hasChildren ? 'parent' : '';
-        $_activeClass = $this->isAttributePageActive($_page, $_childCollection) ? 'active' : '';
+        $_css = array();
+        $_css[] = $i == 1 ? 'first' : '';
+        $_css[] = $i == count($_collection->getItems()) ? 'last' : '';
+        $_css[] = $_hasChildren ? 'parent' : '';
+        $_css[] = $this->isAttributePageActive($_page, $_childCollection) ? 'active' : '';
     ?>
-    <li class="level-0 nav-attribute-<?php echo $_page->getId()?> level-top <?php echo $_activeClass ?> <?php echo $_siblingClass ?> <?php echo $_parentClass ?>">
+    <li class="level-0 nav-attribute-<?php echo $_page->getId()?> level-top <?php echo implode(' ', array_filter($_css)) ?>">
         <a href="<?php echo $_page->getUrl() ?>" class="level-top">
             <span><?php echo $this->escapeHtml($_page->getData('title')) ?></span>
         </a>
@@ -29,6 +31,7 @@ $_collection = $this->getAttributePageCollection();
             <?php echo $this
                 ->setTemplate('mana/attributepage/menu/option.phtml')
                 ->setData('collection', $_childCollection)
+                ->setData('attribute_page', $_page)
                 ->_toHtml(); ?>
         </ul>
         <?php endif; ?>

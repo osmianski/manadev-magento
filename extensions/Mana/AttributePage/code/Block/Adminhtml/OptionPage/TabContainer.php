@@ -88,6 +88,13 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_TabContainer extends Mana_Ad
                 'last_separator' => Mage::getStoreConfig('mana_attributepage/option_page_title/last_separator'),
             )),
             'attribute_page' => $this->jsonHelper()->encodeAttribute($this->getAttributePage()->getData()),
+            'option_position' => $this->getAttributeResource()->getOptionPosition(array(
+                $this->getFlatModel()->getData('option_id_0'),
+                $this->getFlatModel()->getData('option_id_1'),
+                $this->getFlatModel()->getData('option_id_2'),
+                $this->getFlatModel()->getData('option_id_3'),
+                $this->getFlatModel()->getData('option_id_4')
+            )),
         );
 
         if (!$this->adminHelper()->isGlobal()) {
@@ -162,6 +169,12 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_TabContainer extends Mana_Ad
      */
     public function templateHelper() {
         return Mage::helper('mana_core/stringTemplate');
+    }
+    /**
+     * @return Mana_AttributePage_Resource_Attribute
+     */
+    public function getAttributeResource() {
+        return Mage::getResourceSingleton('mana_attributepage/attribute');
     }
     #endregion
 }

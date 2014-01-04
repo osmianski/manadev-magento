@@ -42,7 +42,6 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
         $aggregate = $this->dbAggregateHelper();
-        $t = $this->attributePageHelper();
 
         $seoifyExpr = $this->coreHelper()->isManadevSeoInstalled()
             ? $this->seoHelper()->seoifyExpr("`X`")
@@ -86,6 +85,11 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                         ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
                         : $aggregate->glue($titleExpr, $title['last_separator'])
                 ))}
+            )",
+            'raw_title' => $aggregate->glue($titleExpr, ','),
+            'position' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
+                `op_gcs`.`position`,
+                {$aggregate->sum($aggregate->expr("COALESCE(`oX`.`sort_order`, 0)", $attrCount))}
             )",
             'image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},
                 `op_gcs`.`image`,
@@ -292,7 +296,6 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         $dbHelper = $this->dbHelper();
         $attrCount = Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT;
         $aggregate = $this->dbAggregateHelper();
-        $t = $this->attributePageHelper();
 
         foreach (Mage::app()->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
@@ -343,6 +346,14 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                                 ? $aggregate->glue($titleExpr, $title['separator'], $title['last_separator'])
                                 : $aggregate->glue($titleExpr, $title['last_separator'])
                         ))}
+                    )
+                )",
+                'raw_title' => $aggregate->glue($titleExpr, ','),
+                'position' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
+                    `op_scs`.`position`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
+                        `op_g`.`position`,
+                        {$aggregate->sum($aggregate->expr("COALESCE(`oX`.`sort_order`, 0)", $attrCount))}
                     )
                 )",
                 'image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_IMAGE)},

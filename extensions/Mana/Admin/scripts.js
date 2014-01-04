@@ -1121,6 +1121,9 @@ function ($, expression, core, undefined) {
                     else if (func === 'getLabel') {
                         result.push(fields[field].getLabel());
                     }
+                    else if (func === 'getValue') {
+                        result.push(fields[field].getValue());
+                    }
                     else {
                         result.push(fields[field].getText());
                     }

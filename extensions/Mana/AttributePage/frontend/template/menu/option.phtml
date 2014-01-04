@@ -6,19 +6,36 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 /* @var $this Mana_AttributePage_Block_Navigation */
+/* @var $_attributePage Mana_AttributePage_Model_AttributePage_Store */
 /* @var $_page Mana_AttributePage_Model_OptionPage_Store */
 /* @var $_collection Mana_AttributePage_Resource_OptionPage_Store_Collection */
 $i = 0;
 $_collection = $this->getData('collection');
+$_showAll = $this->showLinkToAllOptionPages($_collection);
+$_attributePage = $this->getData('attribute_page');
 ?>
 <?php foreach($_collection as $_page) : ++$i; ?>
     <?php
-        $_siblingClass = $i == 1 ? 'first' : ($i == count($_collection->getItems()) ? 'last' : '');
-        $_activeClass = $this->isOptionPageActive($_page) ? 'active' : '';
+        $_css = array();
+        $_css[] = $i == 1 ? 'first' : '';
+        $_css[] = $i == count($_collection->getItems()) && !$_showAll ? 'last' : '';
+        $_css[] = $this->isOptionPageActive($_page) ? 'active' : '';
     ?>
-    <li class="level-1 nav-option-<?php echo $_page->getId()?> <?php echo $_activeClass ?> <?php echo $_siblingClass ?>">
+    <li class="level-1 nav-option-<?php echo $_page->getId()?> <?php echo implode(' ', array_filter($_css)) ?>">
         <a href="<?php echo $_page->getUrl() ?>">
             <span><?php echo $this->escapeHtml($_page->getData('title')) ?></span>
         </a>
     </li>
 <?php endforeach; ?>
+<?php if ($_showAll) : ?>
+    <?php
+        $_css = array();
+        $_css[] = count($_collection->getItems()) == 0 ? 'first' : '';
+        $_css[] = 'last';
+    ?>
+    <li class="level-1 nav-all-options <?php echo implode(' ', array_filter($_css)) ?>">
+        <a href="<?php echo $_attributePage->getUrl() ?>">
+            <span><?php echo $this->escapeHtml($this->__('Show All')) ?></span>
+        </a>
+    </li>
+<?php endif; ?>

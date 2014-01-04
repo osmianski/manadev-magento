@@ -113,6 +113,8 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
                 'separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/separator'),
                 'last_separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/last_separator'),
             )),
+            'attribute' => $this->jsonHelper()->encodeAttribute(
+                $this->getAttributeResource()->getAttributes(Mana_AttributePage_Resource_Attribute::FIELDS_OTHER))
         );
 
         if (!$this->adminHelper()->isGlobal()) {
@@ -183,6 +185,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
      */
     public function templateHelper() {
         return Mage::helper('mana_core/stringTemplate');
+    }
+    /**
+     * @return Mana_AttributePage_Resource_Attribute
+     */
+    public function getAttributeResource() {
+        return Mage::getResourceSingleton('mana_attributepage/attribute');
     }
     #endregion
 }

@@ -16,8 +16,24 @@ class Mana_AttributePage_Block_Navigation extends Mage_Core_Block_Template {
 
     public function getAttributePageCollection() {
         $collection = $this->createAttributePageCollection();
+        switch (Mage::getStoreConfig('mana_attributepage/menu/sort_attribute_pages')) {
+            case 'position-asc':
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+            case 'position-desc':
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_DESC);
+                break;
+            case 'title-asc':
+                $collection->setOrder('raw_title', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+            case 'title-desc':
+                $collection->setOrder('raw_title', Varien_Data_Collection_Db::SORT_ORDER_DESC);
+                break;
+            default:
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+        }
         $collection
-            ->setOrder('title', 'ASC')
             ->getSelect()
                 ->where('main_table.is_active = ?', 1)
                 ->where('main_table.include_in_menu = ?', 1)
@@ -29,16 +45,51 @@ class Mana_AttributePage_Block_Navigation extends Mage_Core_Block_Template {
 
     public function getOptionPageCollection($attributePageGlobalId) {
         $collection = $this->createOptionPageCollection();
+        switch (Mage::getStoreConfig('mana_attributepage/menu/sort_option_pages')) {
+            case 'position-asc':
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+            case 'position-desc':
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_DESC);
+                break;
+            case 'title-asc':
+                $collection->setOrder('raw_title', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+            case 'title-desc':
+                $collection->setOrder('raw_title', Varien_Data_Collection_Db::SORT_ORDER_DESC);
+                break;
+            default:
+                $collection->setOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+                break;
+        }
         $collection
             ->addAttributePageFilter($attributePageGlobalId)
-            ->setOrder('title', 'ASC')
             ->getSelect()
                 ->where('main_table.is_active = ?', 1)
                 ->where('main_table.include_in_menu = ?', 1)
                 ->where('main_table.store_id = ?', Mage::app()->getStore()->getId());
 
+        if ($pageSize = Mage::getStoreConfig('mana_attributepage/menu/max_option_pages')) {
+            $collection
+                ->setPageSize($pageSize)
+                ->setCurPage(1);
+        }
         $collection->load();
         return $collection;
+    }
+
+    /**
+     * @param Mana_AttributePage_Resource_OptionPage_Store_Collection $collection
+     * @return bool
+     */
+    public function showLinkToAllOptionPages($collection) {
+        switch (Mage::getStoreConfig('mana_attributepage/menu/show_all_option_pages')) {
+            case 'always':
+                return true;
+            case 'if-max-reached':
+                return $collection->getSize() > count($collection->getItems());
+        }
+        return false;
     }
 
     /**

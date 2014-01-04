@@ -147,9 +147,18 @@
     </mana_core>
     <default>
         <mana_attributepage>
-            <general>
-                <add_to_menu>1</add_to_menu>
-            </general>
+            <menu>
+                <add>1</add>
+                <sort_attribute_pages>position-asc</sort_attribute_pages>
+                <sort_option_pages>position-asc</sort_option_pages>
+                <max_option_pages>10</max_option_pages>
+                <show_all_option_pages>if-max-reached</show_all_option_pages>
+                <only_non_empty_option_pages>1</only_non_empty_option_pages>
+                <add_category_submenu>1</add_category_submenu>
+                <sort_categories>position-asc</sort_categories>
+                <max_categories>10</max_categories>
+                <show_all_categories>if-max-reached</show_all_categories>
+            </menu>
             <attribute_page_title>
                 <template>Shop By {{attribute_labels}}</template>
                 <separator>, </separator>
@@ -165,7 +174,7 @@
     <m_layout>
         <default>
             <m_attribute_page_menu action="addAfter" handle="m_attribute_page_menu" if="flagSet">
-                <param>mana_attributepage/general/add_to_menu</param>
+                <param>mana_attributepage/menu/add</param>
             </m_attribute_page_menu>
         </default>
     </m_layout>

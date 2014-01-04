@@ -34,6 +34,7 @@ $installer->run(
       `default_mask3` int(10) unsigned NOT NULL,
 
       `is_active` tinyint NOT NULL DEFAULT '1',
+      `position` int(10) NOT NULL,
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `image` varchar(255) NOT NULL DEFAULT '',
@@ -115,7 +116,9 @@ $installer->run("
 
       `all_attribute_ids` varchar(255) NOT NULL DEFAULT '',
 
+      `position` int(10) NOT NULL,
       `title` varchar(255) NOT NULL DEFAULT '',
+      `raw_title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `url_key` varchar(128) NOT NULL DEFAULT '',
       `meta_title` varchar(255) NOT NULL DEFAULT '',
@@ -146,6 +149,7 @@ $installer->run(
       `default_mask2` int(10) unsigned NOT NULL,
       `default_mask3` int(10) unsigned NOT NULL,
 
+      `position` int(10) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
@@ -216,8 +220,10 @@ $installer->run("
       `store_id` smallint(5) unsigned NOT NULL,
       `attribute_page_store_custom_settings_id` bigint(20) DEFAULT NULL,
 
+      `position` int(10) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
+      `raw_title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `image` varchar(255) NOT NULL DEFAULT '',
       `image_width` int(10) NULL,
@@ -266,6 +272,8 @@ $installer->run("
       UNIQUE KEY `unique_key` (`attribute_page_global_id`,`store_id`),
       KEY `attribute_page_store_custom_settings_id` (`attribute_page_store_custom_settings_id`),
       KEY `attribute_page_global_id` (`attribute_page_global_id`),
+      KEY `position` (`position`),
+      KEY `raw_title` (`raw_title`),
       KEY `store_id` (`store_id`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -299,6 +307,7 @@ $installer->run(
       `default_mask2` int(10) unsigned NOT NULL,
       `default_mask3` int(10) unsigned NOT NULL,
 
+      `position` int(10) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
@@ -376,7 +385,9 @@ $installer->run("
       `option_id_4` int(10) unsigned DEFAULT NULL,
       `all_option_ids` varchar(255) NOT NULL DEFAULT '',
 
+      `position` int(10) NOT NULL,
       `title` varchar(255) NOT NULL DEFAULT '',
+      `raw_title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `image` varchar(255) NOT NULL DEFAULT '',
       `image_width` int(10) NULL,
@@ -457,6 +468,7 @@ $installer->run(
       `default_mask2` int(10) unsigned NOT NULL,
       `default_mask3` int(10) unsigned NOT NULL,
 
+      `position` int(10) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
@@ -513,8 +525,10 @@ $installer->run("
       `store_id` smallint(5) unsigned NOT NULL,
       `option_page_store_custom_settings_id` bigint(20) DEFAULT NULL,
 
+      `position` int(10) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
       `title` varchar(255) NOT NULL DEFAULT '',
+      `raw_title` varchar(255) NOT NULL DEFAULT '',
       `description` mediumtext NOT NULL,
       `image` varchar(255) NOT NULL DEFAULT '',
       `include_in_menu` tinyint NOT NULL DEFAULT '1',
@@ -549,6 +563,8 @@ $installer->run("
       UNIQUE KEY `unique_key` (`option_page_global_id`,`store_id`),
       KEY `option_page_global_id` (`option_page_global_id`),
       KEY `option_page_store_custom_settings_id` (`option_page_store_custom_settings_id`),
+      KEY `position` (`position`),
+      KEY `raw_title` (`raw_title`),
       KEY `store_id` (`store_id`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 

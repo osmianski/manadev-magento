@@ -44,6 +44,17 @@ class Mana_Core_Helper_Db_Aggregate extends Mage_Core_Helper_Abstract {
         return "CONCAT($result)";
     }
 
+    public function sum($exprArray) {
+        $result = '';
+        foreach ($exprArray as $expr) {
+            if ($result) {
+                $result .= " + ";
+            }
+            $result .= $expr;
+        }
+        return $result;
+    }
+
     public function wrap($pattern, $exprArray) {
         $result = array();
         foreach ($exprArray as $expr) {

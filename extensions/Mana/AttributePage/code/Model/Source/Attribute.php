@@ -11,52 +11,9 @@
  */
 class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_Abstract {
     protected function _getAllOptions() {
-        /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
-        $collection = Mage::getResourceModel('catalog/product_attribute_collection')
-            ->setItemObjectClass('catalog/resource_eav_attribute');
-        $db = $collection->getConnection();
-
-        $select = $collection->getSelect();
-
-        if ($this->adminHelper()->isGlobal()) {
-            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
-                $select->joinLeft(array('f' => $collection->getTable('mana_filters/filter2')),
-                    "`f`.`code` = `main_table`.`attribute_code`", null);
-                $labelExpr = "COALESCE(`f`.`name`, `main_table`.`frontend_label`)";
-            }
-            else {
-                $labelExpr = "main_table.frontend_label";
-            }
-        }
-        else {
-            $storeId = $this->adminHelper()->getStore()->getId();
-            $select->joinLeft(array('l' => $collection->getTable('eav/attribute_label')),
-                $db->quoteInto("`l`.`attribute_id` = `main_table`.`attribute_id` AND `l`.`store_id` = ?", $storeId), null);
-            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
-                $select->joinLeft(array('f' => $collection->getTable('mana_filters/filter2')),
-                    "`f`.`code` = `main_table`.`attribute_code`", null);
-                $select->joinLeft(array('fs' => $collection->getTable('mana_filters/filter2_store')),
-                    $db->quoteInto("`fs`.`global_id` = `f`.`id` AND `fs`.`store_id` = ?", $storeId), null);
-                $labelExpr = "COALESCE(`fs`.`name`, `l`.`value`, `main_table`.`frontend_label`)";
-            }
-            else {
-                $labelExpr = "COALESCE(`l`.`value`, `main_table`.`frontend_label`)";
-            }
-        }
-        $select
-            ->distinct(true)
-            ->reset('columns')
-            ->columns(array('main_table.attribute_id', $labelExpr))
-            ->where("additional_table.is_filterable <> 0")
-            ->where(sprintf('(%s) OR (%s) OR (%s)',
-                $db->quoteInto('main_table.backend_model = ?', 'eav/entity_attribute_backend_array'),
-                $db->quoteInto('main_table.source_model = ?', 'eav/entity_attribute_source_table'),
-                $db->quoteInto("main_table.frontend_input = ? AND main_table.source_model IS NOT NULL", 'select')
-            ))
-            ->order('main_table.frontend_label ASC');
-
         $result = array(array('value' => '', 'label' => ''));
-        foreach ($db->fetchPairs($select) as $value => $label) {
+        $data = $this->getAttributeResource()->getAttributes(Mana_AttributePage_Resource_Attribute::FIELDS_LABEL);
+        foreach ($data as $value => $label) {
             $result[] = array('value' => $value, 'label' => $label);
         }
 
@@ -75,6 +32,12 @@ class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_A
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
+    }
+    /**
+     * @return Mana_AttributePage_Resource_Attribute
+     */
+    public function getAttributeResource() {
+        return Mage::getResourceSingleton('mana_attributepage/attribute');
     }
     #endregion
 }

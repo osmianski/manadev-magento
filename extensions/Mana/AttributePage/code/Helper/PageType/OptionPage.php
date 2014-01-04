@@ -30,7 +30,7 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
     public function setPage($token) {
         $token
             ->setRoute($this->getRoutePath())
-            ->setIsRedirectToSubcategoryPossible(true)
+            ->setIsRedirectToSubcategoryPossible(false)
             ->addParameter('id', $token->getPageUrl()->getData('option_page_id'));
 
         return true;

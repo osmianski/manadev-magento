@@ -35,6 +35,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
         $this->addField($fieldset, 'show_alphabetic_search', 'select', array(
             'label' => $this->__('Show Alphabetic Search'),
             'title' => $this->__('Show Alphabetic Search'),
+            'note' => $this->__('If Yes, then alphabet is shown on top of attribute page'),
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'show_alphabetic_search',
             'required' => true,
@@ -46,6 +47,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
         $this->addField($fieldset, 'show_featured_options', 'select', array(
             'label' => $this->__('Show Featured Images'),
             'title' => $this->__('Show Featured Images'),
+            'note' => $this->__('If Yes, then featured attribute option images (as specified in MANAdev->Attribute Pages->Option Page ([attribute name]) menu) are shown on top of attribute page'),
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'name' => 'show_featured_options',
             'required' => true,
@@ -57,6 +59,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
         $this->addField($fieldset, 'column_count', 'text', array(
             'label' => $this->__('Column Count'),
             'title' => $this->__('Column Count'),
+            'note' => $this->__('Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc.'),
             'name' => 'column_count',
             'required' => true,
 

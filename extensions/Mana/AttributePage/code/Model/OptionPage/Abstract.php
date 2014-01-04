@@ -29,7 +29,6 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_META_TITLE = 16;
     const DM_META_KEYWORDS = 17;
     const DM_META_DESCRIPTION = 18;
-
     const DM_IS_FEATURED = 19;
     const DM_IMAGE_WIDTH = 20;
     const DM_IMAGE_HEIGHT = 21;
@@ -42,6 +41,8 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_SIDEBAR_IMAGE = 28;
     const DM_SIDEBAR_IMAGE_WIDTH = 29;
     const DM_SIDEBAR_IMAGE_HEIGHT = 30;
+
+    const DM_POSITION = 32;
 
     public function validate() {
         $t = Mage::helper('mana_attributepage');
@@ -105,6 +106,11 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
                     }
                 }
             }
+        }
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_POSITION) &&
+            !trim($this->getData('position')))
+        {
+            $errors[] = $t->__('Please fill in %s field', $t->__('Position'));
         }
         if (count($errors)) {
 			throw new Mana_Core_Exception_Validation($errors);
