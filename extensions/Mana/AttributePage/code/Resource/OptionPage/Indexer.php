@@ -246,6 +246,8 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
         }
         $aggregate->joinLeft($select, 'oX', $this->getTable('eav/attribute_option'),
             "`oX`.`attribute_id` = `aX`.`attribute_id`", $attrCount);
+        $select->where("`o0`.`option_id` IS NOT NULL");
+
         $aggregate->joinLeft($select, 'vgX', $this->getTable('eav/attribute_option_value'),
             "`vgX`.`option_id` = `oX`.`option_id` AND `vgX`.`store_id` = 0", $attrCount);
         $select->joinLeft(array('op_gcs' => $this->getTable('mana_attributepage/optionPage_globalCustomSettings')),

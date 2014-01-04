@@ -101,7 +101,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
             if (!in_array($this->getData('option_page_default_sort_by'),
                 explode(',', $this->getData('option_page_available_sort_by'))))
             {
-                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Option Page Defaults: Display tab)');
             }
         }
         else {
@@ -109,7 +109,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
                 !in_array($global->getData('option_page_default_sort_by'),
                     explode(',', $global->getData('option_page_available_sort_by'))))
             {
-                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By');
+                $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Option Page Defaults: Display tab)');
             }
         }
         if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_POSITION) &&

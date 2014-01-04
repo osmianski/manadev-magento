@@ -76,7 +76,7 @@ class Mana_AttributePage_Resource_Attribute extends Mage_Core_Model_Mysql4_Abstr
             ->where(sprintf('(%s) OR (%s) OR (%s)',
                 $db->quoteInto('main_table.backend_model = ?', 'eav/entity_attribute_backend_array'),
                 $db->quoteInto('main_table.source_model = ?', 'eav/entity_attribute_source_table'),
-                $db->quoteInto("main_table.frontend_input = ? AND main_table.source_model IS NOT NULL", 'select')
+                $db->quoteInto("main_table.frontend_input = ?", 'select') //  AND main_table.source_model IS NOT NULL
             ))
             ->order('main_table.frontend_label ASC');
 
