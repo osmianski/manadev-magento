@@ -46,7 +46,7 @@ class Mana_Admin_Block_Crud_Detail_Serializer extends Mage_Adminhtml_Block_Templ
             ));
             $result = $result->getData();
         }
-		return $core->jsonForceObjectAndEncode($result);
+		return $core->jsonForceObjectAndEncode($result, array('force_object' => array('pending' => true, 'saved' => true, 'deleted' => true)));
 	}
 	protected function _getPending() {
 		return array();

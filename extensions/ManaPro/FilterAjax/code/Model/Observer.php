@@ -90,6 +90,17 @@ class ManaPro_FilterAjax_Model_Observer {
 	    }
 	}
 
+    /**
+     * Handles event "http_response_send_before".
+     * @param Varien_Event_Observer $observer
+     */
+    public function unsetFlagInCatalogSession($observer) {
+        if (Mage::registry('manapro_filterajax_request')) {
+            Mage::unregister('manapro_filterajax_request');
+            $this->getCatalogSession()->unsetData('manapro_filterajax_request');
+
+        }
+    }
     /* obsolete handlers. Kept here for easier upgrade */
     public function registerUrl($observer) { }
     public function ajaxCategoryView($observer) {}
@@ -97,4 +108,17 @@ class ManaPro_FilterAjax_Model_Observer {
     public function markUpdatableHtml($observer) {}
     public function ajaxCmsIndex($observer) {}
     public function ajaxCmsPage($observer) {}
+
+
+    #region Dependencies
+
+    /**
+     * @return Mage_Catalog_Model_Session
+     */
+    public function getCatalogSession() {
+        Mage::getSingleton('core/session', array('name' => 'frontend'));
+
+        return Mage::getSingleton('catalog/session');
+    }
+    #endregion
 }

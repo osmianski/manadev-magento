@@ -58,9 +58,9 @@ class Mana_Seo_Rewrite_Store extends Mage_Core_Model_Store {
         if (!Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_STORE_IN_URL, $this->getCode())) {
             $storeParsedQuery['___store'] = $this->getCode();
         }
-        if ($fromStore !== false) {
+        //if ($fromStore !== false) {
             $storeParsedQuery['___from_store'] = $fromStore === true ? Mage::app()->getStore()->getCode() : $fromStore;
-        }
+        //}
 
         return $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')

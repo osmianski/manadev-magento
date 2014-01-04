@@ -2,3 +2,6 @@
 "URL Key Used Internally In Layered Navigation AJAX Refresh","URL Key Used Internally In Layered Navigation AJAX Refresh"
 "Scroll to Top After Pager Clicks","Scroll to Top After Pager Clicks"
 "Disable AJAX for Category Redirects","Disable AJAX for Category Redirects"
+"Google Analytics Account ID","Google Analytics Account ID"
+"Used to track layered navigation AJAX refresh requests. Leave empty if standard setting in Google API section is filled in.","Used to track layered navigation AJAX refresh requests. Leave empty if standard setting in Google API section is filled in."
+"",""

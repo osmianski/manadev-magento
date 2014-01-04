@@ -1,0 +1,34 @@
+/**
+ * @category    Mana
+ * @package     ManaSlider_Tabbed
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+.m-product-slider { overflow: hidden; position: relative; }
+.m-product-slider > div { overflow: hidden; margin: 0 40px; }
+.m-product-slider li.item { position: relative; padding: 10px 10px 85px;}
+/* Arrows */
+/*.m-product-slider .m-prev {position: relative; float: left; background: red; height: 100px; width: 70px;}*/
+
+/*.m-product-slider .m-prev { position: absolute;  background: red; top: 0;height: 100px; width: 70px; }*/
+
+
+.m-product-slider .m-navigation-next, .m-product-slider .m-navigation-prev {
+    cursor: pointer; z-index: 2; position: absolute; margin: 5px 0 0; height: 100%; width: 70px; top: 0; opacity: 0.4; filter: alpha(opacity=40); }
+
+.m-product-slider .m-navigation-next { background: url(../images/manaslider_tabbed/i-next.png) 100% 40% no-repeat; right: 0; }
+
+.m-product-slider .m-navigation-next:hover { background-image: url(../images/manaslider_tabbed/i-next-over.png); opacity: 1; }
+
+.m-product-slider .m-navigation-next:active { background-image: url(../images/manaslider_tabbed/i-next-active.png); opacity: 1; }
+
+.m-product-slider .m-navigation-prev { background: url(../images/manaslider_tabbed/i-prev.png) 0 40% no-repeat; left: 0; }
+
+.m-product-slider.m-navigation-prev:hover { background-image: url(../images/manaslider_tabbed/i-prev-over.png); opacity: 1; }
+
+.m-product-slider .m-navigation-prev:active { background-image: url(../images/manaslider_tabbed/i-prev-active.png); opacity: 1; }
+
+.m-tabbed-slider .ui-tabs-active { color: #26B1ED; }
+
+.m-product-slider .product-grid li.item { }

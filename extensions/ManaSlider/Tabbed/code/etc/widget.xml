@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaSlider_Tabbed
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <mana_tabbed_slider type="manaslider_tabbed/slider" translate="name description" module="manaslider_tabbed">
+        <name>Tabbed Slider (MANAdev)</name>
+        <description type="desc">Adds one or more sliders with products, CMS Blocks and and other content organized as tabs</description>
+        <parameters>
+            <xml_text translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <label>Custom Settings</label>
+                <type>textarea</type>
+            </xml_text>
+        </parameters>
+    </mana_tabbed_slider>
+</widgets>

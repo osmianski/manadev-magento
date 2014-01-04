@@ -36,6 +36,7 @@ class Mana_Filters_Model_Query extends Varien_Object
         return $this;
     }
     protected function _init() {
+        //Mage::log('---', Zend_Log::DEBUG, 'performance.log');
         $this->_productCollection = $this->getLayer()->getProductCollection();
         $this->_productCollectionPrototype = clone $this->_productCollection;
         $this->_selectPrototype = clone $this->_productCollection->getSelect();
@@ -177,4 +178,78 @@ class Mana_Filters_Model_Query extends Varien_Object
         }
         return $currentFilter['processedCounts'];
     }
+
+    protected $_allOptimizedAttributeFilterCounts;
+
+    public function getAllOptimizedAttributeFilterCounts() {
+        if (!$this->_allOptimizedAttributeFilterCounts) {
+            $attributeIds = array();
+            $firstModel = null;
+            /* @var $firstModel Mana_Filters_Model_Filter_Attribute */
+
+            foreach ($this->_filters as $filter) {
+                $model = $filter['model'];
+
+                if ($this->isOptimizedAttributeFilter($model)) {
+                    if (!$firstModel) {
+                        $firstModel = $model;
+                    }
+
+                    /* @var $model Mana_Filters_Model_Filter_Attribute */
+                    $id = $model->getAttributeModel()->getId();
+                    $attributeIds[$id] = $id;
+                }
+            }
+
+            $mainSelect = clone $this->_productCollection->getSelect();
+
+            $collection = $this->createProductCollection();
+
+            foreach ($this->_filters as $filter) {
+                if ($filter['isApplied']) {
+                    /* @var $filterModel Mana_Filters_Interface_Filter */
+                    $filterModel = $filter['model'];
+
+                    $applyFilter = true;
+                    foreach ($this->_filters as $optimizedFilter) {
+                        /* @var $model Mana_Filters_Model_Filter_Attribute */
+                        $model = $optimizedFilter['model'];
+                        if ($this->isOptimizedAttributeFilter($model) && !$model->isFilterAppliedWhenCounting($filterModel)) {
+                            $applyFilter = false;
+                            break;
+                        }
+                    }
+
+                    if ($applyFilter) {
+                        $filterModel->applyToCollection($collection);
+                    }
+                }
+            }
+
+            $this->_allOptimizedAttributeFilterCounts = $firstModel
+                ? $firstModel->optimizedCountOnCollection($collection, $attributeIds)
+                : array();
+            $this->_copyParts($this->_productCollection->getSelect(), $mainSelect);
+
+        }
+        return $this->_allOptimizedAttributeFilterCounts;
+    }
+
+    public function isOptimizedAttributeFilter($model) {
+        return false;
+        return !$this->filtersHelper()->useSolr() &&
+            $model instanceof Mana_Filters_Model_Filter_Attribute &&
+            !$model->isApplied();
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filtersHelper() {
+        return Mage::helper('mana_filters');
+    }
+
+    #endregion
 }

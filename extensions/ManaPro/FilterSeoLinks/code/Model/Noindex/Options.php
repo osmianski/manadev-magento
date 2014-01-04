@@ -13,7 +13,7 @@ class ManaPro_FilterSeoLinks_Model_Noindex_Options {
     public function detect($layerModel) {
         $filters = array();
         $result = false;
-        foreach (Mage::getSingleton($layerModel)->getState()->getFilters() as $item) {
+        foreach ($layerModel->getState()->getFilters() as $item) {
             $code = $item->getFilter()->getRequestVar();
             if (!isset($filters[$code])) {
                 $filters[$code] = $code;

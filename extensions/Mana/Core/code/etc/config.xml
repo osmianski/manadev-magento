@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.10.22.17</version>
+		    <version>13.12.29.12</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -238,7 +238,15 @@
                 </Mana_Core>
             </modules>
         </translate>
-
+        <routers>
+            <mana>
+                <use>standard</use>
+                <args>
+                    <module>Mana_Core</module>
+                    <frontName>mana</frontName>
+                </args>
+            </mana>
+        </routers>
         <!-- INSERT HERE: layout, translate, routers -->
 	</frontend>
     <!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->

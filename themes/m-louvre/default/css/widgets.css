@@ -26,7 +26,7 @@
 /* Widgets =============================================================================== */
 .widget { display:inline; }
 .widget .widget-title { clear:both; padding:15px 0 0; margin:0 0 7px; }
-.col-main .widget .widget-title { text-align: center; background: url(../images/border.png) 0 22px repeat-x; margin-bottom: 20px; }
+.col-main .widget-title { text-align: center; background: url(../images/border.png) 0 22px repeat-x; margin: 15px 0 30px; }
 .widget .widget-title h2 {  }
 .col-main .widget .widget-title h2 { display: inline; padding: 0 10px; font-size: 14px; font-weight: bold; background-color: #f0f0f0; }
 .col-main .col3-set .widget-title h2,

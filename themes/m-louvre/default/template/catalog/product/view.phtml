@@ -40,16 +40,16 @@
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view <?php echo $_product->getTypeId() ?>-type <?php echo $_theme->getListItemClass($this, $_product) ?>">
-    <div class="product-essential">
+    <div class="product-essential col2-set">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
             <input type="hidden" name="related_product" id="related-products-field" value="" />
         </div>
-        <div class="product-img-box">
+        <div class="product-img-box col-1 col-narrow">
             <?php echo $this->getChildHtml('media') ?>
         </div>
-
+<div class="col-2 col-wide">
         <div class="product-shop">
             <div class="product-name">
                 <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
@@ -77,8 +77,8 @@
 
             <?php echo $this->getTierPriceHtml() ?>
             <?php echo $this->getChildHtml('extrahint') ?>
-
             <?php if (!$this->hasOptions()):?>
+
                 <div class="add-to-box">
                     <?php if($_product->isSaleable()): ?>
                         <?php echo $this->getChildHtml('addtocart') ?>
@@ -102,10 +102,13 @@
         </div>
 
 
-        <div class="clearer"></div>
+
         <?php if ($_product->isSaleable() && $this->hasOptions()):?>
             <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
         <?php endif;?>
+        <?php echo $this->getChildHtml('related_inside_product') ?>
+    <?php echo $this->getChildHtml('m_tabs') ?>
+    </div>
     </form>
     <script type="text/javascript">
     //<![CDATA[
@@ -153,5 +156,5 @@
     </script>
     </div>
 
-    <?php echo $this->getChildHtml('m_tabs') ?>
+
 </div>

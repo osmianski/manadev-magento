@@ -11,7 +11,7 @@
         <ManaPro_FilterTree>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.10.21.11</version>
+            <version>13.11.05.17</version>
         </ManaPro_FilterTree>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -141,5 +141,10 @@
                 <make_all_categories_anchor_for_tree_filter>1</make_all_categories_anchor_for_tree_filter>
             </message>
         </mana>
+        <mana_filters>
+            <tree>
+                <expand_selected>1</expand_selected>
+            </tree>
+        </mana_filters>
     </default>
 </config>

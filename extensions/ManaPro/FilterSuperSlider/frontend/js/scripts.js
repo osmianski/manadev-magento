@@ -190,9 +190,12 @@ ManaPro.filterSuperSlider = function(id, o) {
             _change();
         });
 
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize === true) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {
@@ -226,6 +229,10 @@ ManaPro.filterSuperSlider = function(id, o) {
     jQuery(_resizeSpanAndHandles);
 
     jQuery(window).bind('resize', _resizeSpanAndHandles);
+    jQuery(document).bind('m-ajax-after', _resizeSpanAndHandles);
+    jQuery('#' + id + '-track').parent().on('m-prepare', function () {
+        _resizeSpanAndHandles(true);
+    });
     //jQuery('body').click(_resizeSpanAndHandles);
 };
 ManaPro.filterAttributeSlider = function (id, o) {

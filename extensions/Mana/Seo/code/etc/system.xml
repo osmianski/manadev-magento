@@ -34,6 +34,24 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </max_correction_count>
+                        <additional_toolbar_modes translate="label comment">
+                            <label>Additional Toolbar Modes</label>
+                            <comment>Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </additional_toolbar_modes>
+                        <additional_toolbar_orders translate="label comment">
+                            <label>Additional Sort By Options</label>
+                            <comment>Sort by options in addition to sortable attributes defined in Catalog->Attributes->Manage Attributes. If more than one, separate them with ',', without spaces</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </additional_toolbar_orders>
                     </fields>
                 </seo>
                 <message translate="label" module="mana_core">

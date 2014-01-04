@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaSlider_Tabbed
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <manaslider_tabbed_slider>
+        <update handle="mana_ajax"/>
+        <update handle="jquery_ui"/>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/manaslider_tabbed.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manaslider_tabbed.js</name><params/></action>
+        </reference>
+    </manaslider_tabbed_slider>
+    <mana_tabbedslider_products>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="manaslider_tabbed/productSlider" name="product_slider"/>
+        </block>
+    </mana_tabbedslider_products>
+    <cms_page>
+        <update handle="manaslider_tabbed_slider"/>
+    </cms_page>
+</layout>

@@ -46,7 +46,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
 
         $this->_routeParams = $routeParams;
-        if (isset($routeParams['_use_rewrite']) || $routePath == 'catalogsearch/result') {
+        if ($this->_isValidPageType($routePath) &&
+            (isset($routeParams['_use_rewrite']) || $routePath == 'catalogsearch/result'))
+        {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -592,6 +594,16 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return str_replace('%2B', '+', str_replace('%2F', '/', rawurlencode($s)));
     }
 
+    protected function _isValidPageType($routePath) {
+        $routePath = $this->coreHelper()->getRoutePath($routePath);
+        foreach (array_keys($this->coreHelper()->getPageTypes('seo_helper')) as $key) {
+            $pageType = $this->coreHelper()->getPageType($key);
+            if ($routePath == $pageType->getRoutePath()) {
+                return true;
+            }
+        }
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Logger
@@ -607,5 +619,6 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     {
         return Mage::helper('mana_core');
     }
+
     #endregion
 }

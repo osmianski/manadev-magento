@@ -530,6 +530,10 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         getBlock: function (blockName) {
             return this._getBlockRecursively(this.getPageBlock(), blockName);
         },
+        getBlockForElement: function(el) {
+            var blockInfo = this._getElementBlockInfo(el);
+            return blockInfo ? this.getBlock(blockInfo.id) : null;
+        },
         _getBlockRecursively: function (block, blockName) {
             if (block.getId() == blockName) {
                 return block;
