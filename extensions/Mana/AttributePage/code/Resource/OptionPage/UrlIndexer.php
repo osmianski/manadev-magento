@@ -212,7 +212,7 @@ class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resourc
     /**
      * @return Mana_AttributePage_Resource_OptionPage_Store
      */
-    public function getAOptionPageResource() {
+    public function getOptionPageResource() {
         return Mage::getResourceSingleton('mana_attributepage/optionPage_store');
     }
     #endregion
