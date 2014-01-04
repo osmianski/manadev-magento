@@ -133,4 +133,40 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setExceptions"><regular_expr>options=|checkout/cart/add|catalog/product_compare/add|wishlist/index/add</regular_expr></action>
 		</reference>
     </cms_page_layered>
+	<mana_optionpage_view> 
+		<update handle="mana_ajax" />
+		<reference name="head">
+            <action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
+            <action method="addJs"><script>jquery/history.js</script></action>
+        	<action method="addItem"><type>skin_js</type><name>js/manapro_filterajax.js</name><params/></action>
+		</reference>
+		<reference name="top.menu">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="content">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="left">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="right">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="breadcrumbs">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="option_view">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="mana.catalog.leftnav">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+		</reference>
+		<reference name="m_ajax_update">
+		    <action method="setRenderedButNotSentBlocks"><blocks>m_ajax_update,head</blocks></action>
+            <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,left,right,breadcrumbs,top.menu</updated_blocks></action>
+            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>option_view,mana.catalog.leftnav,mana.catalog.rightnav</updated_blocks></action>
+            <action method="setInterceptedLinkContainers"><css_selector>.mb-mana-catalog-leftnav,.mb-mana-catalog-rightnav,.block-layered-nav.m-topmenu,.block-layered-nav.m-top,.category-products .toolbar</css_selector></action>
+            <action method="setExceptions"><regular_expr>options=|checkout/cart/add|catalog/product_compare/add|wishlist/index/add</regular_expr></action>
+		</reference>
+	</mana_optionpage_view>
 </layout>

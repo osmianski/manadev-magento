@@ -24,20 +24,33 @@ class Mana_AttributePage_Model_Observer {
     <menu>
         <mana>
             <children>
-                <shopby>
+                <attributepage>
                     <children>
-                        <attr_manufacturer>
-                            <title>Manufacturer</title>
-                            <action>adminhtml/mana_attributepage/edit/id/1</action>
-                            <sort_order>0</sort_order>
-                        </attr_manufacturer>
-                        <attr_country>
-                            <title>Country of Origin</title>
-                            <action>adminhtml/mana_attributepage/edit/id/2</action>
-                            <sort_order>1</sort_order>
-                        </attr_country>
+EOF;
+            $i = 0;
+            foreach (Mage::getResourceModel("mana_attributepage/attributePage_global_collection")
+                ->setOrder('title', Varien_Data_Collection::SORT_ORDER_ASC) as $attributePage)
+            {
+                $i++;
+                /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
+                $xml .= <<<EOF
+                        <attr_{$attributePage->getId()}>
+                            <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
+                            <action>adminhtml/mana_optionPage/index/parent_id/{$attributePage->getId()}</action>
+                            <sort_order>{$i}</sort_order>
+                        </attr_{$attributePage->getId()}>
+EOF;
+            }
+
+
+//                        <attr_country>
+//                            <title>Country of Origin</title>
+//                            <action>adminhtml/mana_attributepage/edit/id/2</action>
+//                            <sort_order>1</sort_order>
+//                        </attr_country>
+            $xml .= <<<EOF
                     </children>
-                </shopby>
+                </attributepage>
             </children>
         </mana>
     </menu>
@@ -51,4 +64,15 @@ EOF;
             $this->_areDynamicMenuItemsLoaded = true;
         }
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_AttributePage_Helper_Data
+     */
+    public function attributePageHelper() {
+        return Mage::helper('mana_attributepage');
+    }
+
+    #endregion
 }

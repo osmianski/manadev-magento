@@ -53,17 +53,17 @@ function ($, Container, ajax, core)
                 ._super()
                 .on('load', this, function () {
                     if (this.getChild('duplicate')) this.getChild('duplicate').on('click', this, this.duplicate);
-                    if (this.getChild('delete')) this.getChild('delete').on('click', this, this.delete);
+                    if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteClick);
                 })
                 .on('unload', this, function () {
                     if (this.getChild('duplicate')) this.getChild('duplicate').off('click', this, this.duplicate);
-                    if (this.getChild('delete')) this.getChild('delete').off('click', this, this.delete);
+                    if (this.getChild('delete')) this.getChild('delete').off('click', this, this.deleteClick);
                 });
         },
         duplicate: function () {
             setLocation(this.getUrl('duplicate'));
         },
-        delete: function () {
+        deleteClick: function () {
             deleteConfirm(this.getText('delete-confirm'), this.getUrl('delete'));
         },
         save: function (callback) {

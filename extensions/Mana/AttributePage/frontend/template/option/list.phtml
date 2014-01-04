@@ -1,0 +1,45 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Option_List */
+$i = -1;
+if (!($_columnCount = $this->getAttributePage()->getData('column_count'))) {
+    $_columnCount = 4;
+}
+$_currentColumn = 0;
+$_actualColumn = 0;
+$_currentAlpha = '';
+$_count = count($this->getAttributePage()->getOptionPages());
+?>
+<?php if( $_count) :?>
+    <ul class="m-option-page-list col<?php echo $_columnCount ?>-set"><li class="col-<?php echo $_actualColumn + 1?>"><ul>
+        <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) : $i++;?>
+            <?php
+                /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
+                $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+                $_column = floor($_columnCount * $i / $_count);
+                $_alpha = $_optionPage->getData('alpha');
+            ?>
+            <?php if ($_column != $_currentColumn && $_alpha != $_currentAlpha): ?>
+                <?php $_currentColumn = $_column; ?>
+                <?php $_actualColumn++; ?>
+                </ul></li><li class="col-<?php echo $_actualColumn + 1?>"><ul>
+            <?php endif; ?>
+            <?php if ($_alpha != $_currentAlpha): ?>
+                <?php $_currentAlpha = $_alpha; ?>
+                <li class="m-alpha">
+                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></span>
+                </li>
+            <?php endif; ?>
+            <li class="m-option-page">
+                <a href="<?php echo $_optionPage->getUrl() ?>" title="<?php echo $_escapedTitle; ?>">
+                    <?php echo $_escapedTitle; ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul></li></ul>
+<?php endif; ?>

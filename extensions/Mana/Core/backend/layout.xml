@@ -46,6 +46,11 @@ examples on what kind of actions can be applied to referenced blocks.
                 <name>m_wait</name>
                 <template>mana/core/wait.phtml</template>
             </action>
+            <action method="addSingletonBlock">
+                <type>core/template</type>
+                <name>m_popup</name>
+                <template>mana/core/popup.phtml</template>
+            </action>
         </reference>
     </jquery_core>
 	<jquery_basic_effects>

@@ -34,4 +34,9 @@ examples on what kind of actions can be applied to referenced blocks.
 			<action method="addCss"><stylesheet>css/manapro_filterradios.css</stylesheet></action>
 		</reference>
     </cms_page_layered>
+	<mana_optionpage_view> 
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filterradios.css</stylesheet></action>
+		</reference>
+	</mana_optionpage_view>
 </layout>

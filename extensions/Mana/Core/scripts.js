@@ -9,12 +9,12 @@
 
 var Mana = Mana || {};
 
-(function($, undefined) {
+(function($, $p, undefined) {
 
 
     $.extend(Mana, {
         _singletons: {},
-        _defines: { jquery: $ },
+        _defines: { jquery: $, prototype: $p },
 
         /**
          * Defines JavaScript class/module
@@ -50,6 +50,9 @@ var Mana = Mana || {};
             return result;
         },
         _resolveDefine: function(name) {
+            if (Mana._defines[name] === undefined) {
+                console.warn("'" + name + "' is not defined");
+            }
             return Mana._defines[name];
         },
 
@@ -136,7 +139,7 @@ var Mana = Mana || {};
         }
 
     });
-})(jQuery);
+})(jQuery, $);
 
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
@@ -490,6 +493,29 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
             else {
                 return base64.decode(data.replace(/-/g, '+').replace(/_/g, '/').replace(/,/g, '='));
             }
+        }
+    });
+});
+Mana.define('Mana/Core/StringTemplate', ['jquery'], function ($, undefined) {
+    return Mana.Object.extend('Mana/Core/StringTemplate', {
+        concat: function(parsedTemplate, vars) {
+            var result = '';
+            $.each(parsedTemplate, function(i, token) {
+                var type = token[0];
+                var text = token[1];
+                if (type == 'string') {
+                    result += text;
+                }
+                else if (type == 'var') {
+                    if (vars[text] !== undefined) {
+                        result += vars[text];
+                    }
+                    else {
+                        result += '{{' + text + '}}';
+                    }
+                }
+            });
+            return result;
         }
     });
 });
@@ -996,7 +1022,9 @@ function ($, layout, json, core, config, undefined)
         }
     });
 });
-Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana/Core/Layout'], function($, core, layout, undefined) {
+Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana/Core/Layout',
+    'singleton:Mana/Core/Json'],
+function($, core, layout, json, undefined) {
     return Mana.Object.extend('Mana/Core/Block', {
         _init: function() {
             this._id = '';
@@ -1011,6 +1039,7 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
             this._subscribeToHtmlEvents()._subscribeToBlockEvents();
         },
         _subscribeToHtmlEvents: function() {
+            this._json = {};
             return this;
         },
         _subscribeToBlockEvents:function () {
@@ -1209,6 +1238,12 @@ Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana
                 this._text[key] = this.$().data(key + '-text');
             }
             return this._text[key];
+        },
+        getJsonData: function(attributeName, fieldName) {
+            if (this._json[attributeName] === undefined) {
+                this._json[attributeName] = json.decodeAttribute(this.$().data(attributeName));
+            }
+            return fieldName === undefined ? this._json[attributeName] : this._json[attributeName][fieldName];
         }
     });
 });

@@ -337,4 +337,31 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
         $object->setHadValueData(true);
         return parent::_afterSave($object);
     }
+
+    /**
+     * @param Mana_Filters_Model_Filter2 $filter
+     * @return bool|int
+     */
+    public function getAttributeId($filter) {
+        $db = $this->_getReadAdapter();
+
+        if ($filter->getType() != 'category') {
+            return $db->fetchOne($db->select()
+                ->from(array('a' => $this->getTable('eav/attribute')), 'attribute_id')
+                ->joinInner(
+                    array('t' => $this->getTable('eav/entity_type')),
+                    "`t`.`entity_type_id` = `a`.`entity_type_id` AND `t`.`entity_type_code` = 'catalog_product'",
+                    null
+                )
+                ->joinInner(
+                    array('ca' => $this->getTable('catalog/eav_attribute')),
+                    "`ca`.`attribute_id` = `a`.`attribute_id`",
+                    null
+                )
+                ->where('a.attribute_code = ?', $filter->getCode()));
+        }
+        else {
+            return false;
+        }
+    }
 }

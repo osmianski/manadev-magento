@@ -10,10 +10,11 @@ $_element = $this->getElement();
 $_note    = $_element->getNote();
 $_trId    = $_element->getHtmlContainerId();
 $_class   = $_element->getFieldsetHtmlClass();
+$info = $this->jsHelper()->parseClientSideBlockInfo($this);
 $this->checkFieldDisable();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> data-m-block="Mana/Admin/Field">
+<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> <?php echo $info['attribute_html'] ?>>
     <?php if ($_element->getType()=='hidden'): ?>
     <td colspan="3" class="hidden"><?php echo trim($_element->getElementHtml()) ?></td>
     <?php else: ?>
@@ -28,10 +29,15 @@ $this->checkFieldDisable();
         <?php endif ?>
     </td>
     <td class="value use-default">
-    	<?php if ($this->getDisplayUseDefault()) : ?>
-        <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
-        <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
-        <?php endif; ?>
+        <ul>
+        	<?php if ($this->getDisplayUseDefault()) : ?>
+                <li>
+                    <input <?php if($_element->getReadonly() || !$this->getUseDefaultEnabled()) :?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->getUsedDefault()): ?> checked="checked"<?php endif; ?> class="m-default" value="<?php echo $_element->getData('name') ?>"/>
+                    <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->getDefaultLabel() ?></label>
+                </li>
+            <?php endif; ?>
+            <?php echo trim($_element->getUseDefaultHtml()) ?>
+        </ul>
     </td>
     <?php endif; ?>
 </tr>

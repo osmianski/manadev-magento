@@ -20,4 +20,5 @@ class Mana_Seo_Model_UrlHistory extends Mana_Db_Model_Entity {
     const TYPE_CMS_PAGE_SUFFIX =       'cms_page_suffix';
     const TYPE_SEARCH_SUFFIX =         'search_suffix';
     const TYPE_ATTRIBUTE_PAGE_SUFFIX = 'attr_page_suffix';
+    const TYPE_OPTION_PAGE_SUFFIX =    'opt_page_suffix';
 }

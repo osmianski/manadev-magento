@@ -1,0 +1,27 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7')) {
+    /* @var $this Mage_Page_Block_Html_Topmenu */
+    $_menu = $this->getHtml('level-top');
+}
+else {
+    /* @var $this Mage_Catalog_Block_Navigation */
+    $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
+}
+/* @var $_block Mana_AttributePage_Block_Navigation */
+$_block = Mage::getSingleton('core/layout')->getBlockSingleton('mana_attributepage/navigation');
+$_attributeMenu = $_block->getHtml();
+?>
+<?php if($_menu || $_attributeMenu): ?>
+<div class="nav-container">
+    <ul id="nav">
+        <?php echo $_menu ?>
+        <?php echo $_attributeMenu ?>
+    </ul>
+</div>
+<?php endif ?>
