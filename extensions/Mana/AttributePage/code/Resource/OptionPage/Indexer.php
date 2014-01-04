@@ -87,6 +87,10 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 ))}
             )",
             'raw_title' => $aggregate->glue($titleExpr, ','),
+            'description_position' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION_POSITION)},
+                `op_gcs`.`description_position`,
+                `ap_gcs`.`option_page_description_position`
+            )",
             'position' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
                 `op_gcs`.`position`,
                 {$aggregate->sum($aggregate->expr("COALESCE(`oX`.`sort_order`, 0)", $attrCount))}
@@ -132,6 +136,10 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
             'product_image_height' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_HEIGHT)},
                 `op_gcs`.`product_image_height`,
                 `ap_gcs`.`option_page_product_image_height`
+            )",
+            'show_product_image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SHOW_PRODUCT_IMAGE)},
+                `op_gcs`.`show_product_image`,
+                `ap_gcs`.`option_page_show_product_image`
             )",
             'sidebar_image' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE)},
                 `op_gcs`.`sidebar_image`,
@@ -349,6 +357,13 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                     )
                 )",
                 'raw_title' => $aggregate->glue($titleExpr, ','),
+                'description_position' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION_POSITION)},
+                    `op_scs`.`description_position`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION_POSITION)},
+                        `op_g`.`description_position`,
+                        `ap_s`.`option_page_description_position`
+                    )
+                )",
                 'position' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
                     `op_scs`.`position`,
                     IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
@@ -429,6 +444,13 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                     IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_PRODUCT_IMAGE_HEIGHT)},
                         `op_g`.`product_image_height`,
                         `ap_s`.`option_page_product_image_height`
+                    )
+                )",
+                'show_product_image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SHOW_PRODUCT_IMAGE)},
+                    `op_scs`.`show_product_image`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SHOW_PRODUCT_IMAGE)},
+                        `op_g`.`show_product_image`,
+                        `ap_s`.`option_page_show_product_image`
                     )
                 )",
                 'sidebar_image' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_SIDEBAR_IMAGE)},

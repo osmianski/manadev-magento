@@ -80,5 +80,13 @@ abstract class Mana_AttributePage_Block_Adminhtml_OptionPage_AbstractForm extend
     public function getOptionSourceModel($attributeId) {
         return Mage::getModel('mana_attributepage/source_option')->setAttributeId($attributeId);
     }
+
+    /**
+     * @return Mana_AttributePage_Model_Source_DescriptionPosition
+     */
+    public function getDescriptionPositionSourceModel() {
+        return Mage::getSingleton('mana_attributepage/source_descriptionPosition');
+    }
+
     #endregion
 }

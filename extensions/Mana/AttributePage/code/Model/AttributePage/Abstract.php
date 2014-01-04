@@ -56,6 +56,9 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_OPTION_PAGE_SIDEBAR_IMAGE_WIDTH = 43;
     const DM_OPTION_PAGE_SIDEBAR_IMAGE_HEIGHT = 44;
     const DM_POSITION = 45;
+    const DM_DESCRIPTION_POSITION = 46;
+    const DM_OPTION_PAGE_DESCRIPTION_POSITION = 47;
+    const DM_OPTION_PAGE_SHOW_PRODUCT_IMAGE = 48;
 
     const MAX_ATTRIBUTE_COUNT = 5;
 

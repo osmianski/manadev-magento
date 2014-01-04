@@ -57,6 +57,17 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionImageForm  extends 
             'legend' => $this->__('Product Page Image'),
         ));
 
+        $this->addField($fieldset, 'option_page_show_product_image', 'select', array(
+            'label' => $this->__('Show'),
+            'title' => $this->__('Show'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'option_page_show_product_image',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SHOW_PRODUCT_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $this->addField($fieldset, 'option_page_product_image_width', 'text', array(
             'label' => $this->__('Width'),
             'title' => $this->__('Width'),
@@ -76,6 +87,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionImageForm  extends 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PRODUCT_IMAGE_HEIGHT,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
+
 /*
         $fieldset = $this->addFieldset($form, 'mfs_option_sidebar_image', array(
             'title' => $this->__('Sidebar Image'),

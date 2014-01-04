@@ -34,6 +34,22 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_OptionGeneralForm  extend
             'edit_model' => $this->getEditModel(),
         ));
 
+        $fieldset = $this->addFieldset($form, 'mfs_option_content', array(
+            'title' => $this->__('Content'),
+            'legend' => $this->__('Content'),
+        ));
+
+        $this->addField($fieldset, 'option_page_description_position', 'select', array(
+            'label' => $this->__('Description Position'),
+            'title' => $this->__('Description Position'),
+            'options' => $this->getDescriptionPositionSourceModel()->getOptionArray(),
+            'name' => 'option_page_description_position',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DESCRIPTION_POSITION,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_option_base_image', array(
             'title' => $this->__('Base Image'),
             'legend' => $this->__('Base Image'),

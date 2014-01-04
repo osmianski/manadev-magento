@@ -193,6 +193,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     )
                 )",
                 'raw_title' => $aggregate->glue($titleExpr, ','),
+                'description_position' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_DESCRIPTION_POSITION)},
+                    `ap_scs`.`description_position`,
+                    `ap_gcs`.`description_position`
+                )",
                 'position' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION)},
                     `ap_scs`.`position`,
                     IF({$dbHelper->isCustom('ap_gcs', Mana_AttributePage_Model_AttributePage_Abstract::DM_POSITION)},
@@ -270,6 +274,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                         {$aggregate->glue($titleExpr, ',')}
                     )
                 )",
+                'option_page_description_position' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DESCRIPTION_POSITION)},
+                    `ap_scs`.`option_page_description_position`,
+                    `ap_gcs`.`option_page_description_position`
+                )",
                 'option_page_include_filter_name' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_INCLUDE_FILTER_NAME)},
                     `ap_scs`.`option_page_include_filter_name`,
                     `ap_gcs`.`option_page_include_filter_name`
@@ -301,6 +309,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                 'option_page_product_image_height' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_PRODUCT_IMAGE_HEIGHT)},
                     `ap_scs`.`option_page_product_image_height`,
                     `ap_gcs`.`option_page_product_image_height`
+                )",
+                'option_page_show_product_image' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SHOW_PRODUCT_IMAGE)},
+                    `ap_scs`.`option_page_show_product_image`,
+                    `ap_gcs`.`option_page_show_product_image`
                 )",
                 'option_page_sidebar_image_width' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_SIDEBAR_IMAGE_WIDTH)},
                     `ap_scs`.`option_page_sidebar_image_width`,

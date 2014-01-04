@@ -70,6 +70,18 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ImageForm extends Mana_Attri
             'legend' => $this->__('Product Page Image'),
         ));
 
+        $this->addField($fieldset, 'show_product_image', 'select', array(
+            'label' => $this->__('Show'),
+            'title' => $this->__('Show'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'show_product_image',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_OptionPage_Abstract::DM_SHOW_PRODUCT_IMAGE,
+            'default_label' => $this->__('Same For All Option Pages'),
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $this->addField($fieldset, 'product_image', 'image', array(
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),

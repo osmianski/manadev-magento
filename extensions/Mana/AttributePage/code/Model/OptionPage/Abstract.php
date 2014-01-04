@@ -43,6 +43,8 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_SIDEBAR_IMAGE_HEIGHT = 30;
 
     const DM_POSITION = 32;
+    const DM_DESCRIPTION_POSITION = 33;
+    const DM_SHOW_PRODUCT_IMAGE = 34;
 
     public function validate() {
         $t = Mage::helper('mana_attributepage');

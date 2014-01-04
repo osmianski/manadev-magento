@@ -54,6 +54,13 @@ abstract class Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm ext
     }
 
     /**
+     * @return Mana_AttributePage_Model_Source_DescriptionPosition
+     */
+    public function getDescriptionPositionSourceModel() {
+        return Mage::getSingleton('mana_attributepage/source_descriptionPosition');
+    }
+
+    /**
      * @return Mana_AttributePage_Model_Source_SortBy
      */
     public function getSortBySourceModel() {

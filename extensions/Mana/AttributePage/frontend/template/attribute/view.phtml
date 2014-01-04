@@ -9,6 +9,7 @@
 $_attributePage = $this->getAttributePage();
 $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
+$_description = $_attributePage->getData('description');
 ?>
 <div class="page-title category-title m-attribute-page-title">
     <h1><?php echo $_escapedTitle ?></h1>
@@ -20,7 +21,7 @@ $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
             <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_attributePage->getData('image_width'), $_attributePage->getData('image_height')) ?> />
     </p>
 <?php endif; ?>
-<?php if ($_description = $_attributePage->getData('description')): ?>
+<?php if ($_description && $_attributePage->getData('description_position') == 'top'): ?>
     <div class="category-description m-attribute-page-description std">
         <?php echo $_description ?>
     </div>
@@ -29,3 +30,8 @@ $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
 <?php echo $this->getChildHtml('option_featured') ?>
 <?php echo $this->getChildHtml('option_alpha') ?>
 <?php echo $this->getChildHtml('option_list') ?>
+<?php if ($_description && $_attributePage->getData('description_position') == 'bottom'): ?>
+    <div class="category-description m-attribute-page-description std">
+        <?php echo $_description ?>
+    </div>
+<?php endif; ?>

@@ -14,7 +14,7 @@ $_filesHelper = $this->filesHelper();
 <?php if ($_count) : ?>
     <ul class="m-option-page-product">
         <?php foreach ($this->getOptionPages() as $_optionPage) : $i++;?>
-            <?php if (($_imgUrl = $_optionPage->getData('product_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
+            <?php if ($_optionPage->getData('show_product_image') && ($_imgUrl = $_optionPage->getData('product_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
             <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
                 <li class="category-image m-option-page-image">
 

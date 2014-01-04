@@ -85,6 +85,18 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_GeneralForm extends Mana_Att
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'description_position', 'select', array(
+            'label' => $this->__('Description Position'),
+            'title' => $this->__('Description Position'),
+            'options' => $this->getDescriptionPositionSourceModel()->getOptionArray(),
+            'name' => 'description_position',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_DESCRIPTION_POSITION,
+            'default_label' => $this->__('Same For All Option Pages'),
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_base_image', array(
             'title' => $this->__('Base Image'),
             'legend' => $this->__('Base Image'),

@@ -17,6 +17,7 @@ abstract class Mana_AttributePage_Resource_AttributePage_Abstract extends Mage_C
     public function setDefaults($object) {
         if (!$object->getData('_skip_non_defaultables')) {
             $object
+                ->setData('description_position', 'top')
                 ->setData('is_active', 1)
                 ->setData('include_in_menu', 1)
                 ->setData('show_alphabetic_search', 1)
@@ -25,8 +26,10 @@ abstract class Mana_AttributePage_Resource_AttributePage_Abstract extends Mage_C
         }
         if ($object->getData('_add_option_page_defaults')) {
             $object
+                ->setData('option_page_description_position', 'top')
                 ->setData('option_page_is_active', 1)
                 ->setData('option_page_include_in_menu', 1)
+                ->setData('option_page_show_product_image', 1)
                 ->setData('option_page_show_products', 1)
                 ->setData('option_page_available_sort_by', array_keys($this->getSortBySourceModel()->getAllOptions()))
                 ->setData('option_page_default_sort_by', Mage::getStoreConfig('catalog/frontend/default_sort_by'));

@@ -42,6 +42,7 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
                 'attribute_id_2' => "`ap_gcs`.`attribute_id_2`",
                 'attribute_id_3' => "`ap_gcs`.`attribute_id_3`",
                 'attribute_id_4' => "`ap_gcs`.`attribute_id_4`",
+                'description_position' => "`ap_gcs`.`description_position`",
                 'is_active' => "`ap_gcs`.`is_active`",
                 'image' => "`ap_gcs`.`image`",
                 'image_width' => "`ap_gcs`.`image_width`",
@@ -62,6 +63,7 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
         if ($object->getData('_add_option_page_defaults')) {
             $tables['ap_gcs'] = true;
             $fields = array_merge($fields, array(
+                'option_page_description_position' => "`ap_gcs`.`option_page_description_position`",
                 'option_page_include_filter_name' => "`ap_gcs`.`option_page_include_filter_name`",
                 'option_page_image' => "`ap_gcs`.`option_page_image`",
                 'option_page_image_width' => "`ap_gcs`.`option_page_image_width`",
@@ -70,6 +72,7 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
                 'option_page_featured_image_height' => "`ap_gcs`.`option_page_featured_image_height`",
                 'option_page_product_image_width' => "`ap_gcs`.`option_page_product_image_width`",
                 'option_page_product_image_height' => "`ap_gcs`.`option_page_product_image_height`",
+                'option_page_show_product_image' => "`ap_gcs`.`option_page_show_product_image`",
                 'option_page_sidebar_image_width' => "`ap_gcs`.`option_page_sidebar_image_width`",
                 'option_page_sidebar_image_height' => "`ap_gcs`.`option_page_sidebar_image_height`",
                 'option_page_include_in_menu' => "`ap_gcs`.`option_page_include_in_menu`",
