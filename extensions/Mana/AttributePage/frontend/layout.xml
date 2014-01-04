@@ -37,10 +37,6 @@
         <reference name="head">
 			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
         </reference>
-
-        <reference name="left">
-            <block type="catalog/layer_view" name="catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
-        </reference>
         <reference name="content">
             <block type="mana_attributepage/attribute_view" name="attribute_view" template="mana/attributepage/attribute/view.phtml">
                 <block type="mana_attributepage/option_featured" name="option_featured" template="mana/attributepage/option/featured.phtml"/>
