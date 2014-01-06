@@ -19,7 +19,8 @@ class Mana_AttributePage_Model_Observer {
      */
     public function loadDynamicMenuItems($observer) {
         if (!$this->_areDynamicMenuItemsLoaded) {
-            $xml = <<<EOF
+            try {
+                $xml = <<<EOF
 <config>
     <menu>
         <mana>
@@ -27,28 +28,28 @@ class Mana_AttributePage_Model_Observer {
                 <attributepage>
                     <children>
 EOF;
-            $i = 0;
-            foreach (Mage::getResourceModel("mana_attributepage/attributePage_global_collection")
-                ->setOrder('title', Varien_Data_Collection::SORT_ORDER_ASC) as $attributePage)
-            {
-                $i++;
-                /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
-                $xml .= <<<EOF
-                        <attr_{$attributePage->getId()}>
-                            <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
-                            <action>adminhtml/mana_optionPage/index/parent_id/{$attributePage->getId()}</action>
-                            <sort_order>{$i}</sort_order>
-                        </attr_{$attributePage->getId()}>
+                $i = 0;
+                foreach (Mage::getResourceModel("mana_attributepage/attributePage_global_collection")
+                    ->setOrder('title', Varien_Data_Collection::SORT_ORDER_ASC) as $attributePage)
+                {
+                    $i++;
+                    /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
+                    $xml .= <<<EOF
+                            <attr_{$attributePage->getId()}>
+                                <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
+                                <action>adminhtml/mana_optionPage/index/parent_id/{$attributePage->getId()}</action>
+                                <sort_order>{$i}</sort_order>
+                            </attr_{$attributePage->getId()}>
 EOF;
-            }
+                }
 
 
-//                        <attr_country>
-//                            <title>Country of Origin</title>
-//                            <action>adminhtml/mana_attributepage/edit/id/2</action>
-//                            <sort_order>1</sort_order>
-//                        </attr_country>
-            $xml .= <<<EOF
+    //                        <attr_country>
+    //                            <title>Country of Origin</title>
+    //                            <action>adminhtml/mana_attributepage/edit/id/2</action>
+    //                            <sort_order>1</sort_order>
+    //                        </attr_country>
+                $xml .= <<<EOF
                     </children>
                 </attributepage>
             </children>
@@ -56,12 +57,16 @@ EOF;
     </menu>
 </config>
 EOF;
-            /* @var $config Mage_Core_Model_Config_Base */
-            $config = Mage::getSingleton('admin/config')->getAdminhtmlConfig();
-            $dynamicConfig = new Mage_Core_Model_Config_Base();
-            $dynamicConfig->loadString($xml);
-            $config->extend($dynamicConfig, true);
-            $this->_areDynamicMenuItemsLoaded = true;
+                /* @var $config Mage_Core_Model_Config_Base */
+                $config = Mage::getSingleton('admin/config')->getAdminhtmlConfig();
+                $dynamicConfig = new Mage_Core_Model_Config_Base();
+                $dynamicConfig->loadString($xml);
+                $config->extend($dynamicConfig, true);
+                $this->_areDynamicMenuItemsLoaded = true;
+            }
+            catch (Exception $e) {
+                $this->_areDynamicMenuItemsLoaded = true;
+            }
         }
     }
 
