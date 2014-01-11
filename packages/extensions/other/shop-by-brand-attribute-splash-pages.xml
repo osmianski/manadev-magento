@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_shop-by-brand-splash-pages</name>
+    <name>extensions/manadev_shop-by-brand-attribute-splash-pages</name>
     <part name="Mana/Admin" />
     <part name="Mana/AttributePage" />
     <part name="Mana/Ajax"/>
