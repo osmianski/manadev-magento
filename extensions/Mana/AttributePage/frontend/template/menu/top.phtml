@@ -13,15 +13,12 @@ else {
     /* @var $this Mage_Page_Block_Html_Topmenu */
     $_menu = $this->getHtml('level-top');
 }
-/* @var $_block Mana_AttributePage_Block_Navigation */
-$_block = Mage::getSingleton('core/layout')->getBlockSingleton('mana_attributepage/navigation');
-$_attributeMenu = $_block->getHtml();
+$_menu .= Mage::helper('mana_attributepage')->getAttributePageMenuHtml();
 ?>
-<?php if($_menu || $_attributeMenu): ?>
+<?php if($_menu): ?>
 <div class="nav-container">
     <ul id="nav">
         <?php echo $_menu ?>
-        <?php echo $_attributeMenu ?>
     </ul>
 </div>
 <?php endif ?>

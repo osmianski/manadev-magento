@@ -21,9 +21,9 @@ $_attributePage = $this->getData('attribute_page');
         $_css[] = $i == count($_collection->getItems()) && !$_showAll ? 'last' : '';
         $_css[] = $this->isOptionPageActive($_page) ? 'active' : '';
     ?>
-    <li class="level-1 nav-option-<?php echo $_page->getId()?> <?php echo implode(' ', array_filter($_css)) ?>">
+    <li class="level1 item nav-option-<?php echo $_page->getId()?> <?php echo implode(' ', array_filter($_css)) ?>">
         <a href="<?php echo $_page->getUrl() ?>">
-            <span><?php echo $this->escapeHtml($_page->getData('title')) ?></span>
+            <span><?php echo $this->escapeHtml($_page->getData('raw_title')) ?></span>
         </a>
     </li>
 <?php endforeach; ?>
@@ -33,7 +33,7 @@ $_attributePage = $this->getData('attribute_page');
         $_css[] = count($_collection->getItems()) == 0 ? 'first' : '';
         $_css[] = 'last';
     ?>
-    <li class="level-1 nav-all-options <?php echo implode(' ', array_filter($_css)) ?>">
+    <li class="level1 item nav-all-options <?php echo implode(' ', array_filter($_css)) ?>">
         <a href="<?php echo $_attributePage->getUrl() ?>">
             <span><?php echo $this->escapeHtml($this->__('Show All')) ?></span>
         </a>
