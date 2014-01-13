@@ -91,10 +91,10 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                 });
                 sortedItems.sort(function(a, b) {
                     if (a.position < b.position) return -1;
-                    if (a.position > b.position) return 11;
+                    if (a.position > b.position) return 1;
 
-                    if (a.id < b.id) return -1;
-                    if (a.id > b.id) return 1;
+                    if (parseInt(a.id) < parseInt(b.id)) return -1;
+                    if (parseInt(a.id) > parseInt(b.id)) return 1;
 
                     if (a.index < b.index) return -1;
                     if (a.index > b.index) return 1;
