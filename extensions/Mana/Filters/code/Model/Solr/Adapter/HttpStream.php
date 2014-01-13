@@ -141,6 +141,16 @@ class Mana_Filters_Model_Solr_Adapter_HttpStream extends Enterprise_Search_Model
         return $this->_prepareFieldCondition($field, $part);
     }
 
+    protected function _prepareFacetConditions($facetFields) {
+        $result = parent::_prepareFacetConditions($facetFields);
+        if (isset($result['facet']) && $result['facet'] == 'on' &&
+            ($limit = Mage::getStoreConfig('mana_filters/general/solr_limit')) &&
+            is_numeric($limit))
+        {
+            $result['facet.limit'] = (int)$limit;
+        }
+        return $result;
+    }
     #region Dependencies
 
     /**

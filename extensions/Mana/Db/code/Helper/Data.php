@@ -571,7 +571,7 @@ class Mana_Db_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         $classFile .= '.php';
         foreach (explode(PS, get_include_path()) as $path) {
-            if (file_exists($path.DS.$classFile)) {
+            if (@file_exists($path.DS.$classFile)) {
                 return true;
             }
         }

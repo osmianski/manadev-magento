@@ -36,3 +36,8 @@
 "Applicable to all CMS pages including home page where layered navigation is present","Applicable to all CMS pages including home page where layered navigation is present"
 "Disable Filter Options With No Products","Disable Filter Options With No Products"
 "Hide CMS Page Product List When No Filters Are Applied","Hide CMS Page Product List When No Filters Are Applied"
+"Other Settings","Other Settings"
+"SOLR Maximum Number of Counted Options","SOLR Maximum Number of Counted Options"
+"Leave empty to use SOLR server default setting (usually equals 100)","Leave empty to use SOLR server default setting (usually equals 100)"
+"",""
+"",""
