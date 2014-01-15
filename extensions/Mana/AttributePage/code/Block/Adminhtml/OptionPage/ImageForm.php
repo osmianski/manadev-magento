@@ -36,6 +36,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ImageForm extends Mana_Attri
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),
             'name' => 'featured_image',
+            'note' => $this->__('Visible in the list of featured options on attribute page; only visible if option page is featured.'),
             'required' => false,
 
             'default_bit_no' => Mana_AttributePage_Model_OptionPage_Abstract::DM_FEATURED_IMAGE,
@@ -85,6 +86,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ImageForm extends Mana_Attri
         $this->addField($fieldset, 'product_image', 'image', array(
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),
+            'note' => $this->__('Visible on product pages if product contains this option.'),
             'name' => 'product_image',
             'required' => false,
 

@@ -47,7 +47,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
                 );
             }
             $db->delete(
-                $attributeTable,
+                $res->getTableName($attributeTable),
                 $deleteCondition
             );
 
@@ -73,7 +73,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             $select = $db->select()
                 ->from(array('e' => $this->getTable('catalog/product')), null)
                 ->joinLeft(array('ss' =>  new Zend_Db_Expr('('.$subSelect.')')), "`e`.`entity_id` = `ss`.`product_id`", null)
-                 ->joinInner(array('v' => $visibilityAttributeTable),
+                 ->joinInner(array('v' => $res->getTableName($visibilityAttributeTable)),
                  $db->quoteInto("`e`.`entity_id` = `v`.`entity_id` ".
                  " AND `v`.`store_id` = 0 ".
                  " AND `v`.`value` <> 1".

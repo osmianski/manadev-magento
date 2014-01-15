@@ -30,13 +30,8 @@ class Mana_AttributePage_Block_Option_View extends Mage_Core_Block_Template {
                     'title' => $this->getOptionPage()->getData('title'),
                     'last' => true,
             ));
-
-            $title = $this->getOptionPage()->getData('title') . $this->getTitleSeparator() .
-                $this->getAttributePage()->getData('title');
         }
-        else {
-            $title = $this->getOptionPage()->getData('title');
-        }
+        $title = $this->getOptionPage()->getData('meta_title');
 
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             /* @var $headBlock Mage_Page_Block_Html_Head */

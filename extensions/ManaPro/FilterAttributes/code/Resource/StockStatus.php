@@ -48,7 +48,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
                 );
             }
             $db->delete(
-                $attributeTable,
+                $res->getTableName($attributeTable),
                 $deleteCondition
                    );
 
@@ -66,7 +66,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
                 ->from(array('e' => $this->getTable('catalog/product')), null)
                  ->joinInner(array('s' =>  $this->getTable('cataloginventory/stock_item')),
                  ("`e`.`entity_id` = `s`.`product_id`"), null)
-                 ->joinInner(array('v' => $visibilityAttributeTable),
+                 ->joinInner(array('v' => $res->getTableName($visibilityAttributeTable)),
                  $db->quoteInto("`e`.`entity_id` = `v`.`entity_id` ".
                  " AND `v`.`store_id` = 0 ".
                  " AND `v`.`value` <> 1".
