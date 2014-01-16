@@ -77,7 +77,7 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
         $params['_m_escape'] = '';
-        $params['_query'] = array($filter->getRequestVar() => '__0__');
+        $params['_query'] = array('p' => null, $filter->getRequestVar() => '__0__');
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
 
