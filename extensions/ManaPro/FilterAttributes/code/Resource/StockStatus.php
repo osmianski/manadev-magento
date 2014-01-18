@@ -34,7 +34,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
 
         try {
             // DELETE stock status values
-             if (isset($options['product_id'])) {
+            if (isset($options['product_id'])) {
                  $deleteCondition = array(
                      'attribute_id = ?' => new Zend_Db_Expr($attribute['attribute_id']),
                      'store_id  = ?' => new Zend_Db_Expr("0"),
@@ -91,6 +91,7 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
                     'product_ids' => array($options['product_id']),
                 )), Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION );
             }
+
         }
         catch (Exception $e) {
             $db->rollBack();
@@ -105,13 +106,6 @@ class ManaPro_FilterAttributes_Resource_StockStatus extends ManaPro_FilterAttrib
 
     protected function _getStockStatusAttributeValues ( $attributeId) {
         $inStockOptionPosition = Mage::getStoreConfig('mana_filters/general/instock_option_position');
-
-/*    	$v = $this->_getReadAdapter()->fetchAll("
-            SELECT `o`.`sort_order`, `o`.`option_id`
-              FROM `eav_attribute_option` `o`
-             WHERE `o`.`attribute_id` = $attributeId
-            ORDER BY `o`.`sort_order`");
-*/
         $db = $this->_getReadAdapter();
 
         $select = $db->select()
