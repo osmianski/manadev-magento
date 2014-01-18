@@ -11,7 +11,7 @@
         <ManaPro_FilterAttributes>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.01.18.16</version>
+            <version>14.01.18.17</version>
         </ManaPro_FilterAttributes>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -94,6 +94,16 @@
 					</manapro_filterattributes>
 				</observers>
 			</cataloginventory_stock_item_save_commit_after>
+            <cataloginventory_stock_item_save_after> <!-- for 1.6 and below -->
+                <observers>
+                    <manapro_filterattributes>
+                        <class>manapro_filterattributes/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>saveStockStatus</method>
+                        <!-- event handler method name -->
+                    </manapro_filterattributes>
+                </observers>
+            </cataloginventory_stock_item_save_after>
             <m_product_faces_reindex_all><!-- this is event name this module listens for -->
 				<observers>
 					<manapro_filterattributes>
