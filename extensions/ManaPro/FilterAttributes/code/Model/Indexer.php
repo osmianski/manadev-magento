@@ -28,9 +28,6 @@ class ManaPro_FilterAttributes_Model_Indexer  extends Mana_Core_Model_Indexer {
         $object      = $event->getDataObject();
 
         $event->addNewData('product_id', $object->getProductId());
- /*       Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_attribute')
-            ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
- */
     }
 
     /**
