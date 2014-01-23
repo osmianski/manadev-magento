@@ -134,7 +134,7 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
                     'url' => $this->getValue(),
                     'prefix' => '',
                     'position' => 0,
-                    'id' => 0,
+                    'id' => $this->getValue(),
                 );
             }
        }
