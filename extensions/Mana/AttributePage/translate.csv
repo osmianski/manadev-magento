@@ -22,8 +22,6 @@
 "Content","Content"
 "Title","Title"
 "Description","Description"
-"Enabled","Enabled"
-"Disabled","Disabled"
 "Include In Top Menu","Include In Top Menu"
 "Other Settings","Other Settings"
 "URL Key","URL Key"
@@ -119,7 +117,7 @@
 "Top","Top"
 "Bottom","Bottom"
 "Hide","Hide"
-"",""
+"Attribute Option Page","Attribute Option Page"
 "",""
 "",""
 

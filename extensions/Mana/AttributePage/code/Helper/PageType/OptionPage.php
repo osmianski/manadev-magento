@@ -58,4 +58,11 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
 
         return $result['final_url_key'];
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getConditionLabel() {
+        return $this->__('Attribute Option Page');
+    }
 }

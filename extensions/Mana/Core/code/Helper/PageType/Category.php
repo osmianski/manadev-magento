@@ -21,4 +21,11 @@ class Mana_Core_Helper_PageType_Category extends Mana_Core_Helper_PageType  {
     public function getRoutePath() {
         return 'catalog/category/view';
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getConditionLabel() {
+        return $this->__('Category Page');
+    }
 }

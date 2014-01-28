@@ -17,4 +17,11 @@ class Mana_Core_Helper_PageType_HomePage extends Mana_Core_Helper_PageType  {
     public function getRoutePath() {
         return 'cms/index/index';
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getConditionLabel() {
+        return $this->__('CMS Home Page');
+    }
 }

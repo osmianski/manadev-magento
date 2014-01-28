@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterContent
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <ManaPro_FilterContent>
+            <version>14.01.13.17</version>
+        </ManaPro_FilterContent>
+    </modules>
+    <global>
+        <helpers>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Helper</class>
+            </manapro_filtercontent>
+        </helpers>
+        <models>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Model</class>
+                <resourceModel>manapro_filtercontent_resources</resourceModel>
+            </manapro_filtercontent>
+            <manapro_filtercontent_resources>
+                <class>ManaPro_FilterContent_Resource</class>
+                <entities>
+					<global><table>m_filter_content_global</table></global>
+					<globalCustomSettings><table>m_filter_content_global_custom_settings</table></globalCustomSettings>
+					<store><table>m_filter_content_store</table></store>
+					<storeCustomSettings><table>m_filter_content_store_custom_settings</table></storeCustomSettings>
+                </entities>
+            </manapro_filtercontent_resources>
+        </models>
+        <blocks>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Block</class>
+            </manapro_filtercontent>
+        </blocks>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <manapro_filtercontent>
+                    <file>manapro_filtercontent.xml</file>
+                </manapro_filtercontent>
+            </updates>
+            <translate>
+                <modules>
+                    <ManaPro_FilterContent>
+                        <files>
+                            <default>ManaPro_FilterContent.csv</default>
+                        </files>
+                    </ManaPro_FilterContent>
+                </modules>
+            </translate>
+        </layout>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <manapro_filtercontent before="Mage_Adminhtml">ManaPro_FilterContent_Adminhtml</manapro_filtercontent>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

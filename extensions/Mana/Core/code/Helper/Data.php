@@ -828,5 +828,13 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $html;
     }
+    public function getOptionArray($allOptions)
+    {
+        $_options = array();
+        foreach ($allOptions as $option) {
+            $_options[$option['value']] = $option['label'];
+        }
+        return $_options;
+    }
 
 }

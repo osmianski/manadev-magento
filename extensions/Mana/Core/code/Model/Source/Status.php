@@ -1,7 +1,7 @@
 <?php
 /** 
  * @category    Mana
- * @package     Mana_AttributePage
+ * @package     Mana_Core
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_AttributePage_Model_Source_Status extends Mana_Core_Model_Source_Abstract {
+class Mana_Core_Model_Source_Status extends Mana_Core_Model_Source_Abstract {
     protected function _getAllOptions() {
         return array(
             array('value' => 1, 'label' => $this->helper()->__('Enabled')),
@@ -22,7 +22,7 @@ class Mana_AttributePage_Model_Source_Status extends Mana_Core_Model_Source_Abst
      * @return Mana_AttributePage_Helper_Data
      */
     public function helper() {
-        return Mage::helper('mana_attributepage');
+        return Mage::helper('mana_core');
     }
     #endregion
 }

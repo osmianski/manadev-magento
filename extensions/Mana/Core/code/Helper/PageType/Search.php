@@ -17,4 +17,10 @@ class Mana_Core_Helper_PageType_Search extends Mana_Core_Helper_PageType  {
     public function getRoutePath() {
         return 'catalogsearch/result/index';
     }
+    /**
+     * @return bool|string
+     */
+    public function getConditionLabel() {
+        return $this->__('Quick Search Page');
+    }
 }

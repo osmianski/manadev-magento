@@ -47,10 +47,10 @@ abstract class Mana_AttributePage_Block_Adminhtml_AttributePage_AbstractForm ext
     }
 
     /**
-     * @return Mana_AttributePage_Model_Source_Status
+     * @return Mana_Core_Model_Source_Status
      */
     public function getStatusSourceModel() {
-        return Mage::getSingleton('mana_attributepage/source_status');
+        return Mage::getSingleton('mana_core/source_status');
     }
 
     /**

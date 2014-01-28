@@ -17,4 +17,11 @@ class Mana_Core_Helper_PageType_CmsPage extends Mana_Core_Helper_PageType  {
     public function getRoutePath() {
         return 'cms/page/view';
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getConditionLabel() {
+        return $this->__('CMS Page');
+    }
 }
