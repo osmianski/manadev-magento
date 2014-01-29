@@ -168,6 +168,25 @@
                         </globally_applied_filters>
                     </fields>
                 </session>
+                <general translate="label" module="manapro_filteradmin">
+                    <label>Other Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>900</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <solr_limit translate="label comment">
+                            <label>SOLR Maximum Number of Counted Options</label>
+                            <comment>Leave empty to use SOLR server default setting (usually equals 100)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </solr_limit>
+                    </fields>
+                </general>
             </groups>
         </mana_filters>
     </sections>

@@ -105,6 +105,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_GeneralForm extends Mana_Att
         $this->addField($fieldset, 'image', 'image', array(
             'label' => $this->__('Image'),
             'title' => $this->__('Image'),
+            'note' => $this->__('Visible on the top of option page'),
             'name' => 'image',
             'required' => false,
 

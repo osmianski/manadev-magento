@@ -7,12 +7,13 @@
  */
 /* @var $this Mana_AttributePage_Block_Option_Featured */
 $i = -1;
-$_count = count($this->getAttributePage()->getOptionPages());
+$collection = $this->getAttributePage()->getOptionFeatured();
+$_count = count($collection);
 $_filesHelper = $this->filesHelper();
 ?>
 <?php if($_count) :?>
     <ul class="m-option-featured-list">
-        <?php foreach ($this->getAttributePage()->getOptionFeatured() as $_optionPage) : $i++;?>
+        <?php foreach ($collection as $_optionPage) : $i++;?>
             <?php if (($_imgUrl = $_optionPage->getData('featured_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
             <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
                 <li class="category-image m-featured-image">

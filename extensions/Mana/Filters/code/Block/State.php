@@ -13,7 +13,7 @@
 class Mana_Filters_Block_State extends Mage_Catalog_Block_Layer_State {
 	public function getClearUrl() {
         if ($this->getMode() == 'this') {
-            $query = array();
+            $query = array('p' => null);
             foreach ($this->getActiveFilters() as $item) {
                 $query[$item->getFilter()->getRequestVar()] = $item->getFilter()->getResetValue();
             }

@@ -42,8 +42,8 @@ ManaPro.filterRangeInput('<?php echo $_id ?>', {
 	formatThreshold: <?php echo $_filter->getFilterOptions()->getSliderThreshold() ? $_filter->getFilterOptions()->getSliderThreshold() : 0 ?>,
     decimalDigits: <?php echo $_filter->getFilterOptions()->getSliderDecimalDigits() ?>,
     decimalDigits2: <?php echo $_filter->getFilterOptions()->getSliderDecimalDigits2() ?>,
-    decimalSymbol: '<?php echo $_superHelper->getDecimalSymbol() ?>',
-    groupSymbol: '<?php echo $_superHelper->getGroupSymbol() ?>'
+    decimalSymbol: "<?php echo $_superHelper->getDecimalSymbol() ?>",
+    groupSymbol: "<?php echo $_superHelper->escapeHtml($_superHelper->getGroupSymbol()) ?>"
 });
 //]]>
 </script>

@@ -64,7 +64,8 @@ function($, Block, undefined)
             var widthClassFound = false;
             var wasOneColumn = this.$().hasClass("one-filter-column");
             $.each(this.getWidths(), function(cls, width) {
-                if (width && !widthClassFound && self.$().width() < width) {
+                var contentWidth = cls == "one-filter-column" ? $('body').width() : self.$().width();
+                if (width && !widthClassFound && contentWidth < width) {
                     self.$().addClass(cls);
                     widthClassFound = true;
                 }

@@ -25,10 +25,13 @@ Mana.define('Mana/Admin/Action', ['jquery', 'Mana/Core/Block'], function ($, Blo
             return this
                 ._super()
                 .on('bind', this, function () {
-                    $('.mb-'+this.getId()).on('click', _raiseClick);
+//                    $('.mb-'+this.getId()).on('click', _raiseClick);
+                    $(document).on('click', '.mb-' + this.getId(), _raiseClick);
+
                 })
                 .on('unbind', this, function () {
-                    $('.mb-' + this.getId()).off('click', _raiseClick);
+//                    $('.mb-' + this.getId()).off('click', _raiseClick);
+                    $(document).off('click', '.mb-' + this.getId(), _raiseClick);
                 });
         },
         _subscribeToBlockEvents: function () {

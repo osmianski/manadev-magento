@@ -119,7 +119,16 @@
 "Top","Top"
 "Bottom","Bottom"
 "Hide","Hide"
+"Visible on the top of option page","Visible on the top of option page"
+"Visible in the list of featured options on attribute page; only visible if option page is featured.","Visible in the list of featured options on attribute page; only visible if option page is featured."
+"Visible on product pages if product contains this option.","Visible on product pages if product contains this option."
 "",""
 "",""
 "",""
+"",""
+"",""
+"",""
+"",""
+"",""
+
 

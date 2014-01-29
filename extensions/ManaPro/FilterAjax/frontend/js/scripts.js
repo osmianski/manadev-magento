@@ -116,7 +116,10 @@ function($, ajax, config, layout, undefined)
                     $.each(response.blocks, function (blockName) {
                         var block = layout.getBlock(blockName);
                         if (block) {
-                            offset = block.$().offset().top;
+                            var blockOffset = block.$().offset().top;
+                            if (offset == -1 || offset >= blockOffset) {
+                                offset = blockOffset;
+                            }
                         }
                     });
                     if (offset >= 0) {

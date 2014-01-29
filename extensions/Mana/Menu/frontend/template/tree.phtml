@@ -1,0 +1,13 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     Mana_Menu
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_Menu_Block_Tree_Container */
+/* @var $childItem Mana_Menu_Block_Tree_Item */
+?>
+<?php foreach ($this->getChild() as $childItem) : ?>
+    <?php echo $childItem->toHtml() ?>
+<?php endforeach ?>

@@ -103,7 +103,7 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <max_width translate="label comment">
-                            <label>Hide If Content Width Is Wider Than</label>
+                            <label>Hide If Body Width Is More Or Equal To</label>
                             <comment>in pixels. Leave empty to disable mobile layout feature. Note that mobile layout may require theme-related CSS changes.</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>

@@ -65,7 +65,7 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $core = Mage::helper(strtolower('Mana_Core'));
         $params['_query'] = array(
             'm-show-more-popup' => $filter->getFilterOptions()->getId(),
-            'm-seo-enabled' => $core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
+            'm-seo-enabled' => 1, //$core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
         );
         if ($core->getRoutePath() != 'catalogsearch/result/index') {
             $params['_query']['m-show-more-cat'] = Mage::getSingleton('catalog/layer')->getCurrentCategory()->getId();
@@ -77,7 +77,7 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
         $params['_m_escape'] = '';
-        $params['_query'] = array($filter->getRequestVar() => '__0__');
+        $params['_query'] = array('p' => null, $filter->getRequestVar() => '__0__');
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
 
