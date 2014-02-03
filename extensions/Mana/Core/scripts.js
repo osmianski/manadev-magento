@@ -493,6 +493,9 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
             else {
                 return base64.decode(data.replace(/-/g, '+').replace(/_/g, '/').replace(/,/g, '='));
             }
+        },
+        encodeAttribute: function(data) {
+            return base64.encode(data).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ',');
         }
     });
 });

@@ -537,23 +537,60 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     break;
                 case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
                     if ($this->getSchema()->getRedirectToSubcategory()) {
-                        $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-                        $params['_current'] = true;
-                        $params['_use_rewrite'] = true;
-                        $params['_m_escape'] = '';
-                        $params['_query'] = array(
+                        $url = urldecode(str_replace('+', '%2B', $seo->urlDecode(Mage::app()->getFrontController()->getRequest()->getParam('m-url'))));
+                        $query = array(
                             'cat' => $value,
                             'm-seo-enabled' => null,
                             'm-show-more-cat' => null,
                             'm-show-more-popup' => null,
+                            'm-url' => null,
                         );
 
-                        $url = Mage::helper('mana_filters')->markLayeredNavigationUrl(
-                            Mage::getUrl('*/*/*', $params), '*/*/*', $params);
+                        /* @var $parser Mana_Seo_Helper_UrlParser */
+                        $parser = Mage::helper('mana_seo/urlParser');
 
-                        return array(
-                            'full_url' => $url
-                        );
+                        $storeUrl = Mage::app()->getStore()->isCurrentlySecure()
+                                ? $this->getUrl('', array('_secure' => true))
+                                : $this->getUrl('');
+                        $storeParsedUrl = parse_url($storeUrl);
+
+                        $path = substr($url, strlen(
+                                $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
+                                . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
+                                . $storeParsedUrl['path']));
+//                        if (!$this->coreHelper()->startsWith($path, '/')) {
+//                            $path = '/'.$path;
+//                        }
+
+                        $storeParsedQuery = array();
+                        if (isset($storeParsedUrl['query'])) {
+                            parse_str($storeParsedUrl['query'], $storeParsedQuery);
+                        }
+
+                        if ($parsedUrl = $parser->parse($path)) {
+                            $params = array_merge(
+                                $parsedUrl->getImplodedParameters(),
+                                array(
+                                    '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
+                                    '_use_rewrite' => true,
+                                    '_m_escape' => '',
+                                    '_query' => array_merge(
+                                        $storeParsedQuery,
+                                        $query,
+                                        count($parsedUrl->getQueryParameters())
+                                            ? $parsedUrl->getImplodedQueryParameters()
+                                            : array()
+                                    ),
+                                ));
+
+                            $url = Mage::helper('mana_filters')->markLayeredNavigationUrl(
+                                Mage::getUrl($parsedUrl->getRoute(), $params),
+                                $parsedUrl->getRoute(), $params);
+                            return array('full_url' => $url);
+                        }
+                        else {
+                            throw new Exception('Not implemented');
+                        }
                     }
                     elseif ($urlKey = $this->_getCategoryUrlKeys($value)) {
                         return

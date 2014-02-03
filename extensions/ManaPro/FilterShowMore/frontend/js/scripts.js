@@ -65,7 +65,7 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
 
         _openPopup: function() {
             var self = this;
-            ajax.get(this.getPopupUrl(), function(response) {
+            ajax.get(this.getPopupUrl().replace('__0__', urlTemplate.encodeAttribute(location.href)), function(response) {
                 layout.showPopup({
                     content: response,
                     overlay: { opacity: 0.2},

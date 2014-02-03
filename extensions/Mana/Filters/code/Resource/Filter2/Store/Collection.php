@@ -13,6 +13,9 @@
  * @author Mana Team
  */
 class Mana_Filters_Resource_Filter2_Store_Collection extends Mana_Filters_Resource_Filter2_Collection {
+    protected $_eventPrefix = 'mana_filter_store_collection';
+    protected $_eventObject = 'collection';
+
     /**
      * Invoked during resource collection model creation process, this method associates this 
      * resource collection model with model class and with resource model class

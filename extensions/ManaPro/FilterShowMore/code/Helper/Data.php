@@ -66,6 +66,7 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_query'] = array(
             'm-show-more-popup' => $filter->getFilterOptions()->getId(),
             'm-seo-enabled' => 1, //$core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
+            'm-url' => '__0__',
         );
         if ($core->getRoutePath() != 'catalogsearch/result/index') {
             $params['_query']['m-show-more-cat'] = Mage::getSingleton('catalog/layer')->getCurrentCategory()->getId();
