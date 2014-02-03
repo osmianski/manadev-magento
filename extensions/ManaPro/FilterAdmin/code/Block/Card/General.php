@@ -154,6 +154,23 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
 				: $this->__('Same For All Stores'),
         ))->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
 
+        /** @noinspection PhpParamsInspection */
+        $fieldset = $form->addFieldset('mfs_dependency', array(
+			'title' => $this->__('Filter Dependency'),
+			'legend' => $this->__('Filter Dependency'),
+		));
+		$fieldset->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_fieldset'));
+
+        $fieldset->addField('depends_on_filter_id', 'select', array(
+            'label' => $this->__('Available if Filter is Applied'),
+            'name' => 'depends_on_filter_id',
+            'options' => Mage::getModel('manapro_filteradmin/source_filter')
+                ->setCurrentFilterId(Mage::app()->getRequest()->getParam('id'))
+                ->getOptionArray(),
+            'required' => false,
+            'disabled' => !$this->adminHelper()->isGlobal(),
+        ))->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
+
         $this->setForm($form);
         return parent::_prepareForm();
 	}
@@ -209,5 +226,13 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
     public function getModel() {
         return Mage::registry('m_crud_model');
     }
+
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+
     #endregion
 }
