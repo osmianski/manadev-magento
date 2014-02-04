@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterDependent
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <ManaPro_FilterDependent>
+            <version>14.02.04.09</version>
+        </ManaPro_FilterDependent>
+    </modules>
+    <global>
+        <helpers>
+            <manapro_filterdependent>
+                <class>ManaPro_FilterDependent_Helper</class>
+            </manapro_filterdependent>
+        </helpers>
+        <models>
+            <manapro_filterdependent>
+                <class>ManaPro_FilterDependent_Model</class>
+                <resourceModel>manapro_filterdependent_resources</resourceModel>
+            </manapro_filterdependent>
+            <manapro_filterdependent_resources>
+                <class>ManaPro_FilterDependent_Resource</class>
+                <entities>
+
+                </entities>
+            </manapro_filterdependent_resources>
+        </models>
+        <resources>
+            <manapro_filterdependent_setup>
+                <setup>
+                    <module>ManaPro_FilterDependent</module>
+                </setup>
+            </manapro_filterdependent_setup>
+        </resources>
+    </global>
+</config>

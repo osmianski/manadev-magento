@@ -53,13 +53,6 @@
 			</manapro_filteradmin>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
-        <resources>
-            <manapro_filteradmin_setup>
-                <setup>
-                    <module>ManaPro_FilterAdmin</module>
-                </setup>
-            </manapro_filteradmin_setup>
-        </resources>
 
 		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
 		<!-- This section registers event handlers of this module defined in ManaPro_FilterAdmin_Model_Observer with events defined in other

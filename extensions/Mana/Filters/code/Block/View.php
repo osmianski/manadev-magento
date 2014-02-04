@@ -115,11 +115,12 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
         $helper = Mage::helper(strtolower('Mana_Filters'));
 
         $filters = array();
-    	foreach ($helper->getFilterOptionsCollection() as $filterOptions) {
+        $collection = $helper->getFilterOptionsCollection();
+    	foreach ($collection as $filterOptions) {
             /* @var $filterOptions Mana_Filters_Model_Filter2_Store */
 
 
-            if ($helper->isFilterEnabled($filterOptions)) {
+            if ($helper->isFilterEnabled($filterOptions) && !$helper->isHideDependentFilter($filterOptions, $collection)) {
                 if ($helper->canShowFilterInBlock($this, $filterOptions)) {
                     $filters[] = $this->getChild($filterOptions->getCode() . '_filter');
                 }

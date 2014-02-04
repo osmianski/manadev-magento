@@ -202,6 +202,27 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
                 throw new Exception('Not implemented');
         }
     }
+
+    /**
+     * @param Mana_Filters_Model_Filter2_Store $filter
+     * @param Mana_Filters_Resource_Filter2_Store_Collection $collection
+     * @return bool
+     */
+    public function isHideDependentFilter($filter, $collection) {
+        if (!($id = $filter->getData('depends_on_filter_id'))) {
+            return false;
+        }
+        /* @var $parentFilter Mana_Filters_Model_Filter2_Store*/
+        if (!($parentFilter = $this->coreHelper()->collectionFind($collection, 'global_id', $id))) {
+            return false;
+        }
+        $requestVar = $parentFilter->getData('type') == 'category' ? 'cat' : $parentFilter->getData('code');
+        if (Mage::app()->getRequest()->getParam($requestVar)) {
+            return false;
+        }
+
+        return true;
+    }
     public function canShowFilterInBlock($block, $filter) {
         if ($block->getData('show_'.$filter->getCode())) {
             return true;
@@ -430,5 +451,6 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
+
     #endregion
 }
