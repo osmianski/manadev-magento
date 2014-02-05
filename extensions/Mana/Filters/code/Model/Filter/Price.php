@@ -272,6 +272,10 @@ class Mana_Filters_Model_Filter_Price
     public function getRemoveUrl()
     {
         $query = array($this->getRequestVar() => $this->getResetValue());
+        if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+            $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getRequestVar());
+        }
+
         $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
@@ -430,4 +434,21 @@ class Mana_Filters_Model_Filter_Price
     }
     #endregion
 
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
+    #endregion
 }

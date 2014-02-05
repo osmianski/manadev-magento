@@ -12,7 +12,7 @@
 		<ManaPro_FilterAdmin>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.01.12.20</version>
+		    <version>14.02.03.11</version>
 		</ManaPro_FilterAdmin>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -53,6 +53,7 @@
 			</manapro_filteradmin>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
+
 		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
 		<!-- This section registers event handlers of this module defined in ManaPro_FilterAdmin_Model_Observer with events defined in other
 		module throughout the system. So when some code in other module invokes an event mentioned in this section, handler

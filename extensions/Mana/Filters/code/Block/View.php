@@ -115,14 +115,17 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
         $helper = Mage::helper(strtolower('Mana_Filters'));
 
         $filters = array();
-    	foreach ($helper->getFilterOptionsCollection() as $filterOptions) {
+        $collection = $helper->getFilterOptionsCollection();
+    	foreach ($collection as $filterOptions) {
             /* @var $filterOptions Mana_Filters_Model_Filter2_Store */
 
 
-            if ($helper->isFilterEnabled($filterOptions)) {
-                if ($helper->canShowFilterInBlock($this, $filterOptions)) {
-                    $filters[] = $this->getChild($filterOptions->getCode() . '_filter');
-                }
+            if ($helper->isFilterEnabled($filterOptions) &&
+                (!$this->coreHelper()->isManadevDependentFilterInstalled()
+                    || !$this->dependentHelper()->hide($filterOptions, $collection)) &&
+                $helper->canShowFilterInBlock($this, $filterOptions))
+            {
+                $filters[] = $this->getChild($filterOptions->getCode() . '_filter');
     		}
         }
         return $filters;
@@ -196,10 +199,30 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
         }
         return true;
     }
+
+    #region Dependencies
+
     /**
      * @return Mana_Filters_Helper_Data
      */
     public function layerHelper() {
         return Mage::helper('mana_filters');
     }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
+    #endregion
+
+
 }

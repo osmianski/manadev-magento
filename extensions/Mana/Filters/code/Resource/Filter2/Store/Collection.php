@@ -46,6 +46,10 @@ class Mana_Filters_Resource_Filter2_Store_Collection extends Mana_Filters_Resour
 			$select->columns("global.type AS type");
 			$result->addColumn('type');
 		}
+
+        if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+            $this->getDependentFilterVirtualColumnsResource()->addToCollection($select, $result, $columns, $globalEntityName);
+        }
 	}
 	public function addGlobalFields($fields) {
 	    $select = $this->_select;
@@ -59,4 +63,21 @@ class Mana_Filters_Resource_Filter2_Store_Collection extends Mana_Filters_Resour
         }
         return $this;
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Resource_VirtualColumns
+     */
+    public function getDependentFilterVirtualColumnsResource() {
+        return Mage::getResourceSingleton('manapro_filterdependent/virtualColumns');
+    }
+    #endregion
 }
