@@ -39,5 +39,3 @@
 "Other Settings","Other Settings"
 "SOLR Maximum Number of Counted Options","SOLR Maximum Number of Counted Options"
 "Leave empty to use SOLR server default setting (usually equals 100)","Leave empty to use SOLR server default setting (usually equals 100)"
-"Filter Dependency","Filter Dependency"
-"Available if Filter is Applied","Available if Filter is Applied"

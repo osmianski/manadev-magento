@@ -36,5 +36,34 @@
                 </setup>
             </manapro_filterdependent_setup>
         </resources>
+        <events>
+            <m_db_add_edited_data>
+                <observers>
+                    <manapro_filterdependent>
+                        <class>manapro_filterdependent/observer</class>
+                        <method>addEditedData</method>
+                    </manapro_filterdependent>
+                </observers>
+            </m_db_add_edited_data>
+            <m_crud_form>
+                <observers>
+                    <manapro_filterdependent>
+                        <class>manapro_filterdependent/observer</class>
+                        <method>addFields</method>
+                    </manapro_filterdependent>
+                </observers>
+            </m_crud_form>
+        </events>
     </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <ManaPro_FilterDependent>
+                    <files>
+                        <default>ManaPro_FilterDependent.csv</default>
+                    </files>
+                </ManaPro_FilterDependent>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

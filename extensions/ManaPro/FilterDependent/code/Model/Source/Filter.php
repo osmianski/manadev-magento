@@ -1,7 +1,7 @@
 <?php
 /** 
  * @category    Mana
- * @package     ManaPro_FilterAdmin
+ * @package     ManaPro_FilterDependent
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterAdmin_Model_Source_Filter extends Mana_Core_Model_Source_Abstract {
+class ManaPro_FilterDependent_Model_Source_Filter extends Mana_Core_Model_Source_Abstract {
     protected $_currentFilterId;
 
     public function setCurrentFilterId($value) {

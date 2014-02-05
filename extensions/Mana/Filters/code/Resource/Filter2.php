@@ -308,7 +308,6 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
         Mage::helper('mana_db')->updateDefaultableField($object, 'operation', Mana_Filters_Resource_Filter2::DM_OPERATION, $fields, $useDefault);
         Mage::helper('mana_db')->updateDefaultableField($object, 'is_reverse', Mana_Filters_Resource_Filter2::DM_IS_REVERSE, $fields, $useDefault);
         Mage::helper('mana_db')->updateDefaultableField($object, 'disable_no_result_options', Mana_Filters_Resource_Filter2::DM_DISABLE_NO_RESULT_OPTIONS, $fields, $useDefault);
-        $object->setData('depends_on_filter_id', !empty($fields['depends_on_filter_id']) ? $fields['depends_on_filter_id'] : null);
     }
     protected function _afterSave(Mage_Core_Model_Abstract $object) {
         if ($edit = $object->getValueData()) {
