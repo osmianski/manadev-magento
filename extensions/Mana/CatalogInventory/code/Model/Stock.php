@@ -32,6 +32,7 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
         $fullSaveItems = array();
         foreach ($stockInfo as $itemInfo) {
             $item->setData($itemInfo);
+            $item->setData('m_check_actual_qty', true);
             if (!$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
                 Mage::throwException(Mage::helper('cataloginventory')->__('Not all products are available in the requested quantity'));
