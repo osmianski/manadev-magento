@@ -796,10 +796,45 @@ function ($, layout, json, core, config, undefined)
             this._oldSetLocation = undefined;
             this._preventClicks = 0;
         },
+        _encodeUrl: function(url, options) {
+            if (options.encode) {
+                if (options.encode.offset !== undefined) {
+                    if (options.encode.length === undefined) {
+                        if (options.encode.offset === 0) {
+                            return window.encodeURI(url.substr(options.encode.offset));
+                        }
+                        else {
+                            return url.substr(0, options.encode.offset) +
+                                window.encodeURI(url.substr(options.encode.offset));
+                        }
+                    }
+                    else if (options.encode.length === 0) {
+                        return url;
+                    }
+                    else {
+                        if (options.encode.offset === 0) {
+                            return window.encodeURI(url.substr(options.encode.offset, options.encode.length))
+                                + url.substr(options.encode.offset + options.encode.length);
+                        }
+                        else {
+                            return url.substr(0, options.encode.offset) +
+                                window.encodeURI(url.substr(options.encode.offset, options.encode.length)) +
+                                url.substr(options.encode.offset + options.encode.length);
+                        }
+                    }
+                }
+                else {
+                    return url;
+                }
+            }
+            else {
+                return window.encodeURI(url);
+            }
+        },
         get:function (url, callback, options) {
-            var self = this;
+            var self = this, encodedUrl;
             options = this._before(options, url);
-            $.get(window.encodeURI(url))
+            $.get(this._encodeUrl(url, options))
                 .done(function (response) { self._done(response, callback, options, url); })
                 .fail(function (error) { self._fail(error, options, url)})
                 .complete(function () { self._complete(options, url); });
