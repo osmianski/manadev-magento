@@ -957,7 +957,7 @@ function($, $p, TextArea, urlTemplate, config) {
 
 Mana.define('Mana/Admin/Field/Image', ['jquery', 'Mana/Admin/Field/Text', 'singleton:Mana/Core/Config'],
 function($, Text, config) {
-    return Text.extend('Mana/Admin/Field/Text', {
+    return Text.extend('Mana/Admin/Field/Image', {
         _subscribeToHtmlEvents: function () {
             var self = this;
 
@@ -999,7 +999,15 @@ function($, Text, config) {
             });
         },
         setImage: function() {
-            this.$image().attr('src', config.getData("url.imageBase") + '/' + this.getValue());
+            if (this.useDefault()) {
+                if (this.getValue()) {
+                    this.$image().attr('src', config.getData("url.imageBase") + '/' + this.getValue());
+                }
+                else {
+                    this.$image().attr('src', '');
+                }
+            }
+
         },
         $addButton: function() {
             return this.$().find('.add.m-button');
