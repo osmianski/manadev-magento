@@ -75,6 +75,16 @@
                 </mana_seo_url>
             </indexer>
         </index>
+        <events>
+            <adminhtml_controller_action_predispatch_start>
+                <observers>
+                    <mana_attributepage>
+                        <class>mana_attributepage/observer</class>
+                        <method>loadDynamicMenuItems</method>
+                    </mana_attributepage>
+                </observers>
+            </adminhtml_controller_action_predispatch_start>
+        </events>
     </global>
     <adminhtml>
         <translate>
@@ -93,16 +103,6 @@
                 </mana_attributepage>
             </updates>
         </layout>
-        <events>
-            <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <mana_attributepage>
-                        <class>mana_attributepage/observer</class>
-                        <method>loadDynamicMenuItems</method>
-                    </mana_attributepage>
-                </observers>
-            </controller_action_layout_generate_blocks_after>
-        </events>
     </adminhtml>
     <frontend>
         <routers>
