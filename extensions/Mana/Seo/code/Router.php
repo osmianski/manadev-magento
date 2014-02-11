@@ -64,16 +64,16 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     }
                 }
                 else {
-                    $front->getResponse()->setRedirect($url);
+                    $front->getResponse()->setRedirect($url, 301);
                     $request->setDispatched(true);
                 }
             }
             elseif ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE) {
-                $front->getResponse()->setRedirect($url);
+                $front->getResponse()->setRedirect($url, 301);
                 $request->setDispatched(true);
             }
             elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
-                $front->getResponse()->setRedirect($url);
+                $front->getResponse()->setRedirect($url, 301);
                 $request->setDispatched(true);
             }
         }
