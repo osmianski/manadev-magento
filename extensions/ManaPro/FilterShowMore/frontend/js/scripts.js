@@ -61,12 +61,21 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
             }
             return this._separator;
         },
+        getColumnCount: function () {
+            return this.$().data('column-count');
+        },
+        getRowCount: function () {
+            return this.$().data('row-count');
+        },
         //endregion
 
         _openPopup: function() {
             var self = this;
-            ajax.get(this.getPopupUrl().replace('__0__', urlTemplate.encodeAttribute(location.href)), function(response) {
-                layout.showPopup({
+
+            var url = this.getPopupUrl()
+                .replace('__0__', urlTemplate.encodeAttribute(location.href));
+            ajax.get(url, function(response) {
+                var options = {
                     content: response,
                     overlay: { opacity: 0.2},
                     popup: { 'class': 'm-showmore-popup-container', blockName: self.getPopupBlockName()},
@@ -75,7 +84,55 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                         self._popupBlock = popupBlock;
                     }},
                     fadeout: { overlayTime: 0, popupTime: 500, callback: null }
-                });
+                };
+                var $popup = layout.preparePopup(options);
+                var $items = $popup.find('.m-columns li');
+                var columnClass = $popup.find('.m-columns').attr('class');
+                var $rows = $popup.find('.m-rows');
+                var $rowToBeRemoved = $rows.children('li');
+
+                if ($items.length) {
+                    $popup.show();
+                    var scrollBarWidth = 15, reservedMargin = 20;
+                    var popupWidth = $(window).width() - ($popup.outerWidth() - $rows.outerWidth())
+                        - scrollBarWidth - reservedMargin;
+                    var popupHeight = $(window).height() - ($popup.outerHeight() - $rows.outerHeight()) - reservedMargin;
+                    var columnWidth = $items.first().outerWidth();
+                    var columnCount = Math.floor(popupWidth / columnWidth);
+                    if (columnCount < 1) {
+                        columnCount = 1;
+                        $items.width(popupWidth - (columnWidth - $items.first().width()));
+                        columnWidth = popupWidth;
+                    }
+                    if (columnCount > self.getColumnCount()) {
+                        columnCount = self.getColumnCount();
+                    }
+
+                    var $columns, $row, height = 0, scrollRows;
+                    $items.each(function(index) {
+                        var item = this;
+                        var columnIndex = index % columnCount;
+                        var rowIndex = Math.floor(index / columnCount);
+                        if (columnIndex === 0) {
+                            $row = $('<li><ol class="' + columnClass + '"></ol></li>');
+                            $rows.append($row);
+                            $columns = $row.children().first();
+                        }
+                        $columns.append(item);
+                        if (columnIndex == columnCount - 1) {
+                            height += $row.outerHeight();
+                            if (scrollRows === undefined && (height > popupHeight || rowIndex + 1 >= self.getRowCount())) {
+                                scrollRows = rowIndex;
+                            }
+                        }
+                        if (scrollRows !== undefined) {
+                            $rows.attr('data-max-rows', scrollRows);
+                        }
+                    });
+                    $rowToBeRemoved.remove();
+                    $popup.hide();
+                    layout.showPopup(options);
+                }
             });
         },
         close: function() {

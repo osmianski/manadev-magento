@@ -101,9 +101,19 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $rowCount = ceil($count / $columnCount);
         return array($rowCount, $columnCount);
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxRowCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_rows');
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxColumnCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_columns');
     }

@@ -701,6 +701,21 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                 return null;
             }
         },
+        preparePopup: function(options) {
+            if (options.$popup === undefined) {
+                var $popup = $('#m-popup');
+                $popup
+                    .css({"width": "auto", "height": "auto"})
+                    .html(options.content);
+
+                if (options.popup['class']) {
+                    $popup.addClass(options.popup['class']);
+                }
+
+                options.$popup = $popup;
+            }
+            return options.$popup;
+        },
         showPopup: function (options) {
             var self = this;
 
@@ -714,15 +729,8 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                     });
                 };
                 var overlay = self.getPageBlock().showOverlay('m-popup-overlay', options.fadeout);
-                var $popup = $('#m-popup');
+                var $popup = self.preparePopup(options);
                 overlay.animate({ opacity: options.overlay.opacity }, options.fadein.overlayTime, function () {
-                    $popup
-                        .css({"width": "auto", "height": "auto"})
-                        .html(options.content);
-
-                    if (options.popup['class']) {
-                        $popup.addClass(options.popup['class']);
-                    }
                     $popup.show();
 
                     var popupBlock = new PopupBlockClass();
