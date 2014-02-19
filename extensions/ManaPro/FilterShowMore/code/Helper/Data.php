@@ -22,9 +22,9 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isShowAllRequested($filter) {
-	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
-	        return true;
-	    }
+//	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
+//	        return true;
+//	    }
     	$value = Mage::app()->getRequest()->getParam($filter->getRequestVar().$this->getShowAllSuffix());
 		return $value && $value == 1 ? true : false;    
 	}

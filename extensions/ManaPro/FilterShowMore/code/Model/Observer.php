@@ -29,7 +29,6 @@ class ManaPro_FilterShowMore_Model_Observer {
 		}
 		elseif (!Mage::registry('m_showing_filter_popup')) {
 			if (!$filter->getMIsShowMoreDisabled()) {
-				/* @var $m Mana_Core_Helper_Data */ $m = Mage::helper(strtolower('Mana_Core'));
 				$maxItemCount = $filter->getFilterOptions()->getShowMoreItemCount();
 				if (count($items->getItems()) > $maxItemCount) {
 				    $newItems = array();
