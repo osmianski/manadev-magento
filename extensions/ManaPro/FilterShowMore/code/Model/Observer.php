@@ -75,6 +75,7 @@ class ManaPro_FilterShowMore_Model_Observer {
 				$target->getSelect('main')->columns(array(
 					'global.show_more_item_count AS show_more_item_count',
                     'global.show_more_method AS show_more_method',
+                    'global.show_option_search AS show_option_search',
                 ));
 				break;
 		}
@@ -105,6 +106,9 @@ class ManaPro_FilterShowMore_Model_Observer {
                 if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_SHOW_MORE_METHOD)) {
                     $object->setShowMoreMethod($values['show_more_method']);
                 }
+                if (!Mage::helper('mana_db')->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_SHOW_OPTION_SEARCH)) {
+                    $object->setData('show_option_search', $values['show_option_search']);
+                }
                 break;
 		}
 	}
@@ -122,6 +126,7 @@ class ManaPro_FilterShowMore_Model_Observer {
 				$target->getSelect('main')->columns(array(
 					'global.show_more_item_count AS show_more_item_count',
                     'global.show_more_method AS show_more_method',
+                    'global.show_option_search AS show_option_search',
                 ));
 				break;
 		}
@@ -144,6 +149,7 @@ class ManaPro_FilterShowMore_Model_Observer {
 			case 'mana_filters/filter2_store':
 				$object->setShowMoreItemCount($values['show_more_item_count']);
                 $object->setShowMoreMethod($values['show_more_method']);
+                $object->setData('show_option_search', $values['show_option_search']);
                 break;
 		}
 	}
@@ -182,6 +188,17 @@ class ManaPro_FilterShowMore_Model_Observer {
                                 : Mage::helper('manapro_filtershowmore')->__('Same For All Stores'),
                     ), 'show_more_item_count');
                     $field->setRenderer(Mage::getSingleton('core/layout')->getBlockSingleton('mana_admin/crud_card_field'));
+
+                    $field = $form->getElement('mfs_display')->addField('show_option_search', 'select', array_merge(array(
+                        'label' => Mage::helper('manapro_filtershowmore')->__('Show Option Search'),
+                        'name' => 'show_option_search',
+                        'required' => true,
+                        'options' => Mage::getSingleton('mana_core/source_yesno')->getOptionArray(),
+                    ), Mage::helper('mana_admin')->isGlobal() ? array() : array(
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_SHOW_OPTION_SEARCH,
+                        'default_label' => Mage::helper('manapro_filtershowmore')->__('Same For All Stores'),
+                    )), 'show_more_method');
+                    $field->setRenderer(Mage::getSingleton('core/layout')->getBlockSingleton('mana_admin/crud_card_field'));
                 }
 				break;
 		}
@@ -201,6 +218,7 @@ class ManaPro_FilterShowMore_Model_Observer {
 			case 'mana_filters/filter2_store':
 				Mage::helper('mana_db')->updateDefaultableField($object, 'show_more_item_count', Mana_Filters_Resource_Filter2::DM_SHOW_MORE_ITEM_COUNT, $fields, $useDefault);
                 Mage::helper('mana_db')->updateDefaultableField($object, 'show_more_method', Mana_Filters_Resource_Filter2::DM_SHOW_MORE_METHOD, $fields, $useDefault);
+                Mage::helper('mana_db')->updateDefaultableField($object, 'show_option_search', Mana_Filters_Resource_Filter2::DM_SHOW_OPTION_SEARCH, $fields, $useDefault);
                 break;
 		}
 	}
