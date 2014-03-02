@@ -1384,6 +1384,7 @@ function ($, Block, config)
         }
     });
 });
+
 Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'], function($, layout, ajax) {
     function _generateBlocks() {
         var vars = layout.beginGeneratingBlocks();
@@ -1393,8 +1394,6 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
         _generateBlocks();
         ajax.startIntercepting();
     });
-    //$(document).bind('m-ajax-after', _generateBlocks);
-
 });
 
 //region (Obsolete) additional jQuery functions used in MANAdev extensions

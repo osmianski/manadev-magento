@@ -17,3 +17,8 @@
 .m-filter-popup .buttons-set { margin: 8px 0 0; }
 .m-filter-popup .m-filter-colors { margin: 0; }
 .m-showmore-popup-container { box-shadow : 15px 15px 25px 5px rgba( 0, 0, 0, 0.4 ); }
+
+.m-option-search { padding: 4px 0; }
+.m-option-search input { width: 100%; }
+.m-option-search input.m-empty { color: #c0c0c0; }
+.m-no-match { display: none; }

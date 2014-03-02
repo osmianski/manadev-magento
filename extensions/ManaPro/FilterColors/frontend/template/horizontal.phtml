@@ -12,6 +12,7 @@
  */
 /* @var $this Mana_Filters_Block_Filter_Attribute */
 ?>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'before_items', array('block' => $this)) ?>
 <div class="m-filter-colors horizontal <?php echo $this->getFilterClass() ?> <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
 <?php foreach ($this->getItems() as $_item): ?>
 

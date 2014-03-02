@@ -17,6 +17,7 @@
 /* @var $radios ManaPro_FilterRadios_Helper_Data */
 $radios = Mage::helper('manapro_filterradios');
 ?>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'before_items', array('block' => $this)) ?>
 <ol class="m-filter-radios">
     <li>
         <?php if (Mage::getStoreConfigFlag('mana_filters/radio/show_all')): ?>
