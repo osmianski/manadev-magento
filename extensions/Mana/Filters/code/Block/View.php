@@ -111,24 +111,27 @@ class Mana_Filters_Block_View extends Mage_Catalog_Block_Layer_View {
      * @return Mana_Filters_Block_Filter[]
      */
     public function getFilters() {
-        /* @var $helper Mana_Filters_Helper_Data */
-        $helper = Mage::helper(strtolower('Mana_Filters'));
+        if (!$this->hasData('filters')) {
+            /* @var $helper Mana_Filters_Helper_Data */
+            $helper = Mage::helper(strtolower('Mana_Filters'));
 
-        $filters = array();
-        $collection = $helper->getFilterOptionsCollection();
-    	foreach ($collection as $filterOptions) {
-            /* @var $filterOptions Mana_Filters_Model_Filter2_Store */
+            $filters = array();
+            $collection = $helper->getFilterOptionsCollection();
+            foreach ($collection as $filterOptions) {
+                /* @var $filterOptions Mana_Filters_Model_Filter2_Store */
 
 
-            if ($helper->isFilterEnabled($filterOptions) &&
-                (!$this->coreHelper()->isManadevDependentFilterInstalled()
-                    || !$this->dependentHelper()->hide($filterOptions, $collection)) &&
-                $helper->canShowFilterInBlock($this, $filterOptions))
-            {
-                $filters[] = $this->getChild($filterOptions->getCode() . '_filter');
-    		}
+                if ($helper->isFilterEnabled($filterOptions) &&
+                    (!$this->coreHelper()->isManadevDependentFilterInstalled()
+                        || !$this->dependentHelper()->hide($filterOptions, $collection)) &&
+                    $helper->canShowFilterInBlock($this, $filterOptions))
+                {
+                    $filters[] = $this->getChild($filterOptions->getCode() . '_filter');
+                }
+            }
+            $this->setData('filters', $filters);
         }
-        return $filters;
+        return $this->_getData('filters');
     }
     public function getClearUrl() {
         /* @var $helper Mana_Filters_Helper_Data */
