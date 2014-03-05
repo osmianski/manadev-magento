@@ -735,6 +735,8 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
 
                     var popupBlock = new PopupBlockClass();
                     popupBlock.setElement($popup[0]);
+                    var vars = this.beginGeneratingBlocks(this);
+                    this.endGeneratingBlocks(vars);
                     popupBlock.prepare(options.popupBlock);
 
                     $('.m-popup-overlay').on('click', function () {

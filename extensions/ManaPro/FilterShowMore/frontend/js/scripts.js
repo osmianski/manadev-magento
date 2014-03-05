@@ -525,6 +525,12 @@ function ($, Block, undefined) {
     });
 });
 
+Mana.define('Mana/LayeredNavigation/OptionSearch/Popup', ['jquery', 'Mana/LayeredNavigation/OptionSearch'],
+function ($, OptionSearch) {
+    return OptionSearch.extend('Mana/LayeredNavigation/OptionSearch/Popup', {
+    });
+});
+
 //region old style show more/show less and scroll bar scripts
 (function($, undefined) {
 	var prefix = 'm-more-less-';

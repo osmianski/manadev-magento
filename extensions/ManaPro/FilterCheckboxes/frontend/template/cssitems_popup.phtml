@@ -15,6 +15,7 @@
 $jsonHelper = Mage::helper('mana_core/json');
 ?>
 <div class="m-filter-popup">
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'before_popup_items', array('block' => $this)) ?>
 <ol class="m-rows">
     <li>
         <ol class="m-columns m-filter-css-checkboxes">
