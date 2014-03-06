@@ -362,38 +362,38 @@ function($, TopBlock, undefined)
         },
         _subscribeToHtmlEvents: function () {
             var self = this;
-            function _mouseOverFilter() {
-                self._mouseOverFilter($(this).parent(), $(this), $(this).next());
+            function _mouseEnterFilter() {
+                self._mouseEnterFilter($(this).parent(), $(this), $(this).next());
             }
 
-            function _mouseOutFilter() {
-                self._mouseOutFilter($(this).parent(), $(this), $(this).next());
+            function _mouseLeaveFilter() {
+                self._mouseLeaveFilter($(this).parent(), $(this), $(this).next());
             }
 
-            function _mouseOverOptions() {
-                self._mouseOverOptions($(this).parent(), $(this).prev(), $(this));
+            function _mouseEnterOptions() {
+                self._mouseEnterOptions($(this).parent(), $(this).prev(), $(this));
             }
 
-            function _mouseOutOptions() {
-                self._mouseOutOptions($(this).parent(), $(this).prev(), $(this));
+            function _mouseLeaveOptions() {
+                self._mouseLeaveOptions($(this).parent(), $(this).prev(), $(this));
             }
 
             return this
                 ._super()
                 .on('bind', this, function () {
-                    this.$().find('dl dt.m-ln').on('mouseover', _mouseOverFilter);
-                    this.$().find('dl dt.m-ln').on('mouseout', _mouseOutFilter);
-                    this.$().find('dl dd.m-ln').on('mouseover', _mouseOverOptions);
-                    this.$().find('dl dd.m-ln').on('mouseout', _mouseOutOptions);
+                    this.$().find('dl dt.m-ln').on('mouseenter', _mouseEnterFilter);
+                    this.$().find('dl dt.m-ln').on('mouseleave', _mouseLeaveFilter);
+                    this.$().find('dl dd.m-ln').on('mouseenter', _mouseEnterOptions);
+                    this.$().find('dl dd.m-ln').on('mouseleave', _mouseLeaveOptions);
                 })
                 .on('unbind', this, function () {
-                    this.$().find('dl dt.m-ln').off('mouseover', _mouseOverFilter);
-                    this.$().find('dl dt.m-ln').off('mouseout', _mouseOutFilter);
-                    this.$().find('dl dd.m-ln').off('mouseover', _mouseOverOptions);
-                    this.$().find('dl dd.m-ln').off('mouseout', _mouseOutOptions);
+                    this.$().find('dl dt.m-ln').off('mouseenter', _mouseEnterFilter);
+                    this.$().find('dl dt.m-ln').off('mouseleave', _mouseLeaveFilter);
+                    this.$().find('dl dd.m-ln').off('mouseenter', _mouseEnterOptions);
+                    this.$().find('dl dd.m-ln').off('mouseleave', _mouseLeaveOptions);
                 });
         },
-        _mouseOverFilter: function($dl, $dt, $dd) {
+        _mouseEnterFilter: function($dl, $dt, $dd) {
             if ($dl.hasClass('m-inline') || this._mobileLayout) {
                 return true;
             }
@@ -412,7 +412,7 @@ function($, TopBlock, undefined)
             $dd.trigger('m-prepare');
             return true;
         },
-        _mouseOutFilter: function ($dl, $dt, $dd) {
+        _mouseLeaveFilter: function ($dl, $dt, $dd) {
             if ($dl.hasClass('m-inline') || this._mobileLayout) {
                 return true;
             }
@@ -425,7 +425,7 @@ function($, TopBlock, undefined)
 
             return true;
         },
-        _mouseOverOptions: function ($dl, $dt, $dd) {
+        _mouseEnterOptions: function ($dl, $dt, $dd) {
             if ($dl.hasClass('m-inline') || this._mobileLayout) {
                 return true;
             }
@@ -443,7 +443,7 @@ function($, TopBlock, undefined)
 
             return true;
         },
-        _mouseOutOptions: function ($dl, $dt, $dd) {
+        _mouseLeaveOptions: function ($dl, $dt, $dd) {
             if ($dl.hasClass('m-inline') || this._mobileLayout) {
                 return true;
             }
