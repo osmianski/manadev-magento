@@ -59,6 +59,7 @@ examples on what kind of actions can be applied to referenced blocks.
 	    </reference>
 	</m_catalog_category_layered_category_left>
 	<catalogsearch_result_index> <!-- find all catalog search result page -->
+		<update handle="jquery_core" />
 		<reference name="head">
 			<action method="addCss"><stylesheet>css/manapro_filterpositioning.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/manapro_filterpositioning.js</name><params/></action>

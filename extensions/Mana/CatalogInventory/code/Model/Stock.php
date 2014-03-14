@@ -101,8 +101,8 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
             }
         }
         if ($this->helper()->isManadevFilterAttributesInstalled()) {
-            foreach ($items as $item) {
-                $options = array('product_id' => $item->getProductId());
+            foreach ($items as $productId => $item) {
+                $options = array('product_id' => $productId);
                 Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process($this, $options);
             }
         }

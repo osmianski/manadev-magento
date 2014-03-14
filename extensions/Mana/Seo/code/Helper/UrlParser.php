@@ -921,6 +921,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $this->_toolbarOrders = array_merge($this->_toolbarOrders, explode(',', $additionalToolbarOrders));
             }
 
+            $obj = new Varien_Object();
+            $obj->setData('orders', $this->_toolbarOrders);
+            Mage::dispatchEvent('m_toolbar_orders', compact('obj'));
+            $this->_toolbarOrders = $obj->getData('orders');
+
         }
         return $this->_toolbarOrders;
     }
