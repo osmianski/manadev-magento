@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Sorting
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Sorting>
+            <version>14.03.12.05</version>
+        </Mana_Sorting>
+    </modules>
+    <global>
+        <helpers>
+            <mana_sorting>
+                <class>Mana_Sorting_Helper</class>
+            </mana_sorting>
+        </helpers>
+        <blocks>
+            <mana_sorting>
+                <class>Mana_Sorting_Block</class>
+            </mana_sorting>
+            <catalog>
+                <rewrite>
+                    <product_list_toolbar>Mana_Sorting_Rewrite_Toolbar</product_list_toolbar>
+                </rewrite>
+            </catalog>
+        </blocks>
+        <models>
+            <mana_sorting>
+                <class>Mana_Sorting_Model</class>
+                <resourceModel>mana_sorting_resources</resourceModel>
+            </mana_sorting>
+            <mana_sorting_resources>
+                <class>Mana_Sorting_Resource</class>
+                <entities>
+
+                </entities>
+            </mana_sorting_resources>
+        </models>
+        <events>
+            <m_toolbar_orders>
+                <observers>
+                    <mana_xxx>
+                        <class>mana_sorting/observer</class>
+                        <method>addSortingMethodsToSeo</method>
+                    </mana_xxx>
+                </observers>
+            </m_toolbar_orders>
+        </events>
+    </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Mana_Sorting>
+                    <files>
+                        <default>Mana_Sorting.csv</default>
+                    </files>
+                </Mana_Sorting>
+            </modules>
+        </translate>
+    </frontend>
+    <mana_sorting>
+        <newest translate="label" module="Mana_Sorting">
+            <label>Newest</label>
+            <resource>mana_sorting/newest</resource>
+        </newest>
+        <bestsellers translate="label" module="Mana_Sorting">
+            <label>Bestsellers</label>
+            <resource>mana_sorting/bestseller</resource>
+        </bestsellers>
+    </mana_sorting>
+</config>
