@@ -12,7 +12,7 @@
 		<ManaPro_FilterRadios>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.02.18.22</version>
+		    <version>14.03.14.17</version>
 		</ManaPro_FilterRadios>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 

@@ -68,6 +68,96 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
             return this.$().data('row-count');
         },
         //endregion
+        rearrangeItems: function($popup) {
+            var self = this;
+            var $unorganizedColumns = $popup.find('.m-columns');
+            var $items = $popup.find('.m-columns li');
+            var columnClass = $unorganizedColumns.attr('class');
+            var horizontalColors = $unorganizedColumns.hasClass('m-filter-colors') && $unorganizedColumns.hasClass('horizontal');
+            var $rows = $popup.find('.m-rows');
+            var $rowsToBeRemoved = $rows.children('li');
+            if ($items.length) {
+                var scrollBarWidth = 30, reservedMargin = 20;
+                var popupWidth = $(window).width() - ($popup.outerWidth() - $rows.outerWidth())
+                    - scrollBarWidth - reservedMargin;
+                var popupHeight = $(window).height() - ($popup.outerHeight() - $rows.outerHeight()) - reservedMargin;
+                var columnWidth = horizontalColors ? $unorganizedColumns.outerWidth() : $items.first().outerWidth();
+                var columnCount = Math.floor(popupWidth / columnWidth);
+                var height = 0;
+
+                if (columnCount < 1) {
+                    columnCount = 1;
+                    if (horizontalColors) {
+                        columnWidth = popupWidth - (columnWidth - $unorganizedColumns.width());
+                        columnWidth = Math.floor(columnWidth / $items.first().outerWidth()) * $items.first().outerWidth() + 4;
+                        $unorganizedColumns.width(columnWidth);
+                    }
+                    else {
+                        $items.width(popupWidth - (columnWidth - $items.first().width()));
+                    }
+                }
+                if (columnCount > self.getColumnCount()) {
+                    columnCount = self.getColumnCount();
+                }
+
+                if (horizontalColors) {
+                    var scrollHeight, rowIndex = 0, top, rowTop;
+                    $items.each(function () {
+                        var $item = $(this);
+                        if (top === undefined) {
+                            rowTop = top = $item.position().top;
+                        }
+                        else if (top < $item.position().top) {
+                            rowIndex++;
+                            top = $item.position().top;
+                        }
+                        height = top - rowTop + $item.outerHeight();
+                        if (scrollHeight === undefined && (height > popupHeight || rowIndex + 1 >= self.getRowCount())) {
+                            scrollHeight = top - rowTop;
+                        }
+                    });
+                    if (scrollHeight !== undefined) {
+                        $rows.attr('data-max-height', scrollHeight);
+                    }
+                }
+                else {
+                    var $columns, $row, scrollRows, $hiddenRow, index = 0;
+
+                    $items.each(function () {
+                        var item = this, $item = $(item), visible = !$item.hasClass('m-no-match');
+                        if (visible) {
+                            var columnIndex = index % columnCount;
+                            var rowIndex = Math.floor(index / columnCount);
+                            if (columnIndex === 0) {
+                                $row = $('<li><ol class="' + columnClass + '"></ol></li>');
+                                $rows.append($row);
+                            }
+                            $columns = $row.children().first();
+                            $columns.append(item);
+                            if (columnIndex == columnCount - 1) {
+                                height += $row.outerHeight();
+                                if (scrollRows === undefined && (height > popupHeight || rowIndex + 1 >= self.getRowCount())) {
+                                    scrollRows = rowIndex;
+                                }
+                            }
+                            index++;
+                        }
+                        else {
+                            if (!$hiddenRow) {
+                                $hiddenRow = $('<li><ol class="' + columnClass + '"></ol></li>').hide();
+                                $rows.append($hiddenRow);
+                            }
+                            $columns = $hiddenRow.children().first();
+                            $columns.append(item);
+                        }
+                    });
+                    if (scrollRows !== undefined) {
+                        $rows.attr('data-max-rows', scrollRows);
+                    }
+                    $rowsToBeRemoved.remove();
+                }
+            }
+        },
 
         _openPopup: function() {
             var self = this;
@@ -86,84 +176,11 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                     fadeout: { overlayTime: 0, popupTime: 500, callback: null }
                 };
                 var $popup = layout.preparePopup(options);
-                var $unorganizedColumns = $popup.find('.m-columns');
-                var $items = $popup.find('.m-columns li');
-                var columnClass = $unorganizedColumns.attr('class');
-                var horizontalColors = $unorganizedColumns.hasClass('m-filter-colors') && $unorganizedColumns.hasClass('horizontal');
-                var $rows = $popup.find('.m-rows');
-                var $rowToBeRemoved = $rows.children('li');
 
-                if ($items.length) {
-                    $popup.show();
-                    var scrollBarWidth = 30, reservedMargin = 20;
-                    var popupWidth = $(window).width() - ($popup.outerWidth() - $rows.outerWidth())
-                        - scrollBarWidth - reservedMargin;
-                    var popupHeight = $(window).height() - ($popup.outerHeight() - $rows.outerHeight()) - reservedMargin;
-                    var columnWidth = horizontalColors ? $unorganizedColumns.outerWidth() : $items.first().outerWidth();
-                    var columnCount = Math.floor(popupWidth / columnWidth);
-                    var height = 0;
+                $popup.show();
+                self.rearrangeItems($popup);
+                $popup.hide();
 
-                    if (columnCount < 1) {
-                        columnCount = 1;
-                        if (horizontalColors) {
-                            columnWidth = popupWidth - (columnWidth - $unorganizedColumns.width());
-                            columnWidth = Math.floor(columnWidth / $items.first().outerWidth()) * $items.first().outerWidth() + 4;
-                            $unorganizedColumns.width(columnWidth);
-                        }
-                        else {
-                            $items.width(popupWidth - (columnWidth - $items.first().width()));
-                        }
-                    }
-                    if (columnCount > self.getColumnCount()) {
-                        columnCount = self.getColumnCount();
-                    }
-
-                    if (horizontalColors) {
-                        var scrollHeight, rowIndex = 0, top, rowTop;
-                        $items.each(function() {
-                            var $item = $(this);
-                            if (top === undefined) {
-                                rowTop = top = $item.position().top;
-                            }
-                            else if (top < $item.position().top) {
-                                rowIndex++;
-                                top = $item.position().top;
-                            }
-                            height = top - rowTop + $item.outerHeight();
-                            if (scrollHeight === undefined && (height > popupHeight || rowIndex + 1 >= self.getRowCount())) {
-                                scrollHeight = top - rowTop;
-                            }
-                        });
-                        if (scrollHeight !== undefined) {
-                            $rows.attr('data-max-height', scrollHeight);
-                        }
-                    }
-                    else {
-                        var $columns, $row, scrollRows;
-                        $items.each(function(index) {
-                            var item = this;
-                            var columnIndex = index % columnCount;
-                            var rowIndex = Math.floor(index / columnCount);
-                            if (columnIndex === 0) {
-                                $row = $('<li><ol class="' + columnClass + '"></ol></li>');
-                                $rows.append($row);
-                                $columns = $row.children().first();
-                            }
-                            $columns.append(item);
-                            if (columnIndex == columnCount - 1) {
-                                height += $row.outerHeight();
-                                if (scrollRows === undefined && (height > popupHeight || rowIndex + 1 >= self.getRowCount())) {
-                                    scrollRows = rowIndex;
-                                }
-                            }
-                        });
-                        if (scrollRows !== undefined) {
-                            $rows.attr('data-max-rows', scrollRows);
-                        }
-                        $rowToBeRemoved.remove();
-                    }
-                    $popup.hide();
-                }
                 layout.showPopup(options);
             });
         },
@@ -244,6 +261,9 @@ function ($, Block, json) {
             this.$().find('button.m-close').on('click', function() { return self._close(); });
             this.$().find('button.m-apply').on('click', function () { return self._apply(); });
         },
+        rearrangeItems: function() {
+            return this._host.rearrangeItems(this.$());
+        },
         _close: function() {
             this._host.close();
             return false;
@@ -258,12 +278,14 @@ function ($, Block, json) {
                 isSelected = !isSelected;
             }
             var itemData = json.decodeAttribute($element.data('item'));
-            itemData.index = $element.data('index');
-            if (isSelected) {
-                this._selectedItems[itemData.url] = itemData;
-            }
-            else {
-                delete this._selectedItems[itemData.url];
+            if (itemData) {
+                itemData.index = $element.data('index');
+                if (isSelected) {
+                    this._selectedItems[itemData.url] = itemData;
+                }
+                else {
+                    delete this._selectedItems[itemData.url];
+                }
             }
             return false;
         },
@@ -487,7 +509,7 @@ function ($, Block, undefined) {
                 var $list = this.$list();
                 this.$items().each(function() {
                     var $item = $(this);
-                    var haystack = $list.is('.m-filter-colors.vertical') ? $item.find('a > div').attr('title') :
+                    var haystack = $list.is('.m-filter-colors.vertical,.m-columns.m-filter-colors.horizontal') ? $item.find('a > div').attr('title') :
                         ($list.is('.m-filter-colors.horizontal') ? $item.children('div').attr('title') :
                         $item.text());
                     haystack = haystack.toLowerCase();
@@ -504,6 +526,9 @@ function ($, Block, undefined) {
                 this.$items().removeClass('m-no-match');
             }
             this._needle = needle;
+            this._afterSearch();
+        },
+        _afterSearch: function() {
             this.$().parent().trigger('m-prepare');
         },
         _focus: function() {
@@ -528,6 +553,13 @@ function ($, Block, undefined) {
 Mana.define('Mana/LayeredNavigation/OptionSearch/Popup', ['jquery', 'Mana/LayeredNavigation/OptionSearch'],
 function ($, OptionSearch) {
     return OptionSearch.extend('Mana/LayeredNavigation/OptionSearch/Popup', {
+        $list: function () {
+            return this.$().parent().children(':not(.m-option-search)').first().find('.m-columns');
+        },
+        _afterSearch: function () {
+            this._super();
+            this.getParent().rearrangeItems();
+        }
     });
 });
 
