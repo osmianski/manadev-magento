@@ -57,6 +57,9 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
         if (isset($xmls[$order])) {
             /* @var $resource Mana_Sorting_ResourceInterface */
             $resource = Mage::getResourceSingleton((string)$xmls[$order]->resource);
+            if (!($resource instanceof Mana_Sorting_ResourceInterface)) {
+                throw new Exception('Sorting resource class must implement Mana_Sorting_ResourceInterface.');
+            }
             $resource->setOrder($collection, $order, $direction);
             return true;
         }

@@ -10,7 +10,9 @@
         <Mana_Sorting>
             <active>true</active>
             <codePool>local</codePool>
-            <depends>Mana_Core</depends>
+            <depends>
+                <Mana_Core/>
+            </depends>
         </Mana_Sorting>
     </modules>
 </config>

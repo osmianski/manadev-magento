@@ -749,7 +749,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @param Mana_Seo_Model_ParsedUrl[][] | bool $tokens
      * @return Mana_Seo_Model_ParsedUrl[] | bool
      */
-    protected function _getPageUrlKeysAndRemoveSuffixes($tokens) {
+    protected function _getPageUrlKeysAndRemoveSuffixes(&$tokens) {
         if (!$tokens) {
             return false;
         }
@@ -757,6 +757,14 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $flatResult = array();
         $flatTokens = array();
         foreach ($tokens as $suffix => $suffixTokens) {
+//            $oldKey = 'catalogsearch/result';
+//            if (isset($suffixTokens[$oldKey])) {
+//                // this standard URL key is not indexed but may have to be parsed
+//                $newKey = Mage::getStoreConfig('mana/seo/search_url_key');
+//                $suffixTokens[$newKey] = $suffixTokens[$oldKey];
+//                unset($suffixTokens[$oldKey]);
+//                $tokens[$suffix] = $suffixTokens;
+//            }
             $result[$suffix] = array();
             $flatTokens = array_merge($flatTokens, $suffixTokens);
         }
