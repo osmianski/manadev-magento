@@ -757,14 +757,6 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $flatResult = array();
         $flatTokens = array();
         foreach ($tokens as $suffix => $suffixTokens) {
-//            $oldKey = 'catalogsearch/result';
-//            if (isset($suffixTokens[$oldKey])) {
-//                // this standard URL key is not indexed but may have to be parsed
-//                $newKey = Mage::getStoreConfig('mana/seo/search_url_key');
-//                $suffixTokens[$newKey] = $suffixTokens[$oldKey];
-//                unset($suffixTokens[$oldKey]);
-//                $tokens[$suffix] = $suffixTokens;
-//            }
             $result[$suffix] = array();
             $flatTokens = array_merge($flatTokens, $suffixTokens);
         }

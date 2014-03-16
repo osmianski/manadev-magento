@@ -562,11 +562,19 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 //                            $path = '/'.$path;
 //                        }
 
+                        $urlQuery = array();
+                        if (($pos = strpos($path, '?')) !== false) {
+                            parse_str(substr($path, $pos + 1), $urlQuery);
+                            $path = substr($path, 0, $pos);
+                        }
                         $storeParsedQuery = array();
                         if (isset($storeParsedUrl['query'])) {
                             parse_str($storeParsedUrl['query'], $storeParsedQuery);
                         }
 
+                        if ($this->coreHelper()->startsWith($path, 'catalogsearch/result/')) {
+                            $path = Mage::getStoreConfig('mana/seo/search_url_key').substr($path, strlen('catalogsearch/result/'));
+                        }
                         if ($parsedUrl = $parser->parse($path)) {
                             $params = array_merge(
                                 $parsedUrl->getImplodedParameters(),
@@ -577,6 +585,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                                     '_query' => array_merge(
                                         $storeParsedQuery,
                                         $query,
+                                        $urlQuery,
                                         count($parsedUrl->getQueryParameters())
                                             ? $parsedUrl->getImplodedQueryParameters()
                                             : array()
