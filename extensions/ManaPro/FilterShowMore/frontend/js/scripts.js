@@ -583,10 +583,13 @@ function ($, OptionSearch) {
 	function _calculateOtherHeights(l, code) {
 	    var visible = l.is(':visible');
 	    var hiddenElement = l;
+	    var hiddenDisplayStyle;
+
 	    if (!visible) {
             while (hiddenElement.parent().length && !hiddenElement.parent().is(':visible')) {
                 hiddenElement = hiddenElement.parent();
             }
+            hiddenDisplayStyle = hiddenElement[0].style.display;
             hiddenElement.show();
 	    }
 		var heights = {less: 0, more: 0, count: 0};
@@ -603,7 +606,7 @@ function ($, OptionSearch) {
 			heights.count++;
 		});
 		if (!visible) {
-            hiddenElement.hide();
+            hiddenElement[0].style.display = hiddenDisplayStyle;
 		}
 		return heights;
 	}
