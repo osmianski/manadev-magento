@@ -589,7 +589,7 @@ function ($, OptionSearch) {
             while (hiddenElement.parent().length && !hiddenElement.parent().is(':visible')) {
                 hiddenElement = hiddenElement.parent();
             }
-            hiddenDisplayStyle = hiddenElement[0].style.display;
+            hiddenDisplayStyle = hiddenElement.length ? hiddenElement[0].style.display : undefined;
             hiddenElement.show();
 	    }
 		var heights = {less: 0, more: 0, count: 0};
