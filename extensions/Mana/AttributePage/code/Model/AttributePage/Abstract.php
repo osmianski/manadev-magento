@@ -59,12 +59,16 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_DESCRIPTION_POSITION = 46;
     const DM_OPTION_PAGE_DESCRIPTION_POSITION = 47;
     const DM_OPTION_PAGE_SHOW_PRODUCT_IMAGE = 48;
+    const DM_ALLOWED_PAGE_SIZES = 49;
+    const DM_DEFAULT_PAGE_SIZE = 50;
+    const DM_HIDE_EMPTY_OPTION_PAGES = 51;
 
     const MAX_ATTRIBUTE_COUNT = 5;
 
     public function validate() {
         $t = Mage::helper('mana_attributepage');
         $errors = array();
+        $global = Mage::registry('m_global_flat_model');
 
         if ($this->adminHelper()->isGlobal() && !($this->getData('attribute_id_0'))) {
             $errors[] = $t->__('At least one attribute have to be selected');
@@ -105,8 +109,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
             }
         }
         else {
-            if (($global = Mage::registry('m_global_flat_model')) &&
-                !in_array($global->getData('option_page_default_sort_by'),
+            if ($global && !in_array($global->getData('option_page_default_sort_by'),
                     explode(',', $global->getData('option_page_available_sort_by'))))
             {
                 $errors[] = $t->__('Default Sort By value is not selected in Available Sort By (in Option Page Defaults: Display tab)');
@@ -117,6 +120,38 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
         {
             $errors[] = $t->__('Please fill in %s field', $t->__('Position'));
         }
+
+        $allowedPageSizes = explode(',', $this->getData('allowed_page_sizes'));
+        $defaultPageSize = $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DEFAULT_PAGE_SIZE)
+            ? trim($this->getData('default_page_size'))
+            : $global->getData('default_page_size');
+        foreach (array_keys($allowedPageSizes) as $key) {
+            $allowedPageSizes[$key] = trim($allowedPageSizes[$key]);
+        }
+        array_filter($allowedPageSizes);
+
+        if ($this->adminHelper()->isGlobal() ||
+            $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_ALLOWED_PAGE_SIZES))
+        {
+            if (empty($allowedPageSizes)) {
+                $errors[] = $t->__('Please specify at least one value in %s', $t->__('%s->%s', 'Options per Page', 'Allowed Values'));
+            }
+            foreach ($allowedPageSizes as $pageSize) {
+                if (!is_numeric($pageSize) && $pageSize != 'all') {
+                    $errors[] = $t->__("'%s' is not numeric or 'all' in %s", $pageSize, $t->__('%s->%s', 'Options per Page', 'Allowed Values'));
+                }
+            }
+        }
+        if ($this->adminHelper()->isGlobal() ||
+            $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_ALLOWED_PAGE_SIZES) ||
+            $this->dbHelper()->isModelContainsCustomSetting($this, self::DM_DEFAULT_PAGE_SIZE))
+        {
+            if (!in_array($defaultPageSize, $allowedPageSizes)) {
+                $errors[] = $t->__('%s is not in list of %s in %s', $t->__('Default Value'), $t->__('Allowed Values'),
+                    $t->__('Options per Page'));
+            }
+        }
+
         if (count($errors)) {
 			throw new Mana_Core_Exception_Validation($errors);
         }

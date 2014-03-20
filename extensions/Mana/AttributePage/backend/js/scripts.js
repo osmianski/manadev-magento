@@ -290,6 +290,9 @@ function ($, TabContainer, layout, aggregate, template)
                     this.getField('show_alphabetic_search').on('change', this, this.showAlphabeticSearchChange);
                     this.getField('show_featured_options').on('change', this, this.showFeaturedOptionsChange);
                     this.getField('column_count').on('change', this, this.columnCountChange);
+                    this.getField('allowed_page_sizes').on('change', this, this.allowedPageSizesChange);
+                    this.getField('default_page_size').on('change', this, this.defaultPageSizeChange);
+                    this.getField('hide_empty_option_pages').on('change', this, this.hideEmptyOptionPagesChange);
 
                     this.getField('page_layout').on('change', this, this.pageLayoutChange);
                     this.getField('layout_xml').on('change', this, this.layoutXmlChange);
@@ -440,6 +443,15 @@ function ($, TabContainer, layout, aggregate, template)
         },
         columnCountChange: function() {
             this.updateFromJson('column_count', 'global');
+        },
+        allowedPageSizesChange: function() {
+            this.updateFromJson('allowed_page_sizes', 'global');
+        },
+        defaultPageSizeChange: function() {
+            this.updateFromJson('default_page_size', 'global');
+        },
+        hideEmptyOptionPagesChange: function() {
+            this.updateFromJson('hide_empty_option_pages', 'global');
         },
         pageLayoutChange: function() {
             this.updateFromJson('page_layout', 'global');

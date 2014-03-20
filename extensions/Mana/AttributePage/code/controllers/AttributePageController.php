@@ -17,6 +17,7 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
 
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
+            Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {
                 $this->getLayout()->getUpdate()->addUpdate($layoutXml);

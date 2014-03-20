@@ -38,6 +38,20 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         return $this;
     }
 
+    protected function _getAlphaExpr() {
+        return new Zend_Db_Expr("CASE WHEN main_table.title REGEXP '^[0-9]' THEN '#' ELSE LEFT(upper(main_table.title), 1) END");
+    }
+    public function addAlphaFilter($alpha) {
+        $this->getSelect()->where("({$this->_getAlphaExpr()}) = upper(?)", $alpha);
+        return $this;
+    }
+
+    public function addAlphaColumn() {
+        $this->getSelect()->columns(array('alpha' => $this->_getAlphaExpr()));
+
+        return $this;
+    }
+
 //    public function addProductCount() {
 //        $db = $this->getConnection();
 //        $productSelect = $db->select()

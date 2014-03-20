@@ -20,9 +20,18 @@ $_count = count($this->getAttributePage()->getOptionPages());
             <?php if ($_alpha != $_currentAlpha): ?>
                 <?php $_currentAlpha = $_alpha; ?>
                 <li class="m-alpha-pager">
-                    <a href="#<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php if ($this->isPagingNeeded()) : ?>
+                        <a href="<?php echo $this->getAlphaUrl($_currentAlpha) ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php else: ?>
+                        <a href="#<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php endif; ?>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>
+        <?php if ($this->isPagingNeeded()) : ?>
+            <li class="m-alpha-pager">
+                 <a href="<?php echo $this->getAlphaClearUrl() ?>"><?php echo $this->__('All') ?></a>
+            </li>
+        <?php endif; ?>
     </ul>
 <?php endif; ?>

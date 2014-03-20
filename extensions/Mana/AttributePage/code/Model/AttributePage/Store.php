@@ -40,14 +40,14 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
      * @return Mana_AttributePage_Resource_OptionPage_Store_Collection
      */
     public function getOptionPages() {
-        $collection = $this->createOptionPageCollection()
+        $collection = $this->createOptionPageCollection();
+        $collection
             ->addAttributePageFilter($this->getData('attribute_page_global_id'))
             ->addStoreFilter($this->getData('store_id'))
             ->setOrder('title', 'ASC');
 
-        $collection->getSelect()->columns(array(
-            'alpha' => new Zend_Db_Expr("CASE WHEN main_table.title REGEXP '^[0-9]' THEN '#' ELSE LEFT(upper(main_table.title), 1) END"),
-        ));
+        $collection->addAlphaColumn();
+
         return $collection;
     }
 
