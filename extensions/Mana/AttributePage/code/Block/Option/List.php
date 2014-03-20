@@ -71,7 +71,12 @@ class Mana_AttributePage_Block_Option_List extends Mage_Core_Block_Template {
     }
 
     public function getPagerHtml() {
-        return $this->getChildHtml('pager');
+        if (count($this->getAvailableLimit()) > 1 || $this->getCollection()->getLastPageNumber() > 1) {
+            return $this->getChildHtml('pager');
+        }
+        else {
+            return '';
+        }
     }
 
     public function getCollection() {

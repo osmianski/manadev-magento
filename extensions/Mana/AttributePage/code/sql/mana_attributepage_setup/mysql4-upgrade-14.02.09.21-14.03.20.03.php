@@ -25,8 +25,8 @@ $tables = array(
 foreach ($tables as $table) {
     $installer->run("
         ALTER TABLE `$table`
-          ADD  `allowed_page_sizes` VARCHAR( 255 ) NOT NULL DEFAULT  '50,100,200,all',
-          ADD  `default_page_size` VARCHAR( 10 ) NOT NULL DEFAULT  'all',
+          ADD  `allowed_page_sizes` VARCHAR( 255 ) NOT NULL DEFAULT  '100',
+          ADD  `default_page_size` VARCHAR( 10 ) NOT NULL DEFAULT  '100',
           ADD  `hide_empty_option_pages` TINYINT( 1 ) NOT NULL DEFAULT  '1';
     ");
 }
