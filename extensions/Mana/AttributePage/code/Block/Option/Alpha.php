@@ -10,6 +10,8 @@
  *
  */
 class Mana_AttributePage_Block_Option_Alpha extends Mage_Core_Block_Template {
+    protected $_collection;
+
     /**
      * @return Mana_AttributePage_Block_Option_List
      */
@@ -46,7 +48,18 @@ class Mana_AttributePage_Block_Option_Alpha extends Mage_Core_Block_Template {
     }
 
     public function getCollection() {
-        return $this->getAttributePage()->getOptionPages();
+        if (!$this->_collection) {
+            $collection = $this->getAttributePage()->getOptionPages();
+
+            // set having products filter
+            if ($this->getAttributePage()->getData('hide_empty_option_pages')) {
+                $collection->addHavingProductsFilter();
+            }
+
+            $this->_collection = $collection;
+        }
+
+        return $this->_collection;
     }
 
     public function getCount() {

@@ -605,7 +605,7 @@ function ($, OptionSearch) {
 			heights.more += $(item).outerHeight(true);
 			heights.count++;
 		});
-		if (!visible) {
+		if (!visible && hiddenElement.length) {
             hiddenElement[0].style.display = hiddenDisplayStyle;
 		}
 		return heights;

@@ -8,11 +8,11 @@
 /* @var $this Mana_AttributePage_Block_Option_Alpha */
 $i = -1;
 $_currentAlpha = '';
-$_count = count($this->getAttributePage()->getOptionPages());
+$_count = count($this->getCollection());
 ?>
 <?php if($this->getAttributePage()->getData('show_alphabetic_search') && $_count) :?>
     <ul class="m-option-alpha-list">
-        <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) : $i++;?>
+        <?php foreach ($this->getCollection() as $_optionPage) : $i++;?>
             <?php
                 /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
                 $_alpha = $_optionPage->getData('alpha');
