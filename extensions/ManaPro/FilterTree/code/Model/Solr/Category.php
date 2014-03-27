@@ -90,9 +90,9 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
         foreach ($children as $childCategory) {
             /* @var $childCategory Mage_Catalog_Model_Category */
             if ($childCategory['is_active'] &&
-                $childCategory['level'] == $category['level'] + 1 &&
-                strpos($childCategory['path'], $category['path']) === 0 &&
-                $childCategory['product_count'])
+                strpos($childCategory['path'], $category['path'] . '/') === 0 &&
+                strpos($childCategory['path'], '/', strlen($category['path'] . '/')) === false &&
+                ($this->filterHelper()->isFilterEnabled($this->getFilterOptions()) == 2 || $childCategory['product_count']))
             {
                 $data[] = array(
                     'label' => Mage::helper('core')->htmlEscape($childCategory['name']),

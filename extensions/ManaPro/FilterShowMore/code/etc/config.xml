@@ -12,7 +12,7 @@
 		<ManaPro_FilterShowMore>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.11.28.21</version>
+		    <version>14.03.21.15</version>
 		</ManaPro_FilterShowMore>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -243,9 +243,21 @@
 		</mana_filters>
 	</default>
 	
-	<!-- This section extends Mana_Filters module functionality --> 
+	<!-- This section extends Mana_Filters module functionality -->
 	<mana_filters>
 		<markup><!-- named visual extension points -->
+		    <before_items>
+                <search>
+					<template>manapro/filtershowmore/search.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>100</sort_order><!-- Position in rendered markup. -->
+                </search>
+		    </before_items>
+		    <before_popup_items>
+                <search>
+					<template>manapro/filtershowmore/search_popup.phtml</template><!-- PHTML to be rendered -->
+					<sort_order>100</sort_order><!-- Position in rendered markup. -->
+                </search>
+		    </before_popup_items>
 			<after_items> <!-- visual extension point name -->
 				<show_more>
 					<template>manapro/filtershowmore/actions.phtml</template><!-- PHTML to be rendered -->

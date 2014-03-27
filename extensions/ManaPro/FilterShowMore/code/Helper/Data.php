@@ -22,9 +22,9 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isShowAllRequested($filter) {
-	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
-	        return true;
-	    }
+//	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
+//	        return true;
+//	    }
     	$value = Mage::app()->getRequest()->getParam($filter->getRequestVar().$this->getShowAllSuffix());
 		return $value && $value == 1 ? true : false;    
 	}
@@ -65,7 +65,8 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $core = Mage::helper(strtolower('Mana_Core'));
         $params['_query'] = array(
             'm-show-more-popup' => $filter->getFilterOptions()->getId(),
-            'm-seo-enabled' => $core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
+            'm-seo-enabled' => 1, //$core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
+            'm-url' => '__0__',
         );
         if ($core->getRoutePath() != 'catalogsearch/result/index') {
             $params['_query']['m-show-more-cat'] = Mage::getSingleton('catalog/layer')->getCurrentCategory()->getId();
@@ -77,7 +78,7 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
         $params['_m_escape'] = '';
-        $params['_query'] = array($filter->getRequestVar() => '__0__');
+        $params['_query'] = array('p' => null, $filter->getRequestVar() => '__0__');
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
 
@@ -100,9 +101,19 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $rowCount = ceil($count / $columnCount);
         return array($rowCount, $columnCount);
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxRowCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_rows');
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxColumnCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_columns');
     }

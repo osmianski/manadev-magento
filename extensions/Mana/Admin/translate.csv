@@ -12,3 +12,8 @@
 "Hide this message","Hide this message"
 "WYSIWYG Editor","WYSIWYG Editor"
 "Please choose at least one option in %s field","Please choose at least one option in %s field"
+"Please specify at least one value in %s","Please specify at least one value in %s"
+"%s is not in list of %s in %s","%s is not in list of %s in %s"
+"",""
+"",""
+"",""

@@ -66,18 +66,31 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 		$second = substr($hash, strlen($hash) - 1);
 		$resultTemplate = "$first/$second/{$fileinfo['filename']}%s.{$fileinfo['extension']}";
 		$checkTemplate = $this->getFileName($resultTemplate, $type, true);
-		if (!file_exists(sprintf($checkTemplate, ''))) {
+		if (!$this->_fileExists(sprintf($checkTemplate, ''))) {
 			return sprintf($resultTemplate, '');
 		}
 		$i = 1;
 		while (true) {
-			if (!file_exists(sprintf($checkTemplate, '-'.$i))) {
+			if (!$this->_fileExists(sprintf($checkTemplate, '-'.$i))) {
 				return sprintf($resultTemplate, '-'.$i);
 			}
 			$i++;
 		}
 	}
 
+    protected function _fileExists($filename) {
+        $filename = str_replace('\\', '/', $filename);
+        if (file_exists($filename)) {
+            return true;
+        }
+        if (($pos = strpos($filename, '/m-temp/')) !== false) {
+            $filename = substr($filename, 0, $pos) . '/m-' . substr($filename, $pos + strlen('/m-temp/'));
+            return file_exists($filename);
+        }
+        else {
+            return false;
+        }
+    }
     public function walkRecursively($dir, $callback) {
         if (file_exists($dir)) {
             $this->_walkRecursively($dir, $callback);

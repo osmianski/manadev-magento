@@ -10,12 +10,14 @@
  *
  */
 class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
+    protected $_delayedLayoutIsBeingProcessed;
+
     protected $_delayPrepareLayoutBlocks = array();
     /**
      * @param Mage_Core_Block_Abstract $block
      */
     public function delayPrepareLayout($block, $sortOrder = 0) {
-        if (Mage::registry('m_page_is_being_rendered')) {
+        if ($this->_delayedLayoutIsBeingProcessed || Mage::registry('m_page_is_being_rendered')) {
             $block->delayedPrepareLayout();
         }
         else {
@@ -23,6 +25,7 @@ class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
         }
     }
     public function prepareDelayedLayoutBlocks() {
+        $this->_delayedLayoutIsBeingProcessed = true;
         uasort($this->_delayPrepareLayoutBlocks, array($this, '_compareBlocks'));
         foreach ($this->_delayPrepareLayoutBlocks as $block) {
             $block['block']->delayedPrepareLayout();
@@ -48,4 +51,19 @@ class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
             return '';
         }
     }
+
+    public function addRecursiveLayoutUpdates($layoutXml) {
+        if ($layoutXml) {
+            $layoutUpdate = '<' . '?xml version="1.0"?' . '><layout>' . $layoutXml . '</layout>';
+            if ($xml = simplexml_load_string($layoutUpdate, Mage::getConfig()->getModelClassName('core/layout_element'))) {
+                foreach ($xml->children() as $child) {
+                    if (strtolower($child->getName()) == 'update' && isset($child['handle'])) {
+                        Mage::getSingleton('core/layout')->getUpdate()->addHandle((string)$child['handle']);
+                    }
+                }
+            }
+        }
+
+    }
+
 }

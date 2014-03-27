@@ -212,6 +212,10 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
 			$select->columns("global.type AS type");
 			$result->addColumn('type');
 		}
+
+        if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+            $this->getDependentFilterVirtualColumnsResource()->addToModel($this, $select, $result, $columns, $globalEntityName);
+        }
 	}
     /**
      * @param Mana_Filters_Model_Filter2_Store $filter
@@ -235,4 +239,21 @@ class Mana_Filters_Resource_Filter2_Store extends Mana_Filters_Resource_Filter2 
             )
             ->where('f.id = ?', $filter->getGlobalId()));
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Resource_VirtualColumns
+     */
+    public function getDependentFilterVirtualColumnsResource() {
+        return Mage::getResourceSingleton('manapro_filterdependent/virtualColumns');
+    }
+    #endregion
 }

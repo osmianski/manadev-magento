@@ -37,7 +37,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     protected $_parsedUrls;
 
-    protected $_allSuffixes;
+    protected $_allSuffixes = array();
 
     protected $_suffixesByPageType = array();
 
@@ -624,7 +624,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return string[]
      */
     protected function _getAllSuffixes($token) {
-        if (!$this->_allSuffixes) {
+        if (!isset($this->_allSuffixes[$token->getTextToBeParsed()])) {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -640,9 +640,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $historyType[$type] = $type;
             }
 
-            $this->_allSuffixes = $this->_getSuffixes($token, $current, $historyType);
+            $this->_allSuffixes[$token->getTextToBeParsed()] = $this->_getSuffixes($token, $current, $historyType);
         }
-        return $this->_allSuffixes;
+        return $this->_allSuffixes[$token->getTextToBeParsed()];
     }
 
     protected function _getSuffixesByType($token, $pageType) {
@@ -749,7 +749,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @param Mana_Seo_Model_ParsedUrl[][] | bool $tokens
      * @return Mana_Seo_Model_ParsedUrl[] | bool
      */
-    protected function _getPageUrlKeysAndRemoveSuffixes($tokens) {
+    protected function _getPageUrlKeysAndRemoveSuffixes(&$tokens) {
         if (!$tokens) {
             return false;
         }
@@ -920,6 +920,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             if ($additionalToolbarOrders = Mage::getStoreConfig('mana/seo/additional_toolbar_orders')) {
                 $this->_toolbarOrders = array_merge($this->_toolbarOrders, explode(',', $additionalToolbarOrders));
             }
+
+            $obj = new Varien_Object();
+            $obj->setData('orders', $this->_toolbarOrders);
+            Mage::dispatchEvent('m_toolbar_orders', compact('obj'));
+            $this->_toolbarOrders = $obj->getData('orders');
 
         }
         return $this->_toolbarOrders;

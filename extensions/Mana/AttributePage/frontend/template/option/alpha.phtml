@@ -8,11 +8,11 @@
 /* @var $this Mana_AttributePage_Block_Option_Alpha */
 $i = -1;
 $_currentAlpha = '';
-$_count = count($this->getAttributePage()->getOptionPages());
+$_count = count($this->getCollection());
 ?>
 <?php if($this->getAttributePage()->getData('show_alphabetic_search') && $_count) :?>
     <ul class="m-option-alpha-list">
-        <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) : $i++;?>
+        <?php foreach ($this->getCollection() as $_optionPage) : $i++;?>
             <?php
                 /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
                 $_alpha = $_optionPage->getData('alpha');
@@ -20,9 +20,18 @@ $_count = count($this->getAttributePage()->getOptionPages());
             <?php if ($_alpha != $_currentAlpha): ?>
                 <?php $_currentAlpha = $_alpha; ?>
                 <li class="m-alpha-pager">
-                    <a href="#<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php if ($this->isPagingNeeded()) : ?>
+                        <a href="<?php echo $this->getAlphaUrl($_currentAlpha) ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php else: ?>
+                        <a href="#<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></a>
+                    <?php endif; ?>
                 </li>
             <?php endif; ?>
         <?php endforeach; ?>
+        <?php if ($this->isPagingNeeded()) : ?>
+            <li class="m-alpha-pager">
+                 <a href="<?php echo $this->getAlphaClearUrl() ?>"><?php echo $this->__('All') ?></a>
+            </li>
+        <?php endif; ?>
     </ul>
 <?php endif; ?>

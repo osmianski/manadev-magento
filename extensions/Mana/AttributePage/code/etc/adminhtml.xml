@@ -34,10 +34,10 @@
 				<children>
 					<mana>
 						<children>
-							<attributePage translate="title" module="mana_attributepage">
+							<attributepage translate="title" module="mana_attributepage">
 								<title>Attribute Pages</title>
 		                        <sort_order>500</sort_order>
-							</attributePage>
+							</attributepage>
 							<system_configuration>
                                 <children>
                                     <mana_attributepage translate="title" module="mana_attributepage">

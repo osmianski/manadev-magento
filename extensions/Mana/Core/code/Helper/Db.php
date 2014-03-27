@@ -91,4 +91,16 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
     public function getSeoSymbols() {
         return self::$_seoSymbols;
     }
+
+    public function scheduleReindexing($code) {
+        if ($reindex = Mage::registry('m_reindex')) {
+            Mage::unregister('m_reindex');
+        } else {
+            $reindex = array();
+        }
+        $reindex[$code] = $code;
+        Mage::register('m_reindex', $reindex);
+
+        return $this;
+    }
 }

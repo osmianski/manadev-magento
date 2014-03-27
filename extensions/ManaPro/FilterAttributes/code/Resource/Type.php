@@ -76,14 +76,21 @@ abstract class ManaPro_FilterAttributes_Resource_Type extends Mage_Core_Model_My
     }
 
     protected function _getIfExprByGroupedValues($fieldExpr, $values) {
+        $result = '';
+        $count = count($values);
+        $i = 0;
         foreach ($values as $source => $target) {
-
             $sort_order = $target["sort_order"];
+            $next_sort_order = $sort_order + 1;
             $option_id = $target["option_id"];
             if (empty($result)) {
                 $result = "'$option_id'";
             }
-            $result = "IF($fieldExpr = $sort_order, '$option_id', $result)";
+            $condition = $i + 1 == $count
+                ? "$fieldExpr = $sort_order OR $fieldExpr = $next_sort_order"
+                : "$fieldExpr = $sort_order";
+            $result = "IF($condition, '$option_id', $result)";
+            $i++;
         }
         return $result;
     }

@@ -1,0 +1,42 @@
+<widget>
+    <container>
+        <title>Browse By Category</title>
+    </container>
+    <expand_by_default>0</expand_by_default>
+    <collapse_selected>0</collapse_selected>
+    <generators>
+        <category>
+            <model>mana_menu/generator_category</model>
+        </category>
+    </generators>
+    <items>
+        <contacts>
+            <label>Contacts</label>
+            <route>contacts</route>
+            <items>
+                <electronics>
+                    <label>Electronics</label>
+                    <route>catalog/category/view/id/13</route>
+                    <direct_url>electronics.html</direct_url>
+                </electronics>
+                <apparel>
+                    <label>Apparel</label>
+                    <route>catalog/category/view/id/18</route>
+                    <direct_url>apparel.html</direct_url>
+                    <items>
+                        <electronics>
+                            <label>Electronics</label>
+                            <route>catalog/category/view/id/13</route>
+                            <direct_url>electronics.html</direct_url>
+                        </electronics>
+                        <apparel>
+                            <label>Apparel</label>
+                            <route>catalog/category/view/id/18</route>
+                            <direct_url>apparel.html</direct_url>
+                        </apparel>
+                    </items>
+                </apparel>
+            </items>
+        </contacts>
+    </items>
+</widget>

@@ -26,7 +26,7 @@ class Mana_AttributePage_Block_Attribute_View extends Mage_Core_Block_Template {
                     'last' => true,
                 ));
         }
-        $title = $this->getAttributePage()->getData('title');
+        $title = $this->getAttributePage()->getData('meta_title');
 
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             /* @var $headBlock Mage_Page_Block_Html_Head */

@@ -116,7 +116,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
 		return $url;
 	}
     public function getClearUrl($markUrl = true, $clearListParams = false, $nosid = false, $clearAllParams = false) {
-        $filterState = array();
+        $filterState = array('p' => null);
         foreach ($this->getLayer()->getState()->getFilters() as $item) {
             $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
         }
@@ -202,6 +202,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
                 throw new Exception('Not implemented');
         }
     }
+
     public function canShowFilterInBlock($block, $filter) {
         if ($block->getData('show_'.$filter->getCode())) {
             return true;
@@ -430,5 +431,6 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
+
     #endregion
 }

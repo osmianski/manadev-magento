@@ -493,6 +493,9 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
             else {
                 return base64.decode(data.replace(/-/g, '+').replace(/_/g, '/').replace(/,/g, '='));
             }
+        },
+        encodeAttribute: function(data) {
+            return base64.encode(data).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ',');
         }
     });
 });
@@ -663,13 +666,25 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         exists = true;
                         delete namedBlocks[blockInfo.id];
                     }
-                    else if (type) {
+                    else {
+                        if (type) {
+                            block = new type();
+                        }
+                        else {
+                            console.error("Block '" + blockInfo.typeName + "' is not defined");
+                        }
+                    }
+                    if (block) {
+                        block.setId(blockInfo.id);
+                    }
+                }
+                else  {
+                    if (type) {
                         block = new type();
                     }
-                    block.setId(blockInfo.id);
-                }
-                else if (type) {
-                    block = new type();
+                    else {
+                        console.error("Block '" + blockInfo.typeName + "' is not defined");
+                    }
                 }
                 if (block) {
                     block.setElement(element);
@@ -686,6 +701,21 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                 return null;
             }
         },
+        preparePopup: function(options) {
+            if (options.$popup === undefined) {
+                var $popup = $('#m-popup');
+                $popup
+                    .css({"width": "auto", "height": "auto"})
+                    .html(options.content);
+
+                if (options.popup['class']) {
+                    $popup.addClass(options.popup['class']);
+                }
+
+                options.$popup = $popup;
+            }
+            return options.$popup;
+        },
         showPopup: function (options) {
             var self = this;
 
@@ -699,19 +729,14 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                     });
                 };
                 var overlay = self.getPageBlock().showOverlay('m-popup-overlay', options.fadeout);
-                var $popup = $('#m-popup');
+                var $popup = self.preparePopup(options);
                 overlay.animate({ opacity: options.overlay.opacity }, options.fadein.overlayTime, function () {
-                    $popup
-                        .css({"width": "auto", "height": "auto"})
-                        .html(options.content);
-
-                    if (options.popup['class']) {
-                        $popup.addClass(options.popup['class']);
-                    }
                     $popup.show();
 
                     var popupBlock = new PopupBlockClass();
                     popupBlock.setElement($popup[0]);
+                    var vars = self.beginGeneratingBlocks(popupBlock);
+                    self.endGeneratingBlocks(vars);
                     popupBlock.prepare(options.popupBlock);
 
                     $('.m-popup-overlay').on('click', function () {
@@ -781,10 +806,45 @@ function ($, layout, json, core, config, undefined)
             this._oldSetLocation = undefined;
             this._preventClicks = 0;
         },
+        _encodeUrl: function(url, options) {
+            if (options.encode) {
+                if (options.encode.offset !== undefined) {
+                    if (options.encode.length === undefined) {
+                        if (options.encode.offset === 0) {
+                            return window.encodeURI(url.substr(options.encode.offset));
+                        }
+                        else {
+                            return url.substr(0, options.encode.offset) +
+                                window.encodeURI(url.substr(options.encode.offset));
+                        }
+                    }
+                    else if (options.encode.length === 0) {
+                        return url;
+                    }
+                    else {
+                        if (options.encode.offset === 0) {
+                            return window.encodeURI(url.substr(options.encode.offset, options.encode.length))
+                                + url.substr(options.encode.offset + options.encode.length);
+                        }
+                        else {
+                            return url.substr(0, options.encode.offset) +
+                                window.encodeURI(url.substr(options.encode.offset, options.encode.length)) +
+                                url.substr(options.encode.offset + options.encode.length);
+                        }
+                    }
+                }
+                else {
+                    return url;
+                }
+            }
+            else {
+                return window.encodeURI(url);
+            }
+        },
         get:function (url, callback, options) {
-            var self = this;
+            var self = this, encodedUrl;
             options = this._before(options, url);
-            $.get(window.encodeURI(url))
+            $.get(this._encodeUrl(url, options))
                 .done(function (response) { self._done(response, callback, options, url); })
                 .fail(function (error) { self._fail(error, options, url)})
                 .complete(function () { self._complete(options, url); });
@@ -1326,6 +1386,7 @@ function ($, Block, config)
         }
     });
 });
+
 Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'], function($, layout, ajax) {
     function _generateBlocks() {
         var vars = layout.beginGeneratingBlocks();
@@ -1335,8 +1396,6 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
         _generateBlocks();
         ajax.startIntercepting();
     });
-    //$(document).bind('m-ajax-after', _generateBlocks);
-
 });
 
 //region (Obsolete) additional jQuery functions used in MANAdev extensions

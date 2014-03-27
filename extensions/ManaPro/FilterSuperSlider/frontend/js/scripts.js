@@ -295,9 +295,12 @@ ManaPro.filterAttributeSlider = function (id, o) {
     };
     s.options.onChange = _change;
     //
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize === true) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {
@@ -330,6 +333,9 @@ ManaPro.filterAttributeSlider = function (id, o) {
     _mana_oldResizehandler[id] = _resizeSpanAndHandles;
     jQuery(_resizeSpanAndHandles);
     jQuery(window).bind('resize', _resizeSpanAndHandles);
+    jQuery('#' + id + '-track').parent().on('m-prepare', function () {
+        _resizeSpanAndHandles(true);
+    });
 };
 ManaPro.filterRangeInput = function (id, o) {
     var _changing = false;

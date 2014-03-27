@@ -32,6 +32,7 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
         $fullSaveItems = array();
         foreach ($stockInfo as $itemInfo) {
             $item->setData($itemInfo);
+            $item->setData('m_check_actual_qty', true);
             if (!$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
                 Mage::throwException(Mage::helper('cataloginventory')->__('Not all products are available in the requested quantity'));
@@ -100,8 +101,8 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
             }
         }
         if ($this->helper()->isManadevFilterAttributesInstalled()) {
-            foreach ($items as $item) {
-                $options = array('product_id' => $item->getProductId());
+            foreach ($items as $productId => $item) {
+                $options = array('product_id' => $productId);
                 Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process($this, $options);
             }
         }

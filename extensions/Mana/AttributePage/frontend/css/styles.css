@@ -6,7 +6,8 @@
  */
 
 
-.m-featured-image { float: left; width: 100px; }
+.m-featured-image { float: left; width: auto; }
+.m-featured-image a { display: block; }
 
 .m-alpha-pager { width: 20px; float: left; }
 
