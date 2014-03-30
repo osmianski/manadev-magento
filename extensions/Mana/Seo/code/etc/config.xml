@@ -11,7 +11,7 @@
         <Mana_Seo>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.03.16.09</version>
+            <version>14.03.30.12</version>
         </Mana_Seo>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
