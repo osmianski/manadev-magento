@@ -21,4 +21,12 @@ class Mana_Core_Helper_PageType_Category extends Mana_Core_Helper_PageType  {
     public function getRoutePath() {
         return 'catalog/category/view';
     }
+
+    public function isProductListVisible() {
+        if ($category = Mage::registry('current_category')) {
+            return $category->getData('display_mode') != 'PAGE';
+        }
+        return true;
+    }
+
 }
