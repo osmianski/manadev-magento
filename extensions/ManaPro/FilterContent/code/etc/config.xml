@@ -8,7 +8,7 @@
 <config>
     <modules>
         <ManaPro_FilterContent>
-            <version>14.01.13.17</version>
+            <version>14.03.27.14</version>
         </ManaPro_FilterContent>
     </modules>
     <global>
@@ -25,13 +25,21 @@
             <manapro_filtercontent_resources>
                 <class>ManaPro_FilterContent_Resource</class>
                 <entities>
-					<global><table>m_filter_content_global</table></global>
-					<globalCustomSettings><table>m_filter_content_global_custom_settings</table></globalCustomSettings>
-					<store><table>m_filter_content_store</table></store>
-					<storeCustomSettings><table>m_filter_content_store_custom_settings</table></storeCustomSettings>
+					<rule_global><table>m_filter_content_rule_global</table></rule_global>
+					<rule_globalCustomSettings><table>m_filter_content_rule_global_custom_settings</table></rule_globalCustomSettings>
+					<rule_store><table>m_filter_content_rule_store</table></rule_store>
+					<rule_storeCustomSettings><table>m_filter_content_rule_store_custom_settings</table></rule_storeCustomSettings>
+					<rule_condition><table>m_filter_content_rule_condition</table></rule_condition>
                 </entities>
             </manapro_filtercontent_resources>
         </models>
+        <resources>
+            <manapro_filtercontent_setup>
+                <setup>
+                    <module>ManaPro_FilterContent</module>
+                </setup>
+            </manapro_filtercontent_setup>
+        </resources>
         <blocks>
             <manapro_filtercontent>
                 <class>ManaPro_FilterContent_Block</class>
@@ -67,4 +75,160 @@
             </adminhtml>
         </routers>
     </admin>
+    <frontend>
+        <events>
+            <controller_action_layout_generate_xml_before>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addCustomContentToLayoutXml</method>
+                    </manapro_filtercontent>
+                </observers>
+            </controller_action_layout_generate_xml_before>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addCustomContentToGeneratedBlocks</method>
+                    </manapro_filtercontent>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addCustomContentToBlockBeforeRendering</method>
+                    </manapro_filtercontent>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>restoreOriginalBlockContentAfterRenderingAndPostProcess</method>
+                    </manapro_filtercontent>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+        <layout>
+            <updates module="ManaPro_FilterContent">
+                <manapro_filtercontent>
+                    <file>manapro_filtercontent.xml</file>
+                </manapro_filtercontent>
+            </updates>
+        </layout>
+    </frontend>
+    <manapro_filtercontent>
+        <content>
+            <!-- Content rendered before layout XML is loaded -->
+            <layout_xml>
+                <helper>manapro_filtercontent/content_layoutXml</helper>
+                <sort_order>100</sort_order>
+            </layout_xml>
+            <widget_layout_xml>
+                <helper>manapro_filtercontent/content_widgetLayoutXml</helper>
+                <sort_order>200</sort_order>
+            </widget_layout_xml>
+
+            <!-- Content rendered after block objects are generated -->
+            <meta_title>
+                <helper>manapro_filtercontent/content_metaTitle</helper>
+                <sort_order>300</sort_order>
+            </meta_title>
+            <meta_keywords>
+                <helper>manapro_filtercontent/content_metaKeywords</helper>
+                <sort_order>400</sort_order>
+            </meta_keywords>
+            <meta_description>
+                <helper>manapro_filtercontent/content_metaDescription</helper>
+                <sort_order>500</sort_order>
+            </meta_description>
+
+            <!-- Content rendered from theme template and from CMS content -->
+            <title>
+                <helper>manapro_filtercontent/content_title</helper>
+                <sort_order>600</sort_order>
+            </title>
+            <subtitle>
+                <helper>manapro_filtercontent/content_subtitle</helper>
+                <sort_order>700</sort_order>
+            </subtitle>
+            <description>
+                <helper>manapro_filtercontent/content_description</helper>
+                <sort_order>800</sort_order>
+            </description>
+            <additional_description>
+                <helper>manapro_filtercontent/content_additionalDescription</helper>
+                <sort_order>900</sort_order>
+            </additional_description>
+        </content>
+    </manapro_filtercontent>
+    <default>
+        <mana_filtercontent>
+            <general>
+                <is_active>1</is_active>
+            </general>
+            <final>
+                <meta_title><![CDATA[{# We use spaceless directive to remove
+all whitespace between tags. To preserve
+whitespace in actual title text, we use
+<text> pseudo-tags which are eliminated
+before submitted to browser. #}
+
+{% spaceless %}
+    {# Show default page title #}
+    {# ----------------------- #}
+
+    <text>{{ meta_title }}</text>
+
+    {# Add labels of all applied filters
+    and separators in between#}
+    {# ----------------------- #}
+
+    {% for option in filters %}
+        {% if loop.first %}
+            <text>: </text>
+        {% elseif not loop.last %}
+            <text>, </text>
+        {% else %}
+            <text> and </text>
+        {% endif %}
+
+        <text>{{ option.label }}</text>
+    {% endfor %}
+
+    {# Add page number to page title #}
+    {# ----------------------- #}
+
+    {% if page and page > 1 %}
+        <text> (Page {{ page}})</text>
+    {% endif %}
+{% endspaceless %}]]></meta_title>
+                <meta_keywords><![CDATA[{# We use spaceless directive to remove
+all whitespace between tags. To preserve
+whitespace in actual title text, we use
+<text> pseudo-tags which are eliminated
+before submitted to browser. #}
+
+{% spaceless %}
+    {# Show default page keywords #}
+    {# ----------------------- #}
+
+    <text>{{ meta_keywords }}</text>
+
+    {# Add labels of all applied filters
+    and separators in between#}
+    {# ----------------------- #}
+
+    {% for option in filters %}
+        {% if not loop.first or meta_keywords != '' %}
+            <text>,</text>
+        {% endif %}
+
+        <text>{{ option.label }}</text>
+    {% endfor %}
+{% endspaceless %}]]></meta_keywords>
+            </final>
+        </mana_filtercontent>
+    </default>
 </config>

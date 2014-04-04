@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterContent
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <catalog_category_layered>
+        <reference name="category.products">
+            <action method="setData">
+                <key>m_filter_content_title</key>
+                <renderer>manapro_filtercontent/block_category_title</renderer>
+            </action>
+            <action method="setData">
+                <key>m_filter_content_subtitle</key>
+                <renderer>manapro_filtercontent/block_category_subtitle</renderer>
+            </action>
+            <action method="setData">
+                <key>m_filter_content_description</key>
+                <renderer>manapro_filtercontent/block_category_description</renderer>
+            </action>
+            <action method="setData">
+                <key>m_filter_content_additional_description</key>
+                <renderer>manapro_filtercontent/block_category_additionalDescription</renderer>
+            </action>
+        </reference>
+    </catalog_category_layered>
+</layout>

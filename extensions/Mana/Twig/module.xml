@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Twig
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Twig>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Mana_Twig>
+    </modules>
+</config>

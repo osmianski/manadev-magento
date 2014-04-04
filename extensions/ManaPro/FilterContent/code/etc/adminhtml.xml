@@ -21,7 +21,7 @@
                         <manapro_filtercontent translate="title" module="manapro_filtercontent">
                             <title>Filter Specific Content</title>
                             <action>adminhtml/system_config/edit/section/mana_filtercontent</action>
-                            <sort_order>250</sort_order>
+                            <sort_order>150</sort_order>
                         </manapro_filtercontent>
                     </children>
                 </system_configuration>
@@ -42,7 +42,7 @@
                                 <children>
                                     <manapro_filtercontent translate="title" module="manapro_filtercontent">
                                         <title>Filter Specific Content</title>
-                                        <sort_order>250</sort_order>
+                                        <sort_order>150</sort_order>
                                     </manapro_filtercontent>
                                 </children>
 							</system_configuration>
@@ -54,7 +54,7 @@
 								<children>
 									<mana_filtercontent translate="title" module="manapro_filtercontent">
 										<title>MANAdev Filter Specific Content</title>
-                                        <sort_order>50250</sort_order>
+                                        <sort_order>50150</sort_order>
                                     </mana_filtercontent>
 								</children>
 							</config>

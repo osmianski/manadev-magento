@@ -843,4 +843,18 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $_options;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getProductToolbarParameters() {
+        $result = array();
+        $request = Mage::app()->getRequest();
+        foreach (array('p', 'mode', 'order', 'dir', 'limit') as $key) {
+            if ($value = $request->getParam($key)) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
 }
