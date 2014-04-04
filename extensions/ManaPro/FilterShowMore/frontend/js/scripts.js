@@ -32,7 +32,7 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
 
         //region Data Attributes
         getPopupUrl: function () {
-            return urlTemplate.decodeAttribute(this.$().data('popup-url'));
+            return decodeURIComponent(urlTemplate.decodeAttribute(this.$().data('popup-url')));
         },
         getTargetUrl: function () {
             if (this._targetUrl === undefined) {

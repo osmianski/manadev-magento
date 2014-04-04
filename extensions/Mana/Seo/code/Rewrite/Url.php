@@ -319,6 +319,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         $urlKeys = $urlCollection->getConnection()->fetchPairs($select);
         if (!isset($urlKeys[$categoryId])) {
             $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
+            return false;
         }
         $result = array();
         foreach ($categoryIds as $key) {

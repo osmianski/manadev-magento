@@ -14,6 +14,7 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         $this->_init(Mana_AttributePage_Model_OptionPage_Store::ENTITY);
     }
 
+
     /**
      * @param $attributePageGlobalId
      * @return $this
@@ -23,17 +24,45 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         $this->getSelect()
             ->joinInner(array('op_g' => $this->getTable('mana_attributepage/optionPage_global')),
                 "`op_g`.`id` = `main_table`.`option_page_global_id` AND ".
-                $db->quoteInto("`op_g`.`attribute_page_global_id` = ?", $attributePageGlobalId), null);
+                $db->quoteInto("`op_g`.`attribute_page_global_id` = ?", $attributePageGlobalId),
+                array('option_id_0', 'option_id_1', 'option_id_2', 'option_id_3', 'option_id_4'));
         return $this;
     }
 
     public function addHavingProductsFilter() {
         $db = $this->getConnection();
-        for ($i = 0; $i < Mana_AttributePage_Model_AttributePage_Abstract::MAX_ATTRIBUTE_COUNT; $i++) {
+        if ($sampleOptionPage = $this->getSampleItem()) {
+            // basic SQL selecting all products
             $productSelect = $db->select()
-                ->from(array("eav_$i" => $this->getTable('catalog/product_index_eav')), 'entity_id')
-                ->where("`eav_$i`.`value` = `op_g`.`option_id_$i`");
-            $this->getSelect()->where("`op_g`.`option_id_$i` IS NULL OR EXISTS($productSelect)");
+                ->from(array('e' => $this->getTable('catalog/product')), 'entity_id');
+
+            // get number of attributes which option based are based upon
+            if (!$sampleOptionPage->getData('option_id_1')) {
+                $count = 1;
+            }
+            elseif (!$sampleOptionPage->getData('option_id_2')) {
+                $count = 2;
+            }
+            elseif (!$sampleOptionPage->getData('option_id_3')) {
+                $count = 3;
+            }
+            elseif (!$sampleOptionPage->getData('option_id_4')) {
+                $count = 4;
+            }
+            else {
+                $count = 5;
+            }
+
+            // add a condition for each option id
+            for ($i = 0; $i < $count; $i++) {
+                $productSelect
+                    ->joinInner(array("eav_$i" => $this->getTable('catalog/product_index_eav')),
+                        $db->quoteInto("`e`.`entity_id` = `eav_$i`.`entity_id` AND
+                            `eav_$i`.`store_id` = ?", Mage::app()->getStore()->getId()),
+                        null)
+                    ->where("`eav_$i`.`value` = `op_g`.`option_id_$i`");
+            }
+            $this->getSelect()->where("EXISTS($productSelect)");
         }
         return $this;
     }
@@ -108,5 +137,15 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         $this->getSelect()
                 ->where("`main_table`.`is_featured` = ?", 1);
         return $this;
+    }
+
+    public function getSampleItem() {
+        $db = $this->getConnection();
+        if ($data = $db->fetchRow($this->getSelect()->limit(1))) {
+            return $this->getNewEmptyItem()->addData($data);
+        }
+        else {
+            return false;
+        }
     }
 }

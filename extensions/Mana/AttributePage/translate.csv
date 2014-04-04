@@ -108,7 +108,6 @@
 "If reached maximum number of menu links","If reached maximum number of menu links"
 "Visible on the top of attribute page","Visible on the top of attribute page"
 "If Yes, then alphabet is shown on top of attribute page","If Yes, then alphabet is shown on top of attribute page"
-"Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc.","Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc."
 "If Yes, then featured attribute option images (as specified in MANAdev->Attribute Pages->Option Page ([attribute name]) menu) are shown on top of attribute page","If Yes, then featured attribute option images (as specified in MANAdev->Attribute Pages->Option Page ([attribute name]) menu) are shown on top of attribute page"
 "Position","Position"
 "Use Attribute Positions","Use Attribute Positions"
@@ -133,6 +132,9 @@
 "One of values in Allowed Values field","One of values in Allowed Values field"
 "'%s' is not numeric or 'all' in %s","'%s' is not numeric or 'all' in %s"
 "All","All"
+"Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc. <strong>Typically themes do not support more that 4 columns.</strong>","Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc. <strong>Typically themes do not support more that 4 columns.</strong>"
+"",""
+"",""
 "",""
 
 

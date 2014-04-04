@@ -18,6 +18,16 @@ class Mana_Core_Helper_PageType_CmsPage extends Mana_Core_Helper_PageType  {
         return 'cms/page/view';
     }
 
+    public function isProductListVisible() {
+        if ($block = Mage::getSingleton('core/layout')->getBlock('cms.products')) {
+            return ($block->hasData('hide_when_no_filters_applied')
+                ? $block->getData('hide_when_no_filters_applied')
+                : Mage::getStoreConfigFlag('mana_filters/display/hide_cms_product_list'));
+        }
+
+        return true;
+    }
+
     /**
      * @return bool|string
      */
