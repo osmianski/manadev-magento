@@ -405,6 +405,13 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         $this->_noindex();
     }
     /**
+     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_mana_optionpage_view")
+     * @param Varien_Event_Observer $observer
+     */
+    public function noindexOptionPage($observer) {
+        $this->_noindex();
+    }
+    /**
      * REPLACE THIS WITH DESCRIPTION (handles event "m_before_load_filter_collection")
      * @param Varien_Event_Observer $observer
      */
