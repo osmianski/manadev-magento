@@ -26,7 +26,7 @@ $_count = $this->getCount();
                 $_column = floor($_columnCount * $i / $_count);
                 $_alpha = $_optionPage->getData('alpha');
             ?>
-            <?php if ($_column != $_currentColumn && $_alpha != $_currentAlpha): ?>
+            <?php if ($_column != $_currentColumn): ?>
                 <?php $_currentColumn = $_column; ?>
                 <?php $_actualColumn++; ?>
                 </ul></li><li class="col-<?php echo $_actualColumn + 1?>"><ul>
