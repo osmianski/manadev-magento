@@ -17,7 +17,7 @@ class ManaPro_FilterContent_Helper_Block_Category_Title extends ManaPro_FilterCo
     public function before($block, $key) {
         $category = $block->getCurrentCategory();
         $oldTitle = $category->getName();
-        if ($newTitle = $this->contentHelper()->render($oldTitle)) {
+        if ($newTitle = $this->contentHelper()->render()) {
             $block->setData($this->helper()->getOriginalContentKey($key), $oldTitle);
             $category->setData('name', $newTitle);
         }

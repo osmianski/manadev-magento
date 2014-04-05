@@ -43,8 +43,12 @@ class ManaPro_FilterContent_Helper_Factory extends Mage_Core_Helper_Abstract {
      */
     public function createContentHelper($key) {
         if (!isset($this->_contentHelpers[$key])) {
-            $helperClass = (string)($this->helper()->getContentHelperXml($key)->helper);
+            $xml = $this->helper()->getContentHelperXml($key);
+            $helperClass = (string)($xml->helper);
+
+            /* @var $helper ManaPro_FilterContent_Helper_Content */
             $helper = Mage::helper($helperClass);
+            $helper->init($xml);
             if (!($helper instanceof ManaPro_FilterContent_Helper_Content)) {
                 throw new Exception(sprintf('%1 must be instance of %2', get_class($helper), 'ManaPro_FilterContent_Helper_Content'));
             }

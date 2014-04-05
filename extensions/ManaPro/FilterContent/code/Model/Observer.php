@@ -61,9 +61,6 @@ class ManaPro_FilterContent_Model_Observer {
         if ($head = $layout->getBlock('head')) {
             /* @var $head Mage_Page_Block_Html_Head */
 
-            $this->metaTitleContentHelper()->replaceInitialContent($this->_getInitialTitle($head));
-            $this->metaKeywordsContentHelper()->replaceInitialContent($this->_getInitialKeywords($head));
-            $this->metaDescriptionContentHelper()->replaceInitialContent($this->_getInitialDescription($head));
             if (($title = $this->metaTitleContentHelper()->render()) !== false) {
                 $head->setTitle($title);
             }
@@ -81,6 +78,8 @@ class ManaPro_FilterContent_Model_Observer {
      * @param Varien_Event_Observer $observer
      */
     public function addCustomContentToLayoutXml($observer) {
+        $this->rendererHelper()->render();
+
         /* @var $layout Mage_Core_Model_Layout */
         $layout = $observer->getEvent()->getData('layout');
 
@@ -177,10 +176,10 @@ class ManaPro_FilterContent_Model_Observer {
         return Mage::helper('mana_core');
     }
     /**
-     * @return Mana_Filters_Helper_Data
+     * @return ManaPro_FilterContent_Helper_Renderer
      */
-    public function filterHelper() {
-        return Mage::helper('mana_filters');
+    public function rendererHelper() {
+        return Mage::helper('manapro_filtercontent/renderer');
     }
     #endregion
 }

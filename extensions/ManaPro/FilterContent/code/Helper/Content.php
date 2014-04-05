@@ -10,39 +10,24 @@
  *
  */
 abstract class ManaPro_FilterContent_Helper_Content extends Mage_Core_Helper_Abstract {
-    protected $_placeholder;
-    protected $_initialContentReplacement;
-    protected $_hasInitialContentReplacement = false;
+    const RENDER_ALL = '_renderAllContent';
+    const RENDER_ECHO_TAGS = '_renderEchoTagContent';
+    protected $_actionKey;
+    protected $_contentKey;
+
+    /**
+     * @param Mage_Core_Model_Config_Element $xml
+     */
+    public function init($xml) {
+        $this->_actionKey = $xml->getName();
+        $this->_contentKey = isset($xml->content_key) ? (string)$xml->content_key : $this->_actionKey;
+    }
 
     /**
      * @return bool|string
      */
-    abstract public function render();
-
-    /**
-     * @param array $content
-     * @return string
-     */
-    abstract public function getInitialContent($content);
-
-    /**
-     * @param string $value
-     */
-    public function replaceInitialContent($value) {
-        $this->_initialContentReplacement = $value;
-        $this->_hasInitialContentReplacement = true;
-    }
-
-    public function getPlaceholder() {
-        return $this->_placeholder;
-    }
-
-    public function hasInitialContentReplacement() {
-        return $this->_hasInitialContentReplacement;
-    }
-
-    public function getInitialContentReplacement() {
-        return $this->_initialContentReplacement;
+    public function render() {
+        return $this->_renderEchoTagContent($this->rendererHelper()->render());
     }
 
     /**
@@ -50,7 +35,37 @@ abstract class ManaPro_FilterContent_Helper_Content extends Mage_Core_Helper_Abs
      * @param array $actions
      * @return string
      */
-    abstract public function processActions($content, $actions);
+    public function processActions($content, $actions) {
+        if (isset($actions[$this->_actionKey]) && $this->_isChanged($actions[$this->_actionKey])) {
+            $template = '{% spaceless %}<echo>' . $actions[$this->_actionKey] . '<echo>{% endspaceless %}';
+            $filename = $this->helper()->getTwigFilename($actions, $this->_actionKey);
+            $content[$this->_contentKey] = trim($this->twigHelper()->renderStringCached($template, $content, $filename));
+        }
+        return $content;
+    }
+
+    protected function _renderEchoTagContent($content) {
+        if ($this->_actionKey == $this->_contentKey) {
+            return isset($content[$this->_contentKey]) ? str_replace('<echo>', '', str_replace('</echo>', '', $content[$this->_contentKey])) : false;
+        }
+        else {
+            return false;
+        }
+    }
+
+    protected function _renderAllContent() {
+        $content = $this->rendererHelper()->render();
+        return isset($content[$this->_actionKey]) ? $content[$this->_actionKey] : '';
+    }
+
+    protected function _isChanged($template) {
+        $template = trim($template);
+        if (preg_match('/{{\s*'.$this->_actionKey.'\s*}}/', $template, $matches)) {
+            return $template != $matches[0];
+        } else {
+            return true;
+        }
+    }
 
     #region Dependencies
     /**

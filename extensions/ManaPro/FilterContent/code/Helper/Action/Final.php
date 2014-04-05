@@ -19,9 +19,16 @@ class ManaPro_FilterContent_Helper_Action_Final extends ManaPro_FilterContent_He
         if (!$this->_value) {
             $this->_value = $this->_normalize(array(
                 'layout_xml' => '',
-                'widget_layout_xml' => '',
+
                 'meta_title' => Mage::getStoreConfig('mana_filtercontent/final/meta_title'),
                 'meta_keywords' => Mage::getStoreConfig('mana_filtercontent/final/meta_keywords'),
+                'meta_description' => Mage::getStoreConfig('mana_filtercontent/final/meta_description'),
+                'meta_robots' => Mage::getStoreConfig('mana_filtercontent/final/meta_robots'),
+
+                'title' => Mage::getStoreConfig('mana_filtercontent/final/title'),
+                'subtitle' => Mage::getStoreConfig('mana_filtercontent/final/subtitle'),
+                'description' => Mage::getStoreConfig('mana_filtercontent/final/description'),
+                'additional_description' => '',
                 'cache_key' => 'config/final',
             ));
         }

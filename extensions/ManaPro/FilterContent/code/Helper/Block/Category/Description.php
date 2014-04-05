@@ -17,7 +17,7 @@ class ManaPro_FilterContent_Helper_Block_Category_Description extends ManaPro_Fi
     public function before($block, $key) {
         $category = $block->getCurrentCategory();
         $oldDescription = $category->getData('description');
-        if ($newDescription = $this->contentHelper()->render($oldDescription)) {
+        if ($newDescription = $this->contentHelper()->render()) {
             $block->setData($this->helper()->getOriginalContentKey($key), $oldDescription);
             $category->setData('description', $newDescription);
         }

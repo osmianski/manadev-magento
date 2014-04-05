@@ -423,6 +423,17 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
        return false;
     }
 
+    public function getPageContent() {
+        return array(
+            'filters' => array(
+                array(
+                    'label' => '4 & up',
+                )
+            )
+        );
+    }
+
+
     #region Dependencies
 
     /**

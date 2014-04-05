@@ -9,8 +9,6 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterContent_Helper_Content_Title extends ManaPro_FilterContent_Helper_Content_Replacement
+class ManaPro_FilterContent_Helper_Content_Title extends ManaPro_FilterContent_Helper_Content
 {
-    protected $_placeholder = 'TITLE_ec151ca52c08047a5cf40ecdab3cfcb8d04b7a35';
-    protected $_key = 'title';
 }

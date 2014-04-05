@@ -642,13 +642,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     protected function _isValidPageType($routePath) {
-        $routePath = $this->coreHelper()->getRoutePath($routePath);
-        foreach (array_keys($this->coreHelper()->getPageTypes('seo_helper')) as $key) {
-            $pageType = $this->coreHelper()->getPageType($key);
-            if ($routePath == $pageType->getRoutePath()) {
-                return true;
-            }
-        }
+        return $this->coreHelper()->getPageTypeByRoutePath($routePath, 'seo_helper') != null;
     }
 
     #region Dependencies

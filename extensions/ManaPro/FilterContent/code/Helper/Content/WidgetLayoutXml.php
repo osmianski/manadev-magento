@@ -9,8 +9,6 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterContent_Helper_Content_WidgetLayoutXml extends ManaPro_FilterContent_Helper_Content_Addition
+class ManaPro_FilterContent_Helper_Content_WidgetLayoutXml extends ManaPro_FilterContent_Helper_Content
 {
-    protected $_key = 'widget_layout_xml';
-    protected $_addToKey = 'layout_xml';
 }

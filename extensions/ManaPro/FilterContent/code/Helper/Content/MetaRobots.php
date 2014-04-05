@@ -9,6 +9,6 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterContent_Helper_Content_AdditionalDescription extends ManaPro_FilterContent_Helper_Content
+class ManaPro_FilterContent_Helper_Content_MetaRobots extends ManaPro_FilterContent_Helper_Content
 {
 }

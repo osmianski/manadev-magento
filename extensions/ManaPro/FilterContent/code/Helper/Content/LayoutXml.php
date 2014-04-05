@@ -9,6 +9,6 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterContent_Helper_Content_LayoutXml extends ManaPro_FilterContent_Helper_Content_Addition {
-    protected $_key = 'layout_xml';
+class ManaPro_FilterContent_Helper_Content_LayoutXml extends ManaPro_FilterContent_Helper_Content
+{
 }

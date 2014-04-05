@@ -36,4 +36,24 @@ class Mana_Core_Helper_PageType_Category extends Mana_Core_Helper_PageType  {
     public function getConditionLabel() {
         return $this->__('Category Page');
     }
+
+    public function getPageContent() {
+        if ($category = Mage::registry('current_category')) {
+            $result = array(
+                'title' => $category->getName(),
+                'description' => $category->getData('description'),
+            );
+            if ($title = $category->getMetaTitle()) {
+                $result['meta_title'] = $title;
+            }
+            if ($description = $category->getMetaDescription()) {
+                $result['meta_description'] = $description;
+            }
+            if ($keywords = $category->getMetaKeywords()) {
+                $result['meta_keywords'] = $keywords;
+            }
+            return array_merge(parent::getPageContent(), $result);
+        }
+        return parent::getPageContent();
+    }
 }

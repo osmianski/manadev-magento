@@ -174,14 +174,12 @@ class Mana_Seo_Model_Observer {
     }
 
     protected function _isProductListVisible() {
-        $routePath = $this->coreHelper()->getRoutePath();
-        foreach (array_keys($this->coreHelper()->getPageTypes()) as $key) {
-            $pageType = $this->coreHelper()->getPageType($key);
-            if ($routePath == $pageType->getRoutePath()) {
-                return $pageType->isProductListVisible();
-            }
+        if ($pageType = $this->coreHelper()->getPageTypeByRoutePath()) {
+            return $pageType->isProductListVisible();
         }
-        return false;
+        else {
+            return false;
+        }
     }
 
 

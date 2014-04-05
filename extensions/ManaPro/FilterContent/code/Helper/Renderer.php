@@ -22,6 +22,7 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
 //        return $this;
 //    }
 
+    protected $_initialContent;
     protected $_content;
 
     public function render() {
@@ -30,12 +31,11 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
             return $this->_content;
         }
 
-        $initialContent = $this->_getInitialContent();
-        $this->_content = array_merge($initialContent, $this->_getAdditionalContent());
+        $this->_initContent();
 
         // do not render anything if filter specific content feature is disabled
         if (!Mage::getStoreConfigFlag('mana_filtercontent/general/is_active')) {
-            return $this->_removeUnalteredContent($initialContent);
+            return $this->_removeUnalteredContent();
         }
 
 //        // initialize renderer with route path, currently applied filters and other paging/sorting display options
@@ -59,12 +59,16 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
 
 
         // remove unaltered content
-        return $this->_removeUnalteredContent($initialContent);
+        return $this->_removeUnalteredContent();
 
     }
 
-    protected function _removeUnalteredContent($initialContent) {
-        foreach ($initialContent as $key => $value) {
+    public function getContent() {
+        return $this->render();
+    }
+
+    protected function _removeUnalteredContent() {
+        foreach ($this->_initialContent as $key => $value) {
             if (isset($this->_content[$key]) && $this->_content[$key] === $value) {
                 unset($this->_content[$key]);
             }
@@ -73,32 +77,18 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
         return $this->_content;
     }
 
-    protected function _getInitialContent() {
-        $result = array();
-        foreach ($this->factoryHelper()->getAllContentHelpers() as $key => $contentHelper) {
-            $result = $contentHelper->getInitialContent($result);
+    protected function _initContent() {
+        $this->_initialContent = array();
+        if ($pageType = $this->coreHelper()->getPageTypeByRoutePath()) {
+            $this->_initialContent = $pageType->getPageContent();
         }
-        return $result;
-    }
 
-    protected function _getAdditionalContent() {
-        return array(
-            'filters' => array(
-                array(
-                    'label' => '4 & up',
-                )
-            )
-        );
-    }
-
-
-    public function replacePlaceholders($content) {
-        foreach ($this->factoryHelper()->getAllContentHelpers() as $key => $contentHelper) {
-            if (($contentHelper->hasInitialContentReplacement())) {
-                $content = str_replace($contentHelper->getPlaceholder(), $contentHelper->getInitialContentReplacement(), $content);
-            }
+        $pageContent = array();
+        foreach ($this->_initialContent as $key => $value) {
+            $pageContent['page_' . $key] = $value;
         }
-        return $content;
+
+        $this->_content = array_merge($this->_initialContent, $pageContent, $this->filterHelper()->getPageContent());
     }
 
     /**
@@ -133,6 +123,20 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
      */
     public function finalActionHelper() {
         return Mage::helper('manapro_filtercontent/action_final');
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filterHelper() {
+        return Mage::helper('mana_filters');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
     }
 
     #endregion
