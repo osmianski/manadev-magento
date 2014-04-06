@@ -178,6 +178,16 @@
             </mana_seo>
         </routers>
     </mana_core>
+    <mana_filters>
+        <item_repository>
+            <is_active>1</is_active>
+            <resources>
+                <mana_seo>
+                    <resource>mana_seo/item</resource>
+                </mana_seo>
+            </resources>
+        </item_repository>
+    </mana_filters>
     <default>
         <mana>
             <seo>

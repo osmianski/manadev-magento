@@ -36,6 +36,8 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
         return true;
     }
 
+    protected $_urlKeys = array();
+
     /**
      * @param Mana_Seo_Rewrite_Url $urlModel
      * @return string | bool
@@ -50,13 +52,17 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
         if (($optionPageId = $urlModel->getSeoRouteParam('id')) === false) {
             $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'option page URL key', 'id'));
         }
-        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
-        $urlCollection->addFieldToFilter('option_page_id', $optionPageId);
-        if (!($result = $urlModel->getUrlKey($urlCollection))) {
-            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'option page URL key', 'id', $optionPageId));
+        if (!isset($this->_urlKeys[$optionPageId])) {
+            $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+            $urlCollection->addFieldToFilter('option_page_id', $optionPageId);
+            if (!($result = $urlModel->getUrlKey($urlCollection))) {
+                $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'option page URL key', 'id', $optionPageId));
+            }
+
+            $this->_urlKeys[$optionPageId] = $result;
         }
 
-        return $result['final_url_key'];
+        return $this->_urlKeys[$optionPageId]['final_url_key'];
     }
 
     /**

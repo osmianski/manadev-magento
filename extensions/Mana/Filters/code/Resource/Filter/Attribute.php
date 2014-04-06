@@ -20,6 +20,7 @@ class Mana_Filters_Resource_Filter_Attribute
      * @return mixed
      */
     public function countOnCollection($collection, $model) {
+        //Mana_Core_Profiler2::logQueries(true);
         $select = $collection->getSelect();
         // reset columns, order and limitation conditions
         $select->reset(Zend_Db_Select::COLUMNS);
@@ -46,7 +47,9 @@ class Mana_Filters_Resource_Filter_Attribute
             )
             ->group("{$tableAlias}.value");
 
-        return $connection->fetchPairs($select);
+        $result = $connection->fetchPairs($select);
+        //Mana_Core_Profiler2::logQueries(false);
+        return $result;
     }
 
     /**
