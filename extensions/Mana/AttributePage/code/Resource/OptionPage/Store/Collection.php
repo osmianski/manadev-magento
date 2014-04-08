@@ -141,7 +141,8 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
 
     public function getSampleItem() {
         $db = $this->getConnection();
-        if ($data = $db->fetchRow($this->getSelect()->limit(1))) {
+        $select = clone $this->getSelect();
+        if ($data = $db->fetchRow($select->limit(1))) {
             return $this->getNewEmptyItem()->addData($data);
         }
         else {
