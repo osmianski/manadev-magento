@@ -11,8 +11,7 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
-                <Mana_Core/>
-                <Mana_Admin/>
+                <ManaPro_FilterAdmin/>
             </depends>
         </ManaPro_FilterContent>
     </modules>

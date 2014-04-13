@@ -116,6 +116,9 @@ class Mana_Admin_Block_V2_Grid_Column extends Mage_Adminhtml_Block_Widget_Grid_C
             case 'theme':
                 $rendererClass = 'mana_admin/v2_grid_column_theme';
                 break;
+            case 'form':
+                $rendererClass = 'mana_admin/v2_grid_column_form';
+                break;
             default:
                 $rendererClass = 'mana_admin/v2_grid_column_text';
                 break;

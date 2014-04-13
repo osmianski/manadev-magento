@@ -1,0 +1,11 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterContent
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+#content-grid_table > tbody > tr { cursor: pointer; }
+#content-grid_table > tbody > tr.child { cursor: auto; }
+#content-grid tr.child.hidden { display: none; }
+#content-grid tr.child td { padding: 5px 5px 5px 85px; }
+#content-grid tr.child td textarea { height: 4em; }

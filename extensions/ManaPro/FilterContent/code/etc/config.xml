@@ -45,6 +45,64 @@
                 <class>ManaPro_FilterContent_Block</class>
             </manapro_filtercontent>
         </blocks>
+        <events>
+            <m_db_update_columns>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>prepareUpdateColumns</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_update_columns>
+            <m_db_update_process>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>processUpdate</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_update_process>
+            <m_db_insert_columns>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>prepareInsertColumns</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_insert_columns>
+            <m_db_insert_process>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>processInsert</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_insert_process>
+            <m_db_add_edited_data>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addEditedData</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_add_edited_data>
+            <m_db_validate>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>validate</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_validate>
+            <m_db_add_edited_details>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addGridData</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_add_edited_details>
+        </events>
     </global>
     <adminhtml>
         <layout>
@@ -77,14 +135,6 @@
     </admin>
     <frontend>
         <events>
-            <controller_action_layout_generate_xml_before>
-                <observers>
-                    <manapro_filtercontent>
-                        <class>manapro_filtercontent/observer</class>
-                        <method>addCustomContentToLayoutXml</method>
-                    </manapro_filtercontent>
-                </observers>
-            </controller_action_layout_generate_xml_before>
             <controller_action_layout_generate_blocks_after>
                 <observers>
                     <manapro_filtercontent>
@@ -122,51 +172,70 @@
         <content>
             <!-- Content rendered before layout XML is loaded -->
             <layout_xml>
-                <helper>manapro_filtercontent/content_layoutXml</helper>
                 <sort_order>100</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
             </layout_xml>
             <widget_layout_xml>
-                <content_key>layout_xml</content_key>
-                <helper>manapro_filtercontent/content_widgetLayoutXml</helper>
                 <sort_order>200</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
             </widget_layout_xml>
 
             <!-- Content rendered after block objects are generated -->
             <meta_title>
-                <helper>manapro_filtercontent/content_metaTitle</helper>
                 <sort_order>300</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </meta_title>
             <meta_keywords>
-                <helper>manapro_filtercontent/content_metaKeywords</helper>
                 <sort_order>400</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </meta_keywords>
             <meta_description>
-                <helper>manapro_filtercontent/content_metaDescription</helper>
                 <sort_order>500</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </meta_description>
             <meta_robots>
-                <helper>manapro_filtercontent/content_metaRobots</helper>
                 <sort_order>600</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </meta_robots>
 
             <!-- Content rendered from theme template and from CMS content -->
             <title>
-                <helper>manapro_filtercontent/content_title</helper>
                 <sort_order>700</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </title>
             <subtitle>
-                <helper>manapro_filtercontent/content_subtitle</helper>
                 <sort_order>800</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
             </subtitle>
             <description>
-                <helper>manapro_filtercontent/content_description</helper>
                 <sort_order>900</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
             </description>
             <additional_description>
-                <helper>manapro_filtercontent/content_additionalDescription</helper>
                 <sort_order>1000</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
             </additional_description>
+            <common_directives>
+                <sort_order>1100</sort_order>
+                <instruction>pre_process</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </common_directives>
         </content>
+        <actions>
+            <option>
+                <helper>manapro_filtercontent/action_option</helper>
+            </option>
+        </actions>
     </manapro_filtercontent>
     <default>
         <mana_filtercontent>
@@ -241,7 +310,9 @@ and separators in between#}
 {% endfor %}
                 ]]></meta_description>
                 <title>{{ title }}</title>
-                <subtitle>{{ subtitle }}</subtitle>
+                <subtitle><![CDATA[{% if subtitle %}
+    <h2>{{ subtitle }}</h2>
+{% endif %}]]></subtitle>
                 <description>{{ description }}</description>
                 <meta_robots>{{ meta_robots }}</meta_robots>
             </final>

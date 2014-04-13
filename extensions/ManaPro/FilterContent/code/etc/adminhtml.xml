@@ -11,11 +11,11 @@
             <title>MANAdev</title>
             <sort_order>79</sort_order>
 			<children>
-                <filtercontent translate="title" module="manapro_filtercontent">
+                <!--<filtercontent translate="title" module="manapro_filtercontent">
                     <title>Filter Specific Content</title>
                     <sort_order>150</sort_order>
                     <action>adminhtml/mana_filterContent/new</action>
-                </filtercontent>
+                </filtercontent>-->
                 <system_configuration>
                     <children>
                         <manapro_filtercontent translate="title" module="manapro_filtercontent">
@@ -34,10 +34,10 @@
 				<children>
 					<mana>
 						<children>
-							<filtercontent translate="title" module="manapro_filtercontent">
+							<!--<filtercontent translate="title" module="manapro_filtercontent">
 								<title>Filter Specific Content</title>
 		                        <sort_order>150</sort_order>
-							</filtercontent>
+							</filtercontent>-->
 							<system_configuration>
                                 <children>
                                     <manapro_filtercontent translate="title" module="manapro_filtercontent">

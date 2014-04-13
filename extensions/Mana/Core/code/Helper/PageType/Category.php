@@ -40,16 +40,15 @@ class Mana_Core_Helper_PageType_Category extends Mana_Core_Helper_PageType  {
     public function getPageContent() {
         if ($category = Mage::registry('current_category')) {
             $result = array(
+                'meta_title' => $category->getData('meta_title') ? $category->getData('meta_title') : $category->getName(),
                 'title' => $category->getName(),
                 'description' => $category->getData('description'),
             );
-            if ($title = $category->getMetaTitle()) {
-                $result['meta_title'] = $title;
-            }
-            if ($description = $category->getMetaDescription()) {
+
+            if ($description = $category->getData('meta_description')) {
                 $result['meta_description'] = $description;
             }
-            if ($keywords = $category->getMetaKeywords()) {
+            if ($keywords = $category->getData('meta_keywords')) {
                 $result['meta_keywords'] = $keywords;
             }
             return array_merge(parent::getPageContent(), $result);

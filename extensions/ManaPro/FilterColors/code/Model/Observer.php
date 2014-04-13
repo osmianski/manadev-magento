@@ -293,10 +293,7 @@ class ManaPro_FilterColors_Model_Observer {
                 if ($edit = $request->getParam('colorsGrid_table')) {
                     $edit = json_decode(base64_decode($edit), true);
                     Mage::helper('mana_admin')->processPendingEdits('mana_filters/filter2_value', $edit);
-                    if (!($data = $object->getValueData())) {
-                        $data = array();
-                    }
-                    $object->setValueData(array_merge($data, $edit));
+                    $object->setData('value_data', Mage::helper('mana_admin')->mergeEdits($object->getData('value_data'), $edit));
                 }
                 break;
         }

@@ -25,27 +25,22 @@ $installer->run("
       `default_mask1` int(10) unsigned NOT NULL,
 
       `priority`  int(10) NOT NULL DEFAULT '0',
-      `is_active` tinyint NOT NULL DEFAULT '1',
-      `stop_further_processing` tinyint NOT NULL DEFAULT '1',
+      `is_active` tinyint NOT NULL DEFAULT '0',
+      `stop_further_processing` tinyint NOT NULL DEFAULT '0',
 
       `conditions` mediumtext NOT NULL,
-      `actions` mediumtext NOT NULL,
+      `common_directives` mediumtext NOT NULL,
 
-      `change_meta_title` tinyint NOT NULL DEFAULT '0',
-      `meta_title` varchar(255) NOT NULL DEFAULT '',
-      `change_meta_keywords` tinyint NOT NULL DEFAULT '0',
+      `meta_title` mediumtext NOT NULL,
       `meta_keywords` mediumtext NOT NULL,
-      `change_meta_description` tinyint NOT NULL DEFAULT '0',
       `meta_description` mediumtext NOT NULL,
+      `meta_robots` mediumtext NOT NULL,
 
-      `change_title` tinyint NOT NULL DEFAULT '0',
-      `title` varchar(255) NOT NULL DEFAULT '',
-      `change_subtitle` tinyint NOT NULL DEFAULT '0',
-      `subtitle` varchar(255) NOT NULL DEFAULT '',
-      `change_description` tinyint NOT NULL DEFAULT '0',
+      `title` mediumtext NOT NULL,
+      `subtitle` mediumtext NOT NULL,
       `description` mediumtext NOT NULL,
-
       `additional_description` mediumtext NOT NULL,
+
       `layout_xml` mediumtext NOT NULL,
       `widget_layout_xml` mediumtext NOT NULL,
 
@@ -60,27 +55,22 @@ $installer->run("
       `filter_content_global_custom_settings_id` bigint NOT NULL,
 
       `priority`  int(10) NOT NULL DEFAULT '0',
-      `is_active` tinyint NOT NULL DEFAULT '1',
-      `stop_further_processing` tinyint NOT NULL DEFAULT '1',
+      `is_active` tinyint NOT NULL DEFAULT '0',
+      `stop_further_processing` tinyint NOT NULL DEFAULT '0',
 
       `conditions` mediumtext NOT NULL,
-      `actions` mediumtext NOT NULL,
+      `common_directives` mediumtext NOT NULL,
 
-      `change_meta_title` tinyint NOT NULL DEFAULT '0',
-      `meta_title` varchar(255) NOT NULL DEFAULT '',
-      `change_meta_keywords` tinyint NOT NULL DEFAULT '0',
+      `meta_title` mediumtext NOT NULL,
       `meta_keywords` mediumtext NOT NULL,
-      `change_meta_description` tinyint NOT NULL DEFAULT '0',
       `meta_description` mediumtext NOT NULL,
+      `meta_robots` mediumtext NOT NULL,
 
-      `change_title` tinyint NOT NULL DEFAULT '0',
-      `title` varchar(255) NOT NULL DEFAULT '',
-      `change_subtitle` tinyint NOT NULL DEFAULT '0',
-      `subtitle` varchar(255) NOT NULL DEFAULT '',
-      `change_description` tinyint NOT NULL DEFAULT '0',
+      `title` mediumtext NOT NULL,
+      `subtitle` mediumtext NOT NULL,
       `description` mediumtext NOT NULL,
-
       `additional_description` mediumtext NOT NULL,
+
       `layout_xml` mediumtext NOT NULL,
       `widget_layout_xml` mediumtext NOT NULL,
 
@@ -105,26 +95,21 @@ $installer->run("
       `default_mask1` int(10) unsigned NOT NULL,
 
       `priority`  int(10) NOT NULL DEFAULT '0',
-      `is_active` tinyint NOT NULL DEFAULT '1',
-      `stop_further_processing` tinyint NOT NULL DEFAULT '1',
+      `is_active` tinyint NOT NULL DEFAULT '0',
+      `stop_further_processing` tinyint NOT NULL DEFAULT '0',
 
-      `actions` mediumtext NOT NULL,
+      `common_directives` mediumtext NOT NULL,
 
-      `change_meta_title` tinyint NOT NULL DEFAULT '0',
-      `meta_title` varchar(255) NOT NULL DEFAULT '',
-      `change_meta_keywords` tinyint NOT NULL DEFAULT '0',
+      `meta_title` mediumtext NOT NULL,
       `meta_keywords` mediumtext NOT NULL,
-      `change_meta_description` tinyint NOT NULL DEFAULT '0',
       `meta_description` mediumtext NOT NULL,
+      `meta_robots` mediumtext NOT NULL,
 
-      `change_title` tinyint NOT NULL DEFAULT '0',
-      `title` varchar(255) NOT NULL DEFAULT '',
-      `change_subtitle` tinyint NOT NULL DEFAULT '0',
-      `subtitle` varchar(255) NOT NULL DEFAULT '',
-      `change_description` tinyint NOT NULL DEFAULT '0',
+      `title` mediumtext NOT NULL,
+      `subtitle` mediumtext NOT NULL,
       `description` mediumtext NOT NULL,
-
       `additional_description` mediumtext NOT NULL,
+
       `layout_xml` mediumtext NOT NULL,
       `widget_layout_xml` mediumtext NOT NULL,
 
@@ -151,27 +136,22 @@ $installer->run("
       `filter_content_store_custom_settings_id` bigint NULL,
 
       `priority`  int(10) NOT NULL DEFAULT '0',
-      `is_active` tinyint NOT NULL DEFAULT '1',
-      `stop_further_processing` tinyint NOT NULL DEFAULT '1',
+      `is_active` tinyint NOT NULL DEFAULT '0',
+      `stop_further_processing` tinyint NOT NULL DEFAULT '0',
 
       `conditions` mediumtext NOT NULL,
-      `actions` mediumtext NOT NULL,
+      `common_directives` mediumtext NOT NULL,
 
-      `change_meta_title` tinyint NOT NULL DEFAULT '0',
-      `meta_title` varchar(255) NOT NULL DEFAULT '',
-      `change_meta_keywords` tinyint NOT NULL DEFAULT '0',
+      `meta_title` mediumtext NOT NULL,
       `meta_keywords` mediumtext NOT NULL,
-      `change_meta_description` tinyint NOT NULL DEFAULT '0',
       `meta_description` mediumtext NOT NULL,
+      `meta_robots` mediumtext NOT NULL,
 
-      `change_title` tinyint NOT NULL DEFAULT '0',
-      `title` varchar(255) NOT NULL DEFAULT '',
-      `change_subtitle` tinyint NOT NULL DEFAULT '0',
-      `subtitle` varchar(255) NOT NULL DEFAULT '',
-      `change_description` tinyint NOT NULL DEFAULT '0',
+      `title` mediumtext NOT NULL,
+      `subtitle` mediumtext NOT NULL,
       `description` mediumtext NOT NULL,
-
       `additional_description` mediumtext NOT NULL,
+
       `layout_xml` mediumtext NOT NULL,
       `widget_layout_xml` mediumtext NOT NULL,
 
@@ -254,29 +234,28 @@ $filterValueTables = array(
 foreach ($filterValueTables as $table) {
     $installer->run("
         ALTER TABLE `$table`
-            ADD COLUMN (`content_is_active` tinyint NOT NULL DEFAULT '1'),
-            ADD COLUMN (`content_stop_further_processing` tinyint NOT NULL DEFAULT '1'),
+            ADD COLUMN (`content_is_active` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_is_initialized` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_priority`  int(10) NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_stop_further_processing` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_common_directives` mediumtext NOT NULL),
 
-            ADD COLUMN (`content_change_meta_title` tinyint NOT NULL DEFAULT '0'),
-            ADD COLUMN (`content_meta_title` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_meta_keywords` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_meta_title` mediumtext NOT NULL),
             ADD COLUMN (`content_meta_keywords` mediumtext NOT NULL),
-            ADD COLUMN (`content_change_meta_description` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_meta_description` mediumtext NOT NULL),
+            ADD COLUMN (`content_meta_robots` mediumtext NOT NULL),
 
-            ADD COLUMN (`content_change_title` tinyint NOT NULL DEFAULT '0'),
-            ADD COLUMN (`content_title` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_subtitle` tinyint NOT NULL DEFAULT '0'),
-            ADD COLUMN (`content_subtitle` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_description` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_title` mediumtext NOT NULL),
+            ADD COLUMN (`content_subtitle` mediumtext NOT NULL),
             ADD COLUMN (`content_description` mediumtext NOT NULL),
-
             ADD COLUMN (`content_additional_description` mediumtext NOT NULL),
+
             ADD COLUMN (`content_layout_xml` mediumtext NOT NULL),
             ADD COLUMN (`content_widget_layout_xml` mediumtext NOT NULL);
     ");
 }
 
+/*
 $optionPageTables = array(
     $this->getTable('mana_attributepage/optionPage_globalCustomSettings'),
     $this->getTable('mana_attributepage/optionPage_global'),
@@ -287,28 +266,24 @@ $optionPageTables = array(
 foreach ($optionPageTables as $table) {
     $installer->run("
         ALTER TABLE `$table`
-            ADD COLUMN (`content_is_active` tinyint NOT NULL DEFAULT '1'),
-            ADD COLUMN (`content_stop_further_processing` tinyint NOT NULL DEFAULT '1'),
+            ADD COLUMN (`content_is_active` tinyint NOT NULL DEFAULT '0'),
+            ADD COLUMN (`content_stop_further_processing` tinyint NOT NULL DEFAULT '0'),
 
-            ADD COLUMN (`content_change_meta_title` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_meta_title` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_meta_keywords` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_meta_keywords` mediumtext NOT NULL),
-            ADD COLUMN (`content_change_meta_description` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_meta_description` mediumtext NOT NULL),
+            ADD COLUMN (`content_meta_robots` varchar(255) NOT NULL DEFAULT ''),
 
-            ADD COLUMN (`content_change_title` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_title` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_subtitle` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_subtitle` varchar(255) NOT NULL DEFAULT ''),
-            ADD COLUMN (`content_change_description` tinyint NOT NULL DEFAULT '0'),
             ADD COLUMN (`content_description` mediumtext NOT NULL),
-
             ADD COLUMN (`content_additional_description` mediumtext NOT NULL),
+
             ADD COLUMN (`content_layout_xml` mediumtext NOT NULL),
             ADD COLUMN (`content_widget_layout_xml` mediumtext NOT NULL);
     ");
 }
+*/
 
 if (method_exists($this->getConnection(), 'disallowDdlCache')) {
     $this->getConnection()->disallowDdlCache();

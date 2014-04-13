@@ -65,4 +65,24 @@ class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_
 
         return $this->_urlKeys[$attributePageId]['final_url_key'];
     }
+
+    public function getPageContent() {
+        /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
+        $attributePage = Mage::registry('current_attribute_page');
+
+        $result = array(
+            'title' => $attributePage->getData('title'),
+            'description' => $attributePage->getData('description'),
+        );
+        if ($title = $attributePage->getData('meta_title')) {
+            $result['meta_title'] = $title;
+        }
+        if ($description = $attributePage->getData('meta_description')) {
+            $result['meta_description'] = $description;
+        }
+        if ($keywords = $attributePage->getData('meta_keywords')) {
+            $result['meta_keywords'] = $keywords;
+        }
+        return array_merge(parent::getPageContent(), $result);
+    }
 }

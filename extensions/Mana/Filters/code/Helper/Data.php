@@ -441,11 +441,8 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
 
     public function getPageContent() {
         return array(
-            'filters' => array(
-                array(
-                    'label' => '4 & up',
-                )
-            )
+            'filters' => $this->getActiveFilters(),
+            'page' => Mage::app()->getRequest()->getParam('p'),
         );
     }
 

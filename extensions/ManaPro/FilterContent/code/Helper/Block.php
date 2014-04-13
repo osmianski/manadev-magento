@@ -47,5 +47,12 @@ abstract class ManaPro_FilterContent_Helper_Block extends Mage_Core_Helper_Abstr
     public function helper() {
         return Mage::helper('manapro_filtercontent');
     }
+
+    /**
+     * @return ManaPro_FilterContent_Helper_Renderer
+     */
+    public function rendererHelper() {
+        return Mage::helper('manapro_filtercontent/renderer');
+    }
     #endregion
 }

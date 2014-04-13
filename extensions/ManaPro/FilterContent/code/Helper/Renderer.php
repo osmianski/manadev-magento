@@ -22,8 +22,16 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
 //        return $this;
 //    }
 
-    protected $_initialContent;
+    protected $_disposableContent;
     protected $_content;
+
+    public function get($content) {
+        $content = $this->factoryHelper()->getContent($content);
+
+        return isset($this->_content[$content->getKey()])
+            ? str_replace('<echo>', '', str_replace('</echo>', '', $this->_content[$content->getKey()]))
+            : false;
+    }
 
     public function render() {
         // only render all filter specific content once
@@ -31,35 +39,91 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
             return $this->_content;
         }
 
-        $this->_initContent();
-
         // do not render anything if filter specific content feature is disabled
         if (!Mage::getStoreConfigFlag('mana_filtercontent/general/is_active')) {
-            return $this->_removeUnalteredContent();
+            $this->_content = array();
+            return $this->_content;
         }
 
-//        // initialize renderer with route path, currently applied filters and other paging/sorting display options
-//        /** @noinspection PhpParamsInspection */
-//        $renderer = $this->rendererHelper()->init(
-//            $this->coreHelper()->getRoutePath(),
-//            $this->filterHelper()->getLayer()->getState()->getFilters(),
-//            $this->coreHelper()->getProductToolbarParameters()
-//        );
+        Mana_Core_Profiler2::start(__METHOD__);
 
-        // run page type based initialization templates
-
-        // run custom initialization templates
+        // initialize content based on current page type, applied filters etc.
+        $this->_initContent();
+        $actions = array();
 
         // search for matching rules and in all rule providers
+        $stopped = false;
+        foreach ($this->factoryHelper()->getActions() as $actionSource) {
+            foreach ($actionSource->read($this->_content) as $action) {
+                if ($action['is_active']) {
+                    $actions[] = $action;
+
+                    $stopped = (bool)(int)$action['stop_further_processing'];
+                }
+                if ($stopped) {
+                    break;
+                }
+            }
+            if ($stopped) {
+                break;
+            }
+        }
+
+        // add final rule
+        if (!$stopped) {
+            $actions[] = $this->finalActionHelper()->read();
+        }
 
         // run each rule (if relevant) templates in order of priority
+        foreach ($this->factoryHelper()->getAllContent() as $key => $contentHelper) {
+            $mergedTemplate = '';
+            if ($contentHelper->isContentAdded()) {
+                foreach ($actions as $action) {
+                    foreach ($this->factoryHelper()->getAllContent() as $secondaryContentHelper) {
+                        if ($secondaryContentHelper->isContentPreProcessed() &&
+                            isset($action[$secondaryContentHelper->getKey()]))
+                        {
+                            $template = '{% spaceless %}<echo>' . $action[$secondaryContentHelper->getKey()] . '<echo>{% endspaceless %}';
+                            $mergedTemplate .= $template;
+                        }
+                    }
 
-        // run custom finalization templates
-        $this->_processAction($this->finalActionHelper()->read());
+                    if (isset($action[$contentHelper->getKey()])) {
+                        $template = '{% spaceless %}<echo>' . $action[$contentHelper->getKey()] . '<echo>{% endspaceless %}';
+                        $mergedTemplate .= $template;
+                    }
+                }
+            }
+            elseif ($contentHelper->isContentReplaced()) {
+                foreach ($actions as $i => $action) {
+                    foreach ($this->factoryHelper()->getAllContent() as $secondaryContentHelper) {
+                        if ($secondaryContentHelper->isContentPreProcessed() &&
+                            isset($action[$secondaryContentHelper->getKey()])
+                        ) {
+                            $template = '{% spaceless %}<echo>' . $action[$secondaryContentHelper->getKey()] . '<echo>{% endspaceless %}';
+                            $mergedTemplate .= $template;
+                        }
+                    }
+
+                    if (isset($action[$contentHelper->getKey()])) {
+                        $template = '{% spaceless %}<echo>' . $action[$contentHelper->getKey()] . '<echo>{% endspaceless %}';
+                        if ($i == count($actions) - 1) {
+                            $mergedTemplate .= $template;
+                        } else {
+                            $mergedTemplate .= '{% set ' . $contentHelper->getKey() . ' %}' . $template . '{% endset %}';
+                        }
+                    }
+                }
+            }
+
+            $this->_content[$contentHelper->getKey()] =
+                trim($this->twigHelper()->renderStringCached($mergedTemplate, $this->_content, null));
+        }
 
 
         // remove unaltered content
-        return $this->_removeUnalteredContent();
+        Mana_Core_Profiler2::stop();
+        return $this->_removeDisposableContent();
 
     }
 
@@ -67,8 +131,8 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
         return $this->render();
     }
 
-    protected function _removeUnalteredContent() {
-        foreach ($this->_initialContent as $key => $value) {
+    protected function _removeDisposableContent() {
+        foreach ($this->_disposableContent as $key => $value) {
             if (isset($this->_content[$key]) && $this->_content[$key] === $value) {
                 unset($this->_content[$key]);
             }
@@ -78,17 +142,16 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
     }
 
     protected function _initContent() {
-        $this->_initialContent = array();
+        $this->_disposableContent = array();
         if ($pageType = $this->coreHelper()->getPageTypeByRoutePath()) {
-            $this->_initialContent = $pageType->getPageContent();
+            $this->_disposableContent = $pageType->getPageContent();
         }
 
-        $pageContent = array();
-        foreach ($this->_initialContent as $key => $value) {
-            $pageContent['page_' . $key] = $value;
+        $initialContent = array_merge($this->_disposableContent, $this->filterHelper()->getPageContent());
+        $this->_content = $initialContent;
+        foreach ($initialContent as $key => $value) {
+            $this->_content['initial_' . $key] = $value;
         }
-
-        $this->_content = array_merge($this->_initialContent, $pageContent, $this->filterHelper()->getPageContent());
     }
 
     /**
@@ -102,9 +165,15 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
         return call_user_func_array(array(Mage::helper($provider), $method), $args);
     }
 
-    protected function _processAction($actions) {
-        foreach ($this->factoryHelper()->getAllContentHelpers() as $key => $contentHelper) {
-            $this->_content = $contentHelper->processActions($this->_content, $actions);
+    protected function _processAction($action) {
+        if ($action['is_active']) {
+            foreach ($this->factoryHelper()->getAllContent() as $key => $contentHelper) {
+                $this->_content = $contentHelper->processAction($this->_content, $action);
+            }
+            return (bool)(int)$action['stop_further_processing'];
+        }
+        else {
+            return false;
         }
     }
 
@@ -137,6 +206,13 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Twig_Helper_Data
+     */
+    public function twigHelper() {
+        return Mage::helper('mana_twig');
     }
 
     #endregion

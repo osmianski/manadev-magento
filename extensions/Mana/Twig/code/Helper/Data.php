@@ -34,6 +34,7 @@ class Mana_Twig_Helper_Data extends Mage_Core_Helper_Abstract {
                 'autoescape' => false,
             ));
             $twig->addExtension(new Twig_Extension_Debug());
+            $twig->addFunction('remove', new Twig_Function_Function(array(Mage::helper('mana_twig/functions'), 'remove')));
         }
         return $this->_twig;
     }
@@ -48,6 +49,7 @@ class Mana_Twig_Helper_Data extends Mage_Core_Helper_Abstract {
                 'autoescape' => false,
             ));
             $twig->addExtension(new Twig_Extension_Debug());
+            $twig->addFunction('remove', new Twig_Function_Function(array(Mage::helper('mana_twig/functions'), 'remove')));
         }
 
         return $this->_stringTwig;

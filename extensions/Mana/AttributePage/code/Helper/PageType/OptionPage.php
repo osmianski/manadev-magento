@@ -71,4 +71,24 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
     public function getConditionLabel() {
         return $this->__('Attribute Option Page');
     }
+
+    public function getPageContent() {
+        /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
+        $optionPage = Mage::registry('current_option_page');
+
+        $result = array(
+            'title' => $optionPage->getData('title'),
+            'description' => $optionPage->getData('description'),
+        );
+        if ($title = $optionPage->getData('meta_title')) {
+            $result['meta_title'] = $title;
+        }
+        if ($description = $optionPage->getData('meta_description')) {
+            $result['meta_description'] = $description;
+        }
+        if ($keywords = $optionPage->getData('meta_keywords')) {
+            $result['meta_keywords'] = $keywords;
+        }
+        return array_merge(parent::getPageContent(), $result);
+    }
 }

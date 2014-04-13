@@ -23,4 +23,14 @@ class Mana_Core_Helper_PageType_Search extends Mana_Core_Helper_PageType  {
     public function getConditionLabel() {
         return $this->__('Quick Search Page');
     }
+
+    public function getPageContent() {
+        $result = array(
+            'meta_title' => Mage::helper('catalogsearch')->__("Search results for: '%s'",
+                Mage::helper('catalogsearch')->getEscapedQueryText()),
+            'title' => Mage::helper('catalogsearch')->__("Search results for: '%s'",
+                Mage::helper('catalogsearch')->getQueryText()),
+        );
+        return array_merge(parent::getPageContent(), $result);
+    }
 }

@@ -17,7 +17,7 @@ class ManaPro_FilterContent_Helper_Block_Category_Description extends ManaPro_Fi
     public function before($block, $key) {
         $category = $block->getCurrentCategory();
         $oldDescription = $category->getData('description');
-        if ($newDescription = $this->contentHelper()->render()) {
+        if ($newDescription = $this->rendererHelper()->get('description')) {
             $block->setData($this->helper()->getOriginalContentKey($key), $oldDescription);
             $category->setData('description', $newDescription);
         }
@@ -35,12 +35,4 @@ class ManaPro_FilterContent_Helper_Block_Category_Description extends ManaPro_Fi
             $block->unsetData($this->helper()->getOriginalContentKey($key));
         }
     }
-    #region Dependencies
-    /**
-     * @return ManaPro_FilterContent_Helper_Content
-     */
-    public function contentHelper() {
-        return $this->factoryHelper()->createContentHelper('description');
-    }
-    #endregion
 }

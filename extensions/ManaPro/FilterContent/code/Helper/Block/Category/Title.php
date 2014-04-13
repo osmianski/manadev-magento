@@ -17,7 +17,7 @@ class ManaPro_FilterContent_Helper_Block_Category_Title extends ManaPro_FilterCo
     public function before($block, $key) {
         $category = $block->getCurrentCategory();
         $oldTitle = $category->getName();
-        if ($newTitle = $this->contentHelper()->render()) {
+        if ($newTitle = $this->rendererHelper()->get('title')) {
             $block->setData($this->helper()->getOriginalContentKey($key), $oldTitle);
             $category->setData('name', $newTitle);
         }
@@ -35,13 +35,4 @@ class ManaPro_FilterContent_Helper_Block_Category_Title extends ManaPro_FilterCo
             $block->unsetData($this->helper()->getOriginalContentKey($key));
         }
     }
-
-    #region Dependencies
-    /**
-     * @return ManaPro_FilterContent_Helper_Content
-     */
-    public function contentHelper() {
-        return $this->factoryHelper()->createContentHelper('title');
-    }
-    #endregion
 }

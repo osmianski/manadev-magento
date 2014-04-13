@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterContent_Helper_Action_Final extends ManaPro_FilterContent_Helper_Action {
+class ManaPro_FilterContent_Helper_Action_Final extends Mage_Core_Helper_Abstract {
     protected $_value;
 
     /**
@@ -17,7 +17,9 @@ class ManaPro_FilterContent_Helper_Action_Final extends ManaPro_FilterContent_He
      */
     public function read() {
         if (!$this->_value) {
-            $this->_value = $this->_normalize(array(
+            $this->_value = array(
+                'is_active' => true,
+                'stop_further_processing' => true,
                 'layout_xml' => '',
 
                 'meta_title' => Mage::getStoreConfig('mana_filtercontent/final/meta_title'),
@@ -29,8 +31,9 @@ class ManaPro_FilterContent_Helper_Action_Final extends ManaPro_FilterContent_He
                 'subtitle' => Mage::getStoreConfig('mana_filtercontent/final/subtitle'),
                 'description' => Mage::getStoreConfig('mana_filtercontent/final/description'),
                 'additional_description' => '',
+                'common_directives' => '',
                 'cache_key' => 'config/final',
-            ));
+            );
         }
         return $this->_value;
     }

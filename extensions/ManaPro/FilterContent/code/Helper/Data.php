@@ -31,12 +31,16 @@ class ManaPro_FilterContent_Helper_Data extends Mage_Core_Helper_Abstract {
      * @param $key
      * @return Mage_Core_Model_Config_Element
      */
-    public function getContentHelperXml($key) {
+    public function getContentXml($key) {
         return Mage::getConfig()->getNode('manapro_filtercontent/content/'.$key);
     }
 
-    public function getAllContentHelperXmls() {
+    public function getAllContentXmls() {
         return $this->coreHelper()->getSortedXmlChildren(Mage::getConfig()->getNode('manapro_filtercontent'), 'content');
+    }
+
+    public function getAllActionXmls() {
+        return $this->coreHelper()->getSortedXmlChildren(Mage::getConfig()->getNode('manapro_filtercontent'), 'actions');
     }
 
     public function getTwigFilename($actions, $name) {

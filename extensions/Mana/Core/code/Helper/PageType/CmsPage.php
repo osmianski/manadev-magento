@@ -34,4 +34,17 @@ class Mana_Core_Helper_PageType_CmsPage extends Mana_Core_Helper_PageType  {
     public function getConditionLabel() {
         return $this->__('CMS Page');
     }
+
+    public function getPageContent() {
+        $page = Mage::getSingleton('cms/page');
+
+        $result = array(
+            'meta_title' => $page->getData('title'),
+            'meta_description' => $page->getData('meta_description'),
+            'meta_keywords' => $page->getData('meta_keywords'),
+            'title' => $page->getData('title'),
+            'description' => $page->getData('content'),
+        );
+        return array_merge(parent::getPageContent(), $result);
+    }
 }

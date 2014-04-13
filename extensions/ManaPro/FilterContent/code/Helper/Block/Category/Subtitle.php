@@ -16,7 +16,7 @@ class ManaPro_FilterContent_Helper_Block_Category_Subtitle extends ManaPro_Filte
      * @param Varien_Object $htmlObject
      */
     public function after($block, $key, $htmlObject) {
-        if ($subtitle = $this->contentHelper()->render(null)) {
+        if ($subtitle = $this->rendererHelper()->get('subtitle')) {
             $html = $htmlObject->getData('html');
             $insertAfter = '</h1>';
             if (($pos = strpos($html, $insertAfter)) !== false) {
@@ -25,12 +25,4 @@ class ManaPro_FilterContent_Helper_Block_Category_Subtitle extends ManaPro_Filte
             }
         }
     }
-    #region Dependencies
-    /**
-     * @return ManaPro_FilterContent_Helper_Content
-     */
-    public function contentHelper() {
-        return $this->factoryHelper()->createContentHelper('subtitle');
-    }
-    #endregion
 }
