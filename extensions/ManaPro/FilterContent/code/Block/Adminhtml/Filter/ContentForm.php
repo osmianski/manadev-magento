@@ -24,7 +24,9 @@ class ManaPro_FilterContent_Block_Adminhtml_Filter_ContentForm  extends Mana_Adm
     protected function _prepareLayout() {
         parent::_prepareLayout();
         if (Mage::getSingleton('cms/wysiwyg_config')->isEnabled()) {
-            $this->getLayout()->getBlock('head')->setData('can_load_tiny_mce', true);
+            if ($head = $this->getLayout()->getBlock('head')) {
+                $head->setData('can_load_tiny_mce', true);
+            }
         }
     }
 

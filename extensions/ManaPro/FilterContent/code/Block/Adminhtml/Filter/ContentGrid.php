@@ -19,7 +19,7 @@ class ManaPro_FilterContent_Block_Adminhtml_Filter_ContentGrid extends Mana_Admi
             'dir' => 'asc',
         ));
         $this->setUseAjax(true);
-        $this->setSaveParametersInSession(false);
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareColumns() {
@@ -29,27 +29,32 @@ class ManaPro_FilterContent_Block_Adminhtml_Filter_ContentGrid extends Mana_Admi
 			'width' => '50px',
 			'align' => 'center',
 		));
+        $this->addColumn('content_is_active', array(
+            'type' => 'checkbox',
+            'header' => $this->__('Enable'),
+            'index' => 'content_is_active',
+            'width' => '100px',
+            'align' => 'center',
+            'cell_client_side_block_type' => 'ManaPro/FilterContent/Option/IsActiveCell',
+            'readonly' => !$this->adminHelper()->isGlobal(),
+        ));
+        $this->addColumn('content_priority', array(
+            'type' => 'input',
+            'header' => $this->__('Priority'),
+            'index' => 'content_priority',
+            'width' => '50px',
+            'align' => 'center',
+            'readonly' => !$this->adminHelper()->isGlobal(),
+        ));
 		$this->addColumn('name', array(
 			'header' => $this->__('Name'),
 			'index' => 'name',
 		));
-        $this->addColumn('content_is_active', array(
-            'type' => 'select',
-            'options' => 'mana_core/source_status',
-            'header' => $this->__('Additional Content'),
-            'index' => 'content_is_active',
-            'width' => '200px',
-            'align' => 'center',
-            'select_style' => 'width: 150px;',
-            'cell_client_side_block_type' => 'ManaPro/FilterContent/Option/IsActiveCell',
-            'readonly' => !$this->adminHelper()->isGlobal(),
-        ));
         $this->addColumn('content_stop_further_processing', array(
-            'type' => 'select',
-            'options' => 'mana_core/source_yesno',
+            'type' => 'checkbox',
             'header' => $this->__('Stop Further Processing'),
             'index' => 'content_stop_further_processing',
-            'width' => '200px',
+            'width' => '100px',
             'align' => 'center',
             'select_style' => 'width: 150px;',
             'readonly' => !$this->adminHelper()->isGlobal(),

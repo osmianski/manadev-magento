@@ -212,9 +212,6 @@ $installer->run("
         ADD CONSTRAINT `FK_{$table}_cms_page` FOREIGN KEY (`cms_page_id`)
             REFERENCES `{$this->getTable('cms/page')}` (`page_id`)
             ON DELETE CASCADE ON UPDATE CASCADE,
-        ADD CONSTRAINT `FK_{$table}_opt_page` FOREIGN KEY (`option_page_global_id`)
-            REFERENCES `{$this->getTable('mana_attributepage/optionPage_global')}` (`id`)
-            ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT `FK_{$table}_filter` FOREIGN KEY (`filter_global_id`)
             REFERENCES `{$this->getTable('mana_filters/filter2')}` (`id`)
             ON DELETE CASCADE ON UPDATE CASCADE,
@@ -225,6 +222,13 @@ $installer->run("
             REFERENCES `{$this->getTable('catalog/category')}` (`entity_id`)
             ON DELETE CASCADE ON UPDATE CASCADE;
 ");
+
+/*
+        ADD CONSTRAINT `FK_{$table}_opt_page` FOREIGN KEY (`option_page_global_id`)
+            REFERENCES `{$this->getTable('mana_attributepage/optionPage_global')}` (`id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+
+*/
 
 $filterValueTables = array(
     $this->getTable('mana_filters/filter2_value'),

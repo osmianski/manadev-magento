@@ -27,12 +27,12 @@ function($, TabContainer) {
     });
 });
 
-Mana.define('ManaPro/FilterContent/Option/IsActiveCell', ['jquery', 'Mana/Admin/Grid/Cell/Select'],
+Mana.define('ManaPro/FilterContent/Option/IsActiveCell', ['jquery', 'Mana/Admin/Grid/Cell/Checkbox'],
 function($, Select) {
     return Select.extend('ManaPro/FilterContent/Option/IsActiveCell', {
-        onChange: function() {
+        onClick: function() {
             this._super();
-            if (parseInt(this.$input().val())) {
+            if (this.$input().attr('checked') == 'checked') {
                 this.getGrid().expandChildRow(this.$tr());
             }
             else {

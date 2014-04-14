@@ -238,20 +238,26 @@ Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'],
                 return self.onClick();
             }
 
+            function _cellClick() {
+                return self.onCellClick();
+            }
+
             return this
                 ._super()
                 .on('bind', this, function () {
                     this.$input().on('click', _raiseClick);
+//                    this.$().on('click', _cellClick);
                 })
                 .on('unbind', this, function () {
                     this.$input().off('click', _raiseClick);
+//                    this.$().off('click', _cellClick);
                 });
         },
         $input:function () {
             return this.$().find('input');
         },
         onClick:function () {
-            this.getGrid().setCellValue(this, { value:this.$input().attr('checked') == 'checked' ? 1 : 0 });
+            this.getGrid().setCellValue(this, { value:this.isChecked() ? 1 : 0 });
         },
         onReadonlyChanged: function (e) {
             if (e.value || this.$().data('readonly')) {
@@ -260,7 +266,20 @@ Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'],
             else {
                 this.$input().removeAttr('disabled').removeClass('disabled');
             }
+        },
+        isChecked: function() {
+            return this.$input().attr('checked') == 'checked';
         }
+//        onCellClick: function() {
+//            if (this.isChecked()) {
+//                this.$input().removeAttr('checked');
+//            }
+//            else {
+//                this.$input().attr('checked', 'checked');
+//            }
+//            this.onClick();
+//            return false;
+//        }
     });
 });
 Mana.define('Mana/Admin/Grid/Cell/Massaction', ['jquery', 'Mana/Admin/Grid/Cell/Checkbox'], function ($, Checkbox) {

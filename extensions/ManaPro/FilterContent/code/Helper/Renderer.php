@@ -117,7 +117,7 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
             }
 
             $this->_content[$contentHelper->getKey()] =
-                trim($this->twigHelper()->renderStringCached($mergedTemplate, $this->_content, null));
+                trim($this->twigHelper()->renderContentRule($mergedTemplate, $this->_content));
         }
 
 

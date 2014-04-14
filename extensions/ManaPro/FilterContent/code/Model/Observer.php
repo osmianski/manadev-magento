@@ -302,11 +302,14 @@ class ManaPro_FilterContent_Model_Observer {
                         switch ($fieldDef['validation']) {
                             case 'twig':
                                 try {
-                                    $this->twigHelper()->renderStringCached($object->getData($field), array(), null);
+                                    $this->twigHelper()->renderContentRule($object->getData($field), array());
                                 }
                                 catch (Exception $e){
-                                    $result->addError($this->helper()->__("'%s' template contains an error: %s",
-                                            $this->helper()->__($fieldDef['label']), $e->getMessage()));
+                                    $result->addError($this->helper()->__("<p>%s '%s' error: </p><p>%s</p>",
+                                        $this->getOptionResource()->getDefaultOptionLabel($object->getData('option_id')),
+                                        $this->helper()->__($fieldDef['label']),
+                                        nl2br(htmlspecialchars($e->getMessage())))
+                                    );
                                 }
                                 break;
                         }
@@ -371,6 +374,13 @@ class ManaPro_FilterContent_Model_Observer {
      */
     public function twigHelper() {
         return Mage::helper('mana_twig');
+    }
+
+    /**
+     * @return ManaPro_FilterContent_Resource_Option
+     */
+    public function getOptionResource() {
+        return Mage::getResourceSingleton('manapro_filtercontent/option');
     }
     #endregion
 }

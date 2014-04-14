@@ -10,6 +10,17 @@
  *
  */
 class ManaPro_FilterContent_Resource_Option extends Mage_Core_Model_Mysql4_Abstract {
+    public function getDefaultOptionLabel($optionId) {
+        $db = $this->getReadConnection();
+
+        $select = $db->select()
+            ->from(array('ov' => $this->getTable('eav/attribute_option_value')), array('value'))
+            ->where("`ov`.`option_id` = ?", $optionId)
+            ->where("`ov`.`store_id` = 0");
+
+        return $db->fetchOne($select);
+    }
+
     protected function _construct() {
         $this->_setResource('catalog');
     }
@@ -46,7 +57,7 @@ class ManaPro_FilterContent_Resource_Option extends Mage_Core_Model_Mysql4_Abstr
             ->where("`fvs`.`edit_status` = 0")
             ->where("`fvs`.`content_is_active` = 1")
             ->where("`fvs`.`content_is_initialized` = 1")
-            ->order(array($filterPositionExpr, "o.sort_order ASC"));
+            ->order(array("fvs.content_priority", $filterPositionExpr, "o.sort_order ASC"));
 
         //$sql = $select->__toString();
         return $db->fetchAssoc($select);
