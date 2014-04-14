@@ -10,6 +10,7 @@ abstract class Mana_Core_Helper_PageType extends Mage_Core_Helper_Abstract {
 
     abstract public function getRoutePath();
     abstract public function getCurrentSuffix();
+
     public function setCode($code) {
         $this->_code = $code;
         return $this;
@@ -35,6 +36,7 @@ abstract class Mana_Core_Helper_PageType extends Mage_Core_Helper_Abstract {
 
     public function getPageContent() {
         return array(
+            'page_type' => $this->getPageTypeId(),
             'meta_title' => Mage::getStoreConfig('design/head/default_title'),
             'meta_keywords' => Mage::getStoreConfig('design/head/default_keywords'),
             'meta_description' => Mage::getStoreConfig('design/head/default_description'),
@@ -42,5 +44,9 @@ abstract class Mana_Core_Helper_PageType extends Mage_Core_Helper_Abstract {
             'title' => '',
             'description' => '',
         );
+    }
+
+    public function getPageTypeId() {
+        return '';
     }
 }

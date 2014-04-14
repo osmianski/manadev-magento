@@ -85,4 +85,11 @@ class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_
         }
         return array_merge(parent::getPageContent(), $result);
     }
+
+    public function getPageTypeId() {
+        /* @var $attributePage Mana_AttributePage_Model_AttributePage_Store */
+        $attributePage = Mage::registry('current_attribute_page');
+
+        return 'attribute:' . $attributePage->getData('attribute_page_global_id');
+    }
 }

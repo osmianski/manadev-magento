@@ -33,4 +33,8 @@ class Mana_Core_Helper_PageType_Search extends Mana_Core_Helper_PageType  {
         );
         return array_merge(parent::getPageContent(), $result);
     }
+
+    public function getPageTypeId() {
+        return 'search';
+    }
 }

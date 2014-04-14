@@ -55,4 +55,13 @@ class Mana_Core_Helper_PageType_Category extends Mana_Core_Helper_PageType  {
         }
         return parent::getPageContent();
     }
+
+    public function getPageTypeId() {
+        if ($category = Mage::registry('current_category')) {
+            return 'category:' . $category->getId();
+        }
+        else {
+            return '';
+        }
+    }
 }

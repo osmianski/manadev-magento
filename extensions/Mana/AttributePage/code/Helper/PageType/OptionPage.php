@@ -91,4 +91,11 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
         }
         return array_merge(parent::getPageContent(), $result);
     }
+
+    public function getPageTypeId() {
+        /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
+        $optionPage = Mage::registry('current_option_page');
+
+        return 'option:' . $optionPage->getData('option_page_global_id');
+    }
 }

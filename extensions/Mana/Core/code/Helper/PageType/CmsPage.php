@@ -47,4 +47,9 @@ class Mana_Core_Helper_PageType_CmsPage extends Mana_Core_Helper_PageType  {
         );
         return array_merge(parent::getPageContent(), $result);
     }
+
+
+    public function getPageTypeId() {
+        return 'cms:' . Mage::getSingleton('cms/page')->getId();
+    }
 }
