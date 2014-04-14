@@ -12,7 +12,13 @@
  *
  */
 class Mana_Core_Block_Js extends Mage_Core_Block_Template {
-    protected $_config = array();
+    protected $_config;
+
+    protected function _construct() {
+        $this->_config = array(
+            'debug' => Mage::getStoreConfigFlag('mana/ajax/debug'),
+        );
+    }
 
     public function setConfig($key, $value) {
         $this->_config[$key] = $value;
