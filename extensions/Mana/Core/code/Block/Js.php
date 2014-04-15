@@ -16,7 +16,7 @@ class Mana_Core_Block_Js extends Mage_Core_Block_Template {
 
     protected function _construct() {
         $this->_config = array(
-            'debug' => Mage::getStoreConfigFlag('mana/ajax/debug'),
+            'debug' => Mage::app()->getStore()->isAdmin() || Mage::getStoreConfigFlag('mana/ajax/debug'),
         );
     }
 
