@@ -48,7 +48,10 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
         Mana_Core_Profiler2::start(__METHOD__);
 
         // initialize content based on current page type, applied filters etc.
-        $this->_initContent();
+        if (!$this->_initContent()) {
+            $this->_content = array();
+            return $this->_content;
+        }
         $actions = array();
 
         // search for matching rules and in all rule providers
@@ -143,15 +146,21 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
 
     protected function _initContent() {
         $this->_disposableContent = array();
-        if ($pageType = $this->coreHelper()->getPageTypeByRoutePath()) {
+        $this->_content = array();
+        if (($pageType = $this->coreHelper()->getPageTypeByRoutePath())) {
             $this->_disposableContent = $pageType->getPageContent();
+
+            $initialContent = array_merge($this->_disposableContent, $this->filterHelper()->getPageContent());
+            $this->_content = $initialContent;
+            foreach ($initialContent as $key => $value) {
+                $this->_content['initial_' . $key] = $value;
+            }
+            return true;
+        }
+        else {
+            return false;
         }
 
-        $initialContent = array_merge($this->_disposableContent, $this->filterHelper()->getPageContent());
-        $this->_content = $initialContent;
-        foreach ($initialContent as $key => $value) {
-            $this->_content['initial_' . $key] = $value;
-        }
     }
 
     /**
