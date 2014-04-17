@@ -38,6 +38,7 @@ class Mana_Filters_Resource_Filter2_Value extends Mana_Db_Resource_Object {
     const DM_CONTENT_WIDGET_LAYOUT_XML = 20;
     const DM_CONTENT_PRIORITY = 21;
     const DM_CONTENT_COMMON_DIRECTIVES = 22;
+    const DM_CONTENT_BACKGROUND_IMAGE = 23;
 
     #endregion
 

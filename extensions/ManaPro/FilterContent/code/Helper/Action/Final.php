@@ -32,6 +32,7 @@ class ManaPro_FilterContent_Helper_Action_Final extends Mage_Core_Helper_Abstrac
                 'description' => Mage::getStoreConfig('mana_filtercontent/final/description'),
                 'additional_description' => '',
                 'common_directives' => '',
+                'background_image' => '',
                 'cache_key' => 'config/final',
             );
         }

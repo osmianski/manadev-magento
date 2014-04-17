@@ -7,6 +7,10 @@
  -->
 <layout version="0.1.0">
     <catalog_category_layered>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+		</reference>
         <reference name="category.products">
             <action method="setData">
                 <key>m_filter_content_title</key>
@@ -27,6 +31,10 @@
         </reference>
     </catalog_category_layered>
     <catalogsearch_result_index>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+		</reference>
         <reference name="search.result">
             <action method="setData">
                 <key>m_filter_content_title</key>
@@ -49,6 +57,10 @@
         </reference>
     </catalogsearch_result_index>
     <cms_page_layered>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+		</reference>
         <reference name="page_content_heading">
             <action method="setData">
                 <key>m_filter_content_title</key>
@@ -71,6 +83,10 @@
         </reference>
     </cms_page_layered>
     <mana_optionpage_view>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+		</reference>
         <reference name="option_view">
             <action method="setData">
                 <key>m_filter_content_title</key>

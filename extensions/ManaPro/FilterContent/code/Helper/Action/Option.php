@@ -45,6 +45,7 @@ class ManaPro_FilterContent_Helper_Action_Option extends ManaPro_FilterContent_H
                         'description' => $action['content_description'],
                         'additional_description' => $action['content_additional_description'],
                         'common_directives' => $action['content_common_directives'],
+                        'background_image' => $action['content_background_image'],
                         'cache_key' => 'option/' . $action['option_id'],
                     );
                 }

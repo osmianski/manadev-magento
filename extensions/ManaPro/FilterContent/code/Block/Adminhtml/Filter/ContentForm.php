@@ -96,6 +96,16 @@ class ManaPro_FilterContent_Block_Adminhtml_Filter_ContentForm  extends Mana_Adm
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'content_background_image', 'image', array(
+            'name' => 'content_background_image',
+            'label' => $this->__('Background Image for Additional Description'),
+            'title' => $this->__('Background Image for Additional Description'),
+            'required' => false,
+
+            'default_bit_no' => Mana_Filters_Resource_Filter2_Value::DM_CONTENT_BACKGROUND_IMAGE,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $this->addField($fieldset, 'content_meta_title', 'textarea', array(
             'name' => 'content_meta_title',
             'label' => $this->__('Page Title'),

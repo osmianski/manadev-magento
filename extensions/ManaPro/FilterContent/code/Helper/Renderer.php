@@ -86,13 +86,13 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
                         if ($secondaryContentHelper->isContentPreProcessed() &&
                             isset($action[$secondaryContentHelper->getKey()]))
                         {
-                            $template = '{% spaceless %}<echo>' . $action[$secondaryContentHelper->getKey()] . '<echo>{% endspaceless %}';
+                            $template = '{% spaceless %}<echo>' . $secondaryContentHelper->getAction($action) . '<echo>{% endspaceless %}';
                             $mergedTemplate .= $template;
                         }
                     }
 
                     if (isset($action[$contentHelper->getKey()])) {
-                        $template = '{% spaceless %}<echo>' . $action[$contentHelper->getKey()] . '<echo>{% endspaceless %}';
+                        $template = '{% spaceless %}<echo>' . $contentHelper->getAction($action) . '<echo>{% endspaceless %}';
                         $mergedTemplate .= $template;
                     }
                 }
@@ -103,13 +103,13 @@ class ManaPro_FilterContent_Helper_Renderer extends Mage_Core_Helper_Abstract {
                         if ($secondaryContentHelper->isContentPreProcessed() &&
                             isset($action[$secondaryContentHelper->getKey()])
                         ) {
-                            $template = '{% spaceless %}<echo>' . $action[$secondaryContentHelper->getKey()] . '<echo>{% endspaceless %}';
+                            $template = '{% spaceless %}<echo>' . $secondaryContentHelper->getAction($action) . '<echo>{% endspaceless %}';
                             $mergedTemplate .= $template;
                         }
                     }
 
                     if (isset($action[$contentHelper->getKey()])) {
-                        $template = '{% spaceless %}<echo>' . $action[$contentHelper->getKey()] . '<echo>{% endspaceless %}';
+                        $template = '{% spaceless %}<echo>' . $contentHelper->getAction($action) . '<echo>{% endspaceless %}';
                         if ($i == count($actions) - 1) {
                             $mergedTemplate .= $template;
                         } else {

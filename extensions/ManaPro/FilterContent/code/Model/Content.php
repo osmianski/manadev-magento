@@ -67,6 +67,19 @@ class ManaPro_FilterContent_Model_Content {
         return $this->_key;
     }
 
+    public function getAction($action) {
+        $result = $action[$this->getKey()];
+        if ($this->getKey() == 'additional_description' && !empty($action['background_image'])) {
+            $block = $this->getLayeredDescriptionBlock();
+            $block
+                ->setData('additional_description', $action['additional_description'])
+                ->setData('background_image', $action['background_image']);
+            $result = $block->toHtml();
+        }
+        return $result;
+    }
+
+
     #region Dependencies
     /**
      * @return ManaPro_FilterContent_Helper_Renderer
@@ -94,6 +107,13 @@ class ManaPro_FilterContent_Model_Content {
      */
     public function factoryHelper() {
         return Mage::helper('manapro_filtercontent/factory');
+    }
+
+    /**
+     * @return ManaPro_FilterContent_Block_LayeredDescription
+     */
+    public function getLayeredDescriptionBlock() {
+        return Mage::getSingleton('core/layout')->getBlockSingleton('manapro_filtercontent/layeredDescription');
     }
 
     #endregion

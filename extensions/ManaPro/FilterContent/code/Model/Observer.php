@@ -182,6 +182,11 @@ class ManaPro_FilterContent_Model_Observer {
             'validation' => 'twig',
             'label' => 'Widget Layout XML',
         ),
+        'content_background_image' => array(
+            'bit' => Mana_Filters_Resource_Filter2_Value::DM_CONTENT_BACKGROUND_IMAGE,
+            'label' => 'Background Image for Additional Description',
+            'image' => true,
+        ),
     );
 	/**
 	 * Adds columns to replication update select (handles event "m_db_update_columns")
@@ -298,6 +303,21 @@ class ManaPro_FilterContent_Model_Observer {
             case 'mana_filters/filter2_value':
             case 'mana_filters/filter2_value_store':
                 foreach ($this->_fields as $field => $fieldDef) {
+                    if (!empty($fieldDef['image'])) {
+                        if ($this->coreDbHelper()->isModelContainsCustomSetting($object, $field) &&
+                            ($relativeUrl = $object->getData($field)))
+                        {
+                            if ($sourcePath = $this->fileHelper()->getFilename($relativeUrl, 'temp/image')) {
+                                $targetPath = $this->fileHelper()->getFilename($relativeUrl, 'image', true);
+                                if (file_exists($targetPath)) {
+                                    unlink($targetPath);
+                                }
+                                copy($sourcePath, $targetPath);
+                                unlink($sourcePath);
+                            }
+
+                        }
+                    }
                     if (isset($fieldDef['validation'])) {
                         switch ($fieldDef['validation']) {
                             case 'twig':
@@ -381,6 +401,20 @@ class ManaPro_FilterContent_Model_Observer {
      */
     public function getOptionResource() {
         return Mage::getResourceSingleton('manapro_filtercontent/option');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Files
+     */
+    public function fileHelper() {
+        return Mage::helper('mana_core/files');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function coreDbHelper() {
+        return Mage::helper('mana_core/db');
     }
     #endregion
 }

@@ -47,6 +47,7 @@ class ManaPro_FilterContent_Resource_Option extends Mage_Core_Model_Mysql4_Abstr
                 'content_description',
                 'content_additional_description',
                 'content_common_directives',
+                'content_background_image',
             ))
             ->joinInner(array('fs' => $this->getTable('mana_filters/filter2_store')),
                 "`fs`.`id` = `fvs`.`filter_id`", null)
