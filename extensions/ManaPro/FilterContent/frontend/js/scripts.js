@@ -25,6 +25,16 @@ function($, Block) {
             var width = this.$().width();
             this.$li().width(width);
             this.$backgroundImage().attr('width', width);
+
+            var height = 0;
+            this.$li().each(function () {
+                var h = $(this).height();
+                console.log(h);
+                if (height < h) {
+                    height = h;
+                }
+            });
+            this.$().height(height);
         }
     });
 });
