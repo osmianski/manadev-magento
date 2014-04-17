@@ -61,7 +61,8 @@ class Mana_Seo_Model_Observer {
                     }
                 }
                 if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
-                    && $areFiltersApplied || $this->_isProductListVisible()) {
+                    && ($areFiltersApplied || $this->_isProductListVisible()))
+                {
                     $toolbar = $productList->getToolbarBlock();
                     $collection = clone $productList->getLoadedProductCollection();
 

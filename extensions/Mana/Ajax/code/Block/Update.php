@@ -19,7 +19,7 @@ class Mana_Ajax_Block_Update extends Mage_Core_Block_Abstract {
         $core = Mage::helper('mana_core');
 
 		$js
-		    ->setConfig('debug', Mage::getStoreConfigFlag('mana/ajax/debug'))
+		    ->setConfig('debug', Mage::app()->getStore()->isAdmin() || Mage::getStoreConfigFlag('mana/ajax/debug'))
 		    ->setConfig('showOverlay', Mage::getStoreConfigFlag('mana/ajax/overlay'))
 		    ->setConfig('showWait', Mage::getStoreConfigFlag('mana/ajax/progress'))
 		    ->setConfig('ajax.enabled', $ajax->isEnabled())

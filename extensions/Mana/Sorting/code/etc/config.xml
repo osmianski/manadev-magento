@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Sorting>
-            <version>14.03.12.05</version>
+            <version>14.04.06.18</version>
         </Mana_Sorting>
     </modules>
     <global>
@@ -70,5 +70,29 @@
             <label>Bestsellers</label>
             <resource>mana_sorting/bestseller</resource>
         </bestsellers>
+        <most_viewed translate="label" module="Mana_Sorting">
+            <label>Most Viewed</label>
+            <resource>mana_sorting/mostViewed</resource>
+        </most_viewed>
+        <biggest_saving translate="label" module="Mana_Sorting">
+            <label>Biggest Saving</label>
+            <resource>mana_sorting/biggestSaving</resource>
+        </biggest_saving>
+        <top_rated translate="label" module="Mana_Sorting">
+            <label>Top Rated</label>
+            <resource>mana_sorting/topRated</resource>
+        </top_rated>
+        <review_count translate="label" module="Mana_Sorting">
+            <label>Review Count</label>
+            <resource>mana_sorting/reviewCount</resource>
+        </review_count>
+        <quantity translate="label" module="Mana_Sorting">
+            <label>Quantity</label>
+            <resource>mana_sorting/quantity</resource>
+        </quantity>
+        <now_in_wishlist translate="label" module="Mana_Sorting">
+            <label>Now In Wishlist</label>
+            <resource>mana_sorting/nowInWishlist</resource>
+        </now_in_wishlist>
     </mana_sorting>
 </config>

@@ -269,7 +269,7 @@ Mana.define('Mana/Core/Config', ['jquery'], function ($) {
     return Mana.Object.extend('Mana/Core/Config', {
         _init: function () {
             this._data = {
-                debug: true,
+                debug: false,
                 showOverlay: true,
                 showWait: true
             };
