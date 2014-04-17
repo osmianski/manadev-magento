@@ -1,0 +1,35 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Option_View */
+$_optionPage = $this->getOptionPage();
+$_filesHelper = $this->filesHelper();
+$_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+$_description = $_optionPage->getData('description');
+?>
+<div class="page-title category-title m-option-page-title">
+    <h1><?php echo $_escapedTitle ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php if (($_imgUrl = $_optionPage->getData('image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
+    <p class="category-image m-attribute-page-image">
+        <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
+            <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_optionPage->getData('image_width'), $_optionPage->getData('image_height')) ?> />
+    </p>
+<?php endif; ?>
+<?php if ($_description && $_optionPage->getData('description_position') == 'top'): ?>
+    <div class="category-description m-option-page-description std">
+        <?php echo $_description ?>
+    </div>
+<?php endif; ?>
+<?php echo $this->getChildHtml('product_list') ?>
+<?php if ($_description && $_optionPage->getData('description_position') == 'bottom'): ?>
+    <div class="category-description m-option-page-description std">
+        <?php echo $_description ?>
+    </div>
+<?php endif; ?>

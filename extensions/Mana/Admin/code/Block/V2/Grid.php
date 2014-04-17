@@ -64,7 +64,8 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
         }
 
         if ($this->getEdit()) {
-            $block['edit'] = $this->jsonHelper()->encodeAttribute($this->getEdit());
+            $block['edit'] = $this->jsonHelper()->encodeAttribute($this->getEdit(),
+                array('force_object' => array('pending' => true, 'saved' => true, 'deleted' => true)));
         }
         $this->setData('m_client_side_block', $block);
 

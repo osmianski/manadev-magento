@@ -1,7 +1,11 @@
-#nav > li.active { padding-top: 8px; background: #efefef url(../images/nav_active_top.png) 0 0 repeat-x; position: relative; bottom: 6px; }
+#nav > li.active { padding-top: 8px; background: #efefef url(../images/nav_active_top.png) 0 0 repeat-x; position: relative; bottom: 4px; }
 #nav > li.active:before,
 #nav > li.active:after { content:""; display: block; width: 15px; height: 37px; background: transparent url(../images/nav_active_right.png) 0 0 no-repeat; position: absolute; right:-15px; top:0; }
 #nav > li.active:before { right:auto; left:-15px; background: transparent url(../images/nav_active_left.png) 0 0 no-repeat; }
+
+.nav-border-left,
+.nav-border-right { bottom:24px;}
+
 
 .form-search input.input-text { height:16px; }
 .form-language { margin-right: 5px; }

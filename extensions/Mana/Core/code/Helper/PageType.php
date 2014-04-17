@@ -21,4 +21,8 @@ abstract class Mana_Core_Helper_PageType extends Mage_Core_Helper_Abstract {
     public function matchRoute($route) {
         return $route == $this->getRoutePath();
     }
+
+    public function isProductListVisible() {
+        return true;
+    }
 }

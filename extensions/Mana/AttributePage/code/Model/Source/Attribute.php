@@ -11,28 +11,33 @@
  */
 class Mana_AttributePage_Model_Source_Attribute extends Mana_Core_Model_Source_Abstract {
     protected function _getAllOptions() {
-        /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
-        $collection = Mage::getResourceModel('catalog/product_attribute_collection')
-            ->setItemObjectClass('catalog/resource_eav_attribute');
-        $db = $collection->getConnection();
-
-        $select = $collection->getSelect();
-        $select
-            ->distinct(true)
-            ->reset('columns')
-            ->columns(array('main_table.attribute_id', 'main_table.frontend_label'))
-            ->where(sprintf('(%s) OR (%s) OR (%s)',
-                $db->quoteInto('main_table.backend_model = ?', 'eav/entity_attribute_backend_array'),
-                $db->quoteInto('main_table.source_model = ?', 'eav/entity_attribute_source_table'),
-                $db->quoteInto("main_table.frontend_input = ? AND main_table.source_model IS NOT NULL", 'select')
-            ))
-            ->order('main_table.frontend_label ASC');
-
         $result = array(array('value' => '', 'label' => ''));
-        foreach ($db->fetchPairs($select) as $value => $label) {
+        $data = $this->getAttributeResource()->getAttributes(Mana_AttributePage_Resource_Attribute::FIELDS_LABEL);
+        foreach ($data as $value => $label) {
             $result[] = array('value' => $value, 'label' => $label);
         }
 
         return $result;
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+    /**
+     * @return Mana_AttributePage_Resource_Attribute
+     */
+    public function getAttributeResource() {
+        return Mage::getResourceSingleton('mana_attributepage/attribute');
+    }
+    #endregion
 }

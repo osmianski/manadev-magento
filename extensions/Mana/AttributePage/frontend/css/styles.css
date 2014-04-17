@@ -1,0 +1,19 @@
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+
+.m-featured-image { float: left; width: auto; }
+.m-featured-image a { display: block; }
+
+.m-alpha-pager { width: 20px; float: left; }
+
+li.category-image.m-option-page-image{ float: left; display: block; width: auto; margin: 3px; }
+li.category-image.m-option-page-image a { float: left; }
+
+.m-option-featured-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+.m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+.m-option-page-product:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }

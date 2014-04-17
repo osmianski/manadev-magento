@@ -25,7 +25,13 @@ class Mana_Filters_Model_Solr_Adapter_HttpStream extends Enterprise_Search_Model
             foreach ($filters as $field => $value) {
                 if (is_array($value)) {
                     if (isset($value['from']) || isset($value['to'])) {
-                        $fieldCondition = $this->_mRenderRangeCondition($field, $value);
+                        if ($this->coreHelper()->startsWith($field, 'min-max:')) {
+                            list($minField, $maxField) = explode(',', substr($field, strlen('min-max:')));
+                            $fieldCondition = $this->_mRenderMinMaxRangeCondition($minField, $maxField, $value);
+                        }
+                        else {
+                            $fieldCondition = $this->_mRenderRangeCondition($field, $value);
+                        }
                     }
                     elseif (isset($value['or'])) {
                         $fieldCondition = '(' . implode(' OR ', $this->_mRenderCondition($field, $value['or'])) . ')';
@@ -56,7 +62,12 @@ class Mana_Filters_Model_Solr_Adapter_HttpStream extends Enterprise_Search_Model
         $fieldCondition = array();
         foreach ($parts as $part) {
             if (is_array($part) && (isset($part['from']) || isset($part['to']))) {
-                $fieldCondition[] = $this->_mRenderRangeCondition($field, $part);
+                if ($this->coreHelper()->startsWith($field, 'min-max:')) {
+                    list($minField, $maxField) = explode(',', substr($field, strlen('min-max:')));
+                    $fieldCondition[] = $this->_mRenderMinMaxRangeCondition($minField, $maxField, $part);
+                } else {
+                    $fieldCondition[] = $this->_mRenderRangeCondition($field, $part);
+                }
             } else {
                 $fieldCondition[] = $this->_mRenderEqCondition($field, $part);
             }
@@ -74,6 +85,13 @@ class Mana_Filters_Model_Solr_Adapter_HttpStream extends Enterprise_Search_Model
                 ? $this->_prepareFilterQueryText($part['to'])
                 : '*';
         return "$field:[$from TO $to]";
+    }
+
+    protected function _mRenderMinMaxRangeCondition($minField, $maxField, $part) {
+        $from = $this->_prepareFilterQueryText($part['from']);
+        $to = $this->_prepareFilterQueryText($part['to']);
+
+        return "($minField:[$from TO *] OR $maxField:[$from TO *]) AND ($minField:[* TO $to] OR $minField:[* TO $to])";
     }
 
     protected function _mRenderRangeConditionEx($field, $part)
@@ -122,4 +140,25 @@ class Mana_Filters_Model_Solr_Adapter_HttpStream extends Enterprise_Search_Model
         $part = $this->_prepareFilterQueryText($part);
         return $this->_prepareFieldCondition($field, $part);
     }
+
+    protected function _prepareFacetConditions($facetFields) {
+        $result = parent::_prepareFacetConditions($facetFields);
+        if (isset($result['facet']) && $result['facet'] == 'on' &&
+            ($limit = Mage::getStoreConfig('mana_filters/general/solr_limit')) &&
+            is_numeric($limit))
+        {
+            $result['facet.limit'] = (int)$limit;
+        }
+        return $result;
+    }
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    #endregion
 }

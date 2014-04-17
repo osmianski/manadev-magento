@@ -66,18 +66,31 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
 		$second = substr($hash, strlen($hash) - 1);
 		$resultTemplate = "$first/$second/{$fileinfo['filename']}%s.{$fileinfo['extension']}";
 		$checkTemplate = $this->getFileName($resultTemplate, $type, true);
-		if (!file_exists(sprintf($checkTemplate, ''))) {
+		if (!$this->_fileExists(sprintf($checkTemplate, ''))) {
 			return sprintf($resultTemplate, '');
 		}
 		$i = 1;
 		while (true) {
-			if (!file_exists(sprintf($checkTemplate, '-'.$i))) {
+			if (!$this->_fileExists(sprintf($checkTemplate, '-'.$i))) {
 				return sprintf($resultTemplate, '-'.$i);
 			}
 			$i++;
 		}
 	}
 
+    protected function _fileExists($filename) {
+        $filename = str_replace('\\', '/', $filename);
+        if (file_exists($filename)) {
+            return true;
+        }
+        if (($pos = strpos($filename, '/m-temp/')) !== false) {
+            $filename = substr($filename, 0, $pos) . '/m-' . substr($filename, $pos + strlen('/m-temp/'));
+            return file_exists($filename);
+        }
+        else {
+            return false;
+        }
+    }
     public function walkRecursively($dir, $callback) {
         if (file_exists($dir)) {
             $this->_walkRecursively($dir, $callback);
@@ -99,6 +112,33 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
                         $this->_walkRecursively($filename, $callback);
                     }
                 }
+            }
+        }
+    }
+
+    public function shouldRenderImage($relativeUrl) {
+        return $this->getFilename($relativeUrl, 'image') !== false;
+    }
+    public function renderImageAttributes($relativeUrl, $width, $height) {
+        if ($filename = $this->getFilename($relativeUrl, 'image')) {
+            if ($width || $height) {
+                $processor = new Varien_Image($filename);
+                $newRelativeUrl = 'w'.($width ? $width : 'x').'h'.($height ? $height : 'x').'/'.$relativeUrl;
+                if (!$width) {
+                    $width = $processor->getOriginalWidth();
+                }
+                if (!$height) {
+                    $height = $processor->getOriginalHeight();
+                }
+                $processor->keepAspectRatio(true);
+                $processor->resize($width, $height);
+                $processor->save($this->getFilename($newRelativeUrl, 'image', true));
+                return "src=\"{$this->getUrl($newRelativeUrl, 'image')}\" ".
+                    "width=\"{$processor->getOriginalWidth()}\" ".
+                    "height=\"{$processor->getOriginalHeight()}\"";
+            }
+            else {
+                return "src=\"{$this->getUrl($relativeUrl, 'image')}\"";
             }
         }
     }

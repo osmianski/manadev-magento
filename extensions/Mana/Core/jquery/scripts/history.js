@@ -1631,7 +1631,8 @@
 				var currentHash	= History.getHash();
 				if ( currentHash ) {
 					// Expand Hash
-					var currentState = History.extractState(currentHash||document.location.href,true);
+					// MANAdev fix for compatibility with prettyPhoto.js
+					var currentState = false;//History.extractState(currentHash||document.location.href,true);
 					if ( currentState ) {
 						// We were able to parse it, it must be a State!
 						// Let's forward to replaceState

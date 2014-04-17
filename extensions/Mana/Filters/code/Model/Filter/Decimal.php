@@ -251,6 +251,10 @@ class Mana_Filters_Model_Filter_Decimal
     public function getRemoveUrl()
     {
         $query = array($this->getRequestVar() => $this->getResetValue());
+        if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+            $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getRequestVar());
+        }
+
         $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
@@ -356,22 +360,31 @@ class Mana_Filters_Model_Filter_Decimal
     protected $_isMinMaxCalculated = false;
     protected $_minMax;
 
+    public function getDecimalMinMax() {
+        /* @var $query Mana_Filters_Model_Query */
+        $query = $this->getQuery();
+        $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode());
+        $minMax = $queryResult;
+        if (!$minMax['min'] && !($minMax['max']) && $this->_getIsFilterable() == 2) {
+            $rootCategory = Mage::getModel('catalog/category')
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load(Mage::app()->getStore()->getRootCategoryId());
+            $currentCategory = $this->getLayer()->getCurrentCategory();
+            $this->getLayer()->setCurrentCategory($rootCategory);
+            $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode(), false,
+                $this->getLayer()->getProductCollection(), false);
+            $this->getLayer()->setCurrentCategory($currentCategory);
+            $minMax = $queryResult;
+            $minMax['hasNoResults'] = true;
+        }
+        return $minMax;
+    }
+
     protected function _calculateMinMax() {
         if (!$this->_isMinMaxCalculated) {
-            /* @var $query Mana_Filters_Model_Query */
-            $query = $this->getQuery();
-            $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode());
-            $this->_minMax = $queryResult;
-            if (!$this->_minMax['min'] && !($this->_minMax['max']) && $this->_getIsFilterable() == 2) {
-                $rootCategory = Mage::getModel('catalog/category')
-                    ->setStoreId(Mage::app()->getStore()->getId())
-                    ->load(Mage::app()->getStore()->getRootCategoryId());
-                $currentCategory = $this->getLayer()->getCurrentCategory();
-                $this->getLayer()->setCurrentCategory($rootCategory);
-                $queryResult = $query->getFilterRange($this->getFilterOptions()->getCode(), false,
-                    $this->getLayer()->getProductCollection(), false);
-                $this->getLayer()->setCurrentCategory($currentCategory);
-                $this->_minMax = $queryResult;
+            $this->_minMax = $this->getDecimalMinMax();
+            if (!empty($this->_minMax['hasNoResults'])) {
+                unset($this->_minMax['hasNoResults']);
                 $this->_hasNoResults = true;
             }
             $this->_isMinMaxCalculated = true;
@@ -440,5 +453,22 @@ class Mana_Filters_Model_Filter_Decimal
     public function isUpperBoundInclusive() {
         return $this->_getResource()->isUpperBoundInclusive();
     }
+    #endregion
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
     #endregion
 }

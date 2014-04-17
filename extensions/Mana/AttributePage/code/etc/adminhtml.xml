@@ -14,14 +14,17 @@
                 <attributepage translate="title" module="mana_attributepage">
                     <title>Attribute Pages</title>
                     <sort_order>500</sort_order>
-                    <children>
-                        <new translate="title" module="mana_attributepage">
-                            <title>Add</title>
-                            <action>adminhtml/mana_attribute_page/new</action>
-                            <sort_order>100</sort_order>
-                        </new>
-                    </children>
+                    <action>adminhtml/mana_attributePage/</action>
                 </attributepage>
+                <system_configuration>
+                    <children>
+                        <mana_attributepage translate="title" module="mana_attributepage">
+                            <title>Attribute and Option Pages</title>
+                            <action>adminhtml/system_config/edit/section/mana_attributepage</action>
+                            <sort_order>900</sort_order>
+                        </mana_attributepage>
+                    </children>
+                </system_configuration>
 			</children>
 		</mana>
 	</menu>
@@ -35,19 +38,28 @@
 								<title>Attribute Pages</title>
 		                        <sort_order>500</sort_order>
 							</attributepage>
-						</children>
-					</mana>
-                    <!--<system>
-                        <children>
-                            <config>
+							<system_configuration>
                                 <children>
                                     <mana_attributepage translate="title" module="mana_attributepage">
-                                        <title>MANAdev Attribute Pages</title>
+                                        <title>Attribute and Option Pages</title>
+                                        <sort_order>900</sort_order>
                                     </mana_attributepage>
                                 </children>
-                            </config>
-                        </children>
-                    </system>-->
+							</system_configuration>
+						</children>
+					</mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana_attributepage translate="title" module="mana_attributepage">
+										<title>MANAdev Attribute and Option Pages</title>
+                                        <sort_order>50900</sort_order>
+                                    </mana_attributepage>
+								</children>
+							</config>
+						</children>
+					</system>
                 </children>
 			</admin>
 		</resources>

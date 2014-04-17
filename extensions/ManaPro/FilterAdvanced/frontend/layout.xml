@@ -42,4 +42,12 @@ examples on what kind of actions can be applied to referenced blocks.
             <block type="manapro_filteradvanced/actions" name="m_filter_actions" template="manapro/filteradvanced/actions.phtml" />
 		</reference>
     </cms_page_layered>
+    <mana_optionpage_view>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/manapro_filteradvanced.css</stylesheet></action>
+        </reference>
+		<reference name="root">
+            <block type="manapro_filteradvanced/actions" name="m_filter_actions" template="manapro/filteradvanced/actions.phtml" />
+		</reference>
+    </mana_optionpage_view>
 </layout>

@@ -48,8 +48,10 @@ class Mana_Seo_Model_Observer {
                 $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true,
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
+                $areFiltersApplied = false;
                 foreach (array_keys($query) as $key) {
                     if (in_array($key, $this->_getFilterCodes())) {
+                        $areFiltersApplied = true;
                         if (!$schema->getCanonicalFilters()) {
                             $query[$key] = null;
                         }
@@ -58,7 +60,9 @@ class Mana_Seo_Model_Observer {
                         $query[$key] = null;
                     }
                 }
-                if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))) {
+                if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
+                    && ($areFiltersApplied || $this->_isProductListVisible()))
+                {
                     $toolbar = $productList->getToolbarBlock();
                     $collection = clone $productList->getLoadedProductCollection();
 
@@ -169,6 +173,18 @@ class Mana_Seo_Model_Observer {
         );
         $head->setData('items', $items);
     }
+
+    protected function _isProductListVisible() {
+        $routePath = $this->coreHelper()->getRoutePath();
+        foreach (array_keys($this->coreHelper()->getPageTypes()) as $key) {
+            $pageType = $this->coreHelper()->getPageType($key);
+            if ($routePath == $pageType->getRoutePath()) {
+                return $pageType->isProductListVisible();
+            }
+        }
+        return false;
+    }
+
 
     #region Dependencies
 

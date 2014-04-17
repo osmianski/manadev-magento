@@ -122,7 +122,7 @@ class Mana_Filters_Resource_Filter2_Value_Store extends Mana_Filters_Resource_Fi
 			->joinLeft(array('store_option_value' => Mage::getSingleton('core/resource')->getTableName('eav/attribute_option_value')),
 				'store_option_value.option_id = eav_attribute_option.option_id AND store_option_value.store_id = core_store.store_id', null)
 			->joinLeft(array('target' => Mage::getSingleton('core/resource')->getTableName($this->getEntityName())), 
-				'target.global_id = global.id AND target.store_id = core_store.store_id', null) 
+				'target.global_id = global.id AND target.store_id = core_store.store_id', null)
 			->distinct()
 			->where('core_store.store_id <> 0')
 			->where('global.edit_status = 0')
@@ -168,4 +168,8 @@ class Mana_Filters_Resource_Filter2_Value_Store extends Mana_Filters_Resource_Fi
 		$object->setName($values['name']);
 		$object->setPosition($values['position']);
 	}
+
+    public function loadByFilterPosition($object, $filterId, $position) {
+        throw new Exception('Not implemented');
+    }
 }

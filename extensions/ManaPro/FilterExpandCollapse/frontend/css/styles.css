@@ -14,5 +14,7 @@
 /********************************/
 /* dropdown menu in left column */
 /********************************/
-.block-layered-nav dl { position: relative; }
+.block-layered-nav dl { position: relative; zoom: 1; left: 0; top: 0; }
+.block-layered-nav dt.m-dropdown-menu { cursor: pointer; }
 .block-layered-nav dd.m-dropdown-menu { position: absolute; background: #e7f1f4; z-index: 1; padding: 5px 5px 10px 5px; }
+

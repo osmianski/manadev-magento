@@ -37,7 +37,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     protected $_parsedUrls;
 
-    protected $_allSuffixes;
+    protected $_allSuffixes = array();
 
     protected $_suffixesByPageType = array();
 
@@ -50,6 +50,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
     protected $_toolbarLimits = array('all');
     protected $_toolbarModes = array('grid', 'list');
     protected $_toolbarOrders;
+
+    public function __construct() {
+        if ($additionalToolbarModes = Mage::getStoreConfig('mana/seo/additional_toolbar_modes')) {
+            $this->_toolbarModes = array_merge($this->_toolbarModes, explode(',', $additionalToolbarModes));
+        }
+    }
 
     #region Facade
 
@@ -432,7 +438,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $unSuffixedToken = clone $token;
             $unSuffixedToken
                 ->setSuffix($suffix)
-                ->setTextToBeParsed($mbstring->substr($text, 0, $mbstring->strlen($text) - $mbstring->strlen($suffix)));
+                ->setTextToBeParsed($suffix != '/' || $mbstring->endsWith($text, '/')
+                    ? $mbstring->substr($text, 0, $mbstring->strlen($text) - $mbstring->strlen($suffix))
+                    : $text);
 
             $this->_activate($unSuffixedToken, $active);
             $tokens[$suffix] = $unSuffixedToken;
@@ -458,6 +466,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $separatorLength = $mbstring->strlen($separator);
         while ($pos !== false) {
             if (($nextPos = $mbstring->strpos($text, $separator, $pos)) !== false) {
+                if ($nextPos < $pos) {
+                    break;
+                }
                 if ($nextPos === 0) {
                     $pos = $separatorLength;
                 }
@@ -471,7 +482,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     if ($single) {
                         return $clonedToken;
                     }
-                    $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
+                    $tokens[$this->unaccent($clonedToken->getText())] = $clonedToken;
                     $pos = $nextPos + $separatorLength;
                 }
             }
@@ -485,7 +496,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 if ($single) {
                     return $clonedToken;
                 }
-                $tokens[$this->coreHelper()->unaccent($clonedToken->getText())] = $clonedToken;
+                $tokens[$this->unaccent($clonedToken->getText())] = $clonedToken;
 
                 $pos = $nextPos;
             }
@@ -613,7 +624,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return string[]
      */
     protected function _getAllSuffixes($token) {
-        if (!$this->_allSuffixes) {
+        if (!isset($this->_allSuffixes[$token->getTextToBeParsed()])) {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -629,9 +640,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $historyType[$type] = $type;
             }
 
-            $this->_allSuffixes = $this->_getSuffixes($token, $current, $historyType);
+            $this->_allSuffixes[$token->getTextToBeParsed()] = $this->_getSuffixes($token, $current, $historyType);
         }
-        return $this->_allSuffixes;
+        return $this->_allSuffixes[$token->getTextToBeParsed()];
     }
 
     protected function _getSuffixesByType($token, $pageType) {
@@ -704,6 +715,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
         /* @var $collection Mana_Seo_Resource_Url_Collection */
         $collection = $dbHelper->getResourceModel('mana_seo/url_collection');
+        $select = $collection->getSelect();
+        $connection = $collection->getConnection();
+
+        $accentSensitive = $this->_schema->getData('accent_insensitive')
+            ? ''
+            : ' COLLATE utf8_bin';
         $collection
             ->setSchemaFilter($this->_schema)
             ->addTypeFilter($type)
@@ -713,15 +730,17 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                     Mana_Seo_Model_Url::STATUS_OBSOLETE
                 )
             ));
-        $collection->getSelect()->order('status');
+        $select->order('status');
         if ($tokens !== false) {
             $keys = array();
             foreach (array_keys($tokens) as $key) {
-                $keys[] = is_numeric($key)
+                $keys[] = $connection->quoteInto("(main_table.final_url_key = ?{$accentSensitive})", is_numeric($key)
                     ? new Zend_Db_Expr("'$key'")
-                    : new Zend_Db_Expr($collection->getConnection()->quote($key));
+                    : new Zend_Db_Expr($connection->quote($key)));
             }
-            $collection->addFieldToFilter('final_url_key', array('in' => $keys));
+            //$collection->addFieldToFilter('final_url_key', array('in' => $keys));
+            $select->where(implode(' OR ', $keys));
+
         }
         return $collection;
     }
@@ -730,7 +749,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @param Mana_Seo_Model_ParsedUrl[][] | bool $tokens
      * @return Mana_Seo_Model_ParsedUrl[] | bool
      */
-    protected function _getPageUrlKeysAndRemoveSuffixes($tokens) {
+    protected function _getPageUrlKeysAndRemoveSuffixes(&$tokens) {
         if (!$tokens) {
             return false;
         }
@@ -781,7 +800,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             $urlCollection->addFieldToFilter('attribute_id', $attributeId);
         }
         foreach ($urls as $url) {
-            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
             if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
                 $conflictingToken = $result[$finalUrlKey];
@@ -857,7 +876,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $urlCollection->addParentCategoryFilter($token->getCategoryPath());
 
         foreach ($urls as $url) {
-            $finalUrlKey = $this->coreHelper()->unaccent($url->getFinalUrlKey());
+            $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
             if (isset($result[$finalUrlKey])) {
                 /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
                 $conflictingToken = $result[$finalUrlKey];
@@ -897,6 +916,16 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 ->joinInner(array('ca' => $res->getTableName('catalog/eav_attribute')),
                     "`ca`.`attribute_id` = `a`.`attribute_id` AND `ca`.`used_for_sort_by` = 1", null));
             $this->_toolbarOrders[] = 'position';
+            $this->_toolbarOrders[] = 'relevance';
+            if ($additionalToolbarOrders = Mage::getStoreConfig('mana/seo/additional_toolbar_orders')) {
+                $this->_toolbarOrders = array_merge($this->_toolbarOrders, explode(',', $additionalToolbarOrders));
+            }
+
+            $obj = new Varien_Object();
+            $obj->setData('orders', $this->_toolbarOrders);
+            Mage::dispatchEvent('m_toolbar_orders', compact('obj'));
+            $this->_toolbarOrders = $obj->getData('orders');
+
         }
         return $this->_toolbarOrders;
     }
@@ -1009,7 +1038,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $core = Mage::helper('mana_core');
 
         $isSlider = $core->isManadevLayeredNavigationInstalled() &&
-            in_array($token->getParameterUrl()->getFilterDisplay(), array('slider', 'range'));
+            in_array($token->getParameterUrl()->getFilterDisplay(), array('slider', 'range', 'min_max_slider'));
         if ($this->_schema->getUseRangeBounds() || $isSlider) {
             $from = 0 + $from;
             $to = 0 + $to;
@@ -1348,6 +1377,12 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     public function logger() {
         return Mage::helper('mana_core/logger');
+    }
+
+    protected function unaccent($s) {
+        return $this->_schema->getData('accent_insensitive')
+            ? $this->coreHelper()->unaccent($s)
+            : $s;
     }
     #endregion
 }

@@ -13,7 +13,7 @@
 ;
 Mana.define('Mana/LayeredNavigation/AjaxInterceptor', ['jquery', 'singleton:Mana/Core/Ajax',
     'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout'],
-function($, ajax, config, layout)
+function($, ajax, config, layout, undefined)
 {
     return Mana.Object.extend('Mana/LayeredNavigation/AjaxInterceptor', {
         _getBaseUrl: function(url) {
@@ -21,10 +21,11 @@ function($, ajax, config, layout)
                 ? config.getData('url.base')
                 : config.getData('url.secureBase');
         },
-        _isProductListToolbarClicked: function(element) {
+        _isProductListToolbarClicked: function (element) {
             return element !== undefined && (
                 $(element).parents().hasClass('mb-category-products') ||
-                    $(element).parents().hasClass('mb-cms-products')
+                    $(element).parents().hasClass('mb-cms-products') ||
+                    $(element).parents().hasClass('mb-search-result')
                 );
         },
         match: function (url, element) {
@@ -88,16 +89,34 @@ function($, ajax, config, layout)
         },
         intercept: function (url, element) {
             var isProductListToolbarClicked = this._isProductListToolbarClicked(element);
+            var parser = document.createElement('a');
+            parser.href = url;
+            if (window._gaq !== undefined) {
+                window._gaq.push(['_setAccount', config.getData('ga.account')]);
+                window._gaq.push(['_trackPageview', url.substring(parser.protocol.length + parser.hostname.length + 2)]);
+            }
+            if (window.ga !== undefined) {
+                window.ga('send', 'pageview', {'page': url.substring(parser.protocol.length + parser.hostname.length + 2)});
+            }
+
+            var encodedUrl = url;
             url = decodeURIComponent(url);
+
+            var encodedQueryPos = encodedUrl.indexOf('?'), queryPos = url.indexOf('?');
+            if (encodedQueryPos != -1 && queryPos != -1) {
+                url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
+            }
+
             url = this._getBaseUrl(url) + config.getData('layeredNavigation.ajax.urlKey') +
                 '/' + config.getData('ajax.currentRoute') +
-                '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' + url.substr(this._getBaseUrl(url).length);
+                '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' +
+                url.substr(this._getBaseUrl(url).length);
 
             ajax.get(url, function (response) {
                 ajax.update(response);
                 layout.getPageBlock().resize();
 
-                if ($('#nav')) {
+                if ($('#nav') && typeof mainNav != 'undefined') {
                     mainNav("nav", {"show_delay": "100", "hide_delay": "100"});
                 }
 
@@ -106,7 +125,10 @@ function($, ajax, config, layout)
                     $.each(response.blocks, function (blockName) {
                         var block = layout.getBlock(blockName);
                         if (block) {
-                            offset = block.$().offset().top;
+                            var blockOffset = block.$().offset().top;
+                            if (offset == -1 || offset >= blockOffset) {
+                                offset = blockOffset;
+                            }
                         }
                     });
                     if (offset >= 0) {
@@ -118,7 +140,7 @@ function($, ajax, config, layout)
                         scroll(0, offset);
                     }
                 }
-            });
+            }, { preventClicks: true, encode: queryPos != -1 ? { offset: 0, length : queryPos} : undefined });
         }
     });
 });

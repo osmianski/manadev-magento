@@ -12,7 +12,7 @@
 		<ManaPro_FilterColors>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.09.23.17</version>
+		    <version>14.03.14.17</version>
 		</ManaPro_FilterColors>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -250,12 +250,12 @@
 	<default>
 		<mana_filters>
 			<colors>
-				<image_width>60</image_width>
-				<image_height>30</image_height>
-				<image_border_radius>2</image_border_radius>
-                <state_width>20</state_width>
+				<image_width>20</image_width>
+				<image_height>20</image_height>
+				<image_border_radius>0</image_border_radius>
+                <state_width>10</state_width>
                 <state_height>10</state_height>
-                <state_border_radius>1</state_border_radius>
+                <state_border_radius>10</state_border_radius>
 			</colors>
 		</mana_filters>
 	</default>
@@ -276,7 +276,9 @@
 					<reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
 					<template>manapro/filtercolors/horizontal.phtml</template><!-- PHTML to be rendered -->
 					<sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
-				</colors>
+                    <popup_class>Mana/LayeredNavigation/Popup/Color</popup_class>
+                    <color_state_display>color</color_state_display>
+                </colors>
                 <colors_vertical translate="title" module="manapro_filtercolors">
                     <title>Colors and Images (Vertical)</title><!-- this one is displayed in admin -->
                     <block>manapro_filtercolors/filter</block>
@@ -290,6 +292,7 @@
                     <template>manapro/filtercolors/vertical.phtml</template><!-- PHTML to be rendered -->
                     <sort_order>300</sort_order><!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/Color</popup_class>
+                    <color_state_display>color</color_state_display>
                 </colors_vertical>
                 <colors_label translate="title" module="manapro_filtercolors">
                     <title>Colors and Images (with Labels)</title>
@@ -305,8 +308,42 @@
                     <template>manapro/filtercolors/label.phtml</template> <!-- PHTML to be rendered -->
                     <sort_order>300</sort_order> <!-- Position in "Display as" list. The item with least position is the default one. -->
                     <popup_class>Mana/LayeredNavigation/Popup/ColorWithLabel</popup_class>
+                    <color_state_display>color_label</color_state_display>
                 </colors_label>
+                <colors_label_one translate="title" module="manapro_filtercolors">
+                    <title>Colors and Images with Labels (One Item Can Be Selected At A Time) </title>
+                    <!-- this one is displayed in admin -->
+                    <block>manapro_filtercolors/filter</block>
+                    <model>mana_filters/filter_attribute</model>
+                    <solr_model>mana_filters/solr_attribute</solr_model>
+                    <solr_and_model>mana_filters/solr_and_attribute</solr_and_model>
+                    <solr_reverse_model>mana_filters/solr_reverse_attribute</solr_reverse_model>
+                    <resource>mana_filters/filter_attribute</resource>
+                    <and_resource>mana_filters/filter_and_attribute</and_resource>
+                    <reverse_resource>mana_filters/filter_reverse_attribute</reverse_resource>
+                    <template>manapro/filtercolors/label_one.phtml</template>
+                    <sort_order>300</sort_order>
+                    <popup_class>Mana/LayeredNavigation/Popup/ColorOne</popup_class>
+                    <color_state_display>color_label</color_state_display>
+                </colors_label_one>
             </attribute>
 		</display>
+		<color_state_display>
+            <label translate="title" module="manapro_filtercolors">
+                <title>Label</title>
+                <template />
+                <sort_order>100</sort_order>
+            </label>
+            <color translate="title" module="manapro_filtercolors">
+                <title>Color and Image</title>
+                <template>manapro/filtercolors/state.phtml</template>
+                <sort_order>200</sort_order>
+            </color>
+            <color_label translate="title" module="manapro_filtercolors">
+                <title>Color, Image and Label</title>
+                <template>manapro/filtercolors/state_label.phtml</template>
+                <sort_order>300</sort_order>
+            </color_label>
+		</color_state_display>
 	</mana_filters>
 </config>

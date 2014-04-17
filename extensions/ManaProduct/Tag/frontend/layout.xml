@@ -22,9 +22,5 @@ examples on what kind of actions can be applied to referenced blocks.
         <reference name="head">
 			<action method="addCss"><stylesheet>css/manaproduct_tag.css</stylesheet></action>
         </reference>
-        <reference name="root">
-            <block type="manaproduct_tag/before" name="m_product_before_image" />
-            <block type="manaproduct_tag/after" name="m_product_after_image" />
-        </reference>
     </default>
 </layout>

@@ -122,12 +122,23 @@
         };
         var _updateOrderRequest = $.extend({}, _emptyUpdateOrderRequest);
 
+        $(document).bind('m-ajax-before', function (e, selectors, url, reserved, options) {
+            if (options.showManaCheckoutWait) {
+                _updatingOrderDetails = true;
+                _showUpdatingAnimation();
+            }
+        });
+        $(document).bind('m-ajax-after', function (e, selectors, url, reserved, options) {
+            if (options.showManaCheckoutWait) {
+                _updatingOrderDetails = false;
+                _hideUpdatingAnimation();
+            }
+        });
+
         function _updateOrderDetails() {
             if (_updatingOrderDetails) {
                 return;
             }
-            _updatingOrderDetails = true;
-            _showUpdatingAnimation();
             var request = $.extend({}, _updateOrderRequest);
             _updateOrderRequest = $.extend({}, _emptyUpdateOrderRequest);
             var url = $.options('.m-checkout').updateOrderUrl;
@@ -138,8 +149,6 @@
                 url += 'vat=' + request.checkVat;
             }
             ajax.get(url, function (response) {
-                _updatingOrderDetails = false;
-                _hideUpdatingAnimation();
                 ajax.update(response);
                 if (response.vat) {
                     if (!$('.billing-vat input').val().trim()) {
@@ -194,7 +203,7 @@
                 if (!isRequestEmpty) {
                     _updateOrderDetails();
                 }
-            }, {showWait: false});
+            }, {showWait: false, showManaCheckoutWait: true});
         }
 
         $(function () {

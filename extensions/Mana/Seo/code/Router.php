@@ -47,20 +47,33 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     : array()));
 
             if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK) {
-                if (rawurldecode($urlModel->getRoutePath()) == $path) {
+                if (!$this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId())
+                        ->getRedirectParameterOrder() ||
+                    rawurldecode($urlModel->getRoutePath()) == $path)
+                {
+                    Mage::register('m_temporary_query_parameters', $parsedUrl->getQueryParameters());
                     $routerHelper
                         ->changePath($parsedUrl->getPageUrlKey() . $parsedUrl->getSuffix())
                         ->forward($parsedUrl->getRoute(), $request,
-                            array_merge($request->getParams(), $parsedUrl->getImplodedParameters()),
+                            array_merge($request->getUserParams(), $parsedUrl->getImplodedParameters()),
                             array_merge($_GET, $parsedUrl->getImplodedQueryParameters()));
+
+                    // invoke CMS router before Standard Router
+                    if (($cmsRouter = $front->getRouter('cms'))) {
+                        return $cmsRouter->match($request);
+                    }
                 }
                 else {
-                    $front->getResponse()->setRedirect($url);
+                    $front->getResponse()->setRedirect($url, 301);
                     $request->setDispatched(true);
                 }
             }
+            elseif ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE) {
+                $front->getResponse()->setRedirect($url, 301);
+                $request->setDispatched(true);
+            }
             elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
-                $front->getResponse()->setRedirect($url);
+                $front->getResponse()->setRedirect($url, 301);
                 $request->setDispatched(true);
             }
         }
@@ -74,6 +87,13 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
     }
     #endregion
 }

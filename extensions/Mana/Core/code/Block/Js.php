@@ -12,7 +12,13 @@
  *
  */
 class Mana_Core_Block_Js extends Mage_Core_Block_Template {
-    protected $_config = array();
+    protected $_config;
+
+    protected function _construct() {
+        $this->_config = array(
+            'debug' => Mage::app()->getStore()->isAdmin() || Mage::getStoreConfigFlag('mana/ajax/debug'),
+        );
+    }
 
     public function setConfig($key, $value) {
         $this->_config[$key] = $value;
@@ -81,6 +87,15 @@ class Mana_Core_Block_Js extends Mage_Core_Block_Template {
 	    $this
 	        ->setConfig('url.base', Mage::getUrl('', array('_nosid' => true)))
 	        ->setConfig('url.secureBase', Mage::getUrl('', array('_secure' => true, '_nosid' => true)));
+        if ($value = Mage::getStoreConfig('mana/ajax/google_analytics_account')) {
+            $this->setConfig('ga.account', $value);
+        }
+	    elseif ($value = Mage::getStoreConfig('google/analytics/account')) {
+	        $this->setConfig('ga.account', $value);
+	    }
+	    elseif ($value = Mage::getStoreConfig('aromicon_gua/general/account_id')) {
+            $this->setConfig('ga.account', $value);
+        }
 	    return $this;
 	}
 }

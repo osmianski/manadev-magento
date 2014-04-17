@@ -1,0 +1,29 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Option_Featured */
+$i = -1;
+$collection = $this->getAttributePage()->getOptionFeatured();
+$_count = count($collection);
+$_filesHelper = $this->filesHelper();
+?>
+<?php if($_count) :?>
+    <ul class="m-option-featured-list">
+        <?php foreach ($collection as $_optionPage) : $i++;?>
+            <?php if (($_imgUrl = $_optionPage->getData('featured_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
+            <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
+                <li class="category-image m-featured-image">
+
+                        <a href="<?php echo $_optionPage->getUrl() ?>">
+                        <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
+                            <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_optionPage->getData('featured_image_width'), $_optionPage->getData('featured_image_height')) ?>  >
+                        </a>
+                </li>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

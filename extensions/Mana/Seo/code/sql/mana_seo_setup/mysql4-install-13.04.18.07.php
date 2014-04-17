@@ -18,20 +18,14 @@ $db = Mage::helper('mana_db');
 /* @var $utils Mana_Core_Helper_Utils */
 $utils = Mage::helper('mana_core/utils');
 
+/* @var $dbHelper Mana_Core_Helper_Db */
+$dbHelper = Mage::helper('mana_core/db');
+
 /* @var $schema Mana_Seo_Model_Schema */
 $schema = $db->getModel('mana_seo/schema');
 $schema
     ->overrideName('MANAdev 2013')
-    ->overrideSymbols(json_encode(array(
-        array('symbol' => '\\', 'substitute' => ''),
-        array('symbol' => '_', 'substitute' => '-'),
-        array('symbol' => '\'', 'substitute' => ''),
-        array('symbol' => ':', 'substitute' => '-'),
-        array('symbol' => '%', 'substitute' => ''),
-        array('symbol' => '#', 'substitute' => ''),
-        array('symbol' => '&', 'substitute' => '+'),
-        array('symbol' => ' ', 'substitute' => '-'),
-    )))
+    ->overrideSymbols(json_encode($dbHelper->getSeoSymbols()))
     ->overrideStatus(Mana_Seo_Model_Schema::STATUS_ACTIVE)
     ->overrideRedirectParameterOrder(1)
     ->overrideQuerySeparator('/')

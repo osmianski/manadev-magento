@@ -1,0 +1,13 @@
+<?php $collection = $this->getCollection(); ?>
+<?php $currentPage = (int)$this->getRequest()->getParam('page'); ?>
+<?php if(!$currentPage): ?>
+<?php $currentPage = 1; ?>
+<?php endif; ?>
+<?php $pages = ceil(count($collection) / 2); ?>
+<?php $links = ""; ?>
+<?php if ($currentPage != 1): ?>
+<?php echo '<a href="' . $this->getUrl('blog/page') . ($currentPage - 1) . '" >' . Mage::helper('blog')->__('Newer Posts') . '</a>'; ?>
+<?php endif; ?>
+<?php if ($currentPage != $pages): ?>
+<?php echo '<a href="' . $this->getUrl('blog/page') . ($currentPage + 1) . '" >' . Mage::helper('blog')->__('Older Posts') . '</a>'; ?>
+<?php endif; ?>

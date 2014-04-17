@@ -13,7 +13,7 @@
 		<ManaPro_ProductFaces>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.09.17.21</version>
+		    <version>13.10.12.14</version>
 		</ManaPro_ProductFaces>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -64,16 +64,15 @@
 					<!-- INSERT HERE: table-entity mappings -->
 				</entities>
 			</manapro_productfaces_resources>
-			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
-			<!-- This declares that current module will rewrite some model types in module shortnamed 'cataloginventory'. -->
-			<cataloginventory>
-				<rewrite>
-					<stock_item>ManaPro_ProductFaces_Model_Item</stock_item>
-					<stock>ManaPro_ProductFaces_Model_Stock</stock>
-					<!-- INSERT HERE: individual type rewrites -->
-				</rewrite>
-			</cataloginventory>
 			<!-- INSERT HERE: rewrites, ... -->
+            <!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
+            <!-- This declares that current module will rewrite some model types in module shortnamed 'cataloginventory'. -->
+            <cataloginventory>
+                <rewrite>
+                    <stock_item>ManaPro_ProductFaces_Model_Item</stock_item>
+                    <!-- INSERT HERE: individual type rewrites -->
+                </rewrite>
+            </cataloginventory>
 		</models>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/manapro_productfaces_setup directory for install/upgrade scripts. 

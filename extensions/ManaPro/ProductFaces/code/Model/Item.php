@@ -13,7 +13,7 @@
  */
 class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_Item {
     protected function _getMQty() {
-        return $this->getMRepresents() ? $this->getMRepresentedQty() : $this->getQty();
+        return $this->getMRepresents() && !$this->getData('m_check_actual_qty') ? $this->getMRepresentedQty() : $this->getQty();
     }
     public function checkQty($qty)
     {

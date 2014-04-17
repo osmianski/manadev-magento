@@ -12,7 +12,7 @@
 		<Mana_Core>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.10.09.19</version>
+		    <version>14.04.15.12</version>
 		</Mana_Core>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -65,7 +65,11 @@
 					<!-- INSERT HERE: table-entity mappings -->
 				</entities>
 			</mana_core_resources>
-
+            <enterprise_pagecache>
+                <rewrite>
+                    <processor>Mana_Core_Rewrite_PageCache_Processor</processor>
+                </rewrite>
+            </enterprise_pagecache>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
 		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
@@ -181,6 +185,14 @@
                     </mana_core>
                 </observers>
             </controller_front_init_before>
+            <controller_front_send_response_before>
+                <observers>
+                    <enterprise_pagecache>
+                        <class>mana_core/observer</class>
+                        <method>helpSavingInFullPageCache</method>
+                    </enterprise_pagecache>
+                </observers>
+            </controller_front_send_response_before>
         </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
@@ -198,6 +210,15 @@
 	<!-- BASED ON SNIPPET: Static Visuals/Frontend section (config.xml) -->
 	<!-- This section enables static visual changes in store frontend. -->
 	<frontend>
+	    <routers>
+            <mana>
+                <use>standard</use>
+                <args>
+                    <module>Mana_Core</module>
+                    <frontName>mana</frontName>
+                </args>
+            </mana>
+        </routers>
 		<!-- BASED ON SNIPPET: Static Visuals/Layout file support (config.xml) -->
 		<!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
 		and executes during page rendering. -->
@@ -280,9 +301,11 @@
         </mana_dev>
         <mana>
             <js>
-                <!--<require>min_ondemand</require>-->
                 <jquery>min_ondemand</jquery>
             </js>
+            <js_admin>
+                <jquery>min_ondemand</jquery>
+            </js_admin>
             <seo_symbols>
                 <dash>--to-</dash>
                 <space>-</space>

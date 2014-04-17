@@ -209,5 +209,13 @@ class ManaPro_FilterAdmin_Block_Card_General extends Mana_Admin_Block_Crud_Card_
     public function getModel() {
         return Mage::registry('m_crud_model');
     }
+
+    /**
+     * @return Mana_Admin_Helper_Data
+     */
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
+
     #endregion
 }

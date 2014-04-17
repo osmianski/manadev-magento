@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Menu
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<widgets>
+    <mana_tree type="mana_menu/tree_container" translate="name description" module="mana_menu">
+        <name>Tree (MANAdev)</name>
+        <description type="desc">Tree of categorized links</description>
+        <parameters>
+            <xml translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <label>XML</label>
+                <type>textarea</type>
+            </xml>
+        </parameters>
+    </mana_tree>
+    <mana_category_tree type="mana_menu/category_tree" translate="name description" module="mana_menu">
+        <name>Category Tree (MANAdev)</name>
+        <description type="desc">Tree of all store categories</description>
+        <parameters>
+            <title translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <label>Title</label>
+                <type>text</type>
+            </title>
+            <expand_by_default translate="label comment">
+                <required>1</required>
+                <visible>1</visible>
+                <label>Expand All Tree Items on Initial Page Load</label>
+                <comment>Tree remembers collapsed/expanded state of each item, so on subsequent page loads remembered collapsed/expanded state is restored and only not touched items are processed as specified here</comment>
+                <type>select</type>
+                <source_model>mana_core/source_yesno</source_model>
+            </expand_by_default>
+            <collapse_selected translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <label>Collapse Currently Selected Item on Initial Page Load</label>
+                <type>select</type>
+                <source_model>mana_core/source_yesno</source_model>
+            </collapse_selected>
+        </parameters>
+    </mana_category_tree>
+</widgets>

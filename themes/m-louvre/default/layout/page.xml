@@ -65,6 +65,9 @@ Default layout, loads most of the pages
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
                 <label>Page Top</label>
             </block>
+            <block type="core/text_list" name="after_content" as="after_content" translate="label">
+                <label>After content</label>
+            </block>
 
             <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />
 
@@ -156,6 +159,7 @@ Default layout, loads most of the pages
             <action method="setTemplate"><template>page/empty.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
+            <action method="setLayoutCode"><name>empty</name></action>
         </reference>
     </page_empty>
 
@@ -165,6 +169,7 @@ Default layout, loads most of the pages
             <action method="setTemplate"><template>page/1column.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
+            <action method="setLayoutCode"><name>one_column</name></action>
         </reference>
     </page_one_column>
 
@@ -174,6 +179,7 @@ Default layout, loads most of the pages
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
+            <action method="setLayoutCode"><name>two_columns_left</name></action>
         </reference>
     </page_two_columns_left>
 
@@ -183,6 +189,7 @@ Default layout, loads most of the pages
             <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
+            <action method="setLayoutCode"><name>two_columns_right</name></action>
         </reference>
     </page_two_columns_right>
 
@@ -192,6 +199,7 @@ Default layout, loads most of the pages
             <action method="setTemplate"><template>page/3columns.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
+            <action method="setLayoutCode"><name>three_columns</name></action>
         </reference>
     </page_three_columns>
 </layout>

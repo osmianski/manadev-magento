@@ -1,0 +1,9 @@
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+#nav li a[href*="mana_attributePage"] { cursor: pointer !important; }
+/*#nav li a[href*="mana_attributePage"] + ul { width: 250px !important; }*/

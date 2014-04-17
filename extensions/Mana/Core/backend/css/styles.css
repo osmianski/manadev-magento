@@ -19,7 +19,7 @@
     top:45%;
     left:50%;
     width:120px;
-    margin-left:-60px;
+    margin-left: -120px;
     padding:15px 60px;
     background:#fff4e9;
     border:2px solid #f1af73;
@@ -27,4 +27,34 @@
     font-weight:bold;
     text-align:center;
     z-index:20100;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    -ms-box-sizing: content-box;
     }
+
+.m-popup {
+    position: absolute;
+    background: white;
+    z-index: 20100;
+}
+
+.m-popup-overlay {
+    position: absolute;
+    background: black;
+    filter: alpha(opacity=0); /* percent */
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 10000;
+}
+
+.m-overlay {
+    position: absolute;
+    background: white;
+    filter: alpha(opacity=0); /* percent */
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    z-index: 10000;
+}

@@ -8,23 +8,18 @@
 /** 
  * @author Mana Team
  */
-/* @var $this Mana_Filters_Block_Filter_Attribute */
+/* @var $this Mana_Filters_Block_Filter */
 /* @var $filters Mana_Filters_Helper_Data */ $filters = Mage::helper(strtolower('Mana_Filters'));
 /* @var $showmore ManaPro_FilterShowMore_Helper_Data */ $showmore = Mage::helper(strtolower('ManaPro_FilterShowMore'));
 /* @var $jsonHelper Mana_Core_Helper_Json */
 $jsonHelper = Mage::helper('mana_core/json');
-$MAX_ROW_COUNT = $showmore->getMaxRowCount(); // 20
-$MAX_COLUMN_COUNT = $showmore->getMaxColumnCount(); // 4
-$items = $this->getItems();
-list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_COUNT, $MAX_COLUMN_COUNT);
 ?>
 <div class="m-filter-popup">
-<ol class="m-rows" data-max-rows="<?php echo $MAX_ROW_COUNT ?>">
-    <?php for($rowIndex = 0; $rowIndex < $rowCount; $rowIndex++) : ?>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'before_popup_items', array('block' => $this)) ?>
+<ol class="m-rows">
     <li>
         <ol class="m-columns">
-            <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
-            <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
+            <?php foreach ($this->getItems() as $_index => $_item) : /*@var $_item Mana_Filters_Model_Item */ ?>
             <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
                 <?php if ($_item->getMSelected()): ?>
                 <span class="m-selected-filter-item"><?php echo $this->escapeHtml($_item->getLabel()) ?></span>
@@ -33,7 +28,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                     <a href="#" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"
                        data-item="<?php echo $jsonHelper->encodeAttribute($_item->getSeoData()) ?>"
                        data-is-reverse="<?php echo $this->getFilterOptions()->getIsReverse() ?>"
-                       data-index="<?php echo $columnIndex * $rowCount + $rowIndex ?>">
+                       data-index="<?php echo $_index ?>">
                        <?php echo $this->escapeHtml($_item->getLabel()) ?></a>
                     <?php else: echo $this->escapeHtml($_item->getLabel()) ?>
                     <?php endif; ?>
@@ -42,9 +37,8 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                     (<?php echo $_item->getCount() ?>)
                 <?php endif; ?>
             </li>
-            <?php endif; endfor; ?>
+            <?php endforeach; ?>
         </ol>
     </li>
-    <?php endfor; ?>
 </ol>
 </div>

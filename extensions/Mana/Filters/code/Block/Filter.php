@@ -72,7 +72,7 @@ class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract
             }
         }
 
-        return $this->jsonHelper()->encodeAttribute($result);
+        return $this->jsonHelper()->encodeAttribute($result, array('force_object' => true));
     }
 
     public function getPopupBlockName() {

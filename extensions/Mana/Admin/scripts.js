@@ -25,10 +25,13 @@ Mana.define('Mana/Admin/Action', ['jquery', 'Mana/Core/Block'], function ($, Blo
             return this
                 ._super()
                 .on('bind', this, function () {
-                    $('.mb-'+this.getId()).on('click', _raiseClick);
+//                    $('.mb-'+this.getId()).on('click', _raiseClick);
+                    $(document).on('click', '.mb-' + this.getId(), _raiseClick);
+
                 })
                 .on('unbind', this, function () {
-                    $('.mb-' + this.getId()).off('click', _raiseClick);
+//                    $('.mb-' + this.getId()).off('click', _raiseClick);
+                    $(document).off('click', '.mb-' + this.getId(), _raiseClick);
                 });
         },
         _subscribeToBlockEvents: function () {
@@ -485,8 +488,16 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
             }
         });
     });
-Mana.define('Mana/Admin/Tab', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+Mana.define('Mana/Admin/Tab', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout'], function ($, Block, layout) {
     return Block.extend('Mana/Admin/Tab', {
+//        trigger: function(name, e, bubble, propagate) {
+//            this._super(name, e, bubble, propagate);
+//            var container;
+//            if (bubble && (container = layout.getBlock('container'))) {
+//                container.trigger(name, e, bubble, propagate);
+//            }
+//            return e.result;
+//        }
     });
 });
 Mana.define('Mana/Admin/Container', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/UrlTemplate',
@@ -534,6 +545,7 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
             return this
                 ._super()
                 .on('load', this, function () {
+                    this._fields = undefined;
                     if (this.getChild('close')) this.getChild('close').on('click', this, this.close);
                     if (this.getChild('apply')) this.getChild('apply').on('click', this, this.save);
                     if (this.getChild('save')) this.getChild('save').on('click', this, this.saveAndClose);
@@ -544,14 +556,57 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                     if (this.getChild('save')) this.getChild('save').off('click', this, this.saveAndClose);
                 });
         },
+        getField: function (name) {
+            if (this._fields === undefined) {
+                this._fields = layout.getPageBlock().trigger('collect', { fields: true, result: {} }, false, true);
+            }
+            return this._fields[name];
+        },
+        updateFromJson: function(fieldName, attributeName, jsonFieldName) {
+            var defaults = core.isString(attributeName) ? [[attributeName, jsonFieldName]] : attributeName;
+            if (jsonFieldName === undefined) {
+                jsonFieldName = fieldName;
+            }
+            var field = this.getField(fieldName);
+            var self = this;
+            if (field.useDefault()) {
+                $.each(defaults, function(i, rule) {
+                    if (rule[1] === undefined) {
+                        rule[1] = fieldName;
+                    }
+                    if (rule.length < 3 || self.getJsonData(rule[2], rule[1])) {
+                        field.setValue(self.getJsonData(rule[0], rule[1]));
+                        return false; // break
+                    }
+                    else {
+                        return true; // continue
+                    }
+                });
+
+            }
+        },
+        updateImageFromJson: function (fieldName, attributeName, jsonFieldName) {
+            this.updateFromJson(fieldName, attributeName, jsonFieldName);
+            var field = this.getField(fieldName);
+            field.setImage();
+        },
+        _afterSave: function () {
+        },
         save: function(callback) {
             var params = this.getPostParams();
+            var self = this;
 
             ajax.post(this.getUrl('save'), params, function(response) {
                 ajax.update(response);
                 //noinspection JSUnresolvedVariable
-                if (core.isFunction(callback) && !response.failed) {
-                    callback.call();
+                if (!response.failed) {
+                    if (response.forceEditUrl) {
+                        setLocation(response.forceEditUrl);
+                    }
+                    if (core.isFunction(callback)) {
+                        callback.call();
+                    }
+                    self._afterSave();
                 }
             });
         },
@@ -588,7 +643,7 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
         }
     });
 });
-Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Block) {
+Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Block, undefined) {
     return Block.extend('Mana/Admin/Field', {
         _subscribeToHtmlEvents: function () {
             var self = this;
@@ -606,23 +661,430 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Bloc
                     this.$useDefault().off('click', _raiseUseDefaultClick);
                 });
         },
-        $field: function () {
-            return this.$().find('td.value:first input, td.value:first select');
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.on('collect', this, this.onCollectFields);
+                })
+                .on('unload', this, function () {
+                    this.off('collect', this, this.onCollectFields);
+                });
         },
         $useDefault: function () {
             return this.$().find('td.use-default input.m-default');
         },
+        $label: function () {
+            return this.$().find('td.label label');
+        },
+        $form: function() {
+            return $(this.$().parents('form')[0]);
+        },
         onUseDefaultClick: function () {
             if (this.$useDefault()[0].checked) {
-                this.$field().attr('disabled', true).addClass('disabled');
+                this.disable();
             }
             else {
-                this.$field().removeAttr('disabled').removeClass('disabled').focus();
+                this.enable();
             }
+            this.changed();
+        },
+        onCollectFields: function(e) {
+            if (e.fields) {
+                e.result[this.getName()] = this;
+            }
+        },
+        disable: function() {
+            throw 'Not implemented';
+        },
+        enable: function() {
+            throw 'Not implemented';
+        },
+        getName: function() {
+            return this.$()[0].id.substr(this.$form()[0].id.length + '_tr_'.length);
+        },
+        getLabel: function() {
+            return this.$label().text().trim();
+        },
+        getValue: function() {
+            throw 'Not implemented';
+        },
+        getText: function () {
+            throw 'Not implemented';
+        },
+        setValue: function(value) {
+            throw 'Not implemented';
+        },
+        useDefault: function() {
+            return this.$useDefault().length && this.$useDefault()[0].checked;
+        },
+        changed: function () {
+            if (this._changed === undefined) {
+                this._changed = true;
 
+                var newValue = this.trigger('change');
+                if (newValue !== undefined) {
+                    this.setValue(newValue);
+                }
+
+                delete this._changed;
+            }
         }
     });
 });
+Mana.define('Mana/Admin/Field/Select', ['jquery', 'Mana/Admin/Field'], function($, Field) {
+    return Field.extend('Mana/Admin/Field/Select', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _changed() {
+                self.changed();
+            }
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$field().on('change', _changed);
+                })
+                .on('unbind', this, function () {
+                    this.$field().off('change', _changed);
+                });
+        },
+        $field: function() {
+            return this.$().find('td.value:first select');
+        },
+        disable: function() {
+            this.$field().attr('disabled', true).addClass('disabled');
+        },
+        enable: function() {
+            this.$field().removeAttr('disabled').removeClass('disabled').focus();
+        },
+        getValue: function() {
+            return this.$field().val();
+        },
+        getText: function () {
+            return this.$().find('td.value:first select :selected').text();
+        },
+        setValue: function(value) {
+            if (this.$field().val() == value) {
+                return;
+            }
+            this.$field()
+                .val(value)
+                .trigger('change');
+        }
+    });
+});
+Mana.define('Mana/Admin/Field/SelectText', ['jquery', 'Mana/Admin/Field'], function($, Field) {
+    return Field.extend('Mana/Admin/Field/SelectText', {
+        $span: function() {
+            return this.$().find('strong, span');
+        },
+        getValue: function() {
+            return this.$span().data('value');
+        },
+        getText: function () {
+            return this.$span().text();
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/Text', ['jquery', 'Mana/Admin/Field'], function($, Field) {
+    return Field.extend('Mana/Admin/Field/Text', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+            function _changed() {
+                self.changed();
+            }
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$field().on('blur', _changed);
+                })
+                .on('unbind', this, function () {
+                    this.$field().off('blur', _changed);
+                });
+        },
+        $field: function() {
+            return this.$().find('td.value:first input');
+        },
+        disable: function() {
+            this.$field().attr('disabled', true).addClass('disabled');
+        },
+        enable: function() {
+            this.$field().removeAttr('disabled').removeClass('disabled').focus();
+        },
+        getValue: function() {
+            return this.$field().val();
+        },
+        getText: function() {
+            return this.getValue();
+        },
+        setValue: function(value) {
+            if (this.$field().val() == value) {
+                return;
+            }
+            this.$field()
+                .val(value)
+                .trigger('change')
+                .trigger('blur');
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/TextArea', ['jquery', 'Mana/Admin/Field/Text'], function($, Text) {
+    return Text.extend('Mana/Admin/Field/TextArea', {
+        $field: function() {
+            return this.$().find('td.value:first textarea');
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/Wysiwyg', ['jquery', 'prototype', 'Mana/Admin/Field/TextArea', 'singleton:Mana/Core/UrlTemplate',
+    'singleton:Mana/Core/Config'],
+function($, $p, TextArea, urlTemplate, config) {
+    return TextArea.extend('Mana/Admin/Field/Wysiwyg', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+            function _open() {
+                self.open();
+            }
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.$button().on('click', _open);
+                })
+                .on('unbind', this, function () {
+                    this.$button().off('click', _open);
+                });
+        },
+        $button: function() {
+            return this.$().find('td.value:first button');
+        },
+        disable: function() {
+            this._super();
+            this.$button().attr('disabled', true).addClass('disabled');
+        },
+        enable: function() {
+            this._super();
+            this.$button().removeAttr('disabled').removeClass('disabled').focus();
+        },
+        getPopupUrl: function() {
+            return urlTemplate.decodeAttribute(config.getData('url.wysiwyg'));
+        },
+        getElementId: function() {
+            return this.$field()[0].id;
+        },
+        open: function() {
+            new Ajax.Request(this.getPopupUrl().replace('__0__', this.getElementId()), {
+                parameters: {
+                },
+                onSuccess: function(transport) {
+                    try {
+                        this.openDialogWindow(transport.responseText, this.getElementId());
+                    } catch(e) {
+                        alert(e.message);
+                    }
+                }.bind(this)
+            });
+        },
+        openDialogWindow : function(content, elementId) {
+            this.overlayShowEffectOptions = Windows.overlayShowEffectOptions;
+            this.overlayHideEffectOptions = Windows.overlayHideEffectOptions;
+            Windows.overlayShowEffectOptions = {duration:0};
+            Windows.overlayHideEffectOptions = {duration:0};
+
+            Dialog.confirm(content, {
+                draggable:true,
+                resizable:true,
+                closable:true,
+                className:"magento",
+                windowClassName:"popup-window m-editor",
+                title:'WYSIWYG Editor',
+                width:620,
+                height:555,
+                zIndex:1000,
+                recenterAuto:false,
+                hideEffect:Element.hide,
+                showEffect:Element.show,
+                id:"catalog-wysiwyg-editor",
+                buttonClass:"form-button",
+                okLabel:"Submit",
+                ok: this.okDialogWindow.bind(this),
+                cancel: this.closeDialogWindow.bind(this),
+                onClose: this.closeDialogWindow.bind(this),
+                firedElementId: elementId
+            });
+
+            content.evalScripts.bind(content).defer();
+
+            $p(elementId+'_editor').value = $p(elementId).value;
+        },
+        okDialogWindow : function(dialogWindow) {
+            if (dialogWindow.options.firedElementId) {
+                wysiwygObj = eval('wysiwyg'+dialogWindow.options.firedElementId+'_editor');
+                wysiwygObj.turnOff();
+                if (tinyMCE.get(wysiwygObj.id)) {
+                    $p(dialogWindow.options.firedElementId).value = tinyMCE.get(wysiwygObj.id).getContent();
+                } else {
+                    if ($p(dialogWindow.options.firedElementId+'_editor')) {
+                        $p(dialogWindow.options.firedElementId).value = $p(dialogWindow.options.firedElementId+'_editor').value;
+                    }
+                }
+            }
+            this.closeDialogWindow(dialogWindow);
+        },
+        closeDialogWindow : function(dialogWindow) {
+            // remove form validation event after closing editor to prevent errors during save main form
+            if (typeof varienGlobalEvents != undefined && editorFormValidationHandler) {
+                varienGlobalEvents.removeEventHandler('formSubmit', editorFormValidationHandler);
+            }
+
+            //IE fix - blocked form fields after closing
+            $p(dialogWindow.options.firedElementId).focus();
+
+            //destroy the instance of editor
+            wysiwygObj = eval('wysiwyg'+dialogWindow.options.firedElementId+'_editor');
+            if (tinyMCE.get(wysiwygObj.id)) {
+               tinyMCE.execCommand('mceRemoveControl', true, wysiwygObj.id);
+            }
+
+            dialogWindow.close();
+            Windows.overlayShowEffectOptions = this.overlayShowEffectOptions;
+            Windows.overlayHideEffectOptions = this.overlayHideEffectOptions;
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/Image', ['jquery', 'Mana/Admin/Field/Text', 'singleton:Mana/Core/Config'],
+function($, Text, config) {
+    return Text.extend('Mana/Admin/Field/Image', {
+        _subscribeToHtmlEvents: function () {
+            var self = this;
+
+            function _remove() {
+                self.remove();
+            }
+            return this
+                ._super()
+                .on('bind', this, function () {
+                    this.updateButtonsAndImage();
+                    this._addUploader = this._createUploader(this.$addButton());
+                    this._changeUploader = this._createUploader(this.$changeButton());
+                    this.$removeButton().on('click', _remove);
+                })
+                .on('unbind', this, function () {
+                    delete this._addUploader;
+                    delete this._changeUploader;
+                    this.$removeButton().off('click', _remove);
+                });
+        },
+        _createUploader: function($button) {
+            var self = this;
+            // file uploader initialization
+            // the following shows the button in specified element with file upload behavior on click
+            return new qq.FileUploader({
+                // pass the dom node (ex. $(selector)[0] for jQuery users)
+                element: $button[0],
+                // path to server-side upload script
+                action: config.getData("url.upload"),
+                params: { type: 'image', form_key: FORM_KEY },
+                // when upload complete we should update image in grid
+                onComplete: function(id, fileName, responseJSON){
+                    if (responseJSON.relativeUrl) {
+                        self.$image().attr('src', responseJSON.url);
+                        $button.val('');
+                        self.setValue(responseJSON.relativeUrl);
+                    }
+                }
+            });
+        },
+        setImage: function() {
+            if (this.useDefault()) {
+                if (this.getValue()) {
+                    this.$image().attr('src', config.getData("url.imageBase") + '/' + this.getValue());
+                }
+                else {
+                    this.$image().attr('src', '');
+                }
+            }
+
+        },
+        $addButton: function() {
+            return this.$().find('.add.m-button');
+        },
+        $changeButton: function() {
+            return this.$().find('.change.m-button');
+        },
+        $removeButton: function() {
+            return this.$().find('.delete.m-button');
+        },
+        $image: function() {
+            return this.$().find('img');
+        },
+        changed: function() {
+            this._super();
+            this.updateButtonsAndImage();
+        },
+        remove: function() {
+            this.setValue('');
+        },
+        updateButtonsAndImage: function() {
+            if (this.$field().val()) {
+                this.$image().show();
+                this.$addButton().hide();
+                if (this.useDefault()) {
+                    this.$changeButton().hide();
+                    this.$removeButton().hide();
+                }
+                else {
+                    this.$changeButton().show();
+                    this.$removeButton().show();
+                }
+            }
+            else {
+                this.$image().hide();
+                if (this.useDefault()) {
+                    this.$addButton().hide();
+                }
+                else {
+                    this.$addButton().show();
+                }
+                this.$changeButton().hide();
+                this.$removeButton().hide();
+            }
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/MultiSelect', ['jquery', 'Mana/Admin/Field/Select', 'singleton:Mana/Core'],
+function($, Select, core) {
+    return Select.extend('Mana/Admin/Field/MultiSelect', {
+        setValue: function(value) {
+            if (core.isString(value)) {
+                value = value.split(',');
+            }
+            this._super(value);
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/Date', ['jquery', 'Mana/Admin/Field/Text'], function($, Text) {
+    return Text.extend('Mana/Admin/Field/Date', {
+        $picker: function() {
+            return this.$().find('img');
+        },
+        changed: function() {
+            this._super();
+            if (this.useDefault()) {
+                this.$picker().hide();
+            }
+            else {
+                this.$picker().show();
+            }
+        }
+    });
+});
+
 Mana.define('Mana/Admin/Form', ['jquery', 'Mana/Core/Block'], function ($, Block) {
     return Block.extend('Mana/Admin/Form', {
         _subscribeToBlockEvents: function () {
@@ -645,3 +1107,79 @@ Mana.define('Mana/Admin/Form', ['jquery', 'Mana/Core/Block'], function ($, Block
         }
     });
 });
+Mana.define('Mana/Admin/Expression', ['jquery', 'singleton:Mana/Core/Config'], function ($, config) {
+    return Mana.Object.extend('Mana/Admin/Expression', {
+        seoify: function(expr) {
+            expr = expr.toLowerCase();
+            $.each(config.getData('url.symbols'), function(index, pair) {
+                expr = expr.replace(new RegExp(pair.symbol.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'g'), pair.substitute);
+            });
+            return expr;
+        }
+    });
+});
+Mana.define('Mana/Admin/Aggregate', ['jquery', 'singleton:Mana/Admin/Expression', 'singleton:Mana/Core'],
+function ($, expression, core, undefined) {
+    return Mana.Object.extend('Mana/Admin/Aggregate', {
+        expr: function(fields, expr, count, func) {
+            var result = [];
+            for (var i = 0; i < count; i++) {
+                var field = expr.replace(/X/g, i);
+                if (fields[field] !== undefined && fields[field].getValue()) {
+                    if (func === 'getText') {
+                        result.push(fields[field].getText());
+                    }
+                    else if (func === 'getLabel') {
+                        result.push(fields[field].getLabel());
+                    }
+                    else if (func === 'getValue') {
+                        result.push(fields[field].getValue());
+                    }
+                    else {
+                        result.push(fields[field].getText());
+                    }
+                }
+            }
+            return result;
+        },
+        glue: function(expr, separator, lastSeparator) {
+            var length = expr.length;
+            if (lastSeparator === undefined || length < 2) {
+                return expr.join(separator);
+            }
+            else {
+                return expr.slice(0, length - 1).join(separator) + lastSeparator + expr[length - 1];
+            }
+        },
+        seoify: function(expr) {
+            $.each(expr, function(i) {
+                expr[i] = expression.seoify(expr[i]);
+            });
+            return expr;
+        },
+        concat: function() {
+            var result = [];
+            var count = 0;
+            $.each(arguments, function(argIndex, arg) {
+                var length = core.isString(arg) ? 1 : arg.length;
+                if (length > count) {
+                    count = length;
+                }
+            });
+            for (var i = 0; i < count; i++) {
+                var value = '';
+                $.each(arguments, function(argIndex, arg) {
+                    if (core.isString(arg)) {
+                        value += arg;
+                    }
+                    else if (i < arg.length) {
+                        value += arg[i];
+                    }
+                });
+                result.push(value);
+            }
+            return result;
+        }
+    });
+});
+

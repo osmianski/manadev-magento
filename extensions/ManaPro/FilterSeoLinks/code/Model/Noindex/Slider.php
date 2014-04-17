@@ -13,8 +13,8 @@ class ManaPro_FilterSeoLinks_Model_Noindex_Slider {
     public function detect($layerModel) {
         $filter = null;
         $result = false;
-        foreach (Mage::getSingleton($layerModel)->getState()->getFilters() as $item) {
-            if ($item->getFilter()->getFilterOptions() && $item->getFilter()->getFilterOptions()->getDisplay() == 'slider') {
+        foreach ($layerModel->getState()->getFilters() as $item) {
+            if ($item->getFilter()->getFilterOptions() && in_array($item->getFilter()->getFilterOptions()->getDisplay(), array('slider', 'range', 'min_max_slider'))) {
                 $result = true;
                 break;
             }

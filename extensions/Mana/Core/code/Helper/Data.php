@@ -347,19 +347,34 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $val;
     }
-    public function jsonForceObjectAndEncode($data) {
-        return json_encode($this->_forceObjectRecursively($data));
+    public function jsonForceObjectAndEncode($data, $options = array()) {
+        return json_encode($this->_forceObjectRecursively($data, $options));
     }
-    protected function _forceObjectRecursively($data) {
+    protected function _forceObjectRecursively($data, $options = array()) {
+        $forceObject = false;
+        if (isset($options['force_object'])) {
+            $forceObject = $options['force_object'];
+            unset($options['force_object']);
+        }
         if (is_array($data)) {
+            $convert = false;
             foreach ($data as $key => $value) {
-                $data[$key] = $this->_forceObjectRecursively($value);
+                if (!is_numeric($key)) {
+                    $convert = true;
+                }
+                $data[$key] = $this->_forceObjectRecursively($value,
+                    $forceObject !== false && isset($forceObject[$key])
+                        ? array_merge(array('force_object' => $forceObject[$key]), $options)
+                        : $options);
             }
-            return (object)$data;
+            return $forceObject === true || $convert ? (object)$data : $data;
         }
         elseif(is_object($data)) {
             foreach ($data as $key => $value) {
-                $data->$key = $this->_forceObjectRecursively($value);
+                $data->$key = $this->_forceObjectRecursively($value,
+                    $forceObject !== false && isset($forceObject[$key])
+                        ? array_merge(array('force_object' => $forceObject[$key]), $options)
+                        : $options);
             }
             return $data;
         }
@@ -405,6 +420,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             return $request->getRouteName() . '/' . $request->getControllerName() . '/' . $request->getActionName();
         }
     }
+
     public function getRouteParams() {
         $request = Mage::app()->getRequest();
 
@@ -638,7 +654,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     public function getAttributeTable($attribute) {
         return $attribute['backend_table'] ?
             $attribute['backend_table'] :
-            'catalog_category_entity_' . $attribute['backend_type'];
+            Mage::getSingleton('core/resource')->getTableName('catalog_category_entity_' . $attribute['backend_type']);
     }
 
     /**
@@ -713,12 +729,26 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
     }
 
+    public function isManadevSeoInstalled() {
+        return $this->isModuleEnabled('Mana_Seo');
+    }
+
     public function isManadevAttributePageInstalled() {
         return $this->isModuleEnabled('Mana_AttributePage');
     }
 
     public function isManadevLayeredNavigationTreeInstalled() {
         return $this->isModuleEnabled('ManaPro_FilterTree');
+    }
+
+    public function isManadevLayeredNavigationColorInstalled()
+    {
+        return $this->isModuleEnabled('ManaPro_FilterColors');
+    }
+
+    public function isManadevDependentFilterInstalled()
+    {
+        return $this->isModuleEnabled('ManaPro_FilterDependent');
     }
 
     public function isEnterpriseUrlRewriteInstalled() {
@@ -804,4 +834,5 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $html;
     }
+
 }

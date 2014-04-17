@@ -243,9 +243,6 @@ Product view
                 <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
             </block>
         </reference>
-        <reference name="right">
-            <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
-        </reference>
     </catalog_product_view>
 
 <!--

@@ -14,7 +14,9 @@
             <active>true</active>
             <!-- This instructs Magento to search for module code in app/code/local directory. -->
             <codePool>local</codePool>
-            <!-- INSERT HERE: depends -->
+            <depends>
+                <Mana_Filters />
+            </depends>
         </ManaPro_FilterExpandCollapse>
     </modules>
 </config>

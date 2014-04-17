@@ -1,94 +1,62 @@
 <?php
-/**
+/** 
  * @category    Mana
  * @package     Mana_AttributePage
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Seo_Helper_PageType {
+/**
+ * @author Mana Team
+ *
+ */
+class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_PageType  {
+    public function getCurrentSuffix() {
+        return Mage::getStoreConfig('mana_attribute_page/attribute_page/suffix');
+    }
+
+
+    public function getRoutePath() {
+        return 'mana/attributePage/view';
+    }
+
+    public function getSuffixHistoryType() {
+        return Mana_Seo_Model_UrlHistory::TYPE_ATTRIBUTE_PAGE_SUFFIX;
+    }
+
     /**
-     * @param Mana_Seo_Model_Context $context
-     * @param object[] $activeVariations
-     * @param object[] $obsoleteVariations
-     * @return Mana_Seo_Interface_VariationSource
+     * @param Mana_Seo_Model_ParsedUrl $token
+     * @return bool
      */
-    public function getVariations($context, &$activeVariations, &$obsoleteVariations) {
-        $activeVariations = array();
-        $obsoleteVariations = array();
+    public function setPage($token) {
+        $token
+            ->setRoute($this->getRoutePath())
+            ->setIsRedirectToSubcategoryPossible(false)
+            ->addParameter('id', $token->getPageUrl()->getData('attribute_page_id'));
 
-        /* @var $attributePageHelper Mana_AttributePage_Helper_Data */
-        $attributePageHelper = Mage::helper('mana_attributepage');
+        return true;
+    }
 
-        /* @var $dbHelper Mana_Db_Helper_Data */
-        $dbHelper = Mage::helper('mana_db');
+    /**
+     * @param Mana_Seo_Rewrite_Url $urlModel
+     * @return string | bool
+     */
+    public function getUrlKey($urlModel) {
+        /* @var $seo Mana_Seo_Helper_Data */
+        $seo = Mage::helper('mana_seo');
 
-        $currentSuffix = $attributePageHelper->getAttributePageSuffix();
-        $suffixes = $this->_getApplicableSuffixes($context, $currentSuffix, Mana_Seo_Model_UrlHistory::TYPE_ATTRIBUTE_PAGE_SUFFIX);
+        /* @var $logger Mana_Core_Helper_Logger */
+        $logger = Mage::helper('mana_core/logger');
 
-        foreach ($suffixes as $suffix => $allObsolete) {
-            /* @var $attributePageCollection Mana_Db_Resource_Entity_Collection */
-            $attributePageCollection = $dbHelper->getResourceModel('mana_attributepage/page/store_flat_collection');
-
-            $candidates = array();
-            $pageUrlCandidate = $this->_removeSuffix($context->getPath(), $suffix);
-            $candidates[] = $pageUrlCandidate . $context->getOriginalSlash();
-            $candidates[] = $pageUrlCandidate . $context->getAlternativeSlash();
-
-            $attributePageCollection->getSelect()
-                ->where('url_key IN (?)', $candidates)
-                ->where('store_id IN(?)', array(0, $context->getStoreId()))
-                ->order('store_id DESC')
-                ->order(new Zend_Db_Expr('CHAR_LENGTH(url_key) DESC'));
-
-            foreach ($attributePageCollection as $attributePage) {
-                /* @var $attributePage Mana_AttributePage_Model_Page */
-
-                /* @var $page Mana_Seo_Model_Page */
-                $page = Mage::getModel('mana_seo/page');
-                /** @noinspection PhpUndefinedMethodInspection */
-                $url = $attributePage->getUrlKey();
-
-                /** @noinspection PhpUndefinedMethodInspection */
-                $currentUrl = $attributePage->getUrlKey();
-                $page
-                    ->setUrl($url)
-                    ->setCurrentUrl($currentUrl)
-                    ->setSuffix($suffix)
-                    ->setCurrentSuffix($currentSuffix)
-                    ->setQuery('');
-
-                if ($allObsolete) {
-                    $obsoleteVariations[] = $page;
-                }
-                else {
-                    $activeVariations[] = $page;
-                }
-            }
-
-            /* @var $oldUrlKeyCollection Mana_Db_Resource_Entity_Collection */
-            $oldUrlKeyCollection = $dbHelper->getResourceModel('mana_seo/urlHistory_collection');
-            $oldUrlKeyCollection->getSelect()
-                ->where('page_type = ?', Mana_Seo_Model_UrlHistory::TYPE_ATTRIBUTE_PAGE_URL_KEY)
-                ->where('store_id IN(?)', array(0, $context->getStoreId()))
-                ->where('old_url IN (?)', $candidates);
-            foreach ($oldUrlKeyCollection as $historyRecord) {
-                /* @var $page Mana_Seo_Model_Page */
-                $page = Mage::getModel('mana_seo/page');
-                /** @noinspection PhpUndefinedMethodInspection */
-                $url = $historyRecord->getOldUrl();
-
-                /** @noinspection PhpUndefinedMethodInspection */
-                $currentUrl = $historyRecord->getNewUrl();
-
-                $page
-                    ->setUrl($url)
-                    ->setCurrentUrl($currentUrl)
-                    ->setSuffix($suffix)
-                    ->setCurrentSuffix($currentSuffix)
-                    ->setQuery('');
-
-                $obsoleteVariations[] = $page;
-            }
+        if (($attributePageId = $urlModel->getSeoRouteParam('id')) === false) {
+            $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'attribute page URL key', 'id'));
         }
+        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+        $urlCollection->addFieldToFilter('attribute_page_id', $attributePageId);
+        $urlCollection->getSelect()->where('main_table.option_page_id IS NULL');
+        if (!($result = $urlModel->getUrlKey($urlCollection))) {
+            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'attribute page URL key', 'id', $attributePageId));
+        }
+
+        return $result['final_url_key'];
     }
 }

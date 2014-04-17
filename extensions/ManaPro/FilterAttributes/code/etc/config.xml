@@ -11,7 +11,7 @@
         <ManaPro_FilterAttributes>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.05.28.21</version>
+            <version>14.02.23.10</version>
         </ManaPro_FilterAttributes>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -47,7 +47,23 @@
                     <!-- INSERT HERE: table-entity mappings -->
                 </entities>
             </manapro_filterattributes_resources>
+            <review_resource>
+                <rewrite>
+                    <review>ManaPro_FilterAttributes_Resource_Review</review>
+                </rewrite>
+            </review_resource>
         </models>
+        <!-- This tells Magento to analyze sql/manapro_filterattributes_setup directory for install/upgrade scripts.
+            Installation scripts should be named as 'mysql4-install-<new version>.php'.
+            Upgrade scripts should be named as mysql4-upgrade-<current version>-<new version>.php -->
+        <resources>
+            <manapro_filterattributes_setup>
+                <setup>
+                    <module>ManaPro_FilterAttributes</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+            </manapro_filterattributes_setup>
+        </resources>
         <!-- INSERT HERE: blocks, models, ... -->
         <index>
             <indexer>
@@ -57,10 +73,102 @@
                     <description>Recalculates attributes used in Layered Navigation</description>
                     <types>
                         <sync_value><resource>manapro_filterattributes/syncValue</resource></sync_value>
+                        <stock_status><resource>manapro_filterattributes/stockStatus</resource></stock_status>
+                        <rating><resource>manapro_filterattributes/rating</resource></rating>
                     </types>
                 </manapro_filterattributes>
+                <catalog_product_flat>
+                    <depends>
+                        <manapro_filterattributes/>
+                    </depends>
+                </catalog_product_flat>
             </indexer>
         </index>
+		<events>
+			<!-- BASED ON SNIPPET: Models/Event handler (config.xml) -->
+			<cataloginventory_stock_item_save_commit_after><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterattributes>
+						<class>manapro_filterattributes/observer</class> <!-- model name of class containing event handler methods -->
+						<method>saveStockStatus</method> <!-- event handler method name -->
+					</manapro_filterattributes>
+				</observers>
+			</cataloginventory_stock_item_save_commit_after>
+            <cataloginventory_stock_item_save_after> <!-- for 1.6 and below -->
+                <observers>
+                    <manapro_filterattributes>
+                        <class>manapro_filterattributes/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>saveStockStatus</method>
+                        <!-- event handler method name -->
+                    </manapro_filterattributes>
+                </observers>
+            </cataloginventory_stock_item_save_after>
+            <m_product_faces_reindex_all><!-- this is event name this module listens for -->
+				<observers>
+					<manapro_filterattributes>
+						<class>manapro_filterattributes/observer</class> <!-- model name of class containing event handler methods -->
+						<method>saveStockStatus</method> <!-- event handler method name -->
+					</manapro_filterattributes>
+				</observers>
+            </m_product_faces_reindex_all>
+            <review_save_commit_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterattributes>
+                        <class>manapro_filterattributes/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>reviewSaveAfter</method>
+                        <!-- event handler method name -->
+                    </manapro_filterattributes>
+                </observers>
+            </review_save_commit_after>
+
+             <review_delete_commit_after><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterattributes>
+                        <class>manapro_filterattributes/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>reviewDeleteAfter</method>
+                        <!-- event handler method name -->
+                    </manapro_filterattributes>
+                </observers>
+            </review_delete_commit_after>
+		</events>
+
     </global>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <frontend>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterAttributes>
+                    <files>
+                        <default>ManaPro_FilterAttributes.csv</default>
+                    </files>
+                </ManaPro_FilterAttributes>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </frontend>
+    <adminhtml>
+        <!-- This section registers additional translation file with our module-specific strings to be loaded -->
+        <translate>
+            <modules>
+                <ManaPro_FilterAttributes>
+                    <files>
+                        <default>ManaPro_FilterAttributes.csv</default>
+                    </files>
+                </ManaPro_FilterAttributes>
+            </modules>
+        </translate>
+        <!-- INSERT HERE: layout, translate, routers -->
+    </adminhtml>
+	<default>
+		<mana_filters>
+			<general>
+				<instock_option_position>1</instock_option_position>
+			</general>
+		</mana_filters>
+	</default>
+
 </config>

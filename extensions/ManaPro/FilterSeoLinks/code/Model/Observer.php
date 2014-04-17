@@ -340,13 +340,13 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
     }
 
 
-    protected function _noindex($layerModel) {
+    protected function _noindex() {
+        $layerModel = $this->filterHelper()->getLayer();
         if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
             /* @var $head Mage_Page_Block_Html_Head */
             $robots = $head->getRobots();
             $noIndex = false;
             $follow = false;
-            /* @var $layer Mage_Catalog_Model_Layer */ $layer = Mage::getSingleton($layerModel);
             foreach (explode(',', Mage::getStoreConfig('mana_filters/seo/no_index')) as $noIndexProcessorName) {
                 if (!$noIndexProcessorName) {
                     continue;
@@ -381,28 +381,35 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
      * @param Varien_Event_Observer $observer
      */
     public function noindexCategoryView($observer) {
-        $this->_noindex('catalog/layer');
+        $this->_noindex();
     }
     /**
      * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_catalogsearch_result_index  ")
      * @param Varien_Event_Observer $observer
      */
     public function noindexSearchResult($observer) {
-        $this->_noindex('catalogsearch/layer');
+        $this->_noindex();
     }
     /**
      * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_cms_page_view")
      * @param Varien_Event_Observer $observer
      */
     public function noindexCmsPage($observer) {
-        $this->_noindex('catalog/layer');
+        $this->_noindex();
     }
     /**
      * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_cms_index_index")
      * @param Varien_Event_Observer $observer
      */
     public function noindexCmsIndex($observer) {
-        $this->_noindex('catalog/layer');
+        $this->_noindex();
+    }
+    /**
+     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_mana_optionpage_view")
+     * @param Varien_Event_Observer $observer
+     */
+    public function noindexOptionPage($observer) {
+        $this->_noindex();
     }
     /**
      * REPLACE THIS WITH DESCRIPTION (handles event "m_before_load_filter_collection")
@@ -651,4 +658,13 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
 
     #endregion
 
+    #region Dependencies
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filterHelper() {
+        return Mage::helper('mana_filters');
+    }
+    #endregion
 }

@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>13.09.21.13</version>
+		    <version>14.04.04.19</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -107,6 +107,16 @@
                     </manapro_filterseolinks_noindex>
                 </observers>
             </controller_action_layout_render_before_cms_index_index>
+            <controller_action_layout_render_before_mana_optionPage_view><!-- this is event name this module listens for -->
+                <observers>
+                    <manapro_filterseolinks_noindex>
+                        <class>manapro_filterseolinks/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>noindexOptionPage</method>
+                        <!-- event handler method name -->
+                    </manapro_filterseolinks_noindex>
+                </observers>
+            </controller_action_layout_render_before_mana_optionPage_view>
             <m_before_load_filter_collection><!-- this is event name this module listens for -->
                 <observers>
                     <manapro_filterseolinks>
@@ -245,10 +255,18 @@
                 <title>2 or more filters applied</title>
                 <model>manapro_filterseolinks/noindex_filters</model>
             </several_filters>
+            <three_or_more_filters translate="title" module="manapro_filterseolinks">
+                <title>3 or more filters applied</title>
+                <model>manapro_filterseolinks/noindex_filtersThree</model>
+            </three_or_more_filters>
             <several_options translate="title" module="manapro_filterseolinks">
                 <title>2 or more options in the same filter applied</title>
                 <model>manapro_filterseolinks/noindex_options</model>
             </several_options>
+            <three_or_more_options translate="title" module="manapro_filterseolinks">
+                <title>3 or more options in the same filter applied</title>
+                <model>manapro_filterseolinks/noindex_optionsThree</model>
+            </three_or_more_options>
             <slider translate="title" module="manapro_filterseolinks">
                 <title>Slider filter applied</title>
                 <model>manapro_filterseolinks/noindex_slider</model>
@@ -257,6 +275,14 @@
                 <title>Any filter applied</title>
                 <model>manapro_filterseolinks/noindex_any</model>
             </any>
+            <any_two_options translate="title" module="manapro_filterseolinks">
+                <title>2 or more options in the any filter applied</title>
+                <model>manapro_filterseolinks/noindex_anyTwo</model>
+            </any_two_options>
+            <any_three_options translate="title" module="manapro_filterseolinks">
+                <title>3 or more options in the any filter applied</title>
+                <model>manapro_filterseolinks/noindex_anyThree</model>
+            </any_three_options>
         </noindex>
 	</manapro_filterseolinks>
 </config>

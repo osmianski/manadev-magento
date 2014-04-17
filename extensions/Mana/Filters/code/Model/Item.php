@@ -89,6 +89,9 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
     	}
     	else {
     		$query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue());
+    		if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+                $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getFilter()->getRequestVar());
+    		}
     	}
     	// MANA END
     	$params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
@@ -134,11 +137,38 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
                     'url' => $this->getValue(),
                     'prefix' => '',
                     'position' => 0,
-                    'id' => 0,
+                    'id' => $this->getValue(),
                 );
             }
        }
 
 	    return $key !== false ? $this->_seoData[$key] : $this->_seoData;
 	}
+
+    public function getEscapedLabel() {
+        if ($this->getFilter()->getFilterOptions()->getType() == 'category') {
+            return $this->getLabel();
+        }
+        else {
+            return Mage::helper('core')->escapeHtml($this->getLabel());
+        }
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
+    #endregion
 }

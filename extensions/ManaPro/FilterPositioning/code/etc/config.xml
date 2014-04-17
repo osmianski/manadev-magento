@@ -11,7 +11,7 @@
         <ManaPro_FilterPositioning>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.10.09.19</version>
+            <version>14.03.06.21</version>
         </ManaPro_FilterPositioning>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -200,11 +200,21 @@
                 <currently_shopping_by_title>1</currently_shopping_by_title>
                 <categories>none</categories>
             </positioning>
+            <mobile>
+                <max_width>450</max_width>
+                <column_filters>leave</column_filters>
+                <behavior>accordion</behavior>
+                <duration>500</duration>
+            </mobile>
             <positioning_menu>
-                <width>200</width>
+                <min_width>180</min_width>
+                <width>250</width>
             </positioning_menu>
             <positioning_horizontal>
                 <height>100</height>
+                <two_columns_width />
+                <three_columns_width>600</three_columns_width>
+                <four_columns_width>750</four_columns_width>
             </positioning_horizontal>
         </mana_filters>
     </default>

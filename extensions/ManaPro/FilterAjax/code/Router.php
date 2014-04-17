@@ -39,18 +39,25 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             $routerHelper
                 ->changePath($path)
                 ->processWithoutRendering($this, 'render');
-            $baseUrl = parse_url(Mage::getUrl());
+            $baseUrl = parse_url(Mage::getUrl(null, array('_nosid' => true)));
 
-            $_SERVER['REQUEST_URI'] = $baseUrl['path'] . ($path ? ltrim($path, '/') : '/');
+            Mage::register('m_original_request_uri', $_SERVER['REQUEST_URI']);
+            $_SERVER['REQUEST_URI'] = $baseUrl['path'] . ($path ? ltrim($path, '/') : '/')
+                . (($queryPos = strpos($_SERVER['REQUEST_URI'], '?')) !== false ? substr($_SERVER['REQUEST_URI'], $queryPos) : '');
+
+            Mage::register('manapro_filterajax_request', 1);
             $this->getCatalogSession()->setData('manapro_filterajax_request', 1);
-            Mage::getModel('core/url_rewrite')->rewrite();
+            if ($core->isEnterpriseUrlRewriteInstalled()) {
+                $this->_getRequestRewriteController()->rewrite();
+            }
+            else {
+                Mage::getModel('core/url_rewrite')->rewrite();
+            }
         }
         return false;
     }
 
     public function render() {
-        $this->getCatalogSession()->unsetData('manapro_filterajax_request');
-
         /* @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getSingleton('core/layout');
 
@@ -103,7 +110,17 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
      * @return Mage_Catalog_Model_Session
      */
     public function getCatalogSession() {
+        Mage::getSingleton('core/session', array('name' => 'frontend'));
         return Mage::getSingleton('catalog/session');
+    }
+
+    protected function _getRequestRewriteController()
+    {
+        $className = (string)Mage::getConfig()->getNode('global/request_rewrite/model');
+
+        return Mage::getSingleton('core/factory')->getModel($className, array(
+            'routers' => $this->getFront()->getRouters(),
+        ));
     }
     #endregion
 }

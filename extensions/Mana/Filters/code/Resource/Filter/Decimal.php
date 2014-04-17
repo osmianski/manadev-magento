@@ -53,6 +53,35 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
      * @return Mana_Filters_Resource_Filter_Decimal
      */
     public function applyToCollection($collection, $model, $value) {
+        $condition = '';
+        foreach ($value as $selection) {
+            if (strpos($selection, ',') !== false) {
+                list($index, $range) = explode(',', $selection);
+                $range = $this->getRange($index, $range);
+                if ($condition != '') $condition .= ' OR ';
+                $condition .= $this->_getApplyCondition($model, $range);
+            }
+        }
+
+        if ($condition) {
+            $this->_applyJoin($model, $collection);
+            $collection->getSelect()
+                ->distinct()
+                ->where($condition);
+        }
+
+        return $this;
+    }
+
+    protected function _getApplyCondition($model, $range) {
+        $tableAlias = $model->getAttributeModel()->getAttributeCode() . '_idx';
+
+        return '((' . "{$tableAlias}.value" . ' >= ' . $range['from'] . ') ' .
+            'AND (' . "{$tableAlias}.value" . ($this->isUpperBoundInclusive() ? ' <= ' : ' < ') . $range['to'] . '))';
+
+    }
+
+    protected function _applyJoin($model, $collection) {
         $attribute  = $model->getAttributeModel();
         $connection = $this->_getReadAdapter();
         $tableAlias = $attribute->getAttributeCode() . '_idx';
@@ -62,31 +91,12 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
             $connection->quoteInto("{$tableAlias}.store_id = ?", $collection->getStoreId())
         );
 
-        $condition = '';
-        foreach ($value as $selection) {
-            if (strpos($selection, ',') !== false) {
-                list($index, $range) = explode(',', $selection);
-                $range = $this->getRange($index, $range);
-                if ($condition != '') $condition .= ' OR ';
-                $condition .= '(('."{$tableAlias}.value" . ' >= '. $range['from'].') '.
-                    'AND ('."{$tableAlias}.value" . ($this->isUpperBoundInclusive() ? ' <= ' : ' < '). $range['to'].'))';
-            }
-        }
-
-        if ($condition) {
-            $collection->getSelect()
-                ->join(
-                    array($tableAlias => $this->getMainTable()),
-                    join(' AND ', $conditions),
-                    array()
-                )
-                ->distinct()
-                ->where($condition);
-        }
-
-        return $this;
+        $collection->getSelect()->join(
+            array($tableAlias => $this->getMainTable()),
+            join(' AND ', $conditions),
+            array()
+        );
     }
-
 
     public function isUpperBoundInclusive() {
         return false;

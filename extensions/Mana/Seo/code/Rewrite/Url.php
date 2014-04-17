@@ -46,7 +46,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
 
         $this->_routeParams = $routeParams;
-        if (isset($routeParams['_use_rewrite']) || $routePath == 'catalogsearch/result') {
+        if ($this->_isValidPageType($routePath) &&
+            (isset($routeParams['_use_rewrite']) || $routePath == 'catalogsearch/result'))
+        {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -64,6 +66,15 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 if ($this->_pageType = $this->_getPageType($this->_routePath)) {
                     $this->_suffix = $this->_pageType->getCurrentSuffix();
                     $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    if (Mage::getStoreConfig('web/default/front') == 'cms' &&
+                        $this->_pageUrlKey == Mage::getStoreConfig('web/default/cms_home_page'))
+                    {
+                        $this->_routePath = 'cms/index/index';
+                        unset($this->_routeParams['page_id']);
+                        $this->_pageType = $this->_getPageType($this->_routePath);
+                        $this->_suffix = $this->_pageType->getCurrentSuffix();
+                        $this->_pageUrlKey = $this->_pageType->getUrlKey($this);
+                    }
                 }
             }
         }
@@ -308,6 +319,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         $urlKeys = $urlCollection->getConnection()->fetchPairs($select);
         if (!isset($urlKeys[$categoryId])) {
             $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'category URL key', 'id', $categoryId));
+            return false;
         }
         $result = array();
         foreach ($categoryIds as $key) {
@@ -386,7 +398,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         $core = Mage::helper('mana_core');
 
         $isSlider = $core->isManadevLayeredNavigationInstalled() &&
-            in_array($parameterUrl->getFilterDisplay(), array('slider', 'range'));
+            in_array($parameterUrl->getFilterDisplay(), array('slider', 'range', 'min_max_slider'));
 
         $path = '';
         if ($value == '__0__') {
@@ -516,7 +528,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     if ($urlKey = $this->_getValueUrlKey($value)) {
                         return array(
                             'url' => $this->_encode($urlKey['final_url_key']),
-                            'prefix' => $urlKey['final_include_filter_name'] || $url->getFilterDisplay() == 'slider'
+                            'prefix' => $urlKey['final_include_filter_name'] || in_array($url->getFilterDisplay(), array('slider', 'range', 'min_max_slider'))
                                 ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
@@ -526,23 +538,69 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     break;
                 case Mana_Seo_Model_ParsedUrl::PARAMETER_CATEGORY:
                     if ($this->getSchema()->getRedirectToSubcategory()) {
-                        $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-                        $params['_current'] = true;
-                        $params['_use_rewrite'] = true;
-                        $params['_m_escape'] = '';
-                        $params['_query'] = array(
+                        $url = urldecode(str_replace('+', '%2B', $seo->urlDecode(Mage::app()->getFrontController()->getRequest()->getParam('m-url'))));
+                        $query = array(
                             'cat' => $value,
                             'm-seo-enabled' => null,
                             'm-show-more-cat' => null,
                             'm-show-more-popup' => null,
+                            'm-url' => null,
                         );
 
-                        $url = Mage::helper('mana_filters')->markLayeredNavigationUrl(
-                            Mage::getUrl('*/*/*', $params), '*/*/*', $params);
+                        /* @var $parser Mana_Seo_Helper_UrlParser */
+                        $parser = Mage::helper('mana_seo/urlParser');
 
-                        return array(
-                            'full_url' => $url
-                        );
+                        $storeUrl = Mage::app()->getStore()->isCurrentlySecure()
+                                ? $this->getUrl('', array('_secure' => true))
+                                : $this->getUrl('');
+                        $storeParsedUrl = parse_url($storeUrl);
+
+                        $path = substr($url, strlen(
+                                $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
+                                . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
+                                . $storeParsedUrl['path']));
+//                        if (!$this->coreHelper()->startsWith($path, '/')) {
+//                            $path = '/'.$path;
+//                        }
+
+                        $urlQuery = array();
+                        if (($pos = strpos($path, '?')) !== false) {
+                            parse_str(substr($path, $pos + 1), $urlQuery);
+                            $path = substr($path, 0, $pos);
+                        }
+                        $storeParsedQuery = array();
+                        if (isset($storeParsedUrl['query'])) {
+                            parse_str($storeParsedUrl['query'], $storeParsedQuery);
+                        }
+
+                        if ($this->coreHelper()->startsWith($path, 'catalogsearch/result/')) {
+                            $path = Mage::getStoreConfig('mana/seo/search_url_key').substr($path, strlen('catalogsearch/result/'));
+                        }
+                        if ($parsedUrl = $parser->parse($path)) {
+                            $params = array_merge(
+                                $parsedUrl->getImplodedParameters(),
+                                array(
+                                    '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
+                                    '_use_rewrite' => true,
+                                    '_m_escape' => '',
+                                    '_query' => array_merge(
+                                        $storeParsedQuery,
+                                        $query,
+                                        $urlQuery,
+                                        count($parsedUrl->getQueryParameters())
+                                            ? $parsedUrl->getImplodedQueryParameters()
+                                            : array()
+                                    ),
+                                ));
+
+                            $url = Mage::helper('mana_filters')->markLayeredNavigationUrl(
+                                Mage::getUrl($parsedUrl->getRoute(), $params),
+                                $parsedUrl->getRoute(), $params);
+                            return array('full_url' => $url);
+                        }
+                        else {
+                            throw new Exception('Not implemented');
+                        }
                     }
                     elseif ($urlKey = $this->_getCategoryUrlKeys($value)) {
                         return
@@ -580,7 +638,17 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     protected function _encode($s) {
-        return str_replace('%2F', '/', rawurlencode($s));
+        return str_replace('%2B', '+', str_replace('%2F', '/', rawurlencode($s)));
+    }
+
+    protected function _isValidPageType($routePath) {
+        $routePath = $this->coreHelper()->getRoutePath($routePath);
+        foreach (array_keys($this->coreHelper()->getPageTypes('seo_helper')) as $key) {
+            $pageType = $this->coreHelper()->getPageType($key);
+            if ($routePath == $pageType->getRoutePath()) {
+                return true;
+            }
+        }
     }
 
     #region Dependencies
@@ -598,5 +666,6 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     {
         return Mage::helper('mana_core');
     }
+
     #endregion
 }

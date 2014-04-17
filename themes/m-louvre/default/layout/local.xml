@@ -136,6 +136,11 @@
             <block type="catalog/product_list_related" name="related_left" before="-" template="catalog/product/list/related.phtml"/>
 	    </reference>
 	</m_catalog_product_view_related_left>
+	<m_catalog_product_view_related_inside_product>
+	    <reference name="product.info">
+            <block type="catalog/product_list_related" name="related_inside_product" template="catalog/product/list/related.phtml"/>
+	    </reference>
+	</m_catalog_product_view_related_inside_product>
 
 <!-- Page Layouts ============================================================-->
 

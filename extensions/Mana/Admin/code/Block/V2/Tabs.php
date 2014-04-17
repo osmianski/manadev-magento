@@ -32,7 +32,7 @@ class Mana_Admin_Block_V2_Tabs extends Mage_Adminhtml_Block_Widget_Tabs {
             foreach ($tabs as $tabId => $tab) {
                 $tab->setTabId($tabId);
                 $this->addTabBlock($tabId, $tab);
-                if (!$activeTabId) {
+                if (!$activeTabId || $tab->getData('active')) {
                     $activeTabId = $tabId;
                 }
             }
@@ -58,6 +58,23 @@ class Mana_Admin_Block_V2_Tabs extends Mage_Adminhtml_Block_Widget_Tabs {
             $result = ($withPrefix ? $this->getId() . '_' : '') . $tab->getId();
         }
         return str_replace('.', '_', $result);
+    }
+
+    public function getActiveTabName() {
+        if (($tabName = Mage::app()->getRequest()->getParam('tab'))
+            && ($tabBlock = $this->getChild($tabName))
+            && !$tabBlock->isHidden()
+        )
+        {
+            return $tabName;
+        }
+        else {
+            return key($this->_tabs);
+        }
+    }
+
+    public function getActiveTabBlock() {
+        return $this->getChild($this->getActiveTabName());
     }
 
     #region Dependencies

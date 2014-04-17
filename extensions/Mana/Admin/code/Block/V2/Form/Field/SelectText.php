@@ -20,7 +20,10 @@ class Mana_Admin_Block_V2_Form_Field_SelectText extends Varien_Data_Form_Element
             $html = '';
         }
         if ($this->getData('bold')) {
-            $html = "<strong>$html</strong>";
+            $html = "<strong data-value=\"$selected\">$html</strong>";
+        }
+        else {
+            $html = "<span data-value=\"$selected\">$html</span>";
         }
         return $html;
     }

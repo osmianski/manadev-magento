@@ -30,10 +30,10 @@ ManaPro.filterSuperSlider = function(id, o) {
             value = parseFloat(o.existingValues[found]);
         }
         if (o.formatThreshold && value >= o.formatThreshold) {
-            return o.decimalDigits2 ? value.toFixed(o.decimalDigits2) : value.round();
+            return o.decimalDigits2 ? parseFloat(value.toFixed(o.decimalDigits2)) : value.round();
         }
         else {
-            return o.decimalDigits ? value.toFixed(o.decimalDigits) : value.round();
+            return o.decimalDigits ? parseFloat(value.toFixed(o.decimalDigits)) : value.round();
         }
     }
     function _format(value) {
@@ -190,9 +190,12 @@ ManaPro.filterSuperSlider = function(id, o) {
             _change();
         });
 
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize === true) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {
@@ -226,6 +229,10 @@ ManaPro.filterSuperSlider = function(id, o) {
     jQuery(_resizeSpanAndHandles);
 
     jQuery(window).bind('resize', _resizeSpanAndHandles);
+    jQuery(document).bind('m-ajax-after', _resizeSpanAndHandles);
+    jQuery('#' + id + '-track').parent().on('m-prepare', function () {
+        _resizeSpanAndHandles(true);
+    });
     //jQuery('body').click(_resizeSpanAndHandles);
 };
 ManaPro.filterAttributeSlider = function (id, o) {
@@ -288,9 +295,12 @@ ManaPro.filterAttributeSlider = function (id, o) {
     };
     s.options.onChange = _change;
     //
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize === true) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {
@@ -323,6 +333,9 @@ ManaPro.filterAttributeSlider = function (id, o) {
     _mana_oldResizehandler[id] = _resizeSpanAndHandles;
     jQuery(_resizeSpanAndHandles);
     jQuery(window).bind('resize', _resizeSpanAndHandles);
+    jQuery('#' + id + '-track').parent().on('m-prepare', function () {
+        _resizeSpanAndHandles(true);
+    });
 };
 ManaPro.filterRangeInput = function (id, o) {
     var _changing = false;

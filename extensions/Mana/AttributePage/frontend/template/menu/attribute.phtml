@@ -1,0 +1,39 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Navigation */
+/* @var $_page Mana_AttributePage_Model_AttributePage_Store */
+/* @var $_collection Mana_AttributePage_Resource_AttributePage_Store_Collection */
+/* @var $_childCollection Mana_AttributePage_Resource_OptionPage_Store_Collection */
+$i = 0;
+$_collection = $this->getAttributePageCollection();
+?>
+<?php foreach($_collection as $_page) : ++$i; ?>
+    <?php
+        $_childCollection = $this->getOptionPageCollection($_page->getData('attribute_page_global_id'));
+        $_hasChildren = count($_childCollection->getItems()) > 0;
+        $_css = array();
+        $_css[] = $i == 1 ? 'first' : '';
+        $_css[] = $i == count($_collection->getItems()) ? 'last' : '';
+        $_css[] = $_hasChildren ? 'parent' : '';
+        $_css[] = $this->isAttributePageActive($_page, $_childCollection) ? 'active' : '';
+    ?>
+    <li class="level0 item nav-attribute-<?php echo $_page->getId()?> level-top <?php echo implode(' ', array_filter($_css)) ?>">
+        <a href="<?php echo $_page->getUrl() ?>" class="level-top">
+            <span><?php echo $this->escapeHtml($_page->getData('title')) ?></span>
+        </a>
+        <?php if ($_hasChildren): ?>
+        <ul class="level0">
+            <?php echo $this
+                ->setTemplate('mana/attributepage/menu/option.phtml')
+                ->setData('collection', $_childCollection)
+                ->setData('attribute_page', $_page)
+                ->_toHtml(); ?>
+        </ul>
+        <?php endif; ?>
+    </li>
+<?php endforeach; ?>

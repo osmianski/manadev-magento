@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_AttributePage
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <m_attribute_page_menu>
+        <reference name="catalog.topnav">
+            <action method="setTemplate"><filename>mana/attributepage/menu/top.phtml</filename></action>
+        </reference>
+    </m_attribute_page_menu>
+    <mana_optionpage_view translate="label">
+        <label>Option Page (MANAdev)</label>
+        <reference name="left">
+            <block type="catalog/layer_view" name="catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="mana_attributepage/option_view" name="option_view" template="mana/attributepage/option/view.phtml">
+                <block type="catalog/product_list" name="product_list" template="catalog/product/list.phtml">
+                    <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                        <block type="page/html_pager" name="product_list_toolbar_pager"/>
+                    </block>
+                    <action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>5</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+                    <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+                </block>
+            </block>
+        </reference>
+    </mana_optionpage_view>
+    <mana_attributepage_view translate="label">
+        <label>Option Page (MANAdev)</label>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
+        </reference>
+        <reference name="content">
+            <block type="mana_attributepage/attribute_view" name="attribute_view" template="mana/attributepage/attribute/view.phtml">
+                <block type="mana_attributepage/option_featured" name="option_featured" template="mana/attributepage/option/featured.phtml"/>
+                <block type="mana_attributepage/option_alpha" name="option_alpha" template="mana/attributepage/option/alpha.phtml"/>
+                <block type="mana_attributepage/option_list" name="option_list" template="mana/attributepage/option/list.phtml"/>
+            </block>
+        </reference>
+    </mana_attributepage_view>
+    <catalog_product_view>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
+        </reference>
+        <reference name="alert.urls">
+            <block type="mana_attributepage/option_product" name="m_option_product" before="-" template="mana/attributepage/option/product.phtml" />
+        </reference>
+    </catalog_product_view>
+</layout>
