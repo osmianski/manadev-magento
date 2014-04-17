@@ -9,9 +9,9 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Noindex_AnyThree extends ManaPro_FilterSeoLinks_Model_Condition
+class ManaPro_FilterSeoLinks_Model_Follow_Empty extends ManaPro_FilterSeoLinks_Model_Condition
 {
     public function detect($layerModel) {
-        return $this->_countOptionsInAllFilters($layerModel) >= 3;
+        return false;
     }
 }

@@ -9,16 +9,9 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Noindex_Slider {
+class ManaPro_FilterSeoLinks_Model_Noindex_Slider extends ManaPro_FilterSeoLinks_Model_Condition
+{
     public function detect($layerModel) {
-        $filter = null;
-        $result = false;
-        foreach ($layerModel->getState()->getFilters() as $item) {
-            if ($item->getFilter()->getFilterOptions() && in_array($item->getFilter()->getFilterOptions()->getDisplay(), array('slider', 'range', 'min_max_slider'))) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
+        return $this->_isSliderApplied($layerModel);
     }
 }
