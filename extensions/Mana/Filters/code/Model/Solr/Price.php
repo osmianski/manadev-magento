@@ -285,7 +285,7 @@ class Mana_Filters_Model_Solr_Price extends Mana_Filters_Model_Filter_Price
         if (!is_numeric($max)) {
             return parent::getRangeOnCollection($collection);
         } else {
-            $max = floor($max * $this->getCurrencyRate());
+            $max = $this->_ceil($max * $this->getCurrencyRate());
         }
 
         return compact('min', 'max');

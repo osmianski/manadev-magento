@@ -89,7 +89,7 @@ class Mana_Filters_Model_Filter_Price
 
     public function getHighestPossibleValue()
     {
-        return (int)ceil($this->getMaxPriceInt());
+        return $this->getMaxPriceInt();
     }
 
     protected $_hasNoResults = false;
@@ -179,9 +179,13 @@ class Mana_Filters_Model_Filter_Price
     {
         $min = 0;
         $max = $this->_getResource()->getMaxPriceOnCollection($this, $collection);
-        $max = ceil($max);
+        $max = $this->_ceil($max);
         $this->setData('max_price_int', $max);
         return compact('min', 'max');
+    }
+
+    protected function _ceil($value) {
+        return ceil($value);
     }
 
     /**
