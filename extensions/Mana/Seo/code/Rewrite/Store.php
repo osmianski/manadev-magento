@@ -34,11 +34,7 @@ class Mana_Seo_Rewrite_Store extends Mage_Core_Model_Store {
         if (($pos = strpos($currentUrl, '?')) !== false) {
             $currentUrl = substr($currentUrl, 0, $pos);
         }
-        $requestString = substr($currentUrl, strlen(
-                $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
-                . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-                . $storeParsedUrl['path']));
-
+        $requestString = ltrim(Mage::app()->getRequest()->getRequestString(), '/');
         $storeParsedQuery = array();
         if (isset($storeParsedUrl['query'])) {
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
