@@ -835,4 +835,26 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $html;
     }
 
+    public function initLayoutMessages($messagesStorage) {
+        if (!is_array($messagesStorage)) {
+            $messagesStorage = array($messagesStorage);
+        }
+        $layout = Mage::getSingleton('core/layout');
+        foreach ($messagesStorage as $storageName) {
+            $storage = Mage::getSingleton($storageName);
+            if ($storage) {
+                $block = $layout->getMessagesBlock();
+                $block->addMessages($storage->getMessages(true));
+                $block->setEscapeMessageFlag($storage->getEscapeMessages(true));
+                $block->addStorageType($storageName);
+            } else {
+                Mage::throwException(
+                    Mage::helper('core')->__('Invalid messages storage "%s" for layout messages initialization', (string)$storageName)
+                );
+            }
+        }
+
+        return $this;
+    }
+
 }

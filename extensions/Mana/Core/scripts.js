@@ -702,11 +702,16 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             }
         },
         preparePopup: function(options) {
+            options = this._preparePopupOptions(options);
             if (options.$popup === undefined) {
                 var $popup = $('#m-popup');
-                $popup
-                    .css({"width": "auto", "height": "auto"})
-                    .html(options.content);
+                $popup.css({"width": "auto", "height": "auto"});
+                if (core.isString(options.content)) {
+                    $popup.html(options.content);
+                }
+                else {
+                    $popup.html($(options.content).html());
+                }
 
                 if (options.popup['class']) {
                     $popup.addClass(options.popup['class']);
@@ -716,9 +721,31 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             }
             return options.$popup;
         },
+        _preparePopupOptions: function(options) {
+            var result = {
+                overlay: {
+                    opacity: 0.2
+                },
+                popup: {
+                    blockName: 'Mana/Core/PopupBlock'
+                },
+                popupBlock: {},
+                fadein: {
+                    overlayTime: 0,
+                    popupTime: 300
+                },
+                fadeout: {
+                    overlayTime: 0,
+                    popupTime: 500
+                }
+            };
+            $.extend(true, result, options);
+            return result;
+        },
         showPopup: function (options) {
-            var self = this;
+            options = this._preparePopupOptions(options);
 
+            var self = this;
             Mana.requireOptional([options.popup.blockName], function (PopupBlockClass) {
                 var fadeoutCallback = options.fadeout.callback;
                 options.fadeout.callback = function () {
@@ -737,7 +764,9 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                     popupBlock.setElement($popup[0]);
                     var vars = self.beginGeneratingBlocks(popupBlock);
                     self.endGeneratingBlocks(vars);
-                    popupBlock.prepare(options.popupBlock);
+                    if (popupBlock.prepare) {
+                        popupBlock.prepare(options.popupBlock);
+                    }
 
                     $('.m-popup-overlay').on('click', function () {
                         self.hidePopup();
@@ -1307,6 +1336,21 @@ function($, core, layout, json, undefined) {
         }
     });
 });
+Mana.define('Mana/Core/PopupBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout'], function ($, Block, layout) {
+    return Block.extend('Mana/Core/PopupBlock', {
+        prepare: function(options) {
+            var self = this;
+            this._host = options.host;
+
+            this.$().find('.btn-close').on('click', function() { return self._close(); });
+        },
+        _close: function() {
+            layout.hidePopup();
+            return false;
+        }
+    });
+});
+
 Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Config'],
 function ($, Block, config)
 {

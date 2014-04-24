@@ -14,4 +14,9 @@ class Mana_Checkout_SmartController extends Mage_Core_Controller_Front_Action {
         $result = Mage::getSingleton('mana_checkout/processing')->placeOrder();
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
+
+    function placeExpressOrderAction() {
+        $result = Mage::getSingleton('mana_checkout/processing_express')->placeOrder();
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+    }
 }

@@ -317,3 +317,12 @@
         }
     });
 })(jQuery);
+
+Mana.define('Mana/Checkout/LoginPopup', ['jquery', 'Mana/Core/PopupBlock'], function ($, PopupBlock) {
+    return PopupBlock.extend('Mana/Checkout/LoginPopup', {
+        prepare: function (options) {
+            this._super(options);
+            this.$().find('#email').val($('.billing-email input').val());
+        }
+    });
+});
