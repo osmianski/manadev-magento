@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+    <name>customers/manadev</name>
+
+    <!-- SEO Layered Navigation Plus -->
+
+    <part name="Mana/Admin" />
+    <part name="Mana/Ajax"/>
+    <part name="Mana/Core"/>
+    <part name="Mana/Db"/>
+    <part name="Mana/Filters"/>
+    <part name="Mana/Seo"/>
+    <part name="ManaPro/FilterAdmin"/>
+    <part name="ManaPro/FilterAdvanced"/>
+    <part name="ManaPro/FilterAjax"/>
+    <part name="ManaPro/FilterCheckboxes"/>
+    <part name="ManaPro/FilterClear"/>
+    <part name="ManaPro/FilterColors"/>
+    <part name="ManaPro/FilterDropdown"/>
+    <part name="ManaPro/FilterExpandCollapse"/>
+    <part name="ManaPro/FilterGroup"/>
+    <part name="ManaPro/FilterHelp"/>
+    <part name="ManaPro/FilterPositioning"/>
+    <part name="ManaPro/FilterRadios"/>
+    <part name="ManaPro/FilterSeoLinks"/>
+    <part name="ManaPro/FilterShowMore"/>
+    <part name="ManaPro/FilterSlider"/>
+    <part name="ManaPro/FilterSuperSlider"/>
+    <part name="ManaPro/FilterTree"/>
+
+    <!-- Other extensions -->
+    <part name="Mana/Dev"/>
+    <part name="ManaPro/Slider"/>
+
+    <!-- new or project-specific extensions -->
+    <part name="Mana/Checkout"/>
+    <part name="Local/Manadev"/>
+    <part name="Mana/GeoLocation"/>
+    <part name="Mana/ImageGallery"/>
+    <part name="Mana/Lt"/>
+    <part name="Mana/Vat"/>
+    <part name="default/manadev"/>
+
+</config>
