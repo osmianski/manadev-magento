@@ -1376,9 +1376,11 @@ function ($, Block, config)
             return this
                 ._super()
                 .on('bind', this, function() {
+                    $(window).on('load', _raiseResize);
                     $(window).on('resize', _raiseResize);
                 })
                 .on('unbind', this, function() {
+                    $(window).off('load', _raiseResize);
                     $(window).off('resize', _raiseResize);
                 });
 

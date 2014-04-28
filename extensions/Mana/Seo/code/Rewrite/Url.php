@@ -44,6 +44,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     public function getUrl($routePath = null, $routeParams = null) {
 //        $this->_escape = isset($routeParams['_escape']) ? $routeParams['_escape'] :
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
+        Mana_Core_Profiler2::start(__METHOD__, true);
 
         $this->_routeParams = $routeParams;
         if ($this->_isValidPageType($routePath) &&
@@ -79,7 +80,10 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             }
         }
 
-        return parent::getUrl($routePath, $this->_routeParams);
+        $result = parent::getUrl($routePath, $this->_routeParams);
+        Mana_Core_Profiler2::stop(__METHOD__);
+
+        return $result;
     }
 
     public function getRoutePath($routeParams = array()) {
@@ -250,24 +254,43 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return $this->_schema;
     }
 
+    static protected $_valueUrlKeys = array();
+
     /**
      * @param $optionId
      * @return array | bool
      */
     protected function _getValueUrlKey($optionId) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
+        Mana_Core_Profiler2::start(__METHOD__);
+        if (!isset(self::$_valueUrlKeys[$optionId])) {
+            if ($item = $this->itemHelper()->get($optionId)) {
+                $result = array(
+                    'id' => $item->getData('seo_id'),
+                    'final_url_key' => $item->getData('seo_url_key'),
+                    'final_include_filter_name' => $item->getData('seo_include_filter_name'),
+                    'position' => $item->getData('seo_position'),
+                    'option_id' => $item->getData('value'),
+                );
+            }
+            else {
+                /* @var $seo Mana_Seo_Helper_Data */
+                $seo = Mage::helper('mana_seo');
 
-        /* @var $logger Mana_Core_Helper_Logger */
-        $logger = Mage::helper('mana_core/logger');
+                /* @var $logger Mana_Core_Helper_Logger */
+                $logger = Mage::helper('mana_core/logger');
 
-        $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_ATTRIBUTE_VALUE);
-        $urlCollection->addFieldToFilter('option_id', $optionId);
-        if (!($result = $this->getUrlKey($urlCollection, array('final_include_filter_name', 'position', 'option_id')))) {
-            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'attribute option URL key', 'id', $optionId));
+                $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_ATTRIBUTE_VALUE);
+                $urlCollection->addFieldToFilter('option_id', $optionId);
+                if (!($result = $this->getUrlKey($urlCollection, array('final_include_filter_name', 'position', 'option_id')))) {
+                    $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'attribute option URL key', 'id', $optionId));
+                }
+            }
+
+            self::$_valueUrlKeys[$optionId] = $result;
         }
+        Mana_Core_Profiler2::stop();
 
-        return $result;
+        return self::$_valueUrlKeys[$optionId];
     }
 
     protected function _getCategoryUrlKeys($categoryId) {
@@ -642,13 +665,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     protected function _isValidPageType($routePath) {
-        $routePath = $this->coreHelper()->getRoutePath($routePath);
-        foreach (array_keys($this->coreHelper()->getPageTypes('seo_helper')) as $key) {
-            $pageType = $this->coreHelper()->getPageType($key);
-            if ($routePath == $pageType->getRoutePath()) {
-                return true;
-            }
-        }
+        return $this->coreHelper()->getPageTypeByRoutePath($routePath, 'seo_helper') != null;
     }
 
     #region Dependencies
@@ -665,6 +682,14 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     public function coreHelper()
     {
         return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Item
+     */
+    public function itemHelper()
+    {
+        return Mage::helper('mana_filters/item');
     }
 
     #endregion

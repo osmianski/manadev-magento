@@ -72,6 +72,30 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         $edit['pending'] = array();
     }
+
+    public function mergeEdits($edit1, $edit2) {
+        if (!$edit1) {
+            $edit1 = array(
+                'pending' => array(),
+                'saved' => array(),
+                'deleted' => array(),
+            );
+        }
+        return array(
+            'sessionId' => isset($edit1['sessionId']) ? $edit1['sessionId']: $edit2['sessionId'],
+            'pending' => $this->_mergeNumberArrays($edit1['pending'], $edit2['pending']),
+            'saved' => $this->_mergeNumberArrays($edit1['saved'], $edit2['saved']),
+            'deleted' => $this->_mergeNumberArrays($edit1['deleted'], $edit2['deleted']),
+        );
+    }
+    protected function _mergeNumberArrays($array1, $array2) {
+        foreach ($array2 as $key => $value) {
+            $array1[$key] = $value;
+        }
+        return $array1;
+    }
+
+
     /**
      * @param int $id
      * @return Mana_Filters_Model_Filter2_Value

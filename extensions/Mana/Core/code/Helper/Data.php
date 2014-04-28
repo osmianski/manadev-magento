@@ -721,6 +721,19 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $pageTypes[$type];
     }
 
+    /**
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType|null
+     */
+    public function getPageTypeByRoutePath($routePath = null, $helper = 'helper') {
+        foreach ($this->getPageTypes($helper) as $pageType) {
+            if ($pageType->getRoutePath() == $this->getRoutePath($routePath)) {
+                return $pageType;
+            }
+        }
+        return null;
+    }
+
     public function isManadevLayeredNavigationInstalled() {
         return $this->isModuleEnabled('Mana_Filters');
     }
@@ -833,6 +846,28 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         $html = $transportObject->getHtml();
 
         return $html;
+    }
+    public function getOptionArray($allOptions)
+    {
+        $_options = array();
+        foreach ($allOptions as $option) {
+            $_options[$option['value']] = $option['label'];
+        }
+        return $_options;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductToolbarParameters() {
+        $result = array();
+        $request = Mage::app()->getRequest();
+        foreach (array('p', 'mode', 'order', 'dir', 'limit') as $key) {
+            if ($value = $request->getParam($key)) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 
     public function initLayoutMessages($messagesStorage) {

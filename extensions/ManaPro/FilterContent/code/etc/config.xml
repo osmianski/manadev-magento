@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterContent
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <ManaPro_FilterContent>
+            <version>14.04.17.11</version>
+        </ManaPro_FilterContent>
+    </modules>
+    <global>
+        <helpers>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Helper</class>
+            </manapro_filtercontent>
+        </helpers>
+        <models>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Model</class>
+                <resourceModel>manapro_filtercontent_resources</resourceModel>
+            </manapro_filtercontent>
+            <manapro_filtercontent_resources>
+                <class>ManaPro_FilterContent_Resource</class>
+                <entities>
+					<rule_global><table>m_filter_content_rule_global</table></rule_global>
+					<rule_globalCustomSettings><table>m_filter_content_rule_global_custom_settings</table></rule_globalCustomSettings>
+					<rule_store><table>m_filter_content_rule_store</table></rule_store>
+					<rule_storeCustomSettings><table>m_filter_content_rule_store_custom_settings</table></rule_storeCustomSettings>
+					<rule_condition><table>m_filter_content_rule_condition</table></rule_condition>
+                </entities>
+            </manapro_filtercontent_resources>
+        </models>
+        <resources>
+            <manapro_filtercontent_setup>
+                <setup>
+                    <module>ManaPro_FilterContent</module>
+                </setup>
+            </manapro_filtercontent_setup>
+        </resources>
+        <blocks>
+            <manapro_filtercontent>
+                <class>ManaPro_FilterContent_Block</class>
+            </manapro_filtercontent>
+        </blocks>
+        <events>
+            <m_db_update_columns>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>prepareUpdateColumns</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_update_columns>
+            <m_db_update_process>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>processUpdate</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_update_process>
+            <m_db_insert_columns>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>prepareInsertColumns</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_insert_columns>
+            <m_db_insert_process>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>processInsert</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_insert_process>
+            <m_db_add_edited_data>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addEditedData</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_add_edited_data>
+            <m_db_validate>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>validate</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_validate>
+            <m_db_add_edited_details>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addGridData</method>
+                    </manapro_filtercontent>
+                </observers>
+            </m_db_add_edited_details>
+        </events>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <manapro_filtercontent>
+                    <file>manapro_filtercontent.xml</file>
+                </manapro_filtercontent>
+            </updates>
+            <translate>
+                <modules>
+                    <ManaPro_FilterContent>
+                        <files>
+                            <default>ManaPro_FilterContent.csv</default>
+                        </files>
+                    </ManaPro_FilterContent>
+                </modules>
+            </translate>
+        </layout>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <manapro_filtercontent before="Mage_Adminhtml">ManaPro_FilterContent_Adminhtml</manapro_filtercontent>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <frontend>
+        <events>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addCustomContentToGeneratedBlocks</method>
+                    </manapro_filtercontent>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>addCustomContentToBlockBeforeRendering</method>
+                    </manapro_filtercontent>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <manapro_filtercontent>
+                        <class>manapro_filtercontent/observer</class>
+                        <method>restoreOriginalBlockContentAfterRenderingAndPostProcess</method>
+                    </manapro_filtercontent>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+        <layout>
+            <updates module="ManaPro_FilterContent">
+                <manapro_filtercontent>
+                    <file>manapro_filtercontent.xml</file>
+                </manapro_filtercontent>
+            </updates>
+        </layout>
+    </frontend>
+    <manapro_filtercontent>
+        <content>
+            <!-- Content rendered before layout XML is loaded -->
+            <layout_xml>
+                <sort_order>100</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </layout_xml>
+            <widget_layout_xml>
+                <sort_order>200</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </widget_layout_xml>
+
+            <!-- Content rendered after block objects are generated -->
+            <meta_title>
+                <sort_order>300</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </meta_title>
+            <meta_keywords>
+                <sort_order>400</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </meta_keywords>
+            <meta_description>
+                <sort_order>500</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </meta_description>
+            <meta_robots>
+                <sort_order>600</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </meta_robots>
+
+            <!-- Content rendered from theme template and from CMS content -->
+            <title>
+                <sort_order>700</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </title>
+            <subtitle>
+                <sort_order>800</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </subtitle>
+            <description>
+                <sort_order>900</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </description>
+            <additional_description>
+                <sort_order>1000</sort_order>
+                <instruction>add</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </additional_description>
+            <common_directives>
+                <sort_order>1100</sort_order>
+                <instruction>pre_process</instruction>
+                <is_space_sensitive>0</is_space_sensitive>
+            </common_directives>
+        </content>
+        <actions>
+            <option>
+                <helper>manapro_filtercontent/action_option</helper>
+            </option>
+        </actions>
+    </manapro_filtercontent>
+    <default>
+        <mana_filtercontent>
+            <general>
+                <is_active>1</is_active>
+            </general>
+            <final>
+                <meta_title><![CDATA[{# Show default page title #}
+{# ----------------------- #}
+
+<echo>{{ meta_title }}</echo>
+
+{# Add labels of all applied filters
+and separators in between#}
+{# ----------------------- #}
+
+{% for option in filters %}
+    {% if loop.first %}
+        <echo>: </echo>
+    {% elseif not loop.last %}
+        <echo>, </echo>
+    {% else %}
+        <echo> and </echo>
+    {% endif %}
+
+    <echo>{{ option.label }}</echo>
+{% endfor %}
+
+{# Add page number to page title #}
+{# ----------------------- #}
+
+{% if page and page > 1 %}
+    <echo> (Page {{ page}})</echo>
+{% endif %}
+                ]]></meta_title>
+                <meta_keywords><![CDATA[{# Show default page keywords #}
+{# ----------------------- #}
+
+<echo>{{ meta_keywords }}</echo>
+
+{# Add labels of all applied filters
+and separators in between#}
+{# ----------------------- #}
+
+{% for option in filters %}
+    {% if not loop.first or meta_keywords != '' %}
+        <echo>,</echo>
+    {% endif %}
+
+    <echo>{{ option.label }}</echo>
+{% endfor %}
+                ]]></meta_keywords>
+                <meta_description><![CDATA[{# Show default page keywords #}
+{# ----------------------- #}
+
+<echo>{{ meta_description }}</echo>
+
+{# Add labels of all applied filters
+and separators in between#}
+{# ----------------------- #}
+
+{% for option in filters %}
+    {% if loop.first %}
+        <echo>. Applied filters: </echo>
+    {% elseif not loop.last %}
+        <echo>, </echo>
+    {% else %}
+        <echo> and </echo>
+    {% endif %}
+
+    <echo>{{ option.label }}</echo>
+{% endfor %}
+                ]]></meta_description>
+                <title>{{ title }}</title>
+                <subtitle><![CDATA[{% if subtitle %}
+    <h2>{{ subtitle }}</h2>
+{% endif %}]]></subtitle>
+                <description>{{ description }}</description>
+                <meta_robots>{{ meta_robots }}</meta_robots>
+            </final>
+        </mana_filtercontent>
+    </default>
+</config>

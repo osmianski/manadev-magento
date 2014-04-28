@@ -26,6 +26,11 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
      * @param Varien_Event_Observer $observer
      */
     public function addAppliedFiltersToTitle($observer) {
+        // this feature is obsolete when ManaPro_FilterContent module is in place and is enabled
+        if (Mage::getStoreConfigFlag('mana_filtercontent/general/is_active')) {
+            return;
+        }
+
         /* @var $action Mage_Core_Controller_Varien_Action */ $action = $observer->getEvent()->getAction();
         /* @var $layout Mage_Core_Model_Layout */ $layout = $observer->getEvent()->getLayout();
         /* @var $core Mana_Core_Helper_Data */ $core = Mage::helper(strtolower('Mana_Core'));
