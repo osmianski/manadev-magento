@@ -79,7 +79,9 @@ class Local_Manadev_Model_Observer {
      */
     public function addCheckoutOptions($observer) {
         Mage::helper('mana_core/js')->options('.m-checkout', array(
-            'updateOrderUrl' => Mage::getUrl('actions/checkout/updateOrderDetails'),
+            'updateOrderUrl' => Mage::getUrl('actions/checkout/updateOrderDetails', array(
+                '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
+            )),
         ));
     }
 
