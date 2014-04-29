@@ -184,8 +184,9 @@ class Mana_Filters_Model_Filter_Attribute
      */
     public function countOnCollection($collection)
     {
-        return $this->itemHelper()->countItems($this, $collection);
-        //return $this->_getResource()->countOnCollection($collection, $this);
+        return $this->itemHelper()->isEnabled()
+            ? $this->itemHelper()->countItems($this, $collection)
+            : $this->_getResource()->countOnCollection($collection, $this);
     }
 
     public function optimizedCountOnCollection($collection, $attributeIds) {

@@ -12,7 +12,7 @@
 		<Mana_Filters>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.04.17.11</version>
+		    <version>14.04.29.23</version>
 		</Mana_Filters>
 	</modules>
 	
