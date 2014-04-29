@@ -20,20 +20,6 @@ class Mana_Seo_Rewrite_Store extends Mage_Core_Model_Store {
                 : $this->getUrl('');
         $storeParsedUrl = parse_url($storeUrl);
 
-        $params = array(
-            '_current' => true,
-            '_m_escape' => '',
-            '_use_rewrite' => true,
-            '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
-//            '_query' => array(
-//                '___from_store' => null,
-//                '___store' => null,
-//            ),
-        );
-        $currentUrl = Mage::getUrl('*/*/*', $params);
-        if (($pos = strpos($currentUrl, '?')) !== false) {
-            $currentUrl = substr($currentUrl, 0, $pos);
-        }
         $requestString = ltrim(Mage::app()->getRequest()->getRequestString(), '/');
         $storeParsedQuery = array();
         if (isset($storeParsedUrl['query'])) {
@@ -54,20 +40,11 @@ class Mana_Seo_Rewrite_Store extends Mage_Core_Model_Store {
         if (!Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_STORE_IN_URL, $this->getCode())) {
             $storeParsedQuery['___store'] = $this->getCode();
         }
-        //if ($fromStore !== false) {
-            $storeParsedQuery['___from_store'] = $fromStore === true ? Mage::app()->getStore()->getCode() : $fromStore;
-        //}
+        $storeParsedQuery['___from_store'] = $fromStore === true ? Mage::app()->getStore()->getCode() : $fromStore;
 
         return $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
             . $storeParsedUrl['path'] . $requestString
             . ($storeParsedQuery ? '?'.http_build_query($storeParsedQuery, '', '&amp;') : '');
-
-
-
-        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
-        /* @var $url Mana_Seo_Rewrite_Url */
-        $url = Mage::getSingleton('core/url');
-		return $url->getUrl('*/*/*', parent::getCurrentUrl($fromStore));
 	}
 }
