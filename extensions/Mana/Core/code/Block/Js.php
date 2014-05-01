@@ -66,12 +66,23 @@ class Mana_Core_Block_Js extends Mage_Core_Block_Template {
 			$this->_options[$selector] = $options;
 		}
 		else {
-			foreach ($options as $key => $value) {
-				$this->_options[$selector][$key] = $value;
-			}
+		    $this->_mergeArrayRecursive($this->_options[$selector], $options);
 		}
 		return $this; 
 	}
+
+	protected function _mergeArrayRecursive(&$target, $source) {
+        foreach ($source as $key => $value) {
+            if (isset($target[$key]) && is_array($target[$key]) && is_array($value)) {
+                $this->_mergeArrayRecursive($target[$key], $value);
+            }
+            else {
+                $target[$key] = $value;
+            }
+        }
+
+    }
+
 	/**
 	 * Returns all the translations registered to be passed to client-side scripts
 	 * @return array | null

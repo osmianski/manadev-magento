@@ -6,15 +6,21 @@
 
 This module is ready. Currently working on:
 
-* creating a demo and putting on sale
-    * 
+
 
 ### Done So Far ###
 
 The latest work items are on the top:
 
+* put on sale
 * background images for additional content
 * filter option based rules
+
+### Further Plans ###
+
+Work items with higher priority are listed first:
+
+* 
 
 #### Metadata ####
 
