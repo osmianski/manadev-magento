@@ -81,7 +81,23 @@ class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract
     }
     public function getItemsCount() {
         $this->_prepareFilterBlockOnce();
-        return $this->getHidden() ? 0 : $this->_filter->getItemsCount();
+        if ($this->getHidden()) {
+            return 0;
+        }
+        else {
+            $count = $this->_filter->getItemsCount();
+            $selected = $this->_filter->getMSelectedValues();
+            if ($count == 1 &&
+                empty($selected) &&
+                $this->getFilterOptions()->getCode() != 'category' &&
+                Mage::getStoreConfigFlag('mana_filters/display/hide_filters_with_single_visible_item'))
+            {
+                return 0;
+            }
+            else {
+                return $count;
+            }
+        }
     }
 
     public function getMultipleValueSeparator() {

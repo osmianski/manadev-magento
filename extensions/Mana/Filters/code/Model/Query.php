@@ -159,6 +159,7 @@ class Mana_Filters_Model_Query extends Varien_Object
                 $mainSelect = clone $this->_productCollection->getSelect();
 
                 $collection = $this->createProductCollection();
+                //$sql = $collection->getSelect()->__toString();
                 foreach ($this->_filters as $filter) {
                     /* @var $filterModel Mana_Filters_Interface_Filter */
                     $filterModel = $filter['model'];

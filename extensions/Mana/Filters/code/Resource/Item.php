@@ -58,6 +58,7 @@ class Mana_Filters_Resource_Item extends Mage_Core_Model_Mysql4_Abstract {
             ->columns($fields)
             ->group($fields);
 
+        //$sql = $select->__toString();
         return $select;
 
     }
