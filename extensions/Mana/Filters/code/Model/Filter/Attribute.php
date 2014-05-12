@@ -103,21 +103,22 @@ class Mana_Filters_Model_Filter_Attribute
                     }
                 }
             }
-
-            $tags = array(
-                Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId()
-            );
-
-            $tags = $this->getLayer()->getStateTags($tags);
-
-            $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
-            foreach ($data as $position => &$item) {
-                $item['position'] = $position;
-            }
-            usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
-
-            $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
+
+
+        $tags = array(
+            Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId()
+        );
+
+        $tags = $this->getLayer()->getStateTags($tags);
+
+        $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
+        foreach ($data as $position => &$item) {
+            $item['position'] = $position;
+        }
+        usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
+
+        $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
 
         return $data;
     }
