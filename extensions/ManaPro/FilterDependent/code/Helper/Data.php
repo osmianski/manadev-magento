@@ -10,6 +10,10 @@
  * @author Mana Team
  */
 class ManaPro_FilterDependent_Helper_Data extends Mage_Core_Helper_Abstract {
+    public function areDependentFiltersClearedOnParentFilterChange() {
+        return Mage::getStoreConfigFlag('mana_filters/dependent/clear_on_parent_filter_change');
+    }
+
     /**
      * @param Mana_Filters_Model_Filter2_Store $filter
      * @param Mana_Filters_Resource_Filter2_Store_Collection $collection

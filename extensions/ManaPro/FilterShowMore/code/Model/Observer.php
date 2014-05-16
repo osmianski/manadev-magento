@@ -32,11 +32,13 @@ class ManaPro_FilterShowMore_Model_Observer {
 				$maxItemCount = $filter->getFilterOptions()->getShowMoreItemCount();
 				if (count($items->getItems()) > $maxItemCount) {
 				    $newItems = array();
-				    foreach ($items->getItems() as $index => $item) {
+				    $index = 0;
+				    foreach ($items->getItems() as $item) {
 				        /* @var $item Mana_Filters_Model_Item */
 				        if ($index < $maxItemCount || $item->getMSelected()) {
 				            $newItems[] = $item;
 				        }
+				        $index++;
 				    }
 					if (!$_helper->isShowAllRequested($filter)) {
 						$items->setItems($newItems);

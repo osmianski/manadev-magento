@@ -53,6 +53,22 @@
                     </manapro_filterdependent>
                 </observers>
             </m_crud_form>
+            <m_crud_grid_collection>
+                <observers>
+                    <manapro_filterdependent>
+                        <class>manapro_filterdependent/observer</class>
+                        <method>prepareGridCollection</method>
+                    </manapro_filterdependent>
+                </observers>
+            </m_crud_grid_collection>
+            <m_crud_grid_columns>
+                <observers>
+                    <manapro_filterdependent>
+                        <class>manapro_filterdependent/observer</class>
+                        <method>prepareGridColumns</method>
+                    </manapro_filterdependent>
+                </observers>
+            </m_crud_grid_columns>
         </events>
     </global>
     <adminhtml>
@@ -66,4 +82,11 @@
             </modules>
         </translate>
     </adminhtml>
+	<default>
+		<mana_filters>
+			<dependent>
+				<clear_on_parent_filter_change>1</clear_on_parent_filter_change>
+			</dependent>
+		</mana_filters>
+	</default>
 </config>

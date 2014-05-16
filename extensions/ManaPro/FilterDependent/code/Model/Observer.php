@@ -62,6 +62,40 @@ class ManaPro_FilterDependent_Model_Observer {
         }
     }
 
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "m_crud_grid_collection")
+     * @param Varien_Event_Observer $observer
+     */
+    public function prepareGridCollection($observer) {
+        /* @var $grid Mana_Admin_Block_Crud_Grid */ $grid = $observer->getEvent()->getGrid();
+
+        if ($grid instanceof ManaPro_FilterAdmin_Block_List_Grid) {
+            $grid->getCollection()->addColumnToSelect(array('depends_on_filter_id'));
+        }
+    }
+
+    /**
+     * REPLACE THIS WITH DESCRIPTION (handles event "m_crud_grid_columns")
+     * @param Varien_Event_Observer $observer
+     */
+    public function prepareGridColumns($observer) {
+        /* @var $grid Mana_Admin_Block_Crud_Grid */ $grid = $observer->getEvent()->getGrid();
+
+        if ($grid instanceof ManaPro_FilterAdmin_Block_List_Grid) {
+            $grid->addColumn('depends_on_filter_id', array(
+                'header' => Mage::helper('manapro_filterdependent')->__('Dependent On'),
+                'index' => 'depends_on_filter_id',
+                'width' => '150px',
+                'align' => 'center',
+                'type' => 'options',
+                'options' => Mage::getModel('manapro_filterdependent/source_filter')
+                    ->setNoEmptyValue(true)
+                    ->getOptionArray(),
+            ));
+        }
+    }
+
+
     #region Dependencies
 
     /**
