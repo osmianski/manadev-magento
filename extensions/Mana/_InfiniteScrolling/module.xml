@@ -6,9 +6,13 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
+    <!-- This section activates module in Magento system. -->
     <modules>
         <Mana_InfiniteScrolling>
+            <!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
+        	in this case Magento will behave as if module does not exist). -->
             <active>false</active>
+            <!-- This instructs Magento to search for module code in app/code/local directory. -->
             <codePool>local</codePool>
             <depends>
                 <Mage_Catalog />

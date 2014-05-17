@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+    <name>Mana/Node</name>
+    <version>14.05.17.08</version>
+
+    <sync extension-file="Gulpfile.js" project-file="Gulpfile.js"/>
+    <sync extension-file="package.json" project-file="package.json.for-gulp.template"/>
+</config>
