@@ -11,11 +11,11 @@
  */
 class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filter_Attribute {
     public function getLowestPossibleLabel() {
-        $items = $this->getItems();
+        $items = array_values($this->getItems());
         return $items[0]['label'];
     }
     public function getHighestPossibleLabel() {
-        $items = $this->getItems();
+        $items = array_values($this->getItems());
         return $items[count($items) - 1]['label'];
     }
     protected function _getLabelByValue($value) {
@@ -45,11 +45,11 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
         }
     }
     public function getLowestPossibleValue() {
-        $items = $this->getItems();
+        $items = array_values($this->getItems());
         return $items[0]['value'];
     }
     public function getHighestPossibleValue() {
-        $items = $this->getItems();
+        $items = array_values($this->getItems());
         return $items[count($items) - 1]['value'];
     }
     public function getCurrentRangeLowerBound() {
@@ -89,10 +89,14 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
         $key = $this->getLayer()->getStateKey() . '_' . $this->_requestVar;
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
 
+        /* @var $query Mana_Filters_Model_Query */
+        $query = $this->getQuery();
+
+        if ($data === null && $this->itemHelper()->isEnabled()) {
+            $data = $query->getFilterCounts($this->getFilterOptions()->getCode());
+        }
         if ($data === null) {
             $options = $attribute->getFrontend()->getSelectOptions();
-            /* @var $query Mana_Filters_Model_Query */
-            $query = $this->getQuery();
             $optionsCount = $query->getFilterCounts($this->getFilterOptions()->getCode());
             $data = array();
 
@@ -109,51 +113,52 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
                     );
                 }
             }
+        }
 
-            $tags = array(
-                Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId()
-            );
+        $tags = array(
+            Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId()
+        );
 
-            $tags = $this->getLayer()->getStateTags($tags);
+        $tags = $this->getLayer()->getStateTags($tags);
 
-            $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
-            foreach ($data as $position => &$item) {
-                $item['position'] = $position;
+        $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
+        foreach ($data as $position => &$item) {
+            $item['position'] = $position;
+        }
+        usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
+
+        $first = $last = -1;
+        if ($rangeAndLabels = $this->_getRangeAndLabels()) {
+            extract($rangeAndLabels);
+            /* @var $from string */
+            /* @var $to string */
+        }
+        else {
+            $from = $to = -1;
+        }
+        if ($this->_getIsFilterable() != 2) {
+            foreach ($data as $index => $current) {
+                if ($current['count'] || $current['value'] == $from) {
+                    $first = $index;
+                    break;
+                }
             }
-            usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
-
-            $first = $last = -1;
-            if ($rangeAndLabels = $this->_getRangeAndLabels()) {
-                extract($rangeAndLabels);
-                /* @var $from string */
-                /* @var $to string */
+            foreach (array_reverse($data) as $index => $current) {
+                if ($current['count'] || $current['value'] == $to) {
+                    $last = count($data) - $index - 1;
+                    break;
+                }
+            }
+            if ($first != -1) {
+                $data = array_slice($data, $first, $last - $first + 1);
             }
             else {
-                $from = $to = -1;
+                $data = array();
             }
-            if ($this->_getIsFilterable() != 2) {
-                foreach ($data as $index => $current) {
-                    if ($current['count'] || $current['value'] == $from) {
-                        $first = $index;
-                        break;
-                    }
-                }
-                foreach (array_reverse($data) as $index => $current) {
-                    if ($current['count'] || $current['value'] == $to) {
-                        $last = count($data) - $index - 1;
-                        break;
-                    }
-                }
-                if ($first != -1) {
-                    $data = array_slice($data, $first, $last - $first + 1);
-                }
-                else {
-                    $data = array();
-                }
-            }
-
-            $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
+
+        $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
+
         return $data;
     }
 
