@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "scripts.js",
+  "sources": [
+    "vendor/manadev/magento-extensions/extensions/Mana/InfiniteScrolling/frontend/js/src/header.js",
+    "vendor/manadev/magento-extensions/extensions/Mana/InfiniteScrolling/frontend/js/src/Loader.js"
+  ],
+  "names": [],
+  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA"
+}

@@ -18,4 +18,13 @@
             </mana_infinitescrolling>
         </helpers>
     </global>
+    <frontend>
+        <layout>
+            <updates module="Mana_InfiniteScrolling">
+                <mana_infinitescrolling>
+                    <file>mana_infinitescrolling.xml</file>
+                </mana_infinitescrolling>
+            </updates>
+        </layout>
+    </frontend>
 </config>
