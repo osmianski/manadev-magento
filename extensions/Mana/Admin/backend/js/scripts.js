@@ -59,7 +59,7 @@
 			var request = [];
 			if ($.options('edit-form') && $.options('edit-form').subforms) {
 				$.each($.options('edit-form').subforms, function(index, formId) {
-					$.extend(request, $(formId).serializeArray());
+					$.merge(request, $(formId).serializeArray());
 				});
 			}
             $(document).trigger('m-before-save', [request]);
