@@ -11,6 +11,12 @@ var modules = {};
 var buildTasks;
 var watchTasks;
 
+function Module(gulpfile) {
+}
+
+_.extend(Module.prototype, {
+});
+
 // Require Gulpfiles of all the modules
 function loadModules() {
     // only load modules once
@@ -19,7 +25,7 @@ function loadModules() {
     }
     modules = {};
 
-    glob("vendor/**/ModuleGulpfile.js", {sync: true}, function (er, files) {
+    glob("vendor/**/ExtensionGulpfile.js", {sync: true}, function (er, files) {
         _.each(files, function (gulpfile) {
             gulpfile = process.cwd() + path.sep + gulpfile;
 
@@ -51,7 +57,7 @@ function loadModules() {
                 });
             }
 
-            modules[module.name] = module;
+            modules[module.name] = new Module(gulpfile);
         });
     });
 }
