@@ -10,9 +10,10 @@
 
 
 Mana.define('Mana/InfiniteScrolling/Loader', ['jquery'], function ($) {
+    throw 'qq';
     return Mana.Object.extend('Mana/InfiniteScrolling/Loader', {
     });
 });
 
 
-//# sourceMappingURL=scripts.js.map
+//# sourceMappingURL=mana_infinitescrolling.js.map

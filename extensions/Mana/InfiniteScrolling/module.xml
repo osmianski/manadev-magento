@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_InfiniteScrolling>
-            <active>false</active>
+            <active>true</active>
             <codePool>local</codePool>
             <depends>
                 <Mage_Catalog />

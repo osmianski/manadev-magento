@@ -1,10 +1,10 @@
 {
   "version": 3,
-  "file": "scripts.js",
+  "file": "mana_infinitescrolling.js",
   "sources": [
-    "vendor/manadev/magento-extensions/extensions/Mana/InfiniteScrolling/frontend/js/src/header.js",
-    "vendor/manadev/magento-extensions/extensions/Mana/InfiniteScrolling/frontend/js/src/Loader.js"
+    "skin/frontend/base/default/js/src/Mana/InfiniteScrolling/header.js",
+    "skin/frontend/base/default/js/src/Mana/InfiniteScrolling/Loader.js"
   ],
   "names": [],
-  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA"
+  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA;AACA"
 }
