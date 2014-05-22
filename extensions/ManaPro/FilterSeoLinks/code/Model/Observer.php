@@ -476,6 +476,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 $target->getSelect('main')->columns(array(
                     'global.include_in_url AS include_in_url',
                     'global.url_position AS url_position',
+                    'global.include_in_canonical_url AS include_in_canonical_url',
                 ));
                 break;
         }
@@ -502,6 +503,9 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_URL_POSITION)) {
                     $object->setData('url_position', $values['position']);
                 }
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_CANONICAL_URL)) {
+                    $object->setData('include_in_canonical_url', Mana_Seo_Model_Source_IncludeInUrl::AS_IN_SCHEMA);
+                }
                 break;
             case 'mana_filters/filter2_store':
                 if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL)) {
@@ -509,6 +513,9 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 }
                 if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_URL_POSITION)) {
                     $object->setData('url_position', $values['url_position']);
+                }
+                if (!$dbHelper->hasOverriddenValue($object, $values, Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_CANONICAL_URL)) {
+                    $object->setData('include_in_canonical_url', $values['include_in_canonical_url']);
                 }
                 break;
         }
@@ -528,6 +535,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                 $target->getSelect('main')->columns(array(
                     'global.include_in_url AS include_in_url',
                     'global.url_position AS url_position',
+                    'global.include_in_canonical_url AS include_in_canonical_url',
                 ));
                 break;
         }
@@ -548,10 +556,12 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             case 'mana_filters/filter2':
                 $object->setData('include_in_url', Mana_Seo_Model_Source_IncludeInUrl::AS_IN_SCHEMA);
                 $object->setData('url_position', $values['position']);
+                $object->setData('include_in_canonical_url', Mana_Seo_Model_Source_IncludeInUrl::AS_IN_SCHEMA);
                 break;
             case 'mana_filters/filter2_store':
                 $object->setData('include_in_url', $values['include_in_url']);
                 $object->setData('url_position', $values['url_position']);
+                $object->setData('include_in_canonical_url', $values['include_in_canonical_url']);
                 break;
         }
     }
@@ -590,46 +600,47 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
                             'legend' => $t->__('Search Engine Optimization'),
                         )
                     );
+                    /** @noinspection PhpParamsInspection */
+                    $fieldset->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_fieldset'));
+
+                    /* @var $includeInUrlSource Mana_Seo_Model_Source_IncludeInUrl */
+                    $includeInUrlSource = Mage::getSingleton('mana_seo/source_includeInUrl');
 
                     if ($filter->getData('type') == 'attribute') {
-                        /** @noinspection PhpParamsInspection */
-                        $fieldset->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_fieldset'));
-
-                        /* @var $includeInUrlSource Mana_Seo_Model_Source_IncludeInUrl */
-                        $includeInUrlSource = Mage::getSingleton('mana_seo/source_includeInUrl');
-                        $field = $fieldset->addField(
-                            'include_in_url',
-                            'select',
-                            array_merge(
-                                array(
-                                    'label' => $t->__('Include Filter Name In URL'),
-                                    'name' => 'include_in_url',
-                                    'options' => $includeInUrlSource->getOptionArray(),
-                                    'required' => true,
-                                ),
-                                $adminHelper->isGlobal() ? array() : array(
-                                    'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL,
-                                    'default_label' => $t->__('Same For All Stores'),
-                                )
-                            )
-                        );
+                        $field = $fieldset->addField('include_in_url', 'select', array_merge( array(
+                            'label' => $t->__('Include Filter Name In URL'),
+                            'name' => 'include_in_url',
+                            'options' => $includeInUrlSource->getOptionArray(),
+                            'required' => true,
+                        ), $adminHelper->isGlobal() ? array() : array(
+                            'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL,
+                            'default_label' => $t->__('Same For All Stores'),
+                        )));
                         /** @noinspection PhpParamsInspection */
                         $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
                     }
 
-                    $field = $fieldset->addField(
-                        'url_position',
-                        'text',
-                        array(
-                            'label' => $t->__('Position in URL'),
-                            'name' => 'url_position',
-                            'required' => true,
-                            'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
-                            'default_label' => $adminHelper->isGlobal()
-                                ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
-                                : $t->__('Same For All Stores'),
-                        )
-                    );
+                    $field = $fieldset->addField('url_position', 'text', array(
+                        'label' => $t->__('Position in URL'),
+                        'name' => 'url_position',
+                        'required' => true,
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_URL_POSITION,
+                        'default_label' => $adminHelper->isGlobal()
+                            ? ($filter->getData('type') != 'category' ? $t->__('Use Attribute Configuration') : $t->__('Use Default'))
+                            : $t->__('Same For All Stores'),
+                    ));
+                    /** @noinspection PhpParamsInspection */
+                    $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
+
+                    $field = $fieldset->addField('include_in_canonical_url', 'select', array_merge( array(
+                        'label' => $t->__('Include Applied Filter In Canonical URL'),
+                        'name' => 'include_in_canonical_url',
+                        'options' => $includeInUrlSource->getOptionArray(),
+                        'required' => true,
+                    ), $adminHelper->isGlobal() ? array() : array(
+                        'default_bit' => Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_CANONICAL_URL,
+                        'default_label' => $t->__('Same For All Stores'),
+                    )));
                     /** @noinspection PhpParamsInspection */
                     $field->setRenderer($layout->getBlockSingleton('mana_admin/crud_card_field'));
                 }
@@ -659,6 +670,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             case 'mana_filters/filter2_store':
                 $dbHelper->updateDefaultableField($object, 'include_in_url', Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_URL, $fields, $useDefault);
                 $dbHelper->updateDefaultableField($object, 'url_position', Mana_Filters_Resource_Filter2::DM_URL_POSITION, $fields, $useDefault);
+                $dbHelper->updateDefaultableField($object, 'include_in_canonical_url', Mana_Filters_Resource_Filter2::DM_INCLUDE_IN_CANONICAL_URL, $fields, $useDefault);
                 break;
         }
     }

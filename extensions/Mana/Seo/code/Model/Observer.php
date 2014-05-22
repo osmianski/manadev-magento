@@ -12,7 +12,7 @@
  *
  */
 class Mana_Seo_Model_Observer {
-    protected $_filterCodes;
+    protected $_filters;
 	/**
 	 * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_generate_blocks_after")
 	 * @param Varien_Event_Observer $observer
@@ -49,10 +49,13 @@ class Mana_Seo_Model_Observer {
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
+                $filters = $this->_getFilters();
                 foreach (array_keys($query) as $key) {
-                    if (in_array($key, $this->_getFilterCodes())) {
+                    if (isset($filters[$key])) {
                         $areFiltersApplied = true;
-                        if (!$schema->getCanonicalFilters()) {
+                        if ($filters[$key]['include_in_canonical_url'] == 'never' ||
+                            $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && !$schema->getCanonicalFilters())
+                        {
                             $query[$key] = null;
                         }
                     }
@@ -96,19 +99,34 @@ class Mana_Seo_Model_Observer {
         }
     }
 
-    protected function _getFilterCodes() {
-        if ($this->_filterCodes === null) {
-            /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
-            $collection = Mage::getResourceModel('catalog/product_attribute_collection');
-            $collection->addIsFilterableFilter();
-            $this->_filterCodes = array('cat');
-            foreach ($collection as $attribute) {
-                /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-                $this->_filterCodes[] = $attribute->getAttributeCode();
+    protected function _getFilters() {
+        if ($this->_filters === null) {
+            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+                $this->_filters = array();
+                foreach ($this->filterHelper()->getFilterOptionsCollection(true) as $filter) {
+                    /* @var $filter Mana_Filters_Model_Filter2_Store */
+                    $this->_filters[$filter->getType() == 'category' ? 'cat' : $filter->getCode()] = array(
+                        'include_in_canonical_url' => $filter->getData('include_in_canonical_url'),
+                    );
+                }
+            }
+            else {
+                /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
+                $collection = Mage::getResourceModel('catalog/product_attribute_collection');
+                $collection->addIsFilterableFilter();
+                $this->_filters = array('cat' => array(
+                    'include_in_canonical_url' => 'as_in_schema'
+                ));
+                foreach ($collection as $attribute) {
+                    /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+                    $this->_filters[$attribute->getAttributeCode()] = array(
+                        'include_in_canonical_url' => 'as_in_schema'
+                    );
+                }
             }
         }
 
-        return $this->_filterCodes;
+        return $this->_filters;
     }
 
     /**
@@ -192,6 +210,13 @@ class Mana_Seo_Model_Observer {
     public function coreHelper() {
 	    return Mage::helper('mana_core');
 	}
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filterHelper() {
+        return Mage::helper('mana_filters');
+    }
 
     /**
      * @return Mana_Seo_Helper_Data
