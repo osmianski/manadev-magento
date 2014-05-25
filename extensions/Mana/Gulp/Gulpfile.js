@@ -11,6 +11,8 @@ var xml2js = require('xml2js');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var concat = require('gulp-concat-sourcemap');
+var print = require('gulp-print');
+var watch = require('gulp-watch');
 
 /**
  * Gulp application which orchestrates the whole build/watch process
@@ -18,7 +20,7 @@ var concat = require('gulp-concat-sourcemap');
  */
 function App() {
     this.dir = process.cwd();
-    this.modules = {};
+    this.extensions = {};
     this.buildTasks = [];
     this.watchTasks = [];
 }
@@ -32,15 +34,15 @@ _.extend(App.prototype, {
         glob("vendor/**/ExtensionGulpfile.js", {sync: true}, function (er, files) {
             _.each(files, function (gulpfile) {
                 gulpfile = self.dir + path.sep + gulpfile;
-                var moduleClass = require(gulpfile);
-                var module = new moduleClass(self, gulpfile);
-                self.modules[module.name] = module;
+                var extensionClass = require(gulpfile);
+                var extension = new extensionClass(self, gulpfile);
+                self.extensions[extension.name] = extension;
             });
         });
     },
     loadTasks: function() {
-        _.each(this.modules, function (module) {
-            module.loadTasks();
+        _.each(this.extensions, function (extension) {
+            extension.loadTasks();
         });
     }
 });
@@ -108,32 +110,52 @@ _.extend(Extension.prototype, {
      */
     loadJsTasks: function(taskName, dir, sourceFiles) {
         var self = this;
-        var scriptFilename = self.getTargetFilename(this.dir + path.sep + dir + path.sep + 'scripts.js');
-        dir = path.dirname(scriptFilename);
-//        var frontendJsDir = this.dir + path.sep + dir + path.sep;
-//        var src = [];
-//        _.each(sourceFiles, function(sourceFile) {
-//            src.push(self.getTargetFilename(frontendJsDir + sourceFile));
-//        });
 
-        gulp.task(this.prefix + taskName + '_scripts', function() {
-            return gulp.src(sourceFiles, { cwd: dir })
-                .pipe(concat(path.basename(scriptFilename), { prefix: 5 }));
+        // gulp task names
+        var buildTaskName = this.prefix + 'build_' + taskName + '_scripts';
+        var buildMinTaskName = this.prefix + 'build_' + taskName + '_min_scripts';
+        var watchTaskName = this.prefix + 'watch_' + taskName + '_scripts';
+
+        var frontendJsDir = this.dir + path.sep + dir + path.sep;
+        var scriptFilename = self.getTargetFilename(frontendJsDir + 'scripts.js');
+//        var minScriptFilename = self.getTargetFilename(frontendJsDir + 'scripts.min.js');
+//        console.log(this.dir);
+//        console.log(dir);
+//        console.log(scriptFilename);
+//        console.log('%j', sourceFiles);
+        dir = path.dirname(scriptFilename);
+        console.log(dir);
+        var src = [];
+        _.each(sourceFiles, function(sourceFile) {
+            src.push(self.getTargetFilename(frontendJsDir + sourceFile));
         });
 
-//        gulp.task(this.prefix + taskName + '_min_scripts', [this.prefix + taskName + '_scripts'], function() {
-//            gulp.src(frontendJsDir + 'scripts.js')
-//                .pipe(rename({suffix: '.min'}))
-//                .pipe(uglify({
-//                    inSourceMap: frontendJsDir + 'scripts.js.map',
-//                    outSourceMap: 'scripts.min.js.map',
-//                    preserveComments: 'some'
-//                }))
-//                .pipe(gulp.dest(frontendJsDir));
-//        });
+        gulp.task(buildTaskName, function() {
+            return gulp.src(src)
+                .pipe(print())
+                .pipe(concat(path.basename(scriptFilename), { prefix: dir.split('/').length }))
+                .pipe(gulp.dest(dir));
+        });
 
-//        this.app.buildTasks.push(this.prefix + taskName + '_min_scripts');
-        this.app.buildTasks.push(this.prefix + taskName + '_scripts');
+        gulp.task(buildMinTaskName, [buildTaskName], function() {
+            return gulp.src(scriptFilename)
+                .pipe(print())
+                .pipe(rename({suffix: '.min'}))
+                .pipe(uglify({
+                    //inSourceMap: scriptFilename + '.map',
+                    //outSourceMap: minScriptFilename + '.map',
+                    preserveComments: 'some'
+                }))
+                .pipe(gulp.dest(dir));
+        });
+
+        gulp.task(watchTaskName, function () {
+            gulp.watch(src, [buildMinTaskName]);
+        });
+
+
+        this.app.buildTasks.push(buildMinTaskName);
+        this.app.watchTasks.push(watchTaskName);
     },
     getTargetFilename: function(filename) {
         var self = this;

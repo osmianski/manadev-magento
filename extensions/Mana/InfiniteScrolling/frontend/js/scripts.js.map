@@ -2,9 +2,9 @@
   "version": 3,
   "file": "mana_infinitescrolling.js",
   "sources": [
-    "skin/frontend/base/default/js/src/Mana/InfiniteScrolling/header.js",
-    "skin/frontend/base/default/js/src/Mana/InfiniteScrolling/Loader.js"
+    "src/Mana/InfiniteScrolling/header.js",
+    "src/Mana/InfiniteScrolling/Loader.js"
   ],
   "names": [],
-  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA;AACA"
+  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA"
 }
