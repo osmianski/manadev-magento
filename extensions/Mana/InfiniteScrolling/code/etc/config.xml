@@ -17,6 +17,11 @@
                 <class>Mana_InfiniteScrolling_Helper</class>
             </mana_infinitescrolling>
         </helpers>
+        <blocks>
+            <mana_infinitescrolling>
+                <class>Mana_infiniteScrolling_Block</class>
+            </mana_infinitescrolling>
+        </blocks>
     </global>
     <frontend>
         <layout>

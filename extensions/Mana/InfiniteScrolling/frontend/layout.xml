@@ -13,6 +13,13 @@
         <update handle="jquery_core" />
         <reference name="head">
         	<action method="addItem"><type>skin_js</type><name>js/mana_infinitescrolling.js</name><params/></action>
+			<action method="addCss"><stylesheet>css/mana_infinitescrolling.css</stylesheet></action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="mana_infinitescrolling/engine" name="infinitescrolling_engine">
+            	<action method="setData"><key>list</key><value>.category-products</value></action>
+            	<action method="setData"><key>list_item</key><value>.category-products</value></action>
+            </block>
         </reference>
     </mana_infinitescrolling>
 </layout>

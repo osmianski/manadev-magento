@@ -1,15 +1,4 @@
 /**
- * @category    Mana
- * @package     Mana_InfiniteScrolling
- * @copyright   Copyright (c) http://www.manadev.com
- * @license     http://www.manadev.com/license  Proprietary License
- */
-
-; // for better JS merging
-
-
-
-/**
  * Infinite Scrolling engine is client-side block. It contains loader template which is shown during loading
  * additional content.
  */
@@ -92,6 +81,3 @@ Mana.define('Mana/InfiniteScrolling/Engine', ['jquery', 'Mana/Core/Block'], func
 
     });
 });
-
-
-//# sourceMappingURL=mana_infinitescrolling.js.map
