@@ -73,7 +73,7 @@ ManaPro.filterSuperSlider = function(id, o) {
                 parseFloat($_from.val()),
                 parseFloat($_to.val())
             ];
-            if (value[0] == NaN || value[1] == NaN) {
+            if (isNaN(value[0]) || isNaN(value[1])) {
                 _changing = false;
                 return;
             }
@@ -364,7 +364,7 @@ ManaPro.filterRangeInput = function (id, o) {
             parseFloat($_from.val()),
             parseFloat($_to.val())
         ];
-        if (value[0] == NaN || value[1] == NaN) {
+        if (isNaN(value[0]) || isNaN(value[1])) {
             _changing = false;
             return;
         }
