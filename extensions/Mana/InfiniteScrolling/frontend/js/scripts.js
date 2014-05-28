@@ -49,6 +49,14 @@ Mana.define('Mana/InfiniteScrolling/Engine', ['jquery', 'Mana/Core/Block'], func
             return this.$().data('list-item');
         },
 
+        getProductCount: function() {
+            return this.$().data('product-count');
+        },
+
+        getPageSize: function() {
+            return this.$().data('page-size');
+        },
+
         // endregion
 
         // region Selectors
@@ -60,6 +68,10 @@ Mana.define('Mana/InfiniteScrolling/Engine', ['jquery', 'Mana/Core/Block'], func
 
         $items: function() {
             return this.$list().find(this.getListItemSelector());
+        },
+
+        $loader: function() {
+            return this.$().find('.infinite-scrolling-loader');
         },
 
         $scrollingArea: function() {
@@ -76,7 +88,13 @@ Mana.define('Mana/InfiniteScrolling/Engine', ['jquery', 'Mana/Core/Block'], func
         },
 
         getProductListBottom: function() {
+            var $lastItem = this.$items().last();
 
+            return $lastItem.offset().top + $lastItem.height();
+        },
+
+        getVisibleItemCount: function() {
+            return this.$items().length;
         },
 
         // endregion
@@ -85,7 +103,12 @@ Mana.define('Mana/InfiniteScrolling/Engine', ['jquery', 'Mana/Core/Block'], func
         // ------------------------------------------------
 
         onScroll: function () {
-
+            // when window bottom reaches product list bottom
+            if (this.getScrollingAreaBottom() >= this.getProductListBottom() &&
+                this.getVisibleItemCount() < this.getProductCount())
+            {
+                this.load(this.getVisibleItemCount(), );
+            }
         }
 
         // endregion
