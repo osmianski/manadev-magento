@@ -113,8 +113,8 @@ class Mana_Filters_Model_Filter_Attribute
         $tags = $this->getLayer()->getStateTags($tags);
 
         $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
-        foreach ($data as $position => &$item) {
-            $item['position'] = $position;
+        foreach (array_keys($data) as $position => $key) {
+            $data[$key]['position'] = $position;
         }
         usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
 

@@ -37,6 +37,7 @@ class Mana_Filters_Resource_Item extends Mage_Core_Model_Mysql4_Abstract {
         $isSelectedExpr = count($selectedOptionIds) ? "`eav`.`value` IN (" . implode(', ', $selectedOptionIds). ")" : "NULL";
 
         $fields = array(
+            'sort_order' => new Zend_Db_Expr("`o`.`sort_order`"),
             'value' => new Zend_Db_Expr("`eav`.`value`"),
             'label' => new Zend_Db_Expr("COALESCE(`vs`.`value`, `vg`.`value`)"),
             'm_selected' => new Zend_Db_Expr($isSelectedExpr),
@@ -51,6 +52,8 @@ class Mana_Filters_Resource_Item extends Mage_Core_Model_Mysql4_Abstract {
                 {$db->quoteInto("`eav`.`store_id` = ?", $filter->getStoreId())}",
                 array('count' => "COUNT(DISTINCT `eav`.`entity_id`)")
             )
+            ->joinInner(array('o' => $this->getTable('eav/attribute_option')),
+                "`o`.`option_id` = `eav`.`value`", null)
             ->joinInner(array('vg' => $this->getTable('eav/attribute_option_value')),
                 $db->quoteInto("`vg`.`option_id` = `eav`.`value` AND `vg`.`store_id` = ?", 0), null)
             ->joinLeft(array('vs' => $this->getTable('eav/attribute_option_value')),
