@@ -184,6 +184,32 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
             return false;
         }
     }
+
+    protected function _isVisible($rangeAndLabels) {
+        if ($rangeAndLabels === false) {
+            return false;
+        }
+        extract($rangeAndLabels);
+        /* @var $text array */
+        /* @var $from string */
+        /* @var $to string */
+        $isInside = false;
+        $found = false;
+        foreach ($this->_getItemsData() as $item) {
+            if ($item['value'] == $from) {
+                if ($item['value'] != $to) {
+                    $isInside = true;
+                }
+            } elseif ($item['value'] == $to) {
+                if ($isInside) {
+                    $isInside = false;
+                    $found = true;
+                }
+            }
+        }
+
+        return $found;
+    }
     public function getItemsCount() {
         $count = count($this->getItems());
         return $count > 1 ? $count : 0;
@@ -191,7 +217,7 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
 
     protected function _applyToCollection($collection, $value = null)
     {
-        if ($rangeAndLabels = $this->_getRangeAndLabels()) {
+        if (($rangeAndLabels = $this->_getRangeAndLabels()) && $this->_isVisible($rangeAndLabels)) {
             extract($rangeAndLabels);
             /* @var $text array */
             /* @var $from string */
@@ -206,8 +232,10 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
                     }
                     $values[] = $item['value'];
                 } elseif ($item['value'] == $to) {
-                    $isInside = false;
-                    $values[] = $item['value'];
+                    if ($isInside) {
+                        $isInside = false;
+                        $values[] = $item['value'];
+                    }
                 } elseif ($isInside) {
                     $values[] = $item['value'];
                 }
@@ -220,7 +248,7 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
     }
 
     public function addToState() {
-        if ($rangeAndLabels = $this->_getRangeAndLabels()) {
+        if (($rangeAndLabels = $this->_getRangeAndLabels()) && $this->_isVisible($rangeAndLabels)) {
             extract($rangeAndLabels);
             /* @var $text array */
             $this->getLayer()->getState()->addFilter($this->_createItemEx(array(
