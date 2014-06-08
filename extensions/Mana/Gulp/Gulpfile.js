@@ -11,9 +11,15 @@ var xml2js = require('xml2js');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var concat = require('gulp-concat-sourcemap');
-var print = require('gulp-print');
+var gulpPrint = require('gulp-print');
 var watch = require('gulp-watch');
 
+function print() {
+    return gulpPrint(function(filepath) {
+        var d = new Date();
+        return '' + d.getHours() + ':' + d.getMinutes() + ': ' + filepath;
+    });
+}
 /**
  * Gulp application which orchestrates the whole build/watch process
  * @constructor
@@ -124,7 +130,7 @@ _.extend(Extension.prototype, {
 //        console.log(scriptFilename);
 //        console.log('%j', sourceFiles);
         dir = path.dirname(scriptFilename);
-        console.log(dir);
+//        console.log(dir);
         var src = [];
         _.each(sourceFiles, function(sourceFile) {
             src.push(self.getTargetFilename(frontendJsDir + sourceFile));
@@ -133,7 +139,10 @@ _.extend(Extension.prototype, {
         gulp.task(buildTaskName, function() {
             return gulp.src(src)
                 .pipe(print())
-                .pipe(concat(path.basename(scriptFilename), { prefix: dir.split('/').length }))
+                .pipe(concat(path.basename(scriptFilename), {
+                    prefix: dir.split('/').length - 1,
+                    sourceRoot: '../'
+                }))
                 .pipe(gulp.dest(dir));
         });
 

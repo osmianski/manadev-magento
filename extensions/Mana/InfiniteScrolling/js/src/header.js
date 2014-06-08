@@ -4,5 +4,6 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-.mb-infinitescrolling-engine { display: none; }
-.infinite-scrolling-list-loader, .infinite-scrolling-grid-loader { text-align: center; }
+
+; // for better JS merging
+

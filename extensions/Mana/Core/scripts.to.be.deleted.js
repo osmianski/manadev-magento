@@ -7,6 +7,8 @@
 
 ; // make JS merging easier
 
+
+
 var Mana = Mana || {};
 
 (function($, $p, undefined) {
@@ -141,6 +143,8 @@ var Mana = Mana || {};
     });
 })(jQuery, $);
 
+
+
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.
@@ -217,6 +221,7 @@ var Mana = Mana || {};
     };
 })();
 
+
 Mana.define('Mana/Core', ['jquery'], function ($) {
     return Mana.Object.extend('Mana/Core', {
         getClasses: function(element) {
@@ -265,6 +270,8 @@ Mana.define('Mana/Core', ['jquery'], function ($) {
         }
     });
 });
+
+
 Mana.define('Mana/Core/Config', ['jquery'], function ($) {
     return Mana.Object.extend('Mana/Core/Config', {
         _init: function () {
@@ -284,9 +291,17 @@ Mana.define('Mana/Core/Config', ['jquery'], function ($) {
         set: function (data) {
             $.extend(this._data, data);
             return this;
-        }
+        },
+        getBaseUrl: function (url) {
+            return url.indexOf(this.getData('url.base')) == 0
+                ? this.getData('url.base')
+                : this.getData('url.secureBase');
+        },
+
     });
 });
+
+
 Mana.define('Mana/Core/Json', ['jquery', 'singleton:Mana/Core'], function ($, core) {
     return Mana.Object.extend('Mana/Core/Json', {
         parse: function (what) {
@@ -311,6 +326,8 @@ Mana.define('Mana/Core/Json', ['jquery', 'singleton:Mana/Core'], function ($, co
         }
     });
 });
+
+
 Mana.define('Mana/Core/Utf8', [], function () {
     return Mana.Object.extend('Mana/Core/Utf8', {
         decode: function (str_data) {
@@ -358,6 +375,8 @@ Mana.define('Mana/Core/Utf8', [], function () {
         }
     });
 });
+
+
 Mana.define('Mana/Core/Base64', ['singleton:Mana/Core/Utf8'], function (utf8) {
     return Mana.Object.extend('Mana/Core/Base64', {
         encode: function (what) {
@@ -484,6 +503,8 @@ Mana.define('Mana/Core/Base64', ['singleton:Mana/Core/Utf8'], function (utf8) {
         }
     });
 });
+
+
 Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:Mana/Core/Config'], function (base64, config) {
     return Mana.Object.extend('Mana/Core/UrlTemplate', {
         decodeAttribute: function (data) {
@@ -499,6 +520,8 @@ Mana.define('Mana/Core/UrlTemplate', ['singleton:Mana/Core/Base64', 'singleton:M
         }
     });
 });
+
+
 Mana.define('Mana/Core/StringTemplate', ['jquery'], function ($, undefined) {
     return Mana.Object.extend('Mana/Core/StringTemplate', {
         concat: function(parsedTemplate, vars) {
@@ -522,6 +545,8 @@ Mana.define('Mana/Core/StringTemplate', ['jquery'], function ($, undefined) {
         }
     });
 });
+
+
 Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, core, undefined) {
     return Mana.Object.extend('Mana/Core/Layout', {
         _init: function () {
@@ -823,6 +848,8 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         }
     });
 });
+
+
 Mana.define('Mana/Core/Ajax', ['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Json',
     'singleton:Mana/Core', 'singleton:Mana/Core/Config'],
 function ($, layout, json, core, config, undefined)
@@ -1070,6 +1097,7 @@ function ($, layout, json, core, config, undefined)
         _internalCallInterceptionCallback: function(url, element) {
             var interceptor = this._findMatchingInterceptor(url, element);
             if (interceptor) {
+                this.lastUrl = url;
                 interceptor.intercept(url, element);
                 return false; // prevent default link click behavior
             }
@@ -1108,9 +1136,19 @@ function ($, layout, json, core, config, undefined)
                 this._matchedInterceptorCache[url] = interceptor;
             }
             return this._matchedInterceptorCache[url];
+        },
+        getDocumentUrl: function() {
+            if (this.lastUrl) {
+                return this.lastUrl;
+            }
+            else {
+                return document.URL;
+            }
         }
     });
 });
+
+
 Mana.define('Mana/Core/Block', ['jquery', 'singleton:Mana/Core', 'singleton:Mana/Core/Layout',
     'singleton:Mana/Core/Json'],
 function($, core, layout, json, undefined) {
@@ -1336,6 +1374,8 @@ function($, core, layout, json, undefined) {
         }
     });
 });
+
+
 Mana.define('Mana/Core/PopupBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout'], function ($, Block, layout) {
     return Block.extend('Mana/Core/PopupBlock', {
         prepare: function(options) {
@@ -1350,6 +1390,7 @@ Mana.define('Mana/Core/PopupBlock', ['jquery', 'Mana/Core/Block', 'singleton:Man
         }
     });
 });
+
 
 Mana.define('Mana/Core/PageBlock', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Config'],
 function ($, Block, config)
@@ -1433,6 +1474,7 @@ function ($, Block, config)
     });
 });
 
+
 Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'], function($, layout, ajax) {
     function _generateBlocks() {
         var vars = layout.beginGeneratingBlocks();
@@ -1443,6 +1485,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
         ajax.startIntercepting();
     });
 });
+
 
 //region (Obsolete) additional jQuery functions used in MANAdev extensions
 (function($) {
@@ -1777,4 +1820,6 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
     };
 
 })(jQuery);
-//endregion/
+//endregion
+
+//# sourceMappingURL=core.js.map

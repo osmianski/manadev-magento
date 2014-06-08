@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_InfiniteScrolling>
-            <version>14.05.17.11</version>
+            <version>14.06.08.17</version>
         </Mana_InfiniteScrolling>
     </modules>
     <global>
@@ -32,4 +32,25 @@
             </updates>
         </layout>
     </frontend>
+    <mana_core>
+        <routers>
+            <mana_infinitescrolling>
+                <class>Mana_InfiniteScrolling_Router</class>
+                <sort_order>100</sort_order>
+            </mana_infinitescrolling>
+        </routers>
+    </mana_core>
+    <default>
+        <mana>
+            <ajax>
+                <url_key_infinitescrolling>ajax/infinite-scrolling</url_key_infinitescrolling>
+                <route_separator_filter>requested-url</route_separator_filter>
+                <page_separator>page</page_separator>
+                <limit_separator>limit</limit_separator>
+            </ajax>
+            <infinitescrolling>
+                <effect_duration>300</effect_duration>
+            </infinitescrolling>
+        </mana>
+    </default>
 </config>

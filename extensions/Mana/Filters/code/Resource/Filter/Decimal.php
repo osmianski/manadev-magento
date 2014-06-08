@@ -37,11 +37,12 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
 
         $adapter = $this->_getReadAdapter();
 
-        $countExpr = new Zend_Db_Expr("COUNT(*)");
+        $countExpr = new Zend_Db_Expr("COUNT(DISTINCT e.entity_id)");
         $rangeExpr = new Zend_Db_Expr("FLOOR(decimal_index.value / {$model->getRange()}) + 1");
 
         $select->columns(array('range' => $rangeExpr, 'count' => $countExpr));
         $select->group('range');
+        //$sql = $select->__toString();
 
         return $adapter->fetchPairs($select);
     }

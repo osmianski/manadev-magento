@@ -24,5 +24,10 @@
 				<Mana_Db />
             </depends>
         </Mana_Filters>
+        <Mana_InfiniteScrolling>
+            <depends>
+                <Mana_Filters />
+            </depends>
+        </Mana_InfiniteScrolling>
     </modules>
 </config>

@@ -17,9 +17,7 @@ function($, ajax, config, layout, undefined)
 {
     return Mana.Object.extend('Mana/LayeredNavigation/AjaxInterceptor', {
         _getBaseUrl: function(url) {
-            return url.indexOf(config.getData('url.base')) == 0
-                ? config.getData('url.base')
-                : config.getData('url.secureBase');
+            return config.getBaseUrl(url);
         },
         _isProductListToolbarClicked: function (element) {
             return element !== undefined && (
