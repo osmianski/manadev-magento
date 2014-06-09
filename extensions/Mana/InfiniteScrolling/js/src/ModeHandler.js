@@ -32,6 +32,8 @@ function ($) {
         $loader: function () {
             return this.engine.$container().find(this.getLoaderSelector());
         },
-
+        $loaderLocation: function() {
+            return this.$rows().last();
+        }
     });
 });

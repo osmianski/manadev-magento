@@ -8,7 +8,8 @@ module.exports = Extension.extend({
         this.loadJsTasks('frontend', 'frontend/js', [
             'src/header.js',
             'src/ListMode.js',
-            'src/GridMode.js'
+            'src/GridMode.js',
+            'src/ResponsiveGridMode.js'
         ]);
     }
 });

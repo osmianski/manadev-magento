@@ -24,6 +24,7 @@
     <sync extension-dir="frontend/js/src" project-dir="skin/frontend/base/default/js/src/{Extension/Name}"/>
     <sync extension-file="frontend/css/styles.css" project-file="skin/frontend/base/default/css/{extension_name}.css"/>
     <sync extension-dir="frontend/images" project-dir="skin/frontend/base/default/images/{extension_name}"/>
+    <sync extension-file="frontend-rwd/layout.xml" project-file="app/design/frontend/rwd/default/layout/{extension_name}.xml"/>
 
     <!-- module backend files (having impact on Admin Panel) -->
     <sync extension-file="backend/layout.xml" project-file="app/design/adminhtml/default/default/layout/{extension_name}.xml"/>

@@ -6,3 +6,4 @@
  */
 .mb-infinitescrolling-engine { display: none; }
 .infinite-scrolling-list-loader, .infinite-scrolling-grid-loader { text-align: center; }
+.infinite-scrolling-list-loader img, .infinite-scrolling-grid-loader img { display: inline; }

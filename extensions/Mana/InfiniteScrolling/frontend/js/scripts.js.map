@@ -4,9 +4,10 @@
   "sources": [
     "src/Mana/InfiniteScrolling/header.js",
     "src/Mana/InfiniteScrolling/ListMode.js",
-    "src/Mana/InfiniteScrolling/GridMode.js"
+    "src/Mana/InfiniteScrolling/GridMode.js",
+    "src/Mana/InfiniteScrolling/ResponsiveGridMode.js"
   ],
   "names": [],
-  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACRA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA",
+  "mappings": "AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACTA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACXA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;ACRA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA",
   "sourceRoot": "../"
 }

@@ -142,6 +142,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.getModeHandler().$loader();
         },
 
+        $loaderLocation: function () {
+            return this.getModeHandler().$loaderLocation();
+        },
+
         $scrollingArea: function() {
             return $(window);
         },
@@ -208,7 +212,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
 
         showLoader: function() {
             this.loaderVisible = true;
-            this.$rows().last().after(this.$loaderTemplate().clone());
+            this.$loaderLocation().after(this.$loaderTemplate().clone());
         },
 
         hideLoader: function() {
@@ -299,7 +303,9 @@ function ($) {
         $loader: function () {
             return this.engine.$container().find(this.getLoaderSelector());
         },
-
+        $loaderLocation: function() {
+            return this.$rows().last();
+        }
     });
 });
 

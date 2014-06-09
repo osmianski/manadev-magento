@@ -34,7 +34,7 @@
 
                 <!-- add custom additional product list layout modes here -->
                 <action method="addModeHandler"><mode>list</mode><handler>Mana/InfiniteScrolling/ListMode</handler></action>
-                <action method="addModeHandler"><mode>grid</mode><handler>Mana/InfiniteScrolling/GridMode</handler></action>
+                <action method="addModeHandler"><mode>grid</mode><handler>Mana/InfiniteScrolling/ResponsiveGridMode</handler></action>
             	<block type="core/template" name="infinitescrolling_loader" template="mana/infinitescrolling/loader.phtml"/>
             </block>
             <reference name="m_ajax_update">

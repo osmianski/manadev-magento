@@ -4,5 +4,8 @@
 Mana.define('Mana/InfiniteScrolling/ListMode', ['jquery', 'Mana/InfiniteScrolling/ModeHandler'],
 function ($, ModeHandler) {
     return ModeHandler.extend('Mana/InfiniteScrolling/ListMode', {
+        $loaderLocation: function() {
+            return this.$rows().last().parent();
+        }
     });
 });
