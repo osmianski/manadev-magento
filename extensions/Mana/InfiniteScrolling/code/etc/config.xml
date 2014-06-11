@@ -6,115 +6,51 @@
 @license     http://www.manadev.com/license  Proprietary License
  -->
 <config>
-    <!-- This section registers module with Magento system. -->
     <modules>
         <Mana_InfiniteScrolling>
-            <!-- This version number identifies version of database tables specific to this extension. It is written to
-		  	core_resource table.  -->
-            <version>12.06.06.19</version>
+            <version>14.06.08.17</version>
         </Mana_InfiniteScrolling>
     </modules>
-    <!-- This section contains module settings which are merged into global configuration during each page load, 
-	each ajax request. -->
     <global>
-        <!-- This section registers helper classes to be accessible through Mage::helper() method. Mana_InfiniteScrolling_Helper_Data
-		class is accessible through Mage::helper('mana_infinitescrolling') call, other Mana_InfiniteScrolling_Helper_XXX_YYY classes are accessible 
-		through  Mage::helper('mana_infinitescrolling/xxx_yyy') call. -->
         <helpers>
             <mana_infinitescrolling>
-                <!-- This says that string 'mana_infinitescrolling' corresponds to Mana_InfiniteScrolling_Helper pseudo-namespace in 
-				Mage::helper() calls. -->
                 <class>Mana_InfiniteScrolling_Helper</class>
             </mana_infinitescrolling>
         </helpers>
-        <!-- This section registers block classes Mana_InfiniteScrolling_Block_XXX_YYY to be accessible through
-            'mana_infinitescrolling/xxx_yyy' shortcuts. -->
         <blocks>
-            <!-- This says that string 'mana_infinitescrolling' corresponds to Mana_InfiniteScrolling_Block pseudo-namespace. -->
             <mana_infinitescrolling>
-                <class>Mana_InfiniteScrolling_Block</class>
+                <class>Mana_infiniteScrolling_Block</class>
             </mana_infinitescrolling>
-            <!-- INSERT HERE: rewrites, ... -->
         </blocks>
-        <!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
-            Mage::getSingleton('<model type>') calls. That is, Mana_InfiniteScrolling_Model_XXX_YYY classes are accessible as 
-            'mana_infinitescrolling/xxx_yyy' type strings both in getModel() and getSingleton() calls. -->
-        <models>
-            <!-- This says that string 'mana_infinitescrolling' corresponds to Mana_InfiniteScrolling_Model pseudo-namespace in 
-                getModel() and getSingleton() calls. -->
-            <mana_infinitescrolling>
-                <class>Mana_InfiniteScrolling_Model</class>
-                <!-- INSERT HERE: resource section name -->
-            </mana_infinitescrolling>
-            <!-- INSERT HERE: rewrites, ... -->
-        </models>
-        <!-- INSERT HERE: blocks, models, ... -->
     </global>
-    <!-- This section enables static visual changes in frontend area. -->
     <frontend>
-        <!-- This section registers additional layout XML file with our module-specific layout changes to be loaded
-            and executes during page rendering. -->
         <layout>
-            <updates>
+            <updates module="Mana_InfiniteScrolling">
                 <mana_infinitescrolling>
                     <file>mana_infinitescrolling.xml</file>
                 </mana_infinitescrolling>
             </updates>
         </layout>
-        <!-- This section registers event handlers of this module defined in Mana_InfiniteScrolling_Model_Observer with 
-            events defined in other module throughout the system. So when some code in other module invokes an event 
-            mentioned in this section, handler method of Mana_InfiniteScrolling_Model_Observer class gets called. -->
-        <events>
-            <m_ajax_response><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_infinitescrolling>
-                        <class>mana_infinitescrolling/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>renderAjaxResponse</method>
-                        <!-- event handler method name -->
-                    </mana_infinitescrolling>
-                </observers>
-            </m_ajax_response>
-            <m_ajax_request><!-- this is event name this module listens for -->
-                <observers>
-                    <mana_infinitescrolling>
-                        <class>mana_infinitescrolling/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>prepareAjaxRequest</method>
-                        <!-- event handler method name -->
-                    </mana_infinitescrolling>
-                </observers>
-            </m_ajax_request>
-        </events>
-        <!-- INSERT HERE: layout, translate, routers -->
     </frontend>
-    <mana_ajax>
-        <allowed_actions>
-            <catalog_category_view>
-                <scroll/>
-            </catalog_category_view>
-            <catalogsearch_result_index>
-                <scroll/>
-            </catalogsearch_result_index>
-            <cms_index_index>
-                <scroll/>
-            </cms_index_index>
-            <cms_page_view>
-                <scroll/>
-            </cms_page_view>
-        </allowed_actions>
-    </mana_ajax>
+    <mana_core>
+        <routers>
+            <mana_infinitescrolling>
+                <class>Mana_InfiniteScrolling_Router</class>
+                <sort_order>100</sort_order>
+            </mana_infinitescrolling>
+        </routers>
+    </mana_core>
     <default>
         <mana>
             <ajax>
-                <overlay_scroll>0</overlay_scroll>
-                <progress_scroll>0</progress_scroll>
+                <url_key_infinitescrolling>ajax/infinite-scrolling</url_key_infinitescrolling>
+                <route_separator_filter>requested-url</route_separator_filter>
+                <page_separator>page</page_separator>
+                <limit_separator>limit</limit_separator>
             </ajax>
+            <infinitescrolling>
+                <effect_duration>300</effect_duration>
+            </infinitescrolling>
         </mana>
-        <mana_infinitescrolling>
-            <general>
-                <buffer_size>2</buffer_size>
-            </general>
-        </mana_infinitescrolling>
     </default>
 </config>

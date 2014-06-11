@@ -20,5 +20,10 @@
                 <Mana_Core />
             </depends>
         </Mana_Ajax>
+        <Mana_InfiniteScrolling>
+            <depends>
+                <Mana_Ajax />
+            </depends>
+        </Mana_InfiniteScrolling>
     </modules>
 </config>

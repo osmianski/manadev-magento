@@ -270,6 +270,12 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         }
     }
 
+    /**
+     * @param Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $productCollection
+     * @param $categoryCollection
+     * @param bool $inCurrentCategory
+     * @return $this
+     */
     public function addCountToCategories($productCollection, $categoryCollection, $inCurrentCategory = false) {
         Mana_Core_Profiler2::start(__METHOD__);
         $isAnchor = array();
@@ -308,6 +314,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
                 $anchorStmt = clone $select;
                 $anchorStmt->limit(); //reset limits
                 $anchorStmt->where('count_table.category_id IN (?)', $isAnchor);
+                $sql = $anchorStmt->__toString();
                 $productCounts += $productCollection->getConnection()->fetchPairs($anchorStmt);
                 $anchorStmt = null;
             }

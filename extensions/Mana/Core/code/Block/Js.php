@@ -95,9 +95,15 @@ class Mana_Core_Block_Js extends Mage_Core_Block_Template {
 	public function getOptions() { return $this->_options; }
 
 	protected function _prepareLayout() {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper('mana_core');
+
 	    $this
 	        ->setConfig('url.base', Mage::getUrl('', array('_nosid' => true)))
 	        ->setConfig('url.secureBase', Mage::getUrl('', array('_secure' => true, '_nosid' => true)));
+        $this
+            ->setConfig('ajax.currentRoute', $core->getRoutePath() . $core->getRouteParams());
+
         if ($value = Mage::getStoreConfig('mana/ajax/google_analytics_account')) {
             $this->setConfig('ga.account', $value);
         }
