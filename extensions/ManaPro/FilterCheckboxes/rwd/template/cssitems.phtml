@@ -24,15 +24,16 @@
             <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                 <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
                    onclick="this.className='<?php echo $_item->getMShowSelected() ? 'm-checkbox-unchecked' : 'm-checkbox-checked' ?>'"
-                   href="<?php echo $_itemUrl ?>" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
+                   href="<?php echo $_itemUrl ?>" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?>
             <?php else: ?>
                 <a class="<?php echo $_item->getMShowSelected() ? 'm-checkbox-checked' : 'm-checkbox-unchecked' ?>"
-                   href="javascript:void(0)" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></a>
+                   href="javascript:void(0)" title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?>
             <?php endif; ?>
         <?php // MANA END ?>
         <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
             <span class="count">(<?php echo $_item->getCount() ?>)</span>
         <?php endif; ?>
+                </a>
     </li>
 <?php endforeach ?>
 </ol>
