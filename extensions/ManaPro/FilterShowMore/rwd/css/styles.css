@@ -21,7 +21,7 @@
 .m-showmore-popup-container { box-shadow : 15px 15px 25px 5px rgba( 0, 0, 0, 0.4 ); }
 
 .m-option-search { padding: 0 0 10px; }
-.m-scrollable-filter-container .m-option-search { padding: 10px; }
+.sidebar .m-scrollable-filter-container .m-option-search { padding: 10px; }
 .m-option-search input { width: 100%; }
 .m-option-search input.m-empty { color: #c0c0c0; }
 .m-no-match { display: none; }

@@ -17,6 +17,7 @@ module.exports = Extension.extend({
             'src/PopupBlock.js',
             'src/PageBlock.js',
             'src/init.js',
+            'src/rwd.js',
             'src/obsolete.js'
         ]);
     }

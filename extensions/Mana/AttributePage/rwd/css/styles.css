@@ -1,0 +1,34 @@
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+
+
+.m-featured-image { float: left; width: auto; }
+.m-featured-image a { display: block; }
+
+.m-alpha-pager { width: 20px; float: left; }
+
+li.category-image.m-option-page-image{ float: left; display: block; width: auto; margin: 3px; }
+li.category-image.m-option-page-image a { float: left; }
+
+.m-option-featured-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+.m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+.m-option-page-product:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+
+/* Content Columns */
+.m-option-page-list.col2-set .col-1 { float:left; width:48.5%; }
+.m-option-page-list.col2-set .col-2 { float:right; width:48.5%; }
+.m-option-page-list.col2-set .col-narrow { width:32%; }
+.m-option-page-list.col2-set .col-wide { width:65%; }
+
+.m-option-page-list.col3-set .col-1 { float:left; width:32%; }
+.m-option-page-list.col3-set .col-2 { float:left; width:32%; margin-left:2%; }
+.m-option-page-list.col3-set .col-3 { float:right; width:32%; }
+
+.m-option-page-list.col4-set .col-1 { float:left; width:23.5%; }
+.m-option-page-list.col4-set .col-2 { float:left; width:23.5%; margin:0 2%; }
+.m-option-page-list.col4-set .col-3 { float:left; width:23.5%; }
+.m-option-page-list.col4-set .col-4 { float:right; width:23.5%; }

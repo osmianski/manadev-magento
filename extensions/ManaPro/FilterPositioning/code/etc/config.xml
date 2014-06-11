@@ -201,7 +201,7 @@
                 <categories>none</categories>
             </positioning>
             <mobile>
-                <max_width>450</max_width>
+                <max_width></max_width>
                 <column_filters>leave</column_filters>
                 <behavior>accordion</behavior>
                 <duration>500</duration>

@@ -7,9 +7,10 @@
 /*.m-filter-item-list .m-selected-filter-item { color: red; }*/
 .m-filter-popup .m-selected-ln-item > a { font-weight: bold; text-decoration: none; }
 .block-layered-nav .btn-remove { margin-top: 3px; }
-.block-layered-nav .currently li { position: relative; padding: 6px 24px 6px 10px; }
-.block-layered-nav .currently .btn-remove { margin-top: 0; position: absolute; right: 4px; top: 9px; margin-left: 0; }
+.block-layered-nav .currently li { position: relative; }
+.block-layered-nav .currently .btn-remove { margin-top: -10px; position: absolute; right: 0; top: 50%; margin-left: 0; }
 .block-layered-nav dt { position: relative; zoom: 1; left: 0; top: 0; }
+.block.block-layered-nav dl dd ol > li > span, .block.block-layered-nav dl dd ol > li > a { padding: 0; }
 
 .block-layered-nav label { font-family: "Helvetica Neue", Verdana, Arial, sans-serif; line-height: 1.5;
     font-size: 14px; color: #3399cc; }

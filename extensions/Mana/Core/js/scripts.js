@@ -1487,6 +1487,31 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
 });
 
 
+Mana.require(['jquery'], function($) {
+    var bp = {
+        xsmall: 479,
+        small: 599,
+        medium: 770,
+        large: 979,
+        xlarge: 1199
+    };
+    Mana.rwdIsMobile = false;
+    $(function() {
+        if (enquire) {
+            enquire.register('screen and (max-width: ' + bp.medium + 'px)', {
+                match: function () {
+                    Mana.rwdIsMobile = true;
+                },
+                unmatch: function () {
+                    Mana.rwdIsMobile = false;
+                }
+            });
+        }
+    });
+});
+
+
+
 //region (Obsolete) additional jQuery functions used in MANAdev extensions
 (function($) {
 	// this variables are private to this code block
