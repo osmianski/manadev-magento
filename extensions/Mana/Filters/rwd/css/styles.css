@@ -14,3 +14,9 @@
 
 .block-layered-nav label { font-family: "Helvetica Neue", Verdana, Arial, sans-serif; line-height: 1.5;
     font-size: 14px; color: #3399cc; }
+
+@media only screen and (max-width: 770px) {
+    .block-layered-nav dl dd ol > li { background-color: #f4f4f4; padding: 3px 5px; margin: 5px 0; }
+    .block-layered-nav dl dd ol > li:hover { background-color: #e7e7e7; }
+    .block-layered-nav dl dd ol > li > a, .block-layered-nav dl dd ol > li > span { margin: 0; }
+}

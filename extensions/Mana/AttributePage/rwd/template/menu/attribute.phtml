@@ -23,7 +23,7 @@ $_collection = $this->getAttributePageCollection();
         $_css[] = $this->isAttributePageActive($_page, $_childCollection) ? 'active' : '';
     ?>
     <li class="level0 nav-attribute-<?php echo $_page->getId()?> level-top <?php echo implode(' ', array_filter($_css)) ?>">
-        <a href="<?php echo $_page->getUrl() ?>" class="level-top">
+        <a href="<?php echo $_page->getUrl() ?>" class="level0 level-top">
             <?php echo $this->escapeHtml($_page->getData('title')) ?>
         </a>
         <?php if ($_hasChildren): ?>
