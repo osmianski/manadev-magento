@@ -55,13 +55,17 @@ $filterHelper = Mage::helper('mana_filters');
                 <?php endif; ?>
                 <?php endforeach; ?>
                 <?php if($_filterGroupHtml = trim(ob_get_clean())) : ?>
-                    <?php $_filterGroupName = $_filterGroup->getName() ? $this->__($_filterGroup->getName()) : $this->__('Filter'); ?>
+                    <?php $_filterGroupName = $_filterGroup->getName() ? $this->__($_filterGroup->getName()) : $this->__('Shopping Options'); ?>
 
                     <div class="block-subtitle block-subtitle--filter m-filter-group <?php $filterHelper->renderHtml($this, 'group_css', array('group' => $_filterGroup)); ?>"
                         <?php $filterHelper->renderHtml($this, 'group_attributes', array('group' => $_filterGroup)); ?>
+                        <?php if(count($_filterGroups) > 1): ?> style="display: block;"<?php endif; ?>
                     >
                         <?php $filterHelper->renderHtml($this, 'group_before', array('group' => $_filterGroup)); ?>
-                        <?php echo $_filterGroupName ?>
+                        <span class="wide-title <?php if($_filterGroup->getName()): ?>mobile-title<?php endif; ?>"><?php echo $_filterGroupName ?></span>
+                        <?php if(!$_filterGroup->getName()): ?>
+                        <span class="mobile-title"><?php echo $this->__('Filter'); ?></span>
+                        <?php endif; ?>
                         <?php $filterHelper->renderHtml($this, 'group_after', array('group' => $_filterGroup)); ?>
                     </div>
 

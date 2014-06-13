@@ -1501,9 +1501,11 @@ Mana.require(['jquery'], function($) {
             enquire.register('screen and (max-width: ' + bp.medium + 'px)', {
                 match: function () {
                     Mana.rwdIsMobile = true;
+                    $(document).trigger('m-rwd-mobile');
                 },
                 unmatch: function () {
                     Mana.rwdIsMobile = false;
+                    $(document).trigger('m-rwd-wide');
                 }
             });
         }

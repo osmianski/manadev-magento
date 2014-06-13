@@ -66,7 +66,9 @@ class Mana_Filters_Model_Filter_Attribute
         $key = $this->getLayer()->getStateKey() . '_' . $this->_requestVar;
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
 
-        if ($data === null && $this->itemHelper()->isEnabled()) {
+        if ($data === null && $this->itemHelper()->isEnabled() &&
+            $this->_getIsFilterable() == self::OPTIONS_ONLY_WITH_RESULTS)
+        {
             $data = $query->getFilterCounts($this->getFilterOptions()->getCode());
         }
         if ($data === null) {
@@ -185,7 +187,7 @@ class Mana_Filters_Model_Filter_Attribute
      */
     public function countOnCollection($collection)
     {
-        return $this->itemHelper()->isEnabled()
+        return $this->itemHelper()->isEnabled() && $this->_getIsFilterable() == self::OPTIONS_ONLY_WITH_RESULTS
             ? $this->itemHelper()->countItems($this, $collection)
             : $this->_getResource()->countOnCollection($collection, $this);
     }

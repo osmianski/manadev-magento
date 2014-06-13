@@ -168,7 +168,7 @@ function($, ajax, layeredNavigationAjaxInterceptor)
             var hasAccordion = wrapper.hasClass('accordion');
             var startOpen = wrapper.hasClass('open');
 
-            var dl = wrapper.children('dl:first');
+            var dl = wrapper.children('dl');
             var dts = dl.children('dt');
             var panes = dl.children('dd');
             var groups = new Array(dts, panes);
