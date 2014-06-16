@@ -92,7 +92,9 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
         /* @var $query Mana_Filters_Model_Query */
         $query = $this->getQuery();
 
-        if ($data === null && $this->itemHelper()->isEnabled()) {
+        if ($data === null && $this->itemHelper()->isEnabled() &&
+            $this->_getIsFilterable() == self::OPTIONS_ONLY_WITH_RESULTS)
+        {
             $data = $query->getFilterCounts($this->getFilterOptions()->getCode());
         }
         if ($data === null) {
@@ -200,7 +202,11 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
                 if ($item['value'] != $to) {
                     $isInside = true;
                 }
-            } elseif ($item['value'] == $to) {
+                else {
+                    $found = true;
+                }
+            }
+            elseif ($item['value'] == $to) {
                 if ($isInside) {
                     $isInside = false;
                     $found = true;

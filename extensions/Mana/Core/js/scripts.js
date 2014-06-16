@@ -1513,7 +1513,6 @@ Mana.require(['jquery'], function($) {
 });
 
 
-
 //region (Obsolete) additional jQuery functions used in MANAdev extensions
 (function($) {
 	// this variables are private to this code block
