@@ -385,7 +385,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
         uasort($urlKeys, array($this, '_compareAttributeUrlKeys'));
         foreach ($urlKeys as $urlKey) {
-            if ($path) {
+            if ($path !== '') {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
             $path .= $this->_encode($urlKey['final_url_key']);
