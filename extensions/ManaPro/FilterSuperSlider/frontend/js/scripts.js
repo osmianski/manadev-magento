@@ -233,6 +233,7 @@ ManaPro.filterSuperSlider = function(id, o) {
     jQuery('#' + id + '-track').parent().on('m-prepare', function () {
         _resizeSpanAndHandles(true);
     });
+    jQuery(document).on('click', '.toggle-content dl:first dt', _resizeSpanAndHandles);
     //jQuery('body').click(_resizeSpanAndHandles);
 };
 ManaPro.filterAttributeSlider = function (id, o) {

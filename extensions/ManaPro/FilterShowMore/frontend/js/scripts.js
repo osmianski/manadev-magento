@@ -761,10 +761,12 @@ function ($, OptionSearch) {
         var heights = _calculateHeights(l, code);
         if (heights.count > _itemCounts[code]) {
             l.addClass('m-scrollable-filter');
+            l.parent().addClass('m-scrollable-filter-container');
             l.height(heights.less);
         }
         else {
             l.removeClass('m-scrollable-filter');
+            l.parent().removeClass('m-scrollable-filter-container');
             l.height('auto');
         }
     }
