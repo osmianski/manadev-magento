@@ -255,8 +255,8 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             }
 
             // when window bottom reaches product list bottom
-            if (this.getScrollingAreaBottom() >= this.getProductListBottom() &&
-                this.getVisibleItemCount() < this.getProductCount() &&
+            if (this.getVisibleItemCount() < this.getProductCount() &&
+                this.getScrollingAreaBottom() >= this.getProductListBottom() &&
                 !this.isLoaderVisible())
             {
                 this.load(this.page + 1, this.limit);

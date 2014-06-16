@@ -46,20 +46,16 @@ class Mana_InfiniteScrolling_Router extends Mage_Core_Controller_Varien_Router_A
         $limitSeparator = '/' . Mage::getStoreConfig('mana/ajax/limit_separator') . '/';
         $routeSeparator = '/' . Mage::getStoreConfig('mana/ajax/route_separator_filter') . '/';
 
-        if ($core->startsWith($path, $urlKey) &&
-            ($pagePos = strpos($path, $pageSeparator, strlen($urlKey))) !== false &&
-            ($limitPos = strpos($path, $limitSeparator, $pagePos + strlen($pageSeparator))) !== false &&
-            ($routePos = strpos($path, $routeSeparator, $limitPos + +strlen($limitSeparator))) !== false)
-        {
+        $regex = preg_quote($urlKey, '/') . '(.+)' . preg_quote($pageSeparator, '/') . '([0-9]+)' .
+            preg_quote($limitSeparator, '/') . '([0-9]+)' . preg_quote($routeSeparator, '/') . '(.*)';
+        if (preg_match("/$regex/", $path, $matches)) {
             // fetch all URL dynamic parts into object fields which are used later in render method
             //      ajax/infinite-scrolling/{$route}/page/{page}/limit/{$limit}/requested-url/{path}
 
-            $this->_route = substr($path, strlen($urlKey), $pagePos - strlen($urlKey));
-            $this->_page = substr($path, $pagePos + strlen($pageSeparator),
-                $limitPos - $pagePos - strlen($pageSeparator));
-            $this->_limit = substr($path, $limitPos + strlen($limitSeparator),
-                $routePos - $limitPos - strlen($limitSeparator));
-            $path = substr($path, $routePos + strlen($routeSeparator) - 1);
+            $this->_route = $matches[1];
+            $this->_page = $matches[2];
+            $this->_limit = $matches[3];
+            $path = $matches[4];
 
             // let all further Magento logic think that we just received $path. Prevent full page
             // Magento rendering and instead call render() method of this class
