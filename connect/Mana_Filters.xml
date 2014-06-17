@@ -1,13 +1,13 @@
 <_>
-   <form_key>mY5fElVBBbN9ntyw</form_key>
+   <form_key>Al9h1wRigLxRGoPS</form_key>
    <name>Mana_Filters</name>
    <channel>connect.magentocommerce.com/community</channel>
    <summary>Advanced layered navigation</summary>
    <description>Add multiple selection features for attribute and price filters in Magento layered navigation</description>
    <license>Open Software License (OSL 3.0)</license>
    <license_uri>http://opensource.org/licenses/osl-3.0.php</license_uri>
-   <release_version>13.10.17.20</release_version>
-   <api_version>13.10.17.20</api_version>
+   <release_version>14.06.13.09</release_version>
+   <api_version>14.06.13.09</api_version>
    <release_stability>stable</release_stability>
    <api_stability>stable</api_stability>
    <notes>Adds multiple selection features for attribute and price filters in Magento layered navigation.</notes>
@@ -131,6 +131,14 @@
          <role>mageskin</role>
          <role>mageskin</role>
          <role>mageskin</role>
+         <role>magedesign</role>
+         <role>magedesign</role>
+         <role>mageweb</role>
+         <role>mageweb</role>
+         <role>mageweb</role>
+         <role>mageskin</role>
+         <role>mageskin</role>
+         <role>mageskin</role>
       </role>
       <path>
          <path/>
@@ -157,6 +165,14 @@
          <path>frontend/base/default/css/mana_core.css</path>
          <path>frontend/base/default/css/mana_filters.css</path>
          <path>frontend/base/default/images/mana_core</path>
+         <path>frontend/rwd/default/layout/mana_filters.xml</path>
+         <path>frontend/rwd/default/template/mana/filters</path>
+         <path>js/mana/core.js.map</path>
+         <path>js/mana/core.min.js</path>
+         <path>js/src/Mana/Core</path>
+         <path>frontend/rwd/default/css/mana_core.css</path>
+         <path>frontend/rwd/default/css/mana_filters.css</path>
+         <path>frontend/rwd/default/images/mana_core</path>
       </path>
       <type>
          <type>file</type>
@@ -179,6 +195,14 @@
          <type>file</type>
          <type>file</type>
          <type>dir</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>file</type>
          <type>dir</type>
          <type>file</type>
          <type>file</type>
@@ -209,8 +233,24 @@
          <include/>
          <include/>
          <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
       </include>
       <ignore>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
          <ignore/>
          <ignore/>
          <ignore/>
