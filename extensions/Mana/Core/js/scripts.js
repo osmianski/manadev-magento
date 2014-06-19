@@ -150,8 +150,9 @@ var Mana = Mana || {};
  * MIT Licensed.
  */
 // Inspired by base2 and Prototype
+var m_object_initializing = false;
 (function (undefined) {
-    var initializing = false, fnTest = /xyz/.test(function () { xyz;}) ? /\b_super\b/ : /.*/;
+    var fnTest = /xyz/.test(function () { xyz;}) ? /\b_super\b/ : /.*/;
 
     // The base Class implementation (does nothing)
     Mana.Object = function () {
@@ -167,9 +168,9 @@ var Mana = Mana || {};
 
         // Instantiate a base class (but only create the instance,
         // don't run the init constructor)
-        initializing = true;
+        m_object_initializing = true;
         var prototype = new this();
-        initializing = false;
+        m_object_initializing = false;
 
         // Copy the properties over onto the new prototype
         for (var name in prop) {
@@ -201,11 +202,11 @@ var Mana = Mana || {};
         var Object;
         if (className === undefined) {
             // All construction is actually done in the init method
-            Object = function Object() { if (!initializing && this._init) this._init.apply(this, arguments); };
+            Object = function Object() { if (!m_object_initializing && this._init) this._init.apply(this, arguments); };
         }
         else {
             // give constructor a meaningful name for easier debugging
-            eval("Object = function " + className.replace(/\//g, '_') + "() { if (!initializing && this._init) this._init.apply(this, arguments); };");
+            eval("Object = function " + className.replace(/\//g, '_') + "() { if (!m_object_initializing && this._init) this._init.apply(this, arguments); };");
         }
 
         // Populate our constructed prototype object
