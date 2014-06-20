@@ -56,6 +56,9 @@ class Mana_Filters_Model_Filter_Attribute
         /* @var $query Mana_Filters_Model_Query */
         $query = $this->getQuery();
 
+        /* @var $helper Mana_Filters_Helper_Data */
+        $helper = Mage::helper('mana_filters');
+
         // MANA BEGIN: from url, retrieve ids of all options currently selected
         $selectedOptionIds = $this->getMSelectedValues();
         // MANA END
@@ -67,7 +70,8 @@ class Mana_Filters_Model_Filter_Attribute
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
 
         if ($data === null && $this->itemHelper()->isEnabled() &&
-            $this->_getIsFilterable() == self::OPTIONS_ONLY_WITH_RESULTS)
+            $this->_getIsFilterable() == self::OPTIONS_ONLY_WITH_RESULTS &&
+            !$helper->useSolr())
         {
             $data = $query->getFilterCounts($this->getFilterOptions()->getCode());
         }
