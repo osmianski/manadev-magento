@@ -169,7 +169,15 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$items().length;
         },
 
-        getUrl: function(page, limit) {
+        // endregion
+
+        // region Product Loading
+        // ------------------------------------------------
+
+        load: function(page, limit) {
+            var self = this;
+            self.showLoader();
+
             var url = ajax.getDocumentUrl();
 
             // decode %2B style encoded chars into UTF8
@@ -190,24 +198,12 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 '/' + this.getRouteSeparator() +
                 '/' + url.substr(config.getBaseUrl(url).length);
 
-            return url;
-        },
-
-        // endregion
-
-        // region Product Loading
-        // ------------------------------------------------
-
-        load: function(page, limit) {
-            var self = this;
-            self.showLoader();
-
-            ajax.get(this.getUrl(page, limit), function (response) {
+            ajax.get(url, function (response) {
                 self.addContent(response);
                 self.page++;
                 self.hideLoader();
                 layout.getPageBlock().resize();
-            }, { showWait: false, showOverlay: false });
+            }, { showWait: false, showOverlay: false, encode: queryPos != -1 ? { offset: 0, length: queryPos} : undefined });
         },
 
         showLoader: function() {
