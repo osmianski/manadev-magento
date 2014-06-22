@@ -52,6 +52,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     rawurldecode($urlModel->getRoutePath()) == $path)
                 {
                     Mage::register('m_temporary_query_parameters', $parsedUrl->getQueryParameters());
+                    Mage::register('m_parsed_url', $parsedUrl);
                     $routerHelper
                         ->changePath($parsedUrl->getPageUrlKey() . $parsedUrl->getSuffix())
                         ->forward($parsedUrl->getRoute(), $request,

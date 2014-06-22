@@ -1,7 +1,7 @@
 Mana.define('Mana/Core', ['jquery'], function ($) {
     return Mana.Object.extend('Mana/Core', {
-        getClasses: function(element) {
-            return element.className.split(/\s+/);
+        getClasses: function(element) { 
+            return element.className && element.className.split ? element.className.split(/\s+/) : [];
         },
         getPrefixedClass: function(element, prefix) {
             var result = '';
