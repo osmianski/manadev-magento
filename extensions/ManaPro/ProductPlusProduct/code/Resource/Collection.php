@@ -18,6 +18,10 @@ class ManaPro_ProductPlusProduct_Resource_Collection extends Mana_ProductLists_R
 	protected function _beforeLoad() {
 		$this->addFieldToFilter('type_id', array('nin' => array('bundle')));
 		$this->addFieldToFilter('required_options', 0);
-		return parent::_beforeLoad();
+		parent::_beforeLoad();
+        $this->getSelect()->reset(Varien_Db_Select::ORDER);
+        $this->setPositionOrder();
+
+        return $this;
 	}
 }
