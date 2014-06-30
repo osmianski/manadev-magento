@@ -263,7 +263,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     protected function _getValueUrlKey($optionId) {
         Mana_Core_Profiler2::start(__METHOD__);
         if (!isset(self::$_valueUrlKeys[$optionId])) {
-            if ($item = $this->itemHelper()->get($optionId)) {
+            if (($item = $this->itemHelper()->get($optionId)) && $item->getData('seo_url_key')) {
                 $result = array(
                     'id' => $item->getData('seo_id'),
                     'final_url_key' => $item->getData('seo_url_key'),
