@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.05.22.14</version>
+		    <version>14.07.02.13</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -284,6 +284,10 @@
                 <title>Slider filter applied</title>
                 <model>manapro_filterseolinks/noindex_slider</model>
             </slider>
+            <page translate="title" module="manapro_filterseolinks">
+                <title>Second and further pages</title>
+                <model>manapro_filterseolinks/noindex_page</model>
+            </page>
         </noindex>
         <follow>
             <empty translate="title" module="manapro_filterseolinks">
@@ -322,6 +326,10 @@
                 <title>Slider filter applied</title>
                 <model>manapro_filterseolinks/follow_slider</model>
             </slider>
+            <page translate="title" module="manapro_filterseolinks">
+                <title>Second and further pages</title>
+                <model>manapro_filterseolinks/follow_page</model>
+            </page>
         </follow>
 	</manapro_filterseolinks>
 </config>
