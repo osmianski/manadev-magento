@@ -651,10 +651,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->_attributes[$key];
     }
 
-    public function getAttributeTable($attribute) {
+    public function getAttributeTable($attribute, $baseTable = 'catalog_category_entity') {
         return $attribute['backend_table'] ?
             $attribute['backend_table'] :
-            Mage::getSingleton('core/resource')->getTableName('catalog_category_entity_' . $attribute['backend_type']);
+            Mage::getSingleton('core/resource')->getTableName($baseTable . '_' . $attribute['backend_type']);
     }
 
     /**
