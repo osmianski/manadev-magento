@@ -228,6 +228,8 @@ function($, ajax, layeredNavigationAjaxInterceptor)
             $('dt[data-id="' + id + '"]').trigger('click');
         });
         openFilters = [];
+
+        $(window).trigger('delayed-resize');
     });
 
 })(jQuery);
