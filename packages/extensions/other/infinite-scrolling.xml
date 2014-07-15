@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+    <name>extensions/manadev_infinite-scrolling</name>
+    <part name="Mana/Core"/>
+    <part name="Mana/InfiniteScrolling"/>
+</config>

@@ -9,8 +9,9 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Noindex_AnyTwo {
+class ManaPro_FilterSeoLinks_Model_Noindex_AnyTwo extends ManaPro_FilterSeoLinks_Model_Condition
+{
     public function detect($layerModel) {
-        return count($layerModel->getState()->getFilters()) >= 2;
+        return $this->_countOptionsInAllFilters($layerModel) >= 2;
     }
 }

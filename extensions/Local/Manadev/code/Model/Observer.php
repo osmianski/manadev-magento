@@ -73,12 +73,15 @@ class Local_Manadev_Model_Observer {
     }
 
     /**
-     * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_render_before_checkout_index_index")
+     * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_render_before_checkout_index_index",
+     * "controller_action_layout_render_before_paypal_express_review")
      * @param Varien_Event_Observer $observer
      */
     public function addCheckoutOptions($observer) {
         Mage::helper('mana_core/js')->options('.m-checkout', array(
-            'updateOrderUrl' => Mage::getUrl('actions/checkout/updateOrderDetails'),
+            'updateOrderUrl' => Mage::getUrl('actions/checkout/updateOrderDetails', array(
+                '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
+            )),
         ));
     }
 
@@ -161,5 +164,20 @@ class Local_Manadev_Model_Observer {
         } else {
             $this->_forward('new');
         }
+    }
+
+    /**
+     * Handles event "controller_action_layout_generate_blocks_after".
+     * @param Varien_Event_Observer $observer
+     */
+    public function renderMessages($observer) {
+        /* @var $action Mage_Core_Controller_Varien_Action */
+        $action = $observer->getEvent()->getData('action');
+        if ($action instanceof Mage_Paypal_Controller_Express_Abstract) {
+            Mage::helper('mana_core')->initLayoutMessages('customer/session');
+            Mage::getSingleton('core/layout')->getBlock('head')->setTitle(Mage::helper('mana_core')->__('Review Your Order'));
+        }
+
+
     }
 }

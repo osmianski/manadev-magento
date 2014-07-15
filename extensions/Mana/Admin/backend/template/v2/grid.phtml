@@ -146,9 +146,11 @@ $js = Mage::helper('mana_core/js');
             </tr>
             <?php if ($_multipleRows = $this->getMultipleRows($_item)):?>
                 <?php foreach ($_multipleRows as $_i):?>
-                <tr>
+                <tr class="child <?php echo $this->getMultipleRowClass($_i) ?>">
                     <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
-                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>">
+                        <?php $_colspan = $this->getMultipleRowColSpan($_item, $_i, $i, $_column); ?>
+                        <td <?php echo($_colspan ? 'colspan="' . $_colspan . '" ' : '') ?>
+                            class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>">
                             <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td>
                     <?php endforeach; ?>

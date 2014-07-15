@@ -63,6 +63,7 @@ class Mana_Filters_Resource_Filter2 extends Mana_Db_Resource_Object {
     const DM_MIN_SLIDER_CODE = 40;
 
     const DM_SHOW_OPTION_SEARCH = 41;
+    const DM_INCLUDE_IN_CANONICAL_URL = 42;
 
     #endregion
 

@@ -45,9 +45,11 @@ $this->checkFieldDisable();
 </tr>
 <?php if($_trId) : ?>
 <script type="text/javascript">(function($) {
-    $(document).trigger('m-image-field-reset', [
-        $('#<?php echo $_trId ?>')[0]
-    ]);
+    $(function() {
+        $(document).trigger('m-image-field-reset', [
+            $('#<?php echo $_trId ?>')[0]
+        ]);
+    });
 })(jQuery);</script>
 <?php endif; ?>
 <?php endif; ?>

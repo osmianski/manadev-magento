@@ -108,6 +108,7 @@ class Mana_Seo_Resource_UrlIndexer_CategoryValue extends Mana_Seo_Resource_Categ
 
         // run the statement
         $this->makeAllRowsObsolete($options, $obsoleteCondition);
+        $db->exec("SET SQL_BIG_SELECTS=1");
         $db->exec($sql);
     }
 }

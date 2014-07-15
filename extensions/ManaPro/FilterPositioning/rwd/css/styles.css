@@ -1,0 +1,181 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterPositioning
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* CSS Document */
+.hidden       { display:block !important; border:0 !important; margin:0 !important; padding:0 !important; font-size:0 !important; line-height:0 !important; width:0 !important; height:0 !important; overflow:hidden !important; }
+
+/* Containers of Layered Navigation */
+.mb-top-layered-navigation,
+.mb-top-layered-navigation .block-content { background: transparent; border: none; padding: 0; margin: 20px 0 0; position: relative;}
+
+/* Titles SHOP BY and CURRENTLY SHOPPING BY */
+.mb-top-layered-navigation .block-subtitle,
+.mb-top-layered-navigation .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
+.mb-top-layered-navigation dl.m-mobile { display: none; }
+.mb-top-layered-navigation dl { float: left; }
+
+/* CURRENTLY SHOPPING BY bar */
+.mb-top-layered-navigation .currently,
+.mb-top-layered-navigation .currently ol { float: left; width: 100%; }
+.mb-top-layered-navigation .currently li { float: left; white-space: nowrap; margin-right: 10px; background: transparent; border: none; padding: 5px 25px 5px 0; }
+
+.mb-top-layered-navigation #narrow-by-list { clear: both; position: relative; }
+
+/* Actions */
+.mb-top-layered-navigation .actions,
+.mb-top-layered-navigation .m-horizontal-actions,
+.mb-top-layered-navigation .m-subtitle-actions { position: absolute; right: 5px; top:50%; margin: -10px 0 0; }
+.mb-top-layered-navigation .actions { background: transparent; border: none; float: left; padding: 6px 10px; top:-20px; }
+
+/* Top (as Menu) LN =================================================================================================================================== */
+
+/* SHOP BY bar */
+.mb-top-layered-navigation.m-topmenu.m-wide dl { height: 32px; }
+.mb-top-layered-navigation.m-topmenu.m-wide dl dt { float: left; padding: 7px 20px 7px 10px; cursor: pointer; background: url("../images/manapro_filterpositioning/i-dropdown.gif") 0px 14px no-repeat; margin-left: 5px; font-weight: normal; text-transform: none;}
+.mb-top-layered-navigation.m-topmenu.m-wide dl dt.block-subtitle { background-image: none; padding-left: 0; margin-left: 0; }
+.mb-top-layered-navigation.m-topmenu.m-wide dl dd { background: white; position: absolute; width: auto; padding: 20px 10px 10px 10px; border-bottom: 5px solid #DEE5E8; display: block; z-index: 9999;
+/*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#eaeaea');
+    background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(white));
+    background: -moz-linear-gradient(top,  white,  #eaeaea);
+*/
+    filter: alpha(opacity=90);
+  	-moz-opacity: 0.9;
+  	opacity: 0.9;
+
+    }
+.mb-top-layered-navigation.m-topmenu .block-content > div > div { overflow: visible !important; }
+.mb-top-layered-navigation.m-topmenu .m-filter-slider { margin:0 !important; }
+/* Javascript operates with these classes */
+.mb-top-layered-navigation.m-topmenu dl dt.m-ln {  }
+.mb-top-layered-navigation.m-topmenu dl dd.m-ln {  }
+.mb-top-layered-navigation.m-topmenu dl dd.m-ln li { white-space: nowrap; }
+
+/* Classes added on Mouse Over */
+.mb-top-layered-navigation.m-topmenu dl dt.m-popup-filter { background: #DEE5E8; }
+.mb-top-layered-navigation.m-topmenu dl dd.m-popup-filter {  }
+
+/* Top LN - Horizontaly laid filters =================================================================================================================================== */
+.mb-top-layered-navigation.m-top dl { width: 20%; padding: 5px; }
+.mb-top-layered-navigation.m-top.two-filter-columns dl { width: 50%; }
+.mb-top-layered-navigation.m-top.three-filter-columns dl { width: 33%; }
+.mb-top-layered-navigation.m-top.four-filter-columns dl { width: 25%; }
+.mb-top-layered-navigation.m-top dl dd { background: transparent; }
+
+/*Responsive accordion menu for mobile divices========================================================================*/
+.mb-top-layered-navigation.one-filter-column dl { width: 100%; }
+.mb-top-layered-navigation.one-filter-column dl { padding:0; margin:0; }
+.mb-top-layered-navigation.one-filter-column dl.m-mobile { display: block; }
+.mb-top-layered-navigation.one-filter-column dl:last-child { border-bottom:1px solid #ccc;  }
+.mb-top-layered-navigation.one-filter-column dl dt {
+    cursor: pointer;
+    display:block;
+    padding:7px 10px !important;
+    position: relative;
+    margin:0;
+    border:1px solid #ccc;
+    background-color: #f4f4f4;
+    border-bottom: none;
+    text-transform: uppercase;
+}
+.mb-top-layered-navigation.one-filter-column dl dt:hover {
+    color: #3399cc;
+}
+/*.mb-top-layered-navigation.one-filter-column .block-subtitle { cursor: pointer; display:block; padding:5px !important; position: relative; margin:0; border-bottom:1px solid #ddd; border-top:1px solid #f9f9f9;}*/
+.mb-top-layered-navigation.one-filter-column .block-subtitle,
+.block-layered-nav.mb-top-layered-navigation.one-filter-column .currently .block-subtitle {
+    transition: background 300ms ease-in-out;
+    -moz-transition: background 300ms ease-in-out;
+    -webkit-transition: background 300ms ease-in-out;
+    -o-transition: background 300ms ease-in-out;
+    background-color: #3399cc;
+    color: white;
+    font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.4;
+    text-rendering: optimizeSpeed;
+    text-transform: uppercase;
+    padding: 7px 10px;
+    cursor: pointer;
+    position: relative;
+}
+.mb-top-layered-navigation.one-filter-column .block-subtitle:hover,
+.block-layered-nav.mb-top-layered-navigation.one-filter-column .currently .block-subtitle:hover {
+    background-color: #2e8ab8;
+    color: #FFFFFF;
+}
+.mb-top-layered-navigation.one-filter-column .block-subtitle strong { font-weight: normal; }
+.mb-top-layered-navigation.one-filter-column dl dd { padding:10px 5px; margin:0; background: transparent; border:1px solid #ccc; border-bottom: none;}
+.mb-top-layered-navigation.one-filter-column .m-filterclear { position: relative; }
+.mb-top-layered-navigation.one-filter-column .m-filter-colors { margin:0; }
+.mb-top-layered-navigation.one-filter-column .currently { margin:0; border: 1px solid #ccc; }
+.mb-top-layered-navigation.one-filter-column.m-expanded .currently { border-bottom: none; }
+.mb-top-layered-navigation.one-filter-column .currently ol { float: left; width: auto; }
+.mb-top-layered-navigation.one-filter-column .actions { right: 20px; top:0; margin: 0; padding: 5px 10px; z-index:3; }
+.mb-top-layered-navigation.one-filter-column .actions a { color: white; }
+
+.mb-top-layered-navigation.one-filter-column dl dd ol > li { background-color: #f4f4f4; padding: 3px 5px; margin: 5px 0; }
+.mb-top-layered-navigation.one-filter-column dl dd ol > li:hover { background-color: #e7e7e7; }
+.mb-top-layered-navigation.one-filter-column dl dd ol > li > a, .mb-top-layered-navigation dl dd ol > li > span { margin: 0; }
+
+.mb-top-layered-navigation.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
+.mb-top-layered-navigation.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+.mb-top-layered-navigation.one-filter-column .m-expanded .m-expand-collapse .btn-expand-collapse {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: block;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    border-top: 4px solid white;
+    border-bottom: none;
+    right: 7px;
+    top: 50%;
+}
+.mb-top-layered-navigation.one-filter-column .m-collapsed .m-expand-collapse .btn-expand-collapse {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: block;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: none;
+    border-right: 4px solid white;
+    right: 10px;
+    top: 50%;
+    margin-top: -2px;
+    margin-left: 2px;
+}
+.mb-top-layered-navigation.one-filter-column dt.m-expanded .m-expand-collapse .btn-expand-collapse {
+    border-top: 4px solid #3399cc;
+}
+.mb-top-layered-navigation.one-filter-column dt.m-collapsed .m-expand-collapse .btn-expand-collapse {
+    border-right: 4px solid #3399cc;
+}
+.mb-top-layered-navigation.one-filter-column .m-expand-collapse { display: block; width: 20px; height: 20px;}
+.mb-top-layered-navigation.one-filter-column .currently + div .block-subtitle,
+.mb-top-layered-navigation.one-filter-column .currently + div + div .block-subtitle { display: none; }
+.mb-top-layered-navigation.one-filter-column #narrow-by-list { padding: 0; border: none; }
+.mb-top-layered-navigation.one-filter-column .m-option-search input { width: 100%; }
+.mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; }
+.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by { display: none; }
+
+.mb-top-layered-navigation.m-wide dt { text-transform: uppercase; }
+
+/* Types styling for Top LN only */
+.m-standard {} /* One item can be selected at the time */
+.m-list {} /* Text, multiple select */
+.m-checkboxes {} /* checkboxes - form elements */
+.m-css_checkboxes {} /* checkboxes - images */
+.m-colors {} /* Colors and Images - horizontal */
+.m-colors_vertical {} /* Colors and Images - vertical */
+.m-colors_label {} /* Colors and Images with labels */
+.m-dropdown {} /* Dropdowns */
+.m-radios {} /* Radio buttons */
+.m-slider {} /* Slider */

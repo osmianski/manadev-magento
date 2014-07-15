@@ -317,6 +317,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
             	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
+	        $this->updateTextQties($productIds);
         	if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
         catch (Exception $e) {
@@ -362,7 +363,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 	        	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
 	        	if ($entitySql) {
 	        		$this->_getWriteAdapter()->multi_query($entitySql);
-	        	}
+                    $this->updateTextQties($productIds);
+                }
 			}
 			if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
@@ -491,6 +493,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
                           SET e.m_represented_qty = i.qty
                           WHERE i.product_id = e.entity_id AND i.product_id  = $productId";
         $this->_getWriteAdapter()->multi_query($entitySql);
+        $this->updateTextQties(array($productId => $productId));
 
         try {
             if ($requireTransaction) $this->_getWriteAdapter()->commit();
@@ -513,6 +516,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
                 SET e.m_represented_qty = i.qty
                 WHERE i.product_id = e.entity_id";
         $this->_getWriteAdapter()->multi_query($sql);
+        $this->updateTextQties();
 
         if ($productIds = $link->getAllRepresentingProductIds()) {
 		    $productIds = implode(',', $productIds);
@@ -529,7 +533,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         	}
         	Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexAll();
         	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexAll();
-        	Mage::dispatchEvent('m_product_faces_reindex_all');
+            Mage::dispatchEvent('m_product_faces_reindex_all');
 
 			if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
@@ -556,4 +560,51 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
                 " IF ($condition, 1, 0))";
 
     }
+
+    public function updateTextQties($productIds = null) {
+        $db = $this->_getWriteAdapter();
+        $attribute = $this->coreHelper()->getAttribute('catalog_product', 'm_represented_qty_text',
+            array('attribute_id', 'entity_type_id', 'backend_table', 'backend_type'));
+
+        $fields = array(
+             'entity_id' => "`e`.`entity_id`",
+             'attribute_id' => $attribute['attribute_id'],
+             'store_id' => 0,
+             'entity_type_id' => $attribute['entity_type_id'],
+             'value' => "TRIM(TRAILING '.' FROM TRIM(TRAILING '0' from CAST(`e`.`m_represented_qty` AS CHAR)))",
+        );
+
+        /* @var $select Varien_Db_Select */
+        $select = $db->select()
+            ->from(array('e' => $this->getTable('catalog/product')), null);
+
+        $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+
+        if ($productIds !== null && is_array($productIds) && count($productIds) > 0) {
+            $select->where("`e`.`entity_id` IN (?)", $productIds);
+        }
+
+        // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
+        $selectSql = $select->__toString();
+        $sql = $select->insertFromSelect($this->coreHelper()->getAttributeTable($attribute, 'catalog_product_entity'), array_keys($fields));
+
+        // run the statement
+        $db->exec($sql);
+
+    }
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    #endregion
 }

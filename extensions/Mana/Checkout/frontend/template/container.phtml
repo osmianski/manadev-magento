@@ -19,9 +19,13 @@
         <p class="login-link">
             <?php echo $this->__('Already registered?') ?>
             <a href="#" class="login-link" title="<?php echo $this->__('Login') ?>"><?php echo $this->__('Login') ?></a>
-            <script type="text/javascript">(function($) {
-                $('.login-link').mPopup('login-form');
-            })(jQuery);</script>
+            <script type="text/javascript">
+                Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function($, layout) {
+                    $(document).on('click', '.login-link', function() {
+                        layout.showPopup({ content: $('.login-form-text'), popup: { 'class': 'login-form--popup-container' } });
+                    });
+                });
+            </script>
         </p>
         <?php endif ?>
     </div>

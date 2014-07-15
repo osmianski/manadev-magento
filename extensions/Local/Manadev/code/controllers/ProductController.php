@@ -31,6 +31,9 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			
 			// try identify product
 			if (!($productId = $this->getRequest()->getParam('id'))) throw new Mage_Core_Exception($this->__('No product specified.'));
+			if (Mage::helper('mana_core')->endsWith($productId, '.zip')) {
+			    $productId = substr($productId, 0, strlen($productId) - strlen('.zip'));
+			}
 			/* @var $product Mage_Catalog_Model_Product */ $product = Mage::getModel(strtolower('Catalog/Product'));
 			$product->load($productId);
 			if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
@@ -153,7 +156,7 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
             $this->getResponse()->setHeader('Content-Length', $fileSize);
         }
         if ($contentDisposition = $downloader->getContentDisposition()) {
-            $this->getResponse()->setHeader('Content-Disposition', $contentDisposition . '; filename='.$fileName);
+            $this->getResponse()->setHeader('Content-Disposition', $contentDisposition . '; filename='.$fileName, true);
         }
         
         // send headers and raw file bytes

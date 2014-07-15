@@ -23,9 +23,17 @@
                            title="<?php echo $this->__('I accept') ?> <?php echo $this->htmlEscape($_a->getCheckboxText()) ?>"
                            class="checkbox"/><label
                         for="agreement-<?php echo $_a->getId()?>"><?php echo $this->__('I accept') ?> <a href="#" class="agreement-<?php echo $_a->getId()?>"><?php echo $this->htmlEscape($_a->getCheckboxText()) ?></a></label>
-                    <script type="text/javascript">(function ($) {
-                        $('.agreement-<?php echo $_a->getId()?>').mPopup('agreement-<?php echo $_a->getId()?>');
-                    })(jQuery);</script>
+                    <script type="text/javascript">
+                        Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function($, layout) {
+                            $(document).on('click', '.agreement-<?php echo $_a->getId()?>', function() {
+                                layout.showPopup({
+                                    content: $('.agreement-<?php echo $_a->getId()?>-text'),
+                                    popup: { 'class': 'agreement-<?php echo $_a->getId()?>-popup-container' }
+                                });
+                                return false;
+                            });
+                        });
+                    </script>
                 </div>
                 <div class="agreement-<?php echo $_a->getId()?>-text" style="display:none;">
                     <div>

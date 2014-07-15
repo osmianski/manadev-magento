@@ -52,6 +52,9 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
         elseif ($type == 'text') {
             $block = array('type' => 'Mana/Admin/Field/Text');
         }
+        elseif ($type == 'hidden') {
+            $block = array('type' => 'Mana/Admin/Field/Hidden');
+        }
         elseif ($type == 'textarea') {
             $block = array('type' => 'Mana/Admin/Field/TextArea');
         }
@@ -60,6 +63,9 @@ class Mana_Admin_Block_V2_Field extends Mage_Adminhtml_Block_Widget_Form_Rendere
             $block = array('type' => 'Mana/Admin/Field');
         }
         $block['self_contained'] = true;
+        if ($element->getData('dirty')) {
+            $block['dirty'] = true;
+        }
         $this->setData('m_client_side_block', $block);
 
         return $this;

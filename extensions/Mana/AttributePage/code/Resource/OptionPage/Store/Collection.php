@@ -107,8 +107,10 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
        $this->getSelect()
             ->joinInner(array('op_g' => $this->getTable('mana_attributepage/optionPage_global')),
                 "`op_g`.`id` = `main_table`.`option_page_global_id`", null)
+            ->joinInner(array('ap_g' => $this->getTable('mana_attributepage/attributePage_global')),
+                "`op_g`.`attribute_page_global_id` = `ap_g`.`id`", null)
             ->joinInner(array('ap_gcs' => $this->getTable('mana_attributepage/attributePage_globalCustomSettings')),
-                "`op_g`.`attribute_page_global_id` = `ap_gcs`.`id`", null)
+                "`ap_g`.`attribute_page_global_custom_settings_id` = `ap_gcs`.`id`", null)
             ->joinInner(array('i' => $this->getTable('catalog/product_index_eav')),
                 "`ap_gcs`.`attribute_id_0` = `i`.`attribute_id` AND ".
                 "`op_g`.`option_id_0` = `i`.`value` AND ".
@@ -141,7 +143,8 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
 
     public function getSampleItem() {
         $db = $this->getConnection();
-        if ($data = $db->fetchRow($this->getSelect()->limit(1))) {
+        $select = clone $this->getSelect();
+        if ($data = $db->fetchRow($select->limit(1))) {
             return $this->getNewEmptyItem()->addData($data);
         }
         else {

@@ -186,7 +186,7 @@ Mana.define('Mana/Admin/Grid/Cell/Select', ['jquery', 'Mana/Admin/Grid/Cell'], f
             this.getGrid().setCellValue(this, { value: this.$input().val() });
         },
         onReadonlyChanged: function (e) {
-            if (e.value) {
+            if (e.value || this.$().data('readonly')) {
                 this.$input().attr('disabled', true).addClass('disabled');
             }
             else {
@@ -220,7 +220,7 @@ Mana.define('Mana/Admin/Grid/Cell/Input', ['jquery', 'Mana/Admin/Grid/Cell'], fu
             this.getGrid().setCellValue(this, { value:this.$input().val() });
         },
         onReadonlyChanged: function (e) {
-            if (e.value) {
+            if (e.value || this.$().data('readonly')) {
                 this.$input().attr('disabled', true).addClass('disabled');
             }
             else {
@@ -238,28 +238,49 @@ Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'],
                 return self.onClick();
             }
 
+            function _cellClick(e) {
+                if (e.target != self.$input()[0]) {
+                    return self.onCellClick();
+                }
+            }
+
             return this
                 ._super()
                 .on('bind', this, function () {
                     this.$input().on('click', _raiseClick);
+                    this.$().on('click', _cellClick);
                 })
                 .on('unbind', this, function () {
                     this.$input().off('click', _raiseClick);
+                    this.$().off('click', _cellClick);
                 });
         },
         $input:function () {
             return this.$().find('input');
         },
         onClick:function () {
-            this.getGrid().setCellValue(this, { value:this.$input().attr('checked') == 'checked' ? 1 : 0 });
+            this.getGrid().setCellValue(this, { value:this.isChecked() ? 1 : 0 });
         },
         onReadonlyChanged: function (e) {
-            if (e.value) {
+            if (e.value || this.$().data('readonly')) {
                 this.$input().attr('disabled', true).addClass('disabled');
             }
             else {
                 this.$input().removeAttr('disabled').removeClass('disabled');
             }
+        },
+        isChecked: function() {
+            return this.$input().attr('checked') == 'checked';
+        },
+        onCellClick: function() {
+            if (this.isChecked()) {
+                this.$input().removeAttr('checked');
+            }
+            else {
+                this.$input().attr('checked', 'checked');
+            }
+            this.onClick();
+            return false;
         }
     });
 });
@@ -352,6 +373,13 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                     self.trigger('readonly-changed', {value: self._edit.useDefault}, false, true);
                 }
 
+                function _beforeSave(e, request) {
+                    self._updateReloadParams();
+                    request.push({name: self.getAlias(), value: json.stringify(
+                        self._varienGrid.reloadParams
+                    )});
+                }
+
                 return this
                     ._super()
                     .on('bind', this, function () {
@@ -360,6 +388,9 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                             this.getUrl(), 'page', 'sort', 'dir', 'filter');
                         self._varienGrid.useAjax = true;
                         self._varienGrid._block = this;
+                        if (self._varienGridUrl) {
+                            self._varienGrid.url = self._varienGridUrl;
+                        }
 
                         var edit = self.$().data('edit');
                         if (edit) {
@@ -380,12 +411,15 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                         this.$().find('.pager .input-text.page').on('keypress', _inputPage);
                         this.$().find('.pager .limit').on('change', _loadByElement);
                         this.$().find('input.m-default').on('click', _useDefault);
+                        $(document).on('m-before-save', _beforeSave);
                     })
                     .on('unbind', this, function () {
                         this.$().find('.pager .previous, .pager .next').off('click', _setPage);
                         this.$().find('.pager .input-text.page').off('keypress', _inputPage);
                         this.$().find('.pager .limit').off('change', _loadByElement);
                         this.$().find('.input.m-default').off('click', _useDefault);
+                        $(document).off('m-before-save', _beforeSave);
+                        this._varienGridUrl = this._varienGrid.url;
                         this._varienGrid = null;
                     });
             },
@@ -399,6 +433,7 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                         if (this.getChild('add')) this.getChild('add').on('click', this, this.addRow);
                         if (this.getChild('remove')) this.getChild('remove').on('click', this, this.removeRow);
                         this.on('post', this, this.post);
+                        this.on('field-change', this, this.fieldChanged);
                     })
                     .on('unload', this, function () {
                         if (this.getChild('search')) this.getChild('search').off('click', this, this.search);
@@ -406,6 +441,7 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                         if (this.getChild('add')) this.getChild('add').off('click', this, this.addRow);
                         if (this.getChild('remove')) this.getChild('remove').off('click', this, this.removeRow);
                         this.off('post', this, this.post);
+                        this.off('field-change', this, this.fieldChanged);
                     });
             },
             search: function () {
@@ -474,8 +510,16 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                 });
             },
             setCellValue: function (cell, compositeValue) {
-                var id = cell.getRow().getRowId();
-                var column = cell.getColumn().getColumnName();
+                this._saveCellValue(cell.getRow().getRowId(), cell.getColumn().getColumnName(), compositeValue);
+                return this;
+            },
+            fieldChanged: function(e) {
+                var match;
+                if (match = e.id.match(/row_(\d*)_tr_(\w*)/)) {
+                    this._saveCellValue(match[1], match[2], e.compositeValue);
+                }
+            },
+            _saveCellValue: function(id, column, compositeValue) {
                 if (!this._edit.pending[id]) {
                     this._edit.pending[id] = {};
                 }
@@ -483,8 +527,6 @@ Mana.define('Mana/Admin/Grid', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid/Ro
                     this._edit.pending[id][column] = {};
                 }
                 $.extend(this._edit.pending[id][column], compositeValue);
-
-                return this;
             }
         });
     });
@@ -643,7 +685,7 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
         }
     });
 });
-Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Block, undefined) {
+Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid'], function ($, Block, Grid, undefined) {
     return Block.extend('Mana/Admin/Field', {
         _subscribeToHtmlEvents: function () {
             var self = this;
@@ -665,6 +707,9 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Bloc
             return this
                 ._super()
                 .on('load', this, function () {
+                    if (this.$().data('dirty')) {
+                        this.changed();
+                    }
                     this.on('collect', this, this.onCollectFields);
                 })
                 .on('unload', this, function () {
@@ -723,6 +768,16 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block'], function ($, Bloc
                 this._changed = true;
 
                 var newValue = this.trigger('change');
+                for (var parent = this.getParent(); parent != null; parent = parent.getParent()) {
+                    if (parent instanceof Grid) {
+                        parent.trigger('field-change', { id: this.$()[0].id, compositeValue: {
+                            value: this.getValue(),
+                            is_default: this.useDefault()
+                        } });
+                        break;
+                    }
+                }
+
                 if (newValue !== undefined) {
                     this.setValue(newValue);
                 }
@@ -827,6 +882,14 @@ Mana.define('Mana/Admin/Field/Text', ['jquery', 'Mana/Admin/Field'], function($,
                 .val(value)
                 .trigger('change')
                 .trigger('blur');
+        }
+    });
+});
+
+Mana.define('Mana/Admin/Field/Hidden', ['jquery', 'Mana/Admin/Field/Text'], function ($, Text) {
+    return Text.extend('Mana/Admin/Field/Hidden', {
+        $field: function () {
+            return this.$().find('td:first input');
         }
     });
 });

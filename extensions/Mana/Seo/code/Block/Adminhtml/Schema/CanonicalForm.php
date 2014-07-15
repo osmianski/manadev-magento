@@ -54,6 +54,15 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             'required' => true,
         ));
 
+        if ($this->coreHelper()->isManadevAttributePageInstalled()) {
+            $this->addField($fieldset, 'canonical_option_page', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Canonical Link Meta Tag on Option Pages'),
+                'name' => 'canonical_option_page',
+                'required' => true,
+            ));
+        }
+
         $this->addField($fieldset, 'canonical_filters', 'select', array(
             'options' => $this->getYesNoSourceModel()->getOptionArray(),
             'label' => $this->__('Canonical URL Contains All Applied Filters'),

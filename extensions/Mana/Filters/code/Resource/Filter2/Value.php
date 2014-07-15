@@ -23,6 +23,23 @@ class Mana_Filters_Resource_Filter2_Value extends Mana_Db_Resource_Object {
     const DM_SELECTED_HOVERED_IMAGE = 6;
     const DM_STATE_IMAGE = 7;
 
+    const DM_CONTENT_IS_ACTIVE = 8;
+    const DM_CONTENT_IS_INITIALIZED = 9;
+    const DM_CONTENT_STOP_FURTHER_PROCESSING = 10;
+    const DM_CONTENT_META_TITLE = 11;
+    const DM_CONTENT_META_KEYWORDS = 12;
+    const DM_CONTENT_META_DESCRIPTION = 13;
+    const DM_CONTENT_META_ROBOTS = 14;
+    const DM_CONTENT_TITLE = 15;
+    const DM_CONTENT_SUBTITLE = 16;
+    const DM_CONTENT_DESCRIPTION = 17;
+    const DM_CONTENT_ADDITIONAL_DESCRIPTION = 18;
+    const DM_CONTENT_LAYOUT_XML = 19;
+    const DM_CONTENT_WIDGET_LAYOUT_XML = 20;
+    const DM_CONTENT_PRIORITY = 21;
+    const DM_CONTENT_COMMON_DIRECTIVES = 22;
+    const DM_CONTENT_BACKGROUND_IMAGE = 23;
+
     #endregion
 
     public function loadByFilterPosition($object, $filterId, $position)

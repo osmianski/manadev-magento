@@ -77,7 +77,9 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 		} 
 		
         // rendering
-		Mage::helper('mana_core/js')->options('edit-form', array('editSessionId' => Mage::helper('mana_db')->beginEditing()));
+        $sessionId = Mage::helper('mana_db')->beginEditing();
+		Mage::helper('mana_core/js')->options('edit-form', array('editSessionId' => $sessionId));
+        Mage::helper('mana_core/js')->setConfig('editSessionId', $sessionId);
         $this->_setActiveMenu('mana/filters');
         $this->renderLayout();
 		
@@ -108,7 +110,7 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 				$model->getEntityName() => array('saved' => array($model->getId()))
 			));
 			$model->validate();
-
+            $model->validateDetails();
 			// do save
         	$model->save();
         	Mage::dispatchEvent('m_saved', array('object' => $model));

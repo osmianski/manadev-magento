@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.04.04.19</version>
+		    <version>14.07.02.13</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -242,47 +242,94 @@
                 <hash>--no-</hash>
                 <percent>--percent-</percent>
                 <ampersand>--and-</ampersand>
+                <no_index>any_three_options</no_index>
             </seo>
 		</mana_filters>
 	</default>
 	<manapro_filterseolinks>
         <noindex>
             <empty translate="title" module="manapro_filterseolinks">
-                <title></title>
+                <title />
                 <model>manapro_filterseolinks/noindex_empty</model>
             </empty>
+            <any translate="title" module="manapro_filterseolinks">
+                <title>Any filter applied</title>
+                <model>manapro_filterseolinks/noindex_any</model>
+            </any>
+            <any_two_options translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[>= 2 options in the any filter applied]]></title>
+                <model>manapro_filterseolinks/noindex_anyTwo</model>
+            </any_two_options>
+            <any_three_options translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[>= 3 options in the any filter applied]]></title>
+                <model>manapro_filterseolinks/noindex_anyThree</model>
+            </any_three_options>
             <several_filters translate="title" module="manapro_filterseolinks">
-                <title>2 or more filters applied</title>
+                <title><![CDATA[>= 2 filters applied]]></title>
                 <model>manapro_filterseolinks/noindex_filters</model>
             </several_filters>
             <three_or_more_filters translate="title" module="manapro_filterseolinks">
-                <title>3 or more filters applied</title>
+                <title><![CDATA[>= 3 filters applied]]></title>
                 <model>manapro_filterseolinks/noindex_filtersThree</model>
             </three_or_more_filters>
             <several_options translate="title" module="manapro_filterseolinks">
-                <title>2 or more options in the same filter applied</title>
+                <title><![CDATA[>= 2 options in the same filter applied]]></title>
                 <model>manapro_filterseolinks/noindex_options</model>
             </several_options>
             <three_or_more_options translate="title" module="manapro_filterseolinks">
-                <title>3 or more options in the same filter applied</title>
+                <title><![CDATA[>= 3 options in the same filter applied]]></title>
                 <model>manapro_filterseolinks/noindex_optionsThree</model>
             </three_or_more_options>
             <slider translate="title" module="manapro_filterseolinks">
                 <title>Slider filter applied</title>
                 <model>manapro_filterseolinks/noindex_slider</model>
             </slider>
+            <page translate="title" module="manapro_filterseolinks">
+                <title>Second and further pages</title>
+                <model>manapro_filterseolinks/noindex_page</model>
+            </page>
+        </noindex>
+        <follow>
+            <empty translate="title" module="manapro_filterseolinks">
+                <title />
+                <model>manapro_filterseolinks/follow_empty</model>
+            </empty>
             <any translate="title" module="manapro_filterseolinks">
                 <title>Any filter applied</title>
-                <model>manapro_filterseolinks/noindex_any</model>
+                <model>manapro_filterseolinks/follow_any</model>
             </any>
             <any_two_options translate="title" module="manapro_filterseolinks">
-                <title>2 or more options in the any filter applied</title>
-                <model>manapro_filterseolinks/noindex_anyTwo</model>
+                <title><![CDATA[<= 2 options in the any filter applied]]></title>
+                <model>manapro_filterseolinks/follow_anyTwo</model>
             </any_two_options>
             <any_three_options translate="title" module="manapro_filterseolinks">
-                <title>3 or more options in the any filter applied</title>
-                <model>manapro_filterseolinks/noindex_anyThree</model>
+                <title><![CDATA[<= 3 options in the any filter applied]]></title>
+                <model>manapro_filterseolinks/follow_anyThree</model>
             </any_three_options>
-        </noindex>
+            <several_filters translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[<= 2 filters applied]]></title>
+                <model>manapro_filterseolinks/follow_filters</model>
+            </several_filters>
+            <three_or_more_filters translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[<= 3 filters applied]]></title>
+                <model>manapro_filterseolinks/follow_filtersThree</model>
+            </three_or_more_filters>
+            <several_options translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[<= 2 options in the same filter applied]]></title>
+                <model>manapro_filterseolinks/follow_options</model>
+            </several_options>
+            <three_or_more_options translate="title" module="manapro_filterseolinks">
+                <title><![CDATA[<= 3 options in the same filter applied]]></title>
+                <model>manapro_filterseolinks/follow_optionsThree</model>
+            </three_or_more_options>
+            <slider translate="title" module="manapro_filterseolinks">
+                <title>Slider filter applied</title>
+                <model>manapro_filterseolinks/follow_slider</model>
+            </slider>
+            <page translate="title" module="manapro_filterseolinks">
+                <title>Second and further pages</title>
+                <model>manapro_filterseolinks/follow_page</model>
+            </page>
+        </follow>
 	</manapro_filterseolinks>
 </config>

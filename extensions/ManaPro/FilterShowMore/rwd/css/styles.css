@@ -1,0 +1,27 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterShowMore
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-more-less { font-size: 11px; text-align: right; }
+.m-expandable-filter { overflow: hidden; }
+/*.sidebar .m-scrollable-filter-container { padding: 0 !important; }*/
+.m-scrollable-filter-container ol { border:none; }
+.m-scrollable-filter { overflow-x: hidden !important; overflow-y: scroll !important; border: 1px solid #ccc; /*padding: 0 10px; margin: 0 5px; */background: rgba(255,255,255,0.5); }
+.m-scrollable-filter li { white-space: nowrap; }
+
+.m-filter-popup { padding: 10px; }
+.m-filter-popup .m-columns { overflow: hidden; }
+.m-filter-popup .m-columns > li { float: left; width: 200px; text-align: left; }
+.m-filter-popup .m-columns.m-filter-colors.horizontal { width: 600px; }
+.m-filter-popup .m-columns.m-filter-colors.horizontal > li { width: auto; }
+.m-filter-popup .buttons-set { margin: 8px 0 0; }
+.m-filter-popup .m-filter-colors { margin: 0; }
+.m-showmore-popup-container { box-shadow : 15px 15px 25px 5px rgba( 0, 0, 0, 0.4 ); }
+
+.m-option-search { padding: 0 0 10px; }
+/*.sidebar .m-scrollable-filter-container .m-option-search { padding: 10px; }*/
+.m-option-search input { width: 100%; }
+.m-option-search input.m-empty { color: #c0c0c0; }
+.m-no-match { display: none; }

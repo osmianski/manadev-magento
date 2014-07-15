@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_InfiniteScrolling
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <mana_infinitescrolling>
+        <update handle="jquery_core" />
+        <reference name="head">
+            <action method="addJs"><script>mana/infinitescrolling.js</script></action>
+        	<action method="addItem"><type>skin_js</type><name>js/mana/infinitescrolling.js</name><params/></action>
+			<action method="addCss"><stylesheet>css/mana_infinitescrolling.css</stylesheet></action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="mana_infinitescrolling/engine" name="infinitescrolling_engine">
+                <!-- change these CSS selectors if product list in your theme is marked with
+                     different CSS class than in standard theme -->
+            	<action method="setData"><key>container</key><value>.category-products</value></action>
+            	<action method="setData"><key>pager</key><value>.pager</value></action>
+
+            	<action method="setData"><key>row_in_list_mode</key><value>li.item</value></action>
+            	<action method="setData"><key>item_in_list_mode</key><value>li.item</value></action>
+            	<action method="setData"><key>loader_in_list_mode</key><value>.infinite-scrolling-grid-loader</value></action>
+
+            	<action method="setData"><key>row_in_grid_mode</key><value>.products-grid</value></action>
+            	<action method="setData"><key>item_in_grid_mode</key><value>li.item</value></action>
+            	<action method="setData"><key>loader_in_grid_mode</key><value>.infinite-scrolling-grid-loader</value></action>
+
+                <!-- change these Magento layout block names if product list blocks in your theme
+                     are named differently that in standard theme -->
+            	<action method="setData"><key>list_block_name</key><value>product_list</value></action>
+
+                <!-- add custom additional product list layout modes here -->
+                <action method="addModeHandler"><mode>list</mode><handler>Mana/InfiniteScrolling/ListMode</handler></action>
+                <action method="addModeHandler"><mode>grid</mode><handler>Mana/InfiniteScrolling/ResponsiveGridMode</handler></action>
+            	<block type="core/template" name="infinitescrolling_loader" template="mana/infinitescrolling/loader.phtml"/>
+            </block>
+            <reference name="m_ajax_update">
+                <action method="addUpdatedBlocksIfPageChanged"><updated_blocks>infinitescrolling_engine</updated_blocks></action>
+                <action method="addUpdatedBlocksIfParameterChanged"><updated_blocks>infinitescrolling_engine</updated_blocks></action>
+            </reference>
+        </reference>
+    </mana_infinitescrolling>
+    <catalog_category_layered>
+        <update handle="mana_infinitescrolling" />
+    </catalog_category_layered>
+    <catalogsearch_result_index>
+        <update handle="mana_infinitescrolling" />
+        <reference name="infinitescrolling_engine">
+            <!-- on quick search page product list goes with different name -->
+            <action method="setData"><key>list_block_name</key><value>search_result_list</value></action>
+        </reference>
+    </catalogsearch_result_index>
+    <cms_page_layered>
+        <update handle="mana_infinitescrolling" />
+    </cms_page_layered>
+    <mana_optionpage_view>
+        <update handle="mana_infinitescrolling" />
+    </mana_optionpage_view>
+</layout>

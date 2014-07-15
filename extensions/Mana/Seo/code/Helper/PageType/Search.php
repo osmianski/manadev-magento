@@ -14,24 +14,30 @@ class Mana_Seo_Helper_PageType_Search extends Mana_Seo_Helper_PageType  {
         return Mana_Seo_Model_UrlHistory::TYPE_SEARCH_SUFFIX;
     }
 
+    protected $_urlKey;
+
     /**
      * @param Mana_Seo_Rewrite_Url $urlModel
      * @return string | bool
      */
     public function getUrlKey($urlModel) {
-        /* @var $seo Mana_Seo_Helper_Data */
-        $seo = Mage::helper('mana_seo');
+        if (!$this->_urlKey) {
+            /* @var $seo Mana_Seo_Helper_Data */
+            $seo = Mage::helper('mana_seo');
 
-        /* @var $logger Mana_Core_Helper_Logger */
-        $logger = Mage::helper('mana_core/logger');
+            /* @var $logger Mana_Core_Helper_Logger */
+            $logger = Mage::helper('mana_core/logger');
 
-        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
-        $urlCollection->addFieldToFilter('url_key',
-            Mage::getStoreConfig('mana/seo/search_url_key', $urlModel->getStore()->getId()));
-        if (!($result = $urlModel->getUrlKey($urlCollection))) {
-            $logger->logSeoUrl(sprintf('WARNING: %s not found', 'Search page URL key'));
+            $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+            $urlCollection->addFieldToFilter('url_key',
+                Mage::getStoreConfig('mana/seo/search_url_key', $urlModel->getStore()->getId()));
+            if (!($result = $urlModel->getUrlKey($urlCollection))) {
+                $logger->logSeoUrl(sprintf('WARNING: %s not found', 'Search page URL key'));
+            }
+
+            $this->_urlKey = $result;
         }
 
-        return $result['final_url_key'];
+        return $this->_urlKey['final_url_key'];
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * @category    Mana
  * @package     Mana_InfiniteScrolling
  * @copyright   Copyright (c) http://www.manadev.com
