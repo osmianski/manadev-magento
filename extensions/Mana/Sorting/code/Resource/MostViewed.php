@@ -26,6 +26,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
      */
     public function setOrder($collection, $order, $direction)
     {
+        $productViewEvent = 0;
         foreach (Mage::getModel('reports/event_type')->getCollection() as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = $eventType->getId();

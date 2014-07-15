@@ -26,13 +26,6 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
      */
     public function setOrder($collection, $order, $direction)
     {
-        foreach (Mage::getModel('reports/event_type')->getCollection() as $eventType) {
-            if ($eventType->getEventName() == 'catalog_product_view') {
-                $productViewEvent = $eventType->getId();
-                break;
-            }
-        }
-
         $to = $this->getDate()->addDay(1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
         $from = $this->getDate()->addYear(-1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
 

@@ -38,6 +38,11 @@
 
                 </entities>
             </mana_sorting_resources>
+            <adminhtml>
+                <rewrite>
+                    <system_config_source_catalog_listSort>Mana_Sorting_Rewrite_System_Source_ListSort</system_config_source_catalog_listSort>
+                </rewrite>
+            </adminhtml>
         </models>
         <events>
             <m_toolbar_orders>
