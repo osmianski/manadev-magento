@@ -37,7 +37,7 @@
 		 * @return
 		 */
 		trigger: function(el,event){
-            if (jQuery.mobile) {
+            if (jQuery.mobile && jQuery.mobile.navigate && jQuery.mobile.navigate.navigator) {
                 jQuery.mobile.navigate.navigator.ignorePopState = true;
             }
             jQuery(el).trigger(event);
