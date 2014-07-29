@@ -20,6 +20,8 @@ $connection = $installer->getConnection();
 
 $installer->startSetup();
 
+Mage::register('m_prevent_indexing_on_save', true, true);
+
 /* @var $ratingObserver ManaPro_FilterAttributes_Resource_Rating */
 $ratingObserver = Mage::getResourceModel('manapro_filterattributes/rating');
 $ratingAttributeCode = $ratingObserver->getRatingAttributeCode();
@@ -165,6 +167,8 @@ if ($core->isManadevLayeredNavigationInstalled()) {
 
 Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_attribute')
     ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
+
+Mage::unregister('m_prevent_indexing_on_save');
 
 if (method_exists($installer->getConnection(), 'disallowDdlCache')) {
     $installer->getConnection()->disallowDdlCache();

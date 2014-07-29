@@ -7,8 +7,8 @@
  -->
 <layout version="0.1.0">
     <adminhtml_mana_filters_edit>
+        <update handle="editor"/>
 		<reference name="head">
-            <action method="setCanLoadExtJs"><flag>1</flag></action>
 			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
 		</reference>
