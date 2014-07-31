@@ -16,3 +16,7 @@ input.m-slider[type="text"] { width: 30px; }
     { display: none; }
 
 .m-slider-values.left-aligned { text-align: left; }
+
+.m-hide-slider .m-filter-slider,
+.m-hide-slider .m-slider-min-value,
+.m-hide-slider .m-slider-max-value { display: none; }
