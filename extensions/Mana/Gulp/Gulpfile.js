@@ -215,3 +215,5 @@ app.loadTasks();
 
 gulp.task('default', app.buildTasks);
 gulp.task('watch', app.watchTasks);
+
+module.exports = gulp;
