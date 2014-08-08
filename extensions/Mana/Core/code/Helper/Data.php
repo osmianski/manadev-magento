@@ -12,6 +12,10 @@
  */
 class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_pageTypes;
+    /**
+     * @var Mage_Catalog_Model_Category
+     */
+    protected $_rootCategory;
 
     /**
      * Retrieve config value for store by path. By default uses standard Magento function to query core_config_data
@@ -892,4 +896,14 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this;
     }
 
+    public function getRootCategory() {
+        if (!$this->_rootCategory) {
+            $this->_rootCategory = Mage::getModel('catalog/category');
+            $this->_rootCategory
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load(Mage::app()->getStore()->getRootCategoryId());
+
+        }
+        return $this->_rootCategory;
+    }
 }
