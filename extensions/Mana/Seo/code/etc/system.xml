@@ -47,11 +47,20 @@
                             <label>Additional Sort By Options</label>
                             <comment>Sort by options in addition to sortable attributes defined in Catalog->Attributes->Manage Attributes. If more than one, separate them with ',', without spaces</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>300</sort_order>
+                            <sort_order>400</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </additional_toolbar_orders>
+                        <excluded_parameters translate="label comment">
+                            <label>Excluded URL Parameters</label>
+                            <comment>These comma-separated URL parameters are excluded from all layered navigation links. Useful for marketing campaign tracking parameters like utm_campaign.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </excluded_parameters>
                     </fields>
                 </seo>
                 <message translate="label" module="mana_core">

@@ -114,10 +114,15 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
 
             $queryParams = $this->getQueryParams();
             $seoParams = array();
+            $excludedParams = explode(',', Mage::getStoreConfig('mana/seo/excluded_parameters'));
             foreach ($this->getQueryParams() as $key => $value) {
                 $path = false;
 
                 if ($key == 'p' && $value == 1) {
+                    unset($queryParams[$key]);
+                    continue;
+                }
+                if (in_array($key, $excludedParams)) {
                     unset($queryParams[$key]);
                     continue;
                 }
