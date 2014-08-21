@@ -30,6 +30,10 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
     }
 
     protected function _prepareLayout() {
+        Mage::register('m_no_solr', true, true);
+        if (Mage::registry('current_layer')) {
+            Mage::unregister('current_layer');
+        }
         Mage::helper('mana_core/layout')->delayPrepareLayout($this, 100);
 
         return $this;
@@ -93,11 +97,12 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
                 ->addUrlRewrite();
     }
     public function getLayer() {
-        $layer = Mage::registry('current_layer');
-        if ($layer) {
-            return $layer;
-        }
-        return Mage::getSingleton('catalog/layer');
+        return Mage::helper('mana_core/layer')->getLayer();
+//        $layer = Mage::registry('current_layer');
+//        if ($layer) {
+//            return $layer;
+//        }
+//        return Mage::getSingleton('catalog/layer');
     }
     public function prepareSortableFieldsByCategory($category) {
         if (!$this->getAvailableOrders()) {
