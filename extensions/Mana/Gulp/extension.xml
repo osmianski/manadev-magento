@@ -3,6 +3,6 @@
     <name>Mana/Node</name>
     <version>14.06.08.17</version>
 
-    <sync extension-file="Gulpfile.js" project-file="Gulpfile.js"/>
-    <sync extension-file="package.json" project-file="package.json.for-gulp.template"/>
+    <sync extension-file="Gulpfile.js" project-file="Gulpfile.template.js"/>
+    <sync extension-file="package.json" project-file="package.template.json"/>
 </config>
