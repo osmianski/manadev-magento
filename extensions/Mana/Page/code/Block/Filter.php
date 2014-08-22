@@ -146,15 +146,18 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
         $res = Mage::getSingleton('core/resource');
 
         $alias = 'mp_'.$attributeCode;
-        $this->_productCollection->getSelect()->joinLeft(
-            array($alias => $attribute->getBackendTable()),
-            implode(' AND ', array(
-                "`$alias`.`entity_id` = `e`.`entity_id`",
-                $db->quoteInto("`$alias`.`attribute_id` = ?", $attribute->getId()),
-                "`$alias`.`store_id` = 0",
-            )),
-            null
-        );
+        $from = $this->_productCollection->getSelect()->getPart(Varien_Db_Select::FROM);
+        if (!isset($from[$alias])) {
+            $this->_productCollection->getSelect()->joinLeft(
+                array($alias => $attribute->getBackendTable()),
+                implode(' AND ', array(
+                    "`$alias`.`entity_id` = `e`.`entity_id`",
+                    $db->quoteInto("`$alias`.`attribute_id` = ?", $attribute->getId()),
+                    "`$alias`.`store_id` = 0",
+                )),
+                null
+            );
+        }
 
         return "`$alias`.`value`";
     }
