@@ -23,6 +23,9 @@ class ManaPage_AttributeOption_Block_Filter extends Mana_Page_Block_Filter {
                 case 'eq':
                     $condition[] = $db->quoteInto("$attributeExpr = ?", $options['value']);
                     break;
+                case 'neq':
+                    $condition[] = $db->quoteInto("$attributeExpr IS NULL OR $attributeExpr <> ?", $options['value']);
+                    break;
                 case 'finset':
                     $condition[] = $db->quoteInto("find_in_set(?,$attributeExpr)", $options['value']);
                     break;
