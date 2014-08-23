@@ -17,3 +17,9 @@ li.category-image.m-option-page-image a { float: left; }
 .m-option-featured-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
 .m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
 .m-option-page-product:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+
+.m-option-page-list2 { overflow: hidden; background: red; }
+.m-option-page-list2 .m-alpha-list { overflow: hidden; }
+.m-option-page-list2 .m-alpha-list > div { float: left; }
+.m-option-page-list2 .m-alpha-list > ul { float: left; overflow: hidden; }
+.m-option-page-list2 .m-alpha-list > ul > li { float: left; }

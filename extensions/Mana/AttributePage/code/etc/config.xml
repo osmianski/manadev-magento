@@ -169,6 +169,9 @@
                 <separator>, </separator>
                 <last_separator> and </last_separator>
             </option_page_title>
+            <attribute_page_settings>
+                <template>template1</template>
+            </attribute_page_settings>
         </mana_attributepage>
     </default>
     <m_layout>

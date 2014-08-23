@@ -32,3 +32,11 @@ li.category-image.m-option-page-image a { float: left; }
 .m-option-page-list.col4-set .col-2 { float:left; width:23.5%; margin:0 2%; }
 .m-option-page-list.col4-set .col-3 { float:left; width:23.5%; }
 .m-option-page-list.col4-set .col-4 { float:right; width:23.5%; }
+
+/* template 2 styles */
+
+.m-option-page-list2 { overflow: hidden; }
+.m-option-page-list2 .m-alpha-list { overflow: hidden; border-top: 1px solid black; padding-left: 50px; position: relative; }
+.m-option-page-list2 .m-alpha-list > div { float: left; position: absolute; top: 0; left: 0; }
+.m-option-page-list2 .m-alpha-list > ul { float: left; overflow: hidden; }
+.m-option-page-list2 .m-alpha-list > ul > li { float: left; }
