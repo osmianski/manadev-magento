@@ -52,7 +52,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
                     "stats.product_id = e.entity_id",
                     null
                 );
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.view_count {$direction}");
     }
 

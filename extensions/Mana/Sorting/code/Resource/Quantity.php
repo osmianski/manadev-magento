@@ -26,6 +26,6 @@ class Mana_Sorting_Resource_Quantity extends Mage_Core_Model_Mysql4_Abstract imp
      */
     public function setOrder($collection, $order, $direction)
     {
-        $collection->setOrder('m_represented_qty', $direction == 'asc' ? 'desc' : 'asc');
+        $collection->setOrder('m_represented_qty', $direction == 'asc' ? 'asc' : 'desc');
     }
 }

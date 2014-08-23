@@ -38,7 +38,7 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
                 $db->quoteInto(" o.store_id = ?", Mage::app()->getStore()->getId()).
                 " GROUP BY stats.product_id)")),
                 "stats.product_id = e.entity_id", null);
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.qty_ordered {$direction}");
     }
 

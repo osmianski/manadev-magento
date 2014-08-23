@@ -29,7 +29,7 @@ class Mana_Sorting_Resource_BiggestSaving extends Mage_Core_Model_Mysql4_Abstrac
 
         $select = $collection->getSelect();
 
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("(`price_index`.`price` - `price_index`.`final_price`)  {$direction}");
     }
 

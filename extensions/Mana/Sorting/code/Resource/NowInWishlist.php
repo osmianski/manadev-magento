@@ -43,7 +43,7 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
                     "stats.product_id = e.entity_id",
                     null
                 );
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.wishlist_count {$direction}");
     }
 
