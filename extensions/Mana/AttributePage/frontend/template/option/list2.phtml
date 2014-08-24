@@ -15,10 +15,12 @@ $_actualColumn = 0;
 $_currentAlpha = '';
 $_collection = $this->getCollection();
 $_count = $this->getCount();
+$_width = Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template2_width');
+$_height = Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template2_height');
 ?>
 <?php if( $_count) :?>
     <?php echo $this->getPagerHtml(); ?>
-    <div class="m-option-page-list2">
+    <div id="m-option-page-list">
         <div>
             <?php foreach ($_collection as $_optionPage) : $i++;?>
                 <?php
@@ -30,12 +32,17 @@ $_count = $this->getCount();
                     <?php if ($_currentAlpha): ?>
                         </ul></div>
                     <?php endif; ?>
-                    <?php $_currentAlpha = $_alpha; ?>
+                    <?php
+                        $_currentAlpha = $_alpha;
+                        $_displayAlpha = $_currentAlpha == '#'
+                            ? Mage::getStoreConfig('mana_attributepage/attribute_page_settings/digit_label')
+                            : $_currentAlpha;
+                    ?>
                     <div class="m-alpha-list">
-                        <div><?php echo $_currentAlpha; ?></div>
+                        <div data-alpha="<?php echo $_displayAlpha; ?>"><?php echo $_displayAlpha; ?></div>
                         <ul>
                 <?php endif; ?>
-                <li>
+                <li style="width: <?php echo $_width; ?>px; height: <?php echo $_height; ?>px;">
                     <a href="<?php echo $_optionPage->getUrl() ?>" title="<?php echo $_escapedTitle; ?>">
                         <?php echo $_escapedTitle; ?>
                     </a>

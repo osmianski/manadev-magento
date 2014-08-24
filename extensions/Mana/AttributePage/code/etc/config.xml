@@ -170,7 +170,10 @@
                 <last_separator> and </last_separator>
             </option_page_title>
             <attribute_page_settings>
-                <template>template1</template>
+                <template>template2</template>
+                <template2_width>190</template2_width>
+                <template2_height>40</template2_height>
+                <digit_label>#</digit_label>
             </attribute_page_settings>
         </mana_attributepage>
     </default>

@@ -70,7 +70,7 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
         $this->addField($fieldset, 'column_count', 'text', array(
             'label' => $this->__('Column Count'),
             'title' => $this->__('Column Count'),
-            'note' => $this->__('Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc. <strong>Typically themes do not support more that 4 columns.</strong>'),
+            'note' => $this->__('Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc. <strong>Typically themes do not support more that 4 columns. This setting is only applied when Template 1 is used.</strong>'),
             'name' => 'column_count',
             'required' => true,
 

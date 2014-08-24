@@ -16,7 +16,11 @@
     <!-- module frontend files (having impact on store pages) -->
     <sync extension-file="frontend/layout.xml" project-file="app/design/frontend/base/default/layout/{extension_name}.xml"/>
     <sync extension-dir="frontend/template" project-dir="app/design/frontend/base/default/template/{extension/name}"/>
-    <sync extension-file="frontend/js/scripts.js" project-file="skin/frontend/base/default/js/{extension_name}.js"/>
+    <sync extension-file="frontend/js/scripts.js" project-file="skin/frontend/base/default/js/{extension/name}.js"/>
+    <sync extension-file="frontend/js/scripts.js.map" project-file="skin/frontend/base/default/js/{extension/name}.js.map"/>
+    <sync extension-file="frontend/js/scripts.min.js" project-file="skin/frontend/base/default/js/{extension/name}.min.js"/>
+    <sync extension-file="frontend/js/scripts.min.js.map" project-file="skin/frontend/base/default/js/{extension/name}.min.js.map"/>
+    <sync extension-dir="frontend/js/src" project-dir="skin/frontend/base/default/js/src/{Extension/Name}"/>
     <sync extension-file="frontend/css/styles.css" project-file="skin/frontend/base/default/css/{extension_name}.css"/>
     <sync extension-dir="frontend/images" project-dir="skin/frontend/base/default/images/{extension_name}"/>
 

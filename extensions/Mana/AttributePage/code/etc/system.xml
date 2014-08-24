@@ -204,6 +204,14 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
+                        <digit_label>
+                            <label>Digit Label</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </digit_label>
                         <template translate="label comment">
                             <label>Template</label>
                             <comment>Choose the look and feel of option page list</comment>
@@ -214,6 +222,24 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </template>
+                        <template2_width translate="label comment">
+                            <label>Option Page Label Width</label>
+                            <comment>This setting is only applied when Template 2 is used.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template2_width>
+                        <template2_height translate="label comment">
+                            <label>Option Page Label Height</label>
+                            <comment>This setting is only applied when Template 2 is used.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template2_height>
                     </fields>
                 </attribute_page_settings>
             </groups>

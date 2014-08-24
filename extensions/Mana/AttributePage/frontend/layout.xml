@@ -38,6 +38,7 @@
         <label>Option Page (MANAdev)</label>
         <reference name="head">
 			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
+        	<action method="addItem"><type>skin_js</type><name>js/mana/attributepage.js</name><params/></action>
         </reference>
         <reference name="content">
             <block type="mana_attributepage/attribute_view" name="attribute_view" template="mana/attributepage/attribute/view.phtml">
