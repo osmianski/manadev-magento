@@ -27,6 +27,7 @@ class Mana_Filters_Model_Query extends Varien_Object
      */
     protected $_selectPrototype;
     protected $_filters = array();
+    protected $_specialCounts = array();
 
     public function init() {
         if (!$this->_isInitialized) {
@@ -68,6 +69,10 @@ class Mana_Filters_Model_Query extends Varien_Object
         return $this->_filters;
     }
 
+    public function getSpecialCounts() {
+        return $this->_specialCounts;
+    }
+
     public function apply() {
         foreach ($this->_filters as $code => $filter) {
             if (!$filter['isApplyProcessed']) {
@@ -88,6 +93,11 @@ class Mana_Filters_Model_Query extends Varien_Object
                 $this->_filters[$code]['counts'] = $counts;
                 $this->_filters[$code]['isApplyProcessed'] = true;
             }
+        }
+
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $this->_specialCounts = $this->specialPageHelper()->countOnCollection($this->getProductCollection());
+            $this->specialPageHelper()->applyToCollection($this->getProductCollection());
         }
         return $this;
     }
@@ -190,5 +200,18 @@ class Mana_Filters_Model_Query extends Varien_Object
         return Mage::helper('mana_filters');
     }
 
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
     #endregion
 }

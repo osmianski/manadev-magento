@@ -772,6 +772,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Enterprise_UrlRewrite');
     }
 
+    public function isSpecialPagesInstalled() {
+        return $this->isModuleEnabled('Mana_Page');
+    }
+
     protected $_accentTranslations = array(
         'à' => 'a',
         'á' => 'a',

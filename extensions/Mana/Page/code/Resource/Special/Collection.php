@@ -1,14 +1,13 @@
 <?php
-/**
+/** 
  * @category    Mana
- * @package     Mana_Db
+ * @package     Mana_Page
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
 /**
  * @author Mana Team
- * @method string getScopeName()
+ *
  */
-class Mana_Db_Resource_Entity_JsonCollection extends Mana_Core_Resource_JsonCollection {
-
+class Mana_Page_Resource_Special_Collection extends Mana_Core_Resource_JsonCollection {
 }

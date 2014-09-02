@@ -64,5 +64,9 @@
             </modules>
         </translate>
     </frontend>
-    <!-- INSERT HERE: adminhtml, frontend, ... -->
+    <mana_page>
+        <special>
+            <special_price>manapage_sale/special_specialPrice</special_price>
+        </special>
+    </mana_page>
 </config>

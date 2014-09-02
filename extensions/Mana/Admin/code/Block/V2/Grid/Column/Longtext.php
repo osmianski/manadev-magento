@@ -1,14 +1,13 @@
 <?php
 /**
  * @category    Mana
- * @package     Mana_Db
+ * @package     Mana_Admin
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
 /**
  * @author Mana Team
- * @method string getScopeName()
+ *
  */
-class Mana_Db_Resource_Entity_JsonCollection extends Mana_Core_Resource_JsonCollection {
-
+class Mana_Admin_Block_V2_Grid_Column_Longtext extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Longtext {
 }

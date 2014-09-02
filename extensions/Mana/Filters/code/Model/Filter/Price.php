@@ -80,6 +80,10 @@ class Mana_Filters_Model_Filter_Price
             );
         }
 
+        if ($this->_allowSpecialOptions()) {
+            $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode(),
+                $query->getSpecialCounts()));
+        }
         return $data;
     }
 
@@ -437,6 +441,11 @@ class Mana_Filters_Model_Filter_Price
         return $this->_getResource()->isUpperBoundInclusive();
     }
     #endregion
+
+    protected function _allowSpecialOptions() {
+        return true;
+    }
+
 
     #region Dependencies
 

@@ -453,6 +453,14 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         );
     }
 
+    public function getSpecialOptionData($code, $counts) {
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            return $this->specialPageHelper()->getOptionData($code, $counts);
+        }
+        else {
+            return array();
+        }
+    }
 
     #region Dependencies
 
@@ -463,5 +471,11 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         return Mage::helper('mana_core');
     }
 
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
     #endregion
 }
