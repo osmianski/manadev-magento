@@ -20,8 +20,8 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
         $result = array();
 
         foreach ($resource->getData(Mage::app()->getStore()->getId()) as $id => $special) {
-            if (isset($counts[$id])) {
-                $isSelected = $this->isApplied($special['url_key']);
+            if (isset($counts[$id]) && $this->getFilterCodeById($special['filter']) == $code) {
+                $isSelected = $this->isApplied($code, $special['url_key']);
                 $result[] = array(
                     'label' => $special['title'],
                     'special' => true,
@@ -94,73 +94,66 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
 
     public function getAppliedOptions() {
         if (!$this->_applied) {
-            $values = explode('_', Mage::app()->getRequest()->getParam($this->getRequestVar()));
+            /* @var $resource Mana_Page_Resource_Special */
+            $resource = Mage::getResourceSingleton('mana_page/special');
 
-            $this->_applied = $values ? array_filter($values) : array();
+            $result = array();
+
+            foreach ($resource->getData(Mage::app()->getStore()->getId()) as $id => $special) {
+                if ($special['filter']) {
+                    $code = $this->getFilterCodeById($special['filter']);
+                    if ($param = Mage::app()->getRequest()->getParam($code)) {
+                        $values = explode('_', $param);
+                        if (in_array($special['url_key'], $values)) {
+                            if (isset($result[$code])) {
+                                $result[$code] = array();
+                            }
+                            $result[$code][] = $special['url_key'];
+                        }
+                    }
+
+                }
+            }
+
+            $this->_applied = $result;
         }
         return $this->_applied;
     }
 
-    /**
-     * @param Mana_Filters_Model_Item $item
-     * @return string
-     */
-    public function getUrl($item) {
-        $values = $this->getAppliedOptions();
-        if (!$this->isApplied($item->getData('value'))) {
-            $values[] = $item->getData('value');
+    public function isApplied($code, $urlKey) {
+        foreach ($this->getAppliedOptions() as $appliedCode => $options) {
+            if ($code == $appliedCode && in_array($urlKey, $options)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getFilterCodeById($id) {
+        $collection = $this->layerHelper()->getFilterOptionsCollection();
+        if ($filter = $this->coreHelper()->collectionFind($collection, 'global_id', $id)) {
+            return $filter->getData('code');
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function isUrlKey($code, $urlKey) {
+        /* @var $resource Mana_Page_Resource_Special */
+        $resource = Mage::getResourceSingleton('mana_page/special');
+
+        foreach ($resource->getData(Mage::app()->getStore()->getId()) as $special) {
+            if ($special['filter'] && $this->getFilterCodeById($special['filter']) == $code
+                && $special['url_key'] == $urlKey)
+            {
+                return true;
+            }
         }
 
-    	$query = array(
-            $this->getRequestVar() => implode('_', $values),
-            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
-        );
-
-        $params = array('_current'=>true, '_m_escape' => '', '_use_rewrite'=>true, '_query'=>$query, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
+        return false;
     }
 
-    /**
-     * @param Mana_Filters_Model_Item $item
-     * @return string
-     */
-    public function getReplaceUrl($item) {
-        $values = $this->getAppliedOptions();
-        if (!$this->isApplied($item->getData('value'))) {
-            $values[] = $item->getData('value');
-        }
-
-    	$query = array(
-            $this->getRequestVar() => implode('_', $values),
-            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
-        );
-
-        $params = array('_current'=>true, '_m_escape' => '', '_use_rewrite'=>true, '_query'=>$query, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
-    }
-
-    /**
-     * @param Mana_Filters_Model_Item $item
-     * @return string
-     */
-    public function getRemoveUrl($item) {
-        $values = $this->getAppliedOptions();
-        if (!$this->isApplied($item->getData('value'))) {
-            $values[] = $item->getData('value');
-        }
-
-    	$query = array(
-            $this->getRequestVar() => implode('_', $values),
-            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
-        );
-
-        $params = array('_current'=>true, '_m_escape' => '', '_use_rewrite'=>true, '_query'=>$query, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-        return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
-    }
-
-    public function isApplied($urlKey) {
-        return in_array($urlKey, $this->getAppliedOptions());
-    }
 
     #region Dependencies
 
@@ -169,6 +162,13 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function layerHelper() {
+        return Mage::helper('mana_filters');
     }
 
     #endregion

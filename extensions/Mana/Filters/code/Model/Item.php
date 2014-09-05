@@ -25,10 +25,6 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getUrl()
     {
-        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->getData('special')) {
-            return $this->specialPageHelper()->getUrl($this);
-        }
-
     	// MANA BEGIN: add multivalue filter handling
     	$values = $this->getFilter()->getMSelectedValues(); // this could fail if called from some kind of standard filter
     	if (!$values) $values = array();
@@ -57,10 +53,6 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getReplaceUrl()
     {
-        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->getData('special')) {
-            return $this->specialPageHelper()->getReplaceUrl($this);
-        }
-
     	// MANA BEGIN: add multivalue filter handling
     	$values = array();
     	if (!in_array($this->getValue(), $values)) $values[] = $this->getValue();
@@ -87,10 +79,6 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getRemoveUrl()
     {
-        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->getData('special')) {
-            return $this->specialPageHelper()->getRemoveUrl($this);
-        }
-
     	// MANA BEGIN: add multivalue filter handling
     	if ($this->hasData('remove_url')) {
     	    return $this->getData('remove_url');
@@ -191,11 +179,5 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
         return Mage::helper('manapro_filterdependent');
     }
 
-    /**
-     * @return Mana_Page_Helper_Special
-     */
-    public function specialPageHelper() {
-        return Mage::helper('mana_page/special');
-    }
     #endregion
 }
