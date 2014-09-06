@@ -550,6 +550,17 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function setProtectedProperty($object, $propertyName, $value) {
+        $className = get_class($object);
+        $class = new ReflectionClass($className);
+        $property = $class->getProperty($propertyName);
+        if (method_exists($property, 'setAccessible')) {
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        }
+    }
+
+
     public function base64EncodeUrl($url) {
         return base64_encode(Mage::getSingleton('core/url')->sessionUrlVar($url));
     }
