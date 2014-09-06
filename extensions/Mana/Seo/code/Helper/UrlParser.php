@@ -352,7 +352,6 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $cInvalid = Mana_Seo_Model_ParsedUrl::CORRECT_INVALID_PRICE_FILTER_VALUE;
 
         $originalToken = $token;
-        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->specialPageHelper()->isUrlKey($token->getParameterUrl()->getInternalName(), ))
         if ($pairs = $this->_scanNumbers($token, $this->_schema->getMultipleValueSeparator(), $this->_schema->getPriceSeparator(), '-')) {
             foreach ($pairs as $pair) {
                 if (!$this->_setPriceFilter($token, $pair['from'], $pair['to'])) {
@@ -1385,12 +1384,5 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             ? $this->coreHelper()->unaccent($s)
             : $s;
     }
-
-    /**
-     * @return Mana_Page_Helper_Special
-     */
-    public function specialPageHelper() {
-        return Mage::helper('mana_page/special');
-    }
-    #endregion
+   #endregion
 }

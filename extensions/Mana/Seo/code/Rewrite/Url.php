@@ -446,25 +446,21 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             if ($path) {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
-            if ($this->coreHelper()->isSpecialPagesInstalled() && $this->specialPageHelper()->isUrlKey($parameterUrl->getInternalName(), implode(',', $singleValue))) {
-                $path .= implode(',', $singleValue);
+
+            list($from, $to) = $singleValue;
+            if ($isSlider) {
+                $path .= $from . $this->_schema->getPriceSeparator() . $to;
             }
             else {
-                list($from, $to) = $singleValue;
-                if ($isSlider) {
+                $index = $from;
+                $range = $to;
+                if ($this->_schema->getUseRangeBounds()) {
+                    $from = ($index - 1) * $range;
+                    $to = $from + $range;
                     $path .= $from . $this->_schema->getPriceSeparator() . $to;
                 }
                 else {
-                    $index = $from;
-                    $range = $to;
-                    if ($this->_schema->getUseRangeBounds()) {
-                        $from = ($index - 1) * $range;
-                        $to = $from + $range;
-                        $path .= $from . $this->_schema->getPriceSeparator() . $to;
-                    }
-                    else {
-                        $path .= $index . $this->_schema->getPriceSeparator() . $range;
-                    }
+                    $path .= $index . $this->_schema->getPriceSeparator() . $range;
                 }
             }
         }
@@ -702,11 +698,5 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return Mage::helper('mana_filters/item');
     }
 
-    /**
-     * @return Mana_Page_Helper_Special
-     */
-    public function specialPageHelper() {
-        return Mage::helper('mana_page/special');
-    }
     #endregion
 }

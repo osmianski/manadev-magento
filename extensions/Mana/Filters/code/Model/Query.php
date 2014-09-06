@@ -95,9 +95,10 @@ class Mana_Filters_Model_Query extends Varien_Object
             }
         }
 
-        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+        if ($this->coreHelper()->isSpecialPagesInstalled() && !$this->specialPageHelper()->isCounted($this->getProductCollection())) {
             $this->_specialCounts = $this->specialPageHelper()->countOnCollection($this->getProductCollection());
             $this->specialPageHelper()->applyToCollection($this->getProductCollection());
+            $this->specialPageHelper()->addToState();
         }
         return $this;
     }

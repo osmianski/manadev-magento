@@ -133,6 +133,9 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         foreach ($this->getLayer()->getState()->getFilters() as $item) {
             $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
         }
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $filterState[$this->specialPageHelper()->getRequestVar()] = null;
+        }
         if ($clearListParams) {
             $filterState = array_merge($filterState, array(
               'dir' => null,

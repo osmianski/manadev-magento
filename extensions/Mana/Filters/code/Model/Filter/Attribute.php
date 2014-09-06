@@ -303,6 +303,10 @@ class Mana_Filters_Model_Filter_Attribute
 
     public function getRemoveUrl()
     {
+        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->specialPageHelper()->isAppliedInFilter($this->getRequestVar())) {
+            return $this->specialPageHelper()->getClearFilterUrl($this->getRequestVar());
+        }
+
         $query = array($this->getRequestVar() => $this->getResetValue());
         if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
             $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getRequestVar());
@@ -364,6 +368,13 @@ class Mana_Filters_Model_Filter_Attribute
      */
     public function itemHelper() {
         return Mage::helper('mana_filters/item');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
     }
     #endregion
 }
