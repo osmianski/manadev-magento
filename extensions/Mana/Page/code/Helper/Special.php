@@ -12,26 +12,61 @@
 class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
     protected $_counts = array();
     protected $_applied;
+    /**
+     * @var Mana_Page_Model_SpecialFilter[]
+     */
+    protected $_specialFilters;
+    /**
+     * @var Mage_Core_Block_Template
+     */
+    protected $_specialOptionsBlock;
 
-    public function getOptionData($code, $counts) {
-        /* @var $resource Mana_Page_Resource_Special */
-        $resource = Mage::getResourceSingleton('mana_page/special');
+    /**
+     * @return Mana_Page_Model_SpecialFilter[]
+     */
+    public function getSpecialFilters() {
+        if (!$this->_specialFilters) {
+            /* @var $resource Mana_Page_Resource_Special */
+            $resource = Mage::getResourceSingleton('mana_page/special');
 
+            $result = array();
+
+            foreach ($resource->getData(Mage::app()->getStore()->getId()) as $id => $special) {
+                if ($special['filter']) {
+                    /* @var $specialFilter Mana_Page_Model_SpecialFilter */
+                    $specialFilter = Mage::getModel('mana_page/specialFilter');
+
+                    $specialFilter->addData($special);
+                    $specialFilter->setData('is_applied', $this->isApplied($special['url_key']));
+                    $specialFilter->setData('host_filter', $this->getFilterOptionsById($special['filter']));
+                    $specialFilter->setData('special_filter_code', 'special_options_' . $specialFilter->getData('url_key'));
+                    $specialFilter->setData('filter_options', new Varien_Object());
+                    $result[] = $specialFilter;
+                }
+            }
+
+            $this->_specialFilters = $result;
+        }
+        return $this->_specialFilters;
+    }
+
+    /**
+     * @param Mana_Filters_Model_Query $query
+     */
+    public function registerSpecialFilters($query) {
+        if (!$this->_specialFilters) {
+            foreach ($this->getSpecialFilters() as $specialFilter) {
+                $specialFilter->setData('query', $query);
+                $query->addFilter($specialFilter->getData('special_filter_code'), $specialFilter);
+            }
+        }
+    }
+
+    public function getOptionData($code) {
         $result = array();
 
-        foreach ($resource->getData(Mage::app()->getStore()->getId()) as $id => $special) {
-            if (isset($counts[$id]) && $this->getFilterCodeById($special['filter']) == $code) {
-                $isSelected = $this->isApplied($special['url_key']);
-                $result[] = array(
-                    'label' => $special['title'],
-                    'special' => true,
-                    'value' => $special['url_key'],
-                    'count' => $counts[$id],
-                    'm_selected' => $isSelected,
-                    'm_show_selected' => $isSelected,
-                );
-
-            }
+        foreach ($this->getSpecialFilters() as $filter) {
+            $filter->addToHostFilterOptions($result, $code);
         }
 
         return $result;
@@ -278,17 +313,26 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
 
-    protected function _createItemEx($data, $filterOptions) {
-        $filter = new Varien_Object();
-        $filter
-            ->setData('name', $filterOptions->getName())
-            ->setData('request_var', $filterOptions->getCode())
-            ->setData('filter_options', $filterOptions);
-        return Mage::getModel('mana_filters/item')
-            ->setData($data)
-            ->setFilter($filter);
-    }
+    public function getSliderSpecialOptionsHtml($filter) {
+        if ($filter->getSpecialItems() && count($filter->getSpecialItems())) {
+            if (!$this->_specialOptionsBlock) {
+                $this->_specialOptionsBlock = Mage::getSingleton('core/layout')->createBlock('core/template');
+            }
 
+            $this->_specialOptionsBlock->setTemplate($this->coreHelper()->isManadevLayeredNavigationCheckboxesInstalled()
+                ? 'mana/filters/items/list_special.phtml'//'manapro/filtercheckboxes/cssitems_special.phtml'
+                : 'mana/filters/items/list_special.phtml');
+
+            $this->_specialOptionsBlock
+                ->setData('filter', $filter)
+                ->setData('filter_options', $filter->getData('filter_options'));
+
+            return $this->_specialOptionsBlock->toHtml();
+        }
+        else {
+            return '';
+        }
+    }
 
     #region Dependencies
 
@@ -309,7 +353,7 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
     /**
      * @return Mana_Filters_Helper_Data
      */
-    private function filterHelper() {
+    public function filterHelper() {
         return Mage::helper('mana_filters');
     }
 

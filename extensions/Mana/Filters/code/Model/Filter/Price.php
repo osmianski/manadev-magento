@@ -80,11 +80,24 @@ class Mana_Filters_Model_Filter_Price
             );
         }
 
-        if ($this->_allowSpecialOptions()) {
-            $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode(),
-                $query->getSpecialCounts()));
+        if ($this->_addSpecialOptionsToAllOptions()) {
+            $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()));
         }
         return $data;
+    }
+
+    protected $_specialItems;
+    public function getSpecialItems()
+    {
+        if (!$this->_specialItems) {
+            $this->_specialItems = array();
+            if (!$this->_addSpecialOptionsToAllOptions()) {
+                foreach (Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()) as $itemData) {
+                    $this->_specialItems[] = $this->_createItemEx($itemData);
+                }
+            }
+        }
+        return $this->_specialItems;
     }
 
 	public function getLowestPossibleValue() {
@@ -446,7 +459,7 @@ class Mana_Filters_Model_Filter_Price
     }
     #endregion
 
-    protected function _allowSpecialOptions() {
+    protected function _addSpecialOptionsToAllOptions() {
         return true;
     }
 

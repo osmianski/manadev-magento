@@ -456,13 +456,32 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         );
     }
 
-    public function getSpecialOptionData($code, $counts) {
+    public function getSpecialOptionData($code) {
         if ($this->coreHelper()->isSpecialPagesInstalled()) {
-            return $this->specialPageHelper()->getOptionData($code, $counts);
+            $data = $this->specialPageHelper()->getOptionData($code);
+            usort($data, array(Mage::getSingleton('mana_filters/sort'), 'byPosition'));
+            return $data;
         }
         else {
             return array();
         }
+    }
+
+    public function getListItemClass($item) {
+        $result = '';
+        if ($item->getMShowSelected()) {
+            $result .= 'm-selected-ln-item';
+        }
+        if (!($item->getCount() || $item->getMSelected())) {
+            if ($result) {
+                $result .= ' ';
+            }
+            $result .= 'm-disabled';
+        }
+        if ($result) {
+            $result = "class=\"$result\"";
+        }
+        return $result;
     }
 
     #region Dependencies

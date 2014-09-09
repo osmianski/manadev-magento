@@ -52,6 +52,16 @@ class Mana_Page_Block_Adminhtml_Special_Form extends Mana_Admin_Block_V3_Form
             'default_store_label' => $this->__('Same for All Stores'),
         ));
 
+        $this->addField($fieldset, 'position', 'text', array(
+            'label' => $this->__('Position'),
+            'title' => $this->__('Position'),
+            'name' => 'position',
+            'required' => true,
+
+            'default_bit_no' => Mana_Page_Model_Special::DM_POSITION,
+            'default_store_label' => $this->__('Same for All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_condition', array(
             'title' => $this->__('Condition'),
             'legend' => $this->__('Condition'),

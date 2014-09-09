@@ -27,7 +27,6 @@ class Mana_Filters_Model_Query extends Varien_Object
      */
     protected $_selectPrototype;
     protected $_filters = array();
-    protected $_specialCounts = array();
 
     public function init() {
         if (!$this->_isInitialized) {
@@ -69,11 +68,10 @@ class Mana_Filters_Model_Query extends Varien_Object
         return $this->_filters;
     }
 
-    public function getSpecialCounts() {
-        return $this->_specialCounts;
-    }
-
     public function apply() {
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $this->specialPageHelper()->registerSpecialFilters($this);
+        }
         foreach ($this->_filters as $code => $filter) {
             if (!$filter['isApplyProcessed']) {
                 $model = $filter['model'];
@@ -95,11 +93,6 @@ class Mana_Filters_Model_Query extends Varien_Object
             }
         }
 
-        if ($this->coreHelper()->isSpecialPagesInstalled() && !$this->specialPageHelper()->isCounted($this->getProductCollection())) {
-            $this->_specialCounts = $this->specialPageHelper()->countOnCollection($this->getProductCollection());
-            $this->specialPageHelper()->applyToCollection($this->getProductCollection());
-            $this->specialPageHelper()->addToState();
-        }
         return $this;
     }
 

@@ -22,6 +22,9 @@ class Mana_Page_Resource_Special  {
             if ($storeId) {
                 $storeData = isset($data[$storeId]) ? $data[$storeId] : array();
                 foreach ($globalData as $id => $globalModel) {
+                    if (isset($globalModel['default_mask0'])) {
+                        unset($globalModel['default_mask0']);
+                    }
                     $storeData[$id] = isset($storeData[$id]) ? array_merge($globalModel, $storeData[$id]) : $globalModel;
                 }
             }
@@ -89,6 +92,9 @@ class Mana_Page_Resource_Special  {
             }
             if (!$this->dbHelper()->isModelContainsCustomSetting($model, Mana_Page_Model_Special::DM_URL_KEY)) {
                 $model->unsetData('url_key');
+            }
+            if (!$this->dbHelper()->isModelContainsCustomSetting($model, Mana_Page_Model_Special::DM_POSITION)) {
+                $model->unsetData('position');
             }
         }
 

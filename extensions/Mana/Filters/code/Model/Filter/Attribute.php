@@ -122,6 +122,10 @@ class Mana_Filters_Model_Filter_Attribute
         foreach (array_keys($data) as $position => $key) {
             $data[$key]['position'] = $position;
         }
+        if ($this->_addSpecialOptionsToAllOptions()) {
+            $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()));
+        }
+
         usort($data, array(Mage::getSingleton('mana_filters/sort'), $sortMethod));
 
         $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
@@ -347,6 +351,11 @@ class Mana_Filters_Model_Filter_Attribute
         return $values ? array_filter(explode('_', $values)) : array();
     }
     #endregion
+
+    protected function _addSpecialOptionsToAllOptions() {
+        return true;
+    }
+
     #region Dependencies
 
     /**

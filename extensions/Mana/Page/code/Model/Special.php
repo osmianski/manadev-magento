@@ -12,6 +12,7 @@
 class Mana_Page_Model_Special extends Varien_Object {
     const DM_TITLE = 1;
     const DM_URL_KEY = 2;
+    const DM_POSITION = 3;
 
     public function validate() {
         /* @var $t Mana_Page_Helper_Data */
@@ -28,6 +29,12 @@ class Mana_Page_Model_Special extends Varien_Object {
             !trim($this->getData('url_key')))
         {
             $errors[] = $t->__('Please fill in %s field', $t->__('URL Key'));
+        }
+
+        if ($this->dbHelper()->isModelContainsCustomSetting($this, self::DM_POSITION) &&
+            (!trim($this->getData('position')) || !is_numeric($this->getData('position'))))
+        {
+            $errors[] = $t->__('Please fill in numeric %s field', $t->__('Position'));
         }
 
         if (!trim($this->getData('condition'))) {
