@@ -13,6 +13,7 @@ class Mana_Page_Model_Special extends Varien_Object {
     const DM_TITLE = 1;
     const DM_URL_KEY = 2;
     const DM_POSITION = 3;
+    const ENTITY = 'mana_page/special';
 
     public function validate() {
         /* @var $t Mana_Page_Helper_Data */

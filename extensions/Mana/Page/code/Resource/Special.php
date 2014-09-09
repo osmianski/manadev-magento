@@ -17,10 +17,13 @@ class Mana_Page_Resource_Special  {
         if (!isset($this->_data[$storeId])) {
             $data = Mage::getStoreConfig($this->_key);
             $data = $data ? json_decode($data, true) : array();
+            if (!isset($data['stores'])) {
+                $data = array('stores' => array(), 'last_id' => 1);
+            }
 
-            $globalData = isset($data[0]) ? $data[0] : array();
+            $globalData = isset($data['stores'][0]) ? $data['stores'][0] : array();
             if ($storeId) {
-                $storeData = isset($data[$storeId]) ? $data[$storeId] : array();
+                $storeData = isset($data['stores'][$storeId]) ? $data['stores'][$storeId] : array();
                 foreach ($globalData as $id => $globalModel) {
                     if (isset($globalModel['default_mask0'])) {
                         unset($globalModel['default_mask0']);
@@ -64,11 +67,17 @@ class Mana_Page_Resource_Special  {
      * @param Mana_Page_Model_Special $model
      */
     public function saveModel($model) {
+        $originalModel = $model;
+        $model = clone $originalModel;
+
         /* @var $t Mana_Page_Helper_Data */
         $t = Mage::helper('mana_page');
 
         $data = Mage::getStoreConfig($this->_key);
         $data = $data ? json_decode($data, true) : array();
+        if (!isset($data['stores'])) {
+            $data = array('stores' => array(), 'last_id' => 1);
+        }
 
         $storeId = 0;
         if ($model->hasData('store_id')) {
@@ -82,8 +91,8 @@ class Mana_Page_Resource_Special  {
             $model->unsetData('id');
         }
 
-        if (!isset($data[$storeId])) {
-            $data[$storeId] = array();
+        if (!isset($data['stores'][$storeId])) {
+            $data['stores'][$storeId] = array();
         }
 
         if ($model->hasData('default_mask0')) {
@@ -102,16 +111,16 @@ class Mana_Page_Resource_Special  {
         if ($id) {
             if ($storeId) {
                 if (count($modelData)) {
-                    $data[$storeId][$id] = $modelData;
+                    $data['stores'][$storeId][$id] = $modelData;
                 }
                 else {
-                    if (isset($data[$storeId][$id])) {
-                        unset($data[$storeId][$id]);
+                    if (isset($data['stores'][$storeId][$id])) {
+                        unset($data['stores'][$storeId][$id]);
                     }
                 }
             }
             else {
-                $data[$storeId][$id] = $modelData;
+                $data['stores'][$storeId][$id] = $modelData;
             }
         }
         else {
@@ -119,34 +128,42 @@ class Mana_Page_Resource_Special  {
                 throw new Mage_Core_Exception($t->__('Non existent special condition can not be customized on store level.'));
             }
             else {
-                $id = count($data[$storeId]) ? max(array_keys($data[$storeId])) + 1 : 1;
-                $model->setData('id', $id);
-                $data[$storeId][$id] = $modelData;
+                $id = $data['last_id'] + 1;
+                $originalModel->setData('id', $id);
+                $data['stores'][$storeId][$id] = $modelData;
+                $data['last_id'] = $id;
             }
         }
 
         $this->_saveConfig($data);
-    }
 
-    #region Dependencies
-
-    /**
-     * @return Mana_Core_Helper_Db
-     */
-    public function dbHelper() {
-        return Mage::helper('mana_core/db');
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($originalModel,
+                Mana_Page_Model_Special::ENTITY,
+                Mage_Index_Model_Event::TYPE_SAVE);
+        }
     }
 
     public function delete($id) {
+        $originalModel = $this->getModel($id, 0);
         $data = Mage::getStoreConfig($this->_key);
         $data = $data ? json_decode($data, true) : array();
-        foreach (array_keys($data) as $storeId) {
-            if (isset($data[$storeId][$id])) {
-                unset($data[$storeId][$id]);
+        if (!isset($data['stores'])) {
+            $data = array('stores' => array(), 'last_id' => 1);
+        }
+        foreach (array_keys($data['stores']) as $storeId) {
+            if (isset($data['stores'][$storeId][$id])) {
+                unset($data['stores'][$storeId][$id]);
             }
         }
 
         $this->_saveConfig($data);
+
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($originalModel,
+                Mana_Page_Model_Special::ENTITY,
+                Mage_Index_Model_Event::TYPE_DELETE);
+        }
     }
 
     protected function _saveConfig($data) {
@@ -180,6 +197,23 @@ class Mana_Page_Resource_Special  {
         $this->_data = array();
         Mage::getConfig()->reinit();
         Mage::app()->reinitStores();
+    }
+
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
+
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
     }
 
     #endregion

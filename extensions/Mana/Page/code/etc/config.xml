@@ -54,7 +54,15 @@
             </mana_page>
             <!-- INSERT HERE: rewrites, ... -->
         </blocks>
-        <!-- INSERT HERE: blocks, models, ... -->
+        <index>
+            <indexer>
+                <mana_seo_url>
+                    <sources>
+                        <special_filter><resource>mana_page/urlIndexer_specialFilter</resource></special_filter>
+                    </sources>
+                </mana_seo_url>
+            </indexer>
+        </index>
     </global>
     <!-- This section enables static visual changes in frontend area. -->
     <frontend>

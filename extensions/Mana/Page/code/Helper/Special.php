@@ -166,6 +166,14 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
         return 'special-options';
     }
 
+    public function getSpecialFilterPosition() {
+        return 100;
+    }
+
+    public function includeRequestVarInUrl() {
+        return 'always';
+    }
+
     public function getAppliedOptions() {
         if (!$this->_applied) {
             $values = explode('_', Mage::app()->getRequest()->getParam($this->getRequestVar()));
