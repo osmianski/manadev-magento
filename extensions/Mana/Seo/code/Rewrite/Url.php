@@ -438,7 +438,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      * @return string
      */
     protected function _generateSpecialParameter($parameterUrl, $value) {
-        if ($value == '__0__') {
+        if ($value == '__1__') {
             return $value;
         }
         $path = '';
@@ -625,6 +625,19 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                                 ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
+                            'id' => $value,
+                        );
+                    }
+                    break;
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL:
+                    if ($urlKey = $this->_getSpecialFilterUrlKey($value)) {
+                        return array(
+                            'url' => $this->_encode($urlKey['final_url_key']),
+                            'prefix' => $urlKey['final_include_filter_name']
+                                ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
+                                : '',
+                            'position' => $urlKey['position'],
+                            'special' => true,
                             'id' => $value,
                         );
                     }

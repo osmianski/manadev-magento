@@ -153,13 +153,20 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
             ) {
                 /* @var $url Mana_Seo_Rewrite_Url */
                 $url = Mage::getModel('core/url');
-                $this->_seoData = $url->getItemData($this->getFilter()->getRequestVar(), $this->getValue());
+                $requestVar = $this->getFilter()->getRequestVar();
+                if ($this->coreHelper()->isSpecialPagesInstalled()) {
+                    if ($this->getData('special')) {
+                        $requestVar = $this->specialPageHelper()->getRequestVar();
+                    }
+                }
+                $this->_seoData = $url->getItemData($requestVar, $this->getValue());
             }
             else {
                 $this->_seoData = array(
                     'url' => $this->getValue(),
                     'prefix' => '',
                     'position' => 0,
+                    'special' => $this->getData('special'),
                     'id' => $this->getValue(),
                 );
             }
