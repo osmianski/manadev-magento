@@ -67,6 +67,7 @@
     <mana_page>
         <special>
             <special_price>manapage_sale/special_specialPrice</special_price>
+            <promo>manapage_sale/special_promo</promo>
         </special>
     </mana_page>
 </config>

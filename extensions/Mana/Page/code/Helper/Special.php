@@ -328,7 +328,7 @@ class Mana_Page_Helper_Special extends Mage_Core_Helper_Abstract  {
             }
 
             $this->_specialOptionsBlock->setTemplate($this->coreHelper()->isManadevLayeredNavigationCheckboxesInstalled()
-                ? 'mana/filters/items/list_special.phtml'//'manapro/filtercheckboxes/cssitems_special.phtml'
+                ? 'manapro/filtercheckboxes/cssitems_special.phtml'
                 : 'mana/filters/items/list_special.phtml');
 
             $this->_specialOptionsBlock

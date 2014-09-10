@@ -58,26 +58,27 @@ class Mana_Page_Model_SpecialFilter extends Varien_Object implements Mana_Filter
      * @return mixed
      */
     public function countOnCollection($collection) {
-            $result = array();
-            /* @var $resource Mana_Page_Resource_Special */
-            $resource = Mage::getResourceSingleton('mana_page/special');
+        $result = array();
+        /* @var $resource Mana_Page_Resource_Special */
+        $resource = Mage::getResourceSingleton('mana_page/special');
 
-            $db = $collection->getConnection();
+        $db = $collection->getConnection();
 
-            $select = clone $collection->getSelect();
-            $select->reset(Zend_Db_Select::COLUMNS);
-            $select->reset(Zend_Db_Select::ORDER);
-            $select->reset(Zend_Db_Select::GROUP);
-            $select->reset(Zend_Db_Select::LIMIT_COUNT);
-            $select->reset(Zend_Db_Select::LIMIT_OFFSET);
-            $select->columns("COUNT(`e`.`entity_id`)");
+        $select = clone $collection->getSelect();
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->reset(Zend_Db_Select::ORDER);
+        $select->reset(Zend_Db_Select::GROUP);
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);
+        $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $select->columns("COUNT(`e`.`entity_id`)");
 
-            $xml = new SimpleXMLElement($this->getData('condition'));
-            $rule = $this->specialPageHelper()->rule($xml);
-            $rule->join($select, $xml);
-            $select->where($rule->where($xml));
+        $xml = new SimpleXMLElement($this->getData('condition'));
+        $rule = $this->specialPageHelper()->rule($xml);
+        $rule->join($select, $xml);
+        $select->where($rule->where($xml));
 
-            return $db->fetchOne($select);
+        $sql = $select->__toString();
+        return $db->fetchOne($select);
     }
 
     public function getRangeOnCollection($collection) {

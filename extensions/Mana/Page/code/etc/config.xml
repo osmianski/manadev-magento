@@ -121,5 +121,12 @@
             </adminhtml>
         </routers>
     </admin>
+    <mana_page>
+        <special>
+            <and>mana_page/special_and</and>
+            <or>mana_page/special_or</or>
+            <not>mana_page/special_not</not>
+        </special>
+    </mana_page>
     <!-- INSERT HERE: adminhtml, frontend, ... -->
 </config>

@@ -41,9 +41,42 @@ class Mana_Page_Model_Special extends Varien_Object {
         if (!trim($this->getData('condition'))) {
             $errors[] = $t->__('Please fill in %s field', $t->__('Condition'));
         }
+        else {
+            $xml = null;
+            try {
+                $xml = new SimpleXMLElement($this->getData('condition'));
+            }
+            catch (Exception $e) {
+                //$errors[] = $t->__('%s field is not valid XML', $t->__('Condition'));
+            }
+            if (is_null($xml)) {
+                $errors[] = $t->__('%s field is not valid XML', $t->__('Condition'));
+            }
+            else {
+                $this->_validateXmlRecursively($xml, $errors);
+            }
+        }
 
         if (count($errors)) {
 			throw new Mana_Core_Exception_Validation($errors);
+        }
+    }
+
+    /**
+     * @param SimpleXmlElement $xml
+     * @param string[] $errors
+     */
+    protected function _validateXmlRecursively($xml, &$errors) {
+        /* @var $t Mana_Page_Helper_Data */
+        $t = Mage::helper('mana_page');
+
+        $helper = (string)Mage::getConfig()->getNode('mana_page/special/' . $xml->getName());
+        if (!$helper) {
+            $errors[] = $t->__('Unknown %s rule in %s field', $xml->getName(), $t->__('Condition'));
+        }
+
+        foreach ($xml->children() as $childXml) {
+            $this->_validateXmlRecursively($childXml, $errors);
         }
     }
 
