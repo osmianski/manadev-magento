@@ -550,6 +550,17 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function setProtectedProperty($object, $propertyName, $value) {
+        $className = get_class($object);
+        $class = new ReflectionClass($className);
+        $property = $class->getProperty($propertyName);
+        if (method_exists($property, 'setAccessible')) {
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        }
+    }
+
+
     public function base64EncodeUrl($url) {
         return base64_encode(Mage::getSingleton('core/url')->sessionUrlVar($url));
     }
@@ -742,6 +753,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_Filters');
     }
 
+    public function isManadevLayeredNavigationCheckboxesInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterCheckboxes');
+    }
+
     public function isManadevSeoLayeredNavigationInstalled() {
         return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
     }
@@ -770,6 +785,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isEnterpriseUrlRewriteInstalled() {
         return $this->isModuleEnabled('Enterprise_UrlRewrite');
+    }
+
+    public function isSpecialPagesInstalled() {
+        return $this->isModuleEnabled('Mana_Page');
     }
 
     protected $_accentTranslations = array(

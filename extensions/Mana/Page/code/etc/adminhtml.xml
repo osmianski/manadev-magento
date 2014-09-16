@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_AttributePage
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <special translate="title" module="mana_page">
+                    <title>Special Filters, Pages and Tags</title>
+                    <sort_order>150</sort_order>
+                    <action>adminhtml/mana_special/</action>
+                </special>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<special translate="title" module="mana_page">
+								<title>Special Filters, Pages and Tags</title>
+		                        <sort_order>150</sort_order>
+							</special>
+						</children>
+					</mana>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

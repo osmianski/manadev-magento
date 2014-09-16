@@ -145,6 +145,9 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                             case Mana_Seo_Model_ParsedUrl::PARAMETER_TOOLBAR:
                                 $path = $this->_generateToolbarParameter($url, $value);
                                 break;
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL:
+                                $path = $this->_generateSpecialParameter($url, $value);
+                                break;
                             default:
                                 throw new Exception('Not implemented');
                         }
@@ -260,6 +263,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     }
 
     static protected $_valueUrlKeys = array();
+    static protected $_specialFilterUrlKeys = array();
 
     /**
      * @param $optionId
@@ -296,6 +300,33 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         Mana_Core_Profiler2::stop();
 
         return self::$_valueUrlKeys[$optionId];
+    }
+
+    /**
+     * @param $optionId
+     * @return array | bool
+     */
+    protected function _getSpecialFilterUrlKey($specialFilterUrl) {
+        Mana_Core_Profiler2::start(__METHOD__);
+        if (!isset(self::$_specialFilterUrlKeys[$specialFilterUrl])) {
+                /* @var $seo Mana_Seo_Helper_Data */
+                $seo = Mage::helper('mana_seo');
+
+                /* @var $logger Mana_Core_Helper_Logger */
+                $logger = Mage::helper('mana_core/logger');
+
+                $urlCollection = $seo->getUrlCollection($this->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_ATTRIBUTE_VALUE);
+                $urlCollection->addFieldToFilter('type', Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL);
+                $urlCollection->addFieldToFilter('url_key', $specialFilterUrl);
+                if (!($result = $this->getUrlKey($urlCollection, array('final_include_filter_name', 'position', 'option_id')))) {
+                    $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'special filter URL key', 'id', $specialFilterUrl));
+                }
+
+            self::$_specialFilterUrlKeys[$specialFilterUrl] = $result;
+        }
+        Mana_Core_Profiler2::stop();
+
+        return self::$_specialFilterUrlKeys[$specialFilterUrl];
     }
 
     protected function _getCategoryUrlKeys($categoryId) {
@@ -404,6 +435,39 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     /**
      * @param Mana_Seo_Model_Url $parameterUrl
      * @param string $value
+     * @return string
+     */
+    protected function _generateSpecialParameter($parameterUrl, $value) {
+        if ($value == '__1__') {
+            return $value;
+        }
+        $path = '';
+        $includeFilterName = false;
+        $urlKeys = array();
+        foreach (explode('_', $value) as $singleValue) {
+            if ($urlKey = $this->_getSpecialFilterUrlKey($singleValue)) {
+                if ($urlKey['final_include_filter_name']) {
+                    $includeFilterName = true;
+                }
+                $urlKeys[] = $urlKey;
+            }
+        }
+        uasort($urlKeys, array($this, '_compareAttributeUrlKeys'));
+        foreach ($urlKeys as $urlKey) {
+            if ($path !== '') {
+                $path .= $this->_schema->getMultipleValueSeparator();
+            }
+            $path .= $this->_encode($urlKey['final_url_key']);
+        }
+        if ($includeFilterName) {
+            $path = $this->_encode($parameterUrl->getFinalUrlKey()) . $this->_schema->getFirstValueSeparator() . $path;
+        }
+        return $path;
+    }
+
+    /**
+     * @param Mana_Seo_Model_Url $parameterUrl
+     * @param string $value
      * @return array
      */
     protected function _generateCategoryParameter($parameterUrl, $value) {
@@ -443,10 +507,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             $values = array(explode(',', $value));
         }
         foreach ($values as $singleValue) {
-            list($from, $to) = $singleValue;
             if ($path) {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
+
+            list($from, $to) = $singleValue;
             if ($isSlider) {
                 $path .= $from . $this->_schema->getPriceSeparator() . $to;
             }
@@ -560,6 +625,19 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                                 ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
                                 : '',
                             'position' => $urlKey['position'],
+                            'id' => $value,
+                        );
+                    }
+                    break;
+                case Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL:
+                    if ($urlKey = $this->_getSpecialFilterUrlKey($value)) {
+                        return array(
+                            'url' => $this->_encode($urlKey['final_url_key']),
+                            'prefix' => $urlKey['final_include_filter_name']
+                                ? $this->_encode($url->getFinalUrlKey()).$this->getSchema()->getFirstValueSeparator()
+                                : '',
+                            'position' => $urlKey['position'],
+                            'special' => true,
                             'id' => $value,
                         );
                     }

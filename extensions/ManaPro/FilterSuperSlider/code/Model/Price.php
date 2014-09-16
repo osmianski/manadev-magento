@@ -46,4 +46,8 @@ class ManaPro_FilterSuperSlider_Model_Price extends Mana_Filters_Model_Filter_Pr
             return ceil($value);
         }
     }
+
+    protected function _addSpecialOptionsToAllOptions() {
+        return false;
+    }
 }
