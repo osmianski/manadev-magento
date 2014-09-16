@@ -40,6 +40,18 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
             }
             return this._targetUrl;
         },
+        getSpecialUrl: function () {
+            if (this._specialUrl === undefined) {
+                this._specialUrl = urlTemplate.decodeAttribute(this.$().data('special-url'));
+            }
+            return this._specialUrl;
+        },
+        getTargetSpecialUrl: function () {
+            if (this._targetSpecialUrl === undefined) {
+                this._targetSpecialUrl = urlTemplate.decodeAttribute(this.$().data('target-special-url'));
+            }
+            return this._targetSpecialUrl;
+        },
         getClearUrl: function () {
             if (this._clearUrl === undefined) {
                 this._clearUrl = urlTemplate.decodeAttribute(this.$().data('clear-url'));
@@ -188,32 +200,42 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
             layout.hidePopup();
         },
         apply: function(items) {
+            var self = this;
             layout.hidePopup();
 
             if (core.count(items)) {
-                var sortedItems = [];
-                $.each(items, function(index, value) {
-                    sortedItems.push(value);
-                });
-                sortedItems.sort(function(a, b) {
-                    if (a.position < b.position) return -1;
-                    if (a.position > b.position) return 1;
 
-                    if (parseInt(a.id) < parseInt(b.id)) return -1;
-                    if (parseInt(a.id) > parseInt(b.id)) return 1;
-
-                    if (a.index < b.index) return -1;
-                    if (a.index > b.index) return 1;
-
-                    return 0;
-                });
-                if (sortedItems.length == 1 && sortedItems[0].full_url) {
-                    setLocation(sortedItems[0].full_url);
+                if (items.length == 1 && items[0].full_url) {
+                    setLocation(items[0].full_url);
+                    return;
                 }
-                else {
+
+                var groupedItems = [[], []];
+                $.each(items, function(index, value) {
+                    groupedItems[value.special ? 1 : 0].push(value);
+                });
+
+                var urlArgs = ['', ''];
+                $.each(groupedItems, function(groupIndex, groupItems) {
+                    var sortedItems = [];
+                    $.each(groupItems, function(index, value) {
+                        sortedItems.push(value);
+                    });
+                    sortedItems.sort(function(a, b) {
+                        if (a.position < b.position) return -1;
+                        if (a.position > b.position) return 1;
+
+                        if (parseInt(a.id) < parseInt(b.id)) return -1;
+                        if (parseInt(a.id) > parseInt(b.id)) return 1;
+
+                        if (a.index < b.index) return -1;
+                        if (a.index > b.index) return 1;
+
+                        return 0;
+                    });
                     var param = '';
                     var prefix = '';
-                    var separator = this.getSeparator();
+                    var separator = self.getSeparator();
                     $.each(sortedItems, function (index, value) {
                         if (value.prefix) {
                             prefix = value.prefix;
@@ -223,8 +245,15 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                         }
                         param += value.url;
                     });
-                    setLocation(this.getTargetUrl().replace('__0__', prefix + param));
-                }
+                   urlArgs[groupIndex] = prefix + param;
+                });
+                setLocation(urlArgs[0] && urlArgs[1]
+                    ? this.getTargetSpecialUrl()
+                        .replace('__0__', urlArgs[0])
+                        .replace('__1__', urlArgs[1])
+                    : (urlArgs[0]
+                        ? this.getTargetUrl().replace('__0__', urlArgs[0])
+                        : this.getSpecialUrl().replace('__1__', urlArgs[1])));
             }
             else {
                 setLocation(this.getClearUrl());

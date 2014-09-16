@@ -36,6 +36,7 @@
     </mana_optionpage_view>
     <mana_attributepage_view translate="label">
         <label>Option Page (MANAdev)</label>
+        <update handle="jquery_core" />
         <reference name="head">
 			<action method="addCss"><stylesheet>css/mana_attributepage.css</stylesheet></action>
         	<action method="addItem"><type>skin_js</type><name>js/mana/attributepage.js</name><params/></action>

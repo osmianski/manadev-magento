@@ -753,6 +753,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_Filters');
     }
 
+    public function isManadevLayeredNavigationCheckboxesInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterCheckboxes');
+    }
+
     public function isManadevSeoLayeredNavigationInstalled() {
         return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
     }
@@ -781,6 +785,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isEnterpriseUrlRewriteInstalled() {
         return $this->isModuleEnabled('Enterprise_UrlRewrite');
+    }
+
+    public function isSpecialPagesInstalled() {
+        return $this->isModuleEnabled('Mana_Page');
     }
 
     protected $_accentTranslations = array(
