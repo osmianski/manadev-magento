@@ -14,7 +14,7 @@
  */
 /* @var $this Mage_Core_Block_Template */
 ?>
-<ol class="m-filter-css-checkboxes <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
+<ol class="m-filter-css-checkboxes m-special-filters <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
 <?php foreach ($this->getFilter()->getSpecialItems() as $_item): ?>
     <?php $_itemUrl = $this->urlEscape($_item->getMSelected() ? $_item->getRemoveUrl() : $_item->getUrl()); ?>
     <li <?php echo Mage::helper('mana_filters')->getListItemClass($_item) ?> >

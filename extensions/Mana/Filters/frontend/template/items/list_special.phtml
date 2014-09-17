@@ -14,7 +14,7 @@
  */
 /* @var $this Mage_Core_Block_Template */
 ?>
-<ol class="m-filter-item-list <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
+<ol class="m-filter-item-list m-special-filters <?php echo $this->getFilterOptions()->getIsReverse() ? 'm-reverse' : '' ?>">
 <?php foreach ($this->getFilter()->getSpecialItems() as $_item): ?>
     <li <?php if ($_item->getMShowSelected()): ?>class="m-selected-ln-item"<?php endif; ?>>
         <?php if ($_item->getMSelected()): ?>
