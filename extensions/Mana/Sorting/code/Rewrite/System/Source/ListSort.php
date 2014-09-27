@@ -12,25 +12,25 @@
 class Mana_Sorting_Rewrite_System_Source_ListSort extends Mage_Adminhtml_Model_System_Config_Source_Catalog_ListSort {
     public function toOptionArray()
     {
-        return array_merge(parent::toOptionArray(), array(
-            array(
-                'label' => $this->helper()->__('Nash'),
-                'value' => 'nash'
-            ),
-            array(
-                'label' => $this->helper()->__('VO'),
-                'value' => 'vo'
-            ),
-        ));
+        $options = parent::toOptionArray();
+
+        foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
+            $options[] = array(
+                'label' => (string)$xml->label,
+                'value' => (string)$xml->code
+            );
+        }
+        return $options;
     }
 
     #region Dependencies
-
     /**
      * @return Mana_Sorting_Helper_Data
      */
-    public function helper() {
+    public function sortingHelper()
+    {
         return Mage::helper('mana_sorting');
     }
+
     #endregion
 }

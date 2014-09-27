@@ -39,6 +39,15 @@ class Mana_Sorting_Resource_ReviewCount extends Mage_Core_Model_Mysql4_Abstract 
                  'stats.entity_pk_value = e.entity_id AND stats.store_id=' . Mage::app()->getStore()->getId(),
                  array()
             );
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
         $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.reviews_count {$direction}");
     }

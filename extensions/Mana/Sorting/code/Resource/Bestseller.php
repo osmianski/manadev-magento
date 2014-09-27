@@ -28,7 +28,6 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
-
         $select
             ->joinLeft(array('stats' => new Zend_Db_Expr("(SELECT stats.product_id AS product_id, SUM(stats.qty_ordered - IFNULL(stats.qty_canceled, 0)) AS qty_ordered".
                 " FROM {$this->getTable('sales/order_item')} AS stats".
@@ -38,8 +37,20 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
                 $db->quoteInto(" o.store_id = ?", Mage::app()->getStore()->getId()).
                 " GROUP BY stats.product_id)")),
                 "stats.product_id = e.entity_id", null);
+
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                ->joinLeft(
+                    array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                    array()
+                );
+            $select->order("s.is_in_stock desc");
+        }
         $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.qty_ordered {$direction}");
+
+
     }
 
     public function getDate() {

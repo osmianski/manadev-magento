@@ -43,6 +43,11 @@
                     <system_config_source_catalog_listSort>Mana_Sorting_Rewrite_System_Source_ListSort</system_config_source_catalog_listSort>
                 </rewrite>
             </adminhtml>
+            <catalog>
+                <rewrite>
+                    <category_attribute_source_sortby>Mana_Sorting_Rewrite_Category_Source_SortBy</category_attribute_source_sortby>
+                </rewrite>
+            </catalog>
         </models>
         <events>
             <m_toolbar_orders>
@@ -66,15 +71,29 @@
             </modules>
         </translate>
     </frontend>
+    <adminhtml>
+        <!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+        <!-- This section registers additional translation file with our module-specific strings to be loaded
+        during admin area request processing -->
+        <translate>
+            <modules>
+                <Mana_Sorting>
+                    <files>
+                        <default>Mana_Sorting.csv</default>
+                    </files>
+                </Mana_Sorting>
+            </modules>
+        </translate>
+    </adminhtml>
     <mana_sorting>
         <newest translate="label" module="Mana_Sorting">
             <label>Newest</label>
             <resource>mana_sorting/newest</resource>
         </newest>
-        <bestsellers translate="label" module="Mana_Sorting">
+        <bestseller translate="label" module="Mana_Sorting">
             <label>Bestsellers</label>
             <resource>mana_sorting/bestseller</resource>
-        </bestsellers>
+        </bestseller>
         <most_viewed translate="label" module="Mana_Sorting">
             <label>Most Viewed</label>
             <resource>mana_sorting/mostViewed</resource>
@@ -100,4 +119,20 @@
             <resource>mana_sorting/nowInWishlist</resource>
         </now_in_wishlist>
     </mana_sorting>
+    <default>
+        <mana_sorting>
+            <newest>
+                <enabled>1</enabled>
+                <position>100</position>
+            </newest>
+            <bestsellers>
+                <enabled>1</enabled>
+                <position>200</position>
+            </bestsellers>
+            <most_viewed>
+                <enabled>1</enabled>
+                <position>300</position>
+            </most_viewed>
+        </mana_sorting>
+    </default>
 </config>

@@ -26,6 +26,18 @@ class Mana_Sorting_Resource_Quantity extends Mage_Core_Model_Mysql4_Abstract imp
      */
     public function setOrder($collection, $order, $direction)
     {
-        $collection->setOrder('m_represented_qty', $direction == 'asc' ? 'asc' : 'desc');
+        $select = $collection->getSelect();
+
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $select->order("e.m_represented_qty {$direction}");
     }
 }
