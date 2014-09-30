@@ -66,12 +66,6 @@ function($, Block, undefined)
             $.each(this.getWidths(), function(cls, width) {
                 var contentWidth = cls == "one-filter-column" ? $('body').width() : self.$().width();
 
-                // retina devices declare additional variable for how many physical pixels are in one CSS
-                // pixels, so we should account for that
-                if (window.devicePixelRatio) {
-                    contentWidth /= window.devicePixelRatio;
-                }
-
                 if (width && !widthClassFound && contentWidth < width) {
                     self.$().addClass(cls);
                     widthClassFound = true;
