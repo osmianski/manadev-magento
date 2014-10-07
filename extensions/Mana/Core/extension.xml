@@ -36,11 +36,13 @@
     <sync extension-file="backend/js/scripts.js" project-file="skin/adminhtml/default/default/js/{extension_name}.js"/>
     <sync extension-file="backend/css/styles.css" project-file="skin/adminhtml/default/default/css/{extension_name}.css"/>
     <sync extension-dir="backend/images" project-dir="skin/adminhtml/default/default/images/{extension_name}"/>
+    <sync extension-dir="backend/lib/jstree" project-dir="skin/adminhtml/default/default/lib/jstree"/>
 
     <!-- jQuery files (specific only for this module) -->
     <sync extension-dir="jquery/scripts" project-dir="js/jquery"/>
     <sync extension-dir="jquery/frontend" project-dir="skin/frontend/base/default/css/jquery"/>
     <sync extension-dir="jquery/backend" project-dir="skin/adminhtml/default/default/css/jquery"/>
+    <sync extension-dir="backend/jstree" project-dir="skin/adminhtml/default/default/jstree"/>
 
     <!-- .htaccess for m-classes -->
     <sync extension-file="m-classes/.htaccess" project-file="js/m-classes/.htaccess"/>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_content_folder_index>
+		<update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/content.js</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block type="mana_content/adminhtml_folder_listContainer" name="container" as="container">
+				<block type="mana_content/adminhtml_folder_listGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+    </adminhtml_mana_content_folder_index>
+
+    <adminhtml_mana_content_folder_grid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_content/adminhtml_folder_listGrid" name="grid" as="grid" />
+        </block>
+    </adminhtml_mana_content_folder_grid>
+
+    <adminhtml_mana_content_book_edit>
+        <update handle="mana_admin2"/>
+        <update handle="jstree"/>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/content.js</name><params/></action>
+            <action method="addCss"><stylesheet>css/mana_content.css</stylesheet></action>
+        </reference>
+        <reference name="left">
+            <block type="mana_content/adminhtml_book_tree" name="tree" as="tree" />
+        </reference>
+		<reference name="content">
+			<block type="mana_content/adminhtml_book_tabContainer" name="container" as="container">
+			    <block type="mana_content/adminhtml_book_tabs" name="tabs" as="tabs">
+    				<action method="addToParentGroup"><group>top</group></action>
+                    <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
+                        <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form" />
+                    </block>
+                    <block type="mana_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
+                        <block type="mana_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
+                    </block>
+                    <block type="mana_content/adminhtml_book_designFormTab" name="design_tab" as="design_tab">
+                        <block type="mana_content/adminhtml_book_designForm" name="design_form" as="design_form" />
+                    </block>
+
+			    </block>
+			</block>
+		</reference>
+    </adminhtml_mana_content_book_edit>
+
+    <adminhtml_mana_content_book_load>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_content/adminhtml_book_tabContainer" name="container" as="container">
+                <block type="mana_content/adminhtml_book_tabs" name="tabs" as="tabs">
+                    <action method="addToParentGroup">
+                        <group>top</group>
+                    </action>
+                    <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
+                        <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form"/>
+                    </block>
+                    <block type="mana_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
+                        <block type="mana_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
+                    </block>
+                    <block type="mana_content/adminhtml_book_designFormTab" name="design_tab" as="design_tab">
+                        <block type="mana_content/adminhtml_book_designForm" name="design_form" as="design_form"/>
+                    </block>
+
+                </block>
+            </block>
+        </block>
+
+    </adminhtml_mana_content_book_load>
+</layout>

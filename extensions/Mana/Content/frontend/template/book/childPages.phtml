@@ -1,0 +1,9 @@
+<ul>
+    <?php
+    foreach($this->getChildPages() as $page) {
+        ?>
+        <li><a href="<?php echo $page->getFinalUrl(); ?>"><?php echo $page->getTitle(); ?></a></li>
+    <?php
+    }
+    ?>
+</ul>
