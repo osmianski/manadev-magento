@@ -211,8 +211,10 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
-                            // This line will reactivate wysiwyg `content` field.
-                            wysiwygmf_content_content.setup("exact");
+                            if(typeof wysiwygmf_content_content !== "undefined") {
+                                // This line will reactivate wysiwyg `content` field.
+                                wysiwygmf_content_content.setup("exact");
+                            }
 
                             self._postAction("select");
                         }
