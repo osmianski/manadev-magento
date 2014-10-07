@@ -19,7 +19,11 @@ class Mana_Content_Block_Book extends Mage_Core_Block_Template {
         if($this->getCurrentBookPage()) {
             $content = $this->getCurrentBookPage()
                 ->getData('content');
-            return Mage::helper("markdown")->render($content);
+            if(Mage::helper('core')->isModuleEnabled('SchumacherFM_Markdown')) {
+                return Mage::helper("markdown")->render($content);
+            } else {
+                return $content;
+            }
         }
         return;
     }
