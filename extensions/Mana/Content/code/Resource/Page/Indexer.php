@@ -92,7 +92,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 'page_global_id' => "`p_g`.`id`",
                 'store_id' => $store->getId(),
                 'page_store_custom_settings_id' => "`p_scs`.`id`",
-                'is_active' => "`p_scs`.`is_active`",
+                'is_active' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_IS_ACTIVE)},
+                    `p_scs`.`is_active`,
+                    `p_gcs`.`is_active`
+                )",
                 'url_key' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_URL_KEY)},
                     `p_scs`.`url_key`,
                     IF({$dbHelper->isCustom('p_gcs', Mana_Content_Model_Page_Abstract::DM_URL_KEY)},
