@@ -12,7 +12,7 @@
 class Mana_Content_Block_Adminhtml_Folder_ListContainer extends Mana_Admin_Block_V2_Container {
     public function __construct() {
         parent::__construct();
-        $this->_headerText = $this->__('CMS Books');
+        $this->_headerText = $this->__('Content Management');
     }
 
     protected function _prepareLayout() {

@@ -127,8 +127,6 @@
                 <save_mode>all</save_mode>
                 <default_title>Untitled Page</default_title>
                 <default_content>
-!#markdown
-
 {{block type="mana_content/childPageLinks"}}
                 </default_content>
             </book>

@@ -12,7 +12,7 @@
             <sort_order>79</sort_order>
 			<children>
                 <contentpage translate="title" module="mana_content">
-                    <title>CMS Books</title>
+                    <title>Content Management</title>
                     <sort_order>600</sort_order>
                     <action>adminhtml/mana_content_folder/</action>
                 </contentpage>
@@ -35,7 +35,7 @@
 					<mana>
 						<children>
 							<contentpage translate="title" module="mana_content">
-								<title>CMS Books</title>
+								<title>Content Management</title>
 		                        <sort_order>600</sort_order>
 							</contentpage>
 							<system_configuration>

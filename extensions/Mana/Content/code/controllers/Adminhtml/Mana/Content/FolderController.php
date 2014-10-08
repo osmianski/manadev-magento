@@ -13,7 +13,7 @@ class Mana_Content_Adminhtml_Mana_Content_FolderController extends Mana_Admin_Co
 {
     public function indexAction() {
         // page
-        $this->_title('Mana')->_title($this->__('CMS Books'));
+        $this->_title('Mana')->_title($this->__('Content Management'));
 
         // layout
         $update = $this->getLayout()->getUpdate();
