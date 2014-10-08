@@ -145,11 +145,13 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         // Content field reset in here instead of down below so that it will enter validation.
         foreach($changes as $action => $data) {
             foreach($data as $id => $fields) {
-                foreach ($fields as $key => $value) {
-                    if (substr($key, 0, 8) == "content_") {
-                        $changes[$action][$id]['content'] = $value;
-                        unset($changes[$action][$id][$key]);
-                        break;
+                if(is_array($fields)) {
+                    foreach ($fields as $key => $value) {
+                        if (substr($key, 0, 8) == "content_") {
+                            $changes[$action][$id]['content'] = $value;
+                            unset($changes[$action][$id][$key]);
+                            break;
+                        }
                     }
                 }
             }
@@ -165,9 +167,11 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                     }
 
                     if($action == "created") {
-                        $tmpId = $fields['id'];
-                        unset($fields['id']);
-                        if ($newId[$fields['parent_id']['value']]) {
+                        if (isset($fields['id'])) {
+                            $tmpId = $fields['id']['value'];
+                            unset($fields['id']);
+                        }
+                        if (isset($fields['parent_id']['value']) && $newId[$fields['parent_id']['value']]) {
                             $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
                         }
                     } elseif($action == "modified" || $action == "deleted") {
@@ -181,7 +185,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                     }
 
                     if($action == "created") {
-                        $newId[$tmpId['value']] = $model->getId();
+                        $newId[$id] = $model->getId();
                     }
                 }
             }
@@ -213,14 +217,12 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $refreshNewPage = ($this->getRequest()->getPost('rootPageId')) == "false";
 
         if ($refreshNewPage) {
-            $finalModel = $models['finalSettings'];
-            $finalModel->load($model->getId(), 'page_global_custom_settings_id');
             $response->setData(
                 'forceEditUrl',
                 $this->adminHelper()->getStoreUrl(
                 '*/*/edit',
                     array(
-                        'id' => $finalModel->getId()
+                        'id' => reset($newId)
                     )
                 )
             );
@@ -337,8 +339,10 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                         if($action == "modified") {
                             $model->load($id);
                         } elseif($action == "created") {
-                            $tmpId = $fields['id']['value'];
-                            unset($fields['id']);
+                            if(isset($fields['id'])) {
+                                $tmpId = $fields['id']['value'];
+                                unset($fields['id']);
+                            }
                         }
                         $this->setModelData($model, $fields);
                         $model->validate();
