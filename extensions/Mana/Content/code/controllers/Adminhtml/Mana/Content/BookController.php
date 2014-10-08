@@ -273,33 +273,31 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $models = $this->_registerModels($id);
         $model = $models['finalSettings'];
 
-        if(!is_null($id)) {
-            foreach($changes['modified'] as $id => $field) {
-                if($model->getData('page_global_custom_settings_id') == $id) {
-                    foreach($field as $fieldName => $fieldData) {
-                        $model->setData($fieldName, $fieldData['value']);
+        if(!is_null($changes)) {
+            if(!is_null($id)) {
+                foreach($changes['modified'] as $id => $field) {
+                    if($model->getData('page_global_custom_settings_id') == $id) {
+                        foreach($field as $fieldName => $fieldData) {
+                            $model->setData($fieldName, $fieldData['value']);
+                        }
+                        Mage::unregister('m_flat_model');
+                        Mage::register('m_flat_model', $model);
+                        break;
                     }
-                    Mage::unregister('m_flat_model');
-                    Mage::register('m_flat_model', $model);
-                    break;
                 }
-            }
-        } else {
-            foreach($changes['created'] as $id => $field) {
-                if($this->getRequest()->getPost('id') == $id) {
-                    foreach($field as $fieldName => $fieldData) {
-                        $model->setData($fieldName, $fieldData['value']);
+            } else {
+                foreach($changes['created'] as $id => $field) {
+                    if($this->getRequest()->getPost('id') == $id) {
+                        foreach($field as $fieldName => $fieldData) {
+                            $model->setData($fieldName, $fieldData['value']);
+                        }
+                        Mage::unregister('m_flat_model');
+                        Mage::register('m_flat_model', $model);
+                        break;
                     }
-                    Mage::unregister('m_flat_model');
-                    Mage::register('m_flat_model', $model);
-                    break;
                 }
             }
         }
-//        $this->addActionLayoutHandles();
-//        $this->loadLayoutUpdates();
-//        $this->generateLayoutXml()->generateLayoutBlocks();
-//        $this->_isLayoutLoaded = true;
         $this->loadLayout();
         $this->addDataToClientSideBlock();
 
