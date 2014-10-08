@@ -171,7 +171,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             $tmpId = $fields['id']['value'];
                             unset($fields['id']);
                         }
-                        if (isset($fields['parent_id']['value']) && $newId[$fields['parent_id']['value']]) {
+                        if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
                             $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
                         }
                     } elseif($action == "modified" || $action == "deleted") {
