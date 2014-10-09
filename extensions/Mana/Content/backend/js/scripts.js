@@ -302,6 +302,14 @@ function ($, Container, ajax, core, expression) {
                 this._postAction("delete");
             }
         },
+        _initOriginalFields: function () {
+            this._originalFields = {};
+            for (var i in this.getFields()) {
+                this._originalFields[i] = {};
+                this._originalFields[i].value = this.getField(i).getValue();
+                this._originalFields[i].useDefault = this.getField(i).useDefault();
+            }
+        },
         _subscribeToBlockEvents: function () {
             var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg'];
             return this
@@ -319,6 +327,7 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('create')) this.getChild('create').on('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteNode);
                     this.setDefaultValuesToChanges();
+                    this._initOriginalFields();
                 })
                 .on('unload', this, function () {
                     var that = this;
@@ -352,6 +361,7 @@ function ($, Container, ajax, core, expression) {
             }
 
             this._customInit();
+            this._initOriginalFields();
         },
         _onSaveFailed: function(response) {
             this.errorPerRecord = response.errorPerRecord;
@@ -462,6 +472,22 @@ function ($, Container, ajax, core, expression) {
                 this[fieldChangeFunction]();
             }
             this._postAction("modify");
+
+            var obj = this.initChangesObj();
+
+            for(var i in obj) {
+                var originalField = this._originalFields[i];
+                if (originalField.value === obj[i].value && originalField.useDefault === obj[i].isDefault) {
+                    if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
+                        delete this._changes.modified[this.getCurrentId()][i];
+                    }
+                }
+            }
+            var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
+            if(count == 0) {
+                delete this._changes.modified[this.getCurrentId()];
+                this._setNodeColor("black");
+            }
         },
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
