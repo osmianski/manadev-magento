@@ -50,4 +50,8 @@ class ManaPro_FilterSuperSlider_Model_Price extends Mana_Filters_Model_Filter_Pr
     protected function _addSpecialOptionsToAllOptions() {
         return false;
     }
+
+    public function getItemsCount() {
+        return $this->getMaxPriceInt() > 0;
+    }
 }
