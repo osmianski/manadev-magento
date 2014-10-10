@@ -809,6 +809,9 @@ function ($, OptionSearch) {
             _initFilterScrollBar(l, code);
         });
     });
+    $(function () {
+        $('.m-scrollable-filter-container').trigger('m-prepare');
+    });
     $(document).bind('m-ajax-before', function(e, selectors) {
 		_inAjax = true;
 	});
