@@ -37,7 +37,7 @@ EOF;
                     /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
                     $xml .= <<<EOF
                             <attr_{$attributePage->getId()}>
-                                <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
+                                <title><![CDATA[{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}]]></title>
                                 <action>adminhtml/mana_optionPage/index/parent_id/{$attributePage->getId()}</action>
                                 <sort_order>{$i}</sort_order>
                             </attr_{$attributePage->getId()}>
@@ -72,7 +72,7 @@ EOF;
                     /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
                     $xml .= <<<EOF
                             <attr_{$attributePage->getId()}>
-                                <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
+                                <title><![CDATA[{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}]]></title>
                                 <sort_order>{$i}</sort_order>
                             </attr_{$attributePage->getId()}>
 EOF;
