@@ -282,8 +282,10 @@ function($, Block, undefined)
         getSidebarLayeredNavSelector: function() {
             return '.col-left .block.block-layered-nav,' +
                 '.mb-mana-catalog-leftnav,' +
+                '.mb-mana-catalogsearch-leftnav,' +
                 '.col-right .block.block-layered-nav,' +
-                '.mb-mana-catalog-rightnav';
+                '.mb-mana-catalog-rightnav' +
+                '.mb-mana-catalogsearch-leftnav';
         },
         getWidths: function() {
             throw 'Abstract';
