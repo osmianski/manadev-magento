@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_UrlIndexer {
+class ManaPro_FilterSeoLinks_Resource_UrlIndexer_CategoryParameter extends Mana_Seo_Resource_UrlIndexer {
     protected $_matchedEntities = array(
         'mana_filters/filter2' => array(
             Mage_Index_Model_Event::TYPE_SAVE

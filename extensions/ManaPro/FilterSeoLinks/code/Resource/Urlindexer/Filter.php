@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Seo_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_AttributeUrlIndexer {
+class ManaPro_FilterSeoLinks_Resource_UrlIndexer_Filter extends Mana_Seo_Resource_AttributeUrlIndexer {
     /**
      * @param Mana_Seo_Model_UrlIndexer $indexer
      * @param Mana_Seo_Model_Schema $schema
