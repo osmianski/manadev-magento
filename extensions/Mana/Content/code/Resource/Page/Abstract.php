@@ -17,6 +17,7 @@ abstract class Mana_Content_Resource_Page_Abstract extends Mage_Core_Model_Mysql
     public function setDefaults($object) {
         $object->setData('title', Mage::getStoreConfig('mana_content/book/default_title'));
         $object->setData('content', Mage::getStoreConfig('mana_content/book/default_content'));
+        $object->setData('is_active', 1);
         return $this;
     }
 
