@@ -128,7 +128,7 @@ class Mana_Seo_Model_UrlIndexer extends Mana_Core_Model_Indexer {
      */
     protected function _getSources() {
         /** @noinspection PhpUndefinedFieldInspection */
-        return $this->getXml()->sources->children();
+        return $this->getConfigXml()->sources->children();
     }
 
     /**

@@ -11,7 +11,7 @@
         <Mana_Page>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.09.10.19</version>
+            <version>14.10.19.22</version>
         </Mana_Page>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -55,13 +55,13 @@
             <!-- INSERT HERE: rewrites, ... -->
         </blocks>
         <index>
-            <indexer>
+            <indexer_config>
                 <mana_seo_url>
                     <sources>
                         <special_filter><resource>mana_page/urlIndexer_specialFilter</resource></special_filter>
                     </sources>
                 </mana_seo_url>
-            </indexer>
+            </indexer_config>
         </index>
     </global>
     <!-- This section enables static visual changes in frontend area. -->

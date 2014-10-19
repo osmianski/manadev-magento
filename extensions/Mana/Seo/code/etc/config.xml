@@ -11,7 +11,7 @@
         <Mana_Seo>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.09.09.15</version>
+            <version>14.10.19.22</version>
         </Mana_Seo>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -111,6 +111,15 @@
                     <model>mana_seo/urlIndexer</model>
                     <name>SEO URL Rewrites (MANAdev)</name>
                     <description>Indexes SEO URL Rewrites for page types, parameters and parameter values</description>
+                    <depends>
+                        <mana_db />
+                        <mana_db_replicator />
+                        <catalog_url/>
+                    </depends>
+                </mana_seo_url>
+            </indexer>
+            <indexer_config>
+                <mana_seo_url>
                     <sources>
                         <category_page><resource>mana_seo/urlIndexer_categoryPage</resource></category_page>
                         <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
@@ -126,13 +135,8 @@
                         <enterprise_active_category_page><resource>mana_seo/enterpriseUrlIndexer_activeCategoryPage</resource></enterprise_active_category_page>
                         <enterprise_obsolete_category_page><resource>mana_seo/enterpriseUrlIndexer_obsoleteCategoryPage</resource></enterprise_obsolete_category_page>
                     </sources>
-                    <depends>
-                        <mana_db />
-                        <mana_db_replicator />
-                        <catalog_url/>
-                    </depends>
                 </mana_seo_url>
-            </indexer>
+            </indexer_config>
         </index>
     </global>
     <!-- All the following subscribes to listening to /admin/* urls and tries to map is to appropriate action
