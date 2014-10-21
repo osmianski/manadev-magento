@@ -64,6 +64,7 @@ examples on what kind of actions can be applied to referenced blocks.
                     <reload_param_name>products_m_representing</reload_param_name>
                 </action>
                 <action method="addColumnInputName">
+                    <input_name>m_selling_qty</input_name>
                     <input_name>m_parts</input_name>
                     <input_name>m_unit</input_name>
                     <input_name>position</input_name>

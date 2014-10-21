@@ -74,7 +74,8 @@
 							if (data.linked_product_id != oldRepresentingProductData[index].linked_product_id || 
 								data.m_parts != oldRepresentingProductData[index].m_parts || 
 								data.m_unit != oldRepresentingProductData[index].m_unit ||
-								data.position != oldRepresentingProductData[index].position)
+								data.position != oldRepresentingProductData[index].position ||
+                                data.m_selling_qty != oldRepresentingProductData[index].m_selling_qty )
 							{
 								same = false;
 							}
@@ -479,7 +480,7 @@
 	        this.grid.reloadParams = {};
 	        this.grid.reloadParams[this.reloadParamName+'[]'] = this.getDataForReloadParam();
 	    }
-	    if (element.name == 'm_parts' || element.name == 'm_unit' || element.name == 'position') {
+	    if (element.name == 'm_parts' || element.name == 'm_unit' || element.name == 'position' || element.name == 'm_selling_qty') {
 	    	_updateRepresentingInventory();
 	    }
 	    else {

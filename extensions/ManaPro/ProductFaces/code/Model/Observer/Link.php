@@ -143,6 +143,7 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			'm_parts' => $product->getMRepresentedParts(),
 			'm_unit' => $product->getMRepresentedUnit(),
 			'm_external_id' => $product->getMRepresentedExternalId(),
+            'm_selling_qty' => $product->getMSellingQty(),
 		);
 	}
 	static protected $_validating = false;
