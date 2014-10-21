@@ -6,7 +6,18 @@ function ($, Block, json)
             return this
                 ._super()
                 .on('bind', this, function () {
-                    this.$().jstree(this.getOptions());
+                    var options = this.getOptions();
+                    if(options.core.data.id == null) {
+                        options.core.data.id = "n" + this.createGuid();
+                    }
+
+                    options.core.check_callback = function (op, node, par, pos, more) {
+                        if(more && more.dnd && (op === 'move_node') && par.id == "#") {
+                            return false;
+                          }
+                          return true;
+                    };
+                    this.$().jstree(options);
                 })
                 .on('unbind', this, function () {
                 });
@@ -20,6 +31,14 @@ function ($, Block, json)
             }
 
             return options;
+        },
+        createGuid: function () {
+            function s4() {
+                return Math.floor(Math.random(0, 9) * 10).toString();
+            }
+
+            return s4() + s4() + s4() + s4() +
+                s4() + s4() + s4() + s4();
         }
     });
 });
