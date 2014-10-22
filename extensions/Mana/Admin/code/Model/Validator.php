@@ -12,17 +12,20 @@
 class Mana_Admin_Model_Validator {
     protected $_rules = array();
     protected $_data = array();
+    protected $_model;
     protected $_errors = array();
     protected $_allErrors = array();
     protected $defaultMessages = array(
-        'required' => "Please fill in :field field."
+        'required' => "Please fill in :field field.",
+        'unique'   => "The value of :field already exists.",
     );
 
     public function __construct($args) {
-        list($rules, $data, $captions) = $args;
+        list($rules, $data, $captions, $model) = $args;
         $this->_data = $data;
         $this->_rules = $this->explodeRules($rules);
         $this->_captions = $captions;
+        $this->_model = $model;
     }
 
     public function passes() {
@@ -75,6 +78,18 @@ class Mana_Admin_Model_Validator {
         } elseif (is_string($value) && trim($value) === '') {
             return false;
         } elseif (is_array($value) && count($value) < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    protected function validateUnique($field, $value) {
+        if(!isset($this->_model)) {
+            throw new Exception("Could not validate if field is unique because model is not declared in validator.");
+        }
+        $resource = Mage::getModel($this->_model->getResourceName());
+        $resource->load($value, $field);
+        if($resource->getId() && $resource->getId() != $this->_model->getId()) {
             return false;
         }
         return true;

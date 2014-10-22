@@ -27,7 +27,7 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
 
     protected $rules = array(
         'title' => 'required',
-        'url_key' => 'required',
+        'url_key' => 'required|unique',
         'content' => 'required',
     );
 
@@ -97,7 +97,7 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
      * @return Mana_Content_Model_Validator
      */
     protected function getValidator() {
-        return Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions));
+        return Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
     }
 
     #region Dependencies
