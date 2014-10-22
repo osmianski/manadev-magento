@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <ManaPro_Content>
+            <version>14.10.14.14</version>
+        </ManaPro_Content>
+    </modules>
+    <global>
+        <blocks>
+            <manapro_content>
+                <class>ManaPro_Content_Block</class>
+            </manapro_content>
+        </blocks>
+        <helpers>
+            <manapro_content>
+                <class>ManaPro_Content_Helper</class>
+            </manapro_content>
+        </helpers>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <ManaPro_Content>
+                    <files>
+                        <default>ManaPro_Content.csv</default>
+                    </files>
+                </ManaPro_Content>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <manapro_content>
+                    <file>manapro_content.xml</file>
+                </manapro_content>
+            </updates>
+        </layout>
+    </adminhtml>
+    <frontend>
+        <layout>
+            <updates>
+                <manapro_content>
+                    <file>manapro_content.xml</file>
+                </manapro_content>
+            </updates>
+        </layout>
+    </frontend>
+</config>

@@ -503,7 +503,7 @@ function ($, Container, ajax, core, expression) {
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
-            if(field.useDefault()) {
+            if(typeof field !== "undefined" && field.useDefault()) {
                 var url_key = expression.seoify(title);
                 field.setValue(url_key);
             }
@@ -526,7 +526,7 @@ function ($, Container, ajax, core, expression) {
         },
         onChangeMetaTitle: function() {
             var field = this.getField('meta_title');
-            if (field.useDefault()) {
+            if (typeof field !== "undefined" && field.useDefault()) {
                 field.setValue(this.getField('title').getValue());
             }
         },

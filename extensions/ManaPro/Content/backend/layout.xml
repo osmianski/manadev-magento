@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_content_book_edit>
+		<reference name="tabs">
+            <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
+                <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
+            </block>
+            <block type="manapro_content/adminhtml_book_designFormTab" name="design_tab" as="design_tab">
+                <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
+            </block>
+		</reference>
+    </adminhtml_mana_content_book_edit>
+
+    <adminhtml_mana_content_book_load>
+        <reference name="tabs">
+            <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
+                <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
+            </block>
+            <block type="manapro_content/adminhtml_book_designFormTab" name="design_tab" as="design_tab">
+                <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
+            </block>
+		</reference>
+
+    </adminhtml_mana_content_book_load>
+</layout>
