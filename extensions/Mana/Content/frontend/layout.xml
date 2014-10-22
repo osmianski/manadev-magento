@@ -24,5 +24,8 @@
         <reference name="content">
             <block type="mana_content/book" name="book" as="book"/>
         </reference>
+        <remove name="left.permanent.callout" />
+        <remove name="left.newsletter"/>
+        <remove name="tags_popular"/>
     </mana_content_book_view>
 </layout>
