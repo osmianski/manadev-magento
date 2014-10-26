@@ -24,6 +24,7 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
     const DM_META_KEYWORDS = 11;
     const DM_META_DESCRIPTION = 12;
     const DM_POSITION = 13;
+    const DM_LEVEL = 14;
 
     protected $rules = array(
         'title' => 'required',

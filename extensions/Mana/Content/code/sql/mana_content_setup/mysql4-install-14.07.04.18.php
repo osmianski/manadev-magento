@@ -120,6 +120,7 @@ $installer->run("
         `meta_keywords` mediumtext NOT NULL,
         `meta_description` mediumtext NOT NULL,
         `position` int(10) unsigned DEFAULT '0',
+        `level` int(10) unsigned NOT NULL,
 
         PRIMARY KEY (`id`),
         KEY `page_global_id` (`page_global_id`),

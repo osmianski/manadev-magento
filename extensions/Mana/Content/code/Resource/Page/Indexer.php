@@ -151,6 +151,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                     `p_scs`.`position`,
                     `p_gcs`.`position`
                 )",
+                'level' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_LEVEL)},
+                    `p_scs`.`level`,
+                    `p_gcs`.`level`
+                )",
             );
 
             $select = $db->select();
@@ -212,6 +216,34 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                     `mpgcs1`.`is_active`
                 )"),
         );
+        $table = $this->getTable("mana_content/page_globalCustomSettings");
+
+        $setLevel['base'] = "UPDATE `{$table}` AS `mpgcs`
+          SET `mpgcs`.`level` = 0
+          WHERE `mpgcs`.`parent_id` IS NULL
+          AND `mpgcs`.`level` <> 0";
+
+        $setLevel['each'] = "UPDATE `{$table}` AS `mpgcs1`, `{$table}` AS `mpgcs`
+          SET `mpgcs`.`level` = `mpgcs1`.`level` + 1
+          WHERE `mpgcs1`.`id` = `mpgcs`.`parent_id`
+          AND `mpgcs`.`level` <> `mpgcs1`.`level` + 1";
+
+        $read = $this->_getReadAdapter();
+
+        $query = $setLevel['base'];
+        $query .= (isset($options['page_global_custom_settings_id']))
+            ? " AND `mpgcs`.`id` IN (" . implode(",", $ids) . ")"
+            : "";
+        $db->exec($query);
+
+        for($x = 0; $x <= $maxLevel; $x++) {
+            $query = $setLevel['each'];
+            $query .= " AND `mpgcs`.`level` = ". $x;
+            $query .= (isset($options['page_global_custom_settings_id']))
+                ? " AND `mpgcs`.`id` IN (" . implode(",", $ids) . ")"
+                : "";
+            $db->exec($query);
+        }
 
         for ($x = 1; $x <= $maxLevel; $x++) {
             /* @var $select Varien_Db_Select */

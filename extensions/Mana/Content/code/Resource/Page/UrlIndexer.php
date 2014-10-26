@@ -71,44 +71,17 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
         }
 
         $db = $this->_getWriteAdapter();
+        $read = $this->_getReadAdapter();
         $table = $this->getTable("mana_content/page_globalCustomSettings");
 
-        $setLevel['base'] = "UPDATE `{$table}` AS `mpgcs`
-          SET `mpgcs`.`level` = 0
-          WHERE `mpgcs`.`parent_id` IS NULL
-          AND `mpgcs`.`level` <> 0";
-
-        $setLevel['each'] = "UPDATE `{$table}` AS `mpgcs1`, `{$table}` AS `mpgcs`
-          SET `mpgcs`.`level` = `mpgcs1`.`level` + 1
-          WHERE `mpgcs1`.`id` = `mpgcs`.`parent_id`
-          AND `mpgcs`.`level` <> `mpgcs1`.`level` + 1";
-
-        $read = $this->_getReadAdapter();
-
         $sql = $read->select()
-            ->from($table, array(new Zend_Db_Expr("max(level)")));
+            ->from($this->getTable('mana_content/page_globalCustomSettings'), array(new Zend_Db_Expr("max(level)")));
 
         $maxLevel = (int)$read->fetchOne($sql);
 
         $ids = (isset($options['page_global_custom_settings_id']))
             ? Mage::getResourceModel("mana_content/page_globalCustomSettings")->getAllChildren($options['page_global_custom_settings_id'])
             : array();
-
-
-        $query = $setLevel['base'];
-        $query .= (isset($options['page_global_custom_settings_id']))
-            ? " AND `mpgcs`.`id` IN (" . implode(",", $ids) . ")"
-            : "";
-        $db->exec($query);
-
-        for($x = 0; $x <= $maxLevel; $x++) {
-            $query = $setLevel['each'];
-            $query .= " AND `mpgcs`.`level` = ". $x;
-            $query .= (isset($options['page_global_custom_settings_id']))
-                ? " AND `mpgcs`.`id` IN (" . implode(",", $ids) . ")"
-                : "";
-            $db->exec($query);
-        }
 
         $fields = array(
             'url_key' => new Zend_Db_Expr("`cp`.`url_key`"),
