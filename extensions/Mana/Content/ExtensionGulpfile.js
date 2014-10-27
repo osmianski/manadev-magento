@@ -9,5 +9,10 @@ module.exports = Extension.extend({
             'src/Book/TabContainer/Global.js',
             'src/Book/TabContainer/Store.js'
         ]);
+        this.loadJsTasks('frontend', 'frontend/js', [
+            'src/header.js',
+            'src/Tree.js',
+            'src/Tree/Search.js'
+        ]);
     }
 });

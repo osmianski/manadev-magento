@@ -37,4 +37,53 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
 
         return $this;
     }
+
+    public function filterTree($search) {
+        $read = $this->getConnection();
+        $select = $this->_prepareSelect();
+        $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
+        $rows = $read->fetchAssoc($select);
+        $ids = array();
+        foreach($rows as $id => $row) {
+            array_push($ids, $id);
+            $level = $row['level'];
+            $parent_ids = array($row['parent_id']);
+            while($level > 0) {
+                $level --;
+                $select = $this->_prepareSelect();
+                $select->where("`mps`.`level` = ?", $level);
+
+
+                $select->where("`mpgcs`.`id` IN (". implode(',', $parent_ids) .")");
+                $parent_ids = array();
+                $parentRows = $read->fetchAssoc($select);
+                foreach($parentRows as $parentId => $parentRow) {
+                    array_push($ids, $parentId);
+                    array_push($parent_ids, $parentRow['parent_id']);
+                }
+            }
+        }
+        return $ids;
+    }
+
+    private function _prepareSelect() {
+        $read = $this->getConnection();
+        $select = $read->select();
+
+        $fields = array(
+            'id' => new Zend_Db_Expr("`mps`.`id`"),
+            'title' => new Zend_Db_Expr("`mps`.`title`"),
+            'level' => new Zend_Db_Expr("`mps`.`level`"),
+            'parent_id' => new Zend_Db_Expr("`mpgcs`.`parent_id`"),
+            'page_global_custom_settings_id' => new Zend_Db_Expr("`mpgcs`.`id`"),
+        );
+
+        $select->from(array(
+            'mps' => $this->getMainTable()
+            ), $fields);
+        $select->joinInner(array('mpg' => $this->getTable('mana_content/page_global')), "`mpg`.`id` = `mps`.`page_global_id`", array());
+        $select->joinInner(array('mpgcs' => $this->getTable('mana_content/page_globalCustomSettings')), "`mpg`.`page_global_custom_settings_id` = `mpgcs`.`id`", array());
+        $select->where("`store_id` = ?", Mage::app()->getStore()->getId());
+        return $select;
+    }
 }

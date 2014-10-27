@@ -18,10 +18,14 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         $collection = $this->_getCollection();
 
         $collection->setParentFilter(null);
+        $filteredIds = false;
+        if ($filter = Mage::registry('filter')) {
+            $filteredIds = $collection->filterTree($filter['search']);
+        }
         $collection->addOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
 
         foreach($collection as $record) {
-            $this->_extendRecursively($element,$record);
+            $this->_extendRecursively($element,$record, $filteredIds);
         }
     }
 
@@ -29,22 +33,27 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
      * @param $element
      * @param $book Mana_Content_Model_Page_Hierarchical
      */
-    protected function _extendRecursively($element, $book) {
+    protected function _extendRecursively($element, $book, $filteredIds) {
         $id = $book->getId();
         $xmlId = 'c_' . $id;
         $route = "content/book/view";
         $url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
         $url = explode('?', $url)[0];
-        $currentUrl = Mage::helper('core/url')->getCurrentUrl();
-        $element->items->$xmlId->url = $url;
-        $element->items->$xmlId->route = $route;
-        $element->items->$xmlId->label = $book->getTitle();
-        $element->items->$xmlId->selected = $url == $currentUrl;
-        $book->loadChildPages();
+        if($filter = Mage::registry('filter')) {
+            $currentUrl = $filter['current_url'];
+        } else {
+            $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+        }
+        if(!is_array($filteredIds) || in_array($id, $filteredIds)) {
+            $element->items->$xmlId->url = $url;
+            $element->items->$xmlId->route = $route;
+            $element->items->$xmlId->label = $book->getTitle();
+            $element->items->$xmlId->selected = $url == $currentUrl;
+            $book->loadChildPages();
 
-
-        foreach($book->getChildPages() as $record) {
-            $this->_extendRecursively($element->items->$xmlId, $record);
+            foreach($book->getChildPages() as $record) {
+                $this->_extendRecursively($element->items->$xmlId, $record, $filteredIds);
+            }
         }
     }
 

@@ -9,27 +9,16 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Tree extends Mana_Menu_Block_Tree_Container {
-    protected function _construct() {
-        $xml = <<<EOT
-<widget>
-    <generators>
-        <category>
-            <model>mana_content/generator_tree</model>
-        </category>
-    </generators>
-</widget>
-EOT;
+class Mana_Content_Block_Search extends Mage_Core_Block_Template {
 
-        $this->setData('xml', $xml);
-        parent::_construct();
+    public function __construct() {
+        $this->setTemplate('mana/content/search.phtml');
     }
 
     protected function _prepareLayout() {
         // create client-side block
         $this->_prepareClientSideBlock();
 
-        return parent::_prepareLayout();
     }
 
     protected function _prepareClientSideBlock() {
@@ -37,7 +26,8 @@ EOT;
         $urlTemplate = Mage::helper('mana_core/urlTemplate');
 
         $data = array(
-            'type' => 'Mana/Content/Tree',
+            'type' => 'Mana/Content/Tree/Search',
+            'load_url' => $this->getUrl('content/tree/load'),
         );
 
         $this->setData('m_client_side_block', $data);

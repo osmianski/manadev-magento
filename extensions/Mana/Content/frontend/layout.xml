@@ -16,10 +16,12 @@
 
         <reference name="head">
             <action method="addCss"><stylesheet>css/markdownpad-github.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/mana/content.js</name><params/></action>
         </reference>
 
         <reference name="left">
             <block type="mana_content/tree" name="tree" as="tree"/>
+            <block type="mana_content/search" name="search" as="search"/>
         </reference>
         <reference name="content">
             <block type="mana_content/book" name="book" as="book"/>
@@ -28,4 +30,8 @@
         <remove name="left.newsletter"/>
         <remove name="tags_popular"/>
     </mana_content_book_view>
+
+    <mana_content_tree_load>
+        <block type="mana_content/tree" name="root" output="toHtml" />
+    </mana_content_tree_load>
 </layout>
