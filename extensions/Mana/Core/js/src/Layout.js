@@ -198,25 +198,23 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             return options.$popup;
         },
         _preparePopupOptions: function(options) {
-            var result = {
-                overlay: {
-                    opacity: 0.2
-                },
-                popup: {
-                    blockName: 'Mana/Core/PopupBlock'
-                },
-                popupBlock: {},
-                fadein: {
-                    overlayTime: 0,
-                    popupTime: 300
-                },
-                fadeout: {
-                    overlayTime: 0,
-                    popupTime: 500
-                }
-            };
-            $.extend(true, result, options);
-            return result;
+            if (options.overlay === undefined) { options.overlay = {}; }
+            if (options.overlay.opacity === undefined) { options.overlay.opacity = 0.2; }
+
+            if (options.popup === undefined) { options.popup = {}; }
+            if (options.popup.blockName === undefined) { options.popup.blockName = 'Mana/Core/PopupBlock'; }
+
+            if (options.popupBlock === undefined) { options.popupBlock = {}; }
+
+            if (options.fadein === undefined) { options.fadein = {}; }
+            if (options.fadein.overlayTime === undefined) { options.fadein.overlayTime = 0; }
+            if (options.fadein.popupTime === undefined) { options.fadein.popupTime = 300; }
+
+            if (options.fadeout === undefined) { options.fadeout = {}; }
+            if (options.fadeout.overlayTime === undefined) { options.fadeout.overlayTime = 0; }
+            if (options.fadeout.popupTime === undefined) { options.fadeout.popupTime = 500; }
+
+            return options;
         },
         showPopup: function (options) {
             options = this._preparePopupOptions(options);
