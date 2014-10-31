@@ -32,7 +32,7 @@ class Mana_Content_Block_ChildPageLinks extends Mage_Core_Block_Template {
         $bookPage->loadChildPages();
         $this->_childPages = $bookPage->getChildPages();
         for($x=0; $x<count($this->_childPages); $x++) {
-            $route = "content/book/view";
+            $route = "mana_content/book/view";
             $id = $this->_childPages[$x]->getId();
             $this->_childPages[$x]->setFinalUrl(Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id)));
         }

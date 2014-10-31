@@ -19,6 +19,12 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
+
+            $filter = array(
+                'search' => $this->getRequest()->getParam('search'),
+            );
+            Mage::register('filter', $filter);
+
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {
                 $this->getLayout()->getUpdate()->addUpdate($layoutXml);
@@ -45,7 +51,7 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
                 $crumbs = $bookPage->getParentPages();
                 for($x = count($crumbs)-1; $x >= 0; $x--) {
                     $breadCrumb = $crumbs[$x]['title'];
-                    $route = "content/book/view";
+                    $route = "mana_content/book/view";
                     $link = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $crumbs[$x]['id']));
                     $breadcrumbs->addCrumb($breadCrumb, array('label' => $breadCrumb, 'title' => $breadCrumb, 'link' => $link));
                 }

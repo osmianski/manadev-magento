@@ -36,14 +36,11 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
     protected function _extendRecursively($element, $book, $filteredIds) {
         $id = $book->getId();
         $xmlId = 'c_' . $id;
-        $route = "content/book/view";
+        $route = "mana_content/book/view";
         $url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
         $url = explode('?', $url)[0];
-        if($filter = Mage::registry('filter')) {
-            $currentUrl = $filter['current_url'];
-        } else {
-            $currentUrl = Mage::helper('core/url')->getCurrentUrl();
-        }
+        $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+
         if(!is_array($filteredIds) || in_array($id, $filteredIds)) {
             $element->items->$xmlId->url = $url;
             $element->items->$xmlId->route = $route;

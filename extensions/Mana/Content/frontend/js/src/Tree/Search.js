@@ -1,5 +1,5 @@
-Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Core'],
-function ($, Block, layout, ajax, core) {
+Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config'],
+function ($, Block, layout, config) {
     return Block.extend('Mana/Content/Tree/Search', {
         _init: function() {
             this._super();
@@ -25,18 +25,10 @@ function ($, Block, layout, ajax, core) {
             return layout.getBlock('tree');
         },
         changed: function() {
-            var self = this;
-            var params = {
-                current_url: window.location.toString(),
-                search: this.$field()[0].getValue()
-            };
-            ajax.post(this.$().attr('data-load-url'), params, function (response) {
-                if (core.isString(response)) {
-                    self.$tree().setCustomContent(response);
-                } else {
-                    ajax.update(response);
-                }
-            });
+            var url = config.getData('url.unfiltered');
+
+            url += "?search="+ this.$field()[0].getValue();
+            setLocation(url);
         }
     });
 });

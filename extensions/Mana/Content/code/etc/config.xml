@@ -61,6 +61,18 @@
                 </mana_seo_url>
             </indexer>
         </index>
+        <events>
+            <m_ajax_options><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_content>
+                        <class>mana_content/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>setAjaxData</method>
+                        <!-- event handler method name -->
+                    </mana_content>
+                </observers>
+            </m_ajax_options>
+        </events>
     </global>
     <adminhtml>
         <translate>
@@ -86,7 +98,7 @@
                 <use>standard</use>
                 <args>
                     <module>Mana_Content</module>
-                    <frontName>content</frontName>
+                    <frontName>mana_content</frontName>
                 </args>
             </mana_content>
         </routers>
@@ -116,6 +128,12 @@
                 <seo_helper>mana_content/pageType_book</seo_helper>
             </book_page>
         </page_types>
+        <routers>
+            <mana_content>
+                <class>Mana_Content_Router</class>
+                <sort_order>100</sort_order>
+            </mana_content>
+        </routers>
     </mana_core>
     <default>
         <mana_content>
@@ -130,6 +148,10 @@
 {{block type="mana_content/childPageLinks"}}
                 </default_content>
             </book>
+            <ajax>
+                <url_key_filter>ajax/cms-book</url_key_filter>
+                <route_separator_filter>requested-url</route_separator_filter>
+            </ajax>
         </mana_content>
     </default>
 </config>
