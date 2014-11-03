@@ -96,6 +96,12 @@ class Mana_Content_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                 }
             }
         }
+        $params = Mage::app()->getRequest()->getUserParams();
+        $params['_use_rewrite'] = true;
+        $params['_nosid'] = true;
+        $url = Mage::getUrl($core->getRoutePath(), $params);
+
+        $js->setConfig('url.unfiltered', $url);
 
         $response['config'] = $js->getConfig();
         if ($headBlock = $layout->getBlock('head')) {

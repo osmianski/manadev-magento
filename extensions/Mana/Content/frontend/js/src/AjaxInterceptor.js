@@ -40,8 +40,8 @@ function($, ajax, config, layout, undefined)
             requesturl += config.getData('mana_content.ajax.urlKey');
             requesturl += '/' + config.getData('ajax.currentRoute');
             requesturl += '/' + config.getData('mana_content.ajax.routeSeparator');
-            requesturl += '/' + config.getData('url.unfiltered').substr(config.getData('url.base').length);
-            requesturl += url.substr(queryPos);
+            requesturl += '/' + url.substr(config.getData('url.base').length);
+            requesturl += (queryPos != -1) ? url.substr(queryPos) : "";
 
             ajax.get(requesturl, function (response) {
                 ajax.update(response);
