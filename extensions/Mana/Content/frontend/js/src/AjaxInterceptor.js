@@ -4,7 +4,14 @@ function($, ajax, config, layout, undefined)
 {
     return Mana.Object.extend('Mana/Content/AjaxInterceptor', {
         match: function (url, element) {
-            var x = 0;
+            if (element) {
+                var ajaxContainerSelector = config.getData('mana_content.ajax.containers');
+                if (ajaxContainerSelector) {
+                    if (!$(ajaxContainerSelector).has(element).length) {
+                        return false;
+                    }
+                }
+            }
             return true;
         },
         intercept: function (url, element) {

@@ -29,7 +29,8 @@ class Mana_Content_Model_Observer {
         $js
             ->setConfig('url.unfiltered', $url)
             ->setConfig('mana_content.ajax.urlKey', Mage::getStoreConfig('mana_content/ajax/url_key_filter'))
-            ->setConfig('mana_content.ajax.routeSeparator', Mage::getStoreConfig('mana_content/ajax/route_separator_filter'));
+            ->setConfig('mana_content.ajax.routeSeparator', Mage::getStoreConfig('mana_content/ajax/route_separator_filter'))
+            ->setConfig('mana_content.ajax.containers', Mage::getStoreConfig('mana_content/ajax/containers'));
 	}
 
     /* obsolete handlers. Kept here for easier upgrade */

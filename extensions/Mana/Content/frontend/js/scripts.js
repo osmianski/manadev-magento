@@ -39,14 +39,18 @@ function ($, Block, layout, config) {
         $field: function(){
             return this.$().find('input');
         },
+        $link: function() {
+            return this.$().find('a');
+        },
         $tree: function(){
             return layout.getBlock('tree');
         },
         changed: function() {
             var url = config.getData('url.unfiltered');
-
-            url += "?search="+ this.$field()[0].getValue();
-            setLocation(url);
+            if(this.$field()[0].getValue().length > 0) {
+                url += "?search="+ this.$field()[0].getValue();
+            }
+            this.$link()[0].href = url;
         }
     });
 });
@@ -57,7 +61,14 @@ function($, ajax, config, layout, undefined)
 {
     return Mana.Object.extend('Mana/Content/AjaxInterceptor', {
         match: function (url, element) {
-            var x = 0;
+            if (element) {
+                var ajaxContainerSelector = config.getData('mana_content.ajax.containers');
+                if (ajaxContainerSelector) {
+                    if (!$(ajaxContainerSelector).has(element).length) {
+                        return false;
+                    }
+                }
+            }
             return true;
         },
         intercept: function (url, element) {

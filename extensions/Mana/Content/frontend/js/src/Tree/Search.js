@@ -21,14 +21,18 @@ function ($, Block, layout, config) {
         $field: function(){
             return this.$().find('input');
         },
+        $link: function() {
+            return this.$().find('a');
+        },
         $tree: function(){
             return layout.getBlock('tree');
         },
         changed: function() {
             var url = config.getData('url.unfiltered');
-
-            url += "?search="+ this.$field()[0].getValue();
-            setLocation(url);
+            if(this.$field()[0].getValue().length > 0) {
+                url += "?search="+ this.$field()[0].getValue();
+            }
+            this.$link()[0].href = url;
         }
     });
 });
