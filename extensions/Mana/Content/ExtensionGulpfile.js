@@ -7,7 +7,8 @@ module.exports = Extension.extend({
             'src/Wysiwyg.js',
             'src/Book/TabContainer.js',
             'src/Book/TabContainer/Global.js',
-            'src/Book/TabContainer/Store.js'
+            'src/Book/TabContainer/Store.js',
+            'src/Book/RelatedProductGrid.js'
         ]);
         this.loadJsTasks('frontend', 'frontend/js', [
             'src/header.js',
