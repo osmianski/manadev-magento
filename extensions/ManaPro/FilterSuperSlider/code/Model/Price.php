@@ -54,4 +54,13 @@ class ManaPro_FilterSuperSlider_Model_Price extends Mana_Filters_Model_Filter_Pr
     public function getItemsCount() {
         return $this->getMaxPriceInt() > 0;
     }
+
+    public function isFilterAppliedWhenCounting($modelToBeApplied) {
+        if ($this->_getIsFilterable() != 2) {
+            return $modelToBeApplied != $this && !$this->isApplied();
+        }
+        else {
+            return false;
+        }
+    }
 }
