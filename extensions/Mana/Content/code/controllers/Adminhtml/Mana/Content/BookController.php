@@ -305,6 +305,40 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $this->renderLayout();
     }
 
+    public function getRecordAction() {
+        if($id = $this->getRequest()->getParam('id')) {
+            $response = new Varien_Object();
+            $dbHelper = $this->coreDbHelper();
+            $models = $this->_registerModels($id, false);
+            $model = $models['finalSettings'];
+            $data = array();
+            $columns = array(
+                'is_active' => Mana_Content_Model_Page_Abstract::DM_IS_ACTIVE,
+                'url_key' => Mana_Content_Model_Page_Abstract::DM_URL_KEY,
+                'title' => Mana_Content_Model_Page_Abstract::DM_TITLE,
+                'content' => Mana_Content_Model_Page_Abstract::DM_CONTENT,
+                'page_layout' => Mana_Content_Model_Page_Abstract::DM_PAGE_LAYOUT,
+                'layout_xml' => Mana_Content_Model_Page_Abstract::DM_LAYOUT_XML,
+                'custom_layout_xml' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_LAYOUT_XML,
+                'custom_design_active_from' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_DESIGN_ACTIVE_FROM,
+                'custom_design_active_to' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_DESIGN_ACTIVE_TO,
+                'meta_title' => Mana_Content_Model_Page_Abstract::DM_META_TITLE,
+                'meta_description' => Mana_Content_Model_Page_Abstract::DM_META_DESCRIPTION,
+                'meta_keywords' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
+            );
+            foreach($model->getData() as $key => $value) {
+                if(in_array($key, $columns)) {
+                    $data[$key] = array(
+                        'value' => $value,
+                        'isDefault' => $dbHelper->isModelContainsCustomSetting($model, $columns[$key])
+                    );
+                }
+            }
+            $response->setData('data', $data);
+            $this->getResponse()->setBody($response->toJson());
+        }
+    }
+
     public function saveTreeStateAction() {
         $state = $this->getRequest()->getPost('state');
         if($state){

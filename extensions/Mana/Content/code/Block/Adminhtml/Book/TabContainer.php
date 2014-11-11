@@ -108,6 +108,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'default_content_text' => Mage::getStoreConfig('mana_content/book/default_content'),
             'save_mode_text' => Mage::getStoreConfig('mana_content/book/save_mode'),
             'visible_title_char' => Mage::getStoreConfig('mana_content/general/visible_title_char'),
+            'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
         );
 
         $this->setData('m_client_side_block', $data);

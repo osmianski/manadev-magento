@@ -260,12 +260,30 @@ function ($, Container, ajax, core, expression) {
                 });
             };
 
+            var jsTreeCopyNode = function (e, data) {
+                var params = {
+                    form_key: FORM_KEY,
+                    id: data.original.id
+                };
+                ajax.post(self.getUrl('getRecord'), params, function (response) {
+                    var record = $.extend({}, response.data);
+                    delete record.id;
+                    record = self.createNewRecord(record);
+                    record.parent_id = {value: data.parent, isDefault: 1};
+                    record.position = {value: data.position, isDefault: 1};
+                    self.$jsTree().set_id(data.node.id, record.id.value);
+                    self._setNodeColor("green", record.id.value);
+                    self.$jsTree().select_node(record.id.value);
+                });
+            };
+
             return this._super()
                 .on('bind', this, function() {
                     this.$jsTreeElement().on('changed.jstree', jsTreeChanged);
                     this.$jsTreeElement().on('close_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().on('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().on('move_node.jstree', jsTreeMoveNode);
+                    this.$jsTreeElement().on('copy_node.jstree', jsTreeCopyNode);
                     this.setDeleteButtonText();
                 })
                 .on('unbind', this, function() {
@@ -273,6 +291,7 @@ function ($, Container, ajax, core, expression) {
                     this.$jsTreeElement().off('close_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().off('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().off('move_node.jstree', jsTreeMoveNode);
+                    this.$jsTreeElement().off('copy_node.jstree', jsTreeCopyNode);
                 })
         },
         isOnRootNode: function() {
@@ -386,16 +405,10 @@ function ($, Container, ajax, core, expression) {
                 rootPageId: this.getUrlParam('id')
             };
         },
-        createChildNode: function() {
-            var node = {
-                id: "n" + this.createGuid(),
-                text: this.getText('default-title')
-            };
-            var record = this.initChangesObj(node.id);
-            record['id'] = {
-                value: node.id,
-                isDefault: 1
-            };
+        createNewRecord: function (recordData) {
+            recordData = (recordData) ? recordData : {};
+            recordData.id = (recordData.id) ? recordData.id : {value: "n" + this.createGuid(), isDefault: 1};
+            var record = this.initChangesObj(recordData.id.value);
             record['title'] = {
                 value: this.getText('default-title'),
                 isDefault: 1
@@ -412,7 +425,15 @@ function ($, Container, ajax, core, expression) {
                 value: this.getCurrentId(),
                 isDefault: 1
             };
+            return $.extend(record, recordData);
+        },
+        createChildNode: function() {
+            var node = {
+                id: "n" + this.createGuid(),
+                text: this.getText('default-title')
+            };
             var obj = this.$jsTree().create_node(this.getCurrentId(), node);
+            this.createNewRecord();
             this.$jsTree().deselect_all();
             this.$jsTree().select_node(obj);
             this._setNodeColor("green");
