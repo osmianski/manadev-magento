@@ -236,7 +236,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have positive rounding error, do +1 starting from most prioritized
 								foreach ($ids as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while($representingProductData[$key]['m_pack_qty'] <= $qtyLeft) {
+                                        while($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && !($qtyLeft >= 0)) {
                                             $result['qties'][$id]++;
                                             $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
                                         }
@@ -250,7 +250,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have negative rounding error, do -1 starting from least prioritized
 								foreach (array_reverse($ids, true) as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while ($representingProductData[$key]['m_pack_qty'] > $qtyLeft) {
+                                        while ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && !($qtyLeft >= 0)) {
                                             $result['qties'][$id]--;
                                             $qtyLeft += $representingProductData[$key]['m_pack_qty'];
                                         }
