@@ -195,6 +195,9 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			if (isset($fields['m_unit']) && !in_array($fields['m_unit'], array_keys(Mage::getModel('manapro_productfaces/source_unit')->getOptionArray()))) {
 				$errors[] = $helper->__('One of valid units of measure expected, but %s is not.', $fields['m_unit']).$errorSuffix;
 			}
+            if (isset($fields['m_selling_qty']) && (!$fields['m_selling_qty'] || !is_numeric($fields['m_selling_qty']) || $fields['m_selling_qty'] <= 0)) {
+                $errors[] = $helper->__('Selling Qty should be positive number, but %s is not.', $fields['m_selling_qty']) . $errorSuffix;
+            }
 		}
 		catch (Exception $e) {
 			self::$_validating = false;

@@ -28,6 +28,7 @@ class ManaPro_ProductFaces_Resource_Collection_Empty extends Mana_Core_Resource_
     		'm_unit' => 'parts',
     		'm_parts' => '1',
     		'position' => '1',
+            'm_selling_qty' => '1',
     	);
     	foreach ($this->_attributesCodes as $attribute) {
     		$data[$attribute] = $this->_product->getData($attribute);

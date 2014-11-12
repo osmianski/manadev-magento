@@ -63,14 +63,16 @@ class ManaPro_ProductFaces_Resource_Link extends Mage_Catalog_Model_Resource_Eav
     		WHERE `link_type_id` = $linkTypeId
     	");
     	$sql = "
-    		SELECT l.`linked_product_id`, p.value AS m_parts, u.value AS m_unit, e.value AS position 
+    		SELECT l.`linked_product_id`, p.value AS m_parts, u.value AS m_unit, e.value AS position, s.value AS m_selling_qty
     		FROM {$this->getMainTable()} AS l
     		LEFT JOIN {$this->getMainTable()}_attribute_{$tables['m_parts']['data_type']} AS p 
     			ON (p.product_link_attribute_id = {$tables['m_parts']['product_link_attribute_id']}) AND (p.link_id = l.link_id) 
     		LEFT JOIN {$this->getMainTable()}_attribute_{$tables['m_unit']['data_type']} AS u 
     			ON (u.product_link_attribute_id = {$tables['m_unit']['product_link_attribute_id']}) AND (u.link_id = l.link_id) 
     		LEFT JOIN {$this->getMainTable()}_attribute_{$tables['position']['data_type']} AS e 
-    			ON (e.product_link_attribute_id = {$tables['position']['product_link_attribute_id']}) AND (e.link_id = l.link_id) 
+    			ON (e.product_link_attribute_id = {$tables['position']['product_link_attribute_id']}) AND (e.link_id = l.link_id)
+    	    LEFT JOIN {$this->getMainTable()}_attribute_{$tables['m_selling_qty']['data_type']} AS s
+    			ON (s.product_link_attribute_id = {$tables['m_selling_qty']['product_link_attribute_id']}) AND (s.link_id = l.link_id)
     		WHERE (l.`product_id` = $productId) AND (`link_type_id` = $linkTypeId)
     	";
     	return $this->_getReadAdapter()->fetchAll($sql);
