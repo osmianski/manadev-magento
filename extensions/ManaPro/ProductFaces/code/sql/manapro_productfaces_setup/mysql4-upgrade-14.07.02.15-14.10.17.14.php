@@ -25,6 +25,13 @@ $installer->run(
 "
 );
 
+$table = 'cataloginventory/stock_item';
+$installer->run("
+		ALTER TABLE `{$this->getTable($table)}` ADD COLUMN (
+		`{$column}` int NOT NULL default '1'
+	);
+");
+
 $installer->run(
     "
     INSERT INTO {$installer->getTable('catalog/product_link_attribute')}_{$data_type}(product_link_attribute_id, link_id, value)
