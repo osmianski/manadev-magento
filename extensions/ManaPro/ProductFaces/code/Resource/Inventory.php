@@ -263,7 +263,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 						}
                         if ($qtyLeft > 0) {
                             $result['messages'][] = array(
-                                'type' => 'error',
+                                'type' => 'notice',
                                 'text' => $this->coreHelper()->__("There are still %s remaining items that are unassigned.", $qtyLeft),
                             );
                         }
