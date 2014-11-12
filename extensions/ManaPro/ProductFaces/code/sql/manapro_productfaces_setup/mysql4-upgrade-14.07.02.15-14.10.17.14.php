@@ -13,7 +13,7 @@ $installer->startSetup();
 
 $linkTypeId = Mage::getResourceModel('manapro_productfaces/collection')->getRepresentingLinkTypeId();
 
-$column = 'm_selling_qty';
+$column = 'm_pack_qty';
 $data_type = 'int';
 
 $installer->run(

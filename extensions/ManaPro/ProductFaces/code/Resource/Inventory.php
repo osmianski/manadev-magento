@@ -158,14 +158,14 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			if ($representingProductData[$key]['m_unit'] == 'qty') {
 				$productsProcessed++;
 				
-				$qty = $representingProductData[$key]['m_parts'] / $representingProductData[$key]['m_selling_qty'];
+				$qty = $representingProductData[$key]['m_parts'] / $representingProductData[$key]['m_pack_qty'];
 				if (empty($productData['is_qty_decimal'])) {
-					$qty = ($representingProductData[$key]['m_selling_qty'] == 1) ? round($qty): floor($qty);
+					$qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty): floor($qty);
 				}
 				
 				if ($qty <= $qtyLeft) {
 					$result['qties'][$id] = $qty;
-                    $qtyLeft -= $qty * $representingProductData[$key]['m_selling_qty'];
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 				}
 				else {
 					$result['qties'][$id] = $qtyLeft;
@@ -189,14 +189,14 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 					if ($representingProductData[$key]['m_unit'] == 'percent') {
 						$productsProcessed++;
 						
-						$qty = ($productData['qty'] / $representingProductData[$key]['m_selling_qty']) * $representingProductData[$key]['m_parts'] / 100;
+						$qty = ($productData['qty'] / $representingProductData[$key]['m_pack_qty']) * $representingProductData[$key]['m_parts'] / 100;
 						if (empty($productData['is_qty_decimal'])) {
-                            $qty = ($representingProductData[$key]['m_selling_qty'] == 1) ? round($qty) : floor($qty);
+                            $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 						}
 						
 						if ($qty <= $qtyLeft) {
 							$result['qties'][$id] = $qty;
-							$qtyLeft -= $qty * $representingProductData[$key]['m_selling_qty'];
+							$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 						}
 						else {
 							$result['qties'][$id] = $qtyLeft;
@@ -221,13 +221,13 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 							if ($representingProductData[$key]['m_unit'] == 'parts') {
 								$productsProcessed++;
 								
-								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_selling_qty']: 0;
+								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_pack_qty']: 0;
 								if (empty($productData['is_qty_decimal'])) {
-                                    $qty = ($representingProductData[$key]['m_selling_qty'] == 1) ? round($qty) : floor($qty);
+                                    $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 								}
 								
 								$result['qties'][$id] = $qty;
-								$qtyLeft -= $qty * $representingProductData[$key]['m_selling_qty'];
+								$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 							}
 						}
 						
@@ -236,9 +236,9 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have positive rounding error, do +1 starting from most prioritized
 								foreach ($ids as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while($representingProductData[$key]['m_selling_qty'] <= $qtyLeft) {
+                                        while($representingProductData[$key]['m_pack_qty'] <= $qtyLeft) {
                                             $result['qties'][$id]++;
-                                            $qtyLeft -= $representingProductData[$key]['m_selling_qty'];
+                                            $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
                                         }
 										if ($qtyLeft <= 0) {
 											break;
@@ -250,9 +250,9 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have negative rounding error, do -1 starting from least prioritized
 								foreach (array_reverse($ids, true) as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while ($representingProductData[$key]['m_selling_qty'] > $qtyLeft) {
+                                        while ($representingProductData[$key]['m_pack_qty'] > $qtyLeft) {
                                             $result['qties'][$id]--;
-                                            $qtyLeft += $representingProductData[$key]['m_selling_qty'];
+                                            $qtyLeft += $representingProductData[$key]['m_pack_qty'];
                                         }
 										if ($qtyLeft >= 0) {
 											break;
