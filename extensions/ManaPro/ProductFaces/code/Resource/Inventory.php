@@ -157,6 +157,10 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		foreach ($ids as $key => $id) {
 			if ($representingProductData[$key]['m_unit'] == 'qty') {
 				$productsProcessed++;
+
+                if(!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
+                    $representingProductData[$key]['m_pack_qty'] = 1;
+                }
 				
 				$qty = $representingProductData[$key]['m_parts'] / $representingProductData[$key]['m_pack_qty'];
 				if (empty($productData['is_qty_decimal'])) {
