@@ -3698,7 +3698,13 @@
 				tmp = $.inArray(obj.id, dpc);
 				if(tmp !== -1) {
 					dpc = $.vakata.array_remove(dpc, tmp);
-					if(pos > tmp) { pos--; }
+					if(pos > tmp) {
+                        // MANAdev fix: When node is moved to same parent but different position, it doesn't determine the correct position.
+                        // The bug happens only when the node in last position is moved in higher position.
+                        if(pos-1 != old_pos) {
+                            pos--;
+                        }
+                    }
 				}
 				tmp = [];
 				for(i = 0, j = dpc.length; i < j; i++) {
