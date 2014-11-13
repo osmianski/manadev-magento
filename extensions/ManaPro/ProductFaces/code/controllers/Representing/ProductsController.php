@@ -142,7 +142,7 @@ class ManaPro_ProductFaces_Representing_ProductsController extends Mage_Adminhtm
       	foreach ($messages  as $message) {
       		$method = 'add'.$message['type'];
       		$text = $message['text'];
-      		if ($message['option']) {
+      		if (isset($message['option']) && $message['option']) {
       			$text .= '<a href="#" onclick="m_hideProductFacesWarning(\''.$message['option'].'\')">'.$this->__('Hide this warning').'</a>';
       		}
 	        $block->$method($text);
