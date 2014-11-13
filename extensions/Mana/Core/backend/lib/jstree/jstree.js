@@ -1327,7 +1327,11 @@
 								this.settings.core.error.call(this, this._data.core.last_error);
 							}, this));
 				}
-				t = ($.isArray(s) || $.isPlainObject(s)) ? JSON.parse(JSON.stringify(s)) : s;
+                // MANAdev fix: This code does not work with Magento 1.4.2 because prototype changed implementation of
+                // JSON.parse() and JSON.stringify(). It makes `t.children` into a JSON string instead of a JS Object.
+
+                //t = ($.isArray(s) || $.isPlainObject(s)) ? JSON.parse(JSON.stringify(s)) : s;
+                t = s;
 				if(obj.id === '#') {
 					return this._append_json_data(obj, t, function (status) {
 						callback.call(this, status);
