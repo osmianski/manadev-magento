@@ -359,7 +359,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
 
                 /* @var $noIndexProcessor ManaPro_FilterSeoLinks_Model_Condition */
                 $noIndexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/noindex')->$noIndexProcessorName->model);
-                if ($noIndexProcessor->detect($layerModel)) {
+                if ($noIndexProcessor && $noIndexProcessor->detect($layerModel)) {
                     $noIndex = true;
                     break;
                 }
@@ -372,7 +372,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
 
                 /* @var $followProcessor ManaPro_FilterSeoLinks_Model_Condition */
                 $followProcessor = Mage::getModel((string)Mage::getConfig()->getNode('manapro_filterseolinks/follow')->$followProcessorName->model);
-                if ($followProcessor->detect($layerModel)) {
+                if ($followProcessor && $followProcessor->detect($layerModel)) {
                     $follow = true;
                     break;
                 }

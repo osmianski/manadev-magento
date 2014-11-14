@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <mana_content_book_view>
+        <update handle="mana_menu"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/markdownpad-github.css</stylesheet></action>
+        </reference>
+
+        <reference name="left">
+            <block type="mana_content/tree" name="tree" as="tree"/>
+        </reference>
+        <reference name="content">
+            <block type="mana_content/book" name="book" as="book"/>
+        </reference>
+        <remove name="left.permanent.callout" />
+        <remove name="left.newsletter"/>
+        <remove name="tags_popular"/>
+    </mana_content_book_view>
+</layout>

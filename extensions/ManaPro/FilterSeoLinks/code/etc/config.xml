@@ -205,6 +205,20 @@
                 </setup>
             </manapro_filterseolinks_setup>
         </resources>
+        <index>
+            <indexer>
+                <mana_seo_url>
+                    <sources>
+                        <filter_parameter><resource>manapro_filterseolinks/urlIndexer_filter</resource></filter_parameter>
+                        <category_parameter><resource>manapro_filterseolinks/urlIndexer_categoryParameter</resource></category_parameter>
+                        <toolbar_parameter><resource>manapro_filterseolinks/urlIndexer_toolbar</resource></toolbar_parameter>
+    
+                        <category_value><resource>manapro_filterseolinks/urlIndexer_categoryValue</resource></category_value>
+                        <attribute_value><resource>manapro_filterseolinks/urlIndexer_value</resource></attribute_value>
+                    </sources>
+                </mana_seo_url>
+            </indexer>
+        </index>
 	</global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->

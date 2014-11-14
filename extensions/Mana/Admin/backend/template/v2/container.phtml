@@ -12,18 +12,23 @@
 /* @var $this Mana_Admin_Block_V2_Container */
 ?>
 <div class="content-header">
-<table cellspacing="0">
-    <tr>
-		<td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
-        <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
-    </tr>
-</table>
+    <table cellspacing="0">
+        <tr>
+            <td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
+            <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
+        </tr>
+    </table>
 </div>
 <div>
+    <?php foreach ($this->getChildGroup('top', 'getChildHtml') as $alias => $html): ?>
+        <?php echo $html; ?>
+    <?php endforeach; ?>
+
     <?php if ($this->getIsTabContainer()) : ?>
         <div id="tab-content"></div>
     <?php endif; ?>
+
     <?php foreach ($this->getChildGroup('content', 'getChildHtml') as $alias => $html): ?>
-	<?php echo $html; ?>
-<?php endforeach; ?>
+        <?php echo $html; ?>
+    <?php endforeach; ?>
 </div>
