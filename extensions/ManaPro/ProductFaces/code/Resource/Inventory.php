@@ -137,12 +137,15 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		// order results by method (qty, then percent, then part-of) and by position
 		self::$_representingProductDataForSortingCallback = $representingProductData;
 		uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
-		foreach ($ids as $id) {
-			$result['qties'][$id] = 0;	
+		foreach ($ids as $key => $id) {
+			$result['qties'][$id] = 0;
+            if (!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
+                $representingProductData[$key]['m_pack_qty'] = 1;
+            }
 		}
 		foreach ($virtualIds as $key => $id) {
 		    if ($representingProductData[$key]['m_unit'] == 'virtual_percent') {
-                $result['qties'][$id] = $productData['qty'] * $representingProductData[$key]['m_parts'] / 100;
+                $result['qties'][$id] = ($productData['qty'] * $representingProductData[$key]['m_parts'] / 100) / $representingProductData[$key]['m_pack_qty'];
                 if (empty($productData['is_qty_decimal'])) {
                     $result['qties'][$id] = round($result['qties'][$id]);
                 }
@@ -157,10 +160,6 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		foreach ($ids as $key => $id) {
 			if ($representingProductData[$key]['m_unit'] == 'qty') {
 				$productsProcessed++;
-
-                if(!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
-                    $representingProductData[$key]['m_pack_qty'] = 1;
-                }
 				
 				$qty = $representingProductData[$key]['m_parts'] / $representingProductData[$key]['m_pack_qty'];
 				if (empty($productData['is_qty_decimal'])) {
