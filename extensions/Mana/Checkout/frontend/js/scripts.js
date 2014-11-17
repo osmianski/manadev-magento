@@ -161,7 +161,7 @@
     }
 
     $(function() {
-        $('.billing-use-for-shipping').live('click', function() {
+        $(document).on('click', '.billing-use-for-shipping', function() {
             if ($(this).is(':checked')) {
                 $('.shipping-address-form').hide('fast');
             }
@@ -169,7 +169,7 @@
                 $('.shipping-address-form').show('fast');
             }
         });
-        $('.billing-create-account').live('click', function () {
+        $(document).on('click', '.billing-create-account', function () {
             if (!$(this).is(':checked')) {
                 $('.create-account-form').hide('fast');
             }
@@ -179,10 +179,10 @@
         });
 
         _showPaymentMethodForm();
-        $('.payment-method').live('click', _showPaymentMethodForm);
+        $(document).on('click', '.payment-method', _showPaymentMethodForm);
 
         //_enablePersonalMessageFields();
-        $('.message-send').live('click', function () {
+        $(document).on('click', '.message-send', function () {
             if (!$(this).is(':checked')) {
                 $('.message-form').hide('fast');
             }
@@ -191,7 +191,7 @@
             }
         });
 
-        $('.btn-checkout').live('click', _submitOrder);
+        $(document).on('click', '.btn-checkout', _submitOrder);
 
         $('.cvv-what-is-this').mPopup('cvv-description');
     });

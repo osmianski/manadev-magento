@@ -51,7 +51,7 @@
 			updateTotals();
 		}
 	});
-	$('.m-bought-together-options input[type="checkbox"]').live('click', function() {
+	$(document).on('click', '.m-bought-together-options input[type="checkbox"]', function() {
 		// find product id
 		var id = this.id;
 		if (!id.match("^"+_checkboxPrefix)==_checkboxPrefix) {
@@ -109,7 +109,7 @@
 		}
 	});
 	
-	$('.m-bought-together-summary .btn-cart').live('click', function() {
+	$(document).on('click', '.m-bought-together-summary .btn-cart', function() {
 		if ($('#'+_checkboxPrefix+_options.productId).attr('checked')) {
 			if (!productAddToCartForm.validator.validate()) {
 				return false;
@@ -119,7 +119,7 @@
 		$('#m-bought-together-form').submit();
 		return false;
 	});
-	$('.m-bought-together-add-to-box .add-to-links a').live('click', function() {
+	$(document).on('click', '.m-bought-together-add-to-box .add-to-links a', function() {
 		$('#m-bought-together-form')[0].setAttribute('action', this.href);
 		$('#m-bought-together-form').submit();
 		return false;

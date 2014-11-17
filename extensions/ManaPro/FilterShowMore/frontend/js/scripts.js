@@ -818,8 +818,8 @@ function ($, OptionSearch) {
 		}
 		_inAjax = false;
 	});
-	$('a.m-show-less-action').live('click', clickHandler);
-	$('a.m-show-more-action').live('click', clickHandler);
+	$(document).on('click', 'a.m-show-less-action', clickHandler);
+	$(document).on('click', 'a.m-show-more-action', clickHandler);
 
 })(jQuery);
 //endregion

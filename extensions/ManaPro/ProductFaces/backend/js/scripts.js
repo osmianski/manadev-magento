@@ -320,7 +320,7 @@
         		}
         	}
         }
-        $('#m_product_chooser_table .checkbox.entities').live('change', function() {
+        $(document).on('change', '#m_product_chooser_table .checkbox.entities', function() {
         	_selectProduct.apply(this);
         });
         var _oldSelectAll = m_product_chooserJsObject.checkCheckboxes;

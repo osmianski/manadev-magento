@@ -7,11 +7,11 @@
 ;(function($) {
     $(function () {
         $('.m-help .m-text').hide();
-        $('.m-help')
-            .live('mouseover', function () {
+        $(document)
+            .on('mouseover', '.m-help', function () {
                 $(this).find('.m-text').show();
             })
-            .live('mouseout', function () {
+            .on('mouseout', '.m-help', function () {
                 $(this).find('.m-text').hide();
             });
     });

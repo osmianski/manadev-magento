@@ -58,7 +58,7 @@
             restoreState(element);
         });
     });
-    $('.block-layered-nav .m-collapseable').live('click', function() {
+    $(document).on('click', '.block-layered-nav .m-collapseable', function() {
         var element = this;
         if ($(element).hasClass('m-expanded')) {
             _states[$(element).attr('data-id')] = false;
@@ -106,8 +106,8 @@
         }
     }
 
-    $(_selectors.dt)
-        .live('click', function () {
+    $(document)
+        .on('click', _selectors.dt, function () {
             if (!_hidePopups()) {
                 var dt = $(this);
                 var dd = $(this).next();

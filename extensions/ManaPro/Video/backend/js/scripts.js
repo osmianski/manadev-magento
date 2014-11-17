@@ -5,10 +5,10 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 ;(function($){
-    $('#mVideoGrid .filter-actions .m-add').live('click', function() {
+    $(document).on('click', '#mVideoGrid .filter-actions .m-add', function() {
         $.gridAction('mVideoGrid', 'add');
     });
-    $('#mVideoGrid .filter-actions .m-remove').live('click', function () {
+    $(document).on('click', '#mVideoGrid .filter-actions .m-remove', function () {
         $.gridAction('mVideoGrid', 'remove');
     });
 })(jQuery);
