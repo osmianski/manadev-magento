@@ -276,7 +276,8 @@
   padding: 4px;
 }
 #jstree-dnd .jstree-icon,
-#jstree-dnd .jstree-copy {
+#jstree-dnd .jstree-copy,
+#jstree-dnd .jstree-reference{
   display: inline-block;
   text-decoration: none;
   margin: 0 2px 0 0;
@@ -290,7 +291,8 @@
 #jstree-dnd .jstree-er {
   background: red;
 }
-#jstree-dnd .jstree-copy {
+#jstree-dnd .jstree-copy,
+#jstree-dnd .jstree-reference{
   margin: 0 2px 0 2px;
 }
 .jstree-default .jstree-node,
