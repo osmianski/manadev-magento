@@ -42,7 +42,7 @@ class Mana_Content_Resource_Page_GlobalCustomSettings extends Mana_Content_Resou
                         'id' => new Zend_Db_Expr('id'),
                     )
                 )
-                ->where("parent_id IN (?)", implode(",", $parentIds));
+                ->where("parent_id IN (". implode(",", $parentIds) .")");
             $data = $db->fetchAll($select);
             $parentIds = array();
             foreach ($data as $record) {
