@@ -40,7 +40,7 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
                 $head->setDescription($bookPage->getMetaDescription());
                 if($canonicalUrl = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePageUrl($bookPage->getId())) {
                     $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true);
-                    $url = Mage::getUrl('*/*/*', $params);
+                    $url = explode('?', Mage::getUrl('*/*/*', $params))[0];;
                     $head->removeItem('link_rel', $url);
                     $head->addLinkRel('canonical', $canonicalUrl);
                 }
