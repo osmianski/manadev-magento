@@ -33,12 +33,21 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
         $this->setChild('close_button', $button);
 
         if ($this->getFlatModel()->getId() && $this->adminHelper()->isGlobal()) {
-            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
-                ->setData(array(
-                    'label' => $this->__('Create Child Page'),
-                    'class' => 'add',
-                ));
-            $this->setChild('create_button', $button);
+            if($this->getFlatModel()->getReferenceId()) {
+                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.goToOriginal")
+                    ->setData(array(
+                            'label' => $this->__('Go To Original Page'),
+                            'class' => 'go',
+                        ));
+                $this->setChild('create_button', $button);
+            } else {
+                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
+                    ->setData(array(
+                            'label' => $this->__('Create Child Page'),
+                            'class' => 'add',
+                        ));
+                $this->setChild('create_button', $button);
+            }
             $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.delete")
                 ->setData(array(
                     'label' => $this->__('Delete Current Page'),
@@ -89,6 +98,8 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
     }
 
     protected function _prepareClientSideBlock() {
+        $id = $this->getRequest()->getParam('id');
+        $referencePages = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePages($id);
         /* @var $urlTemplate Mana_Core_Helper_UrlTemplate */
         $urlTemplate = Mage::helper('mana_core/urlTemplate');
 
@@ -101,6 +112,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this page and all its child pages?'),
             'delete_whole_page_text' => $this->__('Delete Whole Page'),
+            'delete_reference_page_text' => $this->__('Delete Reference Page'),
             'delete_confirm_root_text' => $this->__('Are you sure you want to delete the whole book? You will be redirected to page list immediately.'),
             'load_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('load')),
             'tree_save_state_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('saveTreeState')),
@@ -109,6 +121,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'save_mode_text' => Mage::getStoreConfig('mana_content/book/save_mode'),
             'visible_title_char' => Mage::getStoreConfig('mana_content/general/visible_title_char'),
             'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
+            'reference_pages' => json_encode($referencePages),
         );
 
         $this->setData('m_client_side_block', $data);

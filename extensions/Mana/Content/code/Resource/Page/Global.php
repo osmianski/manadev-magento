@@ -93,6 +93,7 @@ class Mana_Content_Resource_Page_Global extends Mana_Content_Resource_Page_Abstr
                 'meta_keywords' => "`ti_gcs`.`meta_keywords`",
                 'meta_description' => "`ti_gcs`.`meta_description`",
                 'position' => "`ti_gcs`.`position`",
+                'reference_id' => '`ti_gcs`.`reference_id`',
             ));
         }
         if (isset($tables['ti_gcs'])) {

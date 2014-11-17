@@ -31,11 +31,11 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
         'url_key' => 'required|unique',
         'content' => 'required',
     );
-
     protected $captions = array(
         'url_key' => "URL Key",
     );
 
+    protected $_validator;
 
     public function validate() {
         $global = Mage::registry('m_global_flat_model');
@@ -95,10 +95,17 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @return Mana_Content_Model_Validator
+     * @return Mana_Admin_Model_Validator
      */
-    protected function getValidator() {
-        return Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
+    public function getValidator() {
+        if(!$this->_validator) {
+            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
+        }
+        return $this->_validator;
+    }
+
+    public function getReferencePages($root_id) {
+        $this->getResource()->getReferencePages($root_id);
     }
 
     #region Dependencies

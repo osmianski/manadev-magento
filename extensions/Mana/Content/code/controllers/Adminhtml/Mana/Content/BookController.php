@@ -276,7 +276,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if(!is_null($changes)) {
             if(!is_null($id)) {
                 foreach($changes['modified'] as $id => $field) {
-                    if($model->getData('page_global_custom_settings_id') == $id) {
+                    if($model->getData('id') == $id || $model->getData('reference_id') == $id) {
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
                         }
@@ -288,6 +288,12 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             } else {
                 foreach($changes['created'] as $id => $field) {
                     if($this->getRequest()->getPost('id') == $id) {
+                        if($referenceId = $field['reference_id']['value']) {
+                            $originalPageChanges = ($changes['modified'][$referenceId]) ? $changes['modified'][$referenceId] : $changes['created'][$referenceId];
+                            unset($originalPageChanges['parent_id']);
+                            unset($originalPageChanges['position']);
+                            $field = array_merge($field, $originalPageChanges);
+                        }
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
                         }
@@ -366,6 +372,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 foreach($data as $id => $fields) {
                     try {
                         $models = $this->_registerModels(($action == "created") ? null : $id, false);
+                        /** @var Mana_Content_Model_Page_Abstract $model */
                         $model = $models['customSettings'];
                         $tmpId = $id;
                         if($action == "modified") {
@@ -377,6 +384,9 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             }
                         }
                         $this->setModelData($model, $fields);
+                        if($model->getReferenceId()) {
+                            $model->getValidator()->ignoreRule('unique');
+                        }
                         $model->validate();
                     } catch (Mana_Core_Exception_Validation $e) {
                         foreach ($e->getErrors() as $error) {
