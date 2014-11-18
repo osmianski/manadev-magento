@@ -1,21 +1,30 @@
-<?php 
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_Content
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
 
-/* BASED ON SNIPPET: Resources/Install/upgrade script */
 if (defined('COMPILER_INCLUDE_PATH')) {
-	throw new Exception(Mage::helper('mana_core')->__('This Magento installation contains pending database installation/upgrade scripts. Please turn off Magento compilation feature while installing/upgrading new modules in Admin Panel menu System->Tools->Compilation.'));
+    throw new Exception(Mage::helper('mana_core')->__('This Magento installation contains pending database installation/upgrade scripts. Please turn off Magento compilation feature while installing/upgrading new modules in Admin Panel menu System->Tools->Compilation.'));
 }
+
 /* @var $installer Mage_Core_Model_Resource_Setup */
 $installer = $this;
+if (method_exists($this->getConnection(), 'allowDdlCache')) {
+    $this->getConnection()->allowDdlCache();
+}
 
-$installer->startSetup();
-$table = $installer->getTable('mana_content/page_relatedProduct');
+// page: global custom settings
+$table = $this->getTable('mana_content/page_globalCustomSettings');
 $installer->run("
-    CREATE TABLE `$table` (
-      `id` int(11) UNSIGNED NOT NULL,
-      `page_global_id` int(11) NOT NULL,
-      `product_id` int(11) NOT NULL,
-      PRIMARY KEY (id)
-    ) ENGINE = INNODB DEFAULT CHARSET=utf8;
+    ALTER TABLE `$table`
+    ADD COLUMN reference_id int(10) UNSIGNED DEFAULT NULL;
 ");
+
+if (method_exists($this->getConnection(), 'disallowDdlCache')) {
+    $this->getConnection()->disallowDdlCache();
+}
 $installer->endSetup();
 

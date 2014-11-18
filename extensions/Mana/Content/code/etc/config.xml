@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Content>
-            <version>14.11.14.09</version>
+            <version>14.11.18.03</version>
         </Mana_Content>
     </modules>
     <global>
@@ -34,6 +34,7 @@
 					<page_globalCustomSettings><table>m_page_global_custom_settings</table></page_globalCustomSettings>
 					<page_store><table>m_page_store</table></page_store>
 					<page_storeCustomSettings><table>m_page_store_custom_settings</table></page_storeCustomSettings>
+                    <page_relatedProduct><table>m_page_related_product</table></page_relatedProduct>
                 </entities>
             </mana_content_resources>
         </models>
