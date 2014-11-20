@@ -413,11 +413,13 @@ function ($, Container, ajax, core, expression) {
             if(this._isTemporaryId(id)) {
                 if (!this._changes.created[id]) {
                     this._changes.created[id] = {};
+                    this._changes.created[id].related_products = [];
                 }
                 return this._changes.created[id];
             } else {
                 if (!this._changes.modified[id]) {
                     this._changes.modified[id] = {};
+                    this._changes.modified[id].related_products = [];
                 }
                 return this._changes.modified[id];
             }

@@ -9,20 +9,28 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mage_Adminhtml_Block_Widget_Grid {
+class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
         $this->setId('relatedProductGrid');
-        $this->setDefaultSort('title');
+        $this->setDefaultSort('entity_id');
         $this->setDefaultDir('asc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareColumns() {
-        $this->addColumn('id',array(
+        $this->addColumn('edit_massaction', array(
+            'header' => $this->__('Selected'),
+            'index' => 'edit_massaction',
+            'header_css_class' => 'c-edit_massaction',
+            'renderer' => 'mana_admin/column_checkbox_massaction',
+            'width' => '50px',
+            'align' => 'center',
+        ));
+        $this->addColumn('entity_id',array(
                 'header' => $this->__('ID'),
-                'index' => 'id',
+                'index' => 'entity_id',
                 'width' => '20px',
                 'align' => 'center',
             ));
@@ -50,6 +58,7 @@ class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mage_Adminhtm
     public function getMainButtonsHtml() {
         $html = parent::getMainButtonsHtml();
         $html .= $this->getChildHtml('add_related_products');
+        $html .= $this->getChildHtml('remove_selected');
         return $html;
     }
 
@@ -63,21 +72,36 @@ class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mage_Adminhtm
                 )
             );
         $this->setChild('add_related_products', $button);
+        $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.remove_selected")
+            ->setData(
+                array(
+                    'label' => $this->__('Remove Selected'),
+                    'class' => 'delete',
+                )
+            );
+        $this->setChild('remove_selected', $button);
 
         return parent::_prepareLayout();
     }
 
     protected function _prepareCollection() {
-//        if ($this->adminHelper()->isGlobal()) {
-            $collection = Mage::getModel('catalog/product')->getCollection()
-                    ->addAttributeToSelect('name')
-                    ->addAttributeToSelect('price')
-                    ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('*'));
-            $collection->getSelect()->where('`mprp`.`page_global_id` = ?', Mage::registry('m_flat_model')->getId());
-//        } else {
-//
-//        }
+        $relatedProductIds = Mage::registry('related_product_ids');
+        $collection = Mage::getModel('catalog/product')->getCollection();
 
+        foreach($relatedProductIds as $key => $id) {
+            if(substr($id, 0, 1) == "-") {
+                unset($relatedProductIds[$key]);
+                $remove_id = substr($id, 1, strlen($id) - 1);
+                unset($relatedProductIds[array_search($remove_id, $relatedProductIds)]);
+            }
+        }
+        if(count($relatedProductIds)) {
+            $collection->addIdFilter($relatedProductIds);
+        } else {
+            $collection->addFieldToFilter('entity_id', 0);
+        }
+        $collection->addAttributeToSelect('name')
+            ->addAttributeToSelect('price');
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -95,24 +119,8 @@ class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mage_Adminhtm
     }
 
     public function getGridUrl() {
-        return $this->adminHelper()->getStoreUrl('*/*/grid');
+        return $this->adminHelper()->getStoreUrl('*/*/relatedProductGrid');
     }
-
-
-    protected function _prepareMassaction() {
-        $this->setMassactionIdField('id');
-        $this->getMassactionBlock()->setFormFieldName('ids');
-        $this->getMassactionBlock()->setUseSelectAll(true);
-
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label' => $this->__('Delete'),
-            'url' => $this->getUrl('*/*/delete'),
-            'confirm' => $this->__('Are you sure?'),
-        ));
-
-        return $this;
-    }
-
 
     #region Dependencies
     /**
