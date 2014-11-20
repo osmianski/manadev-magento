@@ -28,6 +28,7 @@ function ($, Container, ajax, core, expression) {
             this.triggerReference = false;
             this.revertPosition = false;
             this.useReferenceInsteadOfCopy = false;
+            this.startingId = false;
             var self = this;
             $.each(this.$jsTreeElement().find("li.jstree-node"), function() {
                 self._setNodeColor(false, $(this).attr("id"));
@@ -395,7 +396,11 @@ function ($, Container, ajax, core, expression) {
             return window[this.$().data('tab-id') + 'JsTabs'];
         },
         getCurrentId: function() {
-            return this.$jsTree().get_selected()[0];
+            if(typeof this.$jsTree().get_selected()[0] === "undefined") {
+                return this.startingId;
+            } else {
+                return this.$jsTree().get_selected()[0];
+            }
         },
         initChangesObj: function (id) {
             if(id === undefined) {

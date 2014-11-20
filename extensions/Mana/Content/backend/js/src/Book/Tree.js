@@ -11,6 +11,7 @@ function ($, Block, json, layout)
                         options.core.data.id = "n" + this.createGuid();
                     }
                     var container = this.$container();
+                    container.startingId = options.core.data.id;
                     var self = this;
 
                     options.core.check_callback = function (op, node, par, pos, more) {
