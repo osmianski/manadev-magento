@@ -593,7 +593,9 @@ function ($, Container, ajax, core, expression) {
             if (typeof this._originalFields !== "undefined" && !this._isTemporaryId(this.getCurrentId())) {
                 for (var i in obj) {
                     var originalField = this._originalFields[this.getCurrentId()][i];
-                    if (originalField.value === obj[i].value && originalField.useDefault === obj[i].isDefault) {
+                    if (typeof originalField !== "undefined" &&
+                        originalField.value === obj[i].value &&
+                        originalField.useDefault === obj[i].isDefault) {
                         if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
                             delete this._changes.modified[this.getCurrentId()][i];
                         }
