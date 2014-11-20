@@ -529,12 +529,12 @@ function ($, Container, ajax, core, expression) {
             return $.extend(record, recordData);
         },
         createChildNode: function() {
+            var record = this.createNewRecord();
             var node = {
-                id: "n" + this.createGuid(),
-                text: this.getText('default-title')
+                id: record.id.value,
+                text: record.title.value
             };
             var obj = this.$jsTree().create_node(this.getCurrentId(), node);
-            this.createNewRecord();
             this.$jsTree().deselect_all();
             this.$jsTree().select_node(obj);
             this._setNodeColor("green");
