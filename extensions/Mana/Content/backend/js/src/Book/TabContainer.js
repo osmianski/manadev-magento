@@ -51,8 +51,12 @@ function ($, Container, ajax, core, expression) {
                     isDefault: 1
                 };
 
-                this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
-                this.getField('is_active').setValue('1');
+                if(this.getField('url_key')) {
+                    this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
+                }
+                if(this.getField('is_active')) {
+                    this.getField('is_active').setValue('1');
+                }
             }
         },
         _subscribeToHtmlEvents: function() {
@@ -427,6 +431,25 @@ function ($, Container, ajax, core, expression) {
             }
             return false;
         },
+        setToBlackIfNoChanges: function () {
+            var obj = this.initChangesObj();
+
+            if (typeof this._originalFields !== "undefined" && !this._isTemporaryId(this.getCurrentId())) {
+                for (var i in obj) {
+                    var originalField = this._originalFields[this.getCurrentId()][i];
+                    if (originalField.value === obj[i].value && originalField.useDefault === obj[i].isDefault) {
+                        if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
+                            delete this._changes.modified[this.getCurrentId()][i];
+                        }
+                    }
+                }
+                var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
+                if (count == 0) {
+                    delete this._changes.modified[this.getCurrentId()];
+                    this._setNodeColor("black");
+                }
+            }
+        },
         fieldChanged: function (e) {
             var strField = e.target.getName();
             var field = this.getField(strField);
@@ -447,31 +470,21 @@ function ($, Container, ajax, core, expression) {
                 this[fieldChangeFunction]();
             }
             this._postAction("modify");
-
-            var obj = this.initChangesObj();
-
-            if(typeof this._originalFields !== "undefined" && !this._isTemporaryId(this.getCurrentId())) {
-                for(var i in obj) {
-                    var originalField = this._originalFields[this.getCurrentId()][i];
-                    if (typeof originalField !== "undefined" && originalField.value === obj[i].value && originalField.useDefault === obj[i].isDefault) {
-                        if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
-                            delete this._changes.modified[this.getCurrentId()][i];
-                        }
-                    }
-                }
-                var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
-                if(count == 0) {
-                    delete this._changes.modified[this.getCurrentId()];
-                    this._setNodeColor("black");
-                }
-            }
+            this.setToBlackIfNoChanges();
         },
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
+            var url_key = expression.seoify(title);
             if(typeof field !== "undefined" && field.useDefault()) {
-                var url_key = expression.seoify(title);
                 field.setValue(url_key);
+            }
+            if(typeof field === "undefined") {
+                this.initChangesObj()['url_key'] = {
+                    value: url_key,
+                    isDefault: 1
+                };
+                this.setToBlackIfNoChanges();
             }
         },
         onChangeTitle: function() {
