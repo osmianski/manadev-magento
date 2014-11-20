@@ -99,7 +99,12 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
 
     protected function _prepareClientSideBlock() {
         $id = $this->getRequest()->getParam('id');
-        $referencePages = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePages($id);
+        if(!is_null($id) && substr($id, 0, 1) != "n") {
+            $id = Mage::getModel('mana_content/page_global')->getCustomSettingId($id);
+            $referencePages = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePages($id);
+        } else {
+            $referencePages = array();
+        }
         /* @var $urlTemplate Mana_Core_Helper_UrlTemplate */
         $urlTemplate = Mage::helper('mana_core/urlTemplate');
 
