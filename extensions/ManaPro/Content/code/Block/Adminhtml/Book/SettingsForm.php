@@ -32,7 +32,6 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
             'legend' => $this->__('General'),
         ));
 
-        $this->adminHelper()->renderSeoSymbols();
         $this->addField($fieldset, 'url_key', 'text', array(
             'label' => $this->__('URL Key'),
             'title' => $this->__('URL Key'),

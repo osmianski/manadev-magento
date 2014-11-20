@@ -19,6 +19,8 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
         else {
             $this->_headerText = $this->__('New Book');
         }
+
+        $this->adminHelper()->renderSeoSymbols();
     }
 
     protected function _prepareLayout() {
