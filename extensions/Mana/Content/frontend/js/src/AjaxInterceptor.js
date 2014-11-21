@@ -7,12 +7,12 @@ function($, ajax, config, layout, undefined)
             if (element) {
                 var ajaxContainerSelector = config.getData('mana_content.ajax.containers');
                 if (ajaxContainerSelector) {
-                    if (!$(ajaxContainerSelector).has(element).length) {
-                        return false;
+                    if ($(ajaxContainerSelector).has(element).length > 0) {
+                        return true;
                     }
                 }
             }
-            return true;
+            return false;
         },
         intercept: function (url, element) {
             var parser = document.createElement('a');
