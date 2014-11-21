@@ -38,32 +38,24 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return $this;
     }
 
-    public function filterTree($search) {
+    public function filterTreeByTitle($search) {
         $read = $this->getConnection();
         $select = $this->_prepareSelect();
         $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
         $rows = $read->fetchAssoc($select);
-        $ids = array();
-        foreach($rows as $id => $row) {
-            array_push($ids, $id);
-            $level = $row['level'];
-            $parent_ids = array($row['parent_id']);
-            while($level > 0) {
-                $level --;
-                $select = $this->_prepareSelect();
-                $select->where("`mps`.`level` = ?", $level);
+        return $this->loadWithParent($rows);
+    }
 
-
-                $select->where("`mpgcs`.`id` IN (". implode(',', $parent_ids) .")");
-                $parent_ids = array();
-                $parentRows = $read->fetchAssoc($select);
-                foreach($parentRows as $parentId => $parentRow) {
-                    array_push($ids, $parentId);
-                    array_push($parent_ids, $parentRow['parent_id']);
-                }
-            }
+    public function filterTreeByRelatedProducts($related_products = array()) {
+        if(!empty($related_products)) {
+            $read = $this->getConnection();
+            $select = $this->_prepareSelect();
+            $select->joinInner(array('mprp' => $this->getTable('mana_content/page_relatedProduct')), "`mpg`.`id` = `mprp`.`page_global_id`", array())
+                ->where("`mprp`.`product_id` IN (". implode(",", $related_products) .")");
+            $rows = $read->fetchAssoc($select);
+            return $this->loadWithParent($rows);
         }
-        return $ids;
+        return array();
     }
 
     private function _prepareSelect() {
@@ -85,5 +77,29 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         $select->joinInner(array('mpgcs' => $this->getTable('mana_content/page_globalCustomSettings')), "`mpg`.`page_global_custom_settings_id` = `mpgcs`.`id`", array());
         $select->where("`store_id` = ?", Mage::app()->getStore()->getId());
         return $select;
+    }
+
+    protected function loadWithParent($rows) {
+        $ids = array();
+        foreach($rows as $id => $row) {
+            array_push($ids, $id);
+            $level = $row['level'];
+            $parent_ids = array($row['parent_id']);
+            while($level > 0) {
+                $level --;
+                $select = $this->_prepareSelect();
+                $select->where("`mps`.`level` = ?", $level);
+
+
+                $select->where("`mpgcs`.`id` IN (". implode(',', $parent_ids) .")");
+                $parent_ids = array();
+                $parentRows = $this->getConnection()->fetchAssoc($select);
+                foreach($parentRows as $parentId => $parentRow) {
+                    array_push($ids, $parentId);
+                    array_push($parent_ids, $parentRow['parent_id']);
+                }
+            }
+        }
+        return $ids;
     }
 }

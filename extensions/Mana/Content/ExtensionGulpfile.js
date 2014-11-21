@@ -13,7 +13,9 @@ module.exports = Extension.extend({
         this.loadJsTasks('frontend', 'frontend/js', [
             'src/header.js',
             'src/Tree.js',
+            'src/Filter.js',
             'src/Tree/Search.js',
+            'src/Tree/RelatedProduct.js',
             'src/AjaxInterceptor.js'
         ]);
     }

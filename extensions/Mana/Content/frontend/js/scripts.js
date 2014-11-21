@@ -16,12 +16,97 @@ function ($, Block) {
     });
 });
 
-Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config'],
-function ($, Block, layout, config) {
-    return Block.extend('Mana/Content/Tree/Search', {
-        _init: function() {
-            this._super();
+Mana.define('Mana/Content/Filter', ['jquery', 'singleton:Mana/Core/Config'],
+function ($, config) {
+    return Mana.Object.extend('Mana/Content/Filter', {
+        _init: function(){
+            this.loadFilterFromUrl();
         },
+        loadFilterFromUrl: function () {
+            this._searchValue = "";
+            this._relatedProducts = [];
+            var queryString = window.location.search;
+            queryString = queryString.substr(1, queryString.length - 1);
+            queryString = queryString.split('&');
+            var param;
+            for(var i = 0; i <queryString.length; i++) {
+                param = queryString[i].split('=');
+                switch(param[0]) {
+                    case 'search':
+                        this._searchValue = param[1];
+                        break;
+                    case 'related_products':
+                        this._relatedProducts = param[1].split(',').map(Number);
+                        break;
+                }
+            }
+        },
+        setSearch: function(searchValue) {
+            this._searchValue = searchValue;
+            return this.constructUrl();
+        },
+        getUrlIfRelatedProductChecked: function(productId) {
+            var url = this.addToRelatedProducts(productId);
+            this.removeFromRelatedProduct(productId);
+            return url;
+        },
+        getUrlIfRelatedProductUnchecked: function(productId) {
+            var url = this.removeFromRelatedProduct(productId);
+            this.addToRelatedProducts(productId);
+            return url;
+        },
+        setRelatedProducts: function(productIds) {
+            this._relatedProducts = productIds;
+            return this.constructUrl();
+        },
+        addToRelatedProducts: function(productId) {
+            if(!this.isProductChecked(productId)) {
+                this._relatedProducts.push(productId);
+            }
+            return this.constructUrl();
+        },
+        removeFromRelatedProduct: function(productId) {
+            var self = this;
+            $.each(this._relatedProducts, function(i) {
+                if(self._relatedProducts[i] == productId) {
+                    self._relatedProducts.splice(i, 1);
+                    return;
+                }
+            });
+            return this.constructUrl();
+        },
+        isProductChecked: function (productId) {
+            return $.inArray(productId, this._relatedProducts) !== -1;
+        },
+        constructUrl: function() {
+            var url = config.getData('url.unfiltered');
+            var params = {};
+            if (this._searchValue.length > 0) {
+                params.search = this._searchValue;
+            }
+            if(this._relatedProducts.length > 0) {
+                params.related_products = this._relatedProducts;
+            }
+            if(params.search || params.related_products) {
+                url += "?";
+                var skipAnd = true;
+                $.each(params, function(i) {
+                    if(skipAnd) {
+                        skipAnd = false;
+                    } else {
+                        url += "&";
+                    }
+                    url += i + "=" + params[i];
+                });
+            }
+            return url;
+        }
+    });
+});
+
+Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config', 'singleton:Mana/Content/Filter'],
+function ($, Block, layout, config, filter) {
+    return Block.extend('Mana/Content/Tree/Search', {
         _subscribeToHtmlEvents: function () {
             var self = this;
             function _changed() {
@@ -36,6 +121,13 @@ function ($, Block, layout, config) {
                     this.$field().off('blur', _changed);
                 });
         },
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function(){
+                    this.$field()[0].setValue(filter._searchValue);
+                })
+        },
         $field: function(){
             return this.$().find('input');
         },
@@ -46,18 +138,40 @@ function ($, Block, layout, config) {
             return layout.getBlock('tree');
         },
         changed: function() {
-            var url = config.getData('url.unfiltered');
-            if(this.$field()[0].getValue().length > 0) {
-                url += "?search="+ this.$field()[0].getValue();
+            this.$link()[0].href = filter.setSearch(this.$field()[0].getValue());
+        }
+    });
+});
+
+Mana.define('Mana/Content/Tree/RelatedProduct', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Content/Filter'],
+function ($, Block, filter) {
+    return Block.extend('Mana/Content/Tree/RelatedProduct', {
+        setFilterUrl: function (link) {
+            var productId = link.data('mProductId');
+            if(filter.isProductChecked(productId)) {
+                link.addClass('m-checkbox-checked');
+            } else {
+                link.addClass('m-checkbox-unchecked');
             }
-            this.$link()[0].href = url;
+            link[0].href = link.hasClass('m-checkbox-unchecked') ? filter.getUrlIfRelatedProductChecked(productId) : filter.getUrlIfRelatedProductUnchecked(productId);
+        },
+        _subscribeToBlockEvents: function () {
+            var self = this;
+
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.$().find('a').each(function(){
+                        self.setFilterUrl($(this));
+                    });
+                })
         }
     });
 });
 
 Mana.define('Mana/Content/AjaxInterceptor', ['jquery', 'singleton:Mana/Core/Ajax',
-    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout'],
-function($, ajax, config, layout, undefined)
+    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout', 'singleton:Mana/Content/Filter'],
+function($, ajax, config, layout, filter, undefined)
 {
     return Mana.Object.extend('Mana/Content/AjaxInterceptor', {
         match: function (url, element) {
@@ -100,6 +214,7 @@ function($, ajax, config, layout, undefined)
             requesturl += '/' + url.substr(config.getData('url.base').length);
 
             ajax.get(requesturl, function (response) {
+                filter.loadFilterFromUrl();
                 ajax.update(response);
                 layout.getPageBlock().resize();
                 result = true;

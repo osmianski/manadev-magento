@@ -20,7 +20,18 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         $collection->setParentFilter(null);
         $filteredIds = false;
         if ($filter = Mage::registry('filter')) {
-            $filteredIds = $collection->filterTree($filter['search']);
+            $searchFilteredIds = $collection->filterTreeByTitle($filter['search']);
+            $relatedProductsFilteredIds = $collection->filterTreeByRelatedProducts($filter['related_products']);
+            if(empty($relatedProductsFilteredIds)) {
+                $filteredIds = $searchFilteredIds;
+            } else {
+                $filteredIds = array();
+                foreach($relatedProductsFilteredIds as $filteredId) {
+                    if(in_array($filteredId, $searchFilteredIds)) {
+                        array_push($filteredIds, $filteredId);
+                    }
+                }
+            }
         }
         $collection->addOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
 
@@ -37,8 +48,18 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         $id = $book->getId();
         $xmlId = 'c_' . $id;
         $route = "mana_content/book/view";
-        $url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
-        $url = explode('?', $url)[0];
+        $params = array('_use_rewrite' => true, 'id' => $id, '_nosid' => true);
+        if ($filter = Mage::registry('filter')) {
+            $query = array();
+            if(!is_null($filter['search'])) {
+                $query['search'] = $filter['search'];
+            }
+            if(!empty($filter['related_products'])) {
+                $query['related_products'] = implode(",", $filter['related_products']);
+            }
+            $params['_query'] = $query;
+        }
+        $url = Mage::getUrl($route, $params);
 
         if(!is_array($filteredIds) || in_array($id, $filteredIds)) {
             $element->items->$xmlId->url = $url;

@@ -1,6 +1,6 @@
 Mana.define('Mana/Content/AjaxInterceptor', ['jquery', 'singleton:Mana/Core/Ajax',
-    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout'],
-function($, ajax, config, layout, undefined)
+    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout', 'singleton:Mana/Content/Filter'],
+function($, ajax, config, layout, filter, undefined)
 {
     return Mana.Object.extend('Mana/Content/AjaxInterceptor', {
         match: function (url, element) {
@@ -43,6 +43,7 @@ function($, ajax, config, layout, undefined)
             requesturl += '/' + url.substr(config.getData('url.base').length);
 
             ajax.get(requesturl, function (response) {
+                filter.loadFilterFromUrl();
                 ajax.update(response);
                 layout.getPageBlock().resize();
                 result = true;

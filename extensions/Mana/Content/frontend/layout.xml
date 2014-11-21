@@ -20,14 +20,15 @@
             <action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
             <action method="addJs"><script>jquery/history.js</script></action>
             <action method="addCss"><stylesheet>css/markdownpad-github.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/mana_content.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/mana/content.js</name><params/></action>
         </reference>
 
         <reference name="m_ajax_update">
 		    <action method="setRenderedButNotSentBlocks"><blocks>m_ajax_update,head</blocks></action>
-            <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,tree,breadcrumbs,right</updated_blocks></action>
-            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>tree</updated_blocks></action>
-            <action method="setInterceptedLinkContainers"><css_selector>.mb-search</css_selector></action>
+            <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,tree,breadcrumbs,right,filter_relatedproduct,search</updated_blocks></action>
+            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>tree,filter_relatedproduct,search</updated_blocks></action>
+            <action method="setInterceptedLinkContainers"><css_selector>.mb-search,.mb-filter-relatedproduct</css_selector></action>
 		</reference>
 
         <reference name="left">
@@ -36,6 +37,9 @@
             </block>
             <block type="mana_content/filter_search" name="search" as="search">
                 <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/Search</type></params></action>
+            </block>
+            <block type="mana_content/filter_relatedproduct" name="filter_relatedproduct" as="filter_relatedproduct">
+                <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/RelatedProduct</type></params></action>
             </block>
         </reference>
         <reference name="content">

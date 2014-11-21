@@ -152,7 +152,7 @@
             <ajax>
                 <url_key_filter>ajax/cms-book</url_key_filter>
                 <route_separator_filter>requested-url</route_separator_filter>
-                <containers>.mb-search,.mb-tree</containers>
+                <containers>.mb-search,.mb-tree,.mb-filter-relatedproduct</containers>
             </ajax>
         </mana_content>
     </default>

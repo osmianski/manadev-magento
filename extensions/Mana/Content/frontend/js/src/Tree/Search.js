@@ -1,9 +1,6 @@
-Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config'],
-function ($, Block, layout, config) {
+Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config', 'singleton:Mana/Content/Filter'],
+function ($, Block, layout, config, filter) {
     return Block.extend('Mana/Content/Tree/Search', {
-        _init: function() {
-            this._super();
-        },
         _subscribeToHtmlEvents: function () {
             var self = this;
             function _changed() {
@@ -18,6 +15,13 @@ function ($, Block, layout, config) {
                     this.$field().off('blur', _changed);
                 });
         },
+        _subscribeToBlockEvents: function () {
+            return this
+                ._super()
+                .on('load', this, function(){
+                    this.$field()[0].setValue(filter._searchValue);
+                })
+        },
         $field: function(){
             return this.$().find('input');
         },
@@ -28,11 +32,7 @@ function ($, Block, layout, config) {
             return layout.getBlock('tree');
         },
         changed: function() {
-            var url = config.getData('url.unfiltered');
-            if(this.$field()[0].getValue().length > 0) {
-                url += "?search="+ this.$field()[0].getValue();
-            }
-            this.$link()[0].href = url;
+            this.$link()[0].href = filter.setSearch(this.$field()[0].getValue());
         }
     });
 });
