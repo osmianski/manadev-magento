@@ -145,7 +145,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		}
 		foreach ($virtualIds as $key => $id) {
 		    if ($representingProductData[$key]['m_unit'] == 'virtual_percent') {
-                $result['qties'][$id] = ($productData['qty'] * $representingProductData[$key]['m_parts'] / 100) / $representingProductData[$key]['m_pack_qty'];
+                $qty = ($productData['qty'] * $representingProductData[$key]['m_parts'] / 100) / $representingProductData[$key]['m_pack_qty'];
+                $result['qties'][$id] = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
                 if (empty($productData['is_qty_decimal'])) {
                     $result['qties'][$id] = round($result['qties'][$id]);
                 }
