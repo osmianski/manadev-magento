@@ -12,6 +12,6 @@
 class Mana_Content_Block_Filter_Search extends Mage_Core_Block_Template {
 
     public function __construct() {
-        $this->setTemplate('mana/content/search.phtml');
+        $this->setTemplate('mana/content/filter/search.phtml');
     }
 }
