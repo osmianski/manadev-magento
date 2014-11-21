@@ -146,7 +146,7 @@
                 <save_mode>all</save_mode>
                 <default_title>Untitled Page</default_title>
                 <default_content>
-{{block type="mana_content/childPageLinks"}}
+{{block type="mana_content/book_childPageLinks"}}
                 </default_content>
             </book>
             <ajax>

@@ -34,20 +34,20 @@
             <block type="mana_content/tree" name="tree" as="tree">
                 <action method="setMClientSideBlock"><params><type>Mana/Content/Tree</type></params></action>
             </block>
-            <block type="mana_content/search" name="search" as="search">
+            <block type="mana_content/filter_search" name="search" as="search">
                 <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/Search</type></params></action>
             </block>
         </reference>
         <reference name="content">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-            <block type="mana_content/book" name="book" as="book"/>
+            <block type="mana_content/content" name="content" as="content"/>
         </reference>
         <reference name="breadcrumbs">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
         </reference>
         <reference name="right">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-            <block type="mana_content/product_related" name="related_product" as="related_product"/>
+            <block type="mana_content/book_related" name="related_product" as="related_product"/>
         </reference>
 
         <remove name="left.permanent.callout" />

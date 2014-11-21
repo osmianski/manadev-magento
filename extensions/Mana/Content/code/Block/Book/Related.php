@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Product_Related extends Mage_Catalog_Block_Product_List_Related {
+class Mana_Content_Block_Book_Related extends Mage_Catalog_Block_Product_List_Related {
     protected function _construct() {
         $this->setTemplate('mana/content/book/related.phtml');
     }

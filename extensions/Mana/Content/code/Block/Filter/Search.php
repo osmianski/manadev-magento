@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Search extends Mage_Core_Block_Template {
+class Mana_Content_Block_Filter_Search extends Mage_Core_Block_Template {
 
     public function __construct() {
         $this->setTemplate('mana/content/search.phtml');

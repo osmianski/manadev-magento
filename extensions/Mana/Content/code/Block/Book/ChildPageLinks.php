@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_ChildPageLinks extends Mage_Core_Block_Template {
+class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
     protected $_childPages = array();
 
     public function _construct() {
