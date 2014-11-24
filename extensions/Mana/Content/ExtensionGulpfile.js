@@ -16,6 +16,7 @@ module.exports = Extension.extend({
             'src/Filter.js',
             'src/Tree/Search.js',
             'src/Tree/RelatedProduct.js',
+            'src/Tree/Tag.js',
             'src/AjaxInterceptor.js'
         ]);
     }

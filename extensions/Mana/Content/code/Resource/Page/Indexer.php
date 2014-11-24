@@ -21,6 +21,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         $this->_calculateGlobalCustomSettings($options);
         $this->_calculateFinalGlobalSettings($options);
         $this->_calculateFinalStoreLevelSettings($options);
+        $this->_calculateTags($options);
     }
 
     public function reindexAll() {
@@ -141,7 +142,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 )",
                 'meta_keywords' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS)},
                     `p_scs`.`meta_keywords`,
-                    `p_gcs`.`meta_keywords`
+                    IF({$dbHelper->isCustom('p_gcs', Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS)},
+                        `p_gcs`.`meta_keywords`,
+                        `p_gcs`.`tags`
+                    )
                 )",
                 'meta_description' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_META_DESCRIPTION)},
                     `p_scs`.`meta_description`,
@@ -154,6 +158,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 'level' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_LEVEL)},
                     `p_scs`.`level`,
                     `p_gcs`.`level`
+                )",
+                'tags' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_TAGS)},
+                    `p_scs`.`tags`,
+                    `p_gcs`.`tags`
                 )",
             );
 
@@ -265,4 +273,101 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
 
 
     }
+
+    protected function _calculateTags($options) {
+        if (!isset($options['page_global_custom_settings_id']) &&
+            !isset($options['page_global_id']) &&
+            !isset($options['store_id']) &&
+            empty($options['reindex_all'])
+        ) {
+            return;
+        }
+
+        $db = $this->_getWriteAdapter();
+        $dbHelper = $this->dbHelper();
+        $tags = array();
+        $tagTable = $this->getTable('mana_content/page_tag');
+        $tagRelationTable = $this->getTable('mana_content/page_tagRelation');
+        $tagSummaryTable = $this->getTable('mana_content/page_tagSummary');
+
+        if(isset($options['page_global_custom_settings_id'])) {
+            $global_id = Mage::getModel('mana_content/page_global')->getGlobalId($options['page_global_custom_settings_id']);
+            $sql = "DELETE FROM {$tagRelationTable} WHERE page_store_id IN (SELECT id FROM {$this->getTable('mana_content/page_store')} WHERE page_global_id = {$global_id})";
+            $db->exec($sql);
+            $select = $db->select()
+                ->from($this->getTable('mana_content/page_globalCustomSettings'), array('tags'))
+                ->where('id = ?', $options['page_global_custom_settings_id']);
+            $tags = $this->contentHelper()->tagStringToArray($db->fetchOne($select));
+        } elseif(isset($options['page_global_id']) && isset($options['store_id'])) {
+            $global_id = $options['page_global_id'];
+            $store_id = $options['store_id'];
+            $cond = sprintf("page_global_id = %d AND store_id = %d", $options['page_global_id'], $options['store_id']);
+            $sql = "DELETE FROM {$tagRelationTable} WHERE page_store_id IN (SELECT id FROM {$this->getTable('mana_content/page_store')} WHERE page_global_id = {$global_id} AND store_id = {$store_id})";
+            $db->exec($sql);
+            $select = $db->select()
+                ->from($this->getTable('mana_content/page_store'), array('tags'))
+                ->where($cond);
+            $tags = $this->contentHelper()->tagStringToArray($db->fetchOne($select));
+        }
+        else{
+            $db->truncate($this->getTable('mana_content/page_tagRelation'));
+            $select = $db->select()->from($this->getTable('mana_content/page_store'), array('tags'));
+            $rows = $db->fetchAssoc($select);
+            $tags = array();
+            foreach($rows as $stringTag) {
+                $tags = array_unique($tags, $this->contentHelper()->tagStringToArray($stringTag));
+            }
+        }
+
+        foreach($tags as $tag) {
+            $db->insertOnDuplicate($tagTable, array('name' => $tag));
+        }
+        array_walk($tags, function(&$value, $key) {
+                $value = "'".$value."'";
+            });
+        if(count($tags) > 0) {
+            $select = $db->select()->from($tagTable, array('id'))->where("name IN (". implode(",", $tags) .")");
+            $tagIds = $db->fetchCol($select);
+        } else {
+            $tagIds = array();
+        }
+
+        foreach($tagIds as $tagId) {
+            $sql = "INSERT INTO {$tagRelationTable}(page_store_id, page_tag_id)
+        SELECT `mps`.id, {$tagId}
+        FROM {$this->getTable('mana_content/page_store')} AS `mps`";
+            if(isset($global_id)) {
+                $sql .= "
+            WHERE `mps`.page_global_id = {$global_id}
+            ";
+                if(isset($options['store_id'])) {
+                    $sql .= "
+                AND `mps`.`store_id` = {$options['store_id']}
+                ";
+                }
+            }
+            $db->exec($sql);
+        }
+
+        if(count($tagIds)) {
+            $sql = "DELETE FROM {$tagSummaryTable}";
+            $db->exec($sql);
+            $sql = "
+                INSERT INTO {$tagSummaryTable}(page_tag_id, store_id, popularity)
+                SELECT `mptr`.`page_tag_id`, `mps`.`store_id`, COUNT(*) AS `popularity`
+                FROM `{$tagRelationTable}` AS `mptr`
+                INNER JOIN `{$this->getTable('mana_content/page_store')}` AS `mps` ON `mptr`.`page_store_id` = `mps`.`id`
+                GROUP BY `mptr`.`page_tag_id`, `mps`.`store_id`
+                ";
+            $db->exec($sql);
+            $sql = "DELETE FROM {$tagTable} WHERE id NOT IN (SELECT DISTINCT page_tag_id FROM {$tagSummaryTable})";
+            $db->exec($sql);
+        }
+    }
+
+    #region Dependencies
+    public function contentHelper() {
+        return Mage::helper('mana_content');
+    }
+    #endregion
 }

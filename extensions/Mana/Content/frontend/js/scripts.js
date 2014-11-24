@@ -25,6 +25,7 @@ function ($, config) {
         loadFilterFromUrl: function () {
             this._searchValue = "";
             this._relatedProducts = [];
+            this._tags = [];
             var queryString = window.location.search;
             queryString = queryString.substr(1, queryString.length - 1);
             queryString = queryString.split('&');
@@ -38,12 +39,44 @@ function ($, config) {
                     case 'related_products':
                         this._relatedProducts = param[1].split(',').map(Number);
                         break;
+                    case 'tags':
+                        this._tags = param[1].split(',').map(Number);
+                        break;
                 }
             }
         },
         setSearch: function(searchValue) {
             this._searchValue = searchValue;
             return this.constructUrl();
+        },
+        getUrlIfTagSelected: function(tagId) {
+            var url = this.addTag(tagId);
+            this.removeTag(tagId);
+            return url;
+        },
+        getUrlIfTagNotSelected: function(tagId) {
+            var url = this.removeTag(tagId);
+            this.addTag(tagId);
+            return url;
+        },
+        addTag: function (tagId) {
+            if(!this.isTagSelected(tagId)) {
+                this._tags.push(tagId);
+            }
+            return this.constructUrl();
+        },
+        removeTag: function (tagId) {
+            var self = this;
+            $.each(this._tags, function(i) {
+                if(self._tags[i] == tagId) {
+                    self._tags.splice(i, 1);
+                    return;
+                }
+            });
+            return this.constructUrl();
+        },
+        isTagSelected: function (tagId) {
+            return $.inArray(tagId, this._tags) !== -1;
         },
         getUrlIfRelatedProductChecked: function(productId) {
             var url = this.addToRelatedProducts(productId);
@@ -87,7 +120,10 @@ function ($, config) {
             if(this._relatedProducts.length > 0) {
                 params.related_products = this._relatedProducts;
             }
-            if(params.search || params.related_products) {
+            if (this._tags.length > 0) {
+                params.tags = this._tags;
+            }
+            if(params.search || params.related_products || params.tags) {
                 url += "?";
                 var skipAnd = true;
                 $.each(params, function(i) {
@@ -154,6 +190,30 @@ function ($, Block, filter) {
                 link.addClass('m-checkbox-unchecked');
             }
             link[0].href = link.hasClass('m-checkbox-unchecked') ? filter.getUrlIfRelatedProductChecked(productId) : filter.getUrlIfRelatedProductUnchecked(productId);
+        },
+        _subscribeToBlockEvents: function () {
+            var self = this;
+
+            return this
+                ._super()
+                .on('load', this, function () {
+                    this.$().find('a').each(function(){
+                        self.setFilterUrl($(this));
+                    });
+                })
+        }
+    });
+});
+
+Mana.define('Mana/Content/Tree/Tag', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Content/Filter'],
+function ($, Block, filter) {
+    return Block.extend('Mana/Content/Tree/Tag', {
+        setFilterUrl: function (link) {
+            var tagId = link.data('mTagId');
+            if(filter.isTagSelected(tagId)) {
+                link.addClass('m-tag-selected');
+            }
+            link[0].href = !link.hasClass('m-tag-selected') ? filter.getUrlIfTagSelected(tagId) : filter.getUrlIfTagNotSelected(tagId);
         },
         _subscribeToBlockEvents: function () {
             var self = this;

@@ -674,6 +674,15 @@ function ($, Container, ajax, core, expression) {
                 field.setValue(this.getField('title').getValue());
             }
         },
+        onChangeTags: function() {
+            var field = this.getField('meta_keywords');
+            if (typeof field !== "undefined" && field.useDefault()) {
+                field.setValue(this.getField('tags').getValue());
+            }
+        },
+        onChangeMetaKeywords: function() {
+            this.onChangeTags();
+        },
         _isTemporaryId: function(id) {
             return id.charAt(0) === "n"
         },

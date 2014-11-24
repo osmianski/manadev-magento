@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Content>
-            <version>14.11.18.03</version>
+            <version>14.11.24.08</version>
         </Mana_Content>
     </modules>
     <global>
@@ -35,6 +35,9 @@
 					<page_store><table>m_page_store</table></page_store>
 					<page_storeCustomSettings><table>m_page_store_custom_settings</table></page_storeCustomSettings>
                     <page_relatedProduct><table>m_page_related_product</table></page_relatedProduct>
+                    <page_tag><table>m_page_tag</table></page_tag>
+                    <page_tagRelation><table>m_page_tag_relation</table></page_tagRelation>
+                    <page_tagSummary><table>m_page_tag_summary</table></page_tagSummary>
                 </entities>
             </mana_content_resources>
         </models>
@@ -152,7 +155,7 @@
             <ajax>
                 <url_key_filter>ajax/cms-book</url_key_filter>
                 <route_separator_filter>requested-url</route_separator_filter>
-                <containers>.mb-search,.mb-tree,.mb-filter-relatedproduct</containers>
+                <containers>.mb-search,.mb-tree,.mb-filter-relatedproduct,.mb-filter-tags</containers>
             </ajax>
         </mana_content>
     </default>

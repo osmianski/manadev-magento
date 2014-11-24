@@ -58,6 +58,18 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return array();
     }
 
+    public function filterTreeByTags($tags = array()) {
+        if(!empty($tags)) {
+            $read = $this->getConnection();
+            $select = $this->_prepareSelect();
+            $select->joinInner(array('mptr' => $this->getTable('mana_content/page_tagRelation')), "`mptr`.`page_store_id` = `mps`.`id`", array())
+                ->where("`mptr`.`page_tag_id` IN (". implode(",", $tags) .")");
+            $rows = $read->fetchAssoc($select);
+            return $this->loadWithParent($rows);
+        }
+        return array();
+    }
+
     private function _prepareSelect() {
         $read = $this->getConnection();
         $select = $read->select();

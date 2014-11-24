@@ -106,6 +106,23 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
             'required' => false,
 
             'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
+            'default_label' => $this->__('Use Tags'),
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $fieldsetTags = $this->addFieldset($form, 'mfs_tag', array(
+                'title' => $this->__('Tag'),
+                'legend' => $this->__('Tag'),
+            ));
+
+        $this->addField($fieldsetTags, 'tags', 'textarea', array(
+            'label' => $this->__('Tags'),
+            'title' => $this->__('Tags'),
+            'name' => 'tags',
+            'required' => false,
+            'note' => $this->__('Tags are comma separated'),
+
+            'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_TAGS,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 

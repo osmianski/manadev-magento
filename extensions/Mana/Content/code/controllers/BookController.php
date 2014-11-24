@@ -21,9 +21,12 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
 
             $related_products = !is_null($this->getRequest()->getParam('related_products')) ? explode(",", $this->getRequest()->getParam('related_products')) : array();
+            $tags = !is_null($this->getRequest()->getParam('tags')) ? explode(",", $this->getRequest()->getParam('tags')) : array();
+
             $filter = array(
                 'search' => $this->getRequest()->getParam('search'),
                 'related_products' => $related_products,
+                'tags' => $tags,
             );
             Mage::register('filter', $filter);
 

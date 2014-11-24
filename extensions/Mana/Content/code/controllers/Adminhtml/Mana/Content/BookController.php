@@ -412,6 +412,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             $model->getValidator()->ignoreRule('unique');
                         }
                         $model->validate();
+                        Mage::getModel('mana_content/page_tag')->validateTag($fields['tags']['value']);
                     } catch (Mana_Core_Exception_Validation $e) {
                         foreach ($e->getErrors() as $error) {
                             if(!$messagePerRecord[$id]) {

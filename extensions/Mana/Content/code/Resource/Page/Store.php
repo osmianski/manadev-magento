@@ -162,6 +162,7 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
                     'meta_keywords' => "`mps`.`meta_keywords`",
                     'meta_description' => "`mps`.`meta_description`",
                     'position' => "`mps`.`position`",
+                    'tags' => "`mps`.`tags`",
                 )
             );
         }

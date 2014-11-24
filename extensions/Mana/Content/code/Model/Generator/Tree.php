@@ -22,15 +22,13 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         if ($filter = Mage::registry('filter')) {
             $searchFilteredIds = $collection->filterTreeByTitle($filter['search']);
             $relatedProductsFilteredIds = $collection->filterTreeByRelatedProducts($filter['related_products']);
-            if(empty($relatedProductsFilteredIds)) {
-                $filteredIds = $searchFilteredIds;
-            } else {
-                $filteredIds = array();
-                foreach($relatedProductsFilteredIds as $filteredId) {
-                    if(in_array($filteredId, $searchFilteredIds)) {
-                        array_push($filteredIds, $filteredId);
-                    }
-                }
+            $tagsFilteredIds = $collection->filterTreeByTags($filter['tags']);
+            $filteredIds = $searchFilteredIds;
+            if(!empty($relatedProductsFilteredIds)) {
+                $filteredIds = array_intersect($filteredIds, $relatedProductsFilteredIds);
+            }
+            if(!empty($tagsFilteredIds)) {
+                $filteredIds = array_intersect($filteredIds, $tagsFilteredIds);
             }
         }
         $collection->addOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);

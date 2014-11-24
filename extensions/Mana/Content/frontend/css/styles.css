@@ -10,5 +10,5 @@ ol.m-content-css-checkboxes li a.m-checkbox-unchecked:hover { background: transp
 ol.m-content-css-checkboxes li a.m-checkbox-checked:hover { background: transparent url(../images/mana_content/checkbox_checked_hover.png) 0 0 no-repeat; }
 ol.m-content-css-checkboxes li a.m-checkbox-unchecked,
 ol.m-content-css-checkboxes li a.m-checkbox-checked { padding-left: 20px; text-decoration: none; }
-
+ul.tags-list li a.m-tag-selected { font-weight:900 }
 .m-filter-checkboxes li input { margin-right: 5px; position: relative; bottom: 2px; }
