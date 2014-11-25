@@ -20,9 +20,10 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         $collection->setParentFilter(null);
         $filteredIds = false;
         if ($filter = Mage::registry('filter')) {
-            $searchFilteredIds = $collection->filterTreeByTitle($filter['search']);
-            $relatedProductsFilteredIds = $collection->filterTreeByRelatedProducts($filter['related_products']);
-            $tagsFilteredIds = $collection->filterTreeByTags($filter['tags']);
+            $filterCollection = $this->_getCollection();
+            $searchFilteredIds = $filterCollection->filterTreeByTitle($filter['search']);
+            $relatedProductsFilteredIds = $filterCollection->filterTreeByRelatedProducts($filter['related_products']);
+            $tagsFilteredIds = $filterCollection->filterTreeByTags($filter['tags']);
             $filteredIds = $searchFilteredIds;
             if(!empty($relatedProductsFilteredIds)) {
                 $filteredIds = array_intersect($filteredIds, $relatedProductsFilteredIds);

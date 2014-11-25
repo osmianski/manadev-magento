@@ -41,7 +41,9 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
     public function filterTreeByTitle($search) {
         $read = $this->getConnection();
         $select = $this->_prepareSelect();
-        $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
+        if(trim($search) != "") {
+            $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
+        }
         $rows = $read->fetchAssoc($select);
         return $this->loadWithParent($rows);
     }
@@ -88,6 +90,15 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         $select->joinInner(array('mpg' => $this->getTable('mana_content/page_global')), "`mpg`.`id` = `mps`.`page_global_id`", array());
         $select->joinInner(array('mpgcs' => $this->getTable('mana_content/page_globalCustomSettings')), "`mpg`.`page_global_custom_settings_id` = `mpgcs`.`id`", array());
         $select->where("`store_id` = ?", Mage::app()->getStore()->getId());
+
+        // add parent condition
+        if ($this->_parentFilterEnabled) {
+            if ($this->_parentId === null) {
+                $select->where("`mpgcs`.`parent_id` IS NULL");
+            } else {
+                $select->where("`mpgcs`.`parent_id` = ?", $this->_parentId);
+            }
+        }
         return $select;
     }
 
@@ -107,7 +118,9 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
                 $parent_ids = array();
                 $parentRows = $this->getConnection()->fetchAssoc($select);
                 foreach($parentRows as $parentId => $parentRow) {
-                    array_push($ids, $parentId);
+                    if(!in_array($parentId, $ids)) {
+                        array_push($ids, $parentId);
+                    }
                     array_push($parent_ids, $parentRow['parent_id']);
                 }
             }
