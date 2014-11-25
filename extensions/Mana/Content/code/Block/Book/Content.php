@@ -35,4 +35,8 @@ class Mana_Content_Block_Book_Content extends Mage_Core_Block_Template {
         return Mage::registry('current_book_page');
     }
 
+    public function getTitle() {
+        return $this->getCurrentBookPage()->getTitle();
+    }
+
 }

@@ -47,7 +47,7 @@
         </reference>
         <reference name="content">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-            <block type="mana_content/content" name="content" as="content"/>
+            <block type="mana_content/book_content" name="book_content" as="book_content"/>
         </reference>
         <reference name="breadcrumbs">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
