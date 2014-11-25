@@ -19,7 +19,7 @@
         <reference name="head">
             <action method="addJs"><script>jquery/history.adapter.jquery.js</script></action>
             <action method="addJs"><script>jquery/history.js</script></action>
-            <action method="addCss"><stylesheet>css/markdownpad-github.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/mana_content.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/mana/content.js</name><params/></action>
         </reference>
