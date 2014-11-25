@@ -70,7 +70,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return array();
     }
 
-    private function _prepareSelect() {
+    protected function _prepareSelect() {
         $read = $this->getConnection();
         $select = $read->select();
 
