@@ -8,4 +8,5 @@
     <part name="Mana/Menu"/>
     <part name="Mana/Content"/>
     <part name="ManaPro/Content"/>
+    <part name="Mana/Ajax"/>
 </config>

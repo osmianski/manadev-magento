@@ -7,4 +7,5 @@
     <part name="Mana/Seo"/>
     <part name="Mana/Menu"/>
     <part name="Mana/Content"/>
+    <part name="Mana/Ajax"/>
 </config>
