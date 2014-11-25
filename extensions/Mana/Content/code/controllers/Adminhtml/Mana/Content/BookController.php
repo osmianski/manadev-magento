@@ -472,7 +472,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             $current_id = $this->getRequest()->getParam('id');
         }
         $savedRelatedProductIds = array();
-        if(substr($current_id, 0, 1) != "n") {
+        if (!is_null($current_id) && substr($current_id, 0, 1) != "n") {
             $savedRelatedProductIds = Mage::getModel('catalog/product')->getCollection()
                 ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $current_id)
                 ->getAllIds();
