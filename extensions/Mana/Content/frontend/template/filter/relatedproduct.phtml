@@ -12,6 +12,9 @@
 /* @var $this Mana_Content_Block_Filter_RelatedProduct */
 
 ?>
+<?php
+if($this->getItems()->getSize() > 0):
+?>
 <div class="block m-container">
     <div class="block-title">Related Product Filter</div>
     <div class="block-content">
@@ -27,4 +30,4 @@
         </ol>
     </div>
 </div>
-
+<?php endif ?>
