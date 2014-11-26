@@ -15,7 +15,7 @@ class Mana_Content_Helper_PageType_Book extends Mana_Core_Helper_PageType {
     }
 
     public function getRoutePath() {
-        return 'content/book/view';
+        return 'mana_content/book/view';
     }
 
     public function getSuffixHistoryType() {

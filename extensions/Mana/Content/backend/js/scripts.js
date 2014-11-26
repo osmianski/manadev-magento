@@ -39,8 +39,8 @@ function ($, Container)
 });
 
 
-Mana.define('Mana/Content/Book/Tree', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Json'],
-function ($, Block, json)
+Mana.define('Mana/Content/Book/Tree', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Json', 'singleton:Mana/Core/Layout'],
+function ($, Block, json, layout)
 {
     return Block.extend('Mana/Content/Book/Tree', {
         _subscribeToHtmlEvents: function() {
@@ -51,10 +51,22 @@ function ($, Block, json)
                     if(options.core.data.id == null) {
                         options.core.data.id = "n" + this.createGuid();
                     }
+                    var container = this.$container();
+                    container.startingId = options.core.data.id;
+                    var self = this;
 
                     options.core.check_callback = function (op, node, par, pos, more) {
-                        if(more && more.dnd && (op === 'move_node') && par.id == "#") {
-                            return false;
+                        if(more && more.dnd && (op === 'move_node' || op === 'copy_node')) {
+                            if(
+                                // Parent should not be moved/copied
+                                par.id == "#" ||
+                                // Only nodes without children (leaf nodes) are able to make a copy and reference
+                                (((op === 'move_node' && container.triggerReference) || op === 'copy_node') && node.children.length > 0) ||
+                                // Do not allow reference pages and referenced pages(original page that has reference) to have children
+                                (op === 'move_node' || op === 'copy_node') && self.isTargetReferencePage(par)
+                                ) {
+                                return false;
+                            }
                           }
                           return true;
                     };
@@ -62,6 +74,18 @@ function ($, Block, json)
                 })
                 .on('unbind', this, function () {
                 });
+        },
+        isTargetReferencePage: function (target) {
+            var reference_pages = this.$container().reference_pages;
+            for(var i in reference_pages) {
+                if(reference_pages[i].id == target.id || reference_pages[i].reference_id == target.id) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        $container: function() {
+            return layout.getBlock('container');
         },
         getOptions: function() {
             var options = {
@@ -157,6 +181,10 @@ function ($, Container, ajax, core, expression) {
                 deleted: {}
             };
             this.errorPerRecord = {};
+            this.triggerReference = false;
+            this.revertPosition = false;
+            this.useReferenceInsteadOfCopy = false;
+            this.startingId = false;
             var self = this;
             $.each(this.$jsTreeElement().find("li.jstree-node"), function() {
                 self._setNodeColor(false, $(this).attr("id"));
@@ -179,8 +207,12 @@ function ($, Container, ajax, core, expression) {
                     isDefault: 1
                 };
 
-                this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
-                this.getField('is_active').setValue('1');
+                if(this.getField('url_key')) {
+                    this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
+                }
+                if(this.getField('is_active')) {
+                    this.getField('is_active').setValue('1');
+                }
             }
         },
         _subscribeToHtmlEvents: function() {
@@ -195,7 +227,9 @@ function ($, Container, ajax, core, expression) {
                     ajax.post(self.getUrl('load'), params, function (response) {
                         if (core.isString(response)) {
                             var activeTab = self.$varienTab().activeTab;
+                            var reference_pages = self.reference_pages;
                             self.setContent(response);
+                            self.reference_pages = reference_pages;
                             var msg = (self.errorPerRecord[params.id]) ? self.errorPerRecord[params.id] : "";
                             ajax.update({updates: {'#messages': msg}});
 
@@ -212,7 +246,7 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
-                            if(typeof wysiwygmf_content_content !== "undefined") {
+                            if(typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
                             }
@@ -234,30 +268,77 @@ function ($, Container, ajax, core, expression) {
             };
 
             var jsTreeMoveNode = function(e, data) {
-                var id = data.node.id;
-                var record = self.initChangesObj(id);
+                var record;
+                if(self.triggerReference) {
+                    self.triggerReference = false;
+                    self.revertPosition = true;
+                    self.useReferenceInsteadOfCopy = true;
+                    self.$jsTree().move_node(data.node.id, data.old_parent, data.old_position);
+                    self.$jsTree().copy_node(data.node.id, data.parent, data.position);
+                } else {
+                    var id = data.node.id;
+                    record = self.initChangesObj(id);
 
-                record.parent_id = {
-                    value: data.node.parent,
-                    isDefault: 0
-                };
-                record.position = {
-                    value: data.position,
-                    isDefault: 0
-                };
-
-                self.$jsTree().deselect_all();
-                self.$jsTree().select_node(data.node.id);
-                self.$jsTree().open_node(data.node.id);
-                self._postAction("modify");
-
-                $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
-                    var child = self.initChangesObj(childDOM.id);
-                    child.position = {
-                        value: index,
+                    record.parent_id = {
+                        value: data.node.parent,
                         isDefault: 0
                     };
+                    record.position = {
+                        value: data.position,
+                        isDefault: 0
+                    };
+
+                    if(!self.revertPosition) {
+                        self.$jsTree().deselect_all();
+                        self.$jsTree().select_node(data.node.id);
+                        self.$jsTree().open_node(data.node.id);
+                        self._postAction("modify");
+                    }
+                    self.revertPosition = false;
+
+                    $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
+                        var child = self.initChangesObj(childDOM.id);
+                        child.position = {
+                            value: index,
+                            isDefault: 0
+                        };
+                    });
+                }
+            };
+
+            var jsTreeCopyNode = function (e, data) {
+                var id;
+                if (self._isTemporaryId(data.original.id)) {
+                    var obj = self.initChangesObj(data.original.id);
+                    id = (obj.reference_id.value) ? obj.reference_id.value : obj.id.value;
+                } else {
+                    id = data.original.id;
+                }
+                var params = {
+                    form_key: FORM_KEY,
+                    id: id
+                };
+                ajax.post(self.getUrl('getRecord'), params, function (response) {
+                    var record = $.extend({}, response.data);
+                    var copiedRecordId = (record.reference_id.value) ? record.reference_id : record.id;
+                    delete record.id;
+                    record = self.createNewRecord(record);
+                    record.parent_id = {value: data.parent, isDefault: 1};
+                    record.position = {value: data.position, isDefault: 1};
+                    if(self.useReferenceInsteadOfCopy) {
+                        self.useReferenceInsteadOfCopy = false;
+                        record.reference_id = copiedRecordId;
+                         self.reference_pages.push({id: record.id.value, reference_id: record.reference_id.value});
+                    }
+                    self.$jsTree().set_id(data.node.id, record.id.value);
+                    self._setNodeColor("green", record.id.value);
+                    self.$jsTree().deselect_all();
+                    self.$jsTree().select_node(record.id.value);
                 });
+            };
+
+            var jsTreeDndMove = function(e, data) {
+                self.triggerReference = data.event.altKey;
             };
 
             return this._super()
@@ -266,17 +347,40 @@ function ($, Container, ajax, core, expression) {
                     this.$jsTreeElement().on('close_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().on('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().on('move_node.jstree', jsTreeMoveNode);
+                    this.$jsTreeElement().on('copy_node.jstree', jsTreeCopyNode);
+                    $(document).on('dnd_move.vakata', jsTreeDndMove);
                     this.setDeleteButtonText();
+                    this.reference_pages = this.$().data('reference-pages');
                 })
                 .on('unbind', this, function() {
                     this.$jsTreeElement().off('changed.jstree', jsTreeChanged);
                     this.$jsTreeElement().off('close_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().off('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().off('move_node.jstree', jsTreeMoveNode);
+                    this.$jsTreeElement().off('copy_node.jstree', jsTreeCopyNode);
+                    $(document).off('dnd_move.vakata', jsTreeDndMove);
                 })
         },
         isOnRootNode: function() {
             return this.getUrlParam('id') === this.getCurrentId();
+        },
+        isReferencePage: function () {
+            var reference_id = this.getField('reference_id').getValue();
+            return reference_id !== "";
+        },
+        disableFieldsIfReferencePage: function () {
+            if(this.isReferencePage()) {
+                var self = this;
+                $.each(this.getFields(), function (fieldName) {
+                    var field = self.getField(fieldName);
+                    // if the field is one of the watchedClasses, bind fieldChanged event
+                    field.disable();
+                    field.$useDefault().parent().hide();
+                    if(typeof field.$picker !== "undefined") {
+                        field.$picker().hide();
+                    }
+                });
+            }
         },
         setDeleteButtonText: function() {
             if(this.isOnRootNode() && !this.getUrlParam('store')) {
@@ -319,6 +423,11 @@ function ($, Container, ajax, core, expression) {
             }
             return false;
         },
+        goToOriginalPage: function () {
+            var reference_id = this.getField('reference_id').getValue();
+            this.$jsTree().deselect_all();
+            this.$jsTree().select_node(reference_id);
+        },
         _subscribeToBlockEvents: function () {
             var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg'];
             return this
@@ -335,8 +444,10 @@ function ($, Container, ajax, core, expression) {
 
                     if (this.getChild('create')) this.getChild('create').on('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteNode);
+                    if (this.getChild('goToOriginal')) this.getChild('goToOriginal').on('click', this, this.goToOriginalPage);
                     this.setDefaultValuesToChanges();
                     this._initOriginalFields(false);
+                    this.disableFieldsIfReferencePage();
                 })
                 .on('unload', this, function () {
                     var that = this;
@@ -351,6 +462,7 @@ function ($, Container, ajax, core, expression) {
 
                     if (this.getChild('create')) this.getChild('create').off('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').off('click', this, this.deleteNode);
+                    if (this.getChild('goToOriginal')) this.getChild('goToOriginal').off('click', this, this.goToOriginalPage);
                 });
         },
         _afterSave: function(response) {
@@ -360,6 +472,14 @@ function ($, Container, ajax, core, expression) {
             }
             for(var tmpId in newIds) {
                 this.$jsTree().set_id(tmpId, newIds[tmpId]);
+                for(var i in this.reference_pages) {
+                    if(this.reference_pages[i].id == tmpId) {
+                        this.reference_pages[i].id == newIds[tmpId];
+                    }
+                    if (this.reference_pages[i].reference_id == tmpId) {
+                        this.reference_pages[i].reference_id == newIds[tmpId];
+                    }
+                }
             }
 
             for(var id in this._changes.deleted) {
@@ -386,16 +506,10 @@ function ($, Container, ajax, core, expression) {
                 rootPageId: this.getUrlParam('id')
             };
         },
-        createChildNode: function() {
-            var node = {
-                id: "n" + this.createGuid(),
-                text: this.getText('default-title')
-            };
-            var record = this.initChangesObj(node.id);
-            record['id'] = {
-                value: node.id,
-                isDefault: 1
-            };
+        createNewRecord: function (recordData) {
+            recordData = (recordData) ? recordData : {};
+            recordData.id = (recordData.id) ? recordData.id : {value: "n" + this.createGuid(), isDefault: 1};
+            var record = this.initChangesObj(recordData.id.value);
             record['title'] = {
                 value: this.getText('default-title'),
                 isDefault: 1
@@ -411,6 +525,14 @@ function ($, Container, ajax, core, expression) {
             record['parent_id'] = {
                 value: this.getCurrentId(),
                 isDefault: 1
+            };
+            return $.extend(record, recordData);
+        },
+        createChildNode: function() {
+            var record = this.createNewRecord();
+            var node = {
+                id: record.id.value,
+                text: record.title.value
             };
             var obj = this.$jsTree().create_node(this.getCurrentId(), node);
             this.$jsTree().deselect_all();
@@ -434,7 +556,11 @@ function ($, Container, ajax, core, expression) {
             return window[this.$().data('tab-id') + 'JsTabs'];
         },
         getCurrentId: function() {
-            return this.$jsTree().get_selected()[0];
+            if(typeof this.$jsTree().get_selected()[0] === "undefined") {
+                return this.startingId;
+            } else {
+                return this.$jsTree().get_selected()[0];
+            }
         },
         initChangesObj: function (id) {
             if(id === undefined) {
@@ -443,11 +569,13 @@ function ($, Container, ajax, core, expression) {
             if(this._isTemporaryId(id)) {
                 if (!this._changes.created[id]) {
                     this._changes.created[id] = {};
+                    this._changes.created[id].related_products = [];
                 }
                 return this._changes.created[id];
             } else {
                 if (!this._changes.modified[id]) {
                     this._changes.modified[id] = {};
+                    this._changes.modified[id].related_products = [];
                 }
                 return this._changes.modified[id];
             }
@@ -460,6 +588,27 @@ function ($, Container, ajax, core, expression) {
                 }
             }
             return false;
+        },
+        setToBlackIfNoChanges: function () {
+            var obj = this.initChangesObj();
+
+            if (typeof this._originalFields !== "undefined" && !this._isTemporaryId(this.getCurrentId())) {
+                for (var i in obj) {
+                    var originalField = this._originalFields[this.getCurrentId()][i];
+                    if (typeof originalField !== "undefined" &&
+                        originalField.value === obj[i].value &&
+                        originalField.useDefault === obj[i].isDefault) {
+                        if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
+                            delete this._changes.modified[this.getCurrentId()][i];
+                        }
+                    }
+                }
+                var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
+                if (count == 0) {
+                    delete this._changes.modified[this.getCurrentId()];
+                    this._setNodeColor("black");
+                }
+            }
         },
         fieldChanged: function (e) {
             var strField = e.target.getName();
@@ -481,31 +630,21 @@ function ($, Container, ajax, core, expression) {
                 this[fieldChangeFunction]();
             }
             this._postAction("modify");
-
-            var obj = this.initChangesObj();
-
-            if(typeof this._originalFields !== "undefined" && !this._isTemporaryId(this.getCurrentId())) {
-                for(var i in obj) {
-                    var originalField = this._originalFields[this.getCurrentId()][i];
-                    if (originalField.value === obj[i].value && originalField.useDefault === obj[i].isDefault) {
-                        if (typeof this._changes.modified[this.getCurrentId()][i] !== "undefined") {
-                            delete this._changes.modified[this.getCurrentId()][i];
-                        }
-                    }
-                }
-                var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
-                if(count == 0) {
-                    delete this._changes.modified[this.getCurrentId()];
-                    this._setNodeColor("black");
-                }
-            }
+            this.setToBlackIfNoChanges();
         },
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
+            var url_key = expression.seoify(title);
             if(typeof field !== "undefined" && field.useDefault()) {
-                var url_key = expression.seoify(title);
                 field.setValue(url_key);
+            }
+            if(typeof field === "undefined") {
+                this.initChangesObj()['url_key'] = {
+                    value: url_key,
+                    isDefault: 1
+                };
+                this.setToBlackIfNoChanges();
             }
         },
         onChangeTitle: function() {
@@ -522,6 +661,11 @@ function ($, Container, ajax, core, expression) {
             this.onChangeMetaTitle();
 
             this.$jsTree().rename_node(obj, title);
+            for(var i in this.reference_pages) {
+                if(this.reference_pages[i].reference_id == obj) {
+                    this.$jsTree().rename_node(this.reference_pages[i], title);
+                }
+            }
             this.$().find("div.content-header tr:first h3.head-empty")[0].innerHTML = field.getValue() + " - Book";
         },
         onChangeMetaTitle: function() {
@@ -529,6 +673,15 @@ function ($, Container, ajax, core, expression) {
             if (typeof field !== "undefined" && field.useDefault()) {
                 field.setValue(this.getField('title').getValue());
             }
+        },
+        onChangeTags: function() {
+            var field = this.getField('meta_keywords');
+            if (typeof field !== "undefined" && field.useDefault()) {
+                field.setValue(this.getField('tags').getValue());
+            }
+        },
+        onChangeMetaKeywords: function() {
+            this.onChangeTags();
         },
         _isTemporaryId: function(id) {
             return id.charAt(0) === "n"
@@ -590,6 +743,83 @@ Mana.define('Mana/Content/Book/TabContainer/Store',
 ['jquery', 'Mana/Content/Book/TabContainer'],
 function ($, TabContainer) {
     return TabContainer.extend('Mana/Content/Book/TabContainer/Store', {
+    });
+});
+
+Mana.define('Mana/Content/Book/RelatedProductGrid', ['jquery', 'Mana/Admin/Grid', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'],
+function ($, Grid, layout, ajax)
+{
+    return Grid.extend('Mana/Content/Book/RelatedProductGrid', {
+        _subscribeToBlockEvents: function() {
+            return this._super()
+                .on('load', this, function () {
+                    if (this.getChild('add-related-products')) this.getChild('add-related-products').on('click', this, this.openRelatedProductGrid);
+                    if (this.getChild('remove-selected')) this.getChild('remove-selected').on('click', this, this.removeSelected);
+                })
+                .on('unload', this, function () {
+                    if (this.getChild('add-related-products')) this.getChild('add-related-products').off('click', this, this.openRelatedProductGrid);
+                    if (this.getChild('remove-selected')) this.getChild('remove-selected').off('click', this, this.removeSelected);
+                })
+        },
+        addToRelatedProductChanges: function (ids) {
+            this.$tabContainer().initChangesObj().related_products = $.merge(this.$tabContainer().initChangesObj().related_products, ids);
+        },
+        removeFromRelatedProductChanges: function(ids) {
+            var current_ids = this.$tabContainer().initChangesObj().related_products;
+            $.each(ids, function(i) {
+                var index = current_ids.indexOf(ids[i]);
+                if(index !== -1) {
+                    current_ids.splice(index, 1);
+                } else {
+                    if(current_ids.indexOf("-"+ids[i]) === -1) {
+                        current_ids.push("-"+ids[i]);
+                    }
+                }
+            });
+        },
+        removeSelected: function () {
+            var rows = this.getRows();
+            var ids = [];
+            $.each(rows, function(i) {
+                if($(rows[i].getCell(0).getElement()).find("input")[0].checked) {
+                    ids.push($(rows[i].getCell(1).getElement())[0].innerText);
+                }
+            });
+            if (rows.length > 0) {
+                this.removeFromRelatedProductChanges(ids);
+                this.$tabContainer()._postAction("modify");
+                this._varienGrid.reload();
+            }
+        },
+        openRelatedProductGrid: function () {
+            this._updateReloadParams();
+            var self = this;
+            $.mChooseProducts({
+                url: this.$tabContainer().getUrl('related-product-grid-selection') + "?isAjax=true",
+                params:function () {
+                    return {
+                        'changes_related_products': self.$tabContainer().initChangesObj().related_products || {},
+                        'id': self.$tabContainer().getCurrentId()
+                    };
+                },
+                result:function (ids) {
+                    if(ids) {
+                        self.addToRelatedProductChanges(ids);
+                        self.$tabContainer()._postAction("modify");
+                        self._varienGrid.reload();
+                    }
+                }
+            });
+
+        },
+        $tabContainer: function() {
+            return layout.getBlock('container');
+        },
+        _updateReloadParams: function() {
+            this._super();
+            this._varienGrid.reloadParams.id = this.$tabContainer().getCurrentId();
+            this._varienGrid.reloadParams.related_product_ids = this.$tabContainer().initChangesObj().related_products;
+        }
     });
 });
 

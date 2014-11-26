@@ -46,6 +46,9 @@ class Mana_Seo_Model_Observer {
             elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view') {
                 $renderCanonicalUrl = $schema->getCanonicalOptionPage();
             }
+            elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view') {
+                $renderCanonicalUrl = $schema->getCanonicalBookPage();
+            }
 
             if ($renderCanonicalUrl) {
                 $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true,

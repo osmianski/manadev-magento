@@ -19,6 +19,17 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
+
+            $related_products = !is_null($this->getRequest()->getParam('related_products')) ? explode(",", $this->getRequest()->getParam('related_products')) : array();
+            $tags = !is_null($this->getRequest()->getParam('tags')) ? explode(",", $this->getRequest()->getParam('tags')) : array();
+
+            $filter = array(
+                'search' => $this->getRequest()->getParam('search'),
+                'related_products' => $related_products,
+                'tags' => $tags,
+            );
+            Mage::register('filter', $filter);
+
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {
                 $this->getLayout()->getUpdate()->addUpdate($layoutXml);
@@ -32,6 +43,12 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
                 $head->setTitle($bookPage->getTitle());
                 $head->setKeywords($bookPage->getMetaKeywords());
                 $head->setDescription($bookPage->getMetaDescription());
+                if($canonicalUrl = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePageUrl($bookPage->getId())) {
+                    $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true);
+                    $url = explode('?', Mage::getUrl('*/*/*', $params))[0];;
+                    $head->removeItem('link_rel', $url);
+                    $head->addLinkRel('canonical', $canonicalUrl);
+                }
             }
             if ($pageLayout = $bookPage->getData('page_layout')) {
                 $this->pageLayoutHelper()->applyTemplate($pageLayout);
@@ -45,7 +62,7 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
                 $crumbs = $bookPage->getParentPages();
                 for($x = count($crumbs)-1; $x >= 0; $x--) {
                     $breadCrumb = $crumbs[$x]['title'];
-                    $route = "content/book/view";
+                    $route = "mana_content/book/view";
                     $link = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $crumbs[$x]['id']));
                     $breadcrumbs->addCrumb($breadCrumb, array('label' => $breadCrumb, 'title' => $breadCrumb, 'link' => $link));
                 }

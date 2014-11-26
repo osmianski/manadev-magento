@@ -9,10 +9,10 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Book extends Mage_Core_Block_Template {
+class Mana_Content_Block_Book_Content extends Mage_Core_Block_Template {
 
     public function __construct() {
-        $this->setTemplate('mana/content/book/book.phtml');
+        $this->setTemplate('mana/content/book/content.phtml');
     }
 
     public function parseContent() {
@@ -33,6 +33,10 @@ class Mana_Content_Block_Book extends Mage_Core_Block_Template {
      */
     public function getCurrentBookPage() {
         return Mage::registry('current_book_page');
+    }
+
+    public function getTitle() {
+        return $this->getCurrentBookPage()->getTitle();
     }
 
 }

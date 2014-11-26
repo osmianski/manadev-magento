@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Content>
-            <version>14.11.14.16</version>
+            <version>14.11.24.08</version>
         </Mana_Content>
     </modules>
     <global>
@@ -34,6 +34,10 @@
 					<page_globalCustomSettings><table>m_page_global_custom_settings</table></page_globalCustomSettings>
 					<page_store><table>m_page_store</table></page_store>
 					<page_storeCustomSettings><table>m_page_store_custom_settings</table></page_storeCustomSettings>
+                    <page_relatedProduct><table>m_page_related_product</table></page_relatedProduct>
+                    <page_tag><table>m_page_tag</table></page_tag>
+                    <page_tagRelation><table>m_page_tag_relation</table></page_tagRelation>
+                    <page_tagSummary><table>m_page_tag_summary</table></page_tagSummary>
                 </entities>
             </mana_content_resources>
         </models>
@@ -61,6 +65,18 @@
                 </mana_seo_url>
             </indexer>
         </index>
+        <events>
+            <m_ajax_options><!-- this is event name this module listens for -->
+                <observers>
+                    <mana_content>
+                        <class>mana_content/observer</class>
+                        <!-- model name of class containing event handler methods -->
+                        <method>setAjaxData</method>
+                        <!-- event handler method name -->
+                    </mana_content>
+                </observers>
+            </m_ajax_options>
+        </events>
     </global>
     <adminhtml>
         <translate>
@@ -86,7 +102,7 @@
                 <use>standard</use>
                 <args>
                     <module>Mana_Content</module>
-                    <frontName>content</frontName>
+                    <frontName>mana_content</frontName>
                 </args>
             </mana_content>
         </routers>
@@ -116,6 +132,12 @@
                 <seo_helper>mana_content/pageType_book</seo_helper>
             </book_page>
         </page_types>
+        <routers>
+            <mana_content>
+                <class>Mana_Content_Router</class>
+                <sort_order>100</sort_order>
+            </mana_content>
+        </routers>
     </mana_core>
     <default>
         <mana_content>
@@ -127,9 +149,14 @@
                 <save_mode>all</save_mode>
                 <default_title>Untitled Page</default_title>
                 <default_content>
-{{block type="mana_content/childPageLinks"}}
+{{block type="mana_content/book_childPageLinks"}}
                 </default_content>
             </book>
+            <ajax>
+                <url_key_filter>ajax/cms-book</url_key_filter>
+                <route_separator_filter>requested-url</route_separator_filter>
+                <containers>.mb-search,.mb-tree,.mb-filter-relatedproduct,.mb-filter-tags</containers>
+            </ajax>
         </mana_content>
     </default>
 </config>

@@ -60,10 +60,14 @@ class Mana_Content_Block_Adminhtml_Book_ContentForm extends Mana_Content_Block_A
         ));
 
         $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig(
-            array('tab_id' => $this->getTabId())
+            array(
+                'tab_id' => $this->getTabId()
+            )
         );
 
-        $contentField = $fieldset->addField('content', 'editor', array(
+        $contentFieldType = is_null($this->getFlatModel()->getData('reference_id')) ? 'editor': 'textarea';
+
+        $contentField = $fieldset->addField('content', $contentFieldType, array(
             'name'      => 'content',
             'style'     => 'height:36em;',
             'required'  => true,
@@ -72,6 +76,10 @@ class Mana_Content_Block_Adminhtml_Book_ContentForm extends Mana_Content_Block_A
 
             'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_CONTENT,
             'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'reference_id', 'hidden', array(
+            'name'      => 'reference_id',
         ));
 
         // Setting custom renderer for content field to remove label column

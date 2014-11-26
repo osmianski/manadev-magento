@@ -1,4 +1,3 @@
-<?php
 /**
  * @category    Mana
  * @package     Mana_Content
@@ -6,10 +5,6 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 
-/* @var $this Mana_Content_Block_Book */
-?>
-<div class="std">
-    <div class="mana_content">
-        <?php echo $this->parseContent(); ?>
-    </div>
-</div>
+; // for better JS merging
+
+

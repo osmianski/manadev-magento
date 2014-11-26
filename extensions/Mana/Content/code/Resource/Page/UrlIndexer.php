@@ -180,7 +180,7 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
     protected function _extendRecursively($element, $book) {
         $id = $book->getId();
         $xmlId = 'c_' . $id;
-        $route = "content/book/view";
+        $route = "mana_content/book/view";
         $element->items->$xmlId->url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
         $element->items->$xmlId->route = $route;
         $element->items->$xmlId->label = $book->getTitle();

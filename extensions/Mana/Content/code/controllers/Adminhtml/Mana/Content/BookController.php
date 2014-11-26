@@ -94,6 +94,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         Mage::register('cms_page', Mage::getModel('cms/page')->load('home', 'identifier'));
         try {
             $models = $this->_registerModels($this->getRequest()->getParam('id'));
+            $this->_processRelatedProductIds();
         }
         catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -180,6 +181,20 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                     if($action != "deleted") {
                         // data
                         $this->_processChanges($model, $fields);
+                        if (isset($fields['related_products'])) {
+                            $related_products = $fields['related_products'];
+                            $delete_id = array();
+                            foreach($related_products as $key => $id) {
+                                if(substr($id, 0, 1) == "-") {
+                                    unset($related_products[$key]);
+                                    array_push($delete_id, substr($id, 1, strlen($id) - 1));
+                                }
+                            }
+                            $global_id = $model->getGlobalId($model->getId());
+                            $collection = Mage::getResourceModel("mana_content/page_relatedProduct_collection");
+                            $collection->unlinkProducts($global_id, $delete_id);
+                            $collection->linkProducts($global_id, $related_products);
+                        }
                     } else {
                         $model->delete();
                     }
@@ -276,7 +291,10 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if(!is_null($changes)) {
             if(!is_null($id)) {
                 foreach($changes['modified'] as $id => $field) {
-                    if($model->getData('page_global_custom_settings_id') == $id) {
+                    if($model->getData('id') == $id || $model->getData('reference_id') == $id) {
+                        if (isset($field['related_products'])) {
+                            $this->_processRelatedProductIds($field['related_products']);
+                        }
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
                         }
@@ -288,6 +306,15 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             } else {
                 foreach($changes['created'] as $id => $field) {
                     if($this->getRequest()->getPost('id') == $id) {
+                        if($referenceId = $field['reference_id']['value']) {
+                            $originalPageChanges = ($changes['modified'][$referenceId]) ? $changes['modified'][$referenceId] : $changes['created'][$referenceId];
+                            unset($originalPageChanges['parent_id']);
+                            unset($originalPageChanges['position']);
+                            $field = array_merge($field, $originalPageChanges);
+                        }
+                        if(isset($field['related_products'])) {
+                            $this->_processRelatedProductIds($field['related_products']);
+                        }
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
                         }
@@ -298,11 +325,48 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 }
             }
         }
+        if(!Mage::registry('related_product_ids')) {
+            $this->_processRelatedProductIds();
+        }
         $this->loadLayout();
         $this->addDataToClientSideBlock();
 
         // render AJAX result
         $this->renderLayout();
+    }
+
+    public function getRecordAction() {
+        if($id = $this->getRequest()->getParam('id')) {
+            $response = new Varien_Object();
+            $dbHelper = $this->coreDbHelper();
+            $models = $this->_registerModels($id, false);
+            $model = $models['finalSettings'];
+            $data = array();
+            $columns = array(
+                'is_active' => Mana_Content_Model_Page_Abstract::DM_IS_ACTIVE,
+                'url_key' => Mana_Content_Model_Page_Abstract::DM_URL_KEY,
+                'title' => Mana_Content_Model_Page_Abstract::DM_TITLE,
+                'content' => Mana_Content_Model_Page_Abstract::DM_CONTENT,
+                'page_layout' => Mana_Content_Model_Page_Abstract::DM_PAGE_LAYOUT,
+                'layout_xml' => Mana_Content_Model_Page_Abstract::DM_LAYOUT_XML,
+                'custom_layout_xml' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_LAYOUT_XML,
+                'custom_design_active_from' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_DESIGN_ACTIVE_FROM,
+                'custom_design_active_to' => Mana_Content_Model_Page_Abstract::DM_CUSTOM_DESIGN_ACTIVE_TO,
+                'meta_title' => Mana_Content_Model_Page_Abstract::DM_META_TITLE,
+                'meta_description' => Mana_Content_Model_Page_Abstract::DM_META_DESCRIPTION,
+                'meta_keywords' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
+            );
+            foreach($model->getData() as $key => $value) {
+                if(in_array($key, $columns)) {
+                    $data[$key] = array(
+                        'value' => $value,
+                        'isDefault' => $dbHelper->isModelContainsCustomSetting($model, $columns[$key])
+                    );
+                }
+            }
+            $response->setData('data', $data);
+            $this->getResponse()->setBody($response->toJson());
+        }
     }
 
     public function saveTreeStateAction() {
@@ -332,6 +396,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 foreach($data as $id => $fields) {
                     try {
                         $models = $this->_registerModels(($action == "created") ? null : $id, false);
+                        /** @var Mana_Content_Model_Page_Abstract $model */
                         $model = $models['customSettings'];
                         $tmpId = $id;
                         if($action == "modified") {
@@ -343,7 +408,11 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             }
                         }
                         $this->setModelData($model, $fields);
+                        if($model->getReferenceId()) {
+                            $model->getValidator()->ignoreRule('unique');
+                        }
                         $model->validate();
+                        Mage::getModel('mana_content/page_tag')->validateTag($fields['tags']['value']);
                     } catch (Mana_Core_Exception_Validation $e) {
                         foreach ($e->getErrors() as $error) {
                             if(!$messagePerRecord[$id]) {
@@ -374,5 +443,49 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             $model->setData($field, $fieldData['value']);
             $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
         }
+    }
+
+    public function relatedProductGridAction() {
+        $id = $this->getRequest()->getPost('id');
+        if (substr($id, 0, 1) == "n") {
+            $id = null;
+        }
+        $models = $this->_registerModels($id);
+        $ids = $this->getRequest()->getParam('related_product_ids');
+        $this->_processRelatedProductIds($ids);
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    public function relatedProductGridSelectionAction() {
+        $ids = $this->getRequest()->getParam('changes_related_products');
+        $this->_processRelatedProductIds($ids);
+        $this->getResponse()->setBody(Mage::helper('mana_admin')->getProductChooserHtml(array($this, '_filterProductChooserCollection')));
+    }
+
+    public function _filterProductChooserCollection($productGrid, $categoryTree = null) {
+        $productGrid->setHiddenProducts(implode(',', Mage::registry('related_product_ids')));
+    }
+
+    protected function _processRelatedProductIds($ids = array()) {
+        if(!$current_id = $this->getRequest()->getPost('id')) {
+            $current_id = $this->getRequest()->getParam('id');
+        }
+        $savedRelatedProductIds = array();
+        if (!is_null($current_id) && substr($current_id, 0, 1) != "n") {
+            $savedRelatedProductIds = Mage::getModel('catalog/product')->getCollection()
+                ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $current_id)
+                ->getAllIds();
+        }
+        foreach($ids as $id) {
+            if(strpos($id, 0, 1) == "-") {
+                $id = strpos($id, 1, strlen($id));
+                $key = array_search($id, $savedRelatedProductIds);
+                unset($savedRelatedProductIds[$key]);
+            } else {
+                $savedRelatedProductIds[] = $id;
+            }
+        }
+        Mage::register('related_product_ids', $savedRelatedProductIds);
     }
 }

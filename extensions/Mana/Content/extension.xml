@@ -23,7 +23,7 @@
     <sync extension-file="frontend/js/scripts.min.js.map" project-file="skin/frontend/base/default/js/{extension/name}.min.js.map"/>
     <sync extension-dir="frontend/js/src" project-dir="skin/frontend/base/default/js/src/{Extension/Name}"/>
     <sync extension-file="frontend/css/styles.css" project-file="skin/frontend/base/default/css/{extension_name}.css"/>
-    <sync extension-file="frontend/css/markdownpad-github.css" project-file="skin/frontend/base/default/css/markdownpad-github.css"/>
+    <sync extension-file="frontend/css/markdownpad_github.css" project-file="skin/frontend/base/default/css/markdownpad_github.css"/>
     <sync extension-dir="frontend/images" project-dir="skin/frontend/base/default/images/{extension_name}"/>
     <sync extension-file="frontend-rwd/layout.xml" project-file="app/design/frontend/rwd/default/layout/{extension_name}.xml"/>
 

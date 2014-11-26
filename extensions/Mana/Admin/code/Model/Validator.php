@@ -15,6 +15,7 @@ class Mana_Admin_Model_Validator {
     protected $_model;
     protected $_errors = array();
     protected $_allErrors = array();
+    protected $_ignoredRules = array();
     protected $defaultMessages = array(
         'required' => "Please fill in :field field.",
         'unique'   => "The value of :field already exists.",
@@ -45,7 +46,7 @@ class Mana_Admin_Model_Validator {
     }
 
     protected function validate($field, $rule) {
-        if (trim($rule) == "") return;
+        if (trim($rule) == "" || in_array($rule, $this->_ignoredRules)) return;
 
         $method = "validate". $this->contentHelper()->underscoreToCamelcase($rule);
 
@@ -100,6 +101,12 @@ class Mana_Admin_Model_Validator {
             return $this->contentHelper()->__($this->_captions[$field]);
         } else {
             return $this->contentHelper()->underscoreToCapitalize($this->contentHelper()->__($field));
+        }
+    }
+
+    public function ignoreRule($rule) {
+        if(!isset($this->_ignoredRules[$rule])) {
+            $this->_ignoredRules[] = $rule;
         }
     }
 

@@ -924,6 +924,9 @@ function ($, layout, json, core, config, undefined)
                     $(selector).html(html);
                 });
             }
+            if (response.config) {
+                config.set(response.config);
+            }
             if (response.blocks) {
                 $.each(response.blocks, function (blockName, sectionIndex) {
                     var block = layout.getBlock(blockName);
@@ -931,9 +934,6 @@ function ($, layout, json, core, config, undefined)
                         block.setContent(response.sections[sectionIndex]);
                     }
                 });
-            }
-            if (response.config) {
-                config.set(response.config);
             }
             if (response.script) {
                 $.globalEval(response.script);

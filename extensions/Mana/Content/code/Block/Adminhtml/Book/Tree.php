@@ -25,7 +25,7 @@ class Mana_Content_Block_Adminhtml_Book_Tree extends Mage_Adminhtml_Block_Templa
                 'multiple' => false,
             ),
             'dnd' => array(
-                'copy' => false,
+                'copy' => true,
             ),
             'plugins' => array (
                 'dnd',

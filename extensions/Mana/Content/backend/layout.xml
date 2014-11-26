@@ -27,6 +27,7 @@
     </adminhtml_mana_content_folder_grid>
 
     <adminhtml_mana_content_book_edit>
+        <update handle="mana_admin"/>
         <update handle="mana_admin2"/>
         <update handle="jstree"/>
         <update handle="editor"/>
@@ -44,6 +45,10 @@
                     <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
                         <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form" />
                     </block>
+                    <block type="mana_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                        <block type="mana_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+                    </block>
+
 
 			    </block>
 			</block>
@@ -60,10 +65,19 @@
                     <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
                         <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form"/>
                     </block>
+                    <block type="mana_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                        <block type="mana_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+                    </block>
 
                 </block>
             </block>
         </block>
 
     </adminhtml_mana_content_book_load>
+
+    <adminhtml_mana_content_book_relatedproductgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+        </block>
+    </adminhtml_mana_content_book_relatedproductgrid>
 </layout>
