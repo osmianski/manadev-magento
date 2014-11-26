@@ -12,3 +12,10 @@ ol.m-content-css-checkboxes li a.m-checkbox-unchecked,
 ol.m-content-css-checkboxes li a.m-checkbox-checked { padding-left: 20px; text-decoration: none; }
 ul.tags-list li a.m-tag-selected { font-weight:900 }
 .m-filter-checkboxes li input { margin-right: 5px; position: relative; bottom: 2px; }
+
+.mb-search .block-content {
+    white-space: nowrap;
+}
+.mb-search .block-content input {
+    width: 60%;
+}

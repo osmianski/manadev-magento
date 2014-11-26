@@ -14,4 +14,13 @@ class Mana_Content_Block_Filter_Search extends Mage_Core_Block_Template {
     public function __construct() {
         $this->setTemplate('mana/content/filter/search.phtml');
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Content_Helper_Data
+     */
+    public function contentHelper() {
+        return Mage::helper('mana_content');
+    }
+    #endregion
 }

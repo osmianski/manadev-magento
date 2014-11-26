@@ -3,16 +3,20 @@ function ($, Block, layout, config, filter) {
     return Block.extend('Mana/Content/Tree/Search', {
         _subscribeToHtmlEvents: function () {
             var self = this;
-            function _changed() {
+
+            function _submit(e) {
                 self.changed();
+                self.submit();
+                e.preventDefault();
             }
+
             return this
                 ._super()
                 .on('bind', this, function () {
-                    this.$field().on('blur', _changed);
+                    this.$form().on('submit', _submit);
                 })
                 .on('unbind', this, function () {
-                    this.$field().off('blur', _changed);
+                    this.$form().off('submit', _submit);
                 });
         },
         _subscribeToBlockEvents: function () {
@@ -22,8 +26,15 @@ function ($, Block, layout, config, filter) {
                     this.$field()[0].setValue(filter._searchValue);
                 })
         },
+        submit: function() {
+            this.$link()[0].href = this.$form()[0].action;
+            this.$link().click();
+        },
         $field: function(){
             return this.$().find('input');
+        },
+        $form: function () {
+            return this.$().find('form');
         },
         $link: function() {
             return this.$().find('a');
@@ -32,7 +43,7 @@ function ($, Block, layout, config, filter) {
             return layout.getBlock('tree');
         },
         changed: function() {
-            this.$link()[0].href = filter.setSearch(this.$field()[0].getValue());
+            this.$form()[0].action = filter.setSearch(this.$field()[0].getValue());
         }
     });
 });

@@ -16,7 +16,7 @@
 if($this->getItems()->getSize() > 0):
 ?>
 <div class="block m-container">
-    <div class="block-title">Related Product Filter</div>
+    <div class="block-title"><?php $this->helper('mana_content')->__('Related Product Filter'); ?></div>
     <div class="block-content">
         <ol class="m-content-css-checkboxes">
             <?php foreach ($this->getItems() as $_item): ?>
