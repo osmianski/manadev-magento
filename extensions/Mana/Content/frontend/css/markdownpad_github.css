@@ -3,15 +3,6 @@
 /* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
 /* Source: https://github.com/nicolahery/markdownpad-github */
 
-/* RESET
-=============================================================================*/
-
-.std > .mana_content html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
 /* BODY
 =============================================================================*/
 
@@ -37,21 +28,43 @@
 /* BLOCKS
 =============================================================================*/
 
-.std > .mana_content p, blockquote, ul, ol, dl, table, pre {
+.std > .mana_content p,
+.std > .mana_content blockquote,
+.std > .mana_content ul,
+.std > .mana_content ol,
+.std > .mana_content dl,
+.std > .mana_content table,
+.std > .mana_content pre {
   margin: 15px 0;
 }
 
 /* HEADERS
 =============================================================================*/
 
-.std > .mana_content h1, h2, h3, h4, h5, h6 {
+.std > .mana_content h1,
+.std > .mana_content h2,
+.std > .mana_content h3,
+.std > .mana_content h4,
+.std > .mana_content h5,
+.std > .mana_content h6 {
   margin: 20px 0 10px;
   padding: 0;
   font-weight: bold;
   -webkit-font-smoothing: antialiased;
 }
 
-.std > .mana_content h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+.std > .mana_content h1 tt,
+.std > .mana_content h1 code,
+.std > .mana_content h2 tt,
+.std > .mana_content h2 code,
+.std > .mana_content h3 tt,
+.std > .mana_content h3 code,
+.std > .mana_content h4 tt,
+.std > .mana_content h4 code,
+.std > .mana_content h5 tt,
+.std > .mana_content h5 code,
+.std > .mana_content h6 tt,
+.std > .mana_content h6 code {
   font-size: inherit;
 }
 
@@ -83,17 +96,33 @@
   font-size: 14px;
 }
 
-.std > .mana_content body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+.std > .mana_content body>h2:first-child,
+.std > .mana_content body>h1:first-child,
+.std > .mana_content body>h1:first-child+h2,
+.std > .mana_content body>h3:first-child,
+.std > .mana_content body>h4:first-child,
+.std > .mana_content body>h5:first-child,
+.std > .mana_content body>h6:first-child {
   margin-top: 0;
   padding-top: 0;
 }
 
-.std > .mana_content a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+.std > .mana_content a:first-child h1,
+.std > .mana_content a:first-child h2,
+.std > .mana_content a:first-child h3,
+.std > .mana_content a:first-child h4,
+.std > .mana_content a:first-child h5,
+.std > .mana_content a:first-child h6 {
   margin-top: 0;
   padding-top: 0;
 }
 
-.std > .mana_content h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+.std > .mana_content h1+p,
+.std > .mana_content h2+p,
+.std > .mana_content h3+p,
+.std > .mana_content h4+p,
+.std > .mana_content h5+p,
+.std > .mana_content h6+p {
   margin-top: 10px;
 }
 
@@ -112,7 +141,8 @@
 /* LISTS
 =============================================================================*/
 
-.std > .mana_content ul, ol {
+.std > .mana_content ul,
+.std > .mana_content ol {
   padding-left: 30px;
 }
 
@@ -125,7 +155,10 @@
   margin-top: 0px;
 }
 
-.std > .mana_content ul ul, ul ol, ol ol, ol ul {
+.std > .mana_content ul ul,
+.std > .mana_content ul ol,
+.std > .mana_content ol ol,
+.std > .mana_content ol ul {
   margin-bottom: 0;
 }
 
@@ -169,12 +202,15 @@
 /* CODE
 =============================================================================*/
 
-.std > .mana_content pre, code, tt {
+.std > .mana_content pre,
+.std > .mana_content code,
+.std > .mana_content tt {
   font-size: 12px;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
 }
 
-.std > .mana_content code, tt {
+.std > .mana_content code,
+.std > .mana_content tt {
   margin: 0 0px;
   padding: 0px 0px;
   white-space: nowrap;
@@ -201,7 +237,8 @@
   border-radius: 3px;
 }
 
-.std > .mana_content pre code, pre tt {
+.std > .mana_content pre code,
+.std > .mana_content pre tt {
   background-color: transparent;
   border: none;
 }
@@ -262,7 +299,8 @@
   font-weight: bold;
 }
 
-.std > .mana_content table th, table td {
+.std > .mana_content table th,
+.std > .mana_content table td {
   border: 1px solid #ccc;
   padding: 6px 13px;
 }
