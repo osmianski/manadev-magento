@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_cms</name>
+    <name>extensions/manadev_cms-books</name>
     <part name="Mana/Core"/>
     <part name="Mana/Db"/>
     <part name="Mana/Admin"/>
