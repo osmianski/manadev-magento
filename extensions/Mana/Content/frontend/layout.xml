@@ -35,15 +35,6 @@
             <block type="mana_content/tree" name="tree" as="tree">
                 <action method="setMClientSideBlock"><params><type>Mana/Content/Tree</type></params></action>
             </block>
-            <block type="mana_content/filter_search" name="search" as="search">
-                <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/Search</type></params></action>
-            </block>
-            <block type="mana_content/filter_relatedproduct" name="filter_relatedproduct" as="filter_relatedproduct">
-                <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/RelatedProduct</type></params></action>
-            </block>
-            <block type="mana_content/filter_tags" name="filter_tags" as="filter_tags">
-                <action method="setMClientSideBlock"><params><type>Mana/Content/Tree/Tag</type></params></action>
-            </block>
         </reference>
         <reference name="content">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
@@ -54,7 +45,6 @@
         </reference>
         <reference name="right">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-            <block type="mana_content/book_related" name="related_product" as="related_product"/>
         </reference>
 
         <remove name="left.permanent.callout" />

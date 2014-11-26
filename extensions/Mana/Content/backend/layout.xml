@@ -45,11 +45,6 @@
                     <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
                         <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form" />
                     </block>
-                    <block type="mana_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
-                        <block type="mana_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
-                    </block>
-
-
 			    </block>
 			</block>
 		</reference>
@@ -65,10 +60,6 @@
                     <block type="mana_content/adminhtml_book_contentFormTab" name="content_tab" as="content_tab">
                         <block type="mana_content/adminhtml_book_contentForm" name="content_form" as="content_form"/>
                     </block>
-                    <block type="mana_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
-                        <block type="mana_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
-                    </block>
-
                 </block>
             </block>
         </block>

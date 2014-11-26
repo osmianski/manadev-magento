@@ -9,6 +9,9 @@
     <adminhtml_mana_content_book_edit>
 		<reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+            </block>
             <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
                 <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
             </block>
@@ -21,6 +24,9 @@
     <adminhtml_mana_content_book_load>
         <reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+            </block>
             <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
                 <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
             </block>

@@ -1,7 +1,7 @@
 <?php
 /** 
  * @category    Mana
- * @package     Mana_Content
+ * @package     ManaPro_Content
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
@@ -9,12 +9,12 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Filter_RelatedProduct extends Mage_Core_Block_Template {
+class ManaPro_Content_Block_Filter_RelatedProduct extends Mage_Core_Block_Template {
 
     protected $_items;
 
     public function __construct() {
-        $this->setTemplate('mana/content/filter/relatedproduct.phtml');
+        $this->setTemplate('manapro/content/filter/relatedproduct.phtml');
     }
 
     public function getItems() {

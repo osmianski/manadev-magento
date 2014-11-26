@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Adminhtml_Book_RelatedProductFormTab extends Mana_Admin_Block_V2_Tab {
+class ManaPro_Content_Block_Adminhtml_Book_RelatedProductFormTab extends Mana_Admin_Block_V2_Tab {
     public function getTitle() {
         return $this->__('Related Products');
     }

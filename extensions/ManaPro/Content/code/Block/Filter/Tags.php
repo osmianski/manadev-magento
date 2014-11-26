@@ -1,7 +1,7 @@
 <?php
 /** 
  * @category    Mana
- * @package     Mana_Content
+ * @package     ManaPro_Content
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
@@ -9,9 +9,9 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Filter_Tags extends Mage_Tag_Block_Popular {
+class ManaPro_Content_Block_Filter_Tags extends Mage_Tag_Block_Popular {
     protected function _construct() {
-        $this->setTemplate('mana/content/filter/tags.phtml');
+        $this->setTemplate('manapro/content/filter/tags.phtml');
     }
 
     protected function _loadTags()

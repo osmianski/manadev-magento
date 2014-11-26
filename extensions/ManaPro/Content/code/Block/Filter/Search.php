@@ -9,10 +9,10 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Filter_Search extends Mage_Core_Block_Template {
+class ManaPro_Content_Block_Filter_Search extends Mage_Core_Block_Template {
 
     public function __construct() {
-        $this->setTemplate('mana/content/filter/search.phtml');
+        $this->setTemplate('manapro/content/filter/search.phtml');
     }
 
     #region Dependencies

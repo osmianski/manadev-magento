@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin_Block_V2_Grid {
+class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
         $this->setId('relatedProductGrid');

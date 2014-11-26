@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+@category    Mana
+@package     ManaPro_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <mana_content_book_view>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/manapro_content.css</stylesheet></action>
+        </reference>
+        <reference name="left">
+            <block type="manapro_content/filter_search" name="search" as="search">
+                <action method="setMClientSideBlock">
+                    <params>
+                        <type>ManaPro/Content/Tree/Search</type>
+                    </params>
+                </action>
+            </block>
+            <block type="manapro_content/filter_relatedproduct" name="filter_relatedproduct" as="filter_relatedproduct">
+                <action method="setMClientSideBlock"><params><type>ManaPro/Content/Tree/RelatedProduct</type></params></action>
+            </block>
+            <block type="manapro_content/filter_tags" name="filter_tags" as="filter_tags">
+                <action method="setMClientSideBlock">
+                    <params>
+                        <type>ManaPro/Content/Tree/Tag</type>
+                    </params>
+                </action>
+            </block>
+        </reference>
+        <reference name="right">
+            <block type="manapro_content/book_related" name="related_product" as="related_product"/>
+        </reference>
+    </mana_content_book_view>
+</layout>
