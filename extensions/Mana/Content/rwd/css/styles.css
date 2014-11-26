@@ -1,0 +1,54 @@
+/* ============================================ *
+ * Search Input
+ * ============================================ */
+.mb-search .input-box {
+    position: relative;
+    padding-top: 0;
+}
+
+.mb-search .block-title {
+    display: none;
+}
+
+.mb-search .block-content {
+    position: relative;
+}
+
+.mb-search .search-button {
+    text-indent: -9999px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: none;
+}
+
+.mb-search .search-button:hover {
+    background: none;
+}
+
+.mb-search .search-button:before {
+    content: '';
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    margin-left: -15px;
+    background-position: 4px -146px;
+    background-image: url(../images/icon_sprite.png);
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+}
+
+.mb-search .search-button:hover:before {
+    opacity: 0.8;
+}
+
+.mb-search .search-button:active:before {
+    margin-top: -13px;
+    margin-left: -13px;
+}
