@@ -4,6 +4,9 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
+/* ============================================ *
+ * Filter Checkboxes
+ * ============================================ */
 ol.m-content-css-checkboxes li a.m-checkbox-unchecked { background: transparent url(../images/mana_content/checkbox_unchecked.png) 0 0 no-repeat; }
 ol.m-content-css-checkboxes li a.m-checkbox-checked { background: transparent url(../images/mana_content/checkbox_checked.png) 0 0 no-repeat; }
 ol.m-content-css-checkboxes li a.m-checkbox-unchecked:hover { background: transparent url(../images/mana_content/checkbox_unchecked_hover.png) 0 0 no-repeat; }
@@ -13,6 +16,10 @@ ol.m-content-css-checkboxes li a.m-checkbox-checked { padding-left: 20px; text-d
 ul.tags-list li a.m-tag-selected { font-weight:900 }
 .m-filter-checkboxes li input { margin-right: 5px; position: relative; bottom: 2px; }
 
+/* ============================================ *
+ * Search Input
+ * ============================================ */
+
 .mb-search .block-content {
     white-space: nowrap;
 }
@@ -20,3 +27,18 @@ ul.tags-list li a.m-tag-selected { font-weight:900 }
     width: 60%;
 }
 
+/* ============================================ *
+ * Related Products Block
+ * ============================================ */
+
+.block-related {
+    float: right;
+    margin: 0 0 10px 10px;
+    width: 195px;
+}
+.block-related .product {
+    margin-left: 0;
+}
+.block-related .actions {
+    background: none;
+}

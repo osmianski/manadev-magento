@@ -29,8 +29,8 @@
                 </action>
             </block>
         </reference>
-        <reference name="right">
-            <block type="manapro_content/book_related" name="related_product" as="related_product"/>
+        <reference name="content">
+            <block type="manapro_content/book_related" name="related_product" as="related_product" before="book_content"/>
         </reference>
     </mana_content_book_view>
 </layout>

@@ -5,21 +5,31 @@
  * @license     http://www.manadev.com/license  Proprietary License
  */
 /* ============================================ *
+ * Filter Checkboxes
+ * ============================================ */
+ol.m-content-css-checkboxes li a.m-checkbox-unchecked { background: transparent url(../images/mana_content/checkbox_unchecked.png) 0 0 no-repeat; }
+ol.m-content-css-checkboxes li a.m-checkbox-checked { background: transparent url(../images/mana_content/checkbox_checked.png) 0 0 no-repeat; }
+ol.m-content-css-checkboxes li a.m-checkbox-unchecked:hover { background: transparent url(../images/mana_content/checkbox_unchecked_hover.png) 0 0 no-repeat; }
+ol.m-content-css-checkboxes li a.m-checkbox-checked:hover { background: transparent url(../images/mana_content/checkbox_checked_hover.png) 0 0 no-repeat; }
+ol.m-content-css-checkboxes li a.m-checkbox-unchecked,
+ol.m-content-css-checkboxes li a.m-checkbox-checked { padding-left: 20px; text-decoration: none; }
+ul.tags-list li a.m-tag-selected { font-weight:900 }
+.m-filter-checkboxes li input { margin-right: 5px; position: relative; bottom: 2px; }
+
+
+/* ============================================ *
  * Search Input
  * ============================================ */
 .mb-search .input-box {
     position: relative;
     padding-top: 0;
 }
-
 .mb-search .block-title {
     display: none;
 }
-
 .mb-search .block-content {
     position: relative;
 }
-
 .mb-search .search-button {
     text-indent: -9999px;
     position: absolute;
@@ -30,11 +40,9 @@
     border: 0;
     background: none;
 }
-
 .mb-search .search-button:hover {
     background: none;
 }
-
 .mb-search .search-button:before {
     content: '';
     position: absolute;
@@ -49,12 +57,26 @@
     background-repeat: no-repeat;
     text-indent: -9999px;
 }
-
 .mb-search .search-button:hover:before {
     opacity: 0.8;
 }
-
 .mb-search .search-button:active:before {
     margin-top: -13px;
     margin-left: -13px;
+}
+
+
+/* ============================================ *
+ * Related Products Block
+ * ============================================ */
+.block-related {
+    float: right;
+    margin: 0 0 10px 10px;
+    width: 195px;
+}
+.block-related .product {
+    margin-left: 0;
+}
+.block-related .actions {
+    background: none;
 }
