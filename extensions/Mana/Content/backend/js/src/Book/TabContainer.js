@@ -42,18 +42,12 @@ function ($, Container, ajax, core, expression) {
                     value: this.getText('default-title'),
                     isDefault: 1
                 };
-                record['url_key'] = {
-                    value: expression.seoify(this.getText('default-title')),
-                    isDefault: 1
-                };
                 record['content'] = {
                     value: this.getText('default-content'),
                     isDefault: 1
                 };
 
-                if(this.getField('url_key')) {
-                    this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
-                }
+                this.onChangeTitle();
                 if(this.getField('is_active')) {
                     this.getField('is_active').setValue('1');
                 }
@@ -447,10 +441,16 @@ function ($, Container, ajax, core, expression) {
                         }
                     }
                 }
+                if(typeof obj.related_products !== "undefined" && obj.related_products.length == 0) {
+                    delete obj.related_products;
+                }
                 var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
                 if (count == 0) {
                     delete this._changes.modified[this.getCurrentId()];
                     this._setNodeColor("black");
+                }
+                if (typeof obj.related_products !== "undefined") {
+                    obj.related_products = [];
                 }
             }
         },
