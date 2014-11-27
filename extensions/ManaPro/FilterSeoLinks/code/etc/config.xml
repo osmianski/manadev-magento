@@ -206,7 +206,7 @@
             </manapro_filterseolinks_setup>
         </resources>
         <index>
-            <indexer>
+            <indexer_config>
                 <mana_seo_url>
                     <sources>
                         <filter_parameter><resource>manapro_filterseolinks/urlIndexer_filter</resource></filter_parameter>
@@ -217,7 +217,7 @@
                         <attribute_value><resource>manapro_filterseolinks/urlIndexer_value</resource></attribute_value>
                     </sources>
                 </mana_seo_url>
-            </indexer>
+            </indexer_config>
         </index>
 	</global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
