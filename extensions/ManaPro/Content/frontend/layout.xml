@@ -9,6 +9,7 @@
     <mana_content_book_view>
         <reference name="head">
             <action method="addCss"><stylesheet>css/manapro_content.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro/content.js</name><params/></action>
         </reference>
         <reference name="left">
             <block type="manapro_content/filter_search" name="search" as="search">

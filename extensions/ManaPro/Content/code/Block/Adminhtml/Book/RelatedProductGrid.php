@@ -112,7 +112,7 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
 
         $block = $this->getMClientSideBlock();
         $newBlock = array(
-            'type' => 'Mana/Content/Book/RelatedProductGrid'
+            'type' => 'ManaPro/Content/Book/RelatedProductGrid'
         );
         $block = array_merge($block, $newBlock);
         $this->setMClientSideBlock($block);

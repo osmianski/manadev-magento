@@ -22,6 +22,15 @@
                 <class>ManaPro_Content_Helper</class>
             </manapro_content>
         </helpers>
+        <models>
+            <manapro_content>
+                <class>ManaPro_Content_Model</class>
+                <resourceModel>mana_content_resources</resourceModel>
+            </manapro_content>
+            <mana_content_resources>
+                <class>ManaPro_Content_Resource</class>
+            </mana_content_resources>
+        </models>
     </global>
     <adminhtml>
         <translate>

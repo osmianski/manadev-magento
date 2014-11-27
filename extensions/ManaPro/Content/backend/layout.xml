@@ -7,6 +7,9 @@
  -->
 <layout version="0.1.0">
     <adminhtml_mana_content_book_edit>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/manapro/content.js</name><params/></action>
+        </reference>
 		<reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
             <block type="manapro_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">

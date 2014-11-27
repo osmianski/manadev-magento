@@ -1,6 +1,6 @@
-Mana.define('Mana/Content/Tree/RelatedProduct', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Content/Filter'],
+Mana.define('ManaPro/Content/Tree/RelatedProduct', ['jquery', 'Mana/Core/Block', 'singleton:ManaPro/Content/Filter'],
 function ($, Block, filter) {
-    return Block.extend('Mana/Content/Tree/RelatedProduct', {
+    return Block.extend('ManaPro/Content/Tree/RelatedProduct', {
         setFilterUrl: function (link) {
             var productId = link.data('mProductId');
             if(filter.isProductChecked(productId)) {

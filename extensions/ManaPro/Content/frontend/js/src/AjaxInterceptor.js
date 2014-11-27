@@ -1,8 +1,8 @@
-Mana.define('Mana/Content/AjaxInterceptor', ['jquery', 'singleton:Mana/Core/Ajax',
-    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout', 'singleton:Mana/Content/Filter'],
+Mana.define('ManaPro/Content/AjaxInterceptor', ['jquery', 'singleton:Mana/Core/Ajax',
+    'singleton:Mana/Core/Config', 'singleton:Mana/Core/Layout', 'singleton:ManaPro/Content/Filter'],
 function($, ajax, config, layout, filter, undefined)
 {
-    return Mana.Object.extend('Mana/Content/AjaxInterceptor', {
+    return Mana.Object.extend('ManaPro/Content/AjaxInterceptor', {
         match: function (url, element) {
             if (element) {
                 var ajaxContainerSelector = config.getData('mana_content.ajax.containers');
@@ -53,7 +53,7 @@ function($, ajax, config, layout, filter, undefined)
         }
     });
 });
-Mana.require(['jquery', 'singleton:Mana/Core/Ajax', 'singleton:Mana/Content/AjaxInterceptor'],
+Mana.require(['jquery', 'singleton:Mana/Core/Ajax', 'singleton:ManaPro/Content/AjaxInterceptor'],
 function($, ajax, contentAjaxInterceptor)
 {
     ajax.addInterceptor(contentAjaxInterceptor);

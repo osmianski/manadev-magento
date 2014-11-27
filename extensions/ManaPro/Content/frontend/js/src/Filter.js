@@ -1,6 +1,6 @@
-Mana.define('Mana/Content/Filter', ['jquery', 'singleton:Mana/Core/Config'],
+Mana.define('ManaPro/Content/Filter', ['jquery', 'singleton:Mana/Core/Config'],
 function ($, config) {
-    return Mana.Object.extend('Mana/Content/Filter', {
+    return Mana.Object.extend('ManaPro/Content/Filter', {
         _init: function(){
             this.loadFilterFromUrl();
         },

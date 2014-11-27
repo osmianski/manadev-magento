@@ -1,7 +1,7 @@
-Mana.define('Mana/Content/Book/RelatedProductGrid', ['jquery', 'Mana/Admin/Grid', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'],
+Mana.define('ManaPro/Content/Book/RelatedProductGrid', ['jquery', 'Mana/Admin/Grid', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'],
 function ($, Grid, layout, ajax)
 {
-    return Grid.extend('Mana/Content/Book/RelatedProductGrid', {
+    return Grid.extend('ManaPro/Content/Book/RelatedProductGrid', {
         _subscribeToBlockEvents: function() {
             return this._super()
                 .on('load', this, function () {

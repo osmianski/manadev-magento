@@ -1,7 +1,10 @@
 /**
  * @category    Mana
- * @package     Mana_Content
+ * @package     ManaPro_Content
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-Mana.define("Mana/Content/Tree",["jquery","Mana/Core/Block"],function(e,n){return n.extend("Mana/Content/Tree",{})});
+
+; // for better JS merging
+
+

@@ -1,6 +1,6 @@
-Mana.define('Mana/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config', 'singleton:Mana/Content/Filter'],
+Mana.define('ManaPro/Content/Tree/Search', ['jquery', 'Mana/Core/Block', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Config', 'singleton:ManaPro/Content/Filter'],
 function ($, Block, layout, config, filter) {
-    return Block.extend('Mana/Content/Tree/Search', {
+    return Block.extend('ManaPro/Content/Tree/Search', {
         _subscribeToHtmlEvents: function () {
             var self = this;
 
