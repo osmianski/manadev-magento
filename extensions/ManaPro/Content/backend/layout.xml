@@ -37,6 +37,11 @@
                 <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
             </block>
 		</reference>
-
     </adminhtml_mana_content_book_load>
+
+    <adminhtml_manapro_content_book_relatedproductgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+        </block>
+    </adminhtml_manapro_content_book_relatedproductgrid>
 </layout>

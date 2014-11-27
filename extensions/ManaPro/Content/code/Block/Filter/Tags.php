@@ -19,7 +19,7 @@ class ManaPro_Content_Block_Filter_Tags extends Mage_Tag_Block_Popular {
         if (empty($this->_tags)) {
             $this->_tags = array();
 
-            $tags = Mage::getResourceModel('mana_content/page_tag_collection')
+            $tags = Mage::getResourceModel('manapro_content/page_tag_collection')
                 ->joinFields(Mage::app()->getStore()->getId())
                 ->limit(20)
                 ->load()

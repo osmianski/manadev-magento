@@ -9,10 +9,10 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Resource_Page_RelatedProduct_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
+class ManaPro_Content_Resource_Page_RelatedProduct_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
 {
     protected function _construct() {
-        $this->_init('mana_content/page_relatedProduct');
+        $this->_init('manapro_content/page_relatedProduct');
     }
 
     public function unlinkProducts($page_global_id, $product_ids = array()) {

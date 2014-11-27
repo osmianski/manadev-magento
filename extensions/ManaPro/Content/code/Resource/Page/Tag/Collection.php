@@ -9,7 +9,7 @@
  * @author Mana Team
  *
  */
-class Mana_Content_Resource_Page_Tag_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
+class ManaPro_Content_Resource_Page_Tag_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
 
     protected function _construct()
     {

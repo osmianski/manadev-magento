@@ -12,7 +12,7 @@
 class ManaPro_Content_Model_Page_Tag extends Mage_Core_Model_Abstract {
 
     public function validateTag($tagNamesInString) {
-        $tagsArray = $this->contentHelper()->tagStringToArray($tagNamesInString);
+        $tagsArray = $this->contentProHelper()->tagStringToArray($tagNamesInString);
         $validated = array();
         foreach($tagsArray as $tag) {
             if(in_array($tag, $validated)) {
@@ -22,10 +22,18 @@ class ManaPro_Content_Model_Page_Tag extends Mage_Core_Model_Abstract {
         }
     }
     #region Dependencies
+    #region Dependencies
     /**
      * @return Mana_Content_Helper_Data
      */
     public function contentHelper() {
+        return Mage::helper('mana_content');
+    }
+
+    /**
+     * @return ManaPro_Content_Helper_Data
+     */
+    public function contentProHelper() {
         return Mage::helper('manapro_content');
     }
     #endregion

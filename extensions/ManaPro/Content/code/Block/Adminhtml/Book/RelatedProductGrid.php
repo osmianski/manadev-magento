@@ -119,7 +119,7 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
     }
 
     public function getGridUrl() {
-        return $this->adminHelper()->getStoreUrl('*/*/relatedProductGrid');
+        return $this->adminHelper()->getStoreUrl('*/manapro_content_book/relatedProductGrid');
     }
 
     #region Dependencies
