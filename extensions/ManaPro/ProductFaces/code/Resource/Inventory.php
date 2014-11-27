@@ -182,10 +182,18 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		if ($qtyLeft > 0) {
 			// if there is some qty left
 			if ($productsProcessed >= count($ids)) {
-				// in case both percent and part methods are NOT present among representing products, we should 
-				// distribute qty left among qty method products. We assign this qty to "parent" product
-				$result['qties'][$thisIndex] += $qtyLeft;
-				$qtyLeft = 0;
+                $keys = array_keys($ids, $thisIndex);
+                $key = reset($keys);
+                if($representingProductData[$key]['m_pack_qty'] == 1) {
+                    // in case both percent and part methods are NOT present among representing products, we should
+                    // distribute qty left among qty method products. We assign this qty to "parent" product
+                    $result['qties'][$thisIndex] += $qtyLeft;
+                    $qtyLeft = 0;
+                } else {
+                    $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                    $result['qties'][$thisIndex] += $qty;
+                }
 			}
 			else {
 				// assign qty left to products with percent method
@@ -213,10 +221,18 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				if ($qtyLeft > 0) {
 					// if there is still some qty left
 					if ($productsProcessed >= count($ids)) {
-						// in case part method is NOT present among representing products, we should 
-						// distribute qty left among qty method products. We assign this qty to "parent" product
-						$result['qties'][$thisIndex] += $qtyLeft;
-						$qtyLeft = 0;
+                        $keys = array_keys($ids, $thisIndex);
+                        $key = reset($keys);
+                        if($representingProductData[$key]['m_pack_qty'] == 1) {
+                            // in case both percent and part methods are NOT present among representing products, we should
+                            // distribute qty left among qty method products. We assign this qty to "parent" product
+                            $result['qties'][$thisIndex] += $qtyLeft;
+                            $qtyLeft = 0;
+                        } else {
+                            $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                            $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                            $result['qties'][$thisIndex] += $qty;
+                        }
 					}
 					else {
 						// assign qty left to products with part method
@@ -265,18 +281,33 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								}
 							}
 						}
-                        if ($qtyLeft > 0) {
-                            $result['messages'][] = array(
-                                'type' => 'notice',
-                                'text' => $this->coreHelper()->__("There are still %s remaining items that are unassigned.", $qtyLeft),
-                            );
-                        }
 					}
 				}
-			}
-		}
-		
-		return $result;
+            }
+        }
+        if ($qtyLeft > 0) {
+            if ($productsProcessed >= count($ids)) {
+                $keys = array_keys($ids, $thisIndex);
+                $key = reset($keys);
+                if($representingProductData[$key]['m_pack_qty'] == 1) {
+                    // in case both percent and part methods are NOT present among representing products, we should
+                    // distribute qty left among qty method products. We assign this qty to "parent" product
+                    $result['qties'][$thisIndex] += $qtyLeft;
+                    $qtyLeft = 0;
+                } else {
+                    $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                    $result['qties'][$thisIndex] += $qty;
+                }
+            }
+
+            $result['messages'][] = array(
+                'type' => 'notice',
+                'text' => $this->coreHelper()->__("There are still %s remaining items that are unassigned.", $qtyLeft),
+            );
+        }
+
+        return $result;
 	}
 
     protected function _getRepresentedProductData($representedProductId, $representedProductsData) {
