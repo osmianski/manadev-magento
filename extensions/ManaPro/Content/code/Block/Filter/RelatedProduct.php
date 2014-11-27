@@ -34,5 +34,19 @@ class ManaPro_Content_Block_Filter_RelatedProduct extends Mage_Core_Block_Templa
             ->distinct(true);
     }
 
+    #region Dependencies
+    /**
+     * @return Mana_Content_Helper_Data
+     */
+    public function contentHelper() {
+        return Mage::helper('mana_content');
+    }
 
+    /**
+     * @return ManaPro_Content_Helper_Data
+     */
+    public function contentProHelper() {
+        return Mage::helper('manapro_content');
+    }
+    #endregion
 }

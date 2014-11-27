@@ -10,13 +10,12 @@
  * @author Mana Team
  */
 /* @var $this ManaPro_Content_Block_Filter_RelatedProduct */
-
 ?>
 <?php
 if($this->getItems()->getSize() > 0):
 ?>
 <div class="block m-container">
-    <div class="block-title"><?php $this->helper('mana_content')->__('Filter by Product'); ?></div>
+    <div class="block-title"><strong><?php echo $this->contentHelper()->__('Filter by Product'); ?></strong></div>
     <div class="block-content">
         <ol class="m-content-css-checkboxes">
             <?php foreach ($this->getItems() as $_item): ?>
