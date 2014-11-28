@@ -163,7 +163,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
      */
     protected function _processChanges($model, $fields) {
 
-        $this->setModelData($model, $fields);
+        $this->contentHelper()->setModelData($model, $fields);
 
         // check if there are any custom settings
         $hasCustomSettings = false;
@@ -316,7 +316,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         foreach($changes['modified'] as $id => $fields) {
             $models = $this->contentHelper()->registerModels($id, false);
             $model = $models['customSettings'];
-            $this->setModelData($model, $fields);
+            $this->contentHelper()->setModelData($model, $fields);
             $model->save();
         }
 
@@ -345,7 +345,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                                     unset($fields['id']);
                                 }
                             }
-                            $this->setModelData($model, $fields);
+                            $this->contentHelper()->setModelData($model, $fields);
                             if($model->getReferenceId()) {
                                 $model->getValidator()->ignoreRule('unique');
                             }
@@ -371,17 +371,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             }
         }
         return true;
-    }
-
-    /**
-     * @param $model
-     * @param $fields
-     */
-    protected function setModelData($model, $fields) {
-        foreach ($fields as $field => $fieldData) {
-            $model->setData($field, $fieldData['value']);
-            $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
-        }
     }
 
     #region Dependencies

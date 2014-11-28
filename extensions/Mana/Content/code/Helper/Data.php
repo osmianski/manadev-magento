@@ -71,6 +71,11 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
                     $customGlobalSettings->load($finalGlobalSettings->getData('page_global_custom_settings_id'));
 
                     if($saveToRegistry) {
+                        $params = Mage::app()->getRequest()->getPost();
+                        if($fieldData = $params['changes']['created'][$params['id']]){
+                            $this->setModelData($customGlobalSettings, $fieldData);
+                            $this->setModelData($finalGlobalSettings, $fieldData);
+                        }
                         Mage::register('m_global_edit_model', $customGlobalSettings);
                         Mage::register('m_global_flat_model', $finalGlobalSettings);
                     }
@@ -89,6 +94,11 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
                 }
             }
             if($saveToRegistry) {
+                $params = Mage::app()->getRequest()->getPost();
+                if ($fieldData = $params['changes']['created'][$params['id']]) {
+                    $this->setModelData($customSettings, $fieldData);
+                    $this->setModelData($finalSettings, $fieldData);
+                }
                 Mage::register('m_edit_model', $customSettings);
                 Mage::register('m_flat_model', $finalSettings);
             }
@@ -100,12 +110,31 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
         return compact('customSettings', 'finalSettings');
     }
 
+
+    /**
+     * @param $model Mana_Content_Model_Page_Abstract
+     * @param $fields array
+     */
+    public function setModelData($model, $fields) {
+        foreach ($fields as $field => $fieldData) {
+            $model->setData($field, $fieldData['value']);
+            $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
+        }
+    }
+
     #region Dependencies
     /**
      * @return Mana_Admin_Helper_Data
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function coreDbHelper() {
+        return Mage::helper('mana_core/db');
     }
     #endregion
 
