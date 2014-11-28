@@ -69,6 +69,7 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
                 array(
                     'label' => $this->__('Add Related Products'),
                     'class' => 'add',
+                    'disabled' => !is_null($this->getFlatModel()->getData('reference_id')),
                 )
             );
         $this->setChild('add_related_products', $button);
@@ -77,6 +78,7 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
                 array(
                     'label' => $this->__('Remove Selected'),
                     'class' => 'delete',
+                    'disabled' => !is_null($this->getFlatModel()->getData('reference_id')),
                 )
             );
         $this->setChild('remove_selected', $button);
@@ -120,6 +122,13 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
 
     public function getGridUrl() {
         return $this->adminHelper()->getStoreUrl('*/manapro_content_book/relatedProductGrid');
+    }
+
+    /**
+     * @return Mana_Content_Model_Page_Abstract
+     */
+    public function getFlatModel() {
+        return Mage::registry('m_flat_model');
     }
 
     #region Dependencies
