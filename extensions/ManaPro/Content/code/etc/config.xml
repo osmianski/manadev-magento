@@ -66,6 +66,14 @@
                     </manapro_content>
                 </observers>
             </m_validate>
+            <m_content_tree_options>
+                <observers>
+                    <manapro_content>
+                        <class>manapro_content/observer</class>
+                        <method>enableCopyAndReference</method>
+                    </manapro_content>
+                </observers>
+            </m_content_tree_options>
 
         </events>
     </global>

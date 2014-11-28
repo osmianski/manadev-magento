@@ -67,6 +67,17 @@ class ManaPro_Content_Model_Observer {
         }
     }
 
+    public function enableCopyAndReference($observer) {
+        $treeOptions = $observer->getOptions();
+        $newOptions = array(
+            'dnd' => array(
+                'copy' => true,
+                'reference' => true,
+            )
+        );
+        $treeOptions->addData($newOptions);
+    }
+
     #region Dependencies
     /**
      * @return Mana_Content_Helper_Data
