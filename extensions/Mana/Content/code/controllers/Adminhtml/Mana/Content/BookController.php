@@ -306,42 +306,65 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     private function validateChangesObject($changes, &$messagePerRecord) {
-        foreach($changes as $action => $data) {
-            if($action != "deleted") {
-                foreach($data as $id => $fields) {
-                    try {
-                        $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
-                        /** @var Mana_Content_Model_Page_Abstract $model */
-                        $model = $models['customSettings'];
-                        $tmpId = $id;
-                        if($action == "modified") {
-                            $model->load($id);
-                        } elseif($action == "created") {
-                            if(isset($fields['id'])) {
-                                $tmpId = $fields['id']['value'];
-                                unset($fields['id']);
-                            }
-                        }
-                        $this->setModelData($model, $fields);
-                        if($model->getReferenceId()) {
-                            $model->getValidator()->ignoreRule('unique');
-                        }
-                        $model->validate();
-                        Mage::dispatchEvent('m_validate', array('object' => $model, 'fields' => $fields));
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $connection->beginTransaction();
+        foreach($changes['deleted'] as $id => $fields) {
+            $models = $this->contentHelper()->registerModels($id, false);
+            $model = $models['customSettings'];
+            $model->delete();
+        }
+        foreach($changes['modified'] as $id => $fields) {
+            $models = $this->contentHelper()->registerModels($id, false);
+            $model = $models['customSettings'];
+            $this->setModelData($model, $fields);
+            $model->save();
+        }
 
-                    } catch (Mana_Core_Exception_Validation $e) {
-                        foreach ($e->getErrors() as $error) {
-                            if(!$messagePerRecord[$id]) {
-                                $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages');
+        try {
+            $url_keys = array();
+            foreach ($changes['created'] as $id => $fields) {
+                if (in_array($fields['url_key']['value'], $url_keys)) {
+                    $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
+                    throw new Exception($message);
+                } else {
+                    array_push($url_keys, $fields['url_key']['value']);
+                }
+            }
+            foreach($changes as $action => $data) {
+                if($action != "deleted") {
+                    foreach($data as $id => $fields) {
+                            $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
+                            /** @var Mana_Content_Model_Page_Abstract $model */
+                            $model = $models['customSettings'];
+                            $tmpId = $id;
+                            if($action == "modified") {
+                                $model->load($id);
+                            } elseif($action == "created") {
+                                if(isset($fields['id'])) {
+                                    $tmpId = $fields['id']['value'];
+                                    unset($fields['id']);
+                                }
                             }
-                            $messagePerRecord[$id]->addError($error);
-                        }
-                    } catch (Exception $e) {
-                        $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages')->addError($e->getMessage());
+                            $this->setModelData($model, $fields);
+                            if($model->getReferenceId()) {
+                                $model->getValidator()->ignoreRule('unique');
+                            }
+                            $model->validate();
+                            Mage::dispatchEvent('m_validate', array('object' => $model, 'fields' => $fields));
                     }
                 }
             }
+        } catch (Mana_Core_Exception_Validation $e) {
+            foreach ($e->getErrors() as $error) {
+                if(!$messagePerRecord[$id]) {
+                    $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages');
+                }
+                $messagePerRecord[$id]->addError($error);
+            }
+        } catch (Exception $e) {
+            $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages')->addError($e->getMessage());
         }
+        $connection->rollback();
         foreach($messagePerRecord as $id => $messages) {
             if(count($messages) > 0) {
                 return false;
