@@ -144,10 +144,6 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
 
         // rendering
         $this->_setActiveMenu('mana/seo_schema');
-        if(!$this->coreHelper()->isManadevLayeredNavigationInstalled()) {
-            $this->getLayout()->getBlock('tabs')->removeTab('canonical_tab');
-            $this->getLayout()->getBlock('tabs')->removeTab('toolbar_tab');
-        }
         $this->renderLayout();
     }
 
