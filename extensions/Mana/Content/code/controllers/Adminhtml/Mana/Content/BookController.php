@@ -325,11 +325,13 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         try {
             $url_keys = array();
             foreach ($changes['created'] as $id => $fields) {
-                if (in_array($fields['url_key']['value'], $url_keys)) {
-                    $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
-                    throw new Exception($message);
-                } else {
-                    array_push($url_keys, $fields['url_key']['value']);
+                if(!isset($fields['reference_id']['value'])) {
+                    if (in_array($fields['url_key']['value'], $url_keys)) {
+                        $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
+                        throw new Exception($message);
+                    } else {
+                        array_push($url_keys, $fields['url_key']['value']);
+                    }
                 }
             }
             foreach($changes as $action => $data) {
