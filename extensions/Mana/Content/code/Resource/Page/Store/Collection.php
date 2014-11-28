@@ -45,7 +45,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
             $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
         }
         $rows = $read->fetchAssoc($select);
-        return $this->loadWithParent($rows);
+        return $rows;
     }
 
     public function filterTreeByRelatedProducts($related_products = array()) {
@@ -55,7 +55,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
             $select->joinInner(array('mprp' => $this->getTable('mana_content/page_relatedProduct')), "`mpg`.`id` = `mprp`.`page_global_id`", array())
                 ->where("`mprp`.`product_id` IN (". implode(",", $related_products) .")");
             $rows = $read->fetchAssoc($select);
-            return $this->loadWithParent($rows);
+            return $rows;
         }
         return array();
     }
@@ -67,7 +67,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
             $select->joinInner(array('mptr' => $this->getTable('mana_content/page_tagRelation')), "`mptr`.`page_store_id` = `mps`.`id`", array())
                 ->where("`mptr`.`page_tag_id` IN (". implode(",", $tags) .")");
             $rows = $read->fetchAssoc($select);
-            return $this->loadWithParent($rows);
+            return $rows;
         }
         return array();
     }
@@ -102,7 +102,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return $select;
     }
 
-    protected function loadWithParent($rows) {
+    public function loadWithParent($rows) {
         $ids = array();
         foreach($rows as $id => $row) {
             array_push($ids, $id);

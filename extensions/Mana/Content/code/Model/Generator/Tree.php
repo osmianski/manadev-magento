@@ -19,23 +19,26 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
 
         $collection->setParentFilter(null);
         $filteredIds = false;
-        if ($filter = Mage::registry('filter')) {
+        $filter = Mage::registry('filter');
+        if ($filter['search'] || $filter['related_products'] || $filter['tags']) {
             $filterCollection = $this->_getCollection();
             $searchFilteredIds = $filterCollection->filterTreeByTitle($filter['search']);
             $relatedProductsFilteredIds = $filterCollection->filterTreeByRelatedProducts($filter['related_products']);
             $tagsFilteredIds = $filterCollection->filterTreeByTags($filter['tags']);
             $filteredIds = $searchFilteredIds;
             if(!empty($relatedProductsFilteredIds)) {
-                $filteredIds = array_intersect($filteredIds, $relatedProductsFilteredIds);
+                $filteredIds = array_intersect_key($filteredIds, $relatedProductsFilteredIds);
             }
             if(!empty($tagsFilteredIds)) {
-                $filteredIds = array_intersect($filteredIds, $tagsFilteredIds);
+                $filteredIds = array_intersect_key($filteredIds, $tagsFilteredIds);
             }
+            $boldRecordIds = $filteredIds;
+            $filteredIds = $filterCollection->loadWithParent($filteredIds);
         }
         $collection->addOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
 
         foreach($collection as $record) {
-            $this->_extendRecursively($element,$record, $filteredIds);
+            $this->_extendRecursively($element,$record, $filteredIds, $boldRecordIds);
         }
     }
 
@@ -43,7 +46,7 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
      * @param $element
      * @param $book Mana_Content_Model_Page_Hierarchical
      */
-    protected function _extendRecursively($element, $book, $filteredIds) {
+    protected function _extendRecursively($element, $book, $filteredIds, $boldRecordIds) {
         $id = $book->getId();
         $xmlId = 'c_' . $id;
         $route = "mana_content/book/view";
@@ -65,10 +68,11 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
             $element->items->$xmlId->route = $route;
             $element->items->$xmlId->label = $book->getTitle();
             $element->items->$xmlId->selected = Mage::registry('current_book_page')->getId() == $id;
+            $element->items->$xmlId->bold = (array_key_exists($id, $boldRecordIds)) ? 1: 0;
             $book->loadChildPages();
 
             foreach($book->getChildPages() as $record) {
-                $this->_extendRecursively($element->items->$xmlId, $record, $filteredIds);
+                $this->_extendRecursively($element->items->$xmlId, $record, $filteredIds, $boldRecordIds);
             }
         }
     }
