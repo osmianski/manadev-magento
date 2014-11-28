@@ -22,6 +22,10 @@
                 <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
             </block>
 		</reference>
+        <reference name="left">
+            <block type="core/text" name="tree_copy_note"><action method="setText" translate="text"><text>Hold CTRL while dragging to copy node.</text></action></block>
+            <block type="core/text" name="tree_reference_note"><action method="setText" translate="text"><text>Hold ALT while dragging to reference node.</text></action></block>
+        </reference>
     </adminhtml_mana_content_book_edit>
 
     <adminhtml_mana_content_book_load>
