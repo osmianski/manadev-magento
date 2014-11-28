@@ -5668,7 +5668,8 @@
 		 * @name $.jstree.defaults.dnd.inside_pos
 		 * @plugin dnd
 		 */
-		inside_pos : 0
+		inside_pos : 0,
+        reference: false
 	};
 	// TODO: now check works by checking for each node individually, how about max_children, unique, etc?
 	$.jstree.plugins.dnd = function (options, parent) {
@@ -5722,7 +5723,7 @@
 					data.helper
 						.children().attr('class', 'jstree-' + ins.get_theme() + ' jstree-' + ins.get_theme() + '-' + ins.get_theme_variant() + ' ' + ( ins.settings.core.themes.responsive ? ' jstree-dnd-responsive' : '' ))
 						.find('.jstree-copy').first()[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey))) ? 'show' : 'hide' ]();
-                    data.helper.find('.jstree-reference').first()[ (data.data.origin && data.event.metaKey || data.event.altKey) ? 'show' : 'hide' ]();
+                    data.helper.find('.jstree-reference').first()[ (data.data.origin.settings.dnd.reference && (data.data.origin && data.event.metaKey || data.event.altKey)) ? 'show' : 'hide' ]();
 
 
 					// if are hovering the container itself add a new root node
@@ -5780,7 +5781,7 @@
 								}
 								ok = true;
 								for(t1 = 0, t2 = data.data.nodes.length; t1 < t2; t1++) {
-									op = data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey))) ? "copy_node" : "move_node";
+									op = data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey || data.event.altKey))) ? "copy_node" : "move_node";
 									ps = i;
 									if(op === "move_node" && v === 'a' && (data.data.origin && data.data.origin === ins) && p === ins.get_parent(data.data.nodes[t1])) {
 										pr = ins.get_node(p);
@@ -5832,7 +5833,7 @@
 							nodes[i].instance = data.data.origin;
 						}
 					}
-					lastmv.ins[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey))) ? 'copy_node' : 'move_node' ](nodes, lastmv.par, lastmv.pos);
+					lastmv.ins[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey || data.event.altKey))) ? 'copy_node' : 'move_node' ](nodes, lastmv.par, lastmv.pos);
 					for(i = 0, j = nodes.length; i < j; i++) {
 						if(nodes[i].instance) {
 							nodes[i].instance = null;
@@ -5853,7 +5854,7 @@
 				data = $.vakata.dnd._get();
 				if(data && data.data && data.data.jstree) {
 					data.helper.find('.jstree-copy').first()[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (e.metaKey || e.ctrlKey))) ? 'show' : 'hide' ]();
-                    data.helper.find('.jstree-reference').first()[ (data.data.origin && e.metaKey || e.altKey) ? 'show' : 'hide' ]();
+                    data.helper.find('.jstree-reference').first()[ (data.data.origin.settings.dnd.reference && (data.data.origin && e.metaKey || e.altKey)) ? 'show' : 'hide' ]();
                 }
 			});
 	});
