@@ -16,6 +16,11 @@ class ManaPro_Content_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         $savedRelatedProductIds = array();
         if (!is_null($current_id) && substr($current_id, 0, 1) != "n") {
+            $model = Mage::getModel('mana_content/page_globalCustomSettings');
+            $model->load($model->getCustomSettingId($current_id));
+            if(!is_null($model->getReferenceId())) {
+                $current_id = $model->getReferenceId();
+            }
             $savedRelatedProductIds = Mage::getModel('catalog/product')->getCollection()
                 ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $current_id)
                 ->getAllIds();
