@@ -7,17 +7,11 @@ module.exports = Extension.extend({
             'src/Wysiwyg.js',
             'src/Book/TabContainer.js',
             'src/Book/TabContainer/Global.js',
-            'src/Book/TabContainer/Store.js',
-            'src/Book/RelatedProductGrid.js'
+            'src/Book/TabContainer/Store.js'
         ]);
         this.loadJsTasks('frontend', 'frontend/js', [
             'src/header.js',
-            'src/Tree.js',
-            'src/Filter.js',
-            'src/Tree/Search.js',
-            'src/Tree/RelatedProduct.js',
-            'src/Tree/Tag.js',
-            'src/AjaxInterceptor.js'
+            'src/Tree.js'
         ]);
     }
 });

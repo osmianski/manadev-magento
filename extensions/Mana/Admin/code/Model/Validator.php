@@ -61,7 +61,7 @@ class Mana_Admin_Model_Validator {
         $this->_allErrors[] = $message;
     }
 
-    protected function getMessage($field, $rule) {
+    public function getMessage($field, $rule) {
         $message = $this->defaultMessages[$rule];
         if(trim($message) == "") {
             $message = "Rule `{$rule}` failed in field :field";

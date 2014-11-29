@@ -64,7 +64,11 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
                     $breadCrumb = $crumbs[$x]['title'];
                     $route = "mana_content/book/view";
                     $link = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $crumbs[$x]['id']));
-                    $breadcrumbs->addCrumb($breadCrumb, array('label' => $breadCrumb, 'title' => $breadCrumb, 'link' => $link));
+                    $crumbOption = array('label' => $breadCrumb, 'title' => $breadCrumb, 'link' => $link);
+                    if($x == 0) {
+                        unset($crumbOption['link']);
+                    }
+                    $breadcrumbs->addCrumb($breadCrumb, $crumbOption);
                 }
             }
 

@@ -12,7 +12,7 @@ $tree = $this->getData('tree');
 ?>
 <?php if (!$this->getData('hidden')) : ?>
 <li <?php if ($this->getData('selected')): ?>class="m-selected"<?php endif; ?>>
-    <div class="m-item" data-id="<?php echo $this->getData('id') ?>">
+    <div class="m-item <?php if($this->getData('bold')): ?>m-item-bold<?php endif; ?>" data-id="<?php echo $this->getData('id') ?>">
         <?php if ($this->getData('selected')): ?>
             <span><?php echo $this->getData('label') ?></span>
         <?php elseif (!$this->getData('disabled')): ?>

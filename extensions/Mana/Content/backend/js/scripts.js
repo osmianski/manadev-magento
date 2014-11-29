@@ -182,7 +182,6 @@ function ($, Container, ajax, core, expression) {
             };
             this.errorPerRecord = {};
             this.triggerReference = false;
-            this.revertPosition = false;
             this.useReferenceInsteadOfCopy = false;
             this.startingId = false;
             var self = this;
@@ -198,18 +197,12 @@ function ($, Container, ajax, core, expression) {
                     value: this.getText('default-title'),
                     isDefault: 1
                 };
-                record['url_key'] = {
-                    value: expression.seoify(this.getText('default-title')),
-                    isDefault: 1
-                };
                 record['content'] = {
                     value: this.getText('default-content'),
                     isDefault: 1
                 };
 
-                if(this.getField('url_key')) {
-                    this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
-                }
+                this.onChangeTitle();
                 if(this.getField('is_active')) {
                     this.getField('is_active').setValue('1');
                 }
@@ -269,44 +262,32 @@ function ($, Container, ajax, core, expression) {
 
             var jsTreeMoveNode = function(e, data) {
                 var record;
-                if(self.triggerReference) {
-                    self.triggerReference = false;
-                    self.revertPosition = true;
-                    self.useReferenceInsteadOfCopy = true;
-                    self.$jsTree().move_node(data.node.id, data.old_parent, data.old_position);
-                    self.$jsTree().copy_node(data.node.id, data.parent, data.position);
-                } else {
-                    var id = data.node.id;
-                    record = self.initChangesObj(id);
+                var id = data.node.id;
+                record = self.initChangesObj(id);
 
-                    record.parent_id = {
-                        value: data.node.parent,
+                record.parent_id = {
+                    value: data.node.parent,
+                    isDefault: 0
+                };
+                record.position = {
+                    value: data.position,
+                    isDefault: 0
+                };
+
+                $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
+                    var child = self.initChangesObj(childDOM.id);
+                    child.position = {
+                        value: index,
                         isDefault: 0
                     };
-                    record.position = {
-                        value: data.position,
-                        isDefault: 0
-                    };
-
-                    if(!self.revertPosition) {
-                        self.$jsTree().deselect_all();
-                        self.$jsTree().select_node(data.node.id);
-                        self.$jsTree().open_node(data.node.id);
-                        self._postAction("modify");
-                    }
-                    self.revertPosition = false;
-
-                    $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
-                        var child = self.initChangesObj(childDOM.id);
-                        child.position = {
-                            value: index,
-                            isDefault: 0
-                        };
-                    });
-                }
+                });
             };
 
             var jsTreeCopyNode = function (e, data) {
+                if(self.triggerReference) {
+                    self.triggerReference = false;
+                    self.useReferenceInsteadOfCopy = true;
+                }
                 var id;
                 if (self._isTemporaryId(data.original.id)) {
                     var obj = self.initChangesObj(data.original.id);
@@ -603,10 +584,16 @@ function ($, Container, ajax, core, expression) {
                         }
                     }
                 }
+                if(typeof obj.related_products !== "undefined" && obj.related_products.length == 0) {
+                    delete obj.related_products;
+                }
                 var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
                 if (count == 0) {
                     delete this._changes.modified[this.getCurrentId()];
                     this._setNodeColor("black");
+                }
+                if (typeof obj.related_products !== "undefined") {
+                    obj.related_products = [];
                 }
             }
         },
@@ -743,83 +730,6 @@ Mana.define('Mana/Content/Book/TabContainer/Store',
 ['jquery', 'Mana/Content/Book/TabContainer'],
 function ($, TabContainer) {
     return TabContainer.extend('Mana/Content/Book/TabContainer/Store', {
-    });
-});
-
-Mana.define('Mana/Content/Book/RelatedProductGrid', ['jquery', 'Mana/Admin/Grid', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'],
-function ($, Grid, layout, ajax)
-{
-    return Grid.extend('Mana/Content/Book/RelatedProductGrid', {
-        _subscribeToBlockEvents: function() {
-            return this._super()
-                .on('load', this, function () {
-                    if (this.getChild('add-related-products')) this.getChild('add-related-products').on('click', this, this.openRelatedProductGrid);
-                    if (this.getChild('remove-selected')) this.getChild('remove-selected').on('click', this, this.removeSelected);
-                })
-                .on('unload', this, function () {
-                    if (this.getChild('add-related-products')) this.getChild('add-related-products').off('click', this, this.openRelatedProductGrid);
-                    if (this.getChild('remove-selected')) this.getChild('remove-selected').off('click', this, this.removeSelected);
-                })
-        },
-        addToRelatedProductChanges: function (ids) {
-            this.$tabContainer().initChangesObj().related_products = $.merge(this.$tabContainer().initChangesObj().related_products, ids);
-        },
-        removeFromRelatedProductChanges: function(ids) {
-            var current_ids = this.$tabContainer().initChangesObj().related_products;
-            $.each(ids, function(i) {
-                var index = current_ids.indexOf(ids[i]);
-                if(index !== -1) {
-                    current_ids.splice(index, 1);
-                } else {
-                    if(current_ids.indexOf("-"+ids[i]) === -1) {
-                        current_ids.push("-"+ids[i]);
-                    }
-                }
-            });
-        },
-        removeSelected: function () {
-            var rows = this.getRows();
-            var ids = [];
-            $.each(rows, function(i) {
-                if($(rows[i].getCell(0).getElement()).find("input")[0].checked) {
-                    ids.push($(rows[i].getCell(1).getElement())[0].innerText);
-                }
-            });
-            if (rows.length > 0) {
-                this.removeFromRelatedProductChanges(ids);
-                this.$tabContainer()._postAction("modify");
-                this._varienGrid.reload();
-            }
-        },
-        openRelatedProductGrid: function () {
-            this._updateReloadParams();
-            var self = this;
-            $.mChooseProducts({
-                url: this.$tabContainer().getUrl('related-product-grid-selection') + "?isAjax=true",
-                params:function () {
-                    return {
-                        'changes_related_products': self.$tabContainer().initChangesObj().related_products || {},
-                        'id': self.$tabContainer().getCurrentId()
-                    };
-                },
-                result:function (ids) {
-                    if(ids) {
-                        self.addToRelatedProductChanges(ids);
-                        self.$tabContainer()._postAction("modify");
-                        self._varienGrid.reload();
-                    }
-                }
-            });
-
-        },
-        $tabContainer: function() {
-            return layout.getBlock('container');
-        },
-        _updateReloadParams: function() {
-            this._super();
-            this._varienGrid.reloadParams.id = this.$tabContainer().getCurrentId();
-            this._varienGrid.reloadParams.related_product_ids = this.$tabContainer().initChangesObj().related_products;
-        }
     });
 });
 

@@ -18,19 +18,27 @@ class Mana_Content_Block_Adminhtml_Book_Tree extends Mage_Adminhtml_Block_Templa
         $page = $this->getHierarchicalFlatModel();
         $page->loadChildPages(Mage::getStoreConfig('mana_content/general/opened_tree_depth'));
 
-        return $this->jsonHelper()->encodeAttribute(array(
+        $treeOptions = array(
             'core' => array(
                 'data' => $this->_convertPageTreeToArrayRecursively($page, 0),
                 'check_callback' => true,
                 'multiple' => false,
             ),
             'dnd' => array(
-                'copy' => true,
+                'copy' => false,
+                'reference' => false,
             ),
-            'plugins' => array (
+            'plugins' => array(
                 'dnd',
             ),
-        ));
+        );
+
+        $optionObject = new Varien_Object();
+
+        $optionObject->setData($treeOptions);
+        Mage::dispatchEvent('m_content_tree_options', array('options' => $optionObject));
+
+        return $this->jsonHelper()->encodeAttribute($optionObject->getData());
     }
 
     /**

@@ -10,81 +10,6 @@
  *
  */
 class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Controller_V2_Controller {
-    protected function _registerModels($id = null, $saveToRegistry = true) {
-        if (!($customSettings = Mage::registry('m_edit_model'))) {
-            if ($this->adminHelper()->isGlobal()) {
-                /* @var $customSettings Mana_Content_Model_Page_GlobalCustomSettings */            
-                $customSettings = Mage::getModel('mana_content/page_globalCustomSettings');
-
-                /* @var $finalSettings Mana_Content_Model_Page_Global */
-                $finalSettings = Mage::getModel('mana_content/page_global');
-
-                if (!is_null($id)) {
-                    $finalSettings->load($id);
-                    if (!$finalSettings->getId()) {
-                        throw new Mage_Core_Exception($this->__('This page no longer exists.'));
-                    }
-                    $customSettings->load($finalSettings->getData('page_global_custom_settings_id'));
-                    $customSettings->setData('page_global_id', $finalSettings->getId());
-                }
-                else {
-                    $finalSettings->setDefaults();
-                    $customSettings->setDefaults();
-                }
-            }
-            else {
-                if (!is_null($id)) {
-                    /* @var $customSettings Mana_Content_Model_Page_StoreCustomSettings */
-                    $customSettings = Mage::getModel('mana_content/page_storeCustomSettings');
-
-                    /* @var $finalSettings Mana_Content_Model_Page_Store */
-                    $finalSettings = Mage::getModel('mana_content/page_store');
-
-                    $finalSettings->setData('store_id', $this->adminHelper()->getStore()->getId());
-                    $finalSettings->setData("_load_global_custom_settings_id", true);
-                    $finalSettings->load($id, 'page_global_id');
-
-                    if (!$finalSettings->getId()) {
-                        throw new Mage_Core_Exception($this->__('This page no longer exists.'));
-                    }
-
-                    /* @var $customGlobalSettings Mana_Content_Model_Page_GlobalCustomSettings */
-                    $customGlobalSettings = Mage::getModel('mana_content/page_globalCustomSettings');
-
-                    /* @var $finalGlobalSettings Mana_Content_Model_Page_Global */
-                    $finalGlobalSettings = Mage::getModel('mana_content/page_global');
-                    $finalGlobalSettings->load($id);
-                    $customGlobalSettings->load($finalGlobalSettings->getData('page_global_custom_settings_id'));
-
-                    if($saveToRegistry) {
-                        Mage::register('m_global_edit_model', $customGlobalSettings);
-                        Mage::register('m_global_flat_model', $finalGlobalSettings);
-                    }
-
-                    if ($customSettingsId = $finalSettings->getData('page_store_custom_settings_id')) {
-                        $customSettings->load($customSettingsId);
-                    }
-                    else {
-                        $customSettings
-                            ->setData('store_id', $this->adminHelper()->getStore()->getId())
-                            ->setData('page_global_id', $finalGlobalSettings->getId());
-                    }
-                }
-                else {
-                    throw new Mage_Core_Exception($this->__('Non existent pages can not be customized on store level.'));
-                }
-            }
-            if($saveToRegistry) {
-                Mage::register('m_edit_model', $customSettings);
-                Mage::register('m_flat_model', $finalSettings);
-            }
-        }
-        else {
-            $finalSettings = Mage::registry('m_flat_model');
-        }
-
-        return compact('customSettings', 'finalSettings');
-    }
 
     public function newAction() {
         $this->_forward('edit');
@@ -93,8 +18,8 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     public function editAction() {
         Mage::register('cms_page', Mage::getModel('cms/page')->load('home', 'identifier'));
         try {
-            $models = $this->_registerModels($this->getRequest()->getParam('id'));
-            $this->_processRelatedProductIds();
+            $models = $this->contentHelper()->registerModels($this->getRequest()->getParam('id'));
+            Mage::dispatchEvent('m_load_related_products');
         }
         catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -161,7 +86,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if($this->validateChangesObject($changes, $messagesPerRecord)) {
             foreach($changes as $action => $data) {
                 foreach ($data as $id => $fields) {
-                    $models = $this->_registerModels(($action == "created") ? null : $id, false);
+                    $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
                     $model = $models['customSettings'];
                     if(isset($fields['parent_id']) && substr( $fields['parent_id']['value'], 0, 1) <> "n") {
                         $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
@@ -181,20 +106,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                     if($action != "deleted") {
                         // data
                         $this->_processChanges($model, $fields);
-                        if (isset($fields['related_products'])) {
-                            $related_products = $fields['related_products'];
-                            $delete_id = array();
-                            foreach($related_products as $key => $id) {
-                                if(substr($id, 0, 1) == "-") {
-                                    unset($related_products[$key]);
-                                    array_push($delete_id, substr($id, 1, strlen($id) - 1));
-                                }
-                            }
-                            $global_id = $model->getGlobalId($model->getId());
-                            $collection = Mage::getResourceModel("mana_content/page_relatedProduct_collection");
-                            $collection->unlinkProducts($global_id, $delete_id);
-                            $collection->linkProducts($global_id, $related_products);
-                        }
                     } else {
                         $model->delete();
                     }
@@ -252,7 +163,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
      */
     protected function _processChanges($model, $fields) {
 
-        $this->setModelData($model, $fields);
+        $this->contentHelper()->setModelData($model, $fields);
 
         // check if there are any custom settings
         $hasCustomSettings = false;
@@ -276,7 +187,11 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 $model->delete();
             }
         }
-        Mage::dispatchEvent('m_saved', array('object' => $model));
+        $observerParam = array('object' => $model);
+        if (isset($fields['related_products'])) {
+            $observerParam['related_products'] = $fields['related_products'];
+        }
+        Mage::dispatchEvent('m_saved', $observerParam);
     }
 
     public function loadAction() {
@@ -285,7 +200,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if(substr($id, 0, 1) == "n") {
             $id = null;
         }
-        $models = $this->_registerModels($id);
+        $models = $this->contentHelper()->registerModels($id);
         $model = $models['finalSettings'];
 
         if(!is_null($changes)) {
@@ -293,7 +208,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 foreach($changes['modified'] as $id => $field) {
                     if($model->getData('id') == $id || $model->getData('reference_id') == $id) {
                         if (isset($field['related_products'])) {
-                            $this->_processRelatedProductIds($field['related_products']);
+                            Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
                         }
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
@@ -313,7 +228,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             $field = array_merge($field, $originalPageChanges);
                         }
                         if(isset($field['related_products'])) {
-                            $this->_processRelatedProductIds($field['related_products']);
+                            Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
                         }
                         foreach($field as $fieldName => $fieldData) {
                             $model->setData($fieldName, $fieldData['value']);
@@ -326,7 +241,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             }
         }
         if(!Mage::registry('related_product_ids')) {
-            $this->_processRelatedProductIds();
+            Mage::dispatchEvent('m_load_related_products');
         }
         $this->loadLayout();
         $this->addDataToClientSideBlock();
@@ -339,7 +254,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if($id = $this->getRequest()->getParam('id')) {
             $response = new Varien_Object();
             $dbHelper = $this->coreDbHelper();
-            $models = $this->_registerModels($id, false);
+            $models = $this->contentHelper()->registerModels($id, false);
             $model = $models['finalSettings'];
             $data = array();
             $columns = array(
@@ -355,9 +270,11 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 'meta_title' => Mana_Content_Model_Page_Abstract::DM_META_TITLE,
                 'meta_description' => Mana_Content_Model_Page_Abstract::DM_META_DESCRIPTION,
                 'meta_keywords' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
+                'reference_id' => 0,
+                'id' => 0,
             );
             foreach($model->getData() as $key => $value) {
-                if(in_array($key, $columns)) {
+                if(array_key_exists($key, $columns)) {
                     $data[$key] = array(
                         'value' => $value,
                         'isDefault' => $dbHelper->isModelContainsCustomSetting($model, $columns[$key])
@@ -391,41 +308,67 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     private function validateChangesObject($changes, &$messagePerRecord) {
-        foreach($changes as $action => $data) {
-            if($action != "deleted") {
-                foreach($data as $id => $fields) {
-                    try {
-                        $models = $this->_registerModels(($action == "created") ? null : $id, false);
-                        /** @var Mana_Content_Model_Page_Abstract $model */
-                        $model = $models['customSettings'];
-                        $tmpId = $id;
-                        if($action == "modified") {
-                            $model->load($id);
-                        } elseif($action == "created") {
-                            if(isset($fields['id'])) {
-                                $tmpId = $fields['id']['value'];
-                                unset($fields['id']);
-                            }
-                        }
-                        $this->setModelData($model, $fields);
-                        if($model->getReferenceId()) {
-                            $model->getValidator()->ignoreRule('unique');
-                        }
-                        $model->validate();
-                        Mage::getModel('mana_content/page_tag')->validateTag($fields['tags']['value']);
-                    } catch (Mana_Core_Exception_Validation $e) {
-                        foreach ($e->getErrors() as $error) {
-                            if(!$messagePerRecord[$id]) {
-                                $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages');
-                            }
-                            $messagePerRecord[$id]->addError($error);
-                        }
-                    } catch (Exception $e) {
-                        $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages')->addError($e->getMessage());
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $connection->beginTransaction();
+        foreach($changes['deleted'] as $id => $fields) {
+            $models = $this->contentHelper()->registerModels($id, false);
+            $model = $models['customSettings'];
+            $model->delete();
+        }
+        foreach($changes['modified'] as $id => $fields) {
+            $models = $this->contentHelper()->registerModels($id, false);
+            $model = $models['customSettings'];
+            $this->contentHelper()->setModelData($model, $fields);
+            $model->save();
+        }
+
+        try {
+            $url_keys = array();
+            foreach ($changes['created'] as $id => $fields) {
+                if(!isset($fields['reference_id']['value'])) {
+                    if (in_array($fields['url_key']['value'], $url_keys)) {
+                        $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
+                        throw new Exception($message);
+                    } else {
+                        array_push($url_keys, $fields['url_key']['value']);
                     }
                 }
             }
+            foreach($changes as $action => $data) {
+                if($action != "deleted") {
+                    foreach($data as $id => $fields) {
+                            $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
+                            /** @var Mana_Content_Model_Page_Abstract $model */
+                            $model = $models['customSettings'];
+                            $tmpId = $id;
+                            if($action == "modified") {
+                                $model->load($id);
+                            } elseif($action == "created") {
+                                if(isset($fields['id'])) {
+                                    $tmpId = $fields['id']['value'];
+                                    unset($fields['id']);
+                                }
+                            }
+                            $this->contentHelper()->setModelData($model, $fields);
+                            if($model->getReferenceId()) {
+                                $model->getValidator()->ignoreRule('unique');
+                            }
+                            $model->validate();
+                            Mage::dispatchEvent('m_validate', array('object' => $model, 'fields' => $fields));
+                    }
+                }
+            }
+        } catch (Mana_Core_Exception_Validation $e) {
+            foreach ($e->getErrors() as $error) {
+                if(!$messagePerRecord[$id]) {
+                    $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages');
+                }
+                $messagePerRecord[$id]->addError($error);
+            }
+        } catch (Exception $e) {
+            $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages')->addError($e->getMessage());
         }
+        $connection->rollback();
         foreach($messagePerRecord as $id => $messages) {
             if(count($messages) > 0) {
                 return false;
@@ -434,58 +377,12 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         return true;
     }
 
+    #region Dependencies
     /**
-     * @param $model
-     * @param $fields
+     * @return Mana_Content_Helper_Data
      */
-    protected function setModelData($model, $fields) {
-        foreach ($fields as $field => $fieldData) {
-            $model->setData($field, $fieldData['value']);
-            $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
-        }
+    public function contentHelper(){
+        return Mage::helper('mana_content');
     }
-
-    public function relatedProductGridAction() {
-        $id = $this->getRequest()->getPost('id');
-        if (substr($id, 0, 1) == "n") {
-            $id = null;
-        }
-        $models = $this->_registerModels($id);
-        $ids = $this->getRequest()->getParam('related_product_ids');
-        $this->_processRelatedProductIds($ids);
-        $this->loadLayout();
-        $this->renderLayout();
-    }
-
-    public function relatedProductGridSelectionAction() {
-        $ids = $this->getRequest()->getParam('changes_related_products');
-        $this->_processRelatedProductIds($ids);
-        $this->getResponse()->setBody(Mage::helper('mana_admin')->getProductChooserHtml(array($this, '_filterProductChooserCollection')));
-    }
-
-    public function _filterProductChooserCollection($productGrid, $categoryTree = null) {
-        $productGrid->setHiddenProducts(implode(',', Mage::registry('related_product_ids')));
-    }
-
-    protected function _processRelatedProductIds($ids = array()) {
-        if(!$current_id = $this->getRequest()->getPost('id')) {
-            $current_id = $this->getRequest()->getParam('id');
-        }
-        $savedRelatedProductIds = array();
-        if (!is_null($current_id) && substr($current_id, 0, 1) != "n") {
-            $savedRelatedProductIds = Mage::getModel('catalog/product')->getCollection()
-                ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $current_id)
-                ->getAllIds();
-        }
-        foreach($ids as $id) {
-            if(strpos($id, 0, 1) == "-") {
-                $id = strpos($id, 1, strlen($id));
-                $key = array_search($id, $savedRelatedProductIds);
-                unset($savedRelatedProductIds[$key]);
-            } else {
-                $savedRelatedProductIds[] = $id;
-            }
-        }
-        Mage::register('related_product_ids', $savedRelatedProductIds);
-    }
+    #endregion
 }

@@ -117,7 +117,6 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'create_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('create')),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
-            'related_product_grid_selection_url' => $this->getUrl('*/*/relatedProductGridSelection'),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this page and all its child pages?'),
             'delete_whole_page_text' => $this->__('Delete Whole Page'),
             'delete_reference_page_text' => $this->__('Delete Reference Page'),
@@ -131,7 +130,6 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
             'reference_pages' => json_encode($referencePages),
         );
-
         $this->setData('m_client_side_block', $data);
         return $this;
     }

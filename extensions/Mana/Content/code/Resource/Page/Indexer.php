@@ -297,7 +297,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             $select = $db->select()
                 ->from($this->getTable('mana_content/page_globalCustomSettings'), array('tags'))
                 ->where('id = ?', $options['page_global_custom_settings_id']);
-            $tags = $this->contentHelper()->tagStringToArray($db->fetchOne($select));
+            $tags = $this->contentProHelper()->tagStringToArray($db->fetchOne($select));
         } elseif(isset($options['page_global_id']) && isset($options['store_id'])) {
             $global_id = $options['page_global_id'];
             $store_id = $options['store_id'];
@@ -368,6 +368,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
     #region Dependencies
     public function contentHelper() {
         return Mage::helper('mana_content');
+    }
+
+    public function contentProHelper() {
+        return Mage::helper('manapro_content');
     }
     #endregion
 }

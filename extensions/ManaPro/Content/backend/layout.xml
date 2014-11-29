@@ -7,8 +7,14 @@
  -->
 <layout version="0.1.0">
     <adminhtml_mana_content_book_edit>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/manapro/content.js</name><params/></action>
+        </reference>
 		<reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+            </block>
             <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
                 <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
             </block>
@@ -16,11 +22,18 @@
                 <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
             </block>
 		</reference>
+        <reference name="left">
+            <block type="core/text" name="tree_copy_note"><action method="setText" translate="text"><text>Hold CTRL while dragging to copy node.</text></action></block>
+            <block type="core/text" name="tree_reference_note"><action method="setText" translate="text"><text>Hold ALT while dragging to reference node.</text></action></block>
+        </reference>
     </adminhtml_mana_content_book_edit>
 
     <adminhtml_mana_content_book_load>
         <reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
+            <block type="manapro_content/adminhtml_book_relatedProductFormTab" name="related_product_tab" as="related_product_tab">
+                <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+            </block>
             <block type="manapro_content/adminhtml_book_settingsFormTab" name="settings_tab" as="settings_tab">
                 <block type="manapro_content/adminhtml_book_settingsForm" name="settings_form" as="settings_form"/>
             </block>
@@ -28,6 +41,11 @@
                 <block type="manapro_content/adminhtml_book_designForm" name="design_form" as="design_form" />
             </block>
 		</reference>
-
     </adminhtml_mana_content_book_load>
+
+    <adminhtml_manapro_content_book_relatedproductgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_content/adminhtml_book_relatedProductGrid" name="related_product_grid" as="related_product_grid"/>
+        </block>
+    </adminhtml_manapro_content_book_relatedproductgrid>
 </layout>

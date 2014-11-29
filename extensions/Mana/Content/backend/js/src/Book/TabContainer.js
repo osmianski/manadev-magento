@@ -26,7 +26,6 @@ function ($, Container, ajax, core, expression) {
             };
             this.errorPerRecord = {};
             this.triggerReference = false;
-            this.revertPosition = false;
             this.useReferenceInsteadOfCopy = false;
             this.startingId = false;
             var self = this;
@@ -42,18 +41,12 @@ function ($, Container, ajax, core, expression) {
                     value: this.getText('default-title'),
                     isDefault: 1
                 };
-                record['url_key'] = {
-                    value: expression.seoify(this.getText('default-title')),
-                    isDefault: 1
-                };
                 record['content'] = {
                     value: this.getText('default-content'),
                     isDefault: 1
                 };
 
-                if(this.getField('url_key')) {
-                    this.getField('url_key').setValue(expression.seoify(this.getText('default-title')));
-                }
+                this.onChangeTitle();
                 if(this.getField('is_active')) {
                     this.getField('is_active').setValue('1');
                 }
@@ -113,44 +106,32 @@ function ($, Container, ajax, core, expression) {
 
             var jsTreeMoveNode = function(e, data) {
                 var record;
-                if(self.triggerReference) {
-                    self.triggerReference = false;
-                    self.revertPosition = true;
-                    self.useReferenceInsteadOfCopy = true;
-                    self.$jsTree().move_node(data.node.id, data.old_parent, data.old_position);
-                    self.$jsTree().copy_node(data.node.id, data.parent, data.position);
-                } else {
-                    var id = data.node.id;
-                    record = self.initChangesObj(id);
+                var id = data.node.id;
+                record = self.initChangesObj(id);
 
-                    record.parent_id = {
-                        value: data.node.parent,
+                record.parent_id = {
+                    value: data.node.parent,
+                    isDefault: 0
+                };
+                record.position = {
+                    value: data.position,
+                    isDefault: 0
+                };
+
+                $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
+                    var child = self.initChangesObj(childDOM.id);
+                    child.position = {
+                        value: index,
                         isDefault: 0
                     };
-                    record.position = {
-                        value: data.position,
-                        isDefault: 0
-                    };
-
-                    if(!self.revertPosition) {
-                        self.$jsTree().deselect_all();
-                        self.$jsTree().select_node(data.node.id);
-                        self.$jsTree().open_node(data.node.id);
-                        self._postAction("modify");
-                    }
-                    self.revertPosition = false;
-
-                    $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
-                        var child = self.initChangesObj(childDOM.id);
-                        child.position = {
-                            value: index,
-                            isDefault: 0
-                        };
-                    });
-                }
+                });
             };
 
             var jsTreeCopyNode = function (e, data) {
+                if(self.triggerReference) {
+                    self.triggerReference = false;
+                    self.useReferenceInsteadOfCopy = true;
+                }
                 var id;
                 if (self._isTemporaryId(data.original.id)) {
                     var obj = self.initChangesObj(data.original.id);
@@ -447,10 +428,16 @@ function ($, Container, ajax, core, expression) {
                         }
                     }
                 }
+                if(typeof obj.related_products !== "undefined" && obj.related_products.length == 0) {
+                    delete obj.related_products;
+                }
                 var count = Object.keys(this._changes.modified[this.getCurrentId()]).length;
                 if (count == 0) {
                     delete this._changes.modified[this.getCurrentId()];
                     this._setNodeColor("black");
+                }
+                if (typeof obj.related_products !== "undefined") {
+                    obj.related_products = [];
                 }
             }
         },

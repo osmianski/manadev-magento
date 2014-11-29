@@ -77,13 +77,6 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             'required' => true,
         ));
 
-        $this->addField($fieldset, 'canonical_book_page', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical URL does not Contain Filters in CMS Book Page'),
-            'name' => 'canonical_book_page',
-            'required' => true,
-        ));
-
         $fieldset = $this->addFieldset($form, 'mfs_prev_next', array(
             'title' => $this->__('rel=prev and rel=next Paging Hints'),
             'legend' => $this->__('rel=prev and rel=next Paging Hints'),
