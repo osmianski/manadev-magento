@@ -25,13 +25,15 @@ class ManaPro_Content_Helper_Data extends Mage_Core_Helper_Abstract {
                 ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $current_id)
                 ->getAllIds();
         }
-        foreach($ids as $id) {
-            if(strpos($id, 0, 1) == "-") {
-                $id = strpos($id, 1, strlen($id));
-                $key = array_search($id, $savedRelatedProductIds);
-                unset($savedRelatedProductIds[$key]);
-            } else {
-                $savedRelatedProductIds[] = $id;
+        if(!is_null($ids)) {
+            foreach($ids as $id) {
+                if(strpos($id, 0, 1) == "-") {
+                    $id = strpos($id, 1, strlen($id));
+                    $key = array_search($id, $savedRelatedProductIds);
+                    unset($savedRelatedProductIds[$key]);
+                } else {
+                    $savedRelatedProductIds[] = $id;
+                }
             }
         }
         Mage::register('related_product_ids', $savedRelatedProductIds);

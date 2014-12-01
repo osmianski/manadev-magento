@@ -206,37 +206,40 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
 
         if(!is_null($changes)) {
             if(!is_null($id)) {
-                foreach($changes['modified'] as $id => $field) {
-                    if($model->getData('id') == $id || $model->getData('reference_id') == $id) {
-                        if (isset($field['related_products'])) {
-                            Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
+                if(isset($changes['modified'])) {
+                    foreach($changes['modified'] as $id => $field) {
+                        if($model->getData('id') == $id || $model->getData('reference_id') == $id) {
+                            if (isset($field['related_products'])) {
+                                Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
+                            }
+                            $this->contentHelper()->setModelData($model, $field);
+                            Mage::unregister('m_flat_model');
+                            Mage::register('m_flat_model', $model);
+                            break;
                         }
-                        foreach($field as $fieldName => $fieldData) {
-                            $model->setData($fieldName, $fieldData['value']);
-                        }
-                        Mage::unregister('m_flat_model');
-                        Mage::register('m_flat_model', $model);
-                        break;
                     }
                 }
             } else {
-                foreach($changes['created'] as $id => $field) {
-                    if($this->getRequest()->getPost('id') == $id) {
-                        if($referenceId = $field['reference_id']['value']) {
-                            $originalPageChanges = ($changes['modified'][$referenceId]) ? $changes['modified'][$referenceId] : $changes['created'][$referenceId];
-                            unset($originalPageChanges['parent_id']);
-                            unset($originalPageChanges['position']);
-                            $field = array_merge($field, $originalPageChanges);
+                if (isset($changes['created'])) {
+                    foreach($changes['created'] as $id => $field) {
+                        if($this->getRequest()->getPost('id') == $id) {
+                            if(isset($field['reference_id']) &&
+                                $referenceId = $field['reference_id']['value']) {
+                                if(isset($changes['modified'][$referenceId]) || isset($changes['created'][$referenceId])) {
+                                    $originalPageChanges = (isset($changes['modified'][$referenceId])) ? $changes['modified'][$referenceId] : $changes['created'][$referenceId];
+                                    unset($originalPageChanges['parent_id']);
+                                    unset($originalPageChanges['position']);
+                                    $field = array_merge($field, $originalPageChanges);
+                                }
+                            }
+                            if(isset($field['related_products'])) {
+                                Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
+                            }
+                            $this->contentHelper()->setModelData($model, $field);
+                            Mage::unregister('m_flat_model');
+                            Mage::register('m_flat_model', $model);
+                            break;
                         }
-                        if(isset($field['related_products'])) {
-                            Mage::dispatchEvent('m_load_related_products', array('related_products' => $field['related_products']));
-                        }
-                        foreach($field as $fieldName => $fieldData) {
-                            $model->setData($fieldName, $fieldData['value']);
-                        }
-                        Mage::unregister('m_flat_model');
-                        Mage::register('m_flat_model', $model);
-                        break;
                     }
                 }
             }
@@ -311,27 +314,33 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     private function validateChangesObject($changes, &$messagePerRecord) {
         $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
         $connection->beginTransaction();
-        foreach($changes['deleted'] as $id => $fields) {
-            $models = $this->contentHelper()->registerModels($id, false);
-            $model = $models['customSettings'];
-            $model->delete();
+        if(isset($changes['deleted'])) {
+            foreach($changes['deleted'] as $id => $fields) {
+                $models = $this->contentHelper()->registerModels($id, false);
+                $model = $models['customSettings'];
+                $model->delete();
+            }
         }
-        foreach($changes['modified'] as $id => $fields) {
-            $models = $this->contentHelper()->registerModels($id, false);
-            $model = $models['customSettings'];
-            $this->contentHelper()->setModelData($model, $fields);
-            $model->save();
+        if(isset($changes['modified'])) {
+            foreach($changes['modified'] as $id => $fields) {
+                $models = $this->contentHelper()->registerModels($id, false);
+                $model = $models['customSettings'];
+                $this->contentHelper()->setModelData($model, $fields, true);
+                $model->save();
+            }
         }
 
         try {
             $url_keys = array();
-            foreach ($changes['created'] as $id => $fields) {
-                if(!isset($fields['reference_id']['value'])) {
-                    if (in_array($fields['url_key']['value'], $url_keys)) {
-                        $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
-                        throw new Exception($message);
-                    } else {
-                        array_push($url_keys, $fields['url_key']['value']);
+            if(isset($changes['created'])) {
+                foreach ($changes['created'] as $id => $fields) {
+                    if(!isset($fields['reference_id']['value'])) {
+                        if (in_array($fields['url_key']['value'], $url_keys)) {
+                            $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
+                            throw new Exception($message);
+                        } else {
+                            array_push($url_keys, $fields['url_key']['value']);
+                        }
                     }
                 }
             }
@@ -361,7 +370,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             }
         } catch (Mana_Core_Exception_Validation $e) {
             foreach ($e->getErrors() as $error) {
-                if(!$messagePerRecord[$id]) {
+                if(!isset($messagePerRecord[$id])) {
                     $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages');
                 }
                 $messagePerRecord[$id]->addError($error);

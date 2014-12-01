@@ -48,6 +48,7 @@ class ManaPro_Content_Model_Observer {
         /** @var Mana_Content_Model_Page_GlobalCustomSettings $model */
         $model = $observer->getObject();
         $delete_id = array();
+        $related_products = is_array($related_products) ? $related_products : array();
         foreach ($related_products as $key => $id) {
             if (substr($id, 0, 1) == "-") {
                 unset($related_products[$key]);

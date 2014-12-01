@@ -95,7 +95,9 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
             }
             if($saveToRegistry) {
                 $params = Mage::app()->getRequest()->getPost();
-                if ($fieldData = $params['changes']['created'][$params['id']]) {
+                if (isset($params['id']) &&
+                    isset($params['changes']['created'][$params['id']]) &&
+                    $fieldData = $params['changes']['created'][$params['id']]) {
                     $this->setModelData($customSettings, $fieldData);
                     $this->setModelData($finalSettings, $fieldData);
                 }
