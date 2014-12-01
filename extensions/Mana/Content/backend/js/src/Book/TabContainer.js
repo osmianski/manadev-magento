@@ -149,7 +149,7 @@ function ($, Container, ajax, core, expression) {
 
                 function copyRecord(obj) {
                     var record = $.extend({}, obj);
-                    if(typeof record.reference_id !== "undefined" && record.reference_id.value == "0") {
+                    if(typeof record.reference_id !== "undefined" && (record.reference_id.value === null || record.reference_id.value == "0")) {
                         delete record.reference_id;
                     }
                     var copiedRecordId = (typeof record.reference_id !== "undefined") ? record.reference_id : record.id;
