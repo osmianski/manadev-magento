@@ -95,7 +95,9 @@ class Mana_Content_Resource_Page_Global extends Mana_Content_Resource_Page_Abstr
                 'position' => "`ti_gcs`.`position`",
                 'reference_id' => '`ti_gcs`.`reference_id`',
                 'tags' => '`ti_gcs`.`tags`',
-            ));
+                'default_mask0' => '`ti_gcs`.`default_mask0`',
+                'default_mask1' => '`ti_gcs`.`default_mask1`',
+                ));
         }
         if (isset($tables['ti_gcs'])) {
             $select->joinInner(

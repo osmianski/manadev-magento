@@ -162,7 +162,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
      */
     protected function _processChanges($model, $fields) {
 
-        $this->contentHelper()->setModelData($model, $fields);
+        $this->contentHelper()->setModelData($model, $fields, true);
 
         // check if there are any custom settings
         $hasCustomSettings = false;
@@ -274,6 +274,8 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 'meta_keywords' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
                 'reference_id' => 0,
                 'id' => 0,
+                'default_mask0' => 0,
+                'default_mask1' => 0,
             );
             foreach($model->getData() as $key => $value) {
                 if(array_key_exists($key, $columns)) {
