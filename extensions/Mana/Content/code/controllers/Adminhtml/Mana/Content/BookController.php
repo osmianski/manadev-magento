@@ -101,8 +101,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                         if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
                             $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
                         }
-                    } elseif($action == "modified" || $action == "deleted") {
-                        $model->load($id);
                     }
                     if($action != "deleted") {
                         // data
