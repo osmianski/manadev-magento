@@ -224,6 +224,19 @@ function ($, Container, ajax, core, expression) {
             if(confirm(confirmText)) {
                 var id = this.getCurrentId();
 
+                for(var x in this.reference_pages) {
+                    if(id == this.reference_pages[x].reference_id) {
+                        var reference_page = this.reference_pages[x];
+                        if (this._isTemporaryId(reference_page.id)) {
+                            delete this._changes.created[reference_page.id];
+                            this.$jsTree().delete_node(reference_page.id);
+                        } else {
+                            this._changes.deleted[reference_page.id] = reference_page.id;
+                            this._setNodeColor("red", reference_page.id);
+                        }
+                    }
+                }
+
                 if (this._isTemporaryId(id)) {
                     delete this._changes.created[id];
                     this.$jsTree().delete_node(id);
@@ -306,10 +319,10 @@ function ($, Container, ajax, core, expression) {
                 this.$jsTree().set_id(tmpId, newIds[tmpId]);
                 for(var i in this.reference_pages) {
                     if(this.reference_pages[i].id == tmpId) {
-                        this.reference_pages[i].id == newIds[tmpId];
+                        this.reference_pages[i].id = newIds[tmpId];
                     }
                     if (this.reference_pages[i].reference_id == tmpId) {
-                        this.reference_pages[i].reference_id == newIds[tmpId];
+                        this.reference_pages[i].reference_id = newIds[tmpId];
                     }
                 }
             }
