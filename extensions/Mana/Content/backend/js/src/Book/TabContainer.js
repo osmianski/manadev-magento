@@ -135,31 +135,38 @@ function ($, Container, ajax, core, expression) {
                 var id;
                 if (self._isTemporaryId(data.original.id)) {
                     var obj = self.initChangesObj(data.original.id);
-                    id = (obj.reference_id.value) ? obj.reference_id.value : obj.id.value;
+                    copyRecord(obj);
                 } else {
                     id = data.original.id;
+                    var params = {
+                        form_key: FORM_KEY,
+                        id: id
+                    };
+                    ajax.post(self.getUrl('getRecord'), params, function (response) {
+                        copyRecord(response.data);
+                    });
                 }
-                var params = {
-                    form_key: FORM_KEY,
-                    id: id
-                };
-                ajax.post(self.getUrl('getRecord'), params, function (response) {
-                    var record = $.extend({}, response.data);
-                    var copiedRecordId = (record.reference_id.value) ? record.reference_id : record.id;
+
+                function copyRecord(obj) {
+                    var record = $.extend({}, obj);
+                    if(typeof record.reference_id !== "undefined" && record.reference_id.value == "0") {
+                        delete record.reference_id;
+                    }
+                    var copiedRecordId = (typeof record.reference_id !== "undefined") ? record.reference_id : record.id;
                     delete record.id;
                     record = self.createNewRecord(record);
                     record.parent_id = {value: data.parent, isDefault: 1};
                     record.position = {value: data.position, isDefault: 1};
-                    if(self.useReferenceInsteadOfCopy) {
+                    if (self.useReferenceInsteadOfCopy) {
                         self.useReferenceInsteadOfCopy = false;
                         record.reference_id = copiedRecordId;
-                         self.reference_pages.push({id: record.id.value, reference_id: record.reference_id.value});
+                        self.reference_pages.push({id: record.id.value, reference_id: record.reference_id.value});
                     }
                     self.$jsTree().set_id(data.node.id, record.id.value);
                     self._setNodeColor("green", record.id.value);
                     self.$jsTree().deselect_all();
                     self.$jsTree().select_node(record.id.value);
-                });
+                }
             };
 
             var jsTreeDndMove = function(e, data) {
