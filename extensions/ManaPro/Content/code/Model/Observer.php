@@ -68,14 +68,18 @@ class ManaPro_Content_Model_Observer {
     }
 
     public function enableCopyAndReference($observer) {
-        $treeOptions = $observer->getOptions();
-        $newOptions = array(
-            'dnd' => array(
-                'copy' => true,
-                'reference' => true,
-            )
-        );
-        $treeOptions->addData($newOptions);
+        $handles = Mage::app()->getLayout()->getUpdate()->getHandles();
+        // Do not allow copy and reference on new
+        if(!in_array('adminhtml_mana_content_book_new', $handles)) {
+            $treeOptions = $observer->getOptions();
+            $newOptions = array(
+                'dnd' => array(
+                    'copy' => true,
+                    'reference' => true,
+                )
+            );
+            $treeOptions->addData($newOptions);
+        }
     }
 
     /**

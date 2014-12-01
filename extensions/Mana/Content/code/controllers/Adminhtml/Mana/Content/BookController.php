@@ -12,6 +12,7 @@
 class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Controller_V2_Controller {
 
     public function newAction() {
+        $this->getLayout()->getUpdate()->addHandle('adminhtml_mana_content_book_new');
         $this->_forward('edit');
     }
 

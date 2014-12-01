@@ -28,6 +28,11 @@
         </reference>
     </adminhtml_mana_content_book_edit>
 
+    <adminhtml_mana_content_book_new>
+        <remove name="tree_copy_note"/>
+        <remove name="tree_reference_note"/>
+    </adminhtml_mana_content_book_new>
+
     <adminhtml_mana_content_book_load>
         <reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
