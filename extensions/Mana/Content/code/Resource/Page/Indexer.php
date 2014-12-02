@@ -22,6 +22,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         $this->_calculateFinalGlobalSettings($options);
         $this->_calculateFinalStoreLevelSettings($options);
         $this->_calculateTags($options);
+        $this->_copyReferencePages($options);
     }
 
     public function reindexAll() {
@@ -365,6 +366,76 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         }
     }
 
+    protected function _copyReferencePages($options) {
+        if(isset($options['page_global_id'])) {
+            $global_id = $options['page_global_id'];
+        } else {
+            $global_id = Mage::getModel('mana_content/page_globalCustomSettings')->getGlobalId($options['page_global_custom_settings_id']);
+        }
+
+        $rawFields = array(
+            'id',
+            'is_active',
+            'url_key',
+            'title',
+            'content',
+            'page_layout',
+            'layout_xml',
+            'custom_design_active_from',
+            'custom_design_active_to',
+            'custom_design',
+            'custom_layout_xml',
+            'meta_title',
+            'meta_keywords',
+            'meta_description',
+            'tags'
+        );
+        $customTable = $this->getTable('mana_content/page_globalCustomSettings');
+        $globalTable = $this->getTable('mana_content/page_global');
+        $storeTable = $this->getTable('mana_content/page_store');
+
+        $db = $this->_getWriteAdapter();
+        $select =$db->select();
+        $select->from(array('pg' => $globalTable), array())
+            ->joinInner(array('pgcs' => $customTable), 'pg.page_global_custom_settings_id = pgcs.id', array())
+            ->joinInner(array('pgo' => $globalTable), 'pgo.id = pgcs.reference_id', array())
+            ->joinInner(array('pgcso' => $customTable), 'pgcso.id = pgo.page_global_custom_settings_id', array())
+            ->where("pgo.id = ?", $global_id);
+
+        $selects[$customTable] = $select;
+
+        $select = $db->select();
+        $select->from(array('ps' => $storeTable), array())
+            ->joinInner(array('pg' => $globalTable), 'pg.id = ps.page_global_id', array())
+            ->joinInner(array('pgcs' => $customTable), 'pgcs.id = pg.page_global_custom_settings_id', array())
+            ->joinInner(array('pgo' => $globalTable), 'pgo.id = pgcs.reference_id', array())
+            ->joinInner(array('pso' => $storeTable), 'pso.page_global_id = pgo.id', array())
+            ->where('pgo.id = ?', $global_id);
+
+        $selects[$storeTable] = $select;
+
+        $tables = array(
+            $customTable => 'pgcs',
+            $storeTable => 'ps',
+        );
+
+        /** @var Varien_Db_Select $select */
+        foreach($selects as $table => $select) {
+            $fields = array();
+            foreach ($rawFields as $key) {
+                $alias = $tables[$table];
+                if ($key != 'id') {
+                    $alias .= 'o';
+                }
+                $fields[$key] = new Zend_Db_Expr("`{$alias}`.`{$key}`");
+            }
+            $select->columns($fields);
+            $sql = $select->insertFromSelect($table, array_keys($fields));
+            $db->exec($sql);
+        }
+
+
+    }
     #region Dependencies
     public function contentHelper() {
         return Mage::helper('mana_content');
