@@ -33,6 +33,14 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
             if(!empty($tagsFilteredIds)) {
                 $filteredIds = array_intersect_key($filteredIds, $tagsFilteredIds);
             }
+            $referencePagesId = $filterCollection->filterReferencingPages($filteredIds);
+            if (!empty($referencePagesId)) {
+                foreach($referencePagesId as $id => $row) {
+                    if(!array_key_exists($id, $filteredIds)) {
+                        $filteredIds[$id] = $row;
+                    }
+                }
+            }
             $boldRecordIds = $filteredIds;
             $filteredIds = $filterCollection->loadWithParent($filteredIds);
         }
