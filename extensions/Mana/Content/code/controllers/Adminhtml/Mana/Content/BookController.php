@@ -65,6 +65,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $messages = $this->getLayout()->createBlock('adminhtml/messages');
 
         $changes = $this->getRequest()->getPost('changes');
+        $changes = is_array($changes) ? $changes : array();
         $newId = array();
         $messagesPerRecord = array();
 

@@ -19,6 +19,7 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
 
         $collection->setParentFilter(null);
         $filteredIds = false;
+        $boldRecordIds = array();
         $filter = Mage::registry('filter');
         if ($filter['search'] || $filter['related_products'] || $filter['tags']) {
             $filterCollection = $this->_getCollection();
