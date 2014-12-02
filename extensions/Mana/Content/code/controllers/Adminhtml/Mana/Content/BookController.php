@@ -326,6 +326,9 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             foreach($changes['modified'] as $id => $fields) {
                 $models = $this->contentHelper()->registerModels($id, false);
                 $model = $models['customSettings'];
+                if(isset($fields['parent_id'])) {
+                    unset($fields['parent_id']);
+                }
                 $this->contentHelper()->setModelData($model, $fields, true);
                 $model->save();
             }
@@ -352,6 +355,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                             /** @var Mana_Content_Model_Page_Abstract $model */
                             $model = $models['customSettings'];
                             $tmpId = $id;
+                            unset($fields['parent_id']);
                             if($action == "modified") {
                                 $model->load($id);
                             } elseif($action == "created") {
