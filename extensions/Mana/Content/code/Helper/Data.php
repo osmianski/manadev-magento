@@ -95,7 +95,9 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
             }
             if($saveToRegistry) {
                 $params = Mage::app()->getRequest()->getPost();
-                if ($fieldData = $params['changes']['created'][$params['id']]) {
+                if (isset($params['id']) &&
+                    isset($params['changes']['created'][$params['id']]) &&
+                    $fieldData = $params['changes']['created'][$params['id']]) {
                     $this->setModelData($customSettings, $fieldData);
                     $this->setModelData($finalSettings, $fieldData);
                 }
@@ -115,10 +117,20 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
      * @param $model Mana_Content_Model_Page_Abstract
      * @param $fields array
      */
-    public function setModelData($model, $fields) {
+    public function setModelData($model, $fields, $setMaskValue = false) {
+        foreach($fields as $field => $fieldData) {
+            if(substr($field, 12) == "default_mask"){
+                $model->setData($field, $fieldData['value']);
+                unset($fields[$field]);
+            }
+        }
         foreach ($fields as $field => $fieldData) {
-            $model->setData($field, $fieldData['value']);
-            $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
+            if(isset($fieldData['value'])) {
+                $model->setData($field, $fieldData['value']);
+                if($setMaskValue) {
+                    $this->coreDbHelper()->isModelContainsCustomSetting($model, $field, !($fieldData['isDefault'] === "true"));
+              }
+            }
         }
     }
 
