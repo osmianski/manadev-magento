@@ -51,7 +51,6 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
         }
         elseif ($event->getEntity() == Mana_Content_Model_Page_StoreCustomSettings::ENTITY) {
             $event->addNewData('page_global_id', $event->getData('data_object')->getData('page_global_id'));
-            $event->addNewData('store_id', $event->getData('data_object')->getData('store_id'));
         }
     }
 
