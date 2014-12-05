@@ -791,6 +791,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_Page');
     }
 
+    public function isManadevCMSProInstalled() {
+        return $this->isModuleEnabled('ManaPro_Content');
+    }
+
     protected $_accentTranslations = array(
         'à' => 'a',
         'á' => 'a',

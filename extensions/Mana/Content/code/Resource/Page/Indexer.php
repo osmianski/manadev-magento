@@ -21,8 +21,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         $this->_calculateGlobalCustomSettings($options);
         $this->_calculateFinalGlobalSettings($options);
         $this->_calculateFinalStoreLevelSettings($options);
-        $this->_calculateTags($options);
-        $this->_copyReferencePages($options);
+        if($this->coreHelper()->isManadevCMSProInstalled()) {
+            $this->_calculateTags($options);
+            $this->_copyReferencePages($options);
+        }
     }
 
     public function reindexAll() {
