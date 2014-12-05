@@ -106,11 +106,13 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
             ->from(array('cp' => $this->getTable('mana_content/page_store')), null)
             ->joinInner(array('mpg' => $this->getTable("mana_content/page_global")), "`mpg`.`id` = `cp`.`page_global_id`", array())
             ->joinInner(array('mpgcs' => $this->getTable("mana_content/page_globalCustomSettings")), "`mpgcs`.`id` = `mpg`.`page_global_custom_settings_id`", array())
+            ->joinLeft(array('msu' => $this->getTargetTableName()), "`cp`.`id` = `msu`.`book_page_id` AND `msu`.`schema_id` = {$schema->getId()}", array())
             ->columns($fields)
             ->where('`cp`.`store_id` = ?', $schema->getStoreId())
             ->where('`mpgcs`.`parent_id` IS NULL');
 
-        $obsoleteCondition = "(`msu`.`schema_id` = " . $schema->getId() . ") AND (`msu`.`is_page` = 1) AND (`msu`.`type` = 'book_page')";
+        $baseObsoleteCondition = "(`msu`.`schema_id` = " . $schema->getId() . ") AND (`msu`.`is_page` = 1) AND (`msu`.`type` = 'book_page') AND (`mps`.`store_id` = {$schema->getStoreId()})";
+        $obsoleteCondition = $baseObsoleteCondition . " AND (`mpgcs`.`parent_id` IS NULL)";
 
         if(count($ids)) {
             $select->where('`mpgcs`.`id` IN (?)', implode(",", $ids));
@@ -142,16 +144,19 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
                 ->joinInner(array('mpgcs' => $table), "`mpgcs`.`id` = `mpg`.`page_global_custom_settings_id`", array())
                 ->joinInner(array('mpgcs1' => $table), "`mpgcs`.`parent_id` = `mpgcs1`.`id`", array())
                 ->joinInner(array('mpg1' => $this->getTable("mana_content/page_global")), "`mpg1`.`page_global_custom_settings_id` = `mpgcs1`.`id`", array())
-                ->joinInner(array('mps1' => $this->getTable("mana_content/page_store")), "`mps1`.`page_global_id` = `mpg1`.`id`", array())
-                ->joinInner(array('msu' => $this->getTargetTableName()), "`mps1`.`id` = `msu`.`book_page_id`", array())
+                ->joinInner(array('mps1' => $this->getTable("mana_content/page_store")), "`mps1`.`page_global_id` = `mpg1`.`id` AND `mps1`.`store_id` = `cp`.`store_id`", array())
+                ->joinLeft(array('msu' => $this->getTargetTableName()), "`mps1`.`id` = `msu`.`book_page_id` AND `msu`.`schema_id` = {$schema->getId()}", array())
                 ->columns(array_merge($fields, $customFields))
-                ->where('`cp`.`store_id` = ?', $schema->getStoreId())
+                ->where("`msu`.`status` = 'active'")
+                ->where("`mps1`.`store_id` = ?", $schema->getStoreId())
                 ->where("`mpgcs`.`level` = ?", $x);
 
             if(count($ids)) {
                 $select->where("`mpgcs`.`id` IN (". implode(",", $ids) .")");
             }
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
+            $obsoleteCondition = $baseObsoleteCondition . " AND (`mpgcs`.`level` = {$x})";
+            $this->makeAllRowsObsolete($options, $obsoleteCondition);
             $db->exec($sql);
         }
     }
