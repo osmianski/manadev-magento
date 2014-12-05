@@ -48,7 +48,7 @@ class Mana_Content_Helper_PageType_Book extends Mana_Core_Helper_PageType {
         /* @var $logger Mana_Core_Helper_Logger */
         $logger = Mage::helper('mana_core/logger');
 
-        if (($bookPageId = $urlModel->getSeoRouteParam('id')) === false) {
+        if (($bookPageId = $urlModel->getBookPageId()) === false) {
             $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'attribute page URL key', 'id'));
         }
         if (!isset($this->_urlKeys[$bookPageId])) {
