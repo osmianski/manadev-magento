@@ -21,8 +21,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         $this->_calculateGlobalCustomSettings($options);
         $this->_calculateFinalGlobalSettings($options);
         $this->_calculateFinalStoreLevelSettings($options);
-        $this->_calculateTags($options);
-        $this->_copyReferencePages($options);
+        if($this->coreHelper()->isManadevCMSProInstalled()) {
+            $this->_calculateTags($options);
+            $this->_copyReferencePages($options);
+        }
     }
 
     public function reindexAll() {
@@ -296,7 +298,9 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             $sql = "DELETE FROM {$tagRelationTable} WHERE page_store_id IN (SELECT id FROM {$this->getTable('mana_content/page_store')} WHERE page_global_id = {$global_id})";
             $db->exec($sql);
             $select = $db->select()
+                ->distinct()
                 ->from($this->getTable('mana_content/page_globalCustomSettings'), array('tags'))
+                ->where('tags IS NOT NULL')
                 ->where('id = ?', $options['page_global_custom_settings_id']);
             $tags = $this->contentProHelper()->tagStringToArray($db->fetchOne($select));
         } elseif(isset($options['page_global_id']) && isset($options['store_id'])) {
@@ -306,17 +310,23 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             $sql = "DELETE FROM {$tagRelationTable} WHERE page_store_id IN (SELECT id FROM {$this->getTable('mana_content/page_store')} WHERE page_global_id = {$global_id} AND store_id = {$store_id})";
             $db->exec($sql);
             $select = $db->select()
+                ->distinct()
                 ->from($this->getTable('mana_content/page_store'), array('tags'))
+                ->where('tags IS NOT NULL')
                 ->where($cond);
-            $tags = $this->contentHelper()->tagStringToArray($db->fetchOne($select));
+            $tags = $this->contentProHelper()->tagStringToArray($db->fetchOne($select));
         }
         else{
             $db->truncate($this->getTable('mana_content/page_tagRelation'));
-            $select = $db->select()->from($this->getTable('mana_content/page_store'), array('tags'));
-            $rows = $db->fetchAssoc($select);
+            $select = $db->select()
+                ->distinct()
+                ->from($this->getTable('mana_content/page_store'), array('tags'))
+                ->where('tags IS NOT NULL');
+            $rows = $db->fetchCol($select);
             $tags = array();
             foreach($rows as $stringTag) {
-                $tags = array_unique($tags, $this->contentHelper()->tagStringToArray($stringTag));
+                $helper = $this->contentProHelper();
+                $tags = array_unique($helper->tagStringToArray($stringTag));
             }
         }
 
@@ -367,12 +377,6 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
     }
 
     protected function _copyReferencePages($options) {
-        if(isset($options['page_global_id'])) {
-            $global_id = $options['page_global_id'];
-        } else {
-            $global_id = Mage::getModel('mana_content/page_globalCustomSettings')->getGlobalId($options['page_global_custom_settings_id']);
-        }
-
         $rawFields = array(
             'id',
             'is_active',
@@ -399,9 +403,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
         $select->from(array('pg' => $globalTable), array())
             ->joinInner(array('pgcs' => $customTable), 'pg.page_global_custom_settings_id = pgcs.id', array())
             ->joinInner(array('pgo' => $globalTable), 'pgo.id = pgcs.reference_id', array())
-            ->joinInner(array('pgcso' => $customTable), 'pgcso.id = pgo.page_global_custom_settings_id', array())
-            ->where("pgo.id = ?", $global_id);
-
+            ->joinInner(array('pgcso' => $customTable), 'pgcso.id = pgo.page_global_custom_settings_id', array());
         $selects[$customTable] = $select;
 
         $select = $db->select();
@@ -409,9 +411,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             ->joinInner(array('pg' => $globalTable), 'pg.id = ps.page_global_id', array())
             ->joinInner(array('pgcs' => $customTable), 'pgcs.id = pg.page_global_custom_settings_id', array())
             ->joinInner(array('pgo' => $globalTable), 'pgo.id = pgcs.reference_id', array())
-            ->joinInner(array('pso' => $storeTable), 'pso.page_global_id = pgo.id', array())
-            ->where('pgo.id = ?', $global_id);
-
+            ->joinInner(array('pso' => $storeTable), 'pso.page_global_id = pgo.id', array());
         $selects[$storeTable] = $select;
 
         $tables = array(
@@ -430,6 +430,19 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 $fields[$key] = new Zend_Db_Expr("`{$alias}`.`{$key}`");
             }
             $select->columns($fields);
+
+            if(isset($options['page_global_id'])) {
+            $global_id = $options['page_global_id'];
+            } elseif (isset($options['page_global_custom_settings_id'])){
+                $global_id = Mage::getModel('mana_content/page_globalCustomSettings')->getGlobalId($options['page_global_custom_settings_id']);
+            } else {
+                $global_id = null;
+            }
+
+            if(!is_null($global_id)) {
+                $select->where('pgo.id = ?', $global_id);
+            }
+
             $sql = $select->insertFromSelect($table, array_keys($fields));
             $db->exec($sql);
         }

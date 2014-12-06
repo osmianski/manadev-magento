@@ -26,8 +26,8 @@
 
         <reference name="m_ajax_update">
 		    <action method="setRenderedButNotSentBlocks"><blocks>m_ajax_update,head</blocks></action>
-            <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,tree,breadcrumbs,filter_relatedproduct,search,filter_tags</updated_blocks></action>
-            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>tree,filter_relatedproduct,search,filter_tags</updated_blocks></action>
+            <action method="setUpdatedBlocksIfPageChanged"><updated_blocks>content,tree,breadcrumbs,filter_relatedproduct,search,filter_tags,store_language</updated_blocks></action>
+            <action method="setUpdatedBlocksIfParameterChanged"><updated_blocks>tree,filter_relatedproduct,search,filter_tags,store_language</updated_blocks></action>
             <action method="setInterceptedLinkContainers"><css_selector>.mb-search,.mb-filter-relatedproduct,.mb-filter-tags</css_selector></action>
 		</reference>
 
@@ -41,6 +41,9 @@
             <block type="mana_content/book_content" name="book_content" as="book_content"/>
         </reference>
         <reference name="breadcrumbs">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+        </reference>
+        <reference name="store_language">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
         </reference>
 

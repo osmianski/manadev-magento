@@ -148,6 +148,7 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
                     'id' => "`mps`.`id`",
                     'parent_id' => "`ti_gcs`.`parent_id`",
                     'page_global_custom_settings_id' => "`mpg`.`page_global_custom_settings_id`",
+                    'page_global_id' => "`mpg`.`id`",
                     'is_active' => "`mps`.`is_active`",
                     'url_key' => "`mps`.`url_key`",
                     'title' => "`mps`.`title`",
