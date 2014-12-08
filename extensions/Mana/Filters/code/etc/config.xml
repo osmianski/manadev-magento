@@ -197,14 +197,6 @@
 				</Mana_Filters>
 			</modules>
 		</translate>
-
-        <layout>
-            <updates>
-                <mana_filters>
-                    <file>mana_filters.xml</file>
-                </mana_filters>
-            </updates>
-        </layout>
 		<!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->

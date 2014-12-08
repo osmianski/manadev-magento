@@ -56,14 +56,18 @@
                     <description>Recalculates books and feed page global and store-level settings</description>
                 </mana_content_page>
                 <mana_seo_url>
-                    <sources>
-                        <book_page><resource>mana_content/page_urlIndexer</resource></book_page>
-                    </sources>
                     <depends>
                         <mana_content_page/>
                     </depends>
                 </mana_seo_url>
             </indexer>
+            <indexer_config>
+                <mana_seo_url>
+                    <sources>
+                        <book_page><resource>mana_content/page_urlIndexer</resource></book_page>
+                    </sources>
+                </mana_seo_url>
+            </indexer_config>
         </index>
         <events>
             <m_ajax_options><!-- this is event name this module listens for -->

@@ -235,7 +235,15 @@
 				</ManaPro_FilterSeoLinks>
 			</modules>
 		</translate>
-		<!-- INSERT HERE: layout, translate, routers -->
+
+        <layout>
+            <updates>
+                <mana_filters>
+                    <file>manapro_filterseolinks.xml</file>
+                </mana_filters>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
 	
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
