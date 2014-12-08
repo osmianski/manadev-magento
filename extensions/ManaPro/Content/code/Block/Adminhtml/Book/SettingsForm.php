@@ -40,7 +40,10 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
 
             'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_URL_KEY,
             'default_label' => $this->__('Use Title'),
-            'default_store_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__(
+                    !$this->adminHelper()->isGlobal() && $this->coreDbHelper()
+                        ->isModelContainsCustomSetting($this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_URL_KEY)
+                    ? 'Same For All Stores' : 'Use Title'),
         ));
 
         $is_active = array(
@@ -56,7 +59,7 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
         if(!is_null($this->getRequest()->getParam('id')) && $model->getData('page_global_id') != $this->getRequest()->getParam('id')) {
             //!is_null($model->getData('parent_id'))
             $is_active['default_label'] = $this->__('Use Parent Page');
-            $is_active['default_store_label'] = $this->__('Use Parent Page');
+            $is_active['default_store_label'] = $this->__('Same For All Stores');
             $is_active['note'] = $this->__('If `Use Parent Page` is checked, value for Status will cascade after save.');
         }
 
@@ -86,7 +89,10 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
 
             'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_META_TITLE,
             'default_label' => $this->__('Use Title'),
-            'default_store_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__(
+                    !$this->adminHelper()->isGlobal() && $this->coreDbHelper()
+                        ->isModelContainsCustomSetting($this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_META_TITLE)
+                    ? 'Same For All Stores' : 'Use Title'),
         ));
 
         $this->addField($fieldsetSeo, 'meta_description', 'textarea', array(
@@ -107,7 +113,10 @@ class ManaPro_Content_Block_Adminhtml_Book_SettingsForm extends Mana_Content_Blo
 
             'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS,
             'default_label' => $this->__('Use Tags'),
-            'default_store_label' => $this->__('Same For All Stores'),
+            'default_store_label' => $this->__($this->__(
+                    !$this->adminHelper()->isGlobal() && $this->coreDbHelper()
+                        ->isModelContainsCustomSetting($this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS)
+                    ? 'Same For All Stores' : 'Use Tags')),
         ));
 
         $fieldsetTags = $this->addFieldset($form, 'mfs_tag', array(
