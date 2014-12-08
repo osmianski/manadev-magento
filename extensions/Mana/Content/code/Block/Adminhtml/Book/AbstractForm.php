@@ -45,6 +45,26 @@ class Mana_Content_Block_Adminhtml_Book_AbstractForm extends Mana_Admin_Block_V3
     public function getStatusSourceModel() {
         return Mage::getSingleton('mana_core/source_status');
     }
+    /**
+     * @return Mana_Content_Model_Page_Abstract
+     */
+    public function getGlobalFlatModel() {
+        return Mage::registry('m_global_flat_model');
+    }
+
+    /**
+     * @return Mana_Content_Model_Page_Abstract
+     */
+    public function getGlobalEditModel() {
+        return Mage::registry('m_global_edit_model');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function coreDbHelper() {
+        return Mage::helper('mana_core/db');
+    }
 
     #endregion
 }

@@ -130,6 +130,23 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
             'reference_pages' => json_encode($referencePages),
         );
+
+        if (!$this->adminHelper()->isGlobal()) {
+            $data = array_merge($data, array(
+                'global' => $this->jsonHelper()->encodeAttribute($this->getGlobalFlatModel()->getData()),
+                'global_is_custom' => $this->jsonHelper()->encodeAttribute(array(
+                    'url_key' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_URL_KEY),
+                    'meta_title' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_META_TITLE),
+                    'meta_description' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_META_DESCRIPTION),
+                    'meta_keywords' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS),
+                )),
+            ));
+        }
+
         $this->setData('m_client_side_block', $data);
         return $this;
     }
