@@ -329,6 +329,13 @@ function ($, Container, ajax, core, expression) {
                 self.triggerReference = data.event.altKey;
             };
 
+            var cancelSubmit = function(evt) {
+                var evt = (evt) ? evt : ((event) ? event : null);
+                if (evt.keyCode == 13) {
+                    return false;
+                }
+            };
+
             return this._super()
                 .on('bind', this, function() {
                     this.$jsTreeElement().on('changed.jstree', jsTreeChanged);
@@ -336,6 +343,7 @@ function ($, Container, ajax, core, expression) {
                     this.$jsTreeElement().on('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().on('move_node.jstree', jsTreeMoveNode);
                     this.$jsTreeElement().on('copy_node.jstree', jsTreeCopyNode);
+                    this.$().find("#mf_content_title").on('keypress', cancelSubmit);
                     $(document).on('dnd_move.vakata', jsTreeDndMove);
                     this.setDeleteButtonText();
                     this.reference_pages = this.$().data('reference-pages');
@@ -346,6 +354,7 @@ function ($, Container, ajax, core, expression) {
                     this.$jsTreeElement().off('open_node.jstree', jsTreeSaveState);
                     this.$jsTreeElement().off('move_node.jstree', jsTreeMoveNode);
                     this.$jsTreeElement().off('copy_node.jstree', jsTreeCopyNode);
+                    this.$().find("#mf_content_title").off('keypress', cancelSubmit);
                     $(document).off('dnd_move.vakata', jsTreeDndMove);
                 })
         },
