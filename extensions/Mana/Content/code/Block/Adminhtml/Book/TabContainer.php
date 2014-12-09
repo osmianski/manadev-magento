@@ -14,7 +14,11 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
         parent::__construct();
         $this->setIsTabContainer(true);
         if ($this->getFlatModel()->getId()) {
-            $this->_headerText = $this->__('%s - Book', $this->getFlatModel()->getData('title'));
+            if($this->getFlatModel()->getReferenceId()) {
+                $this->_headerText = $this->__('%s (Reference) - Book', $this->getFlatModel()->getData('title'));
+            } else {
+                $this->_headerText = $this->__('%s - Book', $this->getFlatModel()->getData('title'));
+            }
         }
         else {
             $this->_headerText = $this->__('New Book');

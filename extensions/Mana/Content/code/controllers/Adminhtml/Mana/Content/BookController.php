@@ -247,6 +247,14 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             Mage::dispatchEvent('m_load_related_products');
         }
         $this->loadLayout();
+        if($model->getReferenceId()) {
+            /** @var Mage_Adminhtml_Block_Messages $msgBlock */
+            $msgBlock = $this->getLayout()->createBlock('adminhtml/messages', 'messages');
+            $msgBlock->setBlockAlias('messages');
+            $msgBlock->addNotice($this->contentHelper()->__("This is a reference page. As such, you can't make changes to this page. Instead, edit the original page by clicking `Go To Original Page` button above and it will load the original page. Changes to the original pages will be propagated to all their respective reference pages instantly."));
+            $this->getLayout()->getBlock('container')->append($msgBlock);
+            $msgBlock->addToParentGroup('top');
+        }
         $this->addDataToClientSideBlock();
 
         // render AJAX result
