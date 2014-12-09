@@ -83,29 +83,6 @@ class ManaPro_Content_Model_Observer {
         }
     }
 
-    /**
-     * Add field `canonical_book_page` to Mana_Seo_Block_Adminhtml_Schema_CanonicalForm (handles event "m_crud_form")
-     * @param Varien_Event_Observer $observer
-     */
-    public function addSettingIncludeFiltersOnCanonicalLinks($observer) {
-        if(get_class($observer->getForm()) == "Mana_Seo_Block_Adminhtml_Schema_CanonicalForm") {
-            /** @var Mana_Seo_Block_Adminhtml_Schema_CanonicalForm $canonicalForm */
-            $canonicalForm = $observer->getForm();
-            $form = $canonicalForm->getForm();
-            foreach($form->getElements() as $fieldset) {
-                if($fieldset->getId() == "mfs_canonical") {
-                    $canonicalForm->addField($fieldset, 'canonical_book_page', 'select', array(
-                        'options' => $canonicalForm->getYesNoSourceModel()->getOptionArray(),
-                        'label' => $canonicalForm->__('Canonical URL does not Contain Filters in CMS Book Page'),
-                        'name' => 'canonical_book_page',
-                        'required' => true,
-                    ));
-                    break;
-                }
-            }
-        }
-    }
-
     #region Dependencies
     /**
      * @return Mana_Content_Helper_Data

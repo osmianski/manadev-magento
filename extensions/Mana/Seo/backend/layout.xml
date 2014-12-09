@@ -31,8 +31,14 @@
 				<block type="mana_seo/adminhtml_schema_urlFormTab" name="url_tab" as="url_tab">
                     <block type="mana_seo/adminhtml_schema_urlForm" name="url_form" as="url_form" />
 				</block>
+                <block type="mana_seo/adminhtml_schema_canonicalFormTab" name="canonical_tab" as="canonical_tab">
+                    <block type="mana_seo/adminhtml_schema_canonicalForm" name="canonical_form" as="canonical_form"/>
+                </block>
                 <block type="mana_seo/adminhtml_schema_symbolGridTab" name="symbol_tab" as="symbol_tab">
                     <block type="mana_seo/adminhtml_schema_symbolGrid" name="symbol_grid" as="symbol_grid"/>
+                </block>
+                <block type="mana_seo/adminhtml_schema_toolbarGridTab" name="toolbar_tab" as="toolbar_tab" after="symbol_tab">
+                    <block type="mana_seo/adminhtml_schema_toolbarGrid" name="toolbar_grid" as="toolbar_grid"/>
                 </block>
 			</block>
 		</reference>
