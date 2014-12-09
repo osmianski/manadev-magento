@@ -9,6 +9,7 @@
     <adminhtml_mana_content_book_edit>
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>js/manapro/content.js</name><params/></action>
+            <action method="addCss"><stylesheet>css/manapro_content.css</stylesheet></action>
         </reference>
 		<reference name="tabs">
             <action method="addToParentGroup"><group>top</group></action>
@@ -23,14 +24,20 @@
             </block>
 		</reference>
         <reference name="left">
-            <block type="core/text" name="tree_copy_note"><action method="setText" translate="text"><text>Hold CTRL while dragging to copy node.</text></action></block>
-            <block type="core/text" name="tree_reference_note"><action method="setText" translate="text"><text>Hold ALT while dragging to reference node.</text></action></block>
+            <block type="core/text_list" name="m_text_note">
+                <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+                <block type="core/text" name="tree_copy_note">
+                    <action method="setText" translate="text"><text>Hold CTRL while dragging to copy node.</text></action>
+                </block>
+                <block type="core/text" name="tree_reference_note">
+                    <action method="setText" translate="text"><text>Hold ALT while dragging to reference node.</text></action>
+                </block>
+            </block>
         </reference>
     </adminhtml_mana_content_book_edit>
 
     <adminhtml_mana_content_book_new>
-        <remove name="tree_copy_note"/>
-        <remove name="tree_reference_note"/>
+        <remove name="m_text_note"/>
     </adminhtml_mana_content_book_new>
 
     <adminhtml_mana_content_book_load>
