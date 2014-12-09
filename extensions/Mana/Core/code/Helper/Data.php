@@ -761,6 +761,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('ManaPro_FilterSeoLinks');
     }
 
+    public function isManadevSeoLayeredNavigationPlusInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterAdvanced');
+    }
+
     public function isManadevSeoInstalled() {
         return $this->isModuleEnabled('Mana_Seo');
     }
