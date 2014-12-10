@@ -561,7 +561,8 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 ->joinInner(array('mps' => $pageStoreCollection->getTable('mana_content/page_store')), '`mps`.`page_global_id` = `main_table`.`page_global_id`', array('book_page_id' => 'id'))
                 ->where("`main_table`.`id` = ?", $bookPageId)
                 ->where("`mps`.`store_id` = ?", $storeId);
-            $bookPageId = $pageStoreCollection->getConnection()->fetchRow($select)['book_page_id'];
+            $row = $pageStoreCollection->getConnection()->fetchRow($select);
+            $bookPageId = $row['book_page_id'];
         }
         return $bookPageId;
     }
