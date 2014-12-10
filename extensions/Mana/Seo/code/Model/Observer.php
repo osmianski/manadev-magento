@@ -37,10 +37,10 @@ class Mana_Seo_Model_Observer {
             elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index') {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view') {
