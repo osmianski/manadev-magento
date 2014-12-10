@@ -26,7 +26,7 @@ class Mana_Seo_Model_Observer {
         if (($head = $layout->getBlock('head')) &&
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
-            $renderLayeredNavigationFilters = false;
+            $renderLayeredNavigationFilters = true;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -37,19 +37,15 @@ class Mana_Seo_Model_Observer {
             }
             elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
-                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
-                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
-                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view' && $this->coreHelper()->isManadevAttributePageInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalOptionPage();
-                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalBookPage();
