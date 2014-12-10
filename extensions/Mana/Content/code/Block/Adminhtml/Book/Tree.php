@@ -59,7 +59,8 @@ class Mana_Content_Block_Adminhtml_Book_Tree extends Mage_Adminhtml_Block_Templa
             $text = $page->getData('title');
         }
 
-        $opened_nodes = Mage::getSingleton('admin/session')->getData('tree_state')['core']['open'];
+        $state = Mage::getSingleton('admin/session')->getData('tree_state');
+        $opened_nodes = $state['core']['open'];
         if (!$opened_nodes) {
             $opened_nodes = array();
         }
