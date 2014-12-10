@@ -511,6 +511,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 $path .= $this->_schema->getMultipleValueSeparator();
             }
 
+            // prevent a warning when current URL contains incorrect price values like ?price=10 (correct is ?price=10,5)
+            if (!is_array($singleValue) || count($singleValue) < 2) {
+                return false;
+            }
+
             list($from, $to) = $singleValue;
             if ($isSlider) {
                 $path .= $from . $this->_schema->getPriceSeparator() . $to;

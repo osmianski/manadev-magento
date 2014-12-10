@@ -131,6 +131,13 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         return $this;
     }
 
+    public function addIsActiveFilter() {
+        $this->getSelect()
+            ->where("`main_table`.`is_active` = 1");
+
+        return $this;
+    }
+
     /**
      * @return $this
      */

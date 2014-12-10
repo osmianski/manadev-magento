@@ -64,7 +64,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ListGrid extends Mana_Admin_
         else {
             return $this->adminHelper()->getStoreUrl('*/*/edit', array(
                 'parent_id' => $this->getAttributePage()->getId(),
-                'id' => $row->getData('attribute_page_global_id'),
+                'id' => $row->getData('option_page_global_id'),
                 'store' => $this->adminHelper()->getStore()->getId()
             ));
         }
