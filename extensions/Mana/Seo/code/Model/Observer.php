@@ -34,19 +34,19 @@ class Mana_Seo_Model_Observer {
                     $renderCanonicalUrl = $this->catalogCategoryHelper()->canUseCanonicalTag();
                 }
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view' && $this->coreHelper()->isManadevAttributePageInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalOptionPage();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalBookPage();
             }
 
@@ -55,7 +55,7 @@ class Mana_Seo_Model_Observer {
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
-                if($this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+                if($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                     $filters = $this->_getFilters();
                     foreach (array_keys($query) as $key) {
                         if (isset($filters[$key])) {

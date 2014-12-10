@@ -30,7 +30,7 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             'legend' => $this->__('Canonical URL'),
         ));
 
-        if ($this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
             $this->addField($fieldset, 'canonical_category', 'select', array(
                     'options' => $this->getYesNoSourceModel()->getOptionArray(),
                     'label' => $this->__('Canonical Link Meta Tag on Category Pages'),
@@ -66,8 +66,16 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             ));
         }
 
+        if($this->coreHelper()->isManadevCMSProInstalled()) {
+            $this->addField($fieldset, 'canonical_book_page', 'select', array(
+                        'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                        'label' => $this->__('Canonical Link Meta Tag on CMS Book Page'),
+                        'name' => 'canonical_book_page',
+                        'required' => true,
+                    ));
+        }
 
-        if ($this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
             $this->addField($fieldset, 'canonical_filters', 'select', array(
                 'options' => $this->getYesNoSourceModel()->getOptionArray(),
                 'label' => $this->__('Canonical URL Contains All Applied Filters'),
@@ -83,16 +91,7 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             ));
         }
 
-        if($this->coreHelper()->isManadevCMSProInstalled()) {
-            $this->addField($fieldset, 'canonical_book_page', 'select', array(
-                        'options' => $this->getYesNoSourceModel()->getOptionArray(),
-                        'label' => $this->__('Canonical URL does not Contain Filters in CMS Book Page'),
-                        'name' => 'canonical_book_page',
-                        'required' => true,
-                    ));
-        }
-
-        if ($this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
             $fieldset = $this->addFieldset($form, 'mfs_prev_next', array(
                     'title' => $this->__('rel=prev and rel=next Paging Hints'),
                     'legend' => $this->__('rel=prev and rel=next Paging Hints'),
@@ -105,12 +104,6 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
                     'required' => true,
                 ));
 
-//        $this->addField($fieldset, 'prev_next_other_lists', 'select', array(
-//            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-//            'label' => $this->__('rel=prev and rel=next URLs on All Pages Containing Product List Toolbar'),
-//            'name' => 'prev_next_other_lists',
-//            'required' => true,
-//        ));
         }
 
         $this->setForm($form);
