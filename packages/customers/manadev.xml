@@ -31,6 +31,9 @@
     <!-- Other extensions -->
     <part name="Mana/Dev"/>
     <part name="ManaPro/Slider"/>
+    <part name="Mana/Menu"/>
+    <part name="Mana/Content"/>
+    <part name="ManaPro/Content"/>
 
     <!-- new or project-specific extensions -->
     <part name="Mana/Checkout"/>
