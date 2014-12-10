@@ -19,5 +19,10 @@
 				<ManaPro_FilterAdmin />
 			</depends>
         </ManaPro_FilterAjax>
+        <Mana_InfiniteScrolling>
+            <depends>
+                <ManaPro_FilterAjax />
+            </depends>
+        </Mana_InfiniteScrolling>
     </modules>
 </config>

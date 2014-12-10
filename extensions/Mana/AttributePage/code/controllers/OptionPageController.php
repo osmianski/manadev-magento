@@ -30,6 +30,8 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
             }
 
             $this->_setProductListOptions();
+            $this->_initLayoutMessages('catalog/session');
+            $this->_initLayoutMessages('checkout/session');
             $this->renderLayout();
         }
         else {

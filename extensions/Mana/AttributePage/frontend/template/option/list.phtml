@@ -32,9 +32,14 @@ $_count = $this->getCount();
                 </ul></li><li class="col-<?php echo $_actualColumn + 1?>"><ul>
             <?php endif; ?>
             <?php if ($_alpha != $_currentAlpha): ?>
-                <?php $_currentAlpha = $_alpha; ?>
+                <?php
+                    $_currentAlpha = $_alpha;
+                    $_displayAlpha = $_currentAlpha == '#'
+                        ? Mage::getStoreConfig('mana_attributepage/attribute_page_settings/digit_label')
+                        : $_currentAlpha;
+                ?>
                 <li class="m-alpha">
-                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></span>
+                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_displayAlpha; ?></span>
                 </li>
             <?php endif; ?>
             <li class="m-option-page">

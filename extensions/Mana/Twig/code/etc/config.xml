@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Twig
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Twig>
+            <version>14.04.02.09</version>
+        </Mana_Twig>
+    </modules>
+    <global>
+        <helpers>
+            <mana_twig>
+                <class>Mana_Twig_Helper</class>
+            </mana_twig>
+        </helpers>
+    </global>
+    <mana_twig>
+        <verbatim_magento_directives>
+            <!-- Mage_Widget_Model_Template_Filter -->
+            <widget/>
+
+            <!-- Mage_Core_Model_Email_Template_Filter -->
+            <block/>
+            <config/>
+            <customvar/>
+            <htmlescape/>
+            <layout/>
+            <media/>
+            <protocol/>
+            <skin/>
+            <store/>
+            <var/>
+
+            <!-- Varien_Filter_Template -->
+            <include/>
+            <var/>
+        </verbatim_magento_directives>
+    </mana_twig>
+</config>

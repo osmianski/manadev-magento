@@ -17,14 +17,28 @@ class Mana_AttributePage_Resource_OptionPage_Store extends Mana_AttributePage_Re
         $this->_init(Mana_AttributePage_Model_OptionPage_Store::ENTITY, 'id');
     }
 
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param Varien_Object $object
+     * @throws Exception
+     * @return Zend_Db_Select
+     */
     protected function _getLoadSelect($field, $value, $object) {
+        if (!$object->getData('store_id')) {
+            throw new Exception($this->attributePageHelper()->__(
+                "You must call setData('store_id', ...) before calling load() on %s objects.",
+                get_class($object)));
+        }
+
         $db = $this->_getReadAdapter();
         $select = $db->select()
             ->from(array('main_table' => $this->getMainTable()))
             ->joinInner(array('op_g' => $this->getTable('mana_attributepage/optionPage_global')),
                 "`op_g`.`id` = `main_table`.`option_page_global_id`",
                 array('option_id_0', 'option_id_1', 'option_id_2', 'option_id_3', 'option_id_4', 'attribute_page_global_id'))
-            ->where("`main_table`.`$field`=?", $value);
+            ->where("`main_table`.`$field`=?", $value)
+            ->where("`main_table`.`store_id`=?", $object->getData('store_id'));
 
         return $select;
     }

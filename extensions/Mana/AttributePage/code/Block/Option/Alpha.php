@@ -49,13 +49,20 @@ class Mana_AttributePage_Block_Option_Alpha extends Mage_Core_Block_Template {
 
     public function getCollection() {
         if (!$this->_collection) {
-            $collection = $this->getAttributePage()->getOptionPages();
+            $collection = $this->getAttributePage()->createOptionPageCollection();
+            $collection
+                ->addAttributePageFilter($this->getAttributePage()->getData('attribute_page_global_id'))
+                ->addStoreFilter($this->getAttributePage()->getData('store_id'));
 
             // set having products filter
             if ($this->getAttributePage()->getData('hide_empty_option_pages')) {
                 $collection->addHavingProductsFilter();
             }
 
+            $collection->getSelect()->reset(Varien_Db_Select::COLUMNS);
+            $collection->addAlphaColumn();
+            $collection->getSelect()->distinct();
+            $collection->setOrder('alpha', 'ASC');
             $this->_collection = $collection;
         }
 
@@ -63,7 +70,12 @@ class Mana_AttributePage_Block_Option_Alpha extends Mage_Core_Block_Template {
     }
 
     public function getCount() {
-        return count($this->getCollection());
+        $collection = $this->getAttributePage()->getOptionPages();
+        if ($this->getAttributePage()->getData('hide_empty_option_pages')) {
+            $collection->addHavingProductsFilter();
+        }
+
+        return $collection->count();
     }
 
     #region Dependencies

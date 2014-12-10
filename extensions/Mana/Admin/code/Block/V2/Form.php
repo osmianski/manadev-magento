@@ -54,10 +54,19 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
      * @return Varien_Data_Form_Element_Fieldset
      */
     public function addFieldset($form, $id, $options) {
+        if (isset($options['renderer'])) {
+            $renderer = $this->getLayout()->getBlockSingleton($options['renderer']);
+            unset($options['renderer']);
+        }
+        else {
+            $renderer = $this->getFieldsetRenderer();
+        }
+
         /** @noinspection PhpParamsInspection */
         $fieldset = $form->addFieldset($id, $options);
 
-        $fieldset->setRenderer($this->getFieldsetRenderer());
+
+        $fieldset->setRenderer($renderer);
         $fieldset->addType('select_text', 'Mana_Admin_Block_V2_Form_Field_SelectText');
         $fieldset->addType('wysiwyg', 'Mana_Admin_Block_V2_Form_Field_Wysiwyg');
         $fieldset->addType('image', 'Mana_Admin_Block_V2_Form_Field_Image');
@@ -73,12 +82,19 @@ class Mana_Admin_Block_V2_Form extends Mage_Adminhtml_Block_Widget_Form {
      * @return Varien_Data_Form_Element_Abstract
      */
     public function addField($fieldset, $id, $type, $options) {
+        if (isset($options['renderer'])) {
+            $renderer = $this->getLayout()->getBlockSingleton($options['renderer']);
+            unset($options['renderer']);
+        }
+        else {
+            $renderer = $this->getFieldRenderer();
+        }
         /** @noinspection PhpParamsInspection */
         $field = $fieldset->addField($id, $type, $options);
         if (isset($options['values'])) {
             $field->setValues($options['values']);
         }
-        $field->setRenderer($this->getFieldRenderer());
+        $field->setRenderer($renderer);
 
         return $field;
     }

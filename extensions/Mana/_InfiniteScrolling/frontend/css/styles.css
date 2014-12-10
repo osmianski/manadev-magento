@@ -1,0 +1,10 @@
+/**
+ * @category    Mana
+ * @package     Mana_InfiniteScrolling
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-infinite-scrolling-staging-area { text-align: center; }
+.m-infinite-scrolling-staging-area .please-wait { float: none; }
+.category-products .toolbar .sort-by { float: right; }
+.category-products .toolbar .view-mode { margin: 0; }

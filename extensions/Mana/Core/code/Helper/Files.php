@@ -119,7 +119,7 @@ class Mana_Core_Helper_Files extends Mage_Core_Helper_Abstract {
     public function shouldRenderImage($relativeUrl) {
         return $this->getFilename($relativeUrl, 'image') !== false;
     }
-    public function renderImageAttributes($relativeUrl, $width, $height) {
+    public function renderImageAttributes($relativeUrl, $width = null, $height = null) {
         if ($filename = $this->getFilename($relativeUrl, 'image')) {
             if ($width || $height) {
                 $processor = new Varien_Image($filename);

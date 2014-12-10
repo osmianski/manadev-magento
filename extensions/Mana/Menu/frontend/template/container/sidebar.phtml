@@ -8,9 +8,11 @@
 /* @var $this Mana_Menu_Block_Tree_Container */
 ?>
 <div class="block m-container">
+    <?php if(strlen($this->getTitle()) > 0): ?>
     <div class="block-title">
         <strong><span><?php echo $this->getTitle() ?></span></strong>
     </div>
+    <?php endif ?>
     <div class="block-content">
         <?php echo $this->getChildHtml('content') ?>
     </div>

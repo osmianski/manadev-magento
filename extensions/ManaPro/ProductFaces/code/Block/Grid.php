@@ -178,6 +178,20 @@ class ManaPro_ProductFaces_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
         	'renderer'			=> 'manapro_productfaces/column_link',
         ));
 
+        $this->addColumn('m_pack_qty', array(
+            'header'            => Mage::helper('manapro_productfaces')->__('Pack Qty'),
+            'name'              => 'm_pack_qty',
+            'type'              => 'number',
+            'validate_class'    => 'validate-number',
+            'index'             => 'm_pack_qty',
+            'width'             => 60,
+            'editable'          => true,
+            'edit_only'         => true,
+            'align'             => 'center',
+        	'renderer'			=> 'adminhtml/widget_grid_column_renderer_input',
+        	'column_css_class'	=> 'mc-m_pack_qty',
+        ));
+
         $this->addColumn('m_parts', array(
             'header'            => Mage::helper('manapro_productfaces')->__('Parts'),
             'name'              => 'm_parts',
@@ -327,7 +341,7 @@ class ManaPro_ProductFaces_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     {
     	/* @var $helper ManaPro_ProductFaces_Helper_Data */ $helper = Mage::helper(strtolower('ManaPro_ProductFaces'));
     	$products = array();
-    	$attributeCodes = array('entity_id', 'm_unit', 'm_parts', 'position', 'sku', 'name');
+    	$attributeCodes = array('entity_id', 'm_unit', 'm_parts', 'position', 'sku', 'name', 'm_pack_qty');
 	    for ($i = 0; $i < 10; $i++) {
 	    	if ($attributeCode = Mage::getStoreConfig('manapro_productfaces/quick_edit/attribute'.$i, $this->_getProduct()->getStoreId())) {
 	        	$attributes = Mage::getResourceModel('catalog/product_attribute_collection');

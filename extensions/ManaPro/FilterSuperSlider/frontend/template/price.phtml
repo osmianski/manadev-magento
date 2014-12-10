@@ -65,3 +65,6 @@ ManaPro.filterSuperSlider('<?php echo $_id ?>', {
 });
 //]]>
 </script>
+<?php if (Mage::helper('mana_core')->isSpecialPagesInstalled()): ?>
+    <?php echo Mage::helper('mana_page/special')->getSliderSpecialOptionsHtml($_filter) ?>
+<?php endif; ?>

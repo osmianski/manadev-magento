@@ -1,0 +1,8 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterContent
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.m-additional-description { position: relative; }
+.m-additional-description li { position: absolute; top: 0; left: 0; }

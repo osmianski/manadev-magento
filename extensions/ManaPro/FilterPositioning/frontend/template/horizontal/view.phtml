@@ -14,6 +14,7 @@
  */
 /* @var $_filterHelper Mana_Filters_Helper_Data */
 $_filterHelper = Mage::helper('mana_filters');
+$showState = Mage::getStoreConfig('mana_filters/positioning/show_state_' . $this->getShowInFilter());
 
 ?>
 <?php if($this->canShowBlock()): ?>
@@ -29,9 +30,11 @@ $_filterHelper = Mage::helper('mana_filters');
     data-three-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/three_columns_width') ?>"
     data-four-columns="<?php echo Mage::getStoreConfig('mana_filters/positioning_horizontal/four_columns_width') ?>">
     <div class="block-content">
-        <?php echo $this->getStateHtml() ?>
-        <?php if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7') && $this->getLayer()->getState()->getFilters()) : ?>
-        <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
+        <?php if ($showState) : ?>
+            <?php echo $this->getStateHtml() ?>
+            <?php if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7') && $this->getLayer()->getState()->getFilters()) : ?>
+            <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
+            <?php endif; ?>
         <?php endif; ?>
         <?php if($this->canShowOptions()): ?>
             <div id="narrow-by-list">

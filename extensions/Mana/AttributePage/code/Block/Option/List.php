@@ -12,6 +12,14 @@
 class Mana_AttributePage_Block_Option_List extends Mage_Core_Block_Template {
     protected $_collection;
 
+    protected function _construct() {
+        parent::_construct();
+        switch (Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template')) {
+            case 'template1': $this->setTemplate('mana/attributepage/option/list.phtml'); break;
+            case 'template2': $this->setTemplate('mana/attributepage/option/list2.phtml'); break;
+        }
+
+    }
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -90,7 +98,7 @@ class Mana_AttributePage_Block_Option_List extends Mage_Core_Block_Template {
             }
 
             // set letter filter
-            if ($alpha = Mage::app()->getRequest()->getParam('alpha')) {
+            if (($alpha = Mage::app()->getRequest()->getParam('alpha')) !== null) {
                 $collection->addAlphaFilter($alpha == '0' ? '#' : $alpha);
             }
 
@@ -106,7 +114,7 @@ class Mana_AttributePage_Block_Option_List extends Mage_Core_Block_Template {
     }
 
     public function getCount() {
-        return count($this->getCollection());
+        return $this->getCollection()->count();
     }
 
     #region Dependencies

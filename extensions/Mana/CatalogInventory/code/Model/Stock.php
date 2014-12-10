@@ -17,6 +17,25 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
         $this->_init('mana_cataloginventory/stock');
     }
 
+    protected function _prepareProductQtys($items) {
+        $qtys = array();
+        foreach ($items as $productId => $item) {
+            if (empty($item['item'])) {
+                $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
+            } else {
+                $stockItem = $item['item'];
+            }
+            $canSubtractQty = $stockItem->getId() && $stockItem->canSubtractQty();
+            if ($canSubtractQty && Mage::helper('catalogInventory')->isQty($stockItem->getTypeId())) {
+                // MANA BEGIN
+                $qtys[$productId] = $item['qty'] * $item['item']->getData('m_pack_qty');
+                // MANA END
+            }
+        }
+
+        return $qtys;
+    }
+
     public function registerProductsSale($items)
     {
         $qtys = $this->_prepareProductQtys($items);
@@ -165,6 +184,9 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
         // MANA END
     	$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
         if ($stockItem->getId() && Mage::helper('catalogInventory')->isQty($stockItem->getTypeId())) {
+            // MANA BEGIN
+            $qty *= $stockItem->getData('m_pack_qty');
+            // MANA END
             $stockItem->addQty($qty);
             if ($stockItem->getCanBackInStock() && $stockItem->getQty() > $stockItem->getMinQty()) {
                 $stockItem->setIsInStock(true)

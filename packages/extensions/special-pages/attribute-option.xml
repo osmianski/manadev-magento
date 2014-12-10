@@ -2,6 +2,7 @@
 <config>
     <name>extensions/manadev_shop-by-attribute_option</name>
     <part name="Mana/Core"/>
+    <part name="Mana/Admin"/>
     <part name="Mana/Page"/>
     <part name="Mana/Widget"/>
     <part name="ManaPage/AttributeOption"/>

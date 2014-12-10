@@ -26,6 +26,8 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
         return true;
     }
 
+    protected $_urlKeys = array();
+
     /**
      * @param Mana_Seo_Rewrite_Url $urlModel
      * @return string | bool
@@ -40,12 +42,15 @@ class Mana_Seo_Helper_PageType_CmsPage extends Mana_Seo_Helper_PageType  {
         if (($cmsPageId = $urlModel->getSeoRouteParam('page_id')) === false) {
             $logger->logSeoUrl(sprintf('WARNING: while resolving %s, %s route parameter is required', 'CMS page URL key', 'id'));
         }
-        $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
-        $urlCollection->addFieldToFilter('cms_page_id', $cmsPageId);
-        if (!($result = $urlModel->getUrlKey($urlCollection))) {
-            $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'CMS page URL key', 'id', $cmsPageId));
+        if (!isset($this->_urlKeys[$cmsPageId])) {
+            $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
+            $urlCollection->addFieldToFilter('cms_page_id', $cmsPageId);
+            if (!($result = $urlModel->getUrlKey($urlCollection))) {
+                $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'CMS page URL key', 'id', $cmsPageId));
+            }
+            $this->_urlKeys[$cmsPageId] = $result;
         }
 
-        return $result['final_url_key'];
+        return $this->_urlKeys[$cmsPageId]['final_url_key'];
     }
 }

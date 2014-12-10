@@ -65,6 +65,7 @@ function($, Block, undefined)
             var wasOneColumn = this.$().hasClass("one-filter-column");
             $.each(this.getWidths(), function(cls, width) {
                 var contentWidth = cls == "one-filter-column" ? $('body').width() : self.$().width();
+
                 if (width && !widthClassFound && contentWidth < width) {
                     self.$().addClass(cls);
                     widthClassFound = true;
@@ -281,8 +282,10 @@ function($, Block, undefined)
         getSidebarLayeredNavSelector: function() {
             return '.col-left .block.block-layered-nav,' +
                 '.mb-mana-catalog-leftnav,' +
+                '.mb-mana-catalogsearch-leftnav,' +
                 '.col-right .block.block-layered-nav,' +
-                '.mb-mana-catalog-rightnav';
+                '.mb-mana-catalog-rightnav' +
+                '.mb-mana-catalogsearch-leftnav';
         },
         getWidths: function() {
             throw 'Abstract';

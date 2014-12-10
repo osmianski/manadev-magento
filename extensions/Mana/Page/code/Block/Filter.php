@@ -30,6 +30,10 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
     }
 
     protected function _prepareLayout() {
+        Mage::register('m_no_solr', true, true);
+        if (Mage::registry('current_layer')) {
+            Mage::unregister('current_layer');
+        }
         Mage::helper('mana_core/layout')->delayPrepareLayout($this, 100);
 
         return $this;
@@ -93,11 +97,12 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
                 ->addUrlRewrite();
     }
     public function getLayer() {
-        $layer = Mage::registry('current_layer');
-        if ($layer) {
-            return $layer;
-        }
-        return Mage::getSingleton('catalog/layer');
+        return Mage::helper('mana_core/layer')->getLayer();
+//        $layer = Mage::registry('current_layer');
+//        if ($layer) {
+//            return $layer;
+//        }
+//        return Mage::getSingleton('catalog/layer');
     }
     public function prepareSortableFieldsByCategory($category) {
         if (!$this->getAvailableOrders()) {
@@ -141,15 +146,18 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
         $res = Mage::getSingleton('core/resource');
 
         $alias = 'mp_'.$attributeCode;
-        $this->_productCollection->getSelect()->joinLeft(
-            array($alias => $attribute->getBackendTable()),
-            implode(' AND ', array(
-                "`$alias`.`entity_id` = `e`.`entity_id`",
-                $db->quoteInto("`$alias`.`attribute_id` = ?", $attribute->getId()),
-                "`$alias`.`store_id` = 0",
-            )),
-            null
-        );
+        $from = $this->_productCollection->getSelect()->getPart(Varien_Db_Select::FROM);
+        if (!isset($from[$alias])) {
+            $this->_productCollection->getSelect()->joinLeft(
+                array($alias => $attribute->getBackendTable()),
+                implode(' AND ', array(
+                    "`$alias`.`entity_id` = `e`.`entity_id`",
+                    $db->quoteInto("`$alias`.`attribute_id` = ?", $attribute->getId()),
+                    "`$alias`.`store_id` = 0",
+                )),
+                null
+            );
+        }
 
         return "`$alias`.`value`";
     }

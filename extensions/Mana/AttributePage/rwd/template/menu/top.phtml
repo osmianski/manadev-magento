@@ -1,0 +1,24 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+if ($this instanceof Mage_Catalog_Block_Navigation) {
+    /* @var $this Mage_Catalog_Block_Navigation */
+    $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
+}
+else {
+    /* @var $this Mage_Page_Block_Html_Topmenu */
+    $_menu = $this->getHtml('level-top');
+}
+$_menu .= Mage::helper('mana_attributepage')->getAttributePageMenuHtml();
+?>
+<?php if($_menu): ?>
+    <nav id="nav">
+        <ol class="nav-primary">
+        <?php echo $_menu ?>
+        </ol>
+    </nav>
+<?php endif ?>

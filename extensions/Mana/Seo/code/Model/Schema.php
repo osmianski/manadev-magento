@@ -49,6 +49,8 @@
  * @method Mana_Seo_Model_Schema overrideCanonicalSearch(bool $value)
  * @method bool getCanonicalCms()
  * @method Mana_Seo_Model_Schema overrideCanonicalCms(bool $value)
+ * @method bool getCanonicalOptionPage()
+ * @method Mana_Seo_Model_Schema overrideCanonicalOptionPage(bool $value)
  * @method bool getCanonicalFilters()
  * @method Mana_Seo_Model_Schema overrideCanonicalFilters(bool $value)
  * @method bool getCanonicalLimitAll()
