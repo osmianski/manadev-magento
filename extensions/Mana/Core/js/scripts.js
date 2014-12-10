@@ -1496,7 +1496,7 @@ Mana.require(['jquery'], function($) {
     };
     Mana.rwdIsMobile = false;
     $(function() {
-        if (window.enquire) {
+        if (window.enquire && window.enquire.register) {
             enquire.register('screen and (max-width: ' + bp.medium + 'px)', {
                 match: function () {
                     Mana.rwdIsMobile = true;
