@@ -31,12 +31,14 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             'legend' => $this->__('General'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample URL'),
-            'note' => $this->__("Demonstrates how URL separators and parameters/filters of different kind appear in URL"),
-            'name' => 'sample',
-            'bold' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $this->addField($fieldset, 'sample', 'label', array(
+                'label' => $this->__('Sample URL'),
+                'note' => $this->__("Demonstrates how URL separators and parameters/filters of different kind appear in URL"),
+                'name' => 'sample',
+                'bold' => true,
+            ));
+        }
         $this->addField($fieldset, 'name', 'text', array(
             'label' => $this->__('Name'),
             'name' => 'name',
@@ -68,7 +70,7 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
         }
 
 
-        if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
             $fieldset = $this->addFieldset($form, 'mfs_separator', array(
                 'title' => $this->__('Separators'),
                 'legend' => $this->__('Separators'),

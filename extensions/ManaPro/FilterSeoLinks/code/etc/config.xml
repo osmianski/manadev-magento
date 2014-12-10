@@ -253,7 +253,6 @@
 	<default>
 		<mana_filters>
 			<seo>
-				<conditional_word>where</conditional_word>
 				<dash>--to-</dash>
 				<space>-</space>
 				<slash>--per-</slash>

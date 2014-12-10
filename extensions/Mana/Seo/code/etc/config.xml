@@ -125,13 +125,6 @@
                         <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
                         <search_page><resource>mana_seo/urlIndexer_search</resource></search_page>
 
-                        <filter_parameter><resource>mana_seo/urlIndexer_filter</resource></filter_parameter>
-                        <category_parameter><resource>mana_seo/urlIndexer_categoryParameter</resource></category_parameter>
-                        <toolbar_parameter><resource>mana_seo/urlIndexer_toolbar</resource></toolbar_parameter>
-
-                        <category_value><resource>mana_seo/urlIndexer_categoryValue</resource></category_value>
-                        <attribute_value><resource>mana_seo/urlIndexer_value</resource></attribute_value>
-
                         <enterprise_active_category_page><resource>mana_seo/enterpriseUrlIndexer_activeCategoryPage</resource></enterprise_active_category_page>
                         <enterprise_obsolete_category_page><resource>mana_seo/enterpriseUrlIndexer_obsoleteCategoryPage</resource></enterprise_obsolete_category_page>
                     </sources>
@@ -195,6 +188,7 @@
     <default>
         <mana>
             <seo>
+				<conditional_word>where</conditional_word>
                 <search_url_key>search</search_url_key>
                 <max_correction_count>0</max_correction_count>
             </seo>

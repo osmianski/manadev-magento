@@ -26,6 +26,7 @@ class Mana_Seo_Model_Observer {
         if (($head = $layout->getBlock('head')) &&
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
+            $renderLayeredNavigationFilters = false;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -36,18 +37,23 @@ class Mana_Seo_Model_Observer {
             }
             elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
+                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
+                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
+                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view' && $this->coreHelper()->isManadevAttributePageInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalOptionPage();
+                $renderLayeredNavigationFilters = true;
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalBookPage();
+                $renderLayeredNavigationFilters = false;
             }
 
             if ($renderCanonicalUrl) {
@@ -55,22 +61,30 @@ class Mana_Seo_Model_Observer {
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
-                if($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
-                    $filters = $this->_getFilters();
-                    foreach (array_keys($query) as $key) {
+
+                $filters = $renderLayeredNavigationFilters ? $this->_getFilters() : array();
+                foreach (array_keys($query) as $key) {
+                    if ($renderLayeredNavigationFilters) {
                         if (isset($filters[$key])) {
                             $areFiltersApplied = true;
                             if ($filters[$key]['include_in_canonical_url'] == 'never' ||
-                                $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && !$schema->getCanonicalFilters())
-                            {
+                                !$filters[$key]['include_in_canonical_url'] ||
+                                $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && (
+                                    !$schema->getCanonicalFilters() ||
+                                    !$this->coreHelper()->isManadevSeoLayeredNavigationInstalled())
+                            ) {
                                 $query[$key] = null;
                             }
-                        }
-                        else {
+                        } else {
                             $query[$key] = null;
                         }
                     }
+                    else {
+                        $query[$key] = null;
+                    }
+                }
 
+                if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                     if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
                         && ($areFiltersApplied || $this->_isProductListVisible()))
                     {
@@ -110,7 +124,7 @@ class Mana_Seo_Model_Observer {
 
     protected function _getFilters() {
         if ($this->_filters === null) {
-            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+            if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $this->_filters = array();
                 foreach ($this->filterHelper()->getFilterOptionsCollection(true) as $filter) {
                     /* @var $filter Mana_Filters_Model_Filter2_Store */
