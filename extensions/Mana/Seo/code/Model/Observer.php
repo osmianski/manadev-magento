@@ -55,46 +55,49 @@ class Mana_Seo_Model_Observer {
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
-                $filters = $this->_getFilters();
-                foreach (array_keys($query) as $key) {
-                    if (isset($filters[$key])) {
-                        $areFiltersApplied = true;
-                        if ($filters[$key]['include_in_canonical_url'] == 'never' ||
-                            $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && !$schema->getCanonicalFilters())
-                        {
+                if($this->coreHelper()->isManadevSeoLayeredNavigationPlusInstalled()) {
+                    $filters = $this->_getFilters();
+                    foreach (array_keys($query) as $key) {
+                        if (isset($filters[$key])) {
+                            $areFiltersApplied = true;
+                            if ($filters[$key]['include_in_canonical_url'] == 'never' ||
+                                $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && !$schema->getCanonicalFilters())
+                            {
+                                $query[$key] = null;
+                            }
+                        }
+                        else {
                             $query[$key] = null;
                         }
                     }
-                    else {
-                        $query[$key] = null;
-                    }
-                }
-                if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
-                    && ($areFiltersApplied || $this->_isProductListVisible()))
-                {
-                    $toolbar = $productList->getToolbarBlock();
-                    $collection = clone $productList->getLoadedProductCollection();
 
-                    $collection->setCurPage($toolbar->getCurrentPage());
-                    $limit = (int)$toolbar->getLimit();
-                    if ($limit) {
-                        $collection->setPageSize($limit);
-                    }
+                    if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
+                        && ($areFiltersApplied || $this->_isProductListVisible()))
+                    {
+                        $toolbar = $productList->getToolbarBlock();
+                        $collection = clone $productList->getLoadedProductCollection();
 
-                    $pageCount = $collection->getLastPageNumber();
-                    $pageNo = $collection->getCurPage();
-                    if ($pageNo > 1) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
-                        $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
-                    }
-                    if ($pageNo < $pageCount) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
-                        $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
-                    }
-                    if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
-                        $query['limit'] = 'all';
+                        $collection->setCurPage($toolbar->getCurrentPage());
+                        $limit = (int)$toolbar->getLimit();
+                        if ($limit) {
+                            $collection->setPageSize($limit);
+                        }
+
+                        $pageCount = $collection->getLastPageNumber();
+                        $pageNo = $collection->getCurPage();
+                        if ($pageNo > 1) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
+                            $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
+                        }
+                        if ($pageNo < $pageCount) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
+                            $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
+                        }
+                        if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
+                            $query['limit'] = 'all';
+                        }
                     }
                 }
 
