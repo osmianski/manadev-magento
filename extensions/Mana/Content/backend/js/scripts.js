@@ -505,7 +505,7 @@ function ($, Container, ajax, core, expression) {
         _onSaveFailed: function(response) {
             this.errorPerRecord = response.errorPerRecord;
             for(var id in this.errorPerRecord) {
-                this.$jsTree().set_icon(id, SKIN_URL + 'images/mana_content/tree-icon.png');
+                this.$jsTree().set_icon(id, this.getUrl('tree-icon-error'));
             }
             for (var key in this.errorPerRecord) {
                 if(this.getCurrentId() != key) {
