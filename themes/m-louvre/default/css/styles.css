@@ -108,7 +108,7 @@ ul,ol         { list-style:none; }
 
 
 /* Layout ================================================================================ */
-.wrapper { /*max-width: 1200px; */min-width: 270px; margin: 0 auto; padding: 0 20px; }
+.wrapper { max-width: 1200px; min-width: 270px; margin: 0 auto; padding: 0 20px; }
 
 .wrapper2 { background: transparent url(../images/bkg-body.jpg) center top repeat-x;}
 
