@@ -12,6 +12,9 @@
 class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_Page_Abstract_Collection {
     public function filterReferencingPages($ids) {
         $ids = !is_array($ids) ? array($ids) : $ids;
+        if(count($ids) == 0) {
+            return;
+        }
         $read = $this->getConnection();
 
         $select = $this->_prepareSelect();
