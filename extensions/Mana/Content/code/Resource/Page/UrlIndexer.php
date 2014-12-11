@@ -151,11 +151,12 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
                 ->where("`mps1`.`store_id` = ?", $schema->getStoreId())
                 ->where("`mpgcs`.`level` = ?", $x);
 
+            $obsoleteCondition = $baseObsoleteCondition . " AND (`mpgcs`.`level` = {$x})";
             if(count($ids)) {
                 $select->where("`mpgcs`.`id` IN (". implode(",", $ids) .")");
+                $obsoleteCondition .= " and `mpgcs`.`id` IN (". implode(",", $ids) .")";
             }
             $sql = $select->insertFromSelect($this->getTargetTableName(), array_keys($fields));
-            $obsoleteCondition = $baseObsoleteCondition . " AND (`mpgcs`.`level` = {$x})";
             $this->makeAllRowsObsolete($options, $obsoleteCondition);
             $db->exec($sql);
         }
