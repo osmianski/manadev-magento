@@ -133,6 +133,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'visible_title_char' => Mage::getStoreConfig('mana_content/general/visible_title_char'),
             'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
             'reference_pages' => json_encode($referencePages),
+            'tree_icon_error_url' => $this->getSkinUrl('images/mana_content/tree-icon.png'),
         );
 
         if (!$this->adminHelper()->isGlobal()) {

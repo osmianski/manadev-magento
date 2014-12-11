@@ -19,7 +19,7 @@
                     </params>
                 </action>
             </block>
-            <block type="manapro_content/filter_relatedproduct" name="filter_relatedproduct" as="filter_relatedproduct">
+            <block type="manapro_content/filter_relatedProduct" name="filter_relatedproduct" as="filter_relatedproduct">
                 <action method="setMClientSideBlock"><params><type>ManaPro/Content/Tree/RelatedProduct</type></params></action>
             </block>
             <block type="manapro_content/filter_tags" name="filter_tags" as="filter_tags">

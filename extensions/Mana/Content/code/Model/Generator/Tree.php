@@ -22,10 +22,10 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
         $filteredIds = false;
         $boldRecordIds = array();
         $filter = Mage::registry('filter');
-        if ($filter['search'] || $filter['related_products'] || $filter['tags']) {
+        if ($this->coreHelper()->isManadevCMSProInstalled() &&  ($filter['search'] || $filter['related_products'] || $filter['tags'])) {
             $filterCollection = $this->_getCollection();
             $collection->addFieldToFilter('`main_table`.`is_active`', 1);
-            $searchFilteredIds = $filterCollection->filterTreeByTitle($filter['search']);
+            $searchFilteredIds = $filterCollection->filterTreeByTitleAndContent($filter['search']);
             $relatedProductsFilteredIds = $filterCollection->filterTreeByRelatedProducts($filter['related_products']);
             $tagsFilteredIds = $filterCollection->filterTreeByTags($filter['tags']);
             $filteredIds = $searchFilteredIds;
