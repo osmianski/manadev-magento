@@ -1,0 +1,21 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterGroup
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+.block-layered-nav .block-subtitle--filter .mobile-title { display:none; }
+.block-layered-nav .block-subtitle--filter .wide-title.mobile-title { display: inline; }
+
+@media only screen and (min-width: 771px) {
+    .block-layered-nav .m-collapseable-group { cursor: pointer; }
+    .block-layered-nav .m-filter-group-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; }
+    .block-layered-nav .m-filter-group-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+    .block-layered-nav .m-expanded .m-filter-group-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filtergroup/m-expanded.png) 0 0 no-repeat; }
+    .block-layered-nav .m-collapsed .m-filter-group-expand-collapse .btn-expand-collapse { background: url(../images/manapro_filtergroup/m-collapsed.png) 0 0 no-repeat; }
+    .block-layered-nav .block-subtitle--filter { content: pointer; }
+}
+@media only screen and (max-width: 770px) {
+.block-layered-nav .block-subtitle--filter .wide-title { display:none; }
+.block-layered-nav .block-subtitle--filter .mobile-title { display:inline; }
+}

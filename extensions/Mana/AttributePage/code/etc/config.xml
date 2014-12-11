@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_AttributePage>
-            <version>14.01.15.21</version>
+            <version>14.12.08.14</version>
         </Mana_AttributePage>
     </modules>
     <global>
@@ -64,17 +64,31 @@
                     </depends>
                 </mana_option_page>
                 <mana_seo_url>
-                    <sources>
-                        <attribute_page><resource>mana_attributepage/attributePage_urlIndexer</resource></attribute_page>
-                        <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
-                    </sources>
                     <depends>
                         <mana_attribute_page/>
                         <mana_option_page/>
                     </depends>
                 </mana_seo_url>
             </indexer>
+            <indexer_config>
+                <mana_seo_url>
+                    <sources>
+                        <attribute_page><resource>mana_attributepage/attributePage_urlIndexer</resource></attribute_page>
+                        <option_page><resource>mana_attributepage/optionPage_urlIndexer</resource></option_page>
+                    </sources>
+                </mana_seo_url>
+            </indexer_config>
         </index>
+        <events>
+            <adminhtml_controller_action_predispatch_start>
+                <observers>
+                    <mana_attributepage>
+                        <class>mana_attributepage/observer</class>
+                        <method>loadDynamicMenuItems</method>
+                    </mana_attributepage>
+                </observers>
+            </adminhtml_controller_action_predispatch_start>
+        </events>
     </global>
     <adminhtml>
         <translate>
@@ -93,16 +107,6 @@
                 </mana_attributepage>
             </updates>
         </layout>
-        <events>
-            <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <mana_attributepage>
-                        <class>mana_attributepage/observer</class>
-                        <method>loadDynamicMenuItems</method>
-                    </mana_attributepage>
-                </observers>
-            </controller_action_layout_generate_blocks_after>
-        </events>
     </adminhtml>
     <frontend>
         <routers>
@@ -169,6 +173,12 @@
                 <separator>, </separator>
                 <last_separator> and </last_separator>
             </option_page_title>
+            <attribute_page_settings>
+                <template>template2</template>
+                <template2_width>190</template2_width>
+                <template2_height>40</template2_height>
+                <digit_label>#</digit_label>
+            </attribute_page_settings>
         </mana_attributepage>
     </default>
     <m_layout>

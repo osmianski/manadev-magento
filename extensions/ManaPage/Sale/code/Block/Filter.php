@@ -62,6 +62,7 @@ class ManaPage_Sale_Block_Filter extends Mana_Page_Block_Filter {
                 0 => array('date' => true, 'from' => $todayDate),
                 1 => array('is' => new Zend_Db_Expr('null')))
             ), 'left');
+            $sql = $_specialProducts->getSelect()->__toString();
             $specialids = $_specialProducts->getAllIds();
         }
         $merged_ids = array_merge($specialids, $promoids);

@@ -1,0 +1,56 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_FilterExpandCollapse
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+@media only screen and (min-width: 771px) {
+    .block-layered-nav .m-collapseable { cursor: pointer; }
+    /*.block-layered-nav .m-collapseable.m-expanded { background: url(../images/manapro_filterexpandcollapse/bkg_layered-down.gif) 9px 11px no-repeat; }*/
+    .block-layered-nav .m-filter-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; }
+    .block-layered-nav .m-filter-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 20px; height: 20px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
+
+    .block-layered-nav .m-filter-expand-collapse { display: block; width: 20px; height: 20px;}
+    .block-layered-nav .m-expanded .m-filter-expand-collapse .btn-expand-collapse {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        display: block;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+        border-top: 4px solid white;
+        border-bottom: none;
+        right: 7px;
+        top: 50%;
+        margin-top: -2px;
+    }
+    .block-layered-nav .m-collapsed .m-filter-expand-collapse .btn-expand-collapse {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        display: block;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: none;
+        border-right: 4px solid white;
+        right: 10px;
+        top: 50%;
+        margin-top: -4px;
+        margin-left: 2px;
+    }
+    .block-layered-nav dt.m-expanded .m-filter-expand-collapse .btn-expand-collapse {
+        border-top: 4px solid #3399cc;
+    }
+    .block-layered-nav dt.m-collapsed .m-filter-expand-collapse .btn-expand-collapse {
+        border-right: 4px solid #3399cc;
+    }
+    /********************************/
+    /* dropdown menu in left column */
+    /********************************/
+    .block-layered-nav dl { position: relative; zoom: 1; left: 0; top: 0; }
+    .block-layered-nav dt.m-dropdown-menu { cursor: pointer; }
+    .block-layered-nav dd.m-dropdown-menu { position: absolute; background: #e7f1f4; z-index: 1; padding: 5px 5px 10px 5px; }
+
+}

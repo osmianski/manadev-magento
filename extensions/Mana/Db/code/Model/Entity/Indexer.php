@@ -21,7 +21,10 @@ class Mana_Db_Model_Entity_Indexer extends Mana_Core_Model_Indexer {
 
     public function matchEvent(Mage_Index_Model_Event $event) {
         /* @var $object Mana_Db_Model_Entity */
-        $object = $event->getData('data_object');
+        if (!($object = $event->getData('data_object'))) {
+            return false;
+        }
+
         $key = $event->getData('entity').'-'.$object->getId();
         if (!isset($this->_matchedEvents[$key])) {
             $this->_matchedEvents[$key] = $this->_matchEntity($event, $object);

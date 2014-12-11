@@ -17,9 +17,7 @@ function($, ajax, config, layout, undefined)
 {
     return Mana.Object.extend('Mana/LayeredNavigation/AjaxInterceptor', {
         _getBaseUrl: function(url) {
-            return url.indexOf(config.getData('url.base')) == 0
-                ? config.getData('url.base')
-                : config.getData('url.secureBase');
+            return config.getBaseUrl(url);
         },
         _isProductListToolbarClicked: function (element) {
             return element !== undefined && (
@@ -98,10 +96,19 @@ function($, ajax, config, layout, undefined)
             if (window.ga !== undefined) {
                 window.ga('send', 'pageview', {'page': url.substring(parser.protocol.length + parser.hostname.length + 2)});
             }
+
+            var encodedUrl = url;
             url = decodeURIComponent(url);
+
+            var encodedQueryPos = encodedUrl.indexOf('?'), queryPos = url.indexOf('?');
+            if (encodedQueryPos != -1 && queryPos != -1) {
+                url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
+            }
+
             url = this._getBaseUrl(url) + config.getData('layeredNavigation.ajax.urlKey') +
                 '/' + config.getData('ajax.currentRoute') +
-                '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' + url.substr(this._getBaseUrl(url).length);
+                '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' +
+                url.substr(this._getBaseUrl(url).length);
 
             ajax.get(url, function (response) {
                 ajax.update(response);
@@ -131,7 +138,7 @@ function($, ajax, config, layout, undefined)
                         scroll(0, offset);
                     }
                 }
-            }, { preventClicks: true });
+            }, { preventClicks: true, encode: queryPos != -1 ? { offset: 0, length : queryPos} : undefined });
         }
     });
 });

@@ -29,6 +29,14 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
 
         $values = $this->_getAttributeValues( $attribute['attribute_id']);
         $v = $this->_getIfExprByGroupedValues("`ss`.`average_rating`", $values);
+		$defaultV = $v;
+		Mage::log(json_encode($values), Zend_Log::DEBUG, 'values.log');
+		foreach ($values as $value) {
+			if ($value['sort_order'] === '0') {
+				$defaultV = "'{$value['option_id']}'";
+				break;
+			}
+		}
 
         $db->beginTransaction();
 
@@ -57,7 +65,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
                 'attribute_id' => new Zend_Db_Expr($attribute['attribute_id']),
                 'store_id' => new Zend_Db_Expr("0"),
                 'entity_id' => new Zend_Db_Expr("`e`.`entity_id`"),
-                'value' => new Zend_Db_Expr($v),
+                'value' => new Zend_Db_Expr($defaultV),
             );
             $subSelect = $db->select()
                 ->from(array('r' => $this->getTable('review/review')), null)
@@ -101,7 +109,7 @@ class ManaPro_FilterAttributes_Resource_Rating  extends ManaPro_FilterAttributes
             );
             $subSelect = $db->select()
                 ->from(array('r' => $this->getTable('review/review')), null)
-                ->joinInner(array('s' => $this->getTable('review/review_store')), "`r`.`review_id` = `s`.`review_id`", null)
+                ->joinInner(array('s' => $this->getTable('review/review_store')), "`r`.`review_id` = `s`.`review_id` AND s.store_id <> 0", null)
                 ->joinInner(array('v' => $this->getTable('rating/rating_option_vote')), "`r`.`review_id` = `v`.`review_id`", null)
                 ->joinInner(array('o' => $this->getTable('rating/rating_option')), "`v`.`option_id` = `o`.`option_id`", null)
                 ->where("`r`.`status_id` = ?",Mage_Review_Model_Review::STATUS_APPROVED )

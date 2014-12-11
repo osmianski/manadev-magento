@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     ManaPro_FilterContent
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_filters_edit>
+        <update handle="editor"/>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/manapro_filtercontent.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+		</reference>
+		<reference name="tabs">
+            <block type="manapro_filtercontent/adminhtml_filter_contentTab" name="content_tab" as="content_tab">
+                <block type="manapro_filtercontent/adminhtml_filter_contentGrid" name="content_grid" as="content_grid">
+                    <block type="manapro_filtercontent/adminhtml_filter_contentForm" name="content_form" as="content_form"/>
+                </block>
+            </block>
+		</reference>
+    </adminhtml_mana_filters_edit>
+	<adminhtml_mana_filters_tabcontent>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_filtercontent/adminhtml_filter_contentTab" name="content_tab" as="content_tab">
+                <block type="manapro_filtercontent/adminhtml_filter_contentGrid" name="content_grid" as="content_grid">
+                    <block type="manapro_filtercontent/adminhtml_filter_contentForm" name="content_form" as="content_form"/>
+                </block>
+            </block>
+        </block>
+	</adminhtml_mana_filters_tabcontent>
+	<adminhtml_mana_filters_contentgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="manapro_filtercontent/adminhtml_filter_contentGrid" name="content_grid" as="content_grid">
+                <block type="manapro_filtercontent/adminhtml_filter_contentForm" name="content_form" as="content_form"/>
+            </block>
+        </block>
+	</adminhtml_mana_filters_contentgrid>
+    <adminhtml_mana_filtercontent_edit>
+        <update handle="mana_admin2"/>
+        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="setCanLoadRulesJs"><flag>1</flag></action>
+            <action method="addItem"><type>skin_js</type><name>js/manapro_filtercontent.js</name><params/></action>
+        </reference>
+		<reference name="left">
+			<block type="manapro_filtercontent/adminhtml_tabs" name="tabs" as="tabs">
+				<block type="manapro_filtercontent/adminhtml_conditionFormTab" name="condition_tab" as="condition_tab">
+                <block type="manapro_filtercontent/adminhtml_filter_contentGrid" name="content_grid" as="content_grid">
+                    <block type="manapro_filtercontent/adminhtml_filter_contentForm" name="content_form" as="content_form"/>
+                </block>
+				</block>
+			</block>
+		</reference>
+		<reference name="content">
+            <block type="manapro_filtercontent/adminhtml_tabContainer" name="container" as="container" />
+		</reference>
+    </adminhtml_mana_filtercontent_edit>
+</layout>

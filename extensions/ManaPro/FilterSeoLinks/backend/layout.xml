@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+@category    Mana
+@package     ManaPro_FilterSeoLinks
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_seo_schema_edit>
+        <reference name="tabs">
+            <block type="mana_seo/adminhtml_schema_toolbarGridTab" name="toolbar_tab" as="toolbar_tab" after="symbol_tab">
+                <block type="mana_seo/adminhtml_schema_toolbarGrid" name="toolbar_grid" as="toolbar_grid"/>
+            </block>
+        </reference>
+    </adminhtml_mana_seo_schema_edit>
+</layout>

@@ -12,6 +12,10 @@
  */
 class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_pageTypes;
+    /**
+     * @var Mage_Catalog_Model_Category
+     */
+    protected $_rootCategory;
 
     /**
      * Retrieve config value for store by path. By default uses standard Magento function to query core_config_data
@@ -546,6 +550,17 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function setProtectedProperty($object, $propertyName, $value) {
+        $className = get_class($object);
+        $class = new ReflectionClass($className);
+        $property = $class->getProperty($propertyName);
+        if (method_exists($property, 'setAccessible')) {
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        }
+    }
+
+
     public function base64EncodeUrl($url) {
         return base64_encode(Mage::getSingleton('core/url')->sessionUrlVar($url));
     }
@@ -651,10 +666,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->_attributes[$key];
     }
 
-    public function getAttributeTable($attribute) {
+    public function getAttributeTable($attribute, $baseTable = 'catalog_category_entity') {
         return $attribute['backend_table'] ?
             $attribute['backend_table'] :
-            Mage::getSingleton('core/resource')->getTableName('catalog_category_entity_' . $attribute['backend_type']);
+            Mage::getSingleton('core/resource')->getTableName($baseTable . '_' . $attribute['backend_type']);
     }
 
     /**
@@ -721,8 +736,25 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $pageTypes[$type];
     }
 
+    /**
+     * @param string $helper
+     * @return Mana_Core_Helper_PageType|null
+     */
+    public function getPageTypeByRoutePath($routePath = null, $helper = 'helper') {
+        foreach ($this->getPageTypes($helper) as $pageType) {
+            if ($pageType->getRoutePath() == $this->getRoutePath($routePath)) {
+                return $pageType;
+            }
+        }
+        return null;
+    }
+
     public function isManadevLayeredNavigationInstalled() {
         return $this->isModuleEnabled('Mana_Filters');
+    }
+
+    public function isManadevLayeredNavigationCheckboxesInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterCheckboxes');
     }
 
     public function isManadevSeoLayeredNavigationInstalled() {
@@ -746,8 +778,25 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('ManaPro_FilterColors');
     }
 
+    public function isManadevDependentFilterInstalled()
+    {
+        return $this->isModuleEnabled('ManaPro_FilterDependent');
+    }
+
     public function isEnterpriseUrlRewriteInstalled() {
         return $this->isModuleEnabled('Enterprise_UrlRewrite');
+    }
+
+    public function isSpecialPagesInstalled() {
+        return $this->isModuleEnabled('Mana_Page');
+    }
+
+    public function isManadevCMSProInstalled() {
+        return $this->isModuleEnabled('ManaPro_Content');
+    }
+
+    public function isManadevCMSInstalled() {
+        return $this->isModuleEnabled('Mana_Content');
     }
 
     protected $_accentTranslations = array(
@@ -829,5 +878,59 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         return $html;
     }
+    public function getOptionArray($allOptions)
+    {
+        $_options = array();
+        foreach ($allOptions as $option) {
+            $_options[$option['value']] = $option['label'];
+        }
+        return $_options;
+    }
 
+    /**
+     * @return string[]
+     */
+    public function getProductToolbarParameters() {
+        $result = array();
+        $request = Mage::app()->getRequest();
+        foreach (array('p', 'mode', 'order', 'dir', 'limit') as $key) {
+            if ($value = $request->getParam($key)) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
+    public function initLayoutMessages($messagesStorage) {
+        if (!is_array($messagesStorage)) {
+            $messagesStorage = array($messagesStorage);
+        }
+        $layout = Mage::getSingleton('core/layout');
+        foreach ($messagesStorage as $storageName) {
+            $storage = Mage::getSingleton($storageName);
+            if ($storage) {
+                $block = $layout->getMessagesBlock();
+                $block->addMessages($storage->getMessages(true));
+                $block->setEscapeMessageFlag($storage->getEscapeMessages(true));
+                $block->addStorageType($storageName);
+            } else {
+                Mage::throwException(
+                    Mage::helper('core')->__('Invalid messages storage "%s" for layout messages initialization', (string)$storageName)
+                );
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRootCategory() {
+        if (!$this->_rootCategory) {
+            $this->_rootCategory = Mage::getModel('catalog/category');
+            $this->_rootCategory
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->load(Mage::app()->getStore()->getRootCategoryId());
+
+        }
+        return $this->_rootCategory;
+    }
 }

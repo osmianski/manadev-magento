@@ -17,9 +17,28 @@ class ManaPro_FilterClear_Helper_Data extends Mage_Core_Helper_Abstract {
         if (!($model = $filterBlock->getFilter())) {
             return false;
         }
-        if (Mage::app()->getRequest()->getParam($model->getRequestVar()) == $model->getResetValue()) {
+        if (Mage::app()->getRequest()->getParam($model->getRequestVar()) == $model->getResetValue() &&
+            !($this->coreHelper()->isSpecialPagesInstalled() && $this->specialPageHelper()->isAppliedInFilter($model->getRequestVar())))
+        {
             return false;
         }
         return $model->getRemoveUrl();
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
+    #endregion
 }

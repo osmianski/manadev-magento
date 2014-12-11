@@ -37,7 +37,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      */
     protected $_parsedUrls;
 
-    protected $_allSuffixes;
+    protected $_allSuffixes = array();
 
     protected $_suffixesByPageType = array();
 
@@ -222,6 +222,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                                     return true;
                                 }
                                 break;
+                            case Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL:
+                                if ($this->_parseSpecialValues($token)) {
+                                    return true;
+                                }
+                                break;
                             default:
                                 throw new Exception('Not implemented');
                         }
@@ -275,6 +280,64 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
                     // read the rest values. Return if exact match found
                     if ($this->_parseAttributeValues($token)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            else {
+                if (!$this->_correct($token, $cNotFound, __LINE__, $text)) {
+                    return false;
+                }
+            }
+        }
+
+        $token->zoomOut();
+        if ($token->hasPendingCorrection($cRedundantParameterName) && !$token->hasPendingCorrection($cExpectedParameterName)) {
+            if (!$this->_correct($token, $cRedundantParameterName, __LINE__, $text)) {
+                return false;
+            }
+        }
+        $token
+            ->clearPendingCorrection($cRedundantParameterName)
+            ->clearPendingCorrection($cExpectedParameterName);
+
+        return $this->_parseParameters($token);
+    }
+
+    /**
+     * AttributeValues ::= Value {MultipleValueSeparator Value } .
+     * @param Mana_Seo_Model_ParsedUrl $token
+     * @return bool
+     */
+    protected function _parseSpecialValues($token) {
+        $cNotFound = Mana_Seo_Model_ParsedUrl::CORRECT_NOT_FOUND_ATTRIBUTE_FILTER_URL_KEY;
+        $cExpectedParameterName = Mana_Seo_Model_ParsedUrl::CORRECT_EXPECTED_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY;
+        $cRedundantParameterName = Mana_Seo_Model_ParsedUrl::CORRECT_REDUNDANT_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY;
+
+        // split by "-", add correction for token beginning with "-"
+        if (($text = $token->getTextToBeParsed()) && ($tokens = $this->_scanUntilSeparator($token, $this->_schema->getMultipleValueSeparator()))) {
+            // get all valid attribute value URL keys
+            if ($tokens = $this->_getSpecialValueUrlKeys($tokens)) {
+                foreach ($tokens as $token) {
+                    if ($token->getSpecialValueUrl()->getFinalIncludeFilterName()) {
+                        $token->setPendingCorrection($cExpectedParameterName);
+                        if (!$token->getParameterUrl()) {
+                            if (!$this->_correct($token, $cExpectedParameterName, __LINE__, $text)) {
+                                return false;
+                            }
+                        }
+                    }
+                    else {
+                        if ($token->getParameterUrl()) {
+                            $token->setPendingCorrection($cRedundantParameterName);
+                        }
+                    }
+                    $this->_setSpecialFilter($token);
+
+                    // read the rest values. Return if exact match found
+                    if ($this->_parseSpecialValues($token)) {
                         return true;
                     }
                 }
@@ -624,7 +687,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return string[]
      */
     protected function _getAllSuffixes($token) {
-        if (!$this->_allSuffixes) {
+        if (!isset($this->_allSuffixes[$token->getTextToBeParsed()])) {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
@@ -640,9 +703,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $historyType[$type] = $type;
             }
 
-            $this->_allSuffixes = $this->_getSuffixes($token, $current, $historyType);
+            $this->_allSuffixes[$token->getTextToBeParsed()] = $this->_getSuffixes($token, $current, $historyType);
         }
-        return $this->_allSuffixes;
+        return $this->_allSuffixes[$token->getTextToBeParsed()];
     }
 
     protected function _getSuffixesByType($token, $pageType) {
@@ -749,7 +812,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @param Mana_Seo_Model_ParsedUrl[][] | bool $tokens
      * @return Mana_Seo_Model_ParsedUrl[] | bool
      */
-    protected function _getPageUrlKeysAndRemoveSuffixes($tokens) {
+    protected function _getPageUrlKeysAndRemoveSuffixes(&$tokens) {
         if (!$tokens) {
             return false;
         }
@@ -811,6 +874,45 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             if (!isset($result[$finalUrlKey])) {
                 $token = $tokens[$finalUrlKey];
                 $token->setAttributeValueUrl($url);
+                $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
+                $result[$finalUrlKey] = $token;
+            }
+            elseif ($url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE && !$url->getFinalIncludeFilterName()) {
+                $this->_conflict($url->getFinalUrlKey(), self::CONFLICT_ATTRIBUTE_VALUE);
+            }
+
+        }
+
+        return count($result) ? $result : false;
+    }
+
+    /**
+     * @param Mana_Seo_Model_ParsedUrl[] $tokens
+     * @return Mana_Seo_Model_ParsedUrl[] | bool
+     */
+    protected function _getSpecialValueUrlKeys($tokens) {
+        if (!$tokens) {
+            return false;
+        }
+        $result = array();
+
+        /* @var $urlCollection Mana_Seo_Resource_Url_Collection */
+        $urlCollection = $urls = $this->_getUrls($tokens, Mana_Seo_Resource_Url_Collection::TYPE_ATTRIBUTE_VALUE);
+        /* @var $token Mana_Seo_Model_ParsedUrl */
+        $token = current($tokens);
+        $urlCollection->addFieldToFilter('type', Mana_Seo_Model_ParsedUrl::PARAMETER_SPECIAL);
+        foreach ($urls as $url) {
+            $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
+            if (isset($result[$finalUrlKey])) {
+                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
+                $conflictingToken = $result[$finalUrlKey];
+                if ($url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE && $conflictingToken->getSpecialValueUrl()->getFinalIncludeFilterName()) {
+                    unset($result[$finalUrlKey]);
+                }
+            }
+            if (!isset($result[$finalUrlKey])) {
+                $token = $tokens[$finalUrlKey];
+                $token->setSpecialValueUrl($url);
                 $this->_activate($token, $url->getStatus() == Mana_Seo_Model_Url::STATUS_ACTIVE);
                 $result[$finalUrlKey] = $token;
             }
@@ -921,6 +1023,11 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
                 $this->_toolbarOrders = array_merge($this->_toolbarOrders, explode(',', $additionalToolbarOrders));
             }
 
+            $obj = new Varien_Object();
+            $obj->setData('orders', $this->_toolbarOrders);
+            Mage::dispatchEvent('m_toolbar_orders', compact('obj'));
+            $this->_toolbarOrders = $obj->getData('orders');
+
         }
         return $this->_toolbarOrders;
     }
@@ -979,6 +1086,18 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             }
         }
         $token->addQueryParameter($token->getAttributeCode(), $token->getAttributeValueUrl()->getOptionId());
+
+        return true;
+    }
+
+    /**
+     * @param Mana_Seo_Model_ParsedUrl $token
+     * @return bool
+     */
+    protected function _setSpecialFilter($token) {
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $token->addQueryParameter(Mage::helper('mana_page/special')->getRequestVar(), $token->getSpecialValueUrl()->getUrlKey());
+        }
 
         return true;
     }
@@ -1379,5 +1498,5 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
             ? $this->coreHelper()->unaccent($s)
             : $s;
     }
-    #endregion
+   #endregion
 }

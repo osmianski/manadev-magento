@@ -31,12 +31,14 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             'legend' => $this->__('General'),
         ));
 
-        $this->addField($fieldset, 'sample', 'label', array(
-            'label' => $this->__('Sample URL'),
-            'note' => $this->__("Demonstrates how URL separators and parameters/filters of different kind appear in URL"),
-            'name' => 'sample',
-            'bold' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $this->addField($fieldset, 'sample', 'label', array(
+                'label' => $this->__('Sample URL'),
+                'note' => $this->__("Demonstrates how URL separators and parameters/filters of different kind appear in URL"),
+                'name' => 'sample',
+                'bold' => true,
+            ));
+        }
         $this->addField($fieldset, 'name', 'text', array(
             'label' => $this->__('Name'),
             'name' => 'name',
@@ -67,88 +69,91 @@ class Mana_Seo_Block_Adminhtml_Schema_UrlForm extends Mana_Admin_Block_V2_Form {
             ));
         }
 
-        $fieldset = $this->addFieldset($form, 'mfs_separator', array(
-            'title' => $this->__('Separators'),
-            'legend' => $this->__('Separators'),
-        ));
-        $this->addField($fieldset, 'query_separator', 'text', array(
-            'label' => $this->__('Query Separator'),
-            'name' => 'query_separator',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'param_separator', 'text', array(
-            'label' => $this->__('Parameter Separator'),
-            'name' => 'param_separator',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'first_value_separator', 'text', array(
-            'label' => $this->__('Value Separator'),
-            'name' => 'first_value_separator',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'multiple_value_separator', 'text', array(
-            'label' => $this->__('Multiple Value Separator'),
-            'name' => 'multiple_value_separator',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'price_separator', 'text', array(
-            'label' => $this->__('Price Separator'),
-            'name' => 'price_separator',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'category_separator', 'text', array(
-            'label' => $this->__('Category Separator'),
-            'note' => $this->__('Used when filtering by category (Redirect to Subcategory Page = No) to separate 2 or more subcategories'),
-            'name' => 'category_separator',
-            'required' => true,
-        ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_redirect', array(
-            'title' => $this->__('Redirects'),
-            'legend' => $this->__('Redirects'),
-        ));
-        $this->addField($fieldset, 'redirect_parameter_order', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Redirect To Same Page With Correct Parameter Order'),
-            'name' => 'redirect_parameter_order',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'redirect_to_subcategory', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Redirect Applied Category Filters To Subcategory Page'),
-            'name' => 'redirect_to_subcategory',
-            'required' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $fieldset = $this->addFieldset($form, 'mfs_separator', array(
+                'title' => $this->__('Separators'),
+                'legend' => $this->__('Separators'),
+            ));
+            $this->addField($fieldset, 'query_separator', 'text', array(
+                'label' => $this->__('Query Separator'),
+                'name' => 'query_separator',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'param_separator', 'text', array(
+                'label' => $this->__('Parameter Separator'),
+                'name' => 'param_separator',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'first_value_separator', 'text', array(
+                'label' => $this->__('Value Separator'),
+                'name' => 'first_value_separator',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'multiple_value_separator', 'text', array(
+                'label' => $this->__('Multiple Value Separator'),
+                'name' => 'multiple_value_separator',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'price_separator', 'text', array(
+                'label' => $this->__('Price Separator'),
+                'name' => 'price_separator',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'category_separator', 'text', array(
+                'label' => $this->__('Category Separator'),
+                'note' => $this->__('Used when filtering by category (Redirect to Subcategory Page = No) to separate 2 or more subcategories'),
+                'name' => 'category_separator',
+                'required' => true,
+            ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_other', array(
-            'title' => $this->__('Other'),
-            'legend' => $this->__('Other'),
-        ));
-        $this->addField($fieldset, 'include_filter_name', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Include Filter Names Before Values'),
-            'note' => $this->__('Only applicable to attribute-based filters'),
-            'name' => 'include_filter_name',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'use_filter_labels', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Use Attribute Labels Instead Of Attribute Codes'),
-            'name' => 'use_filter_labels',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'use_range_bounds', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Use Range Bounds in Price Filters'),
-            'name' => 'use_range_bounds',
-            'required' => true,
-        ));
-        $this->addField($fieldset, 'accent_insensitive', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Accent Insensitive (Deprecated)'),
-            'name' => 'accent_insensitive',
-            'required' => true,
-        ));
+            $fieldset = $this->addFieldset($form, 'mfs_redirect', array(
+                'title' => $this->__('Redirects'),
+                'legend' => $this->__('Redirects'),
+            ));
+            $this->addField($fieldset, 'redirect_parameter_order', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Redirect To Same Page With Correct Parameter Order'),
+                'name' => 'redirect_parameter_order',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'redirect_to_subcategory', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Redirect Applied Category Filters To Subcategory Page'),
+                'name' => 'redirect_to_subcategory',
+                'required' => true,
+            ));
+
+            $fieldset = $this->addFieldset($form, 'mfs_other', array(
+                'title' => $this->__('Other'),
+                'legend' => $this->__('Other'),
+            ));
+            $this->addField($fieldset, 'include_filter_name', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Include Filter Names Before Values'),
+                'note' => $this->__('Only applicable to attribute-based filters'),
+                'name' => 'include_filter_name',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'use_filter_labels', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Use Attribute Labels Instead Of Attribute Codes'),
+                'name' => 'use_filter_labels',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'use_range_bounds', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Use Range Bounds in Price Filters'),
+                'name' => 'use_range_bounds',
+                'required' => true,
+            ));
+            $this->addField($fieldset, 'accent_insensitive', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Accent Insensitive (Deprecated)'),
+                'name' => 'accent_insensitive',
+                'required' => true,
+            ));
+        }
 
         $this->setForm($form);
         return parent::_prepareForm();

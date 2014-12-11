@@ -14,12 +14,14 @@
 class Mana_AttributePage_Model_Observer {
     protected $_areDynamicMenuItemsLoaded = false;
     /**
-     * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_generate_blocks_after")
+     * REPLACE THIS WITH DESCRIPTION (handles event "adminhtml_controller_action_predispatch_start")
      * @param Varien_Event_Observer $observer
      */
     public function loadDynamicMenuItems($observer) {
         if (!$this->_areDynamicMenuItemsLoaded) {
             try {
+                $collection = Mage::getResourceModel("mana_attributepage/attributePage_global_collection")
+                    ->setOrder('title', Varien_Data_Collection::SORT_ORDER_ASC);
                 $xml = <<<EOF
 <config>
     <menu>
@@ -29,14 +31,13 @@ class Mana_AttributePage_Model_Observer {
                     <children>
 EOF;
                 $i = 0;
-                foreach (Mage::getResourceModel("mana_attributepage/attributePage_global_collection")
-                    ->setOrder('title', Varien_Data_Collection::SORT_ORDER_ASC) as $attributePage)
+                foreach ($collection as $attributePage)
                 {
                     $i++;
                     /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
                     $xml .= <<<EOF
                             <attr_{$attributePage->getId()}>
-                                <title>{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}</title>
+                                <title><![CDATA[{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}]]></title>
                                 <action>adminhtml/mana_optionPage/index/parent_id/{$attributePage->getId()}</action>
                                 <sort_order>{$i}</sort_order>
                             </attr_{$attributePage->getId()}>
@@ -55,6 +56,36 @@ EOF;
             </children>
         </mana>
     </menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<attributepage>
+                                <children>
+EOF;
+                $i = 0;
+                foreach ($collection as $attributePage)
+                {
+                    $i++;
+                    /* @var $attributePage Mana_AttributePage_Model_AttributePage_Global */
+                    $xml .= <<<EOF
+                            <attr_{$attributePage->getId()}>
+                                <title><![CDATA[{$this->attributePageHelper()->__('Option Pages (%s)', $attributePage->getData('raw_title'))}]]></title>
+                                <sort_order>{$i}</sort_order>
+                            </attr_{$attributePage->getId()}>
+EOF;
+                }
+                $xml .= <<<EOF
+                                </children>
+							</attributepage>
+						</children>
+					</mana>
+                </children>
+			</admin>
+		</resources>
+	</acl>
 </config>
 EOF;
                 /* @var $config Mage_Core_Model_Config_Base */

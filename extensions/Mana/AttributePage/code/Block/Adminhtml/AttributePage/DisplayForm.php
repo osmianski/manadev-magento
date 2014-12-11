@@ -56,14 +56,52 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'hide_empty_option_pages', 'select', array(
+            'label' => $this->__('Hide Empty Option Pages'),
+            'title' => $this->__('Hide Empty Option Pages'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'hide_empty_option_pages',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_HIDE_EMPTY_OPTION_PAGES,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $this->addField($fieldset, 'column_count', 'text', array(
             'label' => $this->__('Column Count'),
             'title' => $this->__('Column Count'),
-            'note' => $this->__('Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc.'),
+            'note' => $this->__('Into how many columns option list on attribute page is divided, uses standard Magento CSS classes col1-set etc. <strong>Typically themes do not support more that 4 columns. This setting is only applied when Template 1 is used.</strong>'),
             'name' => 'column_count',
             'required' => true,
 
             'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_COLUMN_COUNT,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $fieldset = $this->addFieldset($form, 'mfs_options_pre_page', array(
+            'title' => $this->__('Options per Page'),
+            'legend' => $this->__('Options per Page'),
+        ));
+
+        $this->addField($fieldset, 'allowed_page_sizes', 'text', array(
+            'label' => $this->__('Allowed Values'),
+            'title' => $this->__('Allowed Values'),
+            'note' => $this->__('Write one or more numbers or <code>all</code> separated by comma'),
+            'name' => 'allowed_page_sizes',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_ALLOWED_PAGE_SIZES,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'default_page_size', 'text', array(
+            'label' => $this->__('Default Value'),
+            'title' => $this->__('Default Value'),
+            'note' => $this->__('One of values in Allowed Values field'),
+            'name' => 'default_page_size',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_ALLOWED_PAGE_SIZES,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 

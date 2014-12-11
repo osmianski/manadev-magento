@@ -69,6 +69,9 @@ class Mana_Filters_Model_Query extends Varien_Object
     }
 
     public function apply() {
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $this->specialPageHelper()->registerSpecialFilters($this);
+        }
         foreach ($this->_filters as $code => $filter) {
             if (!$filter['isApplyProcessed']) {
                 $model = $filter['model'];
@@ -89,8 +92,10 @@ class Mana_Filters_Model_Query extends Varien_Object
                 $this->_filters[$code]['isApplyProcessed'] = true;
             }
         }
+
         return $this;
     }
+
     protected function _apply() {
     }
 
@@ -158,6 +163,7 @@ class Mana_Filters_Model_Query extends Varien_Object
                 $mainSelect = clone $this->_productCollection->getSelect();
 
                 $collection = $this->createProductCollection();
+                //$sql = $collection->getSelect()->__toString();
                 foreach ($this->_filters as $filter) {
                     /* @var $filterModel Mana_Filters_Interface_Filter */
                     $filterModel = $filter['model'];
@@ -179,69 +185,6 @@ class Mana_Filters_Model_Query extends Varien_Object
         return $currentFilter['processedCounts'];
     }
 
-    protected $_allOptimizedAttributeFilterCounts;
-
-    public function getAllOptimizedAttributeFilterCounts() {
-        if (!$this->_allOptimizedAttributeFilterCounts) {
-            $attributeIds = array();
-            $firstModel = null;
-            /* @var $firstModel Mana_Filters_Model_Filter_Attribute */
-
-            foreach ($this->_filters as $filter) {
-                $model = $filter['model'];
-
-                if ($this->isOptimizedAttributeFilter($model)) {
-                    if (!$firstModel) {
-                        $firstModel = $model;
-                    }
-
-                    /* @var $model Mana_Filters_Model_Filter_Attribute */
-                    $id = $model->getAttributeModel()->getId();
-                    $attributeIds[$id] = $id;
-                }
-            }
-
-            $mainSelect = clone $this->_productCollection->getSelect();
-
-            $collection = $this->createProductCollection();
-
-            foreach ($this->_filters as $filter) {
-                if ($filter['isApplied']) {
-                    /* @var $filterModel Mana_Filters_Interface_Filter */
-                    $filterModel = $filter['model'];
-
-                    $applyFilter = true;
-                    foreach ($this->_filters as $optimizedFilter) {
-                        /* @var $model Mana_Filters_Model_Filter_Attribute */
-                        $model = $optimizedFilter['model'];
-                        if ($this->isOptimizedAttributeFilter($model) && !$model->isFilterAppliedWhenCounting($filterModel)) {
-                            $applyFilter = false;
-                            break;
-                        }
-                    }
-
-                    if ($applyFilter) {
-                        $filterModel->applyToCollection($collection);
-                    }
-                }
-            }
-
-            $this->_allOptimizedAttributeFilterCounts = $firstModel
-                ? $firstModel->optimizedCountOnCollection($collection, $attributeIds)
-                : array();
-            $this->_copyParts($this->_productCollection->getSelect(), $mainSelect);
-
-        }
-        return $this->_allOptimizedAttributeFilterCounts;
-    }
-
-    public function isOptimizedAttributeFilter($model) {
-        return false;
-        return !$this->filtersHelper()->useSolr() &&
-            $model instanceof Mana_Filters_Model_Filter_Attribute &&
-            !$model->isApplied();
-    }
-
     #region Dependencies
 
     /**
@@ -251,5 +194,18 @@ class Mana_Filters_Model_Query extends Varien_Object
         return Mage::helper('mana_filters');
     }
 
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
     #endregion
 }

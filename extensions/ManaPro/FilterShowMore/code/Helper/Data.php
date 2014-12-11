@@ -22,9 +22,9 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isShowAllRequested($filter) {
-	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
-	        return true;
-	    }
+//	    if ($filter->getFilterOptions()->getDisplay() == 'colors') {
+//	        return true;
+//	    }
     	$value = Mage::app()->getRequest()->getParam($filter->getRequestVar().$this->getShowAllSuffix());
 		return $value && $value == 1 ? true : false;    
 	}
@@ -66,18 +66,23 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $params['_query'] = array(
             'm-show-more-popup' => $filter->getFilterOptions()->getId(),
             'm-seo-enabled' => 1, //$core->getRoutePath() != 'catalogsearch/result/index' ? 1 : 0,
+            'm-url' => '__0__',
         );
         if ($core->getRoutePath() != 'catalogsearch/result/index') {
             $params['_query']['m-show-more-cat'] = Mage::getSingleton('catalog/layer')->getCurrentCategory()->getId();
         }
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
-    public function getPopupTargetUrl($filter) {
+    public function getPopupTargetUrl($filter, $includeTargetFilter = true, $includeSpecialFilter = false) {
         $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
         $params['_m_escape'] = '';
-        $params['_query'] = array('p' => null, $filter->getRequestVar() => '__0__');
+        $params['_query'] = array('p' => null);
+        $params['_query'][$filter->getRequestVar()] = $includeTargetFilter ? '__0__' : null;
+        if ($this->coreHelper()->isSpecialPagesInstalled()) {
+            $params['_query'][$this->specialPageHelper()->getRequestVar()] = $includeSpecialFilter ? '__1__' : null;
+        }
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
 
@@ -100,9 +105,19 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         $rowCount = ceil($count / $columnCount);
         return array($rowCount, $columnCount);
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxRowCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_rows');
     }
+
+    /**
+     * @deprecated since 14.02.18.18
+     * @return int
+     */
     public function getMaxColumnCount() {
         return Mage::getStoreConfig('mana_filters/show_more_popup/max_columns');
     }
@@ -130,4 +145,20 @@ class ManaPro_FilterShowMore_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return false;
     }
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper()
+    {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
+    #endregion
 }

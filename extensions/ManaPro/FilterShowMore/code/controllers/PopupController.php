@@ -30,9 +30,7 @@ class ManaPro_FilterShowMore_PopupController extends Mage_Core_Controller_Front_
                 $viewBlock->setMode('search');
                 $filterHelper->setMode('search');
                 break;
-            case 'catalog/category/view':
-            case 'cms/index/index':
-            case 'cms/page/view':
+            case 'mana/optionPage/view':
                 $category = Mage::getModel('catalog/category')->load($request->getParam('m-show-more-cat'));
                 if ($category->getId()) {
                         Mage::helper('mana_filters')->getLayer()->setCurrentCategory($category);
@@ -40,9 +38,19 @@ class ManaPro_FilterShowMore_PopupController extends Mage_Core_Controller_Front_
                 $viewBlock = $layout->addBlock('mana_filters/view', 'layer');
                 $viewBlock->setMode('category');
                 $filterHelper->setMode('category');
-            break;
+                if (Mage::helper('mana_attributepage/optionPage')->initOptionPage((int)$this->getRequest()->getParam('id', false))) {
+                    Mage::getSingleton('mana_attributepage/layer')->apply();
+                }
+                break;
             default:
-                throw new Exception('Not implemented');
+                $category = Mage::getModel('catalog/category')->load($request->getParam('m-show-more-cat'));
+                if ($category->getId()) {
+                        Mage::helper('mana_filters')->getLayer()->setCurrentCategory($category);
+                }
+                $viewBlock = $layout->addBlock('mana_filters/view', 'layer');
+                $viewBlock->setMode('category');
+                $filterHelper->setMode('category');
+                break;
         }
 
         Mage::dispatchEvent(

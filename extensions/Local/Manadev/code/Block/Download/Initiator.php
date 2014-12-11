@@ -22,7 +22,7 @@ class Local_Manadev_Block_Download_Initiator extends Mage_Core_Block_Template {
 		return $this->getProduct()->getId();
 	}
 	public function getFileUrl() {
-		return $this->getUrl('actions/product/file', array('id' => $this->getProductId()));
+		return $this->getUrl('actions/product/file', array('_direct' => 'actions/product/file/id/'.$this->getProductId().'.zip'));
 	}
 	/**
 	 * Add/remove blocks here and invoke methods of existing blocks. This one is called when this block is being 

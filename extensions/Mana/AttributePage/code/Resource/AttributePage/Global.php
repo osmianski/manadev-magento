@@ -58,6 +58,9 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
                 'custom_design_active_to' => "`ap_gcs`.`custom_design_active_to`",
                 'custom_design' => "`ap_gcs`.`custom_design`",
                 'custom_layout_xml' => "`ap_gcs`.`custom_layout_xml`",
+                'allowed_page_sizes' => "`ap_gcs`.`allowed_page_sizes`",
+                'default_page_size' => "`ap_gcs`.`default_page_size`",
+                'hide_empty_option_pages' => "`ap_gcs`.`hide_empty_option_pages`",
             ));
         }
         if ($object->getData('_add_option_page_defaults')) {

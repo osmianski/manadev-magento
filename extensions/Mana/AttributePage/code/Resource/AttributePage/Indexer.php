@@ -274,6 +274,18 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                         {$aggregate->glue($titleExpr, ',')}
                     )
                 )",
+                'allowed_page_sizes' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_ALLOWED_PAGE_SIZES)},
+                    `ap_scs`.`allowed_page_sizes`,
+                    `ap_gcs`.`allowed_page_sizes`
+                )",
+                'default_page_size' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_DEFAULT_PAGE_SIZE)},
+                    `ap_scs`.`default_page_size`,
+                    `ap_gcs`.`default_page_size`
+                )",
+                'hide_empty_option_pages' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_HIDE_EMPTY_OPTION_PAGES)},
+                    `ap_scs`.`hide_empty_option_pages`,
+                    `ap_gcs`.`hide_empty_option_pages`
+                )",
                 'option_page_description_position' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_OPTION_PAGE_DESCRIPTION_POSITION)},
                     `ap_scs`.`option_page_description_position`,
                     `ap_gcs`.`option_page_description_position`

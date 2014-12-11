@@ -14,18 +14,13 @@
 /* @var $showmore ManaPro_FilterShowMore_Helper_Data */ $showmore = Mage::helper(strtolower('ManaPro_FilterShowMore'));
 /* @var $jsonHelper Mana_Core_Helper_Json */
 $jsonHelper = Mage::helper('mana_core/json');
-$MAX_ROW_COUNT = $showmore->getMaxRowCount(); // 20
-$MAX_COLUMN_COUNT = $showmore->getMaxColumnCount(); // 4
-$items = $this->getItems();
-list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_COUNT, $MAX_COLUMN_COUNT);
 ?>
 <div class="m-filter-popup">
-<ol class="m-rows" data-max-rows="<?php echo $MAX_ROW_COUNT ?>">
-    <?php for($rowIndex = 0; $rowIndex < $rowCount; $rowIndex++) : ?>
+<?php echo Mage::helper('mana_core')->getNamedHtml('mana_filters/markup', 'before_popup_items', array('block' => $this)) ?>
+<ol class="m-rows">
     <li>
         <ol class="m-columns">
-            <?php for ($columnIndex = 0; $columnIndex < $columnCount; $columnIndex++) : if ($columnIndex * $rowCount + $rowIndex < count($items)) : ?>
-            <?php $_item = $items[$columnIndex * $rowCount + $rowIndex]; ?>
+            <?php foreach ($this->getItems() as $_index => $_item) : /*@var $_item Mana_Filters_Model_Item */ ?>
             <li  <?php echo $this->getListItemClass($_item) ?> >
                 <?php if (!$this->getFilterOptions()->getDisableNoResultOptions() || $_item->getCount() || $_item->getMSelected()): ?>
                     <input type="radio" id="popup_<?php echo $_item->getUniqueId($this) ?>"
@@ -33,7 +28,7 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                            value="<?php echo $_item->getSeoValue() ?>" <?php if ($_item->getMSelected()): ?>checked="checked"<?php endif; ?>
                            data-item="<?php echo $jsonHelper->encodeAttribute($_item->getSeoData()) ?>"
                            data-is-reverse="<?php echo $this->getFilterOptions()->getIsReverse() ?>"
-                           data-index="<?php echo $columnIndex * $rowCount + $rowIndex ?>" />
+                           data-index="<?php echo $_index ?>" />
                 <label for="popup_<?php echo $_item->getUniqueId($this) ?>"><span <?php if ($_item->getMSelected()): ?>class="m-selected-radio-button"<?php endif; ?>
                             title="<?php echo $this->escapeHtml($_item->getLabel()) ?>"><?php echo $this->escapeHtml($_item->getLabel()) ?></span></label>
                 <?php else: ?>
@@ -46,9 +41,8 @@ list($rowCount, $columnCount) = $showmore->getPopupDimensions($items, $MAX_ROW_C
                     (<?php echo $_item->getCount() ?>)
                 <?php endif; ?>
             </li>
-            <?php endif; endfor; ?>
+            <?php endforeach; ?>
         </ol>
     </li>
-    <?php endfor; ?>
 </ol>
 </div>

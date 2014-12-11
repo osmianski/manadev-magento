@@ -19,6 +19,10 @@
  * @method Mana_Admin_Block_V2_Grid setUseDefaultEnabled(bool $value)
  */
 class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
+    protected $_multipleRowColumns = array();
+    protected $_multipleRowColumnsPrepared = false;
+    protected $_currentMultipleRowItem;
+
     protected function _prepareLayout() {
         $this->setTemplate('mana/admin/v2/grid.phtml');
         $this->setId(str_replace('_', '-', str_replace('.', '-', $this->getNameInLayout())));
@@ -64,11 +68,48 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
         }
 
         if ($this->getEdit()) {
-            $block['edit'] = $this->jsonHelper()->encodeAttribute($this->getEdit());
+            $block['edit'] = $this->jsonHelper()->encodeAttribute($this->getEdit(),
+                array('force_object' => array('pending' => true, 'saved' => true, 'deleted' => true)));
         }
         $this->setData('m_client_side_block', $block);
 
-        parent::_prepareCollection();
+        if ($this->getCollection()) {
+
+            $this->_preparePage();
+
+            $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
+            $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
+            $filter = $this->getParam($this->getVarNameFilter(), null);
+
+            if (is_null($filter)) {
+                $filter = $this->_defaultFilter;
+            }
+
+            if (is_string($filter)) {
+                $data = $this->helper('adminhtml')->prepareFilterString($filter);
+                $this->_setFilterValues($data);
+            } else if ($filter && is_array($filter)) {
+                $this->_setFilterValues($filter);
+            } else if (0 !== sizeof($this->_defaultFilter)) {
+                $this->_setFilterValues($this->_defaultFilter);
+            }
+
+            if (isset($this->_columns[$columnId]) && $this->_columns[$columnId]->getIndex()) {
+                $dir = (strtolower($dir) == 'desc') ? 'desc' : 'asc';
+                $this->_columns[$columnId]->setDir($dir);
+                $column = $this->_columns[$columnId]->getFilterIndex() ?
+                    $this->_columns[$columnId]->getFilterIndex() : $this->_columns[$columnId]->getIndex();
+                $this->getCollection()->setOrder($column, $dir);
+                if ($secondaryOrder = $this->getData('secondary_order')) {
+                    $this->getCollection()->setOrder($secondaryOrder['column'], $secondaryOrder['dir']);
+                }
+            }
+
+            if (!$this->_isExport) {
+                $this->getCollection()->load();
+                $this->_afterLoadCollection();
+            }
+        }
 
         return $this;
     }
@@ -129,15 +170,21 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
             $rendererClass = $column->getRendererClass();
         }
 
-        $type = 'Mana/Admin/Grid/Cell';
-        if ($core->startsWith($rendererClass, $standardPrefix)) {
-            $type .= '/' . ucfirst(substr($rendererClass, strlen($standardPrefix)));
-        }
-        elseif ($core->startsWith($rendererClass, $editablePrefix)) {
-            $type .= '/' . ucfirst(substr($rendererClass, strlen($editablePrefix)));
+        if (!($type = $column->getData('cell_client_side_block_type'))) {
+            $type = 'Mana/Admin/Grid/Cell';
+            if ($core->startsWith($rendererClass, $standardPrefix)) {
+                $type .= '/' . ucfirst(substr($rendererClass, strlen($standardPrefix)));
+            }
+            elseif ($core->startsWith($rendererClass, $editablePrefix)) {
+                $type .= '/' . ucfirst(substr($rendererClass, strlen($editablePrefix)));
+            }
         }
 
-        return compact('type');
+        $result = compact('type');
+        if ($column->getData('readonly')) {
+            $result['readonly'] = 1;
+        }
+        return $result;
     }
 
     /**
@@ -158,14 +205,7 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
      */
     public function addColumn($columnId, $column) {
         if (is_array($column)) {
-            /* @var $columnBlock Mana_Admin_Block_V2_Grid_Column */
-            $columnBlock = $this->getLayout()->createBlock('mana_admin/v2_grid_column');
-            $columnBlock->setData($column);
-            $columnBlock
-                ->setGrid($this)
-                ->setId($columnId);
-            $columnBlock->prepareClientSideBlock();
-            $this->_columns[$columnId] = $columnBlock;
+            $this->_columns[$columnId] = $this->createColumn($columnId, $column);
             $this->_lastColumnId = $columnId;
         }
         else {
@@ -173,6 +213,80 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
         }
 
         return $this;
+    }
+
+    /**
+     * Add multiple row column to grid
+     *
+     * @param   string $columnId
+     * @param   array | Varien_Object $column <p>
+     *      Available options:
+     *      <table>
+     *      <tr valign="top"><td><i>header</i></td><td>Column header text</td></tr>
+     *      <tr valign="top"><td><i>index</i></td><td>Underlying DB column name</td></tr>
+     *      <tr valign="top"><td><i>width</i></td><td>Width, like '50px'</td></tr>
+     *      <tr valign="top"><td><i>align</i></td><td>Horizontal alignment: 'center', 'left'</td></tr>
+     *      </table>
+     *      </p>
+     * @throws Exception
+     * @return  Mana_Admin_Block_V2_Grid
+     */
+    public function addMultipleRowColumn($columnId, $column) {
+        if (is_array($column)) {
+            $this->_multipleRowColumns[$columnId] = $this->createColumn($columnId, $column);
+        }
+        else {
+            throw new Exception(Mage::helper('adminhtml')->__('Wrong column format.'));
+        }
+
+        return $this;
+    }
+
+    public function getCurrentMultipleRowItem() {
+        return $this->_currentMultipleRowItem;
+    }
+
+    public function setCurrentMultipleRowItem($value) {
+        $this->_currentMultipleRowItem = $value;
+
+        return $this;
+    }
+
+    public function getMultipleRowColumns() {
+        $this->setCurrentMultipleRowItem(func_get_arg(0));
+        if (!$this->_multipleRowColumnsPrepared) {
+            $this->_prepareMultipleRowColumns();
+            $this->_multipleRowColumnsPrepared = true;
+        }
+        return $this->_multipleRowColumns;
+    }
+
+    public function getMultipleRowColSpan($parentItem, $childItem, $columnIndex, $column) {
+        return 0;
+    }
+
+    public function getMultipleRowClass($childItem) {
+        return '';
+    }
+
+    protected function _prepareMultipleRowColumns() {
+    }
+
+    public function createColumn($columnId, $column) {
+        if (is_array($column)) {
+            /* @var $columnBlock Mana_Admin_Block_V2_Grid_Column */
+            $columnBlock = $this->getLayout()->createBlock('mana_admin/v2_grid_column');
+            $columnBlock->setData($column);
+            $columnBlock
+                ->setGrid($this)
+                ->setId($columnId);
+            $columnBlock->prepareClientSideBlock();
+        }
+        else {
+            throw new Exception(Mage::helper('adminhtml')->__('Wrong column format.'));
+        }
+
+        return $columnBlock;
     }
 
     public function getUsedDefault() {
@@ -227,6 +341,13 @@ class Mana_Admin_Block_V2_Grid extends Mage_Adminhtml_Block_Widget_Grid  {
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
     }
 
     /**

@@ -73,7 +73,7 @@ ManaPro.filterSuperSlider = function(id, o) {
                 parseFloat($_from.val()),
                 parseFloat($_to.val())
             ];
-            if (value[0] == NaN || value[1] == NaN) {
+            if (isNaN(value[0]) || isNaN(value[1])) {
                 _changing = false;
                 return;
             }
@@ -233,6 +233,9 @@ ManaPro.filterSuperSlider = function(id, o) {
     jQuery('#' + id + '-track').parent().on('m-prepare', function () {
         _resizeSpanAndHandles(true);
     });
+    jQuery(document).on('click', '.toggle-content dl:first dt', function () {
+        _resizeSpanAndHandles(true);
+    });
     //jQuery('body').click(_resizeSpanAndHandles);
 };
 ManaPro.filterAttributeSlider = function (id, o) {
@@ -295,9 +298,12 @@ ManaPro.filterAttributeSlider = function (id, o) {
     };
     s.options.onChange = _change;
     //
-    function _resizeSpanAndHandles() {
+    function _resizeSpanAndHandles(forceResize) {
         var checkFrequency = 100, stabilityPeriod = 500;
         var checkingForStability = false, currentlyStableFor = 0;
+        if (forceResize === true) {
+            s.resize();
+        }
         if (!_mana_sliderTimers[id]) {
             _mana_sliderTimers[id] = setInterval(function () {
                 if (s.needsResize()) {
@@ -330,6 +336,9 @@ ManaPro.filterAttributeSlider = function (id, o) {
     _mana_oldResizehandler[id] = _resizeSpanAndHandles;
     jQuery(_resizeSpanAndHandles);
     jQuery(window).bind('resize', _resizeSpanAndHandles);
+    jQuery('#' + id + '-track').parent().on('m-prepare', function () {
+        _resizeSpanAndHandles(true);
+    });
 };
 ManaPro.filterRangeInput = function (id, o) {
     var _changing = false;
@@ -358,7 +367,7 @@ ManaPro.filterRangeInput = function (id, o) {
             parseFloat($_from.val()),
             parseFloat($_to.val())
         ];
-        if (value[0] == NaN || value[1] == NaN) {
+        if (isNaN(value[0]) || isNaN(value[1])) {
             _changing = false;
             return;
         }

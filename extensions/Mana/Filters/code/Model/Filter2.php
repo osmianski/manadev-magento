@@ -57,6 +57,22 @@ class Mana_Filters_Model_Filter2 extends Mana_Db_Model_Object {
 			$result->addError($t->__('Please fill in %s field', $t->__('Position')));
 		}
 	}
+
+	public function validateDetails() {
+        if ($edit = $this->getValueData()) {
+            foreach ($edit['saved'] as $id => $editId) {
+                if ($id > 0) {
+                    $editModel = Mage::helper('mana_admin')->loadModel('mana_filters/filter2_value', $editId);
+                    $editModel->validate();
+                }
+                else {
+                    // inserts
+                    throw new Exception('Not implemented!');
+                }
+            }
+        }
+	}
+
     public function getCode() {
         return isset($this->_data['code']) ? $this->_data['code'] : null;
     }

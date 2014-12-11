@@ -13,26 +13,33 @@ if (!($_columnCount = $this->getAttributePage()->getData('column_count'))) {
 $_currentColumn = 0;
 $_actualColumn = 0;
 $_currentAlpha = '';
-$_count = count($this->getAttributePage()->getOptionPages());
+$_collection = $this->getCollection();
+$_count = $this->getCount();
 ?>
 <?php if( $_count) :?>
+    <?php echo $this->getPagerHtml(); ?>
     <ul class="m-option-page-list col<?php echo $_columnCount ?>-set"><li class="col-<?php echo $_actualColumn + 1?>"><ul>
-        <?php foreach ($this->getAttributePage()->getOptionPages() as $_optionPage) : $i++;?>
+        <?php foreach ($_collection as $_optionPage) : $i++;?>
             <?php
                 /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
                 $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
                 $_column = floor($_columnCount * $i / $_count);
                 $_alpha = $_optionPage->getData('alpha');
             ?>
-            <?php if ($_column != $_currentColumn && $_alpha != $_currentAlpha): ?>
+            <?php if ($_column != $_currentColumn): ?>
                 <?php $_currentColumn = $_column; ?>
                 <?php $_actualColumn++; ?>
                 </ul></li><li class="col-<?php echo $_actualColumn + 1?>"><ul>
             <?php endif; ?>
             <?php if ($_alpha != $_currentAlpha): ?>
-                <?php $_currentAlpha = $_alpha; ?>
+                <?php
+                    $_currentAlpha = $_alpha;
+                    $_displayAlpha = $_currentAlpha == '#'
+                        ? Mage::getStoreConfig('mana_attributepage/attribute_page_settings/digit_label')
+                        : $_currentAlpha;
+                ?>
                 <li class="m-alpha">
-                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_currentAlpha; ?></span>
+                    <span id="<?php echo $_currentAlpha; ?>"><?php echo $_displayAlpha; ?></span>
                 </li>
             <?php endif; ?>
             <li class="m-option-page">
@@ -42,4 +49,5 @@ $_count = count($this->getAttributePage()->getOptionPages());
             </li>
         <?php endforeach; ?>
     </ul></li></ul>
+    <?php echo $this->getPagerHtml(); ?>
 <?php endif; ?>

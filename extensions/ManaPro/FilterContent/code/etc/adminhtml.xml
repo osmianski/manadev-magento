@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_AttributePage
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <!--<filtercontent translate="title" module="manapro_filtercontent">
+                    <title>Filter Specific Content</title>
+                    <sort_order>150</sort_order>
+                    <action>adminhtml/mana_filterContent/new</action>
+                </filtercontent>-->
+                <system_configuration>
+                    <children>
+                        <manapro_filtercontent translate="title" module="manapro_filtercontent">
+                            <title>Filter Specific Content</title>
+                            <action>adminhtml/system_config/edit/section/mana_filtercontent</action>
+                            <sort_order>150</sort_order>
+                        </manapro_filtercontent>
+                    </children>
+                </system_configuration>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<!--<filtercontent translate="title" module="manapro_filtercontent">
+								<title>Filter Specific Content</title>
+		                        <sort_order>150</sort_order>
+							</filtercontent>-->
+							<system_configuration>
+                                <children>
+                                    <manapro_filtercontent translate="title" module="manapro_filtercontent">
+                                        <title>Filter Specific Content</title>
+                                        <sort_order>150</sort_order>
+                                    </manapro_filtercontent>
+                                </children>
+							</system_configuration>
+						</children>
+					</mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana_filtercontent translate="title" module="manapro_filtercontent">
+										<title>MANAdev Filter Specific Content</title>
+                                        <sort_order>50150</sort_order>
+                                    </mana_filtercontent>
+								</children>
+							</config>
+						</children>
+					</system>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

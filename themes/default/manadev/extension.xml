@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <name>default/manadev</name>
-    <version>13.08.01.09</version>
+    <version>14.04.25.15</version>
 
     <!-- server-side directories go to app/design -->
     <sync extension-dir="layout" project-dir="app/design/frontend/{Extension/Name}/layout"/>

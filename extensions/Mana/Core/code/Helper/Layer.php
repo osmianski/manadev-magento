@@ -11,6 +11,9 @@
  */
 class Mana_Core_Helper_Layer extends Mage_Core_Helper_Abstract {
     public function useSolrForNavigation() {
+        if (Mage::registry('m_no_solr')) {
+            return false;
+        }
         if (!Mage::helper('core')->isModuleEnabled('Enterprise_Search')) {
             return false;
         }

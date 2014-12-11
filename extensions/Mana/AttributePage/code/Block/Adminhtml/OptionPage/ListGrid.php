@@ -22,6 +22,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ListGrid extends Mana_Admin_
         $this->addColumn('title', array(
             'header' => $this->__('Title'),
             'index' => 'title',
+            'filter_index' => "`main_table`.`title`",
             'width' => '200px',
             'align' => 'left',
         ));
@@ -63,7 +64,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ListGrid extends Mana_Admin_
         else {
             return $this->adminHelper()->getStoreUrl('*/*/edit', array(
                 'parent_id' => $this->getAttributePage()->getId(),
-                'id' => $row->getData('attribute_page_global_id'),
+                'id' => $row->getData('option_page_global_id'),
                 'store' => $this->adminHelper()->getStore()->getId()
             ));
         }
@@ -82,7 +83,13 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ListGrid extends Mana_Admin_
      * @return Mana_AttributePage_Model_AttributePage_Abstract
      */
     public function getAttributePage() {
-        return Mage::registry('m_attribute_page');
+        if ($this->adminHelper()->isGlobal()) {
+            return Mage::registry('m_attribute_page');
+        }
+        else {
+            return Mage::registry('m_global_attribute_page');
+        }
     }
+
     #endregion
 }

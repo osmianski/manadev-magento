@@ -16,6 +16,7 @@
     <div class="page-title">
         <h1><?php echo $this->__('Simple & Secure Checkout') ?></h1>
     </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form id="checkout-form" method="post" action="<?php //echo $this->getUrl('checkout/ajax/save') ?>">
     <ul class="m-columns m-checkout-columns">
         <li class="column1 first">

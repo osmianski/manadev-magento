@@ -92,6 +92,9 @@ class Mana_Menu_Block_Tree extends Mana_Menu_Block_Abstract implements Mage_Widg
         if (!empty($xml->hidden)) {
             $result['hidden'] = true;
         }
+        if ($xml->bold == "1") {
+            $result['bold'] = true;
+        }
         if (!empty($xml->selected)) {
             $result['selected'] = true;
         }

@@ -77,4 +77,6 @@ interface Mana_Filters_Interface_Filter
      * @return void
      */
     public function addToState();
+
+
 }

@@ -25,6 +25,10 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getUrl()
     {
+        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->getData('special')) {
+            return $this->specialPageHelper()->getItemAddToFilterUrl($this);
+        }
+
     	// MANA BEGIN: add multivalue filter handling
     	$values = $this->getFilter()->getMSelectedValues(); // this could fail if called from some kind of standard filter
     	if (!$values) $values = array();
@@ -37,6 +41,9 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
             // MANA_END
             Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
         );
+        if ($this->coreHelper()->isManadevDependentFilterInstalled() && $this->dependentHelper()->areDependentFiltersClearedOnParentFilterChange()) {
+            $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getFilter()->getRequestVar());
+        }
         $params = array('_current'=>true, '_m_escape' => '', '_use_rewrite'=>true, '_query'=>$query, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
@@ -50,6 +57,12 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getReplaceUrl()
     {
+        if ($this->coreHelper()->isSpecialPagesInstalled() &&
+            ($this->getData('special') || $this->specialPageHelper()->isAppliedInFilter($this->getFilter()->getRequestVar())))
+        {
+            return $this->specialPageHelper()->getItemReplaceInFilterUrl($this, $this->getFilter()->getRequestVar());
+        }
+
     	// MANA BEGIN: add multivalue filter handling
     	$values = array();
     	if (!in_array($this->getValue(), $values)) $values[] = $this->getValue();
@@ -61,6 +74,9 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
             // MANA_END
             Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
         );
+        if ($this->coreHelper()->isManadevDependentFilterInstalled() && $this->dependentHelper()->areDependentFiltersClearedOnParentFilterChange()) {
+            $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getFilter()->getRequestVar());
+        }
         $params = array('_current'=>true, '_m_escape' => '', '_use_rewrite'=>true, '_query'=>$query, '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         return Mage::helper('mana_filters')->markLayeredNavigationUrl(Mage::getUrl('*/*/*', $params), '*/*/*', $params);
     }
@@ -73,6 +89,10 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
      */
     public function getRemoveUrl()
     {
+        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->getData('special')) {
+            return $this->specialPageHelper()->getItemRemoveFromFilterUrl($this);
+        }
+
     	// MANA BEGIN: add multivalue filter handling
     	if ($this->hasData('remove_url')) {
     	    return $this->getData('remove_url');
@@ -86,9 +106,15 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
 	            $this->getFilter()->getRequestVar()=>implode('_', $values),
 	            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
 	        );
+    		if ($this->coreHelper()->isManadevDependentFilterInstalled() && $this->dependentHelper()->areDependentFiltersClearedOnParentFilterChange()) {
+                $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getFilter()->getRequestVar());
+    		}
     	}
     	else {
     		$query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue());
+    		if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+                $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getFilter()->getRequestVar());
+    		}
     	}
     	// MANA END
     	$params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
@@ -127,13 +153,20 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
             ) {
                 /* @var $url Mana_Seo_Rewrite_Url */
                 $url = Mage::getModel('core/url');
-                $this->_seoData = $url->getItemData($this->getFilter()->getRequestVar(), $this->getValue());
+                $requestVar = $this->getFilter()->getRequestVar();
+                if ($this->coreHelper()->isSpecialPagesInstalled()) {
+                    if ($this->getData('special')) {
+                        $requestVar = $this->specialPageHelper()->getRequestVar();
+                    }
+                }
+                $this->_seoData = $url->getItemData($requestVar, $this->getValue());
             }
             else {
                 $this->_seoData = array(
                     'url' => $this->getValue(),
                     'prefix' => '',
                     'position' => 0,
+                    'special' => $this->getData('special'),
                     'id' => $this->getValue(),
                 );
             }
@@ -150,4 +183,28 @@ class Mana_Filters_Model_Item extends Mage_Catalog_Model_Layer_Filter_Item {
             return Mage::helper('core')->escapeHtml($this->getLabel());
         }
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
+    }
+    #endregion
 }

@@ -74,3 +74,6 @@
 "%s (Global Configuration)","%s (Global Configuration)"
 "Please confirm that all atributes of added products will be overridden.","Please confirm that all atributes of added products will be overridden."
 "Percentage (Extra Virtual Qty)","Percentage (Extra Virtual Qty)"
+"There are still %s remaining items that are unassigned.","There are still %s remaining items that are unassigned."
+"Pack Qty should be positive number, but %s is not.","Pack Qty should be positive number, but %s is not."
+"Pack Qty","Pack Qty"

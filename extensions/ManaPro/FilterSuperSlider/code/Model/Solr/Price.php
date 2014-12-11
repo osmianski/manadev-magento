@@ -34,4 +34,17 @@ class ManaPro_FilterSuperSlider_Model_Solr_Price extends Mana_Filters_Model_Solr
     public function getDecimalDigits() {
         return $this->getFilterOptions()->getSliderDecimalDigits();
     }
+    protected function _ceil($value) {
+        if ($precision = $this->getDecimalDigits()) {
+            $result = round($value, $precision);
+            if ($result < $value) {
+                $result +=  pow(0.1, $precision);
+            }
+
+            return $result;
+        }
+        else {
+            return ceil($value);
+        }
+    }
 }

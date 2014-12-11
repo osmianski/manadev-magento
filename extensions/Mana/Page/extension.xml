@@ -21,7 +21,11 @@
     <!-- module backend files (having impact on Admin Panel) -->
     <sync extension-file="backend/layout.xml" project-file="app/design/adminhtml/default/default/layout/{extension_name}.xml"/>
     <sync extension-dir="backend/template" project-dir="app/design/adminhtml/default/default/template/{extension/name}"/>
-    <sync extension-file="backend/js/scripts.js" project-file="skin/adminhtml/default/default/js/{extension_name}.js"/>
+    <sync extension-file="backend/js/scripts.js" project-file="skin/adminhtml/default/default/js/{extension/name}.js"/>
+    <sync extension-file="backend/js/scripts.js.map" project-file="skin/adminhtml/default/default/js/{extension/name}.js.map"/>
+    <sync extension-file="backend/js/scripts.min.js" project-file="skin/adminhtml/default/default/js/{extension/name}.min.js"/>
+    <sync extension-file="backend/js/scripts.min.js.map" project-file="skin/adminhtml/default/default/js/{extension/name}.min.js.map"/>
+    <sync extension-dir="backend/js/src" project-dir="skin/adminhtml/default/default/js/src/{Extension/Name}"/>
     <sync extension-file="backend/css/styles.css" project-file="skin/adminhtml/default/default/css/{extension_name}.css"/>
     <sync extension-dir="backend/images" project-dir="skin/adminhtml/default/default/images/{extension_name}"/>
 

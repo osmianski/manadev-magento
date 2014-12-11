@@ -44,11 +44,15 @@
     <div class="m-more-less" id="m-more-less-<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>"
          data-m-block="Mana/LayeredNavigation/ShowMore/PopupAction"
          data-popup-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupUrl($_filter)) ?>"
-         data-target-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupTargetUrl($_filter)) ?>"
+         data-target-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupTargetUrl($_filter, true, false)) ?>"
+         data-special-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupTargetUrl($_filter, false, true)) ?>"
+         data-target-special-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupTargetUrl($_filter, true, true)) ?>"
          data-clear-url="<?php echo $_urlTemplate->encodeAttribute($_helper->getPopupClearUrl($_filter)) ?>"
          data-selected-items="<?php echo $block->getSelectedSeoValues() ?>"
          data-popup-block="<?php echo $block->getPopupBlockName() ?>"
-         data-separator="<?php echo $block->getMultipleValueSeparator() ?>">
+         data-separator="<?php echo $block->getMultipleValueSeparator() ?>"
+         data-column-count="<?php echo Mage::getStoreConfig('mana_filters/show_more_popup/max_columns') ?>"
+         data-row-count="<?php echo Mage::getStoreConfig('mana_filters/show_more_popup/max_rows') ?>">
         <a href="#" class="m-show-more-popup-action"><?php echo $block->__('Show More') ?></a>
     </div>
     <?php else : ?>

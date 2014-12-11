@@ -51,6 +51,8 @@
  * @method Mana_Seo_Model_ParsedUrl setPageUrl(Mana_Seo_Model_Url $value)
  * @method Mana_Seo_Model_Url getAttributeValueUrl() - URL index entry for current attribute value URL key. Unset after parameter value is registered
  * @method Mana_Seo_Model_ParsedUrl setAttributeValueUrl(Mana_Seo_Model_Url $value)
+ * @method Mana_Seo_Model_Url getSpecialValueUrl() - URL index entry for current attribute value URL key. Unset after parameter value is registered
+ * @method Mana_Seo_Model_ParsedUrl setSpecialValueUrl(Mana_Seo_Model_Url $value)
  * @method Mana_Seo_Model_Url getParameterUrl() - URL index entry for current parameter URL key. Unset after parameter value is registered
  * @method Mana_Seo_Model_ParsedUrl setParameterUrl(Mana_Seo_Model_Url $value)
  *
@@ -77,6 +79,7 @@ class Mana_Seo_Model_ParsedUrl extends Varien_Object {
     const PARAMETER_CATEGORY = 'category';
     const PARAMETER_PRICE = 'price';
     const PARAMETER_TOOLBAR = 'toolbar';
+    const PARAMETER_SPECIAL = 'special';
 
     const CORRECT_NOT_FOUND_CATEGORY_FILTER_URL_KEY = 0x0001;
     const CORRECT_NOT_FOUND_ATTRIBUTE_FILTER_URL_KEY = 0x0002;

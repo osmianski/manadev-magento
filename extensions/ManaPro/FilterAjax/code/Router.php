@@ -39,6 +39,7 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             $routerHelper
                 ->changePath($path)
                 ->processWithoutRendering($this, 'render');
+
             $baseUrl = parse_url(Mage::getUrl(null, array('_nosid' => true)));
 
             Mage::register('m_original_request_uri', $_SERVER['REQUEST_URI']);
@@ -52,6 +53,10 @@ class ManaPro_FilterAjax_Router extends Mage_Core_Controller_Varien_Router_Abstr
             }
             else {
                 Mage::getModel('core/url_rewrite')->rewrite();
+            }
+
+            if ($path == '/') {
+                Mage::helper('mana_core')->setProtectedProperty($request, '_originalPathInfo', '/');
             }
         }
         return false;

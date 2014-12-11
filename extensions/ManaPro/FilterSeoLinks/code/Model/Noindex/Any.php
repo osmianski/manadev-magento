@@ -9,7 +9,8 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Noindex_Any {
+class ManaPro_FilterSeoLinks_Model_Noindex_Any extends ManaPro_FilterSeoLinks_Model_Condition
+{
     public function detect($layerModel) {
         $filter = null;
         $result = false;

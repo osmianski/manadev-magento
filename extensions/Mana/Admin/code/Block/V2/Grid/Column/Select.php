@@ -17,7 +17,10 @@ class Mana_Admin_Block_V2_Grid_Column_Select extends Mage_Adminhtml_Block_Widget
      * @return  string
      */
     public function render(Varien_Object $row) {
-        $html = '<select name="' . ($this->getColumn()->getName() ? $this->getColumn()->getName() : $this->getColumn()->getId()) . '" ' . $this->getColumn()->getValidateClass() . '>';
+        $html = '<select '.
+            'name="' . ($this->getColumn()->getName() ? $this->getColumn()->getName() : $this->getColumn()->getId()) . '" ' .
+            ($this->getColumn()->getData('select_style') ? 'style="'. $this->getColumn()->getData('select_style').'" ' : '') .
+            $this->getColumn()->getValidateClass() . '>';
         $value = $row->getData($this->getColumn()->getIndex());
 
         $options = $this->getColumn()->getOptions();

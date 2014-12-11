@@ -12,7 +12,7 @@
  *
  */
 class Mana_Seo_Model_Observer {
-    protected $_filterCodes;
+    protected $_filters;
 	/**
 	 * REPLACE THIS WITH DESCRIPTION (handles event "controller_action_layout_generate_blocks_after")
 	 * @param Varien_Event_Observer $observer
@@ -26,6 +26,7 @@ class Mana_Seo_Model_Observer {
         if (($head = $layout->getBlock('head')) &&
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
+            $renderLayeredNavigationFilters = true;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -34,23 +35,43 @@ class Mana_Seo_Model_Observer {
                     $renderCanonicalUrl = $this->catalogCategoryHelper()->canUseCanonicalTag();
                 }
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
+            }
+            elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view' && $this->coreHelper()->isManadevAttributePageInstalled()) {
+                $renderCanonicalUrl = $schema->getCanonicalOptionPage();
+            }
+            elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
+                $renderCanonicalUrl = $schema->getCanonicalBookPage();
+                $renderLayeredNavigationFilters = false;
             }
 
             if ($renderCanonicalUrl) {
                 $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true,
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
+                $areFiltersApplied = false;
+
+                $filters = $renderLayeredNavigationFilters ? $this->_getFilters() : array();
                 foreach (array_keys($query) as $key) {
-                    if (in_array($key, $this->_getFilterCodes())) {
-                        if (!$schema->getCanonicalFilters()) {
+                    if ($renderLayeredNavigationFilters) {
+                        if (isset($filters[$key])) {
+                            $areFiltersApplied = true;
+                            if ($filters[$key]['include_in_canonical_url'] == 'never' ||
+                                !$filters[$key]['include_in_canonical_url'] ||
+                                $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && (
+                                    !$schema->getCanonicalFilters() ||
+                                    !$this->coreHelper()->isManadevSeoLayeredNavigationInstalled())
+                            ) {
+                                $query[$key] = null;
+                            }
+                        } else {
                             $query[$key] = null;
                         }
                     }
@@ -58,30 +79,35 @@ class Mana_Seo_Model_Observer {
                         $query[$key] = null;
                     }
                 }
-                if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))) {
-                    $toolbar = $productList->getToolbarBlock();
-                    $collection = clone $productList->getLoadedProductCollection();
 
-                    $collection->setCurPage($toolbar->getCurrentPage());
-                    $limit = (int)$toolbar->getLimit();
-                    if ($limit) {
-                        $collection->setPageSize($limit);
-                    }
+                if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+                    if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
+                        && ($areFiltersApplied || $this->_isProductListVisible()))
+                    {
+                        $toolbar = $productList->getToolbarBlock();
+                        $collection = clone $productList->getLoadedProductCollection();
 
-                    $pageCount = $collection->getLastPageNumber();
-                    $pageNo = $collection->getCurPage();
-                    if ($pageNo > 1) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
-                        $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
-                    }
-                    if ($pageNo < $pageCount) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
-                        $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
-                    }
-                    if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
-                        $query['limit'] = 'all';
+                        $collection->setCurPage($toolbar->getCurrentPage());
+                        $limit = (int)$toolbar->getLimit();
+                        if ($limit) {
+                            $collection->setPageSize($limit);
+                        }
+
+                        $pageCount = $collection->getLastPageNumber();
+                        $pageNo = $collection->getCurPage();
+                        if ($pageNo > 1) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
+                            $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
+                        }
+                        if ($pageNo < $pageCount) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
+                            $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
+                        }
+                        if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
+                            $query['limit'] = 'all';
+                        }
                     }
                 }
 
@@ -92,19 +118,34 @@ class Mana_Seo_Model_Observer {
         }
     }
 
-    protected function _getFilterCodes() {
-        if ($this->_filterCodes === null) {
-            /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
-            $collection = Mage::getResourceModel('catalog/product_attribute_collection');
-            $collection->addIsFilterableFilter();
-            $this->_filterCodes = array('cat');
-            foreach ($collection as $attribute) {
-                /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-                $this->_filterCodes[] = $attribute->getAttributeCode();
+    protected function _getFilters() {
+        if ($this->_filters === null) {
+            if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+                $this->_filters = array();
+                foreach ($this->filterHelper()->getFilterOptionsCollection(true) as $filter) {
+                    /* @var $filter Mana_Filters_Model_Filter2_Store */
+                    $this->_filters[$filter->getType() == 'category' ? 'cat' : $filter->getCode()] = array(
+                        'include_in_canonical_url' => $filter->getData('include_in_canonical_url'),
+                    );
+                }
+            }
+            else {
+                /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
+                $collection = Mage::getResourceModel('catalog/product_attribute_collection');
+                $collection->addIsFilterableFilter();
+                $this->_filters = array('cat' => array(
+                    'include_in_canonical_url' => 'as_in_schema'
+                ));
+                foreach ($collection as $attribute) {
+                    /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+                    $this->_filters[$attribute->getAttributeCode()] = array(
+                        'include_in_canonical_url' => 'as_in_schema'
+                    );
+                }
             }
         }
 
-        return $this->_filterCodes;
+        return $this->_filters;
     }
 
     /**
@@ -170,6 +211,16 @@ class Mana_Seo_Model_Observer {
         $head->setData('items', $items);
     }
 
+    protected function _isProductListVisible() {
+        if ($pageType = $this->coreHelper()->getPageTypeByRoutePath()) {
+            return $pageType->isProductListVisible();
+        }
+        else {
+            return false;
+        }
+    }
+
+
     #region Dependencies
 
     /**
@@ -178,6 +229,13 @@ class Mana_Seo_Model_Observer {
     public function coreHelper() {
 	    return Mage::helper('mana_core');
 	}
+
+    /**
+     * @return Mana_Filters_Helper_Data
+     */
+    public function filterHelper() {
+        return Mage::helper('mana_filters');
+    }
 
     /**
      * @return Mana_Seo_Helper_Data

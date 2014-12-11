@@ -13,6 +13,8 @@ abstract class Mana_Core_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
     protected $_code;
     protected $_process;
     protected $_xml = null;
+    protected $_configXml = null;
+
     public function getCode() {
         return $this->_code;
     }
@@ -38,6 +40,15 @@ abstract class Mana_Core_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
             $this->_xml = count($result) == 1 ? $result[0] : false;
         }
         return $this->_xml;
+    }
+
+    public function getConfigXml() {
+        if (is_null($this->_configXml)) {
+            $result = Mage::getConfig()->getXpath("//global/index/indexer_config/{$this->getProcess()->getIndexerCode()}");
+
+            $this->_configXml = count($result) == 1 ? $result[0] : false;
+        }
+        return $this->_configXml;
     }
 
     /**

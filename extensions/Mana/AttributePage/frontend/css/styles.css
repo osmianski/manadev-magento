@@ -9,10 +9,23 @@
 .m-featured-image { float: left; width: auto; }
 .m-featured-image a { display: block; }
 
-.m-alpha-pager { width: 20px; float: left; }
+.m-alpha-pager { margin: 5px; float: left; }
 
-li.category-image.m-option-page-image{ float: left; width: 100px; }
+li.category-image.m-option-page-image{ float: left; display: block; width: auto; margin: 3px; }
+li.category-image.m-option-page-image a { float: left; }
 
 .m-option-featured-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
-.m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+#m-option-alpha-list:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
 .m-option-page-product:after { display: block; content: "."; clear: both; font-size: 0; line-height: 0; height: 0; overflow: hidden; }
+
+/* template 2 styles */
+
+.m-template2 #m-option-page-list { overflow: hidden; position: relative; }
+.m-template2 #m-option-page-list > div { position: relative; }
+.m-template2 #m-option-page-list .m-alpha-list { overflow: hidden; border-bottom: 1px solid #ccc; padding-top: 10px; padding-left: 90px; position: relative; }
+.m-template2 #m-option-page-list .m-alpha-list:last-child {border: none; }
+.m-template2 #m-option-page-list .m-alpha-list > div { float: left; position: absolute; top: 0; left: 0; font-size: 40px; line-height: 60px; }
+.m-template2 #m-option-page-list .m-alpha-list > ul { float: left; overflow: hidden; }
+.m-template2 #m-option-page-list .m-alpha-list > ul > li { float: left; }
+
+.m-template2 #m-option-alpha-list { border: solid #ccc; border-width: 1px 0; margin: 5px 0; }

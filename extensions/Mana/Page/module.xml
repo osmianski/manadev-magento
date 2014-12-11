@@ -16,6 +16,7 @@
             <codePool>local</codePool>
             <depends>
                 <Mana_Core/>
+                <Mana_Admin/>
             </depends>
         </Mana_Page>
     </modules>

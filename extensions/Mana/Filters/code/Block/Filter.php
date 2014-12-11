@@ -81,7 +81,24 @@ class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract
     }
     public function getItemsCount() {
         $this->_prepareFilterBlockOnce();
-        return $this->getHidden() ? 0 : $this->_filter->getItemsCount();
+        if ($this->getHidden()) {
+            return 0;
+        }
+        else {
+            $count = $this->_filter->getItemsCount();
+            $selected = $this->_filter->getMSelectedValues();
+            if ($count == 1 &&
+                empty($selected) &&
+                $this->getFilterOptions()->getCode() != 'category' &&
+                $this->getFilterOptions()->getCode() != 'price' &&
+                Mage::getStoreConfigFlag('mana_filters/display/hide_filters_with_single_visible_item'))
+            {
+                return 0;
+            }
+            else {
+                return $count;
+            }
+        }
     }
 
     public function getMultipleValueSeparator() {
@@ -126,20 +143,7 @@ class Mana_Filters_Block_Filter extends Mage_Catalog_Block_Layer_Filter_Abstract
     }
 
     public function getListItemClass($item) {
-        $result = '';
-        if ($item->getMShowSelected()) {
-            $result .= 'm-selected-ln-item';
-        }
-        if (!($item->getCount() || $item->getMSelected())) {
-            if ($result) {
-                $result .= ' ';
-            }
-            $result .= 'm-disabled';
-        }
-        if ($result) {
-            $result = "class=\"$result\"";
-        }
-        return $result;
+        return Mage::helper('mana_filters')->getListItemClass($item);
     }
 
     #region Dependencies

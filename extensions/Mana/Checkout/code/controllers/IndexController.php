@@ -28,6 +28,7 @@ class Mana_Checkout_IndexController extends Mage_Core_Controller_Front_Action {
         $this
             ->loadLayout()
             ->getLayout()->getBlock('head')->setTitle($this->__('Checkout'));
+        $this->_initLayoutMessages('customer/session');
         $this->renderLayout();
     }
 }

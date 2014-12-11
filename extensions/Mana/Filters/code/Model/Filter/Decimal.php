@@ -82,7 +82,25 @@ class Mana_Filters_Model_Filter_Decimal
             );
         }
 
+        if ($this->_addSpecialOptionsToAllOptions()) {
+            $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()));
+        }
+
         return $data;
+    }
+
+    protected $_specialItems;
+    public function getSpecialItems()
+    {
+        if (!$this->_specialItems) {
+            $this->_specialItems = array();
+            if (!$this->_addSpecialOptionsToAllOptions()) {
+                foreach (Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()) as $itemData) {
+                    $this->_specialItems[] = $this->_createItemEx($itemData);
+                }
+            }
+        }
+        return $this->_specialItems;
     }
 
     public function getLowestPossibleValue()
@@ -250,7 +268,15 @@ class Mana_Filters_Model_Filter_Decimal
 
     public function getRemoveUrl()
     {
+        if ($this->coreHelper()->isSpecialPagesInstalled() && $this->specialPageHelper()->isAppliedInFilter($this->getRequestVar())) {
+            return $this->specialPageHelper()->getClearFilterUrl($this->getRequestVar());
+        }
+
         $query = array($this->getRequestVar() => $this->getResetValue());
+        if ($this->coreHelper()->isManadevDependentFilterInstalled()) {
+            $query = $this->dependentHelper()->removeDependentFiltersFromUrl($query, $this->getRequestVar());
+        }
+
         $params = array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
         $params['_current'] = true;
         $params['_use_rewrite'] = true;
@@ -448,6 +474,34 @@ class Mana_Filters_Model_Filter_Decimal
 
     public function isUpperBoundInclusive() {
         return $this->_getResource()->isUpperBoundInclusive();
+    }
+    #endregion
+
+    protected function _addSpecialOptionsToAllOptions() {
+        return true;
+    }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return ManaPro_FilterDependent_Helper_Data
+     */
+    public function dependentHelper() {
+        return Mage::helper('manapro_filterdependent');
+    }
+
+    /**
+     * @return Mana_Page_Helper_Special
+     */
+    public function specialPageHelper() {
+        return Mage::helper('mana_page/special');
     }
     #endregion
 }

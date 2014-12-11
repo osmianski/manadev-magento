@@ -47,8 +47,12 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     : array()));
 
             if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK) {
-                if (rawurldecode($urlModel->getRoutePath()) == $path) {
+                if (!$this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId())
+                        ->getRedirectParameterOrder() ||
+                    rtrim(rawurldecode($urlModel->getRoutePath())) == rtrim($path, '/'))
+                {
                     Mage::register('m_temporary_query_parameters', $parsedUrl->getQueryParameters());
+                    Mage::register('m_parsed_url', $parsedUrl);
                     $routerHelper
                         ->changePath($parsedUrl->getPageUrlKey() . $parsedUrl->getSuffix())
                         ->forward($parsedUrl->getRoute(), $request,
@@ -61,16 +65,16 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                     }
                 }
                 else {
-                    $front->getResponse()->setRedirect($url);
+                    $front->getResponse()->setRedirect($url, 301);
                     $request->setDispatched(true);
                 }
             }
             elseif ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OBSOLETE) {
-                $front->getResponse()->setRedirect($url);
+                $front->getResponse()->setRedirect($url, 301);
                 $request->setDispatched(true);
             }
             elseif (Mage::getStoreConfig('mana/seo/max_correction_count')) {
-                $front->getResponse()->setRedirect($url);
+                $front->getResponse()->setRedirect($url, 301);
                 $request->setDispatched(true);
             }
         }
@@ -84,6 +88,13 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
     }
     #endregion
 }

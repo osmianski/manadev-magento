@@ -51,4 +51,19 @@ class Mana_Core_Helper_Layout extends Mage_Core_Helper_Abstract {
             return '';
         }
     }
+
+    public function addRecursiveLayoutUpdates($layoutXml) {
+        if ($layoutXml) {
+            $layoutUpdate = '<' . '?xml version="1.0"?' . '><layout>' . $layoutXml . '</layout>';
+            if ($xml = simplexml_load_string($layoutUpdate, Mage::getConfig()->getModelClassName('core/layout_element'))) {
+                foreach ($xml->children() as $child) {
+                    if (strtolower($child->getName()) == 'update' && isset($child['handle'])) {
+                        Mage::getSingleton('core/layout')->getUpdate()->addHandle((string)$child['handle']);
+                    }
+                }
+            }
+        }
+
+    }
+
 }

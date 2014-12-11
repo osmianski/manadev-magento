@@ -4,7 +4,7 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
-input.m-slider { width: 30px; }
+input.m-slider[type="text"] { width: 30px; }
 .col-main .block-layered-nav.m-topmenu dl.m-slider.m-inline dt { background-image: none; padding-left: 0; }
 .col-main .block-layered-nav.m-topmenu dl.m-slider.m-inline dd { background: none; position: static; border-bottom: 0; float: left;
     padding: 7px 10px 7px 0; }
@@ -16,3 +16,7 @@ input.m-slider { width: 30px; }
     { display: none; }
 
 .m-slider-values.left-aligned { text-align: left; }
+
+.mb-top-layered-navigation.one-filter-column  .m-hide-slider .m-filter-slider,
+.mb-top-layered-navigation.one-filter-column .m-hide-slider .m-slider-min-value,
+.mb-top-layered-navigation.one-filter-column .m-hide-slider .m-slider-max-value { display: none; }

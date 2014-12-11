@@ -17,6 +17,7 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
 
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
+            Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {
                 $this->getLayout()->getUpdate()->addUpdate($layoutXml);
@@ -27,7 +28,10 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
             if ($pageLayout = $attributePage->getData('page_layout')) {
                 $this->pageLayoutHelper()->applyTemplate($pageLayout);
             }
-
+            if ($root = $this->getLayout()->getBlock('root')) {
+                /* @var $root Mage_Page_Block_Html */
+                $root->addBodyClass('m-'.Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template'));
+            }
             $this->renderLayout();
         } else {
             $this->_forward('noRoute');

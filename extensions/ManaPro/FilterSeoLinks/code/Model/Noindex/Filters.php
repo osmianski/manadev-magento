@@ -9,19 +9,9 @@
  * @author Mana Team
  *
  */
-class ManaPro_FilterSeoLinks_Model_Noindex_Filters {
+class ManaPro_FilterSeoLinks_Model_Noindex_Filters extends ManaPro_FilterSeoLinks_Model_Condition
+{
     public function detect($layerModel) {
-        $filter = null;
-        $result = false;
-        foreach ($layerModel->getState()->getFilters() as $item) {
-            if (!$filter) {
-                $filter = $item->getFilter();
-            }
-            elseif ($item->getFilter() != $filter) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
+        return $this->_countFilters($layerModel) >= 2;
     }
 }

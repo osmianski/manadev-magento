@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Page
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_special_index>
+		<update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/page.js</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block type="mana_page/adminhtml_special_listContainer" name="container" as="container">
+				<block type="mana_page/adminhtml_special_listGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+    </adminhtml_mana_special_index>
+    <adminhtml_mana_special_grid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="mana_page/adminhtml_special_listGrid" name="grid" as="grid" />
+        </block>
+    </adminhtml_mana_special_grid>
+    <adminhtml_mana_special_edit>
+		<update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/page.js</name><params/></action>
+        </reference>
+		<reference name="content">
+            <block type="mana_page/adminhtml_special_formContainer" name="container" as="container">
+                <block type="mana_page/adminhtml_special_form" name="form" as="form">
+					<action method="addToParentGroup"><group>content</group></action>
+                </block>
+            </block>
+		</reference>
+
+    </adminhtml_mana_special_edit>
+</layout>

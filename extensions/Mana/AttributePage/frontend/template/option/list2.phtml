@@ -1,0 +1,57 @@
+<?php
+/** 
+ * @category    Mana
+ * @package     Mana_AttributePage
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Mana_AttributePage_Block_Option_List */
+$i = -1;
+if (!($_columnCount = $this->getAttributePage()->getData('column_count'))) {
+    $_columnCount = 4;
+}
+$_currentColumn = 0;
+$_actualColumn = 0;
+$_currentAlpha = '';
+$_collection = $this->getCollection();
+$_count = $this->getCount();
+$_width = Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template2_width');
+$_height = Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template2_height');
+?>
+<?php if( $_count) :?>
+    <?php echo $this->getPagerHtml(); ?>
+    <div id="m-option-page-list">
+        <div>
+            <?php foreach ($_collection as $_optionPage) : $i++;?>
+                <?php
+                    /* @var $_optionPage Mana_AttributePage_Model_OptionPage_Store */
+                    $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+                    $_alpha = $_optionPage->getData('alpha');
+                ?>
+                <?php if ($_alpha != $_currentAlpha): ?>
+                    <?php if ($_currentAlpha): ?>
+                        </ul></div>
+                    <?php endif; ?>
+                    <?php
+                        $_currentAlpha = $_alpha;
+                        $_displayAlpha = $_currentAlpha == '#'
+                            ? Mage::getStoreConfig('mana_attributepage/attribute_page_settings/digit_label')
+                            : $_currentAlpha;
+                    ?>
+                    <div class="m-alpha-list">
+                        <div data-alpha="<?php echo $_displayAlpha; ?>"><?php echo $_displayAlpha; ?></div>
+                        <ul>
+                <?php endif; ?>
+                <li style="width: <?php echo $_width; ?>px; height: <?php echo $_height; ?>px;">
+                    <a href="<?php echo $_optionPage->getUrl() ?>" title="<?php echo $_escapedTitle; ?>">
+                        <?php echo $_escapedTitle; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+            <?php if ($_currentAlpha): ?>
+                </ul></div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php echo $this->getPagerHtml(); ?>
+<?php endif; ?>
