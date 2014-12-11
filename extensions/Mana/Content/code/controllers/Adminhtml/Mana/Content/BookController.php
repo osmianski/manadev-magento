@@ -122,8 +122,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             }
             $response->setData('newId', $newId);
         } else {
-            $messages->addError("There are validation errors.");
-
             $errorPerRecord = array();
             $selectedRecord = $this->getRequest()->getPost('selectedRecord');
             foreach($messagesPerRecord as $id => $recordErrors) {
