@@ -51,11 +51,11 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return $this;
     }
 
-    public function filterTreeByTitle($search) {
+    public function filterTreeByTitleAndContent($search) {
         $read = $this->getConnection();
         $select = $this->_prepareSelect();
         if(trim($search) != "") {
-            $select->where("`mps`.`title` LIKE ?", '%' . $search . '%');
+            $select->where("`mps`.`title` LIKE ? OR `mps`.`content` LIKE ?", '%' . $search . '%');
         }
         $rows = $read->fetchAssoc($select);
         return $rows;
