@@ -49,7 +49,7 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
             if ($parsedUrl->getStatus() == Mana_Seo_Model_ParsedUrl::STATUS_OK) {
                 if (!$this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId())
                         ->getRedirectParameterOrder() ||
-                    rtrim(rawurldecode($urlModel->getRoutePath())) == rtrim($path, '/'))
+                    rtrim(rawurldecode($urlModel->getRoutePath()), '/') == rtrim($path, '/'))
                 {
                     Mage::register('m_temporary_query_parameters', $parsedUrl->getQueryParameters());
                     Mage::register('m_parsed_url', $parsedUrl);
