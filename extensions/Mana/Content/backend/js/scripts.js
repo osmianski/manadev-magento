@@ -70,6 +70,9 @@ function ($, Block, json, layout)
                           }
                           return true;
                     };
+                    options.dnd.copy_move_callback = function(node, parent, position) {
+                        container.resetNodePosition(node.parent);
+                    };
                     this.$().jstree(options);
                 })
                 .on('unbind', this, function () {
@@ -214,6 +217,26 @@ function ($, Container, ajax, core, expression) {
                 }
             }
         },
+        resetNodePosition: function (parent, node_to_remove) {
+            var self = this;
+            var children = this.$jsTree().get_children_dom(parent);
+            var x;
+            if(typeof node_to_remove !== "undefined") {
+                for(x = 0; x < children.length; x++) {
+                    if(children[x].id == node_to_remove) {
+                        children.splice(x, 1);
+                    }
+                }
+            }
+
+            for(x = 0; x < children.length; x++) {
+                var child = self.initChangesObj(children[x].id);
+                child.position = {
+                    value: x,
+                    isDefault: 0
+                };
+            }
+        },
         _subscribeToHtmlEvents: function() {
             var self = this;
             var jsTreeChanged = function (e, data) {
@@ -279,14 +302,8 @@ function ($, Container, ajax, core, expression) {
                     value: data.position,
                     isDefault: 0
                 };
-
-                $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
-                    var child = self.initChangesObj(childDOM.id);
-                    child.position = {
-                        value: index,
-                        isDefault: 0
-                    };
-                });
+                self.resetNodePosition(data.old_parent, data.node.id);
+                self._setNodeColor("blue", data.node.id);
             };
 
             var jsTreeCopyNode = function (e, data) {
@@ -560,6 +577,7 @@ function ($, Container, ajax, core, expression) {
             var obj = this.$jsTree().create_node(this.getCurrentId(), node);
             this.$jsTree().deselect_all();
             this.$jsTree().select_node(obj);
+            this.resetNodePosition(record.parent_id.value);
             this._setNodeColor("green");
         },
         createGuid: function () {
