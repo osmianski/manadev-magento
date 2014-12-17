@@ -129,7 +129,6 @@ function ($, TextArea)
             }
             return this
                 ._super()
-//                TODO: Should set editor to enabled/disabled depending if it was overridden.
                 .on('bind', this, function () {
                     varienGlobalEvents.attachEventHandler("tinymceBeforeSetContent", initTinyMce);
                 })
@@ -139,15 +138,22 @@ function ($, TextArea)
         },
 
         $editor: function() {
-            return window.tinymce.activeEditor;
+            if(typeof window.tinymce !== "undefined") {
+                return window.tinymce.activeEditor;
+            }
+            return false;
         },
         disable: function () {
             this._super();
-            this.$editor().getBody().setAttribute('contenteditable', false);
+            if(this.$editor()) {
+                this.$editor().getBody().setAttribute('contenteditable', false);
+            }
         },
         enable: function () {
             this._super();
-            this.$editor().getBody().setAttribute('contenteditable', true);
+            if (this.$editor()) {
+                this.$editor().getBody().setAttribute('contenteditable', true);
+            }
         }
 
     });
@@ -239,7 +245,7 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
-                            if(typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
+                            if(self.$().data('wysiwyg-enabled') == "enabled" && typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
                             }

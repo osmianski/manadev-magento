@@ -134,6 +134,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
             'reference_pages' => json_encode($referencePages),
             'tree_icon_error_url' => $this->getSkinUrl('images/mana_content/tree-icon.png'),
+            'wysiwyg_enabled' => Mage::getStoreConfig('cms/wysiwyg/enabled'),
         );
 
         if (!$this->adminHelper()->isGlobal()) {
