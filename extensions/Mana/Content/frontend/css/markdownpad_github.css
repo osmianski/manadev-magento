@@ -320,3 +320,14 @@
 .std > .mana_content img {
   max-width: 100%
 }
+
+/* UL and OL
+=============================================================================*/
+
+.std > .mana_content ul {
+    list-style: disc;
+}
+
+.std > .mana_content ol {
+    list-style: decimal;
+}
