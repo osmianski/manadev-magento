@@ -333,7 +333,7 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').off('click', this, this.goToOriginalPage);
                 });
         },
-        _afterSave: function(response) {
+        _afterSave: function(response, callback) {
             var newIds = response.newId;
             for (var id in this.errorPerRecord) {
                 this.$jsTree().set_icon(id, true);
@@ -351,7 +351,7 @@ function ($, Container, ajax, core, expression) {
             }
 
             for(var id in this._changes.deleted) {
-                if(this.getCurrentId() == id) {
+                if(this.getCurrentId() == id && !core.isFunction(callback)) {
                     this.$jsTree().select_node(this.getUrlParam('id'));
                 }
                 this.$jsTree().delete_node(id);

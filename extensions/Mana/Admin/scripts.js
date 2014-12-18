@@ -653,7 +653,7 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                     if (core.isFunction(callback)) {
                         callback.call();
                     }
-                    self._afterSave(response);
+                    self._afterSave(response, callback);
                 } else {
                     self._onSaveFailed(response);
                 }
