@@ -27,6 +27,7 @@ class ManaPro_Content_Block_Adminhtml_Book_RelatedProductGrid extends Mana_Admin
             'renderer' => 'mana_admin/column_checkbox_massaction',
             'width' => '50px',
             'align' => 'center',
+            'filter' => false,
         ));
         $this->addColumn('entity_id',array(
                 'header' => $this->__('ID'),

@@ -5833,7 +5833,7 @@
 							nodes[i].instance = data.data.origin;
 						}
 					}
-					lastmv.ins[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey || data.event.altKey))) ? 'copy_node' : 'move_node' ](nodes, lastmv.par, lastmv.pos);
+					lastmv.ins[ data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey || data.event.altKey))) ? 'copy_node' : 'move_node' ](nodes, lastmv.par, lastmv.pos, data.data.origin.settings.dnd.copy_move_callback);
 					for(i = 0, j = nodes.length; i < j; i++) {
 						if(nodes[i].instance) {
 							nodes[i].instance = null;

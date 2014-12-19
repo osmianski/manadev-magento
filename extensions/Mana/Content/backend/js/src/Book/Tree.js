@@ -29,6 +29,9 @@ function ($, Block, json, layout)
                           }
                           return true;
                     };
+                    options.dnd.copy_move_callback = function(node, parent, position) {
+                        container.resetNodePosition(node.parent);
+                    };
                     this.$().jstree(options);
                 })
                 .on('unbind', this, function () {

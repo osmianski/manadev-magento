@@ -50,7 +50,7 @@ h1            { font-size:30px; font-weight:normal; line-height:1.15; color:#26b
 h2            { font-size:18px; font-weight:normal; line-height: 1.25; color:#26b1ed; margin-bottom: 10px;}
 h3            { font-size:15px; font-weight:bold; line-height:1.25; color:#26b1ed; }
 h4            { font-size:14px; color: #ff6464; }
-h5            { font-size:12px; font-weight:bold; }
+h5            { font-size:12px; font-weight:bold; color: #646464; }
 h6            { font-size:11px; font-weight:bold; }
 
 /* Forms */
@@ -108,7 +108,7 @@ ul,ol         { list-style:none; }
 
 
 /* Layout ================================================================================ */
-.wrapper { /*max-width: 1200px; */min-width: 270px; margin: 0 auto; padding: 0 20px; }
+.wrapper { max-width: 1200px; min-width: 270px; margin: 0 auto; padding: 0 20px; }
 
 .wrapper2 { background: transparent url(../images/bkg-body.jpg) center top repeat-x;}
 
@@ -120,6 +120,10 @@ ul,ol         { list-style:none; }
 .main { margin:10px 0; min-height: 520px; }
 
 /* Base Columns */
+.col-left,
+.col-main,
+.col-right { box-sizing: border-box; }
+
 .col-left { float:left; width: 220px; }
 .col-main { float:left; padding:5px; margin: 0 10px; }
 .col-right { float:right; width: 220px;}
@@ -129,7 +133,8 @@ ul,ol         { list-style:none; }
 
 /* 2 Columns Layout */
 .col2-left-layout .col-main { float:right; }
-.col2-right-layout .col-main {}
+.col2-right-layout .col-main { width: 79%; }
+.col2-right-layout .col-right { width: 19%; }
 
 /* 3 Columns Layout */
 .col3-layout .col-main { }
@@ -1909,9 +1914,9 @@ m-register-login-actions {}
 .footer { padding:10px; background: #d7d7d7; border-radius: 10px 10px 0 0; text-align: center;}
 .footer p { text-align:right; }
 .footer a { color: #646464; text-decoration: none; white-space: nowrap; }
-.footer .col-1,
-.footer .col-2,
-.footer .col-3 { width:33%; float: left; margin:0; padding:0; }
+.footer .col3-set .col-1,
+.footer .col3-set .col-2,
+.footer .col3-set .col-3 { width:33%; float: left; margin:0; padding:0; }
 .footer .links li { padding: 0 10px; line-height: 30px; }
 
 .footer-container .bottom-container { text-align:center; }

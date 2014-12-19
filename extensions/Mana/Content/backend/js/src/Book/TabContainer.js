@@ -52,6 +52,26 @@ function ($, Container, ajax, core, expression) {
                 }
             }
         },
+        resetNodePosition: function (parent, node_to_remove) {
+            var self = this;
+            var children = this.$jsTree().get_children_dom(parent);
+            var x;
+            if(typeof node_to_remove !== "undefined") {
+                for(x = 0; x < children.length; x++) {
+                    if(children[x].id == node_to_remove) {
+                        children.splice(x, 1);
+                    }
+                }
+            }
+
+            for(x = 0; x < children.length; x++) {
+                var child = self.initChangesObj(children[x].id);
+                child.position = {
+                    value: x,
+                    isDefault: 0
+                };
+            }
+        },
         _subscribeToHtmlEvents: function() {
             var self = this;
             var jsTreeChanged = function (e, data) {
@@ -83,7 +103,7 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
-                            if(typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
+                            if(self.$().data('wysiwyg-enabled') == "enabled" && typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
                             }
@@ -117,14 +137,8 @@ function ($, Container, ajax, core, expression) {
                     value: data.position,
                     isDefault: 0
                 };
-
-                $.each(self.$jsTree().get_children_dom(data.node.parent), function (index, childDOM) {
-                    var child = self.initChangesObj(childDOM.id);
-                    child.position = {
-                        value: index,
-                        isDefault: 0
-                    };
-                });
+                self.resetNodePosition(data.old_parent, data.node.id);
+                self._setNodeColor("blue", data.node.id);
             };
 
             var jsTreeCopyNode = function (e, data) {
@@ -319,7 +333,7 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').off('click', this, this.goToOriginalPage);
                 });
         },
-        _afterSave: function(response) {
+        _afterSave: function(response, callback) {
             var newIds = response.newId;
             for (var id in this.errorPerRecord) {
                 this.$jsTree().set_icon(id, true);
@@ -337,7 +351,7 @@ function ($, Container, ajax, core, expression) {
             }
 
             for(var id in this._changes.deleted) {
-                if(this.getCurrentId() == id) {
+                if(this.getCurrentId() == id && !core.isFunction(callback)) {
                     this.$jsTree().select_node(this.getUrlParam('id'));
                 }
                 this.$jsTree().delete_node(id);
@@ -398,6 +412,7 @@ function ($, Container, ajax, core, expression) {
             var obj = this.$jsTree().create_node(this.getCurrentId(), node);
             this.$jsTree().deselect_all();
             this.$jsTree().select_node(obj);
+            this.resetNodePosition(record.parent_id.value);
             this._setNodeColor("green");
         },
         createGuid: function () {

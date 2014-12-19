@@ -77,6 +77,7 @@ class ManaPro_Content_Model_Observer {
                 'dnd' => array(
                     'copy' => true,
                     'reference' => true,
+                    'inside_pos' => 'last',
                 )
             );
             $treeOptions->addData($newOptions);
