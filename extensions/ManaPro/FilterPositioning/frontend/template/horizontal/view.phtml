@@ -18,7 +18,7 @@ $showState = Mage::getStoreConfig('mana_filters/positioning/show_state_' . $this
 
 ?>
 <?php if($this->canShowBlock()): ?>
-<div class="block block-layered-nav m-top mb-top-layered-navigation <?php echo Mage::getStoreConfig('mana_filters/mobile/slider') ?> <?php echo $this->areAllFiltersMobileOnly() ? 'm-mobile-only': ''?>"
+<div class="block block-layered-nav m-top mb-top-layered-navigation m-wide <?php echo Mage::getStoreConfig('mana_filters/mobile/slider') ?> <?php echo $this->areAllFiltersMobileOnly() ? 'm-mobile-only': ''?>"
     data-m-block="Mana/LayeredNavigation/Top/HorizontalBlock"
     data-behavior="<?php echo Mage::getStoreConfig('mana_filters/mobile/behavior') ?>"
     data-duration="<?php echo Mage::getStoreConfig('mana_filters/mobile/duration') ?>"
