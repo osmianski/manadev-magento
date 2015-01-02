@@ -24,7 +24,7 @@ class ManaPro_FilterColors_Block_Filter extends Mana_Filters_Block_Filter {
         /* @var $colors ManaPro_FilterColors_Helper_Data */ $colors = Mage::helper(strtolower('ManaPro_FilterColors'));
         if (/* @var $head Mage_Page_Block_Html_Head */ $head = $this->getLayout()->getBlock('head')) {
             $css = $head->hasMCss() ? $head->getMCss() : array();
-            $url = $colors->getCssRelativeUrl($this->getFilterOptions());
+            $url = $colors->getCssRelativeUrl(Mage::app()->getStore()->getId());
             if (!in_array($url, $css)) {
                 $css[] = $url;
             }
