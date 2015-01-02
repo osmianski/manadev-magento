@@ -10,6 +10,7 @@ $_attributePage = $this->getAttributePage();
 $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
 $_description = $_attributePage->getData('description');
+$_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
 ?>
 <div class="page-title category-title m-attribute-page-title">
     <h1><?php echo $_escapedTitle ?></h1>

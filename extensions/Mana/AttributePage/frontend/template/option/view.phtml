@@ -10,6 +10,7 @@ $_optionPage = $this->getOptionPage();
 $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
 $_description = $_optionPage->getData('description');
+$_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
 ?>
 <div class="page-title category-title m-option-page-title">
     <h1><?php echo $_escapedTitle ?></h1>
