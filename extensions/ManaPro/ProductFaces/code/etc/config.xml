@@ -13,7 +13,7 @@
 		<ManaPro_ProductFaces>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>15.01.05.08</version>
+		    <version>15.01.05.12</version>
 		</ManaPro_ProductFaces>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
