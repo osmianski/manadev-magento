@@ -14,13 +14,7 @@ class Mana_Sorting_Rewrite_Category_Source_SortBy extends Mage_Catalog_Model_Cat
     {
         if (is_null($this->_options)) {
             $options = parent::getAllOptions();
-
-            foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
-                $options[] = array(
-                    'label' => (string)$xml->label,
-                    'value' => (string)$xml->code
-                );
-            }
+            $this->sortingHelper()->addManaSortingOptions($options);
             $this->_options = $options;
         }
         return $this->_options;

@@ -51,7 +51,7 @@
                     </fields>
                 </newest>
                 <bestsellers translate="label" module="mana_sorting">
-                    <label>Bestseller</label>
+                    <label>Bestsellers</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>200</sort_order>
                     <show_in_default>1</show_in_default>
@@ -135,7 +135,7 @@
                     </fields>
                 </biggesr_saving>
                 <now_in_wishlist translate="label" module="mana_sorting">
-                    <label>Now in wishlist</label>
+                    <label>Now In Whishlist</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>500</sort_order>
                     <show_in_default>1</show_in_default>

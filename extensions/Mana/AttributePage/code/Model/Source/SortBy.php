@@ -27,6 +27,19 @@ class Mana_AttributePage_Model_Source_SortBy extends Mana_Core_Model_Source_Abst
                 'value' => $attribute['attribute_code']
             );
         }
+        $core = Mage::helper('mana_core');
+        $sorting = Mage::helper('mana_sorting');
+
+        if ($core->isManadevSortingInstalled()) {
+      //      $sorting->addManaSortingOptions($options);
+            foreach ($sorting->getSortingMethodXmls() as $xml) {
+                $options[] = array(
+                    'label' => (string)$xml->label,
+                    'value' => (string)$xml->code
+                );
+            }
+        }
+
         return $options;
     }
 

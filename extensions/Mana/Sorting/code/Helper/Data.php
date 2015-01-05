@@ -46,6 +46,16 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return 0;
     }
 
+    public function addManaSortingOptions($options) {
+        foreach ($this->getSortingMethodXmls() as $xml) {
+            $options[] = array(
+                'label' => (string)$xml->label,
+                'value' => (string)$xml->code
+            );
+        }
+        return $options;
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
