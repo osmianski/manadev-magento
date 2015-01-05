@@ -33,7 +33,8 @@
                 else {
                     expand(element, 0);
                 }
-            }).live('click', function () {
+            });
+            $(document).on('click', '.m-billing-address .m-collapseable', function () {
                     var element = this;
                     if ($(element).hasClass('m-expanded')) {
                         collapse(element, 200);
@@ -104,7 +105,7 @@
 
         $(function() {
             _email = $('.billing-email input').val();
-            $('.billing-email input').live('change', function() {
+            $(document).on('change', '.billing-email input', function() {
                 var domainChanged = _domain(_email) != _domain($(this).val());
                 _email = $(this).val();
                 if (domainChanged) {
@@ -212,12 +213,12 @@
                 _updateOrderRequest.updateTotals = true;
                 _updateOrderDetails();
             }
-            $('.billing-vat input').live('change', function() {
+            $(document).on('change', '.billing-vat input', function() {
                 _updateOrderRequest.checkVat = $(this).val();
                 _updateOrderRequest.updateTotals = true;
                 _updateOrderDetails();
             });
-            $('.billing-country select').live('change', function () {
+            $(document).on('change', '.billing-country select', function () {
                 _updateOrderRequest.updateTotals = true;
                 $('.billing-country').removeClass('updatable');
                 _updateOrderDetails();
@@ -338,7 +339,7 @@
         }
 
         $(function() {
-            $('.btn-checkout').live('click', _submitOrder);
+            $(document).on('click', '.btn-checkout', _submitOrder);
         });
         //endregion
 

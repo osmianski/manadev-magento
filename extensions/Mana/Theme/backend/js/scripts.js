@@ -91,9 +91,9 @@
     }
     $(function() {
         _showOrHideColumnCountParameter();
-        $('.block_reference select, .block_template_cms select, .block_template select, #select_widget_type, ' +
-          'select[name="parameters[template]"], select[name="parameters[template_cms]"]')
-            .live('change', _showOrHideColumnCountParameter);
+        $(document)
+            .on('change', '.block_reference select, .block_template_cms select, .block_template select, #select_widget_type, ' +
+                'select[name="parameters[template]"], select[name="parameters[template_cms]"]', _showOrHideColumnCountParameter);
         Ajax.Responders.register({onComplete:_showOrHideColumnCountParameter });
     });
 })(jQuery);

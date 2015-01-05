@@ -157,7 +157,7 @@
 
         $(function () {
             _loadState();
-            $(_options.itemSelector).live('click', function () {
+            $(document).on('click', _options.itemSelector, function () {
                 if ($(this).parent().hasClass(_options.collapsedClass)) {
                     _expand($(this), true);
                     return false;
@@ -167,7 +167,7 @@
                     return false;
                 }
             });
-            $(_options.textSelector).live('click', function () {
+            $(document).on('click', _options.textSelector, function () {
                 setLocation($(this).parent()[0].href);
                 return false;
             });
@@ -233,7 +233,7 @@
             _updateDisabled();
 
             // update text after selection is changed
-            $('select').live('change', function () {
+            $(document).on('change', 'select', function () {
                 // update disabled status
                 _updateDisabled();
 
