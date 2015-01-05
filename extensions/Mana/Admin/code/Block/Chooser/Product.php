@@ -97,4 +97,14 @@ class Mana_Admin_Block_Chooser_Product extends Mage_Adminhtml_Block_Catalog_Prod
         }
         return $result;
     }
+
+    public function getSelectedProducts() {
+        parent::getSelectedProducts();
+        if ($selectedProducts = $this->getRequest()->getParam('selected_products_comma_separated', null)) {
+            $selectedProducts = explode(',', $selectedProducts);
+            $this->setSelectedProducts($selectedProducts);
+        }
+
+        return $this->_selectedProducts;
+    }
 }

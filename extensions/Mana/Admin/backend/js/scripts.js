@@ -188,6 +188,13 @@
                         delete selected[id];
                     }
                 }
+                var ids = [];
+                for (id in selected) {
+                    ids.push(id);
+                }
+                m_product_chooserJsObject.reloadParams = {
+                    selected_products_comma_separated: ids.join(',')
+                };
             }
 
             $('#m_product_chooser_table .checkbox.entities').live('change', function () {
