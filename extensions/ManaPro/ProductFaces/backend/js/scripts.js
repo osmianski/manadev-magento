@@ -239,154 +239,45 @@
 	}
 	
 	function _addExisting() {
-		if (!_chooserContent) {
-			$.get(_options.chooserUrl)
-				.done(function (response) {
-					_chooserContent = '<div id="m_product_chooser_dialog">' + (response || '') + '</div>';
-					_openChooser();
-				});
-		}
-		else {
-			_openChooser();
-		}
-	}
-	function _openChooser() {
-		_chooserDialog = Dialog.info(_chooserContent, {
-            draggable:true, resizable:true, closable:true, className:"magento", windowClassName:"popup-window",
-            title: _options.chooserConfig.buttons.open,
-            top:0, width:950, height:630, zIndex:1000,
-            recenterAuto:false, hideEffect:Element.hide, destroyOnClose: true,
-            showEffect:Element.show, id:"widget-chooser",
-            onClose: _closeChooser
-        });
-        _chooserContent.evalScripts.bind(_chooserContent).call();
-        var selected = {};
-        $get('widget-chooser').observe('product:cancelled', function() {
-        	_chooserDialog.close();
-        });
-        $('#m_productfaces_cloning_override').change(function() {
-			var override = $('#m_productfaces_cloning_override').val();
-			var decision = $('#m_productfaces_cloning_override_decision').val();
-			if (decision === '' && (override == 1 || override == 3)) {
-				$('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');
-			}
-        });
-        $get('widget-chooser').observe('product:confirmed', function() {
-        	_chooserDialog.close();
-        	var ids = [];
-    		for (var id in selected) {
-    			ids.push(id);
-    		}
-        	if (ids.length) {
-		    	$.get(_options.productDataUrl, {selected_ids: ids})
-	    		.done(function(response) {
-	    			var data = response.evalJSON();
-	    			data.each(function(item) {
-	    				_serializer.gridData.set(item['entity_id'], item);
-	    			});
-	    			
-	    			_updateHiddenState();
-	    			
-	    			// call server to update visuals
-	    			_recalculationPending = true;
-	    			_serializer.grid.reload(_serializer.grid.url);
-	    			var override = $('#m_productfaces_cloning_override').val();
-	    			var decision = $('#m_productfaces_cloning_override_decision').val();
-	    			if (decision === '' && (override == 1 || override == 3)) {
-	    				$('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');
-	    			}
-	    			_existingIds = $.extend(_existingIds, selected);
-	    			$('#m_productfaces_cloning_override_ids').val(Object.toJSON(_existingIds));
-	    		});
-        	}
-        });
-        function _selectProduct() {
-        	var id = $(this).val();
-        	if (id !=  _options.productId) {
-        		var exists = false;
-        		_serializer.gridData.each(function (item) {
-		    		if (id == item[0]) {
-		    			exists = true;
-		    		}
-		    	});
-        		if (!exists) {
-        			if ($(this).is(':checked')) {
-        				selected[id] = id;
-        			}
-        			else {
-        				if (selected[id]) {
-        					delete selected[id];
-        				}
-        			}
-        		}
-        	}
-        }
-        $('#m_product_chooser_table .checkbox.entities').live('change', function() {
-        	_selectProduct.apply(this);
-        });
-        var _oldSelectAll = m_product_chooserJsObject.checkCheckboxes;
-        m_product_chooserJsObject.checkCheckboxes = function(el) {
-        	_oldSelectAll.call(m_product_chooserJsObject, el);
-        	$('#m_product_chooser_table .checkbox.entities').each(function(checkboxIndex, checkbox) {
-        		_selectProduct.apply(checkbox);
-        	});
-        }
-	}
-	function _closeChooser(dialog) {
-		if (!dialog) {
-			dialog = _chooserDialog;
-		}
-		if (dialog) {
-			dialog.close();
-		}
-		_chooserDialog = null;
-	}
-	window.m_product_chooser = {
-	    close: function() {
-	    	_closeChooser();
-	    },
-	    getElementValue: function(value) {
-	        return 0;
-	    },
+        $.mChooseProducts({
+            url: _options.chooserUrl,
+            result: function (ids) {
+                $('#m_productfaces_cloning_override').change(function () {
+                    var override = $('#m_productfaces_cloning_override').val();
+                    var decision = $('#m_productfaces_cloning_override_decision').val();
+                    if (decision === '' && (override == 1 || override == 3)) {
+                        $('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');
+                    }
+                });
+                if (ids.length) {
+                    $.get(_options.productDataUrl, {selected_ids: ids})
+                        .done(function(response) {
+                            var data = response.evalJSON();
+                            data.each(function(item) {
+                                _serializer.gridData.set(item['entity_id'], item);
+                            });
 
-	    getElementLabelText: function(value) {
-	        return '';
-	    },
+                            _updateHiddenState();
 
-	    setElementValue: function(id) {
-	    	var exists = false;
-	    	if (id == "product/" + _options.productId) {
-	    		exists = true;
-	    	}
-	    	else {
-		    	_serializer.gridData.each(function (item) {
-		    		if (id == "product/" + item[0]) {
-		    			exists = true;
-		    		}
-		    	});
-	    	}
-	    	if (exists) {
-	    		alert(_options.productAlreadyAddedMsg);
-	    	}
-	    	else {
-		    	$.get(_options.productDataUrl, {selected_id: id})
-		    		.done(function(response) {
-		    			var data = response.evalJSON();
-		    			_serializer.gridData.set(data['entity_id'], data);
-		    			_updateHiddenState();
-		    			
-		    			// call server to update visuals
-		    			_recalculationPending = true;
-		    			_serializer.grid.reload(_serializer.grid.url);
-		    			
-		    		});
-	    	}
-	    },
-
-	    setElementLabel: function(value) {
-	    }
-	};
-	
+                            // call server to update visuals
+                            _recalculationPending = true;
+                            _serializer.grid.reload(_serializer.grid.url);
+                            var override = $('#m_productfaces_cloning_override').val();
+                            var decision = $('#m_productfaces_cloning_override_decision').val();
+                            if (decision === '' && (override == 1 || override == 3)) {
+                                $('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');
+                            }
+                            var selected = {};
+                            ids.each(function(i) {
+                                selected[i] = i;
+                            });
+                            _existingIds = $.extend(_existingIds, selected);
+                            $('#m_productfaces_cloning_override_ids').val(Object.toJSON(_existingIds));
+                        });
+                }
+            }
+        });
+	}
 	function _remove() {
 		var selectedCheckboxes = $('td.mc-massaction input:checked');
 		if (selectedCheckboxes.length > 0) {
