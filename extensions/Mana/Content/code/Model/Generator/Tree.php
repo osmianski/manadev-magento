@@ -83,7 +83,9 @@ class Mana_Content_Model_Generator_Tree extends Mana_Menu_Model_Generator {
             $book->loadChildPages();
 
             foreach($book->getChildPages() as $record) {
-                $this->_extendRecursively($element->items->$xmlId, $record, $filteredIds, $boldRecordIds);
+                if($record->getIsActive() == "1") {
+                    $this->_extendRecursively($element->items->$xmlId, $record, $filteredIds, $boldRecordIds);
+                }
             }
         }
     }
