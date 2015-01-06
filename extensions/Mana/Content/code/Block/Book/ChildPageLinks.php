@@ -30,12 +30,17 @@ class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
     protected function loadChildPages() {
         $bookPage = $this->getCurrentBookPage();
         $bookPage->loadChildPages();
-        $this->_childPages = $bookPage->getChildPages();
-        for($x=0; $x<count($this->_childPages); $x++) {
+        $childPages = $bookPage->getChildPages();
+        for($x=0; $x<count($childPages); $x++) {
+            if($childPages[$x]->getIsActive() == "0") {
+                unset($childPages[$x]);
+                continue;
+            }
             $route = "mana_content/book/view";
-            $id = $this->_childPages[$x]->getId();
-            $this->_childPages[$x]->setFinalUrl(Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id)));
+            $id = $childPages[$x]->getId();
+            $childPages[$x]->setFinalUrl(Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id)));
         }
+        $this->_childPages = $childPages;
     }
 
     public function getChildPages() {
