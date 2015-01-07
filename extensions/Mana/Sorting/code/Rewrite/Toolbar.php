@@ -10,15 +10,29 @@
  *
  */
 class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolbar {
-    protected function _construct() {
-        parent::_construct();
-        $this->_addOrders();
-   }
-
     public function setAvailableOrders($orders) {
-        $this->_availableOrder = $orders;
-        $this->_addOrders();
-        return $this;
+        $category = $this->sortingHelper()->getCategory();
+        if($category->getAvailableSortBy()) {
+            foreach ($category->getAvailableSortBy() as $sortBy) {
+                if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
+                    $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
+                }
+            }
+        }
+        parent::setAvailableOrders($orders);
+        if(!$category->getAvailableSortBy()) {
+            $this->_addOrders();
+        }
+    }
+
+    public function setDefaultOrder($field) {
+        $category = $this->sortingHelper()->getCategory();
+        if($category->getData('default_sort_by')) {
+            $field = $category->getData('default_sort_by');
+        } else {
+            $field = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
+        }
+        return parent::setDefaultOrder($field);
     }
 
     public function setCollection($collection) {

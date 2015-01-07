@@ -56,6 +56,38 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return $options;
     }
 
+    public function getManaSortingOptionLabel($sortingOptionCode) {
+        foreach($this->getSortingMethodXmls() as $xml) {
+            if((string)$xml->code == $sortingOptionCode) {
+                return (string)$xml->label;
+            }
+        }
+        return false;
+    }
+
+    public function isManaSortingOption($sortingOptionCode) {
+        foreach($this->getSortingMethodXmls() as $xml) {
+            if($sortingOptionCode == (string)$xml->code) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get catalog layer model
+     *
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCategory() {
+        $layer = Mage::registry('current_layer');
+        if ($layer) {
+            return $layer->getCurrentCategory();
+        }
+
+        return Mage::getSingleton('catalog/layer')->getCurrentCategory();
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
