@@ -46,7 +46,6 @@
             <catalog>
                 <rewrite>
                     <category_attribute_source_sortby>Mana_Sorting_Rewrite_Category_Source_SortBy</category_attribute_source_sortby>
-                    <config>Mana_Sorting_Rewrite_Catalog_Config</config>
                 </rewrite>
             </catalog>
         </models>
