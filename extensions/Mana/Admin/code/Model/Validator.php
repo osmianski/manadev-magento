@@ -19,6 +19,7 @@ class Mana_Admin_Model_Validator {
     protected $defaultMessages = array(
         'required' => "Please fill in :field field.",
         'unique'   => "The value of :field already exists.",
+        'numeric'  => "Field :field should only contain numbers.",
     );
 
     public function __construct($args) {
@@ -94,6 +95,10 @@ class Mana_Admin_Model_Validator {
             return false;
         }
         return true;
+    }
+
+    protected function validateNumeric($field, $value) {
+        return is_numeric($value);
     }
 
     protected function getFieldCaption($field) {
