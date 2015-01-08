@@ -48,7 +48,7 @@ class Mana_Admin_Model_Validator {
     protected function validate($field, $rule) {
         if (trim($rule) == "" || in_array($rule, $this->_ignoredRules)) return;
 
-        $method = "validate". $this->contentHelper()->underscoreToCamelcase($rule);
+        $method = "validate". $this->adminHelper()->underscoreToCamelcase($rule);
 
         if(method_exists($this, $method) && !$this->$method($field, $this->_data[$field])) {
             $this->addError($field, $rule);
@@ -97,10 +97,10 @@ class Mana_Admin_Model_Validator {
     }
 
     protected function getFieldCaption($field) {
-        if($this->_captions[$field]) {
-            return $this->contentHelper()->__($this->_captions[$field]);
+        if(isset($this->_captions[$field])) {
+            return $this->adminHelper()->__($this->_captions[$field]);
         } else {
-            return $this->contentHelper()->underscoreToCapitalize($this->contentHelper()->__($field));
+            return $this->adminHelper()->underscoreToCapitalize($this->adminHelper()->__($field));
         }
     }
 
@@ -113,10 +113,10 @@ class Mana_Admin_Model_Validator {
     #region Dependencies
 
     /**
-     * @return Mana_Content_Helper_Data
+     * @return Mana_Admin_Helper_Data
      */
-    public function contentHelper() {
-        return Mage::helper('mana_content');
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
     }
 
     #endregion
