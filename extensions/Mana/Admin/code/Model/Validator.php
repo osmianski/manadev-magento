@@ -19,7 +19,7 @@ class Mana_Admin_Model_Validator {
     protected $_config = array();
     protected $defaultMessages = array(
         'required' => "Please fill in :field field.",
-        'unique'   => "The value of :field already exists.",
+        'unique'   => "A record with `:value` :field already exists.",
         'numeric'  => "Field :field should only contain numbers.",
     );
     protected $defaultConfig = array(
@@ -77,11 +77,17 @@ class Mana_Admin_Model_Validator {
     }
 
     public function getMessage($field, $rule) {
-        $message = $this->defaultMessages[$rule];
-        if(trim($message) == "") {
-            $message = "Rule `{$rule}` failed in field :field";
+        if(isset($this->defaultMessages[$rule])) {
+            $message = $this->defaultMessages[$rule];
+        } else {
+            $message = "Rule `:rule` failed in field :field.";
         }
-        return str_replace(":field", $this->getFieldCaption($field), $message);
+        $this->adminHelper()->__($message);
+
+        $message = str_replace(":rule", $rule, $message);
+        $message = str_replace(":field", $this->getFieldCaption($field), $message);
+        $message = str_replace(":value", $this->_model->getData($field), $message);
+        return $message;
     }
 
     public function getMessages() {
