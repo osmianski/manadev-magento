@@ -16,24 +16,34 @@ class Mana_Admin_Model_Validator {
     protected $_errors = array();
     protected $_allErrors = array();
     protected $_ignoredRules = array();
+    protected $_config = array();
     protected $defaultMessages = array(
         'required' => "Please fill in :field field.",
         'unique'   => "The value of :field already exists.",
         'numeric'  => "Field :field should only contain numbers.",
     );
+    protected $defaultConfig = array(
+        'singleErrorOnly' => false,
+        'singleErrorPerField' => true,
+    );
 
     public function __construct($args) {
-        list($rules, $data, $captions, $model) = $args;
+        list($rules, $data, $captions, $model, $config) = $args;
         $this->_data = $data;
         $this->_rules = $this->explodeRules($rules);
         $this->_captions = $captions;
         $this->_model = $model;
+        $this->_config = array_merge($this->defaultConfig, $config);
     }
 
     public function passes() {
         foreach($this->_rules as $field => $rules) {
             foreach($rules as $rule) {
                 $this->validate($field, $rule);
+                // Stop validation if singleErrorOnly configuration is enabled
+                if($this->isSingleErrorOnly() && count($this->_errors) > 0) {
+                    return false;
+                }
             }
         }
         return count($this->_errors) === 0;
@@ -58,6 +68,10 @@ class Mana_Admin_Model_Validator {
 
     protected function addError($field, $rule) {
         $message = $this->getMessage($field, $rule);
+        // Do not add error if singleErrorPerField configuration is enabled and there is already an error in that field.
+        if ($this->isSingleErrorPerField() && isset($this->_errors[$field])) {
+            return;
+        }
         $this->_errors[$field][$rule] = $message;
         $this->_allErrors[] = $message;
     }
@@ -122,6 +136,14 @@ class Mana_Admin_Model_Validator {
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
+    }
+
+    private function isSingleErrorOnly() {
+        return $this->_config['singleErrorOnly'];
+    }
+
+    private function isSingleErrorPerField() {
+        return $this->_config['singleErrorPerField'];
     }
 
     #endregion

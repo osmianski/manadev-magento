@@ -38,7 +38,7 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
      */
     public function getValidator() {
         if(!$this->_validator) {
-            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
+            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this, array()));
         }
         return $this->_validator;
     }
