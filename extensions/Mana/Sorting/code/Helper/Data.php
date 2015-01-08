@@ -95,5 +95,9 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
+
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
+    }
     #endregion
 }
