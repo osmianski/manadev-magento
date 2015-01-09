@@ -15,6 +15,10 @@ class Mana_Sorting_Model_Method_Indexer extends Mana_Core_Model_Indexer {
         Mage_Core_Model_Store::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE,
         ),
+        Mana_Sorting_Model_Method::ENTITY => array(
+            Mage_Index_Model_Event::TYPE_SAVE,
+            Mage_Index_Model_Event::TYPE_DELETE
+        ),
         Mana_Sorting_Model_Method_StoreCustomSettings::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE,
             Mage_Index_Model_Event::TYPE_DELETE
@@ -43,8 +47,10 @@ class Mana_Sorting_Model_Method_Indexer extends Mana_Core_Model_Indexer {
                 $event->addNewData('store_id', $event->getData('data_object')->getId());
             }
         }
-        elseif ($event->getEntity() == Mana_Sorting_Model_Method_StoreCustomSettings::ENTITY) {
+        elseif ($event->getEntity() == Mana_Sorting_Model_Method::ENTITY) {
             $event->addNewData('method_id', $event->getData('data_object')->getData('method_id'));
+        } elseif ($event->getEntity() == Mana_Sorting_Model_Method_StoreCustomSettings::ENTITY) {
+            $event->addNewData('method_store_custom_settings_id', $event->getData('data_object')->getData('id'));
         }
     }
 
