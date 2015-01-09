@@ -70,6 +70,13 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
     public function indexAction() {
         // page
         $this->_title('Mana')->_title($this->__('Sorting Method Management'));
+        // layout
+        $update = $this->getLayout()->getUpdate();
+        $update->addHandle('default');
+        $this->addActionLayoutHandles();
+        if (!Mage::app()->isSingleStoreMode()) {
+            $update->addHandle('mana_admin2_multistore_list');
+        }
         $this->loadLayout();
         $this->renderLayout();
     }
