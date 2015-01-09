@@ -80,7 +80,7 @@ class Mana_Sorting_Block_Adminhtml_Method_ListGrid extends Mana_Admin_Block_V2_G
             return $this->adminHelper()->getStoreUrl(
                 '*/*/edit',
                 array(
-                    'id' => $row->getData('page_global_id'),
+                    'id' => $row->getData('method_id'),
                     'store' => $this->adminHelper()->getStore()->getId()
                 )
             );

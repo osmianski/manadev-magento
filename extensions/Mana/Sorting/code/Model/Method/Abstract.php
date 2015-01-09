@@ -13,17 +13,40 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
     const DM_IS_ACTIVE = 0;
     const DM_TITLE = 1;
     const DM_POSITION = 2;
+    const DM_ATTRIBUTE_ID_0 = 3;
+    const DM_ATTRIBUTE_ID_1 = 4;
+    const DM_ATTRIBUTE_ID_2 = 5;
+    const DM_ATTRIBUTE_ID_3 = 6;
+    const DM_ATTRIBUTE_ID_4 = 7;
+
 
     protected $rules = array(
         'title' => 'required|unique',
         'position' => 'required|numeric',
         'is_active' => 'required',
+        'attribute_id_0' => 'required',
     );
     protected $captions = array(
         'is_active' => "Status",
+        'attribute_id_0' => "Attribute",
+    );
+    protected $nullableFields = array(
+        'attribute_id_1',
+        'attribute_id_2',
+        'attribute_id_3',
+        'attribute_id_4',
     );
 
     protected $_validator;
+
+    public function save() {
+        foreach($this->nullableFields as $field) {
+            if(trim($this->getData($field)) == "") {
+                $this->setData($field, null);
+            }
+        }
+        return parent::save();
+    }
 
     public function validate() {
         $validator = $this->getValidator();

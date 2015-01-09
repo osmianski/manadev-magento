@@ -48,7 +48,7 @@ class Mana_Sorting_Model_Method_Indexer extends Mana_Core_Model_Indexer {
             }
         }
         elseif ($event->getEntity() == Mana_Sorting_Model_Method::ENTITY) {
-            $event->addNewData('method_id', $event->getData('data_object')->getData('method_id'));
+            $event->addNewData('method_id', $event->getData('data_object')->getData('id'));
         } elseif ($event->getEntity() == Mana_Sorting_Model_Method_StoreCustomSettings::ENTITY) {
             $event->addNewData('method_store_custom_settings_id', $event->getData('data_object')->getData('id'));
         }

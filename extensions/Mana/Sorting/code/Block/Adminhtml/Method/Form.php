@@ -16,7 +16,7 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
      */
     protected function _prepareForm() {
         $form = new Varien_Data_Form(array(
-            'id' => 'mf_content',
+            'id' => 'mf_method',
             'html_id_prefix' => 'mf_method_',
             'field_container_id_prefix' => 'mf_method_tr_',
             'use_container' => true,
@@ -61,6 +61,24 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
             'default_bit_no' => Mana_Sorting_Model_Method_Abstract::DM_IS_ACTIVE,
             'default_store_label' => $this->__('Same For All Stores'),
         ));
+
+
+        $fieldset = $this->addFieldset($form, 'mfs_attribute', array(
+            'title' => $this->__('Combination of Sorting Methods'),
+            'legend' => $this->__('Combination of Sorting Methods'),
+        ));
+
+        for($x=0;$x<=4;$x++) {
+            $this->addField($fieldset, 'attribute_id_'.$x, 'select', array(
+                'label' => $this->__('Attribute'),
+                'title' => $this->__('Attribute'),
+                'name' => 'attribute_id_'.$x,
+                'required' => $x == 0,
+                'options' => $this->getAttributeSourceModel()->getOptionArray(),
+                'default_bit_no' => constant("Mana_Sorting_Model_Method_Abstract::DM_ATTRIBUTE_ID_".$x),
+                'default_store_label' => $this->__('Same For All Stores'),
+            ));
+        }
 
         $this->setForm($form);
         return parent::_prepareForm();

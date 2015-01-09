@@ -20,12 +20,40 @@ $table = $this->getTable('mana_sorting/method');
 $installer->run("
     CREATE TABLE `$table` (
       `id` bigint(20) NOT NULL AUTO_INCREMENT,
+      `attribute_id_0` smallint(5) unsigned NOT NULL,
+      `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_3` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_4` smallint(5) unsigned DEFAULT NULL,
       `title` varchar(255) NOT NULL,
       `position` int(11) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
-      PRIMARY KEY (`id`)
+
+      PRIMARY KEY (`id`),
+      KEY `attribute_id_0` (`attribute_id_0`),
+      KEY `attribute_id_1` (`attribute_id_1`),
+      KEY `attribute_id_2` (`attribute_id_2`),
+      KEY `attribute_id_3` (`attribute_id_3`),
+      KEY `attribute_id_4` (`attribute_id_4`)
     )
     ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+    ALTER TABLE `$table`
+        ADD CONSTRAINT `FK_{$table}_attr_0` FOREIGN KEY (`attribute_id_0`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_1` FOREIGN KEY (`attribute_id_1`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_2` FOREIGN KEY (`attribute_id_2`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_3` FOREIGN KEY (`attribute_id_3`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_4` FOREIGN KEY (`attribute_id_4`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE;
 ");
 
 $table = $this->getTable('mana_sorting/method_storeCustomSettings');
@@ -35,12 +63,22 @@ $installer->run("
       `method_id` bigint(20) NOT NULL,
       `store_id` smallint(5) unsigned NOT NULL,
       `default_mask0` int(10) unsigned NOT NULL,
+      `attribute_id_0` smallint(5) unsigned NOT NULL,
+      `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_3` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_4` smallint(5) unsigned DEFAULT NULL,
       `title` varchar(255) NOT NULL,
       `position` int(11) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
 
       PRIMARY KEY (`id`),
-      KEY(`store_id`)
+      KEY(`store_id`),
+      KEY `attribute_id_0` (`attribute_id_0`),
+      KEY `attribute_id_1` (`attribute_id_1`),
+      KEY `attribute_id_2` (`attribute_id_2`),
+      KEY `attribute_id_3` (`attribute_id_3`),
+      KEY `attribute_id_4` (`attribute_id_4`)
 
     )
     ENGINE = INNODB DEFAULT CHARSET=utf8;
@@ -51,6 +89,21 @@ $installer->run("
             ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT `FK_{$table}_store` FOREIGN KEY (`store_id`)
             REFERENCES `{$this->getTable('core/store')}` (`store_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_0` FOREIGN KEY (`attribute_id_0`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_1` FOREIGN KEY (`attribute_id_1`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_2` FOREIGN KEY (`attribute_id_2`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_3` FOREIGN KEY (`attribute_id_3`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_4` FOREIGN KEY (`attribute_id_4`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
             ON DELETE CASCADE ON UPDATE CASCADE;
 ");
 
@@ -62,6 +115,11 @@ $installer->run("
       `method_id` bigint(20) NOT NULL,
       `store_id` smallint(5) unsigned NOT NULL,
       `method_store_custom_settings_id` bigint(20) NULL,
+      `attribute_id_0` smallint(5) unsigned NOT NULL,
+      `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_3` smallint(5) unsigned DEFAULT NULL,
+      `attribute_id_4` smallint(5) unsigned DEFAULT NULL,
       `title` varchar(255) NOT NULL,
       `position` int(11) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
@@ -70,7 +128,13 @@ $installer->run("
         UNIQUE KEY `unique_key` (`method_id`, `store_id`),
         KEY(`method_id`),
         KEY(`store_id`),
-        KEY(`method_store_custom_settings_id`)
+        KEY(`method_store_custom_settings_id`),
+
+      KEY `attribute_id_0` (`attribute_id_0`),
+      KEY `attribute_id_1` (`attribute_id_1`),
+      KEY `attribute_id_2` (`attribute_id_2`),
+      KEY `attribute_id_3` (`attribute_id_3`),
+      KEY `attribute_id_4` (`attribute_id_4`)
     )
     ENGINE = INNODB DEFAULT CHARSET=utf8;
 
@@ -83,7 +147,22 @@ $installer->run("
             ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT `FK_{$table}_method_s` FOREIGN KEY (`method_store_custom_settings_id`)
             REFERENCES `{$this->getTable('mana_sorting/method_storeCustomSettings')}` (`id`)
-            ON DELETE SET NULL ON UPDATE SET NULL;
+            ON DELETE SET NULL ON UPDATE SET NULL,
+        ADD CONSTRAINT `FK_{$table}_attr_0` FOREIGN KEY (`attribute_id_0`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_1` FOREIGN KEY (`attribute_id_1`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_2` FOREIGN KEY (`attribute_id_2`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_3` FOREIGN KEY (`attribute_id_3`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT `FK_{$table}_attr_4` FOREIGN KEY (`attribute_id_4`)
+            REFERENCES `{$this->getTable('eav/attribute')}` (`attribute_id`)
+            ON DELETE CASCADE ON UPDATE CASCADE;
 ");
 
 if (method_exists($this->getConnection(), 'disallowDdlCache')) {
