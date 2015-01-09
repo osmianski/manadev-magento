@@ -190,6 +190,7 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
         if ($useDefault = $this->getRequest()->getPost('use_default')) {
             foreach ($useDefault as $key) {
                 $this->coreDbHelper()->isModelContainsCustomSetting($model, $key, false);
+                $model->unsetData($key);
             }
         }
 

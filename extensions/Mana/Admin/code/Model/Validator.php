@@ -25,6 +25,7 @@ class Mana_Admin_Model_Validator {
     protected $defaultConfig = array(
         'singleErrorOnly' => false,
         'singleErrorPerField' => true,
+        'skipUndefinedField' => true,
     );
 
     public function __construct($args) {
@@ -61,8 +62,11 @@ class Mana_Admin_Model_Validator {
 
         $method = "validate". $this->adminHelper()->underscoreToCamelcase($rule);
 
-        if(method_exists($this, $method) && !$this->$method($field, $this->_data[$field])) {
-            $this->addError($field, $rule);
+        if(!($this->isSkipValidationOnUndefinedData() && !isset($this->_data[$field]))) {
+            $data = isset($this->_data[$field]) ? $this->_data[$field] : "";
+            if (method_exists($this, $method) && !$this->$method($field, $data)) {
+                $this->addError($field, $rule);
+            }
         }
     }
 
@@ -135,6 +139,25 @@ class Mana_Admin_Model_Validator {
         }
     }
 
+    public function getConfig($configKey) {
+        if(isset($this->_config[$configKey])) {
+            return $this->_config[$configKey];
+        }
+        throw new Exception("Undefined config key `$configKey`.");
+    }
+
+    private function isSingleErrorOnly() {
+        return $this->getConfig('singleErrorOnly');
+    }
+
+    private function isSingleErrorPerField() {
+        return $this->getConfig('singleErrorPerField');
+    }
+
+    private function isSkipValidationOnUndefinedData() {
+        return $this->getConfig('skipUndefinedField');
+    }
+
     #region Dependencies
 
     /**
@@ -142,14 +165,6 @@ class Mana_Admin_Model_Validator {
      */
     public function adminHelper() {
         return Mage::helper('mana_admin');
-    }
-
-    private function isSingleErrorOnly() {
-        return $this->_config['singleErrorOnly'];
-    }
-
-    private function isSingleErrorPerField() {
-        return $this->_config['singleErrorPerField'];
     }
 
     #endregion
