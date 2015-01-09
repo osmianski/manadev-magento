@@ -59,6 +59,7 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
             'name' => 'is_active',
             'required' => true,
             'default_bit_no' => Mana_Sorting_Model_Method_Abstract::DM_IS_ACTIVE,
+            'default_store_label' => $this->__('Same For All Stores'),
         ));
 
         $this->setForm($form);
