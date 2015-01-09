@@ -52,7 +52,7 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
                     } else {
                         $customSettings
                             ->setData('store_id', $this->adminHelper()->getStore()->getId())
-                            ->setData('page_global_id', $finalGlobalSettings->getId());
+                            ->setData('method_id', $finalGlobalSettings->getId());
                     }
                 } else {
                     throw new Mage_Core_Exception($this->__('Non existent sorting methods can not be customized on store level.'));
