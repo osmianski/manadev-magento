@@ -11,7 +11,7 @@
  */
 class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_PageType  {
     public function getCurrentSuffix() {
-        return Mage::getStoreConfig('mana_attribute_page/option_page/suffix');
+        return Mage::getStoreConfig('mana_attributepage/seo/option_page_url_suffix', Mage::app()->getStore());
     }
 
 
