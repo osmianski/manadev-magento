@@ -14,12 +14,7 @@ class Mana_Sorting_Rewrite_System_Source_ListSort extends Mage_Adminhtml_Model_S
     {
         $options = parent::toOptionArray();
 
-        foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
-            $options[] = array(
-                'label' => (string)$xml->label,
-                'value' => (string)$xml->code
-            );
-        }
+        $options = $this->sortingHelper()->addManaSortingOptions($options);
         return $options;
     }
 

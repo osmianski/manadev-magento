@@ -53,6 +53,16 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
                 'value' => (string)$xml->code
             );
         }
+
+        $collection = $this->getCustomSortMethodCollection();
+        /** @var Mana_Sorting_Model_Method_Abstract $sortMethod */
+        foreach($collection as $sortMethod) {
+            array_push($options, array(
+                    'label' => $sortMethod->getData('title'),
+                    'value' => $this->getCustomSortMethodPrefix().$sortMethod->getId(),
+                ));
+        }
+
         return $options;
     }
 
@@ -88,6 +98,15 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return Mage::getSingleton('catalog/layer')->getCurrentCategory();
     }
 
+    public function getCustomSortMethodPrefix() {
+        return 'm_sortmethod_';
+    }
+
+    public function getCustomSortMethodCollection() {
+        $collection = Mage::getResourceModel('mana_sorting/method_collection');
+        $collection->filterActive();
+        return $collection;
+    }
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data

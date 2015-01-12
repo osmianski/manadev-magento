@@ -58,6 +58,10 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
         foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
             $this->_availableOrder[(string)$xml->code] = (string)$xml->label;
         }
+        /** @var Mana_Sorting_Model_Method_Abstract $sortMethod */
+        foreach($this->sortingHelper()->getCustomSortMethodCollection() as $sortMethod) {
+            $this->_availableOrder[(string)$this->sortingHelper()->getCustomSortMethodPrefix().$sortMethod->getId()] = $sortMethod->getData('title');
+        }
     }
 
     /**
@@ -75,6 +79,15 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
                 throw new Exception('Sorting resource class must implement Mana_Sorting_ResourceInterface.');
             }
             $resource->setOrder($collection, $order, $direction);
+            return true;
+        }
+        elseif(strpos($order, $this->sortingHelper()->getCustomSortMethodPrefix()) === 0) {
+            $id = str_replace($this->sortingHelper()->getCustomSortMethodPrefix(), "", $order);
+            /** @var Mana_Sorting_Resource_CustomSortMethod $resource */
+            $resource = Mage::getResourceSingleton('mana_sorting/customSortMethod');
+            $resource->setCustomSortMethodId($id);
+            $resource->setOrder($collection, $order, $direction);
+
             return true;
         }
         else {

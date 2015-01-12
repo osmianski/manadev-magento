@@ -213,13 +213,6 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
         }
         $model->setData('_has_custom_settings', $hasCustomSettings);
 
-        // implode multiple select fields
-//        foreach (array('option_page_available_sort_by') as $key) {
-//            if ($model->hasData($key) && is_array($model->getData($key))) {
-//                $model->setData($key, implode(',', $model->getData($key)));
-//            }
-//        }
-
         // validate if all required data is entered and makes sense
         $model->validate();
     }
