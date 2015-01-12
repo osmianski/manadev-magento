@@ -73,10 +73,6 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
 
             $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
 
-            if (isset($options['method_store_custom_settings_id'])) {
-                $select->where("`msc`.`id` = ?", $options['method_store_custom_settings_id']);
-            }
-
             if (isset($options['method_id'])) {
                 $select->where("`m`.`id` = ?", $options['method_id']);
             }
