@@ -25,5 +25,12 @@ abstract class Mana_Sorting_Resource_Method_Abstract extends Mage_Core_Model_Mys
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
     #endregion
 }

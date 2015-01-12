@@ -29,6 +29,15 @@ class Mana_Sorting_Block_Adminhtml_Method_ListGrid extends Mana_Admin_Block_V2_G
             )
         );
         $this->addColumn(
+            'url_key',
+            array(
+                'header' => $this->__('URL Key'),
+                'index' => 'url_key',
+                'width' => '50px',
+                'align' => 'left',
+            )
+        );
+        $this->addColumn(
             'position',
             array(
                 'header' => $this->__('Position'),

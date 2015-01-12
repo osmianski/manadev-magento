@@ -59,7 +59,7 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         foreach($collection as $sortMethod) {
             array_push($options, array(
                     'label' => $sortMethod->getData('title'),
-                    'value' => $this->getCustomSortMethodPrefix().$sortMethod->getId(),
+                    'value' => $sortMethod->getData('url_key'),
                 ));
         }
 
@@ -96,10 +96,6 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         return Mage::getSingleton('catalog/layer')->getCurrentCategory();
-    }
-
-    public function getCustomSortMethodPrefix() {
-        return 'm_sortmethod_';
     }
 
     public function getCustomSortMethodCollection() {

@@ -18,6 +18,7 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
     const DM_ATTRIBUTE_ID_2 = 5;
     const DM_ATTRIBUTE_ID_3 = 6;
     const DM_ATTRIBUTE_ID_4 = 7;
+    const DM_URL_KEY = 8;
 
 
     protected $rules = array(
@@ -25,10 +26,12 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
         'position' => 'required|numeric',
         'is_active' => 'required',
         'attribute_id_0' => 'required',
+        'url_key' => 'required|unique',
     );
     protected $captions = array(
         'is_active' => "Status",
         'attribute_id_0' => "Attribute",
+        'url_key' => "URL Key",
     );
     protected $nullableFields = array(
         'attribute_id_1',

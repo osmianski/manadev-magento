@@ -43,6 +43,19 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'url_key', 'text', array(
+            'label' => $this->__('URL Key'),
+            'title' => $this->__('URL Key'),
+            'name' => 'url_key',
+            'required' => true,
+            'default_bit_no' => Mana_Sorting_Model_Method_Abstract::DM_URL_KEY,
+            'default_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__(
+                !$this->adminHelper()->isGlobal() && $this->coreDbHelper()
+                    ->isModelContainsCustomSetting($this->getGlobalEditModel(), Mana_Sorting_Model_Method_Abstract::DM_URL_KEY)
+                    ? 'Same For All Stores' : 'Use Title'),
+        ));
+
         $this->addField($fieldset, 'position', 'text', array(
             'label' => $this->__('Position'),
             'title' => $this->__('Position'),

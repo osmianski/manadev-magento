@@ -12,6 +12,7 @@
 class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_Abstract{
 
     public function process($options) {
+        $this->_calculateFinalGlobalSettings($options);
         $this->_calculateFinalStoreLevelSettings($options);
     }
 
@@ -37,6 +38,10 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
                 continue;
             }
 
+            $seoifyHelper = $this->coreHelper()->isManadevSeoInstalled()
+            ? $this->seoHelper()
+            : $dbHelper;
+
             $fields = array(
                 'method_id' => "`m`.`id`",
                 'store_id' => $store->getId(),
@@ -52,6 +57,13 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
                 'title' => "IF({$dbHelper->isCustom('msc', Mana_Sorting_Model_Method_Abstract::DM_TITLE)},
                     `msc`.`title`,
                     `m`.`title`
+                )",
+                'url_key' => "IF({$dbHelper->isCustom('msc', Mana_Sorting_Model_Method_Abstract::DM_URL_KEY)},
+                    `msc`.`url_key`,
+                    IF({$dbHelper->isCustom('msc', Mana_Sorting_Model_Method_Abstract::DM_TITLE)},
+                        {$seoifyHelper->seoifyExpr("`msc`.`title`")},
+                        {$seoifyHelper->seoifyExpr("`m`.`title`")}
+                    )
                 )",
             );
             for($x=0;$x<=4;$x++) {
@@ -85,6 +97,47 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
             $db->exec($sql);
         }
 
+    }
+
+    protected function _calculateFinalGlobalSettings($options) {
+        if(!isset($options['method_id']) &&
+            !isset($options['method_store_custom_settings_id']) &&
+            !isset($options['store_id']) &&
+            empty($options['reindex_all']))
+        {
+            return;
+        }
+
+        $db = $this->_getWriteAdapter();
+        $dbHelper = $this->dbHelper();
+
+        $seoifyExpr = $this->coreHelper()->isManadevSeoInstalled()
+            ? $this->seoHelper()->seoifyExpr("`m`.`title`")
+            : $dbHelper->seoifyExpr("`m`.`title`");
+
+        $fields = array(
+            'id' => "`m`.`id`",
+            'url_key' => "IF({$dbHelper->isCustom('m', Mana_Content_Model_Page_Abstract::DM_URL_KEY)},
+                        {$seoifyExpr},
+                        `m`.`url_key`
+                    )",
+        );
+
+
+        $select = $db->select();
+        $select->from(array('m' => $this->getTable('mana_sorting/method')), null);
+        $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+        
+        if (isset($options['method_id'])) {
+            $select->where("`m`.`id` = ?", $options['method_id']);
+        }
+
+        // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
+        $selectSql = $select->__toString();
+        $sql = $select->insertFromSelect($this->getTable('mana_sorting/method'), array_keys($fields));
+
+        // run the statement
+        $db->exec($sql);
     }
 
     /**

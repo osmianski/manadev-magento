@@ -20,6 +20,7 @@ $table = $this->getTable('mana_sorting/method');
 $installer->run("
     CREATE TABLE `$table` (
       `id` bigint(20) NOT NULL AUTO_INCREMENT,
+      `default_mask0` int(10) unsigned NOT NULL,
       `attribute_id_0` smallint(5) unsigned NOT NULL,
       `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
@@ -28,6 +29,7 @@ $installer->run("
       `title` varchar(255) NOT NULL,
       `position` int(11) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
+      `url_key` varchar(255) NOT NULL,
 
       PRIMARY KEY (`id`),
       KEY `attribute_id_0` (`attribute_id_0`),
@@ -63,14 +65,15 @@ $installer->run("
       `method_id` bigint(20) NOT NULL,
       `store_id` smallint(5) unsigned NOT NULL,
       `default_mask0` int(10) unsigned NOT NULL,
-      `attribute_id_0` smallint(5) unsigned NOT NULL,
+      `attribute_id_0` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_1` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_2` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_3` smallint(5) unsigned DEFAULT NULL,
       `attribute_id_4` smallint(5) unsigned DEFAULT NULL,
-      `title` varchar(255) NOT NULL,
-      `position` int(11) NOT NULL,
-      `is_active` tinyint NOT NULL DEFAULT '1',
+      `title` varchar(255) DEFAULT NULL,
+      `position` int(11) DEFAULT NULL,
+      `is_active` tinyint DEFAULT NULL,
+      `url_key` varchar(255) DEFAULT NULL,
 
       PRIMARY KEY (`id`),
       KEY(`store_id`),
@@ -123,6 +126,7 @@ $installer->run("
       `title` varchar(255) NOT NULL,
       `position` int(11) NOT NULL,
       `is_active` tinyint NOT NULL DEFAULT '1',
+      `url_key` varchar(255) NOT NULL,
 
       PRIMARY KEY (`id`),
         UNIQUE KEY `unique_key` (`method_id`, `store_id`),

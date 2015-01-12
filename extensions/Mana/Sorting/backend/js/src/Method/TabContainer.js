@@ -1,5 +1,5 @@
-Mana.define('Mana/Sorting/Method/TabContainer', ['jquery', 'Mana/Admin/Container', 'singleton:Mana/Core'],
-function ($, Container, core) {
+Mana.define('Mana/Sorting/Method/TabContainer', ['jquery', 'Mana/Admin/Container', 'singleton:Mana/Admin/Expression'],
+function ($, Container, expression) {
     return Container.extend('Mana/Sorting/Method/TabContainer', {
         _subscribeToHtmlEvents: function() {
             var self = this;
@@ -60,6 +60,21 @@ function ($, Container, core) {
             var field = this.getField(fieldName);
             if (field.useDefault()) {
                 field.setValue(this.getJsonData('global', fieldName));
+            }
+        },
+        updateTitle: function() {
+            this.useDefaultUrlKey();
+        },
+        useDefaultTitle: function() {
+            this.defaultUseDefaultProcess('title');
+            this.useDefaultUrlKey();
+        },
+        useDefaultUrlKey: function() {
+            var field = this.getField('url_key');
+            var title = this.getField('title').getValue();
+            var url_key = expression.seoify(title);
+            if(typeof field !== "undefined" && field.useDefault()) {
+                field.setValue(url_key);
             }
         },
         getAttrCount: function () {

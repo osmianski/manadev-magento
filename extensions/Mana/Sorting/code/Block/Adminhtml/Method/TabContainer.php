@@ -102,6 +102,10 @@ class Mana_Sorting_Block_Adminhtml_Method_TabContainer extends Mana_Admin_Block_
         if (!$this->adminHelper()->isGlobal()) {
             $data = array_merge($data, array(
                 'global' => $this->jsonHelper()->encodeAttribute($this->getGlobalFlatModel()->getData()),
+                'global_is_custom' => $this->jsonHelper()->encodeAttribute(array(
+                    'url_key' => $this->coreDbHelper()->isModelContainsCustomSetting(
+                        $this->getGlobalFlatModel(), Mana_Sorting_Model_Method_Abstract::DM_URL_KEY),
+                )),
             ));
         }
 
