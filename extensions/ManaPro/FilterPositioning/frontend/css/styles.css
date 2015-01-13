@@ -91,7 +91,9 @@ transition: background 300ms ease-in-out;
 .mb-top-layered-navigation.one-filter-column .currently + div + div .block-subtitle { display: none; }
 
 .mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; }
-.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by { display: none; }
+.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by,
+.mb-top-layered-navigation.m-wide.m-mobile-only .actions,
+.mb-top-layered-navigation.m-wide.m-mobile-only .currently { display: none; }
 
 /* Types styling for Top LN only */
 .m-standard {} /* One item can be selected at the time */
