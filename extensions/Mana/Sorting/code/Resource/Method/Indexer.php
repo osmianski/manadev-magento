@@ -117,9 +117,9 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
 
         $fields = array(
             'id' => "`m`.`id`",
-            'url_key' => "IF({$dbHelper->isCustom('m', Mana_Content_Model_Page_Abstract::DM_URL_KEY)},
-                        {$seoifyExpr},
-                        `m`.`url_key`
+            'url_key' => "IF({$dbHelper->isCustom('m', Mana_Sorting_Model_Method_Abstract::DM_URL_KEY)},
+                        `m`.`url_key`,
+                        {$seoifyExpr}
                     )",
         );
 
