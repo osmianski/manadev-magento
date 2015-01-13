@@ -86,7 +86,7 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
                 'label' => $this->__('Attribute'),
                 'title' => $this->__('Attribute'),
                 'name' => 'attribute_id_'.$x,
-                'required' => $x == 0,
+                'required' => $x == 0 || $x == 1,
                 'options' => $this->getAttributeSourceModel()->getOptionArray(),
                 'default_bit_no' => constant("Mana_Sorting_Model_Method_Abstract::DM_ATTRIBUTE_ID_".$x),
                 'default_store_label' => $this->__('Same For All Stores'),
