@@ -11,7 +11,7 @@
         <ManaPro_FilterPositioning>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>15.01.06.18</version>
+            <version>15.01.14.21</version>
         </ManaPro_FilterPositioning>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
