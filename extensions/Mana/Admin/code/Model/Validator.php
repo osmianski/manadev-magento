@@ -16,23 +16,35 @@ class Mana_Admin_Model_Validator {
     protected $_errors = array();
     protected $_allErrors = array();
     protected $_ignoredRules = array();
+    protected $_config = array();
     protected $defaultMessages = array(
         'required' => "Please fill in :field field.",
-        'unique'   => "The value of :field already exists.",
+        'unique'   => "A record with `:value` :field already exists.",
+        'numeric'  => "Field :field should only contain numbers.",
+    );
+    protected $defaultConfig = array(
+        'singleErrorOnly' => false,
+        'singleErrorPerField' => true,
+        'skipUndefinedField' => true,
     );
 
     public function __construct($args) {
-        list($rules, $data, $captions, $model) = $args;
+        list($rules, $data, $captions, $model, $config) = $args;
         $this->_data = $data;
         $this->_rules = $this->explodeRules($rules);
         $this->_captions = $captions;
         $this->_model = $model;
+        $this->_config = array_merge($this->defaultConfig, $config);
     }
 
     public function passes() {
         foreach($this->_rules as $field => $rules) {
             foreach($rules as $rule) {
                 $this->validate($field, $rule);
+                // Stop validation if singleErrorOnly configuration is enabled
+                if($this->isSingleErrorOnly() && count($this->_errors) > 0) {
+                    return false;
+                }
             }
         }
         return count($this->_errors) === 0;
@@ -48,25 +60,38 @@ class Mana_Admin_Model_Validator {
     protected function validate($field, $rule) {
         if (trim($rule) == "" || in_array($rule, $this->_ignoredRules)) return;
 
-        $method = "validate". $this->contentHelper()->underscoreToCamelcase($rule);
+        $method = "validate". $this->adminHelper()->underscoreToCamelcase($rule);
 
-        if(method_exists($this, $method) && !$this->$method($field, $this->_data[$field])) {
-            $this->addError($field, $rule);
+        if(!($this->isSkipValidationOnUndefinedData() && !isset($this->_data[$field]))) {
+            $data = isset($this->_data[$field]) ? $this->_data[$field] : "";
+            if (method_exists($this, $method) && !$this->$method($field, $data)) {
+                $this->addError($field, $rule);
+            }
         }
     }
 
     protected function addError($field, $rule) {
         $message = $this->getMessage($field, $rule);
+        // Do not add error if singleErrorPerField configuration is enabled and there is already an error in that field.
+        if ($this->isSingleErrorPerField() && isset($this->_errors[$field])) {
+            return;
+        }
         $this->_errors[$field][$rule] = $message;
         $this->_allErrors[] = $message;
     }
 
     public function getMessage($field, $rule) {
-        $message = $this->defaultMessages[$rule];
-        if(trim($message) == "") {
-            $message = "Rule `{$rule}` failed in field :field";
+        if(isset($this->defaultMessages[$rule])) {
+            $message = $this->defaultMessages[$rule];
+        } else {
+            $message = "Rule `:rule` failed in field :field.";
         }
-        return str_replace(":field", $this->getFieldCaption($field), $message);
+        $this->adminHelper()->__($message);
+
+        $message = str_replace(":rule", $rule, $message);
+        $message = str_replace(":field", $this->getFieldCaption($field), $message);
+        $message = str_replace(":value", $this->_model->getData($field), $message);
+        return $message;
     }
 
     public function getMessages() {
@@ -96,11 +121,15 @@ class Mana_Admin_Model_Validator {
         return true;
     }
 
+    protected function validateNumeric($field, $value) {
+        return is_numeric($value);
+    }
+
     protected function getFieldCaption($field) {
-        if($this->_captions[$field]) {
-            return $this->contentHelper()->__($this->_captions[$field]);
+        if(isset($this->_captions[$field])) {
+            return $this->adminHelper()->__($this->_captions[$field]);
         } else {
-            return $this->contentHelper()->underscoreToCapitalize($this->contentHelper()->__($field));
+            return $this->adminHelper()->underscoreToCapitalize($this->adminHelper()->__($field));
         }
     }
 
@@ -110,13 +139,32 @@ class Mana_Admin_Model_Validator {
         }
     }
 
+    public function getConfig($configKey) {
+        if(isset($this->_config[$configKey])) {
+            return $this->_config[$configKey];
+        }
+        throw new Exception("Undefined config key `$configKey`.");
+    }
+
+    private function isSingleErrorOnly() {
+        return $this->getConfig('singleErrorOnly');
+    }
+
+    private function isSingleErrorPerField() {
+        return $this->getConfig('singleErrorPerField');
+    }
+
+    private function isSkipValidationOnUndefinedData() {
+        return $this->getConfig('skipUndefinedField');
+    }
+
     #region Dependencies
 
     /**
-     * @return Mana_Content_Helper_Data
+     * @return Mana_Admin_Helper_Data
      */
-    public function contentHelper() {
-        return Mage::helper('mana_content');
+    public function adminHelper() {
+        return Mage::helper('mana_admin');
     }
 
     #endregion

@@ -103,7 +103,7 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
      */
     public function getValidator() {
         if(!$this->_validator) {
-            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
+            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this, array()));
         }
         return $this->_validator;
     }

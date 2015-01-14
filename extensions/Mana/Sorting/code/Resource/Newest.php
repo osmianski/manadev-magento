@@ -23,6 +23,19 @@ class Mana_Sorting_Resource_Newest extends Mage_Core_Model_Mysql4_Abstract imple
      * @param string $direction
      */
     public function setOrder($collection, $order, $direction) {
-        $collection->setOrder('created_at', $direction == 'asc' ? 'desc' : 'asc');
+
+        $select = $collection->getSelect();
+
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $select->order("e.created_at {$direction}");
     }
 }

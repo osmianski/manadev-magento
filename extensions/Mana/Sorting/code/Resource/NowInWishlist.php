@@ -26,13 +26,6 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
      */
     public function setOrder($collection, $order, $direction)
     {
-        foreach (Mage::getModel('reports/event_type')->getCollection() as $eventType) {
-            if ($eventType->getEventName() == 'catalog_product_view') {
-                $productViewEvent = $eventType->getId();
-                break;
-            }
-        }
-
         $to = $this->getDate()->addDay(1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
         $from = $this->getDate()->addYear(-1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
 
@@ -50,7 +43,16 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
                     "stats.product_id = e.entity_id",
                     null
                 );
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("stats.wishlist_count {$direction}");
     }
 
