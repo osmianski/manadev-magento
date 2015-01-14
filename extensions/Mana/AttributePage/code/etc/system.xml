@@ -242,6 +242,32 @@
                         </template2_height>
                     </fields>
                 </attribute_page_settings>
+                <seo>
+                    <label>Search Engine Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <attribute_page_url_suffix>
+                            <label>Attribute Page URL Suffix</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </attribute_page_url_suffix>
+                        <option_page_url_suffix>
+                            <label>Option Page URL Suffix</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </option_page_url_suffix>
+                    </fields>
+                </seo>
             </groups>
         </mana_attributepage>
     </sections>
