@@ -28,10 +28,10 @@ class Mana_AttributePage_Model_Source_SortBy extends Mana_Core_Model_Source_Abst
             );
         }
         $core = Mage::helper('mana_core');
-        $sorting = Mage::helper('mana_sorting');
 
         if ($core->isManadevSortingInstalled()) {
-      //      $sorting->addManaSortingOptions($options);
+            $sorting = Mage::helper('mana_sorting');
+            //      $sorting->addManaSortingOptions($options);
             foreach ($sorting->getSortingMethodXmls() as $xml) {
                 $options[] = array(
                     'label' => (string)$xml->label,
