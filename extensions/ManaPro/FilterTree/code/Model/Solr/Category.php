@@ -18,6 +18,27 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
         }
         return $this->_countedCategories;
     }
+
+    public function getCategory() {
+        if ($this->coreHelper()->getRoutePath() == 'catalog/category/view' &&
+            $this->coreHelper()->isManadevSeoLayeredNavigationInstalled())
+        {
+            if (($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId())) &&
+                $schema->getRedirectToSubcategory())
+            {
+                return $this->treeHelper()->getRootCategory();
+            }
+            else {
+                return $this->getCurrentCategory();
+            }
+        }
+        return $this->treeHelper()->getRootCategory();
+    }
+
+    public function getCurrentCategory() {
+        return parent::getCategory();
+    }
+
     protected function _getItemsData() {
         $key = $this->getLayer()->getStateKey() . '_SUBCATEGORIES';
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
@@ -111,4 +132,20 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
     public function getResetValue() {
         return null;
     }
+    #region Dependencies
+
+    /**
+     * @return ManaPro_FilterTree_Helper_Data
+     */
+    public function treeHelper() {
+        return Mage::helper('manapro_filtertree');
+    }
+
+    /**
+     * @return Mana_Seo_Helper_Data
+     */
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
+    #endregion
 }
