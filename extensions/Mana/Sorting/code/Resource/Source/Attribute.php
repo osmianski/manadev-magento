@@ -62,7 +62,8 @@ class Mana_Sorting_Resource_Source_Attribute extends Mage_Core_Model_Mysql4_Abst
             ->reset('columns')
             ->columns(array('main_table.attribute_id', $labelExpr))
             ->where("main_table.frontend_input NOT IN ('textarea', 'gallery', 'multiselect', 'media_image')")
-            ->where("additional_table.used_for_sort_by = ?", 1)
+            ->where("additional_table.used_in_product_listing = ?", 1)
+            ->where("TRIM(main_table.frontend_label) <> ''")
             ->order('main_table.frontend_label ASC');
 
         if ($fields == self::FIELDS_LABEL) {
