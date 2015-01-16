@@ -62,8 +62,8 @@
             <indexer>
                 <mana_sorting_method translate="name description" module="mana_sorting">
                     <model>mana_sorting/method_indexer</model>
-                    <name>Sorting Methods (MANAdev)</name>
-                    <description>Recalculates sorting methods store-level settings</description>
+                    <name>Custom Sorting Methods (MANAdev)</name>
+                    <description>Recalculates custom sorting methods store-level settings.</description>
                 </mana_sorting_method>
             </indexer>
             <indexer_config>

@@ -83,8 +83,8 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
 
         for($x=0;$x<=4;$x++) {
             $this->addField($fieldset, 'attribute_id_'.$x, 'select', array(
-                'label' => $this->__('Attribute'),
-                'title' => $this->__('Attribute'),
+                'label' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
+                'title' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'name' => 'attribute_id_'.$x,
                 'required' => $x == 0 || $x == 1,
                 'options' => $this->getAttributeSourceModel()->getOptionArray(),

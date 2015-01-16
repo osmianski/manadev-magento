@@ -12,7 +12,7 @@
             <sort_order>79</sort_order>
 			<children>
                 <sortingmethod translate="title" module="mana_sorting">
-                    <title>Sorting Methods</title>
+                    <title>Custom Sorting Methods</title>
                     <sort_order>700</sort_order>
                     <action>adminhtml/mana_sorting_method/</action>
                 </sortingmethod>
