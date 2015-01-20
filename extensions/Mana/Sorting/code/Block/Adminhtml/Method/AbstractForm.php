@@ -73,5 +73,12 @@ class Mana_Sorting_Block_Adminhtml_Method_AbstractForm extends Mana_Admin_Block_
         return Mage::getSingleton('mana_sorting/source_attribute');
     }
 
+    /**
+     * @return Mana_Sorting_Model_Source_Direction
+     */
+    public function getDirectionSourceModel() {
+        return Mage::getSingleton('mana_sorting/source_direction');
+    }
+
     #endregion
 }

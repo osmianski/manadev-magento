@@ -19,6 +19,11 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
     const DM_ATTRIBUTE_ID_3 = 6;
     const DM_ATTRIBUTE_ID_4 = 7;
     const DM_URL_KEY = 8;
+    const DM_ATTRIBUTE_ID_0_SORTDIR = 9;
+    const DM_ATTRIBUTE_ID_1_SORTDIR = 10;
+    const DM_ATTRIBUTE_ID_2_SORTDIR = 11;
+    const DM_ATTRIBUTE_ID_3_SORTDIR = 12;
+    const DM_ATTRIBUTE_ID_4_SORTDIR = 13;
 
 
     protected $rules = array(

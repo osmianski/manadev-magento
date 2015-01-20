@@ -90,6 +90,14 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
                 'options' => $this->getAttributeSourceModel()->getOptionArray(),
                 'disabled' => !(bool)$this->adminHelper()->isGlobal(),
             ));
+            $this->addField($fieldset, 'attribute_id_'.$x.'_sortdir', 'select', array(
+                'label' => $this->__('Direction'),
+                'title' => $this->__('Direction'),
+                'name' => 'attribute_id_'.$x.'_sortdir',
+                'required' => $x == 0 || $x == 1,
+                'options' => $this->getDirectionSourceModel()->getOptionArray(),
+                'disabled' => !(bool)$this->adminHelper()->isGlobal(),
+            ));
         }
 
         $this->setForm($form);
