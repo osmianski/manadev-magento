@@ -99,7 +99,8 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     public function getCustomSortMethodCollection() {
-        $collection = Mage::getResourceModel('mana_sorting/method_collection');
+        $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
+        $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
         $collection->filterActive();
         return $collection;
     }

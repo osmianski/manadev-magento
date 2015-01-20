@@ -24,6 +24,11 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
     const DM_ATTRIBUTE_ID_2_SORTDIR = 11;
     const DM_ATTRIBUTE_ID_3_SORTDIR = 12;
     const DM_ATTRIBUTE_ID_4_SORTDIR = 13;
+    const DM_SORTING_METHOD_0 = 14;
+    const DM_SORTING_METHOD_1 = 15;
+    const DM_SORTING_METHOD_2 = 16;
+    const DM_SORTING_METHOD_3 = 17;
+    const DM_SORTING_METHOD_4 = 18;
 
 
     protected $rules = array(
@@ -64,6 +69,32 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
             throw new Mana_Core_Exception_Validation($validator->getMessages());
         }
     }
+
+    protected function _afterLoad() {
+        for($x=0;$x<=4;$x++) {
+            if ($this->getData("sorting_method_{$x}") != "") {
+                $sorting_method = $this->getData("sorting_method_{$x}");
+                $this->setData("attribute_id_{$x}", $sorting_method);
+            }
+        }
+
+    }
+
+    protected function _beforeSave() {
+        for($x=0;$x<=4;$x++) {
+            $attrField = "attribute_id_{$x}";
+            $sortMethodField = "sorting_method_{$x}";
+            if(!is_numeric($this->getData($attrField))) {
+                $attrValue = $this->getData($attrField);
+                $this->setData($sortMethodField, $attrValue);
+                $this->setData($attrField, null);
+            } else {
+                $this->setData($sortMethodField, "");
+            }
+        }
+        return parent::_beforeSave();
+    }
+
 
     /**
      * @return Mana_Admin_Model_Validator

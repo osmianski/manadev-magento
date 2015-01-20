@@ -49,13 +49,28 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
         }
         for($x=0;$x<=4;$x++) {
             $attribute_id = $this->sortMethodModel->getData('attribute_id_'.$x);
+            $sorting_method = $this->sortMethodModel->getData('sorting_method_' . $x);
+            $directionAttribute = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir") == 1 ? 'asc' : 'desc';
             if(is_numeric($attribute_id)) {
                 $_attribute_code = Mage::getModel('eav/entity_attribute')->load($attribute_id)->getAttributeCode();
-                $directionAttribute = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir") == 1 ? 'asc' : 'desc';
                 $collection->addAttributeToSort($_attribute_code, $directionAttribute);
-            } else {
+            } elseif($sorting_method != "") {
+                $xmls = $this->sortingHelper()->getSortingMethodXmls();
+                $resource = Mage::getResourceSingleton((string)$xmls[$sorting_method]->resource);
+                $resource->setOrder($collection, $order, $directionAttribute);
                 break;
             }
         }
     }
+
+    #region Dependencies
+
+    /**
+     * @return Mana_Sorting_Helper_Data
+     */
+    public function sortingHelper() {
+        return Mage::helper('mana_sorting');
+    }
+
+    #endregion
 }

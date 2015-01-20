@@ -77,6 +77,11 @@ class Mana_Sorting_Resource_Method_Indexer extends Mana_Sorting_Resource_Method_
                     `msc`.`attribute_id_{$x}_sortdir`,
                     `m`.`attribute_id_{$x}_sortdir`
                 )";
+                $constant = constant("Mana_Sorting_Model_Method_Abstract::DM_SORTING_METHOD_{$x}");
+                $fields["sorting_method_{$x}"] = "IF({$dbHelper->isCustom('msc', $constant)},
+                    `msc`.`sorting_method_{$x}`,
+                    `m`.`sorting_method_{$x}`
+                )";
             }
 
             $select = $db->select();
