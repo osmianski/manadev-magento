@@ -88,7 +88,6 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
     public function editAction() {
         try {
             $models = $this->_registerModels();
-            Mage::dispatchEvent('m_load_related_products');
         }
         catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
