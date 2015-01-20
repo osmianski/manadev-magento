@@ -127,7 +127,7 @@ examples on what kind of actions can be applied to referenced blocks.
                 <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
             </block>
         </reference>
-        <reference name="option.products">
+        <reference name="option_view">
             <block type="mana_core/list" name="catalog.above_products" as="above_products" before="-">
                 <block type="mana_filters/view" name="mana.catalog.above_products.nav" before="-" template="catalog/layer/view.phtml">
                     <action method="setShowInFilter"><showIn>above_products</showIn></action>
