@@ -33,10 +33,10 @@ class ManaPro_FilterShowMore_Model_Observer {
 				if (count($items->getItems()) > $maxItemCount) {
 				    $newItems = array();
 				    $index = 0;
-				    foreach ($items->getItems() as $item) {
+				    foreach ($items->getItems() as $key => $item) {
 				        /* @var $item Mana_Filters_Model_Item */
 				        if ($index < $maxItemCount || $item->getMSelected()) {
-				            $newItems[] = $item;
+				            $newItems[$key] = $item;
 				        }
 				        $index++;
 				    }
