@@ -50,6 +50,7 @@ class Mana_Seo_Resource_EnterpriseUrlIndexer_ActiveCategoryPage extends Mana_Seo
             $select = $db->select()
                 ->from(array('r' => $this->getTable('enterprise_urlrewrite/url_rewrite')), null)
                 ->joinLeft(array('rel' => $this->getTable('enterprise_urlrewrite/redirect_rewrite')), "rel.url_rewrite_id = r.url_rewrite_id", null)
+                ->join(array('c' => $this->getTable('catalog/category')), "c.entity_id = " . $fields['category_id'], null)
                 ->columns($fields)
                 ->where("`r`.`target_path` LIKE 'catalog/category/view/id/%'")
                 ->where('rel.url_rewrite_id IS NULL')
