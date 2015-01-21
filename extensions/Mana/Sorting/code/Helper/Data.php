@@ -98,9 +98,16 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return Mage::getSingleton('catalog/layer')->getCurrentCategory();
     }
 
+    /**
+     * @return Mana_Sorting_Resource_Method_Collection|Mana_Sorting_Resource_Method_Store_Collection
+     */
     public function getCustomSortMethodCollection() {
-        $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
-        $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+        if($this->adminHelper()->isGlobal()) {
+            $collection = Mage::getResourceModel('mana_sorting/method_collection');
+        } else {
+            $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
+            $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+        }
         $collection->filterActive();
         return $collection;
     }
