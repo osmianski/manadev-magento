@@ -220,6 +220,39 @@ class Mana_Seo_Model_Observer {
         }
     }
 
+    /**
+     * Handles event "core_config_data_save_commit_after".
+     * @param Varien_Event_Observer $observer
+     */
+    public function afterConfigDataSaveCommit($observer) {
+        /* @var $configData Mage_Core_Model_Config_Data */
+        $configData = $observer->getEvent()->getDataObject();
+
+        $suffixFields = array(
+            // category URL suffix redirects work without saving it in URL history so the following line is
+            // disabled
+            //Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX => 'catalog/seo/category_url_suffix',
+
+            Mana_Seo_Model_UrlHistory::TYPE_ATTRIBUTE_PAGE_SUFFIX => 'mana_attributepage/seo/attribute_page_url_suffix',
+            Mana_Seo_Model_UrlHistory::TYPE_OPTION_PAGE_SUFFIX => 'mana_attributepage/seo/option_page_url_suffix',
+        );
+
+        foreach ($suffixFields as $historyType => $path) {
+            $storeId = $configData->getStoreCode() ? Mage::app()->getStore($configData->getStoreCode())->getId() : 0;
+            if ($configData->getPath() == $path &&
+                Mage::getStoreConfig($configData->getPath(), $storeId) != $configData->getValue())
+            {
+                /* @var $history Mana_Seo_Model_UrlHistory */
+                $history = $this->dbHelper()->getModel('mana_seo/urlHistory');
+                $history
+                    ->setData('url_key', $this->coreHelper()->addDotToSuffix(Mage::getStoreConfig($configData->getPath(), $storeId)))
+                    ->setData('redirect_to', $this->coreHelper()->addDotToSuffix($configData->getValue()))
+                    ->setData('type', $historyType)
+                    ->setData('store_id', $storeId);
+                $history->save();
+            }
+        }
+    }
 
     #region Dependencies
 
@@ -228,6 +261,13 @@ class Mana_Seo_Model_Observer {
      */
     public function coreHelper() {
 	    return Mage::helper('mana_core');
+	}
+
+    /**
+     * @return Mana_Db_Helper_Data
+     */
+    public function dbHelper() {
+	    return Mage::helper('mana_db');
 	}
 
     /**

@@ -303,7 +303,7 @@ function ($, Container, ajax, core, expression) {
                     isDefault: 0
                 };
                 self.resetNodePosition(data.old_parent, data.node.id);
-                var color = self._isTemporaryId(self.getCurrentId) ? "green" : "blue";
+                var color = self._isTemporaryId(self.getCurrentId()) ? "green" : "blue";
                 self._setNodeColor(color, data.node.id)
             };
 

@@ -11,7 +11,7 @@
         <ManaPro_FilterTree>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>15.01.05.08</version>
+            <version>15.01.15.19</version>
         </ManaPro_FilterTree>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -89,6 +89,17 @@
                     <sort_order>150</sort_order>
                     <!-- Position in "Display as" list. The item with least position is the default one. -->
                 </tree>
+                <subtree translate="title" module="manapro_filtertree">
+                    <title>Tree (2nd level and down)</title>
+                    <!-- this one is displayed in admin -->
+                    <block>manapro_filtertree/filter</block>
+                    <model>manapro_filtertree/subtree</model>
+                    <solr_model>manapro_filtertree/solr_subtree</solr_model>
+                    <template>manapro/filtertree/tree.phtml</template>
+                    <!-- PHTML to be rendered -->
+                    <sort_order>150</sort_order>
+                    <!-- Position in "Display as" list. The item with least position is the default one. -->
+                </subtree>
             </category>
         </display>
     </mana_filters>

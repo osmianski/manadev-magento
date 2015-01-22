@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+@category    Mana
+@package     Mana_Sorting
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<layout version="0.1.0">
+    <adminhtml_mana_sorting_method_index>
+        <update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/sorting.js</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block type="mana_sorting/adminhtml_method_listContainer" name="container" as="container">
+				<block type="mana_sorting/adminhtml_method_listGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+		</reference>
+    </adminhtml_mana_sorting_method_index>
+
+    <adminhtml_mana_sorting_method_edit>
+        <update handle="mana_admin2"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/mana/sorting.js</name><params/></action>
+        </reference>
+        <reference name="content">
+            <block type="mana_sorting/adminhtml_method_tabContainer" as="container" name="container">
+                <block type="mana_sorting/adminhtml_method_form" as="method_form" name="method_form">
+                    <action method="addToParentGroup"><group>content</group></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mana_sorting_method_edit>
+</layout>

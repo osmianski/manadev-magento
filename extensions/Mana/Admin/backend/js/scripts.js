@@ -96,7 +96,7 @@
                 }
             })
             .fail(function (error) {
-                $.errorUpdate($.options('edit-form').messagesSelector, error);
+                $.errorUpdate($.options('edit-form').messagesSelector, error.statusText || error);
             })
             .complete(function () {
                 $('#loading-mask').hide();
