@@ -119,8 +119,8 @@ class Mana_Filters_Model_Filter_Attribute
         $tags = $this->getLayer()->getStateTags($tags);
 
         $sortMethod = $this->getFilterOptions()->getSortMethod() ? $this->getFilterOptions()->getSortMethod() : 'byPosition';
-        foreach (array_keys($data) as $position => $key) {
-            $data[$key]['position'] = $position;
+        foreach (array_keys($data) as $position => $itemKey) {
+            $data[$itemKey]['position'] = $position;
         }
         if ($this->_addSpecialOptionsToAllOptions()) {
             $data = array_merge($data, Mage::helper('mana_filters')->getSpecialOptionData($this->getFilterOptions()->getCode()));
