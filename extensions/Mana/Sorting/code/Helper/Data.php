@@ -78,6 +78,11 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
                 return (string)$xml->label;
             }
         }
+        $collection = $this->getCustomSortMethodCollection();
+        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        if($collection->count() > 0) {
+            return $collection->getFirstItem()->getData('title');
+        }
         return false;
     }
 
@@ -86,6 +91,11 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             if($sortingOptionCode == (string)$xml->code) {
                 return true;
             }
+        }
+        $collection = $this->getCustomSortMethodCollection();
+        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        if($collection->count() > 0) {
+            return true;
         }
         return false;
     }
