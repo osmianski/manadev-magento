@@ -55,7 +55,8 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
                 $_attribute_code = Mage::getModel('eav/entity_attribute')->load($attribute_id)->getAttributeCode();
                 $collection->addAttributeToSort($_attribute_code, $directionAttribute);
             } elseif($sorting_method != "") {
-                $xmls = $this->sortingHelper()->getSortingMethodXmls();
+                $xmls = $this->sortingHelper()->getSortingMethodXmls(false);
+
                 $resource = Mage::getResourceSingleton((string)$xmls[$sorting_method]->resource);
                 $resource->setOrder($collection, $order, $directionAttribute);
                 break;

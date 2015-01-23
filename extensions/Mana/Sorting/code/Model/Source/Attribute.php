@@ -24,7 +24,7 @@ class Mana_Sorting_Model_Source_Attribute extends Mana_Core_Model_Source_Abstrac
                 $otherAttributes[] = array('value' => $value, 'label' => $label);
             }
         }
-        foreach ($this->sortingHelper()->getSortingMethodXmls() as $code => $xml) {
+        foreach ($this->sortingHelper()->getSortingMethodXmls(false) as $code => $xml) {
             $sortingMethods[] = array('label' => (string)$xml->label, 'value' => $code);
         }
         $result[] = array('label' => 'Sorting Methods', 'value' => $sortingMethods);
