@@ -126,10 +126,10 @@
             <label>Newest</label>
             <resource>mana_sorting/newest</resource>
         </newest>
-        <bestseller translate="label" module="Mana_Sorting">
+        <bestsellers translate="label" module="Mana_Sorting">
             <label>Bestsellers</label>
             <resource>mana_sorting/bestseller</resource>
-        </bestseller>
+        </bestsellers>
         <most_viewed translate="label" module="Mana_Sorting">
             <label>Most Viewed</label>
             <resource>mana_sorting/mostViewed</resource>
