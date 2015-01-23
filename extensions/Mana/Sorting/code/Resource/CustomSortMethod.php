@@ -59,6 +59,7 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
 
                 $resource = Mage::getResourceSingleton((string)$xmls[$sorting_method]->resource);
                 $resource->setOrder($collection, $order, $directionAttribute);
+            } else {
                 break;
             }
         }
