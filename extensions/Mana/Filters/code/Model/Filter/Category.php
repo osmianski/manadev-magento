@@ -380,6 +380,11 @@ class Mana_Filters_Model_Filter_Category
                 ->addAttributeToSelect('is_anchor')
                 ->joinUrlRewrite();
         }
+
+        if ($this->coreHelper()->isManadevPaidLayeredNavigationInstalled()) {
+            $collection->addAttributeToFilter('m_show_in_layered_navigation', 1);
+        }
+
         $collection
             ->addAttributeToFilter('is_active', 1)
             ->addIdFilter($categoryIds)

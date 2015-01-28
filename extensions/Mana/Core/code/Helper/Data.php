@@ -753,6 +753,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_Filters');
     }
 
+    public function isManadevPaidLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterAdmin');
+    }
+
     public function isManadevLayeredNavigationCheckboxesInstalled() {
         return $this->isModuleEnabled('ManaPro_FilterCheckboxes');
     }
