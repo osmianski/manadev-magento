@@ -360,6 +360,7 @@ class Mana_Filters_Model_Filter_Category
 
         /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
         if (Mage::helper('catalog/category_flat')->isEnabled()) {
+            $alias = 'main_table';
             $storeId = $category->getStoreId();
             $collection->getSelect()
                 ->reset(Zend_Db_Select::COLUMNS)
@@ -373,6 +374,7 @@ class Mana_Filters_Model_Filter_Category
                     array('request_path' => 'url_rewrite.request_path'));
         }
         else {
+            $alias = 'e';
             $collection
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('name')
@@ -403,11 +405,11 @@ class Mana_Filters_Model_Filter_Category
                 $storeId = Mage::app()->getStore()->getId();
                 $collection->getSelect()
                     ->joinLeft(array('m_siln_g' => $showInLayeredNavigationTable),
-                        "`m_siln_g`.`entity_id` = `main_table`.`entity_id`
+                        "`m_siln_g`.`entity_id` = `e`.`entity_id`
                             AND `m_siln_g`.`attribute_id` = $attributeId
                             AND `m_siln_g`.`store_id` = 0", null)
                     ->joinLeft(array('m_siln_s' => $showInLayeredNavigationTable),
-                        "`m_siln_s`.`entity_id` = `main_table`.`entity_id`
+                        "`m_siln_s`.`entity_id` = `e`.`entity_id`
                             AND `m_siln_s`.`attribute_id` = $attributeId
                             AND `m_siln_s`.`store_id` = $storeId", null)
                     ->where("COALESCE(`m_siln_s`.`value`, `m_siln_g`.`value`) = 1");
@@ -415,7 +417,7 @@ class Mana_Filters_Model_Filter_Category
         }
 
         if (count($categoryIds)) {
-            $collection->getSelect()->where("`main_table`.`entity_id` IN (" . implode(', ', $categoryIds) . ")");
+            $collection->getSelect()->where("`$alias`.`entity_id` IN (" . implode(', ', $categoryIds) . ")");
         }
         else {
             $collection->getSelect()->where("1 <> 1");
