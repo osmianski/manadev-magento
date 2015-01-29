@@ -90,7 +90,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 foreach ($data as $id => $fields) {
                     $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
                     $model = $models['customSettings'];
-                    if(isset($fields['parent_id']) && substr( $fields['parent_id']['value'], 0, 1) <> "n") {
+                    if(array_key_exists('parent_id', $fields) && substr( $fields['parent_id']['value'], 0, 1) <> "n") {
                         $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
                     }
 
