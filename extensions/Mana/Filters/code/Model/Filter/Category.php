@@ -382,12 +382,46 @@ class Mana_Filters_Model_Filter_Category
         }
 
         if ($this->coreHelper()->isManadevPaidLayeredNavigationInstalled()) {
-            $collection->addAttributeToFilter('m_show_in_layered_navigation', 1);
+            if ($this->flatHelper()->isEnabled() && $this->flatHelper()->isRebuilt() &&
+                !$this->dbHelper()->indexRequiresReindexing('catalog_category_flat'))
+            {
+                $collection->addAttributeToFilter('m_show_in_layered_navigation', 1);
+            }
+            else {
+                $res = Mage::getSingleton('core/resource');
+                $showInLayeredNavigationTable = $res->getTableName('catalog_category_entity_int');
+                $db = $collection->getConnection();
+
+                $attributeSelect = $db->select()
+                    ->from(array('a' => $res->getTableName('eav/attribute')), 'attribute_id')
+                    ->join(array('t' => $res->getTableName('eav/entity_type')),
+                        $db->quoteInto("`t`.`entity_type_id` = `a`.`entity_type_id`
+                            AND `t`.`entity_type_code` = ?", 'catalog_category'), null)
+                    ->where("`a`.`attribute_code` = ?", 'm_show_in_layered_navigation');
+                $attributeId = $db->fetchOne($attributeSelect);
+
+                $storeId = Mage::app()->getStore()->getId();
+                $collection->getSelect()
+                    ->joinLeft(array('m_siln_g' => $showInLayeredNavigationTable),
+                        "`m_siln_g`.`entity_id` = `main_table`.`entity_id`
+                            AND `m_siln_g`.`attribute_id` = $attributeId
+                            AND `m_siln_g`.`store_id` = 0", null)
+                    ->joinLeft(array('m_siln_s' => $showInLayeredNavigationTable),
+                        "`m_siln_s`.`entity_id` = `main_table`.`entity_id`
+                            AND `m_siln_s`.`attribute_id` = $attributeId
+                            AND `m_siln_s`.`store_id` = $storeId", null)
+                    ->where("COALESCE(`m_siln_s`.`value`, `m_siln_g`.`value`) = 1");
+            }
         }
 
+        if (count($categoryIds)) {
+            $collection->getSelect()->where("`main_table`.`entity_id` IN (" . implode(', ', $categoryIds) . ")");
+        }
+        else {
+            $collection->getSelect()->where("1 <> 1");
+        }
         $collection
             ->addAttributeToFilter('is_active', 1)
-            ->addIdFilter($categoryIds)
             ->setOrder('position', 'ASC')
             ->load();
 
@@ -417,5 +451,18 @@ class Mana_Filters_Model_Filter_Category
         return Mage::helper('manapro_filterdependent');
     }
 
+    /**
+     * @return Mage_Catalog_Helper_Category_Flat
+     */
+    public function flatHelper() {
+        return Mage::helper('catalog/category_flat');
+    }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
     #endregion
 }

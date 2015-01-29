@@ -49,11 +49,10 @@ if (!$installer->getAttributeId($entityTypeId, 'm_show_in_layered_navigation')) 
             SELECT '{$entityTypeId}', '{$attributeId}', `entity_id`, '1'
                 FROM `{$installer->getTable('catalog_category_entity')}`;
     ");
-}
 
-if (Mage::helper('catalog/category_flat')->isEnabled()) {
     Mage::helper('mana_core/db')->scheduleReindexing('catalog_category_flat');
 }
+
 
 if (method_exists($this->getConnection(), 'disallowDdlCache')) {
     $this->getConnection()->disallowDdlCache();

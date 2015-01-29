@@ -35,8 +35,11 @@ class Mana_Db_Model_Observer {
         if ($reindex = Mage::registry('m_reindex')) {
             foreach ($reindex as $code) {
                 $indexer->getProcessByCode($code)
-                    ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX)
-                    ->reindexAll();
+                    ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
+            }
+            foreach ($reindex as $code) {
+                $indexer->getProcessByCode($code)
+                	->reindexAll();
             }
         }
 	    if ($savedObjects = Mage::registry('m_objects_to_be_saved')) {

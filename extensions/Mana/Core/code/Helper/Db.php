@@ -103,4 +103,11 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
 
         return $this;
     }
+
+    public function indexRequiresReindexing($code) {
+        /* @var $indexer Mage_Index_Model_Indexer */
+        $indexer = Mage::getSingleton('index/indexer');
+        $process = $indexer->getProcessByCode($code);
+        return $process->getData('status') != Mage_Index_Model_Process::STATUS_PENDING;
+    }
 }
