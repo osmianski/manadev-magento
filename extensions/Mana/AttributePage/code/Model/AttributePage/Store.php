@@ -44,6 +44,7 @@ class Mana_AttributePage_Model_AttributePage_Store extends Mana_AttributePage_Mo
         $collection
             ->addAttributePageFilter($this->getData('attribute_page_global_id'))
             ->addStoreFilter($this->getData('store_id'))
+            ->addIsActiveFilter()
             ->setOrder('title', 'ASC');
 
         $collection->addAlphaColumn();

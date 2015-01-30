@@ -143,6 +143,7 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			'm_parts' => $product->getMRepresentedParts(),
 			'm_unit' => $product->getMRepresentedUnit(),
 			'm_external_id' => $product->getMRepresentedExternalId(),
+            'm_pack_qty' => $product->getMPackQty(),
 		);
 	}
 	static protected $_validating = false;
@@ -194,6 +195,9 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			if (isset($fields['m_unit']) && !in_array($fields['m_unit'], array_keys(Mage::getModel('manapro_productfaces/source_unit')->getOptionArray()))) {
 				$errors[] = $helper->__('One of valid units of measure expected, but %s is not.', $fields['m_unit']).$errorSuffix;
 			}
+            if (isset($fields['m_pack_qty']) && (!$fields['m_pack_qty'] || !is_numeric($fields['m_pack_qty']) || $fields['m_pack_qty'] <= 0)) {
+                $errors[] = $helper->__('Pack Qty should be positive number, but %s is not.', $fields['m_pack_qty']) . $errorSuffix;
+            }
 		}
 		catch (Exception $e) {
 			self::$_validating = false;

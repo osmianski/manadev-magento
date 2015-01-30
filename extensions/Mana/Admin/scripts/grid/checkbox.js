@@ -27,7 +27,7 @@
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
 	// executed when referenced DOM elements are still being loaded.
 	$(function() {
-		$('.ct-checkbox').live('mouseover', function() {
+		$(document).on('mouseover', '.ct-checkbox', function() {
 			if ($.gridData(this, 'show_helper')) { 
 				$.helperPopup({
 					host: this, 
@@ -37,7 +37,7 @@
 				});
 			}
 		});
-		$('.ct-checkbox input').live('change', function() {
+		$(document).on('change', '.ct-checkbox input', function() {
 			var td = $(this).parent('td')[0];
 			$.gridData(td, {value :$(this).attr('checked') == 'checked' ? 1 : 0, is_default: false});
 			if (_helper) {

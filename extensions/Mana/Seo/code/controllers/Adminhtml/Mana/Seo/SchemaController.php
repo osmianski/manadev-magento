@@ -103,7 +103,9 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
         $this->_title('Mana')->_title($this->__('%s - SEO Schema', $models['flat']->getName()));
 
         // advise create schema duplicates before important changes
-        if (Mage::getStoreConfigFlag('mana/message/create_seo_schema_duplicate_advice')) {
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled() &&
+            Mage::getStoreConfigFlag('mana/message/create_seo_schema_duplicate_advice'))
+        {
             $this->showMessage('create_seo_schema_duplicate_advice', $this->seoHelper()->__(
                 "If you change one of the fields affecting URL structure (%s), URLs with old structure will result in 404 'Page not found' pages. If URLs with old structure are already indexed by search bots, it is recommended to create a duplicate of this schema before making such changes, so that URLs with old structure would be redirected to this schema URLs. ",
                 implode(', ', array(

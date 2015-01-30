@@ -58,7 +58,7 @@
             restoreState(element);
         });
     });
-    $('.block-layered-nav .m-collapseable-group').live('click', function() {
+    $(document).on('click', '.block-layered-nav .m-collapseable-group', function() {
         var element = this;
         if ($(element).hasClass('m-expanded')) {
             _states[$(element).attr('data-id')] = false;

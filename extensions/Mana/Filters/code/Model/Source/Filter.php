@@ -39,6 +39,10 @@ class Mana_Filters_Model_Source_Filter extends Mana_Core_Model_Source_Abstract {
             $select = $collection->getSelect()
                 ->reset(Varien_Db_Select::COLUMNS)
                 ->columns(array('id', 'name'));
+
+            if ($this->_currentFilterId) {
+                $collection->addFieldToFilter('id', array('neq' => $this->_currentFilterId));
+            }
         }
         else {
             $collection = $this->getStoreLevelFilterCollection()
@@ -49,9 +53,10 @@ class Mana_Filters_Model_Source_Filter extends Mana_Core_Model_Source_Abstract {
 			Mage::helper('mana_db')->joinLeft($select,
 				'global', Mage::getSingleton('core/resource')->getTableName('mana_filters/filter2'),
 				'main_table.global_id = global.id');
-        }
-        if ($this->_currentFilterId) {
-            $collection->addFieldToFilter('id', array('neq' => $this->_currentFilterId));
+
+            if ($this->_currentFilterId) {
+                $collection->addFieldToFilter('global_id', array('neq' => $this->_currentFilterId));
+            }
         }
 
         if (count($this->_excluded)) {

@@ -1731,7 +1731,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
                 popup: { contentSelector:'.' + name + '-text', containerClass:'m-' + name + '-popup-container', top:100 }
 
             }, options);
-            $(this).live('click', function() {
+            $(document).on('click', this, function() {
                 if ($.mPopupClosing()) {
                     return false;
                 }

@@ -404,12 +404,11 @@ class ManaPro_FilterColors_Model_Observer {
         switch ($object->getEntityName()) {
             case 'mana_filters/filter2':
                 foreach (Mage::app()->getStores() as $store) {
-                    $filter = Mage::getModel('mana_filters/filter2_store')->loadByGlobalId($object->getId(), $store->getId());
-                    $colors->generateCss($filter);
+                    $colors->generateCss($store->getId());
                 }
                 break;
             case 'mana_filters/filter2_store':
-                $colors->generateCss($object);
+                $colors->generateCss($object->getData('store_id'));
                 break;
         }
 	}

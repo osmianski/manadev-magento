@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.07.02.13</version>
+		    <version>14.11.14.16</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -205,6 +205,20 @@
                 </setup>
             </manapro_filterseolinks_setup>
         </resources>
+        <index>
+            <indexer_config>
+                <mana_seo_url>
+                    <sources>
+                        <filter_parameter><resource>manapro_filterseolinks/urlIndexer_filter</resource></filter_parameter>
+                        <category_parameter><resource>manapro_filterseolinks/urlIndexer_categoryParameter</resource></category_parameter>
+                        <toolbar_parameter><resource>manapro_filterseolinks/urlIndexer_toolbar</resource></toolbar_parameter>
+    
+                        <category_value><resource>manapro_filterseolinks/urlIndexer_categoryValue</resource></category_value>
+                        <attribute_value><resource>manapro_filterseolinks/urlIndexer_value</resource></attribute_value>
+                    </sources>
+                </mana_seo_url>
+            </indexer_config>
+        </index>
 	</global>
 	<!-- BASED ON SNIPPET: Static Visuals/Adminhtml section (config.xml) -->
 	<!-- This section enables static visual changes in admin area. -->
@@ -221,7 +235,15 @@
 				</ManaPro_FilterSeoLinks>
 			</modules>
 		</translate>
-		<!-- INSERT HERE: layout, translate, routers -->
+
+        <layout>
+            <updates>
+                <mana_filters>
+                    <file>manapro_filterseolinks.xml</file>
+                </mana_filters>
+            </updates>
+        </layout>
+        <!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
 	
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
@@ -231,7 +253,6 @@
 	<default>
 		<mana_filters>
 			<seo>
-				<conditional_word>where</conditional_word>
 				<dash>--to-</dash>
 				<space>-</space>
 				<slash>--per-</slash>

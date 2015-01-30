@@ -26,6 +26,7 @@ class Mana_Seo_Model_Observer {
         if (($head = $layout->getBlock('head')) &&
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
+            $renderLayeredNavigationFilters = true;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -34,17 +35,21 @@ class Mana_Seo_Model_Observer {
                     $renderCanonicalUrl = $this->catalogCategoryHelper()->canUseCanonicalTag();
                 }
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'catalogsearch/result/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalSearch();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/page/view' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index') {
+            elseif ($this->coreHelper()->getRoutePath() == 'cms/index/index' && $this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalCms();
             }
-            elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view') {
+            elseif ($this->coreHelper()->getRoutePath() == 'mana/optionPage/view' && $this->coreHelper()->isManadevAttributePageInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalOptionPage();
+            }
+            elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
+                $renderCanonicalUrl = $schema->getCanonicalBookPage();
+                $renderLayeredNavigationFilters = false;
             }
 
             if ($renderCanonicalUrl) {
@@ -52,13 +57,21 @@ class Mana_Seo_Model_Observer {
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
                 $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
-                $filters = $this->_getFilters();
+
+                $filters = $renderLayeredNavigationFilters ? $this->_getFilters() : array();
                 foreach (array_keys($query) as $key) {
-                    if (isset($filters[$key])) {
-                        $areFiltersApplied = true;
-                        if ($filters[$key]['include_in_canonical_url'] == 'never' ||
-                            $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && !$schema->getCanonicalFilters())
-                        {
+                    if ($renderLayeredNavigationFilters) {
+                        if (isset($filters[$key])) {
+                            $areFiltersApplied = true;
+                            if ($filters[$key]['include_in_canonical_url'] == 'never' ||
+                                !$filters[$key]['include_in_canonical_url'] ||
+                                $filters[$key]['include_in_canonical_url'] == 'as_in_schema' && (
+                                    !$schema->getCanonicalFilters() ||
+                                    !$this->coreHelper()->isManadevSeoLayeredNavigationInstalled())
+                            ) {
+                                $query[$key] = null;
+                            }
+                        } else {
                             $query[$key] = null;
                         }
                     }
@@ -66,32 +79,35 @@ class Mana_Seo_Model_Observer {
                         $query[$key] = null;
                     }
                 }
-                if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
-                    && ($areFiltersApplied || $this->_isProductListVisible()))
-                {
-                    $toolbar = $productList->getToolbarBlock();
-                    $collection = clone $productList->getLoadedProductCollection();
 
-                    $collection->setCurPage($toolbar->getCurrentPage());
-                    $limit = (int)$toolbar->getLimit();
-                    if ($limit) {
-                        $collection->setPageSize($limit);
-                    }
+                if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+                    if ($schema->getPrevNextProductList() && ($productList = $this->_getProductList($layout))
+                        && ($areFiltersApplied || $this->_isProductListVisible()))
+                    {
+                        $toolbar = $productList->getToolbarBlock();
+                        $collection = clone $productList->getLoadedProductCollection();
 
-                    $pageCount = $collection->getLastPageNumber();
-                    $pageNo = $collection->getCurPage();
-                    if ($pageNo > 1) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
-                        $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
-                    }
-                    if ($pageNo < $pageCount) {
-                        $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
-                        $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
-                            array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
-                    }
-                    if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
-                        $query['limit'] = 'all';
+                        $collection->setCurPage($toolbar->getCurrentPage());
+                        $limit = (int)$toolbar->getLimit();
+                        if ($limit) {
+                            $collection->setPageSize($limit);
+                        }
+
+                        $pageCount = $collection->getLastPageNumber();
+                        $pageNo = $collection->getCurPage();
+                        if ($pageNo > 1) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
+                            $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
+                        }
+                        if ($pageNo < $pageCount) {
+                            $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
+                            $head->addLinkRel('next', Mage::getUrl('*/*/*', array_merge($params,
+                                        array('_query' => array_merge($query, array('p' => $pageNo + 1))))));
+                        }
+                        if ($schema->getCanonicalLimitAll() && Mage::getStoreConfigFlag('catalog/frontend/list_allow_all')) {
+                            $query['limit'] = 'all';
+                        }
                     }
                 }
 
@@ -104,7 +120,7 @@ class Mana_Seo_Model_Observer {
 
     protected function _getFilters() {
         if ($this->_filters === null) {
-            if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
+            if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
                 $this->_filters = array();
                 foreach ($this->filterHelper()->getFilterOptionsCollection(true) as $filter) {
                     /* @var $filter Mana_Filters_Model_Filter2_Store */
@@ -204,6 +220,39 @@ class Mana_Seo_Model_Observer {
         }
     }
 
+    /**
+     * Handles event "core_config_data_save_commit_after".
+     * @param Varien_Event_Observer $observer
+     */
+    public function afterConfigDataSaveCommit($observer) {
+        /* @var $configData Mage_Core_Model_Config_Data */
+        $configData = $observer->getEvent()->getDataObject();
+
+        $suffixFields = array(
+            // category URL suffix redirects work without saving it in URL history so the following line is
+            // disabled
+            //Mana_Seo_Model_UrlHistory::TYPE_CATEGORY_SUFFIX => 'catalog/seo/category_url_suffix',
+
+            Mana_Seo_Model_UrlHistory::TYPE_ATTRIBUTE_PAGE_SUFFIX => 'mana_attributepage/seo/attribute_page_url_suffix',
+            Mana_Seo_Model_UrlHistory::TYPE_OPTION_PAGE_SUFFIX => 'mana_attributepage/seo/option_page_url_suffix',
+        );
+
+        foreach ($suffixFields as $historyType => $path) {
+            $storeId = $configData->getStoreCode() ? Mage::app()->getStore($configData->getStoreCode())->getId() : 0;
+            if ($configData->getPath() == $path &&
+                Mage::getStoreConfig($configData->getPath(), $storeId) != $configData->getValue())
+            {
+                /* @var $history Mana_Seo_Model_UrlHistory */
+                $history = $this->dbHelper()->getModel('mana_seo/urlHistory');
+                $history
+                    ->setData('url_key', $this->coreHelper()->addDotToSuffix(Mage::getStoreConfig($configData->getPath(), $storeId)))
+                    ->setData('redirect_to', $this->coreHelper()->addDotToSuffix($configData->getValue()))
+                    ->setData('type', $historyType)
+                    ->setData('store_id', $storeId);
+                $history->save();
+            }
+        }
+    }
 
     #region Dependencies
 
@@ -212,6 +261,13 @@ class Mana_Seo_Model_Observer {
      */
     public function coreHelper() {
 	    return Mage::helper('mana_core');
+	}
+
+    /**
+     * @return Mana_Db_Helper_Data
+     */
+    public function dbHelper() {
+	    return Mage::helper('mana_db');
 	}
 
     /**

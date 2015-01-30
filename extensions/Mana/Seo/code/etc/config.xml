@@ -11,7 +11,7 @@
         <Mana_Seo>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.11.19.13</version>
+            <version>15.01.20.16</version>
         </Mana_Seo>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -94,6 +94,14 @@
                     </mana_seo>
                 </observers>
             </controller_action_layout_generate_blocks_after>
+            <core_config_data_save_commit_after>
+                <observers>
+                    <mana_seo>
+                        <class>mana_seo/observer</class>
+                        <method>afterConfigDataSaveCommit</method>
+                    </mana_seo>
+                </observers>
+            </core_config_data_save_commit_after>
         </events>
         <index>
             <indexer>
@@ -124,13 +132,6 @@
                         <category_page><resource>mana_seo/urlIndexer_categoryPage</resource></category_page>
                         <cms_page><resource>mana_seo/urlIndexer_cmsPage</resource></cms_page>
                         <search_page><resource>mana_seo/urlIndexer_search</resource></search_page>
-
-                        <filter_parameter><resource>mana_seo/urlIndexer_filter</resource></filter_parameter>
-                        <category_parameter><resource>mana_seo/urlIndexer_categoryParameter</resource></category_parameter>
-                        <toolbar_parameter><resource>mana_seo/urlIndexer_toolbar</resource></toolbar_parameter>
-
-                        <category_value><resource>mana_seo/urlIndexer_categoryValue</resource></category_value>
-                        <attribute_value><resource>mana_seo/urlIndexer_value</resource></attribute_value>
 
                         <enterprise_active_category_page><resource>mana_seo/enterpriseUrlIndexer_activeCategoryPage</resource></enterprise_active_category_page>
                         <enterprise_obsolete_category_page><resource>mana_seo/enterpriseUrlIndexer_obsoleteCategoryPage</resource></enterprise_obsolete_category_page>
@@ -195,6 +196,7 @@
     <default>
         <mana>
             <seo>
+				<conditional_word>where</conditional_word>
                 <search_url_key>search</search_url_key>
                 <max_correction_count>0</max_correction_count>
             </seo>

@@ -29,7 +29,17 @@ class Mana_Sorting_Resource_BiggestSaving extends Mage_Core_Model_Mysql4_Abstrac
 
         $select = $collection->getSelect();
 
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
+
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
         $select->order("(`price_index`.`price` - `price_index`.`final_price`)  {$direction}");
     }
 

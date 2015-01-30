@@ -1,0 +1,11 @@
+li.node-color-red > a {
+    color: red !important;
+}
+
+li.node-color-blue > a {
+    color: blue !important;
+}
+
+li.node-color-green > a {
+    color: green !important;
+}

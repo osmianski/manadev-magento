@@ -80,6 +80,12 @@
 		          	<span><span><?php echo $this->__('ADMIN DEMO') ?></span></span>
 		        </a>
 		    <?php endif; ?>
+		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getData('demo_19_frontend'), 'demo_19_frontend')) : ?>
+		    	<a title="<?php echo $this->__('View live demo on 1.9 responsive theme') ?>" target="_blank"
+		          	class="button btn-cart" href="<?php echo $_url ?>">
+		          	<span><span><?php echo $this->__('1.9 RESPONSIVE DEMO') ?></span></span>
+		        </a>
+		    <?php endif; ?>
 		    </div>
            
 

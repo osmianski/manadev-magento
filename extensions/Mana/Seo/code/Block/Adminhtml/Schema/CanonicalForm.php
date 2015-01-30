@@ -30,29 +30,32 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             'legend' => $this->__('Canonical URL'),
         ));
 
-        $this->addField($fieldset, 'canonical_category', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical Link Meta Tag on Category Pages'),
-            'note' => $this->__("If 'No', canonical URL would be rendered as specified in %s", implode('->',
-                array($this->__('System'), $this->__('Configuration'), $this->__('Catalog'),
-                $this->__('Search Engine Optimizations'), $this->__('Use Canonical Link Meta Tag For Categories')))),
-            'name' => 'canonical_category',
-            'required' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $this->addField($fieldset, 'canonical_category', 'select', array(
+                    'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                    'label' => $this->__('Canonical Link Meta Tag on Category Pages'),
+                    'note' => $this->__("If 'No', canonical URL would be rendered as specified in %s", implode('->',
+                                array($this->__('System'), $this->__('Configuration'), $this->__('Catalog'),
+                                    $this->__('Search Engine Optimizations'), $this->__('Use Canonical Link Meta Tag For Categories')))),
+                    'name' => 'canonical_category',
+                    'required' => true,
+                ));
 
-        $this->addField($fieldset, 'canonical_search', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical Link Meta Tag on Quick Search Page'),
-            'name' => 'canonical_search',
-            'required' => true,
-        ));
+            $this->addField($fieldset, 'canonical_search', 'select', array(
+                    'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                    'label' => $this->__('Canonical Link Meta Tag on Quick Search Page'),
+                    'name' => 'canonical_search',
+                    'required' => true,
+                ));
 
-        $this->addField($fieldset, 'canonical_cms', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical Link Meta Tag on CMS Pages'),
-            'name' => 'canonical_cms',
-            'required' => true,
-        ));
+            $this->addField($fieldset, 'canonical_cms', 'select', array(
+                    'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                    'label' => $this->__('Canonical Link Meta Tag on CMS Pages'),
+                    'name' => 'canonical_cms',
+                    'required' => true,
+                ));
+        }
+
 
         if ($this->coreHelper()->isManadevAttributePageInstalled()) {
             $this->addField($fieldset, 'canonical_option_page', 'select', array(
@@ -63,38 +66,45 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
             ));
         }
 
-        $this->addField($fieldset, 'canonical_filters', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical URL Contains All Applied Filters'),
-            'name' => 'canonical_filters',
-            'required' => true,
-        ));
+        if($this->coreHelper()->isManadevCMSProInstalled()) {
+            $this->addField($fieldset, 'canonical_book_page', 'select', array(
+                        'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                        'label' => $this->__('Canonical Link Meta Tag on CMS Book Page'),
+                        'name' => 'canonical_book_page',
+                        'required' => true,
+                    ));
+        }
 
-        $this->addField($fieldset, 'canonical_limit_all', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('Canonical URL Points to the Page with All Items'),
-            'name' => 'canonical_limit_all',
-            'required' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $this->addField($fieldset, 'canonical_filters', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Canonical URL Contains All Applied Filters'),
+                'name' => 'canonical_filters',
+                'required' => true,
+            ));
 
-        $fieldset = $this->addFieldset($form, 'mfs_prev_next', array(
-            'title' => $this->__('rel=prev and rel=next Paging Hints'),
-            'legend' => $this->__('rel=prev and rel=next Paging Hints'),
-        ));
+            $this->addField($fieldset, 'canonical_limit_all', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Canonical URL Points to the Page with All Items'),
+                'name' => 'canonical_limit_all',
+                'required' => true,
+            ));
+        }
 
-        $this->addField($fieldset, 'prev_next_product_list', 'select', array(
-            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-            'label' => $this->__('rel=prev and rel=next URLs on Paginated Product List Pages'),
-            'name' => 'prev_next_product_list',
-            'required' => true,
-        ));
+        if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
+            $fieldset = $this->addFieldset($form, 'mfs_prev_next', array(
+                    'title' => $this->__('rel=prev and rel=next Paging Hints'),
+                    'legend' => $this->__('rel=prev and rel=next Paging Hints'),
+                ));
 
-//        $this->addField($fieldset, 'prev_next_other_lists', 'select', array(
-//            'options' => $this->getYesNoSourceModel()->getOptionArray(),
-//            'label' => $this->__('rel=prev and rel=next URLs on All Pages Containing Product List Toolbar'),
-//            'name' => 'prev_next_other_lists',
-//            'required' => true,
-//        ));
+            $this->addField($fieldset, 'prev_next_product_list', 'select', array(
+                    'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                    'label' => $this->__('rel=prev and rel=next URLs on Paginated Product List Pages'),
+                    'name' => 'prev_next_product_list',
+                    'required' => true,
+                ));
+
+        }
 
         $this->setForm($form);
         return parent::_prepareForm();

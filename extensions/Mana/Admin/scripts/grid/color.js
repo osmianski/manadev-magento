@@ -126,7 +126,7 @@
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
 	// executed when referenced DOM elements are still being loaded.
 	$(function() {
-		$('.ct-color').live('mouseover', function() {
+		$(document).on('mouseover', '.ct-color', function() {
 			if ($.gridData(this, 'show_helper')) { 
 				$.helperPopup({
 					host: this, 

@@ -169,8 +169,10 @@
 .mb-top-layered-navigation.one-filter-column .currently + div + div .block-subtitle { display: none; }
 .mb-top-layered-navigation.one-filter-column #narrow-by-list { padding: 0; border: none; }
 .mb-top-layered-navigation.one-filter-column .m-option-search input { width: 100%; }
-.mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; }
-.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by { display: none; }
+.mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; display: none; }
+.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by,
+.mb-top-layered-navigation.m-wide.m-mobile-only .actions,
+.mb-top-layered-navigation.m-wide.m-mobile-only .currently { display: none; }
 
 .mb-top-layered-navigation.m-wide dt { text-transform: uppercase; }
 

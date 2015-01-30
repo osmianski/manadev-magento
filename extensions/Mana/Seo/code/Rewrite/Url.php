@@ -549,6 +549,24 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return $path;
     }
 
+    public function getBookPageId() {
+        $bookPageId = $this->getSeoRouteParam('id');
+        if(isset($this->_query['___store'])) {
+            $seo = Mage::helper('mana_seo');
+
+            $storeId = Mage::app()->getStore($this->_query['___store'])->getId();
+            $pageStoreCollection = Mage::getResourceModel('mana_content/page_store_collection');
+
+            $select = $pageStoreCollection->getSelect()
+                ->joinInner(array('mps' => $pageStoreCollection->getTable('mana_content/page_store')), '`mps`.`page_global_id` = `main_table`.`page_global_id`', array('book_page_id' => 'id'))
+                ->where("`main_table`.`id` = ?", $bookPageId)
+                ->where("`mps`.`store_id` = ?", $storeId);
+            $row = $pageStoreCollection->getConnection()->fetchRow($select);
+            $bookPageId = $row['book_page_id'];
+        }
+        return $bookPageId;
+    }
+
     protected function _compareSeoParams($a, $b) {
         if ($a['position'] < $b['position']) return -1;
         if ($a['position'] > $b['position']) return 1;

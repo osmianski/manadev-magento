@@ -924,6 +924,9 @@ function ($, layout, json, core, config, undefined)
                     $(selector).html(html);
                 });
             }
+            if (response.config) {
+                config.set(response.config);
+            }
             if (response.blocks) {
                 $.each(response.blocks, function (blockName, sectionIndex) {
                     var block = layout.getBlock(blockName);
@@ -931,9 +934,6 @@ function ($, layout, json, core, config, undefined)
                         block.setContent(response.sections[sectionIndex]);
                     }
                 });
-            }
-            if (response.config) {
-                config.set(response.config);
             }
             if (response.script) {
                 $.globalEval(response.script);
@@ -1496,7 +1496,7 @@ Mana.require(['jquery'], function($) {
     };
     Mana.rwdIsMobile = false;
     $(function() {
-        if (window.enquire) {
+        if (window.enquire && window.enquire.register) {
             enquire.register('screen and (max-width: ' + bp.medium + 'px)', {
                 match: function () {
                     Mana.rwdIsMobile = true;
@@ -1756,7 +1756,7 @@ Mana.require(['jquery'], function($) {
                 popup: { contentSelector:'.' + name + '-text', containerClass:'m-' + name + '-popup-container', top:100 }
 
             }, options);
-            $(this).live('click', function() {
+            $(document).on('click', this, function () {
                 if ($.mPopupClosing()) {
                     return false;
                 }

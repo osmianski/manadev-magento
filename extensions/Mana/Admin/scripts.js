@@ -598,11 +598,14 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                     if (this.getChild('save')) this.getChild('save').off('click', this, this.saveAndClose);
                 });
         },
-        getField: function (name) {
+        getFields: function() {
             if (this._fields === undefined) {
                 this._fields = layout.getPageBlock().trigger('collect', { fields: true, result: {} }, false, true);
             }
-            return this._fields[name];
+            return this._fields;
+        },
+        getField: function (name) {
+            return this.getFields()[name];
         },
         updateFromJson: function(fieldName, attributeName, jsonFieldName) {
             var defaults = core.isString(attributeName) ? [[attributeName, jsonFieldName]] : attributeName;
@@ -634,6 +637,8 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
         },
         _afterSave: function () {
         },
+        _onSaveFailed: function (response) {
+        },
         save: function(callback) {
             var params = this.getPostParams();
             var self = this;
@@ -648,7 +653,9 @@ function ($, Block, urlTemplate, layout, ajax, config, core, undefined)
                     if (core.isFunction(callback)) {
                         callback.call();
                     }
-                    self._afterSave();
+                    self._afterSave(response, callback);
+                } else {
+                    self._onSaveFailed(response);
                 }
             });
         },
@@ -698,9 +705,11 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid']
                 ._super()
                 .on('bind', this, function () {
                     this.$useDefault().on('click', _raiseUseDefaultClick);
+                    this.on('collect', this, this.onCollectFields);
                 })
                 .on('unbind', this, function () {
                     this.$useDefault().off('click', _raiseUseDefaultClick);
+                    this.off('collect', this, this.onCollectFields);
                 });
         },
         _subscribeToBlockEvents: function () {
@@ -710,10 +719,8 @@ Mana.define('Mana/Admin/Field', ['jquery', 'Mana/Core/Block', 'Mana/Admin/Grid']
                     if (this.$().data('dirty')) {
                         this.changed();
                     }
-                    this.on('collect', this, this.onCollectFields);
                 })
                 .on('unload', this, function () {
-                    this.off('collect', this, this.onCollectFields);
                 });
         },
         $useDefault: function () {

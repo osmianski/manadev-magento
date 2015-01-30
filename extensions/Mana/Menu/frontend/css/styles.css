@@ -17,3 +17,5 @@
 .m-menu-tree .m-collapsed > ul { margin-left: 10px; }
 
 .m-container .block-content { padding: 5px 10px; }
+
+.m-item-bold { font-weight: bold; }

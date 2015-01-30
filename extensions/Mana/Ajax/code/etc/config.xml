@@ -11,7 +11,7 @@
         <Mana_Ajax>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.06.08.17</version>
+            <version>15.01.05.08</version>
         </Mana_Ajax>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 

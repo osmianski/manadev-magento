@@ -1,0 +1,17 @@
+<?php
+/** @var $this ManaPro_Content_Block_Filter_Tags */
+if(count($this->getTags())> 0):
+?>
+<div class="block">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('Filter by Tag'); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul class="tags-list">
+            <?php foreach ($this->getTags() as $_tag): ?>
+                <li><a data-m-tag-id="<?php echo $_tag->getData('page_tag_id'); ?>" style="font-size:<?php echo $_tag->getRatio()*70+75 ?>%;"><?php echo $this->htmlEscape($_tag->getName()) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif ?>

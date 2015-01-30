@@ -39,9 +39,6 @@ function($, Block, undefined)
                 ._super()
                 .on('bind', this, function () {
                     this._replacedTitles = [];
-                    if (!this.$().hasClass("one-filter-column")) {
-                        this._prepareWideLayout();
-                    }
                     this.$().find('dl dt.m-ln').on('click', _expandCollapse);
                     this.$().find('.block-subtitle').on('click', _expandCollapseSubTitle);
                     this.$().find('.block-subtitle, .actions').on('mouseenter', _mouseEnter);
@@ -57,6 +54,11 @@ function($, Block, undefined)
         _subscribeToBlockEvents: function() {
             return this
                 ._super()
+                .on('load', this, function() {
+                    if (!this.$().hasClass("one-filter-column")) {
+                        this._prepareWideLayout();
+                    }
+                })
                 .on('resize', this, this.resize);
         },
         resize: function() {

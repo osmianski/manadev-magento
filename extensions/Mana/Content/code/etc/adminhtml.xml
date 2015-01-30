@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Content
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <contentpage translate="title" module="mana_content">
+                    <title>Content Management</title>
+                    <sort_order>600</sort_order>
+                    <action>adminhtml/mana_content_folder/</action>
+                </contentpage>
+                <system_configuration>
+                    <children>
+                        <mana_content translate="title" module="mana_content">
+                            <title>Content Management</title>
+                            <action>adminhtml/system_config/edit/section/mana_content</action>
+                            <sort_order>1000</sort_order>
+                        </mana_content>
+                    </children>
+                </system_configuration>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<contentpage translate="title" module="mana_content">
+								<title>Content Management</title>
+		                        <sort_order>600</sort_order>
+							</contentpage>
+							<system_configuration>
+                                <children>
+                                    <mana_content translate="title" module="mana_content">
+                                        <title>Content Management</title>
+                                        <sort_order>1000</sort_order>
+                                    </mana_content>
+                                </children>
+							</system_configuration>
+						</children>
+					</mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana_content translate="title" module="mana_content">
+										<title>MANAdev Content Management</title>
+                                        <sort_order>51000</sort_order>
+                                    </mana_content>
+								</children>
+							</config>
+						</children>
+					</system>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

@@ -137,12 +137,16 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		// order results by method (qty, then percent, then part-of) and by position
 		self::$_representingProductDataForSortingCallback = $representingProductData;
 		uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
-		foreach ($ids as $id) {
-			$result['qties'][$id] = 0;	
+		foreach ($ids as $key => $id) {
+			$result['qties'][$id] = 0;
+            if (!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
+                $representingProductData[$key]['m_pack_qty'] = 1;
+            }
 		}
 		foreach ($virtualIds as $key => $id) {
 		    if ($representingProductData[$key]['m_unit'] == 'virtual_percent') {
-                $result['qties'][$id] = $productData['qty'] * $representingProductData[$key]['m_parts'] / 100;
+                $qty = ($productData['qty'] * $representingProductData[$key]['m_parts'] / 100) / $representingProductData[$key]['m_pack_qty'];
+                $result['qties'][$id] = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
                 if (empty($productData['is_qty_decimal'])) {
                     $result['qties'][$id] = round($result['qties'][$id]);
                 }
@@ -158,14 +162,14 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			if ($representingProductData[$key]['m_unit'] == 'qty') {
 				$productsProcessed++;
 				
-				$qty = $representingProductData[$key]['m_parts'];
+				$qty = $representingProductData[$key]['m_parts'] / $representingProductData[$key]['m_pack_qty'];
 				if (empty($productData['is_qty_decimal'])) {
-					$qty = round($qty);
+					$qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty): floor($qty);
 				}
 				
 				if ($qty <= $qtyLeft) {
 					$result['qties'][$id] = $qty;
-					$qtyLeft -= $qty;
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 				}
 				else {
 					$result['qties'][$id] = $qtyLeft;
@@ -178,10 +182,18 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		if ($qtyLeft > 0) {
 			// if there is some qty left
 			if ($productsProcessed >= count($ids)) {
-				// in case both percent and part methods are NOT present among representing products, we should 
-				// distribute qty left among qty method products. We assign this qty to "parent" product
-				$result['qties'][$thisIndex] += $qtyLeft;
-				$qtyLeft = 0;
+                $keys = array_keys($ids, $thisIndex);
+                $key = reset($keys);
+                if($representingProductData[$key]['m_pack_qty'] == 1) {
+                    // in case both percent and part methods are NOT present among representing products, we should
+                    // distribute qty left among qty method products. We assign this qty to "parent" product
+                    $result['qties'][$thisIndex] += $qtyLeft;
+                    $qtyLeft = 0;
+                } else {
+                    $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                    $result['qties'][$thisIndex] += $qty;
+                }
 			}
 			else {
 				// assign qty left to products with percent method
@@ -189,14 +201,14 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 					if ($representingProductData[$key]['m_unit'] == 'percent') {
 						$productsProcessed++;
 						
-						$qty = $productData['qty'] * $representingProductData[$key]['m_parts'] / 100;
+						$qty = ($productData['qty'] / $representingProductData[$key]['m_pack_qty']) * $representingProductData[$key]['m_parts'] / 100;
 						if (empty($productData['is_qty_decimal'])) {
-							$qty = round($qty);
+                            $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 						}
 						
 						if ($qty <= $qtyLeft) {
 							$result['qties'][$id] = $qty;
-							$qtyLeft -= $qty;
+							$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 						}
 						else {
 							$result['qties'][$id] = $qtyLeft;
@@ -209,10 +221,18 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				if ($qtyLeft > 0) {
 					// if there is still some qty left
 					if ($productsProcessed >= count($ids)) {
-						// in case part method is NOT present among representing products, we should 
-						// distribute qty left among qty method products. We assign this qty to "parent" product
-						$result['qties'][$thisIndex] += $qtyLeft;
-						$qtyLeft = 0;
+                        $keys = array_keys($ids, $thisIndex);
+                        $key = reset($keys);
+                        if($representingProductData[$key]['m_pack_qty'] == 1) {
+                            // in case both percent and part methods are NOT present among representing products, we should
+                            // distribute qty left among qty method products. We assign this qty to "parent" product
+                            $result['qties'][$thisIndex] += $qtyLeft;
+                            $qtyLeft = 0;
+                        } else {
+                            $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                            $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                            $result['qties'][$thisIndex] += $qty;
+                        }
 					}
 					else {
 						// assign qty left to products with part method
@@ -221,13 +241,13 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 							if ($representingProductData[$key]['m_unit'] == 'parts') {
 								$productsProcessed++;
 								
-								$qty = ($totalParts > 0) ? $qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts : 0;
+								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_pack_qty']: 0;
 								if (empty($productData['is_qty_decimal'])) {
-									$qty = round($qty);
+                                    $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 								}
 								
 								$result['qties'][$id] = $qty;
-								$qtyLeft -= $qty;
+								$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 							}
 						}
 						
@@ -236,8 +256,10 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have positive rounding error, do +1 starting from most prioritized
 								foreach ($ids as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-										$result['qties'][$id] += 1;
-										$qtyLeft--;
+                                        while($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && !($qtyLeft >= 0)) {
+                                            $result['qties'][$id]++;
+                                            $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
+                                        }
 										if ($qtyLeft <= 0) {
 											break;
 										}
@@ -248,8 +270,10 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 								// in case we have negative rounding error, do -1 starting from least prioritized
 								foreach (array_reverse($ids, true) as $key => $id) {
 									if ($representingProductData[$key]['m_unit'] == 'parts') {
-										$result['qties'][$id] -= 1;
-										$qtyLeft++;
+                                        while ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && !($qtyLeft >= 0)) {
+                                            $result['qties'][$id]--;
+                                            $qtyLeft += $representingProductData[$key]['m_pack_qty'];
+                                        }
 										if ($qtyLeft >= 0) {
 											break;
 										}
@@ -259,11 +283,42 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 						}
 					}
 				}
-			}
-		}
-		
-		return $result;
+            }
+        }
+        if ($qtyLeft > 0) {
+            if ($productsProcessed >= count($ids)) {
+                $keys = array_keys($ids, $thisIndex);
+                $key = reset($keys);
+                if ($representingProductData[$key]['m_pack_qty'] == 1) {
+                    // in case both percent and part methods are NOT present among representing products, we should
+                    // distribute qty left among qty method products. We assign this qty to "parent" product
+                    $result['qties'][$thisIndex] += $qtyLeft;
+                    $qtyLeft = 0;
+                } else {
+                    $qty = floor($qtyLeft / $representingProductData[$key]['m_pack_qty']);
+                    $qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
+                    $result['qties'][$thisIndex] += $qty;
+                }
+            }
+        }
+        if ($qtyLeft > 0) {
+            $result['messages'][] = array(
+                'type' => 'notice',
+                'text' => $this->coreHelper()->__("There are still %s remaining items that are unassigned.", $qtyLeft),
+            );
+        }
+
+        return $result;
 	}
+
+    protected function _getRepresentedProductData($representedProductId, $representedProductsData) {
+        foreach ($representedProductsData as $productData) {
+            if ($productData['linked_product_id'] == $representedProductId) {
+                return $productData;
+            }
+        }
+    }
+
 	public function updateRepresentingProducts($productId, $requireTransaction = true, $options = array()) {
 		$options = array_merge(array(
 			'potentiallyObsoleteIds' => array(),
@@ -284,11 +339,16 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         	$sql = '';
         	$entitySql = '';
         	$calculation = $this->calculateQuantities($productId);
+            $link = Mage::getResourceModel('manapro_productfaces/link');
+            $representedProductsData = $link->getRepresentingProductsAndOptions($representedProductId);
+
         	$stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
 			foreach ($calculation['qties'] as $linkedProductId => $qty) {
+                $representingProductData = $this->_getRepresentedProductData($linkedProductId, $representedProductsData);
 				$qtyUpdate = $linkedProductId != $representedProductId ? '`qty` = 0, ' : '';
 				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
-					SET $qtyUpdate`m_represented_qty` = $qty, {$this->isInStockUpdate("$qty > `min_qty`")}, `m_represents` = 1
+					SET $qtyUpdate`m_represented_qty` = $qty, {$this->isInStockUpdate("$qty > `min_qty`")}, `m_represents` = 1,
+					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -301,8 +361,10 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$productIds[$linkedProductId] = $linkedProductId;
 			}
 			foreach ($options['potentiallyObsoleteIds'] as $linkedProductId) {
+                $representingProductData = $this->_getRepresentedProductData($linkedProductId, $representedProductsData);
                 $sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
-					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0
+					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0,
+					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
