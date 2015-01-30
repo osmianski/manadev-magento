@@ -147,9 +147,14 @@ function ($, Container, expression) {
                 field = this.getField('attribute_id_' + i);
                 if (i > lastIndex + 1) {
                     field.$().hide();
+                    this.getField('attribute_id_' + i + '_sortdir').$().hide();
                 }
                 else {
                     field.$().show();
+                    this.getField('attribute_id_' + i + '_sortdir').$().show();
+                }
+                if(field.getValue() == "") {
+                    this.getField('attribute_id_' + i + '_sortdir').$().hide();
                 }
                 field.$field().find('option').each(function() {
                     if (value = $(this).val()) {

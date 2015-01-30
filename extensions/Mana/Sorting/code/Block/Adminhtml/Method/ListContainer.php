@@ -12,7 +12,7 @@
 class Mana_Sorting_Block_Adminhtml_Method_ListContainer extends Mana_Admin_Block_V2_Container {
     public function __construct() {
         parent::__construct();
-        $this->_headerText = $this->__('Sorting Method Management');
+        $this->_headerText = $this->__('Custom Sorting Methods');
     }
 
     protected function _prepareLayout() {
@@ -21,7 +21,7 @@ class Mana_Sorting_Block_Adminhtml_Method_ListContainer extends Mana_Admin_Block
         /* @var $button Mana_Admin_Block_Grid_Action */
         $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create_method")
             ->setData(array(
-                'label' => $this->__('Create Sort Method'),
+                'label' => $this->__('Create Sorting Method'),
                 'class' => 'add',
             ));
         $this->setChild('create_method_button', $button);

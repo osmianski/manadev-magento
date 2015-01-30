@@ -24,6 +24,9 @@ class Mana_Sorting_Model_Observer {
         foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
             $orders[] = (string)$xml->code;
         }
+        foreach($this->sortingHelper()->getCustomSortMethodCollection() as $customSortingMethod) {
+            $orders[] = (string)$customSortingMethod->getUrlKey();
+        }
         $obj->setData('orders', $orders);
     }
     #region Dependencies

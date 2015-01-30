@@ -106,7 +106,7 @@
                         </position>
                     </fields>
                 </most_viewed>
-                <biggesr_saving translate="label" module="mana_sorting">
+                <biggest_saving translate="label" module="mana_sorting">
                     <label>Biggest Saving</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>400</sort_order>
@@ -133,7 +133,7 @@
                             <show_in_store>1</show_in_store>
                         </position>
                     </fields>
-                </biggesr_saving>
+                </biggest_saving>
                 <now_in_wishlist translate="label" module="mana_sorting">
                     <label>Now In Whishlist</label>
                     <frontend_type>text</frontend_type>

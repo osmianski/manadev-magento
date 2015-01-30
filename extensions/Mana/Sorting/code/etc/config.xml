@@ -62,19 +62,10 @@
             <indexer>
                 <mana_sorting_method translate="name description" module="mana_sorting">
                     <model>mana_sorting/method_indexer</model>
-                    <name>Sorting Methods (MANAdev)</name>
-                    <description>Recalculates sorting methods store-level settings</description>
+                    <name>Custom Sorting Methods (MANAdev)</name>
+                    <description>Recalculates custom sorting methods store-level settings.</description>
                 </mana_sorting_method>
             </indexer>
-            <indexer_config>
-                <mana_seo_url>
-                    <sources>
-                        <book_page>
-                            <resource>mana_content/page_urlIndexer</resource>
-                        </book_page>
-                    </sources>
-                </mana_seo_url>
-            </indexer_config>
         </index>
         <events>
             <m_toolbar_orders>
@@ -135,10 +126,10 @@
             <label>Newest</label>
             <resource>mana_sorting/newest</resource>
         </newest>
-        <bestseller translate="label" module="Mana_Sorting">
+        <bestsellers translate="label" module="Mana_Sorting">
             <label>Bestsellers</label>
             <resource>mana_sorting/bestseller</resource>
-        </bestseller>
+        </bestsellers>
         <most_viewed translate="label" module="Mana_Sorting">
             <label>Most Viewed</label>
             <resource>mana_sorting/mostViewed</resource>

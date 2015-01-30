@@ -10,8 +10,6 @@
  *
  */
 class Mana_Sorting_Resource_Source_Attribute extends Mage_Core_Model_Mysql4_Abstract {
-    const FIELDS_LABEL = 'label';
-    const FIELDS_OTHER = 'other';
 
     /**
      * Resource initialization
@@ -20,7 +18,7 @@ class Mana_Sorting_Resource_Source_Attribute extends Mage_Core_Model_Mysql4_Abst
         $this->_setResource('catalog');
     }
 
-    public function getAttributes($fields) {
+    public function getAttributes() {
         /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
             ->setItemObjectClass('catalog/resource_eav_attribute');
@@ -32,12 +30,10 @@ class Mana_Sorting_Resource_Source_Attribute extends Mage_Core_Model_Mysql4_Abst
             if ($this->coreHelper()->isManadevLayeredNavigationInstalled()) {
                 $select->joinLeft(array('f' => $collection->getTable('mana_filters/filter2')),
                     "`f`.`code` = `main_table`.`attribute_code`", null);
-                $labelExpr = "COALESCE(`f`.`name`, `main_table`.`frontend_label`)";
-                $positionExpr = "COALESCE(`f`.`position`, `additional_table`.`position`, 0)";
+                $labelExpr = "COALESCE(`f`.`name`, `main_table`.`frontend_label`) as label";
             }
             else {
-                $labelExpr = "main_table.frontend_label";
-                $positionExpr = "COALESCE(`additional_table`.`position`, 0)";
+                $labelExpr = "main_table.frontend_label as label";
             }
         }
         else {
@@ -49,30 +45,23 @@ class Mana_Sorting_Resource_Source_Attribute extends Mage_Core_Model_Mysql4_Abst
                     "`f`.`code` = `main_table`.`attribute_code`", null);
                 $select->joinLeft(array('fs' => $collection->getTable('mana_filters/filter2_store')),
                     $db->quoteInto("`fs`.`global_id` = `f`.`id` AND `fs`.`store_id` = ?", $storeId), null);
-                $labelExpr = "COALESCE(`fs`.`name`, `l`.`value`, `main_table`.`frontend_label`)";
-                $positionExpr = "COALESCE(`fs`.`position`, `additional_table`.`position`, 0)";
+                $labelExpr = "COALESCE(`fs`.`name`, `l`.`value`, `main_table`.`frontend_label`) as label";
             }
             else {
-                $labelExpr = "COALESCE(`l`.`value`, `main_table`.`frontend_label`)";
-                $positionExpr = "COALESCE(`additional_table`.`position`, 0)";
+                $labelExpr = "COALESCE(`l`.`value`, `main_table`.`frontend_label`) as label";
             }
         }
         $select
             ->distinct(true)
             ->reset('columns')
-            ->columns(array('main_table.attribute_id', $labelExpr))
+            ->columns(array('main_table.attribute_id', $labelExpr, 'additional_table.used_for_sort_by'))
             ->where("main_table.frontend_input NOT IN ('textarea', 'gallery', 'multiselect', 'media_image')")
-            ->where("additional_table.used_for_sort_by = ?", 1)
+            ->where("additional_table.used_in_product_listing = ?", 1)
+            ->where("TRIM(main_table.frontend_label) <> ''")
             ->order('main_table.frontend_label ASC');
 
-        if ($fields == self::FIELDS_LABEL) {
-            $select->columns(array('main_table.attribute_id', $labelExpr));
-            return $db->fetchPairs($select);
-        }
-        else {
-            $select->columns(array('id' => 'main_table.attribute_id', 'position' => $positionExpr));
-            return $db->fetchAssoc($select);
-        }
+        return $db->fetchAssoc($select);
+
     }
     #region Dependencies
     /**

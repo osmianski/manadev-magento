@@ -83,13 +83,18 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
 
         for($x=0;$x<=4;$x++) {
             $this->addField($fieldset, 'attribute_id_'.$x, 'select', array(
-                'label' => $this->__('Attribute'),
-                'title' => $this->__('Attribute'),
+                'label' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
+                'title' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'name' => 'attribute_id_'.$x,
                 'required' => $x == 0 || $x == 1,
-                'options' => $this->getAttributeSourceModel()->getOptionArray(),
-                'default_bit_no' => constant("Mana_Sorting_Model_Method_Abstract::DM_ATTRIBUTE_ID_".$x),
-                'default_store_label' => $this->__('Same For All Stores'),
+                'values' => $this->getAttributeSourceModel()->getAllOptions(),
+                'disabled' => !(bool)$this->adminHelper()->isGlobal(),
+            ));
+            $this->addField($fieldset, 'attribute_id_'.$x.'_sortdir', 'select', array(
+                'title' => $this->__('Direction'),
+                'name' => 'attribute_id_'.$x.'_sortdir',
+                'options' => $this->getDirectionSourceModel()->getOptionArray(),
+                'disabled' => !(bool)$this->adminHelper()->isGlobal(),
             ));
         }
 

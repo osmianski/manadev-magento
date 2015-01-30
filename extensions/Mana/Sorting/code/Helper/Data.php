@@ -11,23 +11,29 @@
  */
 class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_sortingMethodXmls;
+    protected $_sortingMethodXmlsWithoutFilter;
+    protected $_customSortingMethodCollection;
     public $_outOfStock;
     /**
      * @return Varien_Simplexml_Element[]
      */
-    public function getSortingMethodXmls() {
-        if (!$this->_sortingMethodXmls) {
+    public function getSortingMethodXmls($filterActive = true) {
+        if (($filterActive && !$this->_sortingMethodXmls) || (!$filterActive && !$this->_sortingMethodXmlsWithoutFilter)) {
             $result = array();
             foreach ($this->coreHelper()->getSortedXmlChildren(Mage::getConfig()->getNode(), 'mana_sorting') as $code => $xml) {
-                if (Mage::getStoreConfigFlag('mana_sorting/' . $code . '/enabled')) {
+                if ((!$filterActive) || ($filterActive && Mage::getStoreConfigFlag('mana_sorting/' . $code . '/enabled'))) {
                     $xml->code = $code;
                     $result[$code] = $xml;
                 }
             }
             uksort($result, array($this, '_compareSortingMethodByPosition'));
-            $this->_sortingMethodXmls = $result;
+            if($filterActive) {
+                $this->_sortingMethodXmls = $result;
+            } else {
+                $this->_sortingMethodXmlsWithoutFilter = $result;
+            }
         }
-        return $this->_sortingMethodXmls;
+        return ($filterActive) ? $this->_sortingMethodXmls : $this->_sortingMethodXmlsWithoutFilter;
     }
 
     public function getOutOfStockOption () {
@@ -72,6 +78,11 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
                 return (string)$xml->label;
             }
         }
+        $collection = $this->getCustomSortMethodCollection();
+        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        if($collection->count() > 0) {
+            return $collection->getFirstItem()->getData('title');
+        }
         return false;
     }
 
@@ -80,6 +91,11 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             if($sortingOptionCode == (string)$xml->code) {
                 return true;
             }
+        }
+        $collection = $this->getCustomSortMethodCollection();
+        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        if($collection->count() > 0) {
+            return true;
         }
         return false;
     }
@@ -98,8 +114,16 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return Mage::getSingleton('catalog/layer')->getCurrentCategory();
     }
 
+    /**
+     * @return Mana_Sorting_Resource_Method_Collection|Mana_Sorting_Resource_Method_Store_Collection
+     */
     public function getCustomSortMethodCollection() {
-        $collection = Mage::getResourceModel('mana_sorting/method_collection');
+        if($this->adminHelper()->isGlobal()) {
+            $collection = Mage::getResourceModel('mana_sorting/method_collection');
+        } else {
+            $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
+            $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+        }
         $collection->filterActive();
         return $collection;
     }
