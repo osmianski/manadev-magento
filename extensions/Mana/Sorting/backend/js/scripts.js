@@ -134,7 +134,7 @@ function ($, Container, expression) {
         updateAttributes: function() {
             var lastIndex = -1;
             var values = {};
-            var i, field, value;
+            var i, field, value, hiddenField, tmpVal, optgroup, options;
             var self = this;
             for (i = 0; i < this.getAttrCount(); i++) {
                 field = this.getField('attribute_id_' + i);
@@ -145,6 +145,7 @@ function ($, Container, expression) {
             }
             for (i = 0; i < this.getAttrCount(); i++) {
                 field = this.getField('attribute_id_' + i);
+                hiddenField = this.getField('attribute_id_' + i + '_hidden');
                 if (i > lastIndex + 1) {
                     field.$().hide();
                     this.getField('attribute_id_' + i + '_sortdir').$().hide();
@@ -159,21 +160,43 @@ function ($, Container, expression) {
                 field.$field().find('option').each(function() {
                     if (value = $(this).val()) {
                         if (values[value] !== undefined && values[value] != field) {
-                            $(this).hide();
-                        }
-                        else {
-                            $(this).show();
+                            optgroup = hiddenField.$field().find("optgroup[label='"+ this.parentElement.label +"']");
+                            if($(this.parentElement).find("option").length <= 1) {
+                                $(this.parentElement).hide();
+                            }
+                            optgroup.append(this);
                         }
                     }
                     else {
                         if (i < lastIndex) {
-                            $(this).hide();
-                        }
-                        else {
-                            $(this).show();
+                            optgroup = hiddenField.$field().find("optgroup[label='"+ this.parentElement.label +"']");
+                            if($(this.parentElement).find("option").length <= 1) {
+                                $(this.parentElement).hide();
+                            }
+                            optgroup.append(this);
                         }
                     }
                 });
+                tmpVal = field.getValue();
+                hiddenField.$field().find('option').each(function() {
+                    if (values[$(this).val()] === undefined) {
+                        var attrList = self.$().data('attributes');
+                        optgroup = field.$field().find("optgroup[label='" + this.parentElement.label + "']");
+                        optgroup.append(this);
+                        optgroup.show();
+                        for(var x=0; x< attrList.length; x++) {
+                            if(attrList[x]['label'] == this.parentElement.label){
+                                options = optgroup.find("option");
+                                optgroup.html(options.sort(function(a, b) {
+                                    a = attrList[x]['value'][a.value]['position'];
+                                    b = attrList[x]['value'][b.value]['position'];
+                                    return a == b ? 0 : a < b ? -1 : 1;
+                                }));
+                            }
+                        }
+                    }
+                });
+                field.setValue(tmpVal);
             }
         }
     });

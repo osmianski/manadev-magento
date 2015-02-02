@@ -97,6 +97,7 @@ class Mana_Sorting_Block_Adminhtml_Method_TabContainer extends Mana_Admin_Block_
             'create_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('create')),
             'delete_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('delete')),
             'delete_confirm_text' => $this->__('Are you sure you want to delete this sorting method?'),
+            'attributes' => $this->prepareSortedAttributes(),
         );
 
         if (!$this->adminHelper()->isGlobal()) {
@@ -121,6 +122,22 @@ class Mana_Sorting_Block_Adminhtml_Method_TabContainer extends Mana_Admin_Block_
         $html .= $this->getChildHtml('save_button');
         $html .= parent::getButtonsHtml($area);
         return $html;
+    }
+
+    private function prepareSortedAttributes() {
+        $attrList = $this->getAttributeSourceModel()->getAllOptions();
+        foreach($attrList as $x => $optgroup) {
+            $tmp = array();
+            if(!is_array($optgroup['value'])) {
+                continue;
+            }
+            foreach($optgroup['value'] as $y => $attr ) {
+                $attr['position'] = $y;
+                $tmp[$attr['value']] = $attr;
+            }
+            $attrList[$x]['value'] = $tmp;
+        }
+        return json_encode($attrList);
     }
 
     #region Dependencies
@@ -156,6 +173,13 @@ class Mana_Sorting_Block_Adminhtml_Method_TabContainer extends Mana_Admin_Block_
      */
     public function templateHelper() {
         return Mage::helper('mana_core/stringTemplate');
+    }
+
+    /**
+     * @return Mana_Sorting_Model_Source_Attribute
+     */
+    public function getAttributeSourceModel() {
+        return Mage::getSingleton('mana_sorting/source_attribute');
     }
     #endregion
 }

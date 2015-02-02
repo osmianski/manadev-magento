@@ -76,6 +76,14 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_AttributeForm extends Man
             'options' => $this->getAttributeSourceModel()->getOptionArray(),
         ));
 
+        for($x=0;$x<=4;$x++) {
+            $this->addField($fieldset, 'attribute_id_'.$x.'_hidden', 'select', array(
+                'name' => 'attribute_id_'.$x.'_hidden',
+                'style' => 'display:none;',
+                'values' => array(),
+            ));
+        }
+
         $this->setForm($form);
         return parent::_prepareForm();
     }
