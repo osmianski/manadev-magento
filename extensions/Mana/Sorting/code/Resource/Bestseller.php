@@ -29,16 +29,17 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
         $select
-            ->joinLeft(array('stats' => new Zend_Db_Expr("(SELECT stats.product_id AS product_id, SUM(stats.qty_ordered - IFNULL(stats.qty_canceled, 0)) AS qty_ordered".
-                " FROM {$this->getTable('sales/order_item')} AS stats".
+            ->joinLeft(array('bestseller_stats' => new Zend_Db_Expr("(SELECT bestseller_stats.product_id AS product_id, SUM(bestseller_stats.qty_ordered - IFNULL(bestseller_stats.qty_canceled, 0)) AS qty_ordered".
+                " FROM {$this->getTable('sales/order_item')} AS bestseller_stats".
                 " INNER JOIN {$this->getTable('sales/order')} AS o ON".
-                " (o.entity_id = stats.order_id AND".
+                " (o.entity_id = bestseller_stats.order_id AND".
                 " (o.created_at BETWEEN '{$from}' AND '{$to}'))  AND o.state NOT IN ('pending_payment', 'new', 'canceled') AND".
                 $db->quoteInto(" o.store_id = ?", Mage::app()->getStore()->getId()).
-                " GROUP BY stats.product_id)")),
-                "stats.product_id = e.entity_id", null);
+                " GROUP BY bestseller_stats.product_id)")),
+                "bestseller_stats.product_id = e.entity_id", null);
 
-        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                 ->joinLeft(
                     array('s' => $this->getTable('cataloginventory/stock_item')),
@@ -48,7 +49,7 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
             $select->order("s.is_in_stock desc");
         }
         $direction = $direction == 'asc' ? 'asc' : 'desc';
-        $select->order("stats.qty_ordered {$direction}");
+        $select->order("bestseller_stats.qty_ordered {$direction}");
 
 
     }

@@ -28,8 +28,8 @@ class Mana_Sorting_Resource_BiggestSaving extends Mage_Core_Model_Mysql4_Abstrac
     {
 
         $select = $collection->getSelect();
-
-        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
                         array('s' => $this->getTable('cataloginventory/stock_item')),
