@@ -111,7 +111,10 @@ function ($, Container, ajax, core, expression) {
                             self._postAction("select");
                         }
                         else {
-                            ajax.update(response);
+                            if(response.ajaxExpired == 1) {
+                                window.location.reload();
+                                return;
+                            }
                         }
                     });
                 }
@@ -121,7 +124,12 @@ function ($, Container, ajax, core, expression) {
                     state: self.$jsTree().get_state(),
                     form_key: FORM_KEY
                 };
-                ajax.post(self.getUrl('tree-save-state'), params);
+                ajax.post(self.getUrl('tree-save-state'), params, function(response){
+                    if(response.ajaxExpired == 1) {
+                        window.location.reload();
+                        return;
+                    }
+                });
             };
 
             var jsTreeMoveNode = function(e, data) {
@@ -335,6 +343,10 @@ function ($, Container, ajax, core, expression) {
                 });
         },
         _afterSave: function(response, callback) {
+            if (response.ajaxExpired == 1) {
+                window.location.reload();
+                return;
+            }
             var newIds = response.newId;
             for (var id in this.errorPerRecord) {
                 this.$jsTree().set_icon(id, true);
@@ -379,7 +391,8 @@ function ($, Container, ajax, core, expression) {
                 form_key: FORM_KEY,
                 changes: this._changes,
                 selectedRecord: this.getCurrentId(),
-                rootPageId: this.getUrlParam('id')
+                rootPageId: this.getUrlParam('id'),
+                isAjax: true
             };
         },
         createNewRecord: function (recordData) {
