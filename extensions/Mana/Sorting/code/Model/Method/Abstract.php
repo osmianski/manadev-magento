@@ -36,16 +36,15 @@ abstract class Mana_Sorting_Model_Method_Abstract extends Mage_Core_Model_Abstra
         'position' => 'required|numeric',
         'is_active' => 'required',
         'attribute_id_0' => 'required',
-        'attribute_id_1' => 'required',
         'url_key' => 'required|unique',
     );
     protected $captions = array(
         'is_active' => "Status",
         'attribute_id_0' => "Attribute",
-        'attribute_id_1' => "Attribute",
         'url_key' => "URL Key",
     );
     protected $nullableFields = array(
+        'attribute_id_1',
         'attribute_id_2',
         'attribute_id_3',
         'attribute_id_4',

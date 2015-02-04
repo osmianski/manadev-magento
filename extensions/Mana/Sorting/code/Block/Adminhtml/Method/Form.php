@@ -86,7 +86,7 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
                 'label' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'title' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'name' => 'attribute_id_'.$x,
-                'required' => $x == 0 || $x == 1,
+                'required' => $x == 0,
                 'values' => $this->getAttributeSourceModel()->getAllOptions(),
                 'disabled' => !(bool)$this->adminHelper()->isGlobal(),
             ));
