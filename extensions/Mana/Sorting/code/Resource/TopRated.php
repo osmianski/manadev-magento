@@ -62,8 +62,9 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("top_rated_stats.average_rating {$direction}");
+        $sqlString = $select->__toString();
     }
 
     public function getDate()

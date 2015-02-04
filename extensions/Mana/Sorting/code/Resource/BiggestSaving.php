@@ -38,8 +38,7 @@ class Mana_Sorting_Resource_BiggestSaving extends Mage_Core_Model_Mysql4_Abstrac
                     );
             $select->order("s.is_in_stock desc");
         }
-
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("(`price_index`.`price` - `price_index`.`final_price`)  {$direction}");
     }
 
