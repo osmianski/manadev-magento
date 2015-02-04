@@ -174,6 +174,9 @@ function ($, Container, expression) {
                                 $(this.parentElement).hide();
                             }
                             optgroup.append(this);
+                            $(this).hide();
+                        } else {
+                            $(this).show();
                         }
                     }
                 });
