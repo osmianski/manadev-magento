@@ -276,7 +276,10 @@ function ($, Container, ajax, core, expression) {
                             self._postAction("select");
                         }
                         else {
+                            // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                            // because the url has query parameter "isAjax=true"
                             if(response.ajaxExpired == 1) {
+                                // Reload so that after logging in, it will redirect to the current book page.
                                 window.location.reload();
                                 return;
                             }
@@ -290,7 +293,10 @@ function ($, Container, ajax, core, expression) {
                     form_key: FORM_KEY
                 };
                 ajax.post(self.getUrl('tree-save-state'), params, function(response){
+                    // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                    // because the url has query parameter "isAjax=true"
                     if(response.ajaxExpired == 1) {
+                        // Reload so that after logging in, it will redirect to the current book page.
                         window.location.reload();
                         return;
                     }
@@ -331,6 +337,13 @@ function ($, Container, ajax, core, expression) {
                         id: id
                     };
                     ajax.post(self.getUrl('getRecord'), params, function (response) {
+                        // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                        // because the url has query parameter "isAjax=true"
+                        if(response.ajaxExpired == 1) {
+                            // Reload so that after logging in, it will redirect to the current book page.
+                            window.location.reload();
+                            return;
+                        }
                         copyRecord(response.data);
                     });
                 }
@@ -508,7 +521,10 @@ function ($, Container, ajax, core, expression) {
                 });
         },
         _afterSave: function(response, callback) {
+            // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+            // because the url has query parameter "isAjax=true"
             if (response.ajaxExpired == 1) {
+                // Reload so that after logging in, it will redirect to the current book page.
                 window.location.reload();
                 return;
             }
