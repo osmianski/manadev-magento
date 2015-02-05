@@ -50,7 +50,7 @@ function ($, Container, json, aggregate, undefined)
         updateAttributes: function() {
             var lastIndex = -1;
             var values = {};
-            var i, field, value;
+            var i, field, value, hiddenField, tmpVal, options;
             var self = this;
             for (i = 0; i < this.getAttrCount(); i++) {
                 field = this.getField('attribute_id_' + i);
@@ -61,6 +61,7 @@ function ($, Container, json, aggregate, undefined)
             }
             for (i = 0; i < this.getAttrCount(); i++) {
                 field = this.getField('attribute_id_' + i);
+                hiddenField = this.getField('attribute_id_' + i + '_hidden');
                 if (i > lastIndex + 1) {
                     field.$().hide();
                 }
@@ -70,21 +71,29 @@ function ($, Container, json, aggregate, undefined)
                 field.$field().find('option').each(function() {
                     if (value = $(this).val()) {
                         if (values[value] !== undefined && values[value] != field) {
-                            $(this).hide();
-                        }
-                        else {
-                            $(this).show();
+                            hiddenField.$field().append(this);
                         }
                     }
                     else {
                         if (i < lastIndex) {
-                            $(this).hide();
-                        }
-                        else {
-                            $(this).show();
+                            hiddenField.$field().append(this);
                         }
                     }
                 });
+                tmpVal = field.getValue();
+                hiddenField.$field().find('option').each(function() {
+                    if (values[$(this).val()] === undefined) {
+                        var attrList = self.getJsonData('attributePosition');
+                        field.$field().append(this);
+                        options = field.$field().find("option");
+                        field.$field().html(options.sort(function(a, b) {
+                            a = attrList[a.value]['position'];
+                            b = attrList[b.value]['position'];
+                            return a == b ? 0 : a < b ? -1 : 1;
+                        }));
+                    }
+                });
+                field.setValue(tmpVal);
             }
         },
         updateTabs: function() {

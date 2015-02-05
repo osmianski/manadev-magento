@@ -86,7 +86,7 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
                 'label' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'title' => ($x == 0) ? $this->__('Sort By') : $this->__('Then By'),
                 'name' => 'attribute_id_'.$x,
-                'required' => $x == 0 || $x == 1,
+                'required' => $x == 0,
                 'values' => $this->getAttributeSourceModel()->getAllOptions(),
                 'disabled' => !(bool)$this->adminHelper()->isGlobal(),
             ));
@@ -95,6 +95,15 @@ class Mana_Sorting_Block_Adminhtml_Method_Form extends Mana_Sorting_Block_Adminh
                 'name' => 'attribute_id_'.$x.'_sortdir',
                 'options' => $this->getDirectionSourceModel()->getOptionArray(),
                 'disabled' => !(bool)$this->adminHelper()->isGlobal(),
+            ));
+            $values = $this->getAttributeSourceModel()->getAllOptions();
+            foreach($values as $key => $group) {
+                $values[$key]['value'] = array();
+            }
+            $this->addField($fieldset, 'attribute_id_'.$x.'_hidden', 'select', array(
+                'name' => 'attribute_id_'.$x.'_hidden',
+                'style' => 'display:none;',
+                'values' => $values,
             ));
         }
 

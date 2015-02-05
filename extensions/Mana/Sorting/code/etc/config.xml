@@ -169,6 +169,26 @@
                 <enabled>1</enabled>
                 <position>300</position>
             </most_viewed>
+            <biggest_saving>
+                <enabled>1</enabled>
+                <position>400</position>
+            </biggest_saving>
+            <top_rated>
+                <enabled>1</enabled>
+                <position>500</position>
+            </top_rated>
+            <review_count>
+                <enabled>1</enabled>
+                <position>600</position>
+            </review_count>
+            <quantity>
+                <enabled>1</enabled>
+                <position>700</position>
+            </quantity>
+            <now_in_wishlist>
+                <enabled>1</enabled>
+                <position>800</position>
+            </now_in_wishlist>
         </mana_sorting>
     </default>
 </config>

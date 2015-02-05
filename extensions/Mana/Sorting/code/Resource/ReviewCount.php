@@ -35,11 +35,12 @@ class Mana_Sorting_Resource_ReviewCount extends Mage_Core_Model_Mysql4_Abstract 
 
         $select
             ->joinLeft(
-                 array('stats' => $this->getTable('review/review_aggregate')),
-                 'stats.entity_pk_value = e.entity_id AND stats.store_id=' . Mage::app()->getStore()->getId(),
+                 array('review_count_stats' => $this->getTable('review/review_aggregate')),
+                 'review_count_stats.entity_pk_value = e.entity_id AND review_count_stats.store_id=' . Mage::app()->getStore()->getId(),
                  array()
             );
-        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
                         array('s' => $this->getTable('cataloginventory/stock_item')),
@@ -49,7 +50,7 @@ class Mana_Sorting_Resource_ReviewCount extends Mage_Core_Model_Mysql4_Abstract 
             $select->order("s.is_in_stock desc");
         }
         $direction = $direction == 'asc' ? 'asc' : 'desc';
-        $select->order("stats.reviews_count {$direction}");
+        $select->order("review_count_stats.reviews_count {$direction}");
     }
 
     public function getDate()

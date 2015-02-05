@@ -28,7 +28,8 @@ class Mana_Sorting_Resource_Quantity extends Mage_Core_Model_Mysql4_Abstract imp
     {
         $select = $collection->getSelect();
 
-        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
                         array('s' => $this->getTable('cataloginventory/stock_item')),
@@ -38,6 +39,28 @@ class Mana_Sorting_Resource_Quantity extends Mage_Core_Model_Mysql4_Abstract imp
             $select->order("s.is_in_stock desc");
         }
         $direction = $direction == 'asc' ? 'asc' : 'desc';
-        $select->order("e.m_represented_qty {$direction}");
+        if($this->coreHelper()->isManadevManySKUInstalled()) {
+            $select->order("e.m_represented_qty {$direction}");
+        } else {
+            $tables = $select->getPart('from');
+            if (!array_key_exists('s', $tables)) {
+                $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            }
+            $select->order("s.qty {$direction}");
+        }
     }
+
+    #region Dependencies
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+    #endregion
 }

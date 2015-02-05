@@ -13,6 +13,7 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_sortingMethodXmls;
     protected $_sortingMethodXmlsWithoutFilter;
     protected $_customSortingMethodCollection;
+    protected $_sortingMethodsCombined;
     public $_outOfStock;
     /**
      * @return Varien_Simplexml_Element[]
@@ -23,10 +24,10 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             foreach ($this->coreHelper()->getSortedXmlChildren(Mage::getConfig()->getNode(), 'mana_sorting') as $code => $xml) {
                 if ((!$filterActive) || ($filterActive && Mage::getStoreConfigFlag('mana_sorting/' . $code . '/enabled'))) {
                     $xml->code = $code;
+                    $xml->position = (int)Mage::getStoreConfig('mana_sorting/' . $code . '/position');
                     $result[$code] = $xml;
                 }
             }
-            uksort($result, array($this, '_compareSortingMethodByPosition'));
             if($filterActive) {
                 $this->_sortingMethodXmls = $result;
             } else {
@@ -52,24 +53,43 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return 0;
     }
 
-    public function addManaSortingOptions($options) {
-        foreach ($this->getSortingMethodXmls() as $xml) {
-            $options[] = array(
-                'label' => (string)$xml->label,
-                'value' => (string)$xml->code
-            );
-        }
+    public function addManaSortingOptions($options = array()) {
+        if(!isset($this->_sortingMethodsCombined)) {
+            $sortMethods = array();
+            foreach ($this->getSortingMethodXmls() as $xml) {
+                $sortMethods[(string)$xml->code] = array(
+                    'label' => (string)$xml->label,
+                    'value' => (string)$xml->code,
+                    'position' => (string)$xml->position,
+                );
+            }
 
-        $collection = $this->getCustomSortMethodCollection();
-        /** @var Mana_Sorting_Model_Method_Abstract $sortMethod */
-        foreach($collection as $sortMethod) {
-            array_push($options, array(
+            $collection = $this->getCustomSortMethodCollection();
+            /** @var Mana_Sorting_Model_Method_Abstract $sortMethod */
+            foreach($collection as $sortMethod) {
+                $sortMethods[$sortMethod->getData('url_key')] = array(
                     'label' => $sortMethod->getData('title'),
                     'value' => $sortMethod->getData('url_key'),
+                    'position' => $sortMethod->getData('position'),
+                );
+            }
+            $this->_sortingMethodsCombined = $sortMethods;
+            uksort($this->_sortingMethodsCombined, array($this, 'sortSortingMethods'));
+        }
+        foreach($this->_sortingMethodsCombined as $sortMethod) {
+            array_push($options, array(
+                    'label' => $sortMethod['label'],
+                    'value' => $sortMethod['value'],
                 ));
         }
-
         return $options;
+    }
+
+    public function sortSortingMethods($a, $b)
+    {
+        $ap = (int)$this->_sortingMethodsCombined[$a]['position'];
+        $bp = (int)$this->_sortingMethodsCombined[$b]['position'];
+        return ($ap == $bp) ? 0 : ($ap < $bp ) ? -1 : 1;
     }
 
     public function getManaSortingOptionLabel($sortingOptionCode) {

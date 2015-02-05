@@ -55,12 +55,9 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
     }
 
     protected function _addOrders() {
-        foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
-            $this->_availableOrder[(string)$xml->code] = (string)$xml->label;
-        }
-        /** @var Mana_Sorting_Model_Method_Abstract $sortMethod */
-        foreach($this->sortingHelper()->getCustomSortMethodCollection() as $sortMethod) {
-            $this->_availableOrder[(string)$sortMethod->getData('url_key')] = $sortMethod->getData('title');
+        $sortingMethods = $this->sortingHelper()->addManaSortingOptions();
+        foreach($sortingMethods as $sortMethod) {
+            $this->_availableOrder[$sortMethod['value']] = $sortMethod['label'];
         }
     }
 

@@ -36,7 +36,7 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
         $select
                 ->joinLeft(
                     array(
-                        'stats' => new Zend_Db_Expr("(SELECT r.entity_pk_value AS product_id, avg(o.value) average_rating" .
+                        'top_rated_stats' => new Zend_Db_Expr("(SELECT r.entity_pk_value AS product_id, avg(o.value) average_rating" .
                                 " FROM {$this->getTable('review/review')} AS r" .
                                 " INNER JOIN {$this->getTable('review/review_store')} AS rs ON" .
                                 " (r.review_id = rs.review_id)" .
@@ -49,10 +49,11 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
                                 " AND rs.store_id = " . Mage::app()->getStore()->getId() .
                                 " GROUP BY r.entity_pk_value)")
                     ),
-                    "stats.product_id = e.entity_id",
+                    "top_rated_stats.product_id = e.entity_id",
                     null
                 );
-        if (Mage::helper('mana_sorting')->getOutOfStockOption()) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
                         array('s' => $this->getTable('cataloginventory/stock_item')),
@@ -61,8 +62,9 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
-        $select->order("stats.average_rating {$direction}");
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
+        $select->order("top_rated_stats.average_rating {$direction}");
+        $sqlString = $select->__toString();
     }
 
     public function getDate()
