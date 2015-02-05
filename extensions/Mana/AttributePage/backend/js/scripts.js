@@ -77,6 +77,9 @@ function ($, Container, json, aggregate, undefined)
                     else {
                         if (i < lastIndex) {
                             hiddenField.$field().append(this);
+                            $(this).hide();
+                        } else {
+                            $(this).show();
                         }
                     }
                 });
