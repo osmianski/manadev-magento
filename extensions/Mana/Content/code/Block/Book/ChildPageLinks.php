@@ -31,7 +31,8 @@ class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
         $bookPage = $this->getCurrentBookPage();
         $bookPage->loadChildPages();
         $childPages = $bookPage->getChildPages();
-        for($x=0; $x<count($childPages); $x++) {
+        $count = count($childPages);
+        for($x=0; $x< $count; $x++) {
             if($childPages[$x]->getIsActive() == "0") {
                 unset($childPages[$x]);
                 continue;
