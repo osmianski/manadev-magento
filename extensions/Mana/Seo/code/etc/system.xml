@@ -25,7 +25,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </search_url_key>
-                        <max_correction_count translate="label comment">
+                        <!--<max_correction_count translate="label comment">
                             <label>Maximum Correction Count</label>
 							<comment>In case of misspelled URL system tries to correct or reduce misspelled words and get valid executable URL. This parameter specifies how many spelling errors should be corrected until system shows 404 'Page not found' page. URL processing time grows exponentially depending on ths parameter, so keep it low.</comment>
                             <frontend_type>text</frontend_type>
@@ -33,7 +33,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </max_correction_count>
+                        </max_correction_count>-->
                         <additional_toolbar_modes translate="label comment">
                             <label>Additional Toolbar Modes</label>
                             <comment>Product list modes in addition to 'grid' and 'list'. If more than one, separate them with ',', without spaces</comment>
