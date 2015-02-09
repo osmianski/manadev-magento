@@ -20,7 +20,7 @@
 		var price = 0;
 		var count = 0;
 		$('.m-bought-together-options input[type="checkbox"]').each(function(checkboxIndex, checkbox) {
-			if ($(checkbox).attr('checked')) {
+			if ($(checkbox).is(':checked')) {
 				// find product id
 				var id = checkbox.id;
 				if (!id.match("^"+_checkboxPrefix)==_checkboxPrefix) {
@@ -61,7 +61,7 @@
 		
 		// hide or show the product image
 		var product = $('#'+_productPrefix+id);
-		if ($(this).attr('checked')) {
+		if ($(this).is(':checked')) {
 			product.show();
 		}
 		else {
@@ -110,7 +110,7 @@
 	});
 	
 	$(document).on('click', '.m-bought-together-summary .btn-cart', function() {
-		if ($('#'+_checkboxPrefix+_options.productId).attr('checked')) {
+		if ($('#'+_checkboxPrefix+_options.productId).is(':checked')) {
 			if (!productAddToCartForm.validator.validate()) {
 				return false;
 			}
