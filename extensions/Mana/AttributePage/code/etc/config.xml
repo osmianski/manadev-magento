@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_AttributePage>
-            <version>15.02.05.12</version>
+            <version>15.02.10.18</version>
         </Mana_AttributePage>
     </modules>
     <global>
