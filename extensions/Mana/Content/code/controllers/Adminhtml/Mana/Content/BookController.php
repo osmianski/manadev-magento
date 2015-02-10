@@ -17,7 +17,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     public function editAction() {
-        Mage::register('cms_page', Mage::getModel('cms/page')->load('home', 'identifier'));
         try {
             $models = $this->contentHelper()->registerModels($this->getRequest()->getParam('id'));
             Mage::dispatchEvent('m_load_related_products');
