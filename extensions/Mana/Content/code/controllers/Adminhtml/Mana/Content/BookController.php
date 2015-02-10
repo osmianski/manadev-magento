@@ -90,18 +90,19 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
                 foreach ($data as $id => $fields) {
                     $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
                     $model = $models['customSettings'];
-                    if(array_key_exists('parent_id', $fields) && substr( $fields['parent_id']['value'], 0, 1) <> "n") {
-                        $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
-                    }
-
-                    if($action == "created") {
-                        if (isset($fields['id'])) {
-                            $tmpId = $fields['id']['value'];
-                            unset($fields['id']);
+                    if(is_array($fields)) {
+                        if (isset($fields['parent_id']['value']) && substr($fields['parent_id']['value'], 0, 1) <> "n") {
+                            $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
                         }
-                    }
-                    if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
-                        $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
+                        if ($action == "created") {
+                            if (isset($fields['id'])) {
+                                $tmpId = $fields['id']['value'];
+                                unset($fields['id']);
+                            }
+                        }
+                        if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
+                            $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
+                        }
                     }
                     if($action != "deleted") {
                         // data
