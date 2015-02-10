@@ -72,6 +72,32 @@ function ($, Container, ajax, core, expression) {
                 };
             }
         },
+        insertNodePosition: function(parent, node, position) {
+            var self = this;
+            var children = this.$jsTree().get_children_dom(parent);
+            var xpos = 0;
+            for(x = 0; x < children.length; x++) {
+                if(x == position) {
+                    xpos++;
+                }
+
+                var child = self.initChangesObj(children[x].id);
+                if(children[x].id == node) {
+                    child.position = {
+                        value: position,
+                        isDefault: 0
+                    };
+                } else {
+                    child.position = {
+                        value: xpos,
+                        isDefault: 0
+                    };
+                }
+                if(x != position ) {
+                    xpos++;
+                }
+            }
+        },
         _subscribeToHtmlEvents: function() {
             var self = this;
             var jsTreeChanged = function (e, data) {
@@ -151,7 +177,11 @@ function ($, Container, ajax, core, expression) {
                     value: data.position,
                     isDefault: 0
                 };
-                self.resetNodePosition(data.old_parent, data.node.id);
+                if(data.old_parent == data.parent){
+                    self.insertNodePosition(data.old_parent, data.node.id, data.position);
+                } else {
+                    self.resetNodePosition(data.old_parent, data.node.id);
+                }
                 var color = self._isTemporaryId(self.getCurrentId()) ? "green" : "blue";
                 self._setNodeColor(color, data.node.id)
             };

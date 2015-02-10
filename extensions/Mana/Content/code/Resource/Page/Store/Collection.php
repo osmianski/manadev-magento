@@ -17,7 +17,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         }
         $read = $this->getConnection();
 
-        $select = $this->_prepareSelect();
+        $select = $this->_makeSelect();
         $select
             ->joinInner(array('pg2' => $this->getTable('mana_content/page_global')), 'pg2.id = mpgcs.reference_id', array())
             ->joinInner(array('ps2' => $this->getTable('mana_content/page_store')), 'ps2.page_global_id = pg2.id', array())
@@ -56,7 +56,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
 
     public function filterTreeByTitleAndContent($search) {
         $read = $this->getConnection();
-        $select = $this->_prepareSelect();
+        $select = $this->_makeSelect();
         if(trim($search) != "") {
             $select->where("`mps`.`title` LIKE ? OR `mps`.`content` LIKE ?", '%' . $search . '%');
         }
@@ -67,7 +67,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
     public function filterTreeByRelatedProducts($related_products = array()) {
         if(!empty($related_products)) {
             $read = $this->getConnection();
-            $select = $this->_prepareSelect();
+            $select = $this->_makeSelect();
             $select->joinInner(array('mprp' => $this->getTable('mana_content/page_relatedProduct')), "`mpg`.`id` = `mprp`.`page_global_id`", array())
                 ->where("`mprp`.`product_id` IN (". implode(",", $related_products) .")");
             $rows = $read->fetchAssoc($select);
@@ -79,7 +79,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
     public function filterTreeByTags($tags = array()) {
         if(!empty($tags)) {
             $read = $this->getConnection();
-            $select = $this->_prepareSelect();
+            $select = $this->_makeSelect();
             $select->joinInner(array('mptr' => $this->getTable('mana_content/page_tagRelation')), "`mptr`.`page_store_id` = `mps`.`id`", array())
                 ->where("`mptr`.`page_tag_id` IN (". implode(",", $tags) .")");
             $rows = $read->fetchAssoc($select);
@@ -88,7 +88,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
         return array();
     }
 
-    protected function _prepareSelect() {
+    protected function _makeSelect() {
         $read = $this->getConnection();
         $select = $read->select();
 
@@ -126,7 +126,7 @@ class Mana_Content_Resource_Page_Store_Collection extends Mana_Content_Resource_
             $parent_ids = array($row['parent_id']);
             while($level > 0) {
                 $level --;
-                $select = $this->_prepareSelect();
+                $select = $this->_makeSelect();
                 $select->where("`mps`.`level` = ?", $level);
 
 
