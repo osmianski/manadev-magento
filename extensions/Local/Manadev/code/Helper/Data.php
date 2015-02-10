@@ -654,7 +654,13 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     protected function _getRate($currencyCode, $date) {
-		return Mage::helper('mana_lt')->getRate($currencyCode, $date);
+        if ($date >= '2015-01-01') {
+            // Lithuania adopted EURO, so no conversion takes place
+            return 1;
+        }
+        else {
+            return Mage::helper('mana_lt')->getRate($currencyCode, $date);
+        }
 	}
 	public function getCustomerAddress() {
         if (Mage::getSingleton('customer/session')->isLoggedIn()) {
