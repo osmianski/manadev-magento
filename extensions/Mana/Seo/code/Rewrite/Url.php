@@ -382,6 +382,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
         $result = array();
         foreach ($categoryIds as $key) {
+            // category URL key may be not in the m_seo_url table for some reason
+            if (!isset($urlKeys[$key])) {
+                return false;
+            }
+
             $result[] = $this->_encode($urlKeys[$key]);
         }
         return implode($this->getSchema()->getCategorySeparator(), $result);
