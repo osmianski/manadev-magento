@@ -405,11 +405,11 @@ class Mana_Filters_Model_Filter_Category
                 $storeId = Mage::app()->getStore()->getId();
                 $collection->getSelect()
                     ->joinLeft(array('m_siln_g' => $showInLayeredNavigationTable),
-                        "`m_siln_g`.`entity_id` = `e`.`entity_id`
+                        "`m_siln_g`.`entity_id` = `$alias`.`entity_id`
                             AND `m_siln_g`.`attribute_id` = $attributeId
                             AND `m_siln_g`.`store_id` = 0", null)
                     ->joinLeft(array('m_siln_s' => $showInLayeredNavigationTable),
-                        "`m_siln_s`.`entity_id` = `e`.`entity_id`
+                        "`m_siln_s`.`entity_id` = `$alias`.`entity_id`
                             AND `m_siln_s`.`attribute_id` = $attributeId
                             AND `m_siln_s`.`store_id` = $storeId", null)
                     ->where("COALESCE(`m_siln_s`.`value`, `m_siln_g`.`value`) = 1");
