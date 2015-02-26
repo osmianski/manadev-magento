@@ -338,6 +338,15 @@ class Mana_Filters_Model_Filter_Category
         return null;
     }
 
+    /**
+     * @param Varien_Db_Select $select
+     */
+    protected function getMainAlias($select) {
+        $from = $select->getPart(Varien_Db_Select::FROM);
+        $aliases = array_keys($from);
+        return $aliases[0];
+    }
+
     public function getChildrenCollection($category, $mode) {
 
         /* @var $resource Mage_Catalog_Model_Resource_Eav_Mysql4_Category */
@@ -354,13 +363,14 @@ class Mana_Filters_Model_Filter_Category
         }
 
         $collection = $category->getCollection();
+        $alias = $this->getMainAlias($collection->getSelect());
 
         /* @var $_conn Varien_Db_Adapter_Pdo_Mysql */
         $_conn = $collection->getConnection();
 
         /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
         if (Mage::helper('catalog/category_flat')->isEnabled()) {
-            $alias = 'main_table';
+//            $alias = 'main_table';
             $storeId = $category->getStoreId();
             $collection->getSelect()
                 ->reset(Zend_Db_Select::COLUMNS)
@@ -374,7 +384,7 @@ class Mana_Filters_Model_Filter_Category
                     array('request_path' => 'url_rewrite.request_path'));
         }
         else {
-            $alias = 'e';
+//            $alias = 'e';
             $collection
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('name')
