@@ -185,6 +185,14 @@
 					</manapro_productfaces>
 				</observers>
 			</controller_action_predispatch>
+            <catalog_product_import_finish_before>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_link</class>
+                        <method>afterProductImport</method>
+                    </manapro_productfaces>
+                </observers>
+            </catalog_product_import_finish_before>
 			<!-- INVENTORY RELATED EVENTS -->
 			
             <!-- <checkout_submit_all_after>

@@ -516,7 +516,22 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			}
 		}
 	}
-	/**
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function afterProductImport($observer) {
+        $event = $observer->getEvent();
+        foreach($observer->getEvent()->getAdapter()->getAffectedEntityIds() as $entityId) {
+            $product = Mage::getModel('catalog/product')->load($entityId);
+            Mage::register('current_product', $product);
+            $event->setProduct($product);
+            $this->saveRepresentingProducts($observer);
+            Mage::unregister('current_product');
+        }
+    }
+
+    /**
 	 * Enter description here ...
 	 * @param Mage_Catalog_Model_Product $target
 	 * @param Mage_Catalog_Model_Product $source
