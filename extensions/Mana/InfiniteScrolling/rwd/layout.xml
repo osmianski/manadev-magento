@@ -43,6 +43,9 @@
             </reference>
         </reference>
     </mana_infinitescrolling>
+    <catalog_category_default>
+        <update handle="mana_infinitescrolling"/>
+    </catalog_category_default>
     <catalog_category_layered>
         <update handle="mana_infinitescrolling" />
     </catalog_category_layered>
