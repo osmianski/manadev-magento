@@ -29,6 +29,12 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
                 $this->pageLayoutHelper()->applyTemplate($pageLayout);
             }
 
+            if ($root = $this->getLayout()->getBlock('root')) {
+                /* @var $root Mage_Page_Block_Html */
+                $root->addBodyClass('option-page-' . $optionPage->getData('option_page_global_id'))
+                    ->addBodyClass('option-' . $optionPage->getData('url_key'));
+            }
+
             $this->_setProductListOptions();
             $this->_initLayoutMessages('catalog/session');
             $this->_initLayoutMessages('checkout/session');
