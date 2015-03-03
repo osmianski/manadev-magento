@@ -97,6 +97,7 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
                     $this->setModelData($finalSettings, $fieldData);
                 }
                 Mage::register('m_edit_model', $customSettings);
+                Mage::register('cms_page', $customSettings);
                 Mage::register('m_flat_model', $finalSettings);
             }
         }

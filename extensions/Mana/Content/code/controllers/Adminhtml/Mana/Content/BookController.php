@@ -17,7 +17,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     public function editAction() {
-        Mage::register('cms_page', Mage::getModel('cms/page')->load('home', 'identifier'));
         try {
             $models = $this->contentHelper()->registerModels($this->getRequest()->getParam('id'));
             Mage::dispatchEvent('m_load_related_products');
@@ -69,21 +68,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $newId = array();
         $messagesPerRecord = array();
 
-        // Workaround for the Markdown plugin adding suffix to content field.
-        // Content field reset in here instead of down below so that it will enter validation.
-        foreach($changes as $action => $data) {
-            foreach($data as $id => $fields) {
-                if(is_array($fields)) {
-                    foreach ($fields as $key => $value) {
-                        if (substr($key, 0, 8) == "content_") {
-                            $changes[$action][$id]['content'] = $value;
-                            unset($changes[$action][$id][$key]);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        $this->recoverContentField($changes);
 
         if($this->validateChangesObject($changes, $messagesPerRecord)) {
             foreach($changes as $action => $data) {
@@ -199,6 +184,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if(substr($id, 0, 1) == "n") {
             $id = null;
         }
+        $this->recoverContentField($changes);
         $models = $this->contentHelper()->registerModels($id);
         $model = $models['finalSettings'];
 
@@ -359,6 +345,24 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
             }
         }
         return true;
+    }
+
+    protected function recoverContentField(&$changes) {
+        // Workaround for the Markdown plugin adding suffix to content field.
+        // Content field reset in here instead of down below so that it will enter validation.
+        foreach ($changes as $action => $data) {
+            foreach ($data as $id => $fields) {
+                if (is_array($fields)) {
+                    foreach ($fields as $key => $value) {
+                        if (substr($key, 0, 8) == "content_") {
+                            $changes[$action][$id]['content'] = $value;
+                            unset($changes[$action][$id][$key]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     #region Dependencies

@@ -134,6 +134,10 @@ function ($, Container, ajax, core, expression) {
                                 wysiwygmf_content_content.setup("exact");
                             }
 
+                            if(typeof window.reinitMarkdown === "function") {
+                                window.reinitMarkdown();
+                            }
+
                             self._postAction("select");
                         }
                         else {
