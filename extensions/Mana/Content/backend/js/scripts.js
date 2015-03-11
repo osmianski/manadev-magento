@@ -762,8 +762,8 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('title');
             var obj = this.getCurrentId();
             var title = field.getValue();
+            var origTitle = title;
             var no_of_char = parseInt(this.$().data('visible-title-char'));
-            $("#" + obj).attr('title', title);
             if (title.length > no_of_char) {
                 title = title.substring(0, no_of_char);
                 title += "...";
@@ -772,6 +772,7 @@ function ($, Container, ajax, core, expression) {
             this.onChangeMetaTitle();
 
             this.$jsTree().rename_node(obj, title);
+            $("#" + obj).attr('title', origTitle);
             for(var i in this.reference_pages) {
                 if(this.reference_pages[i].reference_id == obj) {
                     this.$jsTree().rename_node(this.reference_pages[i], title);
