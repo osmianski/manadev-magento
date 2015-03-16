@@ -21,7 +21,7 @@
 		// show/hide here in more complex helpers
 	}
 	function _onHelperHide(td, helper) {
-		$.gridData(td, {is_default: $(helper).find('input.m-default').attr('checked') == 'checked'});
+		$.gridData(td, {is_default: $(helper).find('input.m-default').is(':checked')});
 		_helper = null;
 	}
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if

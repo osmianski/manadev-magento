@@ -21,7 +21,7 @@
 		// show/hide here in more complex helpers
 	}
 	function _onHelperHide(td, helper) {
-		$.gridData(td, {is_default: $(helper).find('input.m-default').attr('checked') == 'checked'});
+		$.gridData(td, {is_default: $(helper).find('input.m-default').is(':checked')});
 		_helper = null;
 	}
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
@@ -39,7 +39,7 @@
 		});
 		$(document).on('change', '.ct-checkbox input', function() {
 			var td = $(this).parent('td')[0];
-			$.gridData(td, {value :$(this).attr('checked') == 'checked' ? 1 : 0, is_default: false});
+			$.gridData(td, {value :$(this).is(':checked') ? 1 : 0, is_default: false});
 			if (_helper) {
 				$(_helper).find('input.m-default').mMarkAttr('checked', $.gridData(td, 'is_default'));
 			}

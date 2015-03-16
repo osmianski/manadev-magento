@@ -270,14 +270,14 @@ Mana.define('Mana/Admin/Grid/Cell/Checkbox', ['jquery', 'Mana/Admin/Grid/Cell'],
             }
         },
         isChecked: function() {
-            return this.$input().attr('checked') == 'checked';
+            return this.$input().is(':checked');
         },
         onCellClick: function() {
             if (this.isChecked()) {
                 this.$input().removeAttr('checked');
             }
             else {
-                this.$input().attr('checked', 'checked');
+                this.$input().prop('checked', true);
             }
             this.onClick();
             return false;

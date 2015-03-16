@@ -27,7 +27,7 @@
             $(helper).find('.use-default').hide();
         }
         var value = $.gridData(td, 'value');
-        if ($.gridData(td, 'show_use_default') && $(helper).find('input.m-default').attr('checked') == 'checked') {
+        if ($.gridData(td, 'show_use_default') && $(helper).find('input.m-default').is(':checked')) {
             $('#m-image-helper .mi-buttons').hide();
         }
         else {
@@ -49,7 +49,7 @@
 	}
 	function _onHelperHide(td, helper) {
 		$.gridData(td, {
-		    is_default: $(helper).find('input.m-default').attr('checked') == 'checked'
+		    is_default: $(helper).find('input.m-default').is(':checked')
 		});
 		_helper = null;
 		//_td = null;
@@ -120,7 +120,7 @@
             $.hideHelperPopup();
         });
         $('#m-image-helper input.m-default').click(function() {
-            if ($(this).attr('checked') == 'checked') {
+            if ($(this).is(':checked')) {
                 $('#m-image-helper .mi-buttons').hide();
             }
             else {
