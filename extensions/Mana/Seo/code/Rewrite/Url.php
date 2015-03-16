@@ -27,6 +27,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
     protected $_query;
 
     /**
+     * @var Mage_Core_Model_Store
+     */
+    protected $_store;
+
+    /**
      * @var Mana_Seo_Model_Schema
      */
     protected $_schema;
@@ -41,6 +46,23 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         return parent::getUrl($routePath, $routeParams);
     }
 
+    protected function _setAppStore($routeParams) {
+        if ($routeParams && isset($routeParams['_query']) && isset($routeParams['_query']['___store'])) {
+            if (!$this->_store) {
+                $this->_store = Mage::app()->getStore();
+            }
+
+            Mage::app()->setCurrentStore(Mage::app()->getStore($routeParams['_query']['___store']));
+        }
+    }
+
+    protected function _restoreAppStore() {
+        if ($this->_store) {
+            Mage::app()->setCurrentStore($this->_store);
+            $this->_store = null;
+        }
+    }
+
     public function getUrl($routePath = null, $routeParams = null) {
 //        $this->_escape = isset($routeParams['_escape']) ? $routeParams['_escape'] :
 //            (isset($routeParams['_m_escape']) ? $routeParams['_m_escape'] : $this->_escape);
@@ -53,7 +75,8 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
             /* @var $seo Mana_Seo_Helper_Data */
             $seo = Mage::helper('mana_seo');
 
-            if ($this->_schema = $seo->getActiveSchema($this->getStore()->getId())) {
+            $this->_setAppStore($routeParams);
+            if ($this->_schema = $seo->getActiveSchema(Mage::app()->getStore()->getId())) {
                 $this->_routePath = $this->_populateCurrentRouteFromRequest($routePath);
 
                 $query = null;
@@ -81,6 +104,7 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
         }
 
         $result = parent::getUrl($routePath, $this->_routeParams);
+        $this->_restoreAppStore();
         Mana_Core_Profiler2::stop(__METHOD__);
 
         return $result;
@@ -271,7 +295,13 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      */
     protected function _getValueUrlKey($optionId) {
         Mana_Core_Profiler2::start(__METHOD__);
-        if (!isset(self::$_valueUrlKeys[$optionId])) {
+
+        $storeId = Mage::app()->getStore()->getId();
+        if (!isset(self::$_valueUrlKeys[$storeId])) {
+            self::$_valueUrlKeys[$storeId] = array();
+        }
+
+        if (!isset(self::$_valueUrlKeys[$storeId][$optionId])) {
             if (($item = $this->itemHelper()->get($optionId)) && $item->getData('seo_url_key')) {
                 $result = array(
                     'id' => $item->getData('seo_id'),
@@ -295,11 +325,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                 }
             }
 
-            self::$_valueUrlKeys[$optionId] = $result;
+            self::$_valueUrlKeys[$storeId][$optionId] = $result;
         }
         Mana_Core_Profiler2::stop();
 
-        return self::$_valueUrlKeys[$optionId];
+        return self::$_valueUrlKeys[$storeId][$optionId];
     }
 
     /**
@@ -308,7 +338,14 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
      */
     protected function _getSpecialFilterUrlKey($specialFilterUrl) {
         Mana_Core_Profiler2::start(__METHOD__);
-        if (!isset(self::$_specialFilterUrlKeys[$specialFilterUrl])) {
+
+        $storeId = Mage::app()->getStore()->getId();
+        if (!isset(self::$_specialFilterUrlKeys[$storeId])) {
+            self::$_specialFilterUrlKeys[$storeId] = array();
+        }
+
+
+        if (!isset(self::$_specialFilterUrlKeys[$storeId][$specialFilterUrl])) {
                 /* @var $seo Mana_Seo_Helper_Data */
                 $seo = Mage::helper('mana_seo');
 
@@ -322,11 +359,11 @@ class Mana_Seo_Rewrite_Url extends Mage_Core_Model_Url {
                     $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'special filter URL key', 'id', $specialFilterUrl));
                 }
 
-            self::$_specialFilterUrlKeys[$specialFilterUrl] = $result;
+            self::$_specialFilterUrlKeys[$storeId][$specialFilterUrl] = $result;
         }
         Mana_Core_Profiler2::stop();
 
-        return self::$_specialFilterUrlKeys[$specialFilterUrl];
+        return self::$_specialFilterUrlKeys[$storeId][$specialFilterUrl];
     }
 
     protected function _getCategoryUrlKeys($categoryId) {
