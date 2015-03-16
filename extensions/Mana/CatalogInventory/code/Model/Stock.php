@@ -28,7 +28,9 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
             $canSubtractQty = $stockItem->getId() && $stockItem->canSubtractQty();
             if ($canSubtractQty && Mage::helper('catalogInventory')->isQty($stockItem->getTypeId())) {
                 // MANA BEGIN
-                $qtys[$productId] = $item['qty'] * $item['item']->getData('m_pack_qty');
+                if ($item['item']) {
+                    $qtys[$productId] = $item['qty'] * $item['item']->getData('m_pack_qty');
+                }
                 // MANA END
             }
         }
