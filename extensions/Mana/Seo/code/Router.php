@@ -78,6 +78,42 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                 $request->setDispatched(true);
             }
         }
+        elseif (isset($_GET['___from_store'])) {
+            // URL is not valid in current store. If there is `___from_store` query parameter, the URL maybe valid in source store. If so,
+            // generate the same URL for new store and redirect to it.
+
+            try {
+                $fromStore = Mage::app()->getStore($_GET['___from_store']);
+            } catch (Exception $e) {
+                return false;
+            }
+
+            $this->coreHelper()->setCurrentStore($fromStore);
+            $parsedUrl = $parser->parse($path);
+            $this->coreHelper()->restoreCurrentStore();
+
+            if ($parsedUrl) {
+
+                if (count($parsedUrl->getQueryParameters())) {
+                    $query = $parsedUrl->getImplodedQueryParameters();
+                    if (isset($query['___from_store'])) {
+                        unset($query['___from_store']);
+                    }
+                    $queryParam = array('_query' => $query);
+                }
+                else {
+                    $queryParam = array();
+                }
+
+                $url = $urlModel->getUrl($parsedUrl->getRoute(), array_merge(
+                    array('_use_rewrite' => true, '_nosid' => true),
+                    $parsedUrl->getImplodedParameters(),
+                    $queryParam));
+
+                $front->getResponse()->setRedirect($url, 301);
+                $request->setDispatched(true);
+            }
+        }
 
         return false;
     }
