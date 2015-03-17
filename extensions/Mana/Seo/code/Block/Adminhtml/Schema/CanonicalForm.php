@@ -104,6 +104,14 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
                     'required' => true,
                 ));
 
+            $this->addField($fieldset, 'canonical_remove_when_pager_is_used', 'select', array(
+                'options' => $this->getCanonicalHideWhenPagerIsUsedSourceModel()->getOptionArray(),
+                'label' => $this->__('Remove Canonical URL on Second and Further Pages'),
+                'note' => $this->__("This setting defines canonical URL behavior on page/2, page/3, ... pages. It only has effect if '%s' setting is used.",
+                    'rel=prev and rel=next URLs on Paginated Product List Pages'),
+                'name' => 'canonical_remove_when_pager_is_used',
+                'required' => true,
+            ));
         }
 
         $this->setForm($form);
@@ -126,11 +134,10 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
     }
 
     /**
-     * @return Mana_Seo_Model_Source_Canonical
+     * @return Mana_Seo_Model_Source_Canonical_HideWhenPagerIsUsed
      */
-    public function getCanonicalSourceModel() {
-        return Mage::getSingleton('mana_seo/source_canonical');
+    public function getCanonicalHideWhenPagerIsUsedSourceModel() {
+        return Mage::getSingleton('mana_seo/source_canonical_hideWhenPagerIsUsed');
     }
-
     #endregion
 }
