@@ -88,6 +88,10 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return $expr;
     }
 
+    public function makeNotEmpty($expr) {
+        return "IF ($expr = '', '-', $expr)";
+    }
+
     public function getSeoSymbols() {
         return self::$_seoSymbols;
     }
