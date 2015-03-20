@@ -307,7 +307,7 @@ function ($, Container, ajax, core, expression) {
                                 wysiwygmf_content_content.setup("exact");
                             }
 
-                            if(typeof window.reinitMarkdown === "function") {
+                            if (!self.isReferencePage() && typeof window.reinitMarkdown === "function") {
                                 window.reinitMarkdown();
                             }
 
