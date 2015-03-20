@@ -129,6 +129,14 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
+                            if(self.isReferencePage()) {
+                                $('.mb-container-goToOriginal').show();
+                                $('.mb-container-create').hide();
+                            } else {
+                                $('.mb-container-goToOriginal').hide();
+                                $('.mb-container-create').show();
+                            }
+
                             if(self.$().data('wysiwyg-enabled') == "enabled" && typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
