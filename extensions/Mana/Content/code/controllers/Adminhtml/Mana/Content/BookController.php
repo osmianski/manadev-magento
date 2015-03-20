@@ -184,11 +184,11 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         if(substr($id, 0, 1) == "n") {
             $id = null;
         }
-        $this->recoverContentField($changes);
         $models = $this->contentHelper()->registerModels($id);
         $model = $models['finalSettings'];
 
         if(!is_null($changes)) {
+            $this->recoverContentField($changes);
             if(!is_null($id)) {
                 if(isset($changes['modified'])) {
                     foreach($changes['modified'] as $id => $field) {
