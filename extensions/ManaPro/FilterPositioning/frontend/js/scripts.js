@@ -39,6 +39,9 @@ function($, Block, undefined)
                 ._super()
                 .on('bind', this, function () {
                     this._replacedTitles = [];
+                    if (this.getSubtitleBehavior() == 'expand') {
+                        this._subTitleExpanded = true;
+                    }
                     this.$().find('dl dt.m-ln').on('click', _expandCollapse);
                     this.$().find('.block-subtitle').on('click', _expandCollapseSubTitle);
                     this.$().find('.block-subtitle, .actions').on('mouseenter', _mouseEnter);
@@ -259,6 +262,12 @@ function($, Block, undefined)
                 this._behavior = this.$().data('behavior');
             }
             return this._behavior;
+        },
+        getSubtitleBehavior: function() {
+            if (this._subtitleBehavior === undefined) {
+                this._subtitleBehavior = this.$().data('subtitle-behavior');
+            }
+            return this._subtitleBehavior;
         },
         getDuration: function() {
             if (this._duration === undefined) {
