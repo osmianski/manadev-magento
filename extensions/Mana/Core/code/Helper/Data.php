@@ -435,7 +435,9 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         $result = '';
         foreach ($request->getUserParams() as $key => $value) {
-            $result .= '/'.$key.'/'.$value;
+            if (!is_object($value)) {
+                $result .= '/' . $key . '/' . $value;
+            }
         }
         return $result;
     }
