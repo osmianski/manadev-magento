@@ -516,7 +516,18 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			}
 		}
 	}
-	/**
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function afterProductImport($observer) {
+        /* @var $inventory ManaPro_ProductFaces_Resource_Inventory */ $inventory = Mage::getResourceModel('manapro_productfaces/inventory');
+        foreach($observer->getEvent()->getAdapter()->getAffectedEntityIds() as $entityId) {
+            $inventory->updateRepresentingProducts($entityId);
+        }
+    }
+
+    /**
 	 * Enter description here ...
 	 * @param Mage_Catalog_Model_Product $target
 	 * @param Mage_Catalog_Model_Product $source
