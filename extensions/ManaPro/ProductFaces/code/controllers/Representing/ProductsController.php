@@ -171,6 +171,7 @@ class ManaPro_ProductFaces_Representing_ProductsController extends Mage_Adminhtm
 				'm_unit' => 'parts',
 				'm_parts' => 1,
 				'position' => 1,
+                'm_pack_qty' => 1,
 			);
 			if ($product = Mage::getModel('catalog/product')->setStoreId($storeId)->load($id)) {
 				$response['sku'] = $product->getSku();
