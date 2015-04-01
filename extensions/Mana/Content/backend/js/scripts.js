@@ -170,6 +170,15 @@ function ($, Container, ajax, core, expression) {
             this._super();
             this._customInit();
         },
+        save: function() {
+            if(typeof wysiwygmf_content_content !== "undefined") {
+                var content = this.getField('content').getValue();
+                content = wysiwygmf_content_content.decodeWidgets(content);
+                content = wysiwygmf_content_content.decodeDirectives(content);
+                this.getField('content').setValue(content);
+            }
+            return this._super();
+        },
         _customInit: function () {
             this._changes = {
                 // the keys are temporary IDs, format n123, "n" is to distinguish from IDs of
