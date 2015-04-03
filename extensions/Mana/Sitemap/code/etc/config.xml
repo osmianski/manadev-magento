@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Sitemap
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_Sitemap>
+            <version>15.04.02.19</version>
+        </Mana_Sitemap>
+    </modules>
+    <global>
+        <helpers>
+            <mana_sitemap>
+                <class>Mana_Sitemap_Helper</class>
+            </mana_sitemap>
+        </helpers>
+        <models>
+            <sitemap>
+                <rewrite>
+                    <sitemap>Mana_Sitemap_Rewrite_Sitemap</sitemap>
+                </rewrite>
+            </sitemap>
+        </models>
+    </global>
+</config>
