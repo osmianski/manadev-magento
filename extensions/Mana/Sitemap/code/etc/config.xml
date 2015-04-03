@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Sitemap>
-            <version>15.04.02.19</version>
+            <version>15.04.03.19</version>
         </Mana_Sitemap>
     </modules>
     <global>
