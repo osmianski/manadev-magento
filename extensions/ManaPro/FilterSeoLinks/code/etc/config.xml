@@ -245,7 +245,17 @@
         </layout>
         <!-- INSERT HERE: layout, translate, routers -->
 	</adminhtml>
-	
+    <frontend>
+		<translate>
+			<modules>
+				<ManaPro_FilterSeoLinks>
+					<files>
+						<default>ManaPro_FilterSeoLinks.csv</default>
+					</files>
+				</ManaPro_FilterSeoLinks>
+			</modules>
+		</translate>
+    </frontend>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
 
 	<!-- This section provides defaults for values normally configurable through global system configuration 
