@@ -21,12 +21,13 @@ class Mana_AttributePage_Resource_Sitemap extends Mage_Core_Model_Mysql4_Abstrac
         $select = $db->select()
             ->from(array('ap' => $this->getTable('mana_attributepage/attributePage_store')), null)
             ->joinInner(array('url' => $this->getTable('mana_seo/url')),
-                "`url`.`attribute_page_id` = `ap`.`id` AND " .
+                "`url`.`attribute_page_id` = `ap`.`id` AND `url`.`status` = 'active' AND " .
                 $db->quoteInto("`url`.`type` = ? AND", 'attribute_page') .
                 $db->quoteInto("`url`.`schema_id` = ?", $schema->getId()), null)
             ->where("`ap`.`store_id` = ?", $storeId)
             ->where("`ap`.`is_active` = 1")
-            ->columns(new Zend_Db_Expr("`url`.`final_url_key`"));
+            ->columns(new Zend_Db_Expr($db->quoteInto("CONCAT(`url`.`final_url_key`, ?)",
+                Mage::getStoreConfig('mana_attributepage/seo/attribute_page_url_suffix', $storeId))));
 
         return $db->fetchCol($select);
     }
@@ -40,12 +41,13 @@ class Mana_AttributePage_Resource_Sitemap extends Mage_Core_Model_Mysql4_Abstrac
             ->joinInner(array('ap' => $this->getTable('mana_attributepage/attributePage_store')),
                 $db->quoteInto("`ap`.`attribute_page_global_id` = `op_g`.`attribute_page_global_id` AND `ap`.`store_id` = ? AND `ap`.`is_active` = 1", $storeId), null)
             ->joinInner(array('url' => $this->getTable('mana_seo/url')),
-                "`url`.`option_page_id` = `op`.`id` AND " .
+                "`url`.`option_page_id` = `op`.`id` AND `url`.`status` = 'active' AND " .
                 $db->quoteInto("`url`.`type` = ? AND", 'option_page') .
                 $db->quoteInto("`url`.`schema_id` = ?", $schema->getId()), null)
             ->where("`op`.`store_id` = ?", $storeId)
             ->where("`op`.`is_active` = 1")
-            ->columns(new Zend_Db_Expr("`url`.`final_url_key`"));
+            ->columns(new Zend_Db_Expr($db->quoteInto("CONCAT(`url`.`final_url_key`, ?)",
+                Mage::getStoreConfig('mana_attributepage/seo/option_page_url_suffix', $storeId))));
 
         return $db->fetchCol($select);
     }
