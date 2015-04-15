@@ -133,7 +133,17 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 
 		}
 		$thisIndex = in_array('this', $ids) ? 'this' : $productData['entity_id'];
-		
+
+        // Reinsert parent product to last, so it goes first (highest priority) when sorted with same `m_unit` and `position`
+        if(($key = array_search($thisIndex, $ids)) !== false) {
+            $tmp = $representingProductData[$key];
+            unset($representingProductData[$key]);
+            unset($ids[$key]);
+            array_push($ids, $thisIndex);
+            end($ids);
+            $representingProductData[key($ids)] = $tmp;
+        }
+
 		// order results by method (qty, then percent, then part-of) and by position
 		self::$_representingProductDataForSortingCallback = $representingProductData;
 		uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
