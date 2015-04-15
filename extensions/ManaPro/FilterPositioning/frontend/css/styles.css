@@ -11,6 +11,8 @@
 .mb-top-layered-navigation,
 .mb-top-layered-navigation .block-content { background: transparent; border: none; padding: 0; margin: 20px 0 0; position: relative;}
 
+.mb-top-layered-navigation .block-content:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+
 /* Titles SHOP BY and CURRENTLY SHOPPING BY */
 .mb-top-layered-navigation .block-subtitle,
 .mb-top-layered-navigation .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }

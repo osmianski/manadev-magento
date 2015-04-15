@@ -112,6 +112,23 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
         $this->getResource()->getReferencePages($root_id);
     }
 
+    public function getIdentifier() {
+        $route = "mana_content/book/view";
+        if($this->adminHelper()->isGlobal()) {
+            $pageGlobalId = $this->getData('page_global_id');
+            $model = Mage::getModel('mana_content/page_store');
+            $model->setData('store_id', Mage::app()->getDefaultStoreView()->getId());
+            $model->load($pageGlobalId, 'page_global_id');
+            $id = $model->getId();
+        } else {
+            $id = $this->getId();
+        }
+        $url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
+        $currentUrl = Mage::getUrl();
+        $url = str_replace($currentUrl, '', $url);
+        return $url;
+    }
+
     #region Dependencies
     /**
      * @return Mage_Index_Model_Indexer

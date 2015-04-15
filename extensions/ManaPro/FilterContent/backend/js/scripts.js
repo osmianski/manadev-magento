@@ -32,7 +32,7 @@ function($, Select) {
     return Select.extend('ManaPro/FilterContent/Option/IsActiveCell', {
         onClick: function() {
             this._super();
-            if (this.$input().attr('checked') == 'checked') {
+            if (this.$input().is('checked')) {
                 this.getGrid().expandChildRow(this.$tr());
             }
             else {

@@ -13,7 +13,7 @@
 //		b.	we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
 ;(function($) {
     function _buttons(tr) {
-        if ($(tr).find('.m-default').attr('checked') == 'checked') {
+        if ($(tr).find('.m-default').is(':checked')) {
             $(tr).find('.mfi-buttons .m-button').hide();
         }
         else {

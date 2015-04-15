@@ -1592,12 +1592,13 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
 	}
 
 	$.fn.mMarkAttr = function (attr, condition) {
-		if (condition) {
-			this.attr(attr, attr);
-		}
-		else {
-			this.removeAttr(attr);
-		}
+	    this.prop(attr, condition);
+		//if (condition) {
+		//	this.attr(attr, attr);
+		//}
+		//else {
+		//	this.removeAttr(attr);
+		//}
 		return this;
 	}; 
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if

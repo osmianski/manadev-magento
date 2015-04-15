@@ -26,7 +26,8 @@ class Mana_Seo_Model_Observer {
         if (($head = $layout->getBlock('head')) &&
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
-            $renderLayeredNavigationFilters = true;
+            $preventRenderingCanonicalUrlWhenPagerIsApplied = false;
+            $pageContainsLayeredNavigation = true;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -49,18 +50,19 @@ class Mana_Seo_Model_Observer {
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalBookPage();
-                $renderLayeredNavigationFilters = false;
+                $pageContainsLayeredNavigation = false;
             }
 
             if ($renderCanonicalUrl) {
                 $params = array('_nosid' => true, '_current' => true, '_m_escape' => '', '_use_rewrite' => true,
                     '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure());
-                $query = Mage::app()->getRequest()->getQuery();
+                $originalQuery = $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
 
-                $filters = $renderLayeredNavigationFilters ? $this->_getFilters() : array();
+                $filters = $pageContainsLayeredNavigation ? $this->_getFilters() : array();
+                $isOtherParameterSuppressed = false;
                 foreach (array_keys($query) as $key) {
-                    if ($renderLayeredNavigationFilters) {
+                    if ($pageContainsLayeredNavigation) {
                         if (isset($filters[$key])) {
                             $areFiltersApplied = true;
                             if ($filters[$key]['include_in_canonical_url'] == 'never' ||
@@ -71,8 +73,15 @@ class Mana_Seo_Model_Observer {
                             ) {
                                 $query[$key] = null;
                             }
-                        } else {
+                        }
+                        elseif ($key == 'p') {
+                            if (!$schema->getCanonicalPaging()) {
+                                $query[$key] = null;
+                            }
+                        }
+                        else {
                             $query[$key] = null;
+                            $isOtherParameterSuppressed = true;
                         }
                     }
                     else {
@@ -99,6 +108,19 @@ class Mana_Seo_Model_Observer {
                             $this->_removeHeadItemsByType($head, 'link_rel', 'rel="prev"');
                             $this->addLinkRel($head, 'prev', Mage::getUrl('*/*/*', array_merge($params,
                                         array('_query' => array_merge($query, array('p' => $pageNo - 1))))));
+                            switch ($schema->getData('canonical_remove_when_pager_is_used')) {
+                                case Mana_Seo_Model_Source_Canonical_HideWhenPagerIsUsed::ON_NON_FILTERED_PAGES_ONLY:
+                                    $preventRenderingCanonicalUrlWhenPagerIsApplied = count($originalQuery) == 1 && isset($originalQuery['p']);
+                                    break;
+                                case Mana_Seo_Model_Source_Canonical_HideWhenPagerIsUsed::ON_ALL_PAGES_EXCEPT_HAVING_TOOLBAR_PARAMETERS:
+                                    if ($pageContainsLayeredNavigation) {
+                                        $preventRenderingCanonicalUrlWhenPagerIsApplied = !$isOtherParameterSuppressed;
+                                    }
+                                    else {
+                                        $preventRenderingCanonicalUrlWhenPagerIsApplied = count($originalQuery) == 1 && isset($originalQuery['p']);
+                                    }
+                                    break;
+                            }
                         }
                         if ($pageNo < $pageCount) {
                             $this->_removeHeadItemsByType($head, 'link_rel', 'rel="next"');
@@ -111,9 +133,12 @@ class Mana_Seo_Model_Observer {
                     }
                 }
 
-                $canonicalUrl =  Mage::getUrl('*/*/*', array_merge($params, array('_query' => $query)));
+
                 $this->_removeHeadItemsByType($head, 'link_rel', 'rel="canonical"');
-                $head->addLinkRel('canonical', $canonicalUrl);
+                if (!$preventRenderingCanonicalUrlWhenPagerIsApplied) {
+                    $canonicalUrl = Mage::getUrl('*/*/*', array_merge($params, array('_query' => $query)));
+                    $head->addLinkRel('canonical', $canonicalUrl);
+                }
             }
         }
     }

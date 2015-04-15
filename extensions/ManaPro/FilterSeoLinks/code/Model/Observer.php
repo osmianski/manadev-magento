@@ -255,19 +255,24 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
     }
 
     protected function _processPage($rule, &$globalVars) {
+        $t = Mage::helper('manapro_filterseolinks');
         if ($globalVars['page'] && $globalVars['page'] > 1) {
-            $globalVars['page'] = $this->_processValue((string)$rule['pattern'], $globalVars);
+            $globalVars['page'] = $this->_processValue($t->__((string)$rule['pattern']), $globalVars);
         }
     }
 
     protected function _processApply($instruction, &$globalVars, $var, $key = null) {
+        $t = Mage::helper('manapro_filterseolinks');
+
+        $qq = $t->__((string)$instruction['last_glued_by']);
+
         $pattern = array(
-            'pattern' => (string)$instruction['pattern'],
-            'glue' => (string)$instruction['glued_by'],
+            'pattern' => $t->__((string)$instruction['pattern']),
+            'glue' => $t->__((string)$instruction['glued_by']),
             'lastGlue' => isset($instruction['last_glued_by'])
-                ? (string)$instruction['last_glued_by']
-                : (string)$instruction['glued_by'],
-            'prefix' => isset($instruction['prefix']) ? $instruction['prefix'] : ''
+                ? $t->__((string)$instruction['last_glued_by'])
+                : $t->__((string)$instruction['glued_by']),
+            'prefix' => isset($instruction['prefix']) ? $t->__((string)$instruction['prefix']) : ''
         );
         if ($key === null) {
             $globalVars[$var] = $pattern;
