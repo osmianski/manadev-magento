@@ -282,7 +282,11 @@ function ($, Container, ajax, core, expression) {
                     params.form_key = FORM_KEY;
 
                     ajax.post(self.getUrl('load'), params, function (response) {
-                        if (core.isString(response)) {
+                        function processLoad() {
+                            if(typeof self.$varienTab() === "undefined") {
+                                setTimeout(processLoad, 100);
+                                return;
+                            }
                             var activeTab = self.$varienTab().activeTab;
                             var reference_pages = self.reference_pages;
                             self.setContent(response);
@@ -321,6 +325,14 @@ function ($, Container, ajax, core, expression) {
                             }
 
                             self._postAction("select");
+                        }
+
+                        if (core.isString(response)) {
+                            if(typeof self.$varienTab() !== "undefined") {
+                                processLoad();
+                            } else {
+                                setTimeout(processLoad, 100);
+                            }
                         }
                         else {
                             // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
