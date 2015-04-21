@@ -180,6 +180,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
 
     public function loadAction() {
         $changes = $this->getRequest()->getPost('changes');
+        $changes = is_array($changes) ? $changes : array();
         $id = $this->getRequest()->getPost('id');
         if(substr($id, 0, 1) == "n") {
             $id = null;
