@@ -63,7 +63,7 @@ class ManaPro_ProductFaces_Resource_Link extends Mage_Catalog_Model_Resource_Eav
     		WHERE `link_type_id` = $linkTypeId
     	");
     	$sql = "
-    		SELECT l.`linked_product_id`, p.value AS m_parts, u.value AS m_unit, e.value AS position, s.value AS m_pack_qty
+    		SELECT l.`linked_product_id`, p.value AS m_parts, u.value AS m_unit, e.value AS position, COALESCE(s.value, 1) AS m_pack_qty
     		FROM {$this->getMainTable()} AS l
     		LEFT JOIN {$this->getMainTable()}_attribute_{$tables['m_parts']['data_type']} AS p 
     			ON (p.product_link_attribute_id = {$tables['m_parts']['product_link_attribute_id']}) AND (p.link_id = l.link_id) 
