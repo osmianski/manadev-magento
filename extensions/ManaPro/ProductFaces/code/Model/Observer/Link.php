@@ -186,9 +186,6 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 					$errors[] = $helper->__('Error while saving representing product %s: %s', $linkedProduct->getSku(), $e->getMessage());
 				}
 			}
-			if (isset($fields['m_parts']) && (!$fields['m_parts'] || !is_numeric($fields['m_parts']) || $fields['m_parts'] <= 0)) {
-				$errors[] = $helper->__('Parts should be positive number, but %s is not.', $fields['m_parts']).$errorSuffix;
-			}
 			if (isset($fields['position']) && !is_numeric($fields['position'])) {
 				$errors[] = $helper->__('Position should be a number, but %s is not.', $fields['position']).$errorSuffix;
 			}

@@ -10,7 +10,6 @@
 "Other","Other"
 " See product %s (%s)."," See product %s (%s)."
 "Product can represent only a single other product.","Product can represent only a single other product."
-"Parts should be positive number, but %s is not.","Parts should be positive number, but %s is not."
 "Price should be positive number, but %s is not.","Price should be positive number, but %s is not."
 "One of valid units of measure expected, but %s is not.","One of valid units of measure expected, but %s is not."
 "Scheduled Inventory Update","Scheduled Inventory Update"
