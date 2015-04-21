@@ -368,9 +368,9 @@ function ($, Container, ajax, core, expression) {
             if(typeof this._originalFields[id] === "undefined") {
                 this._originalFields[id] = {};
                 for (var i in this.getFields()) {
-                    this._originalFields[id][i] = {};
-                    this._originalFields[id][i].value = this.getField(i).getValue();
-                    this._originalFields[id][i].useDefault = this.getField(i).useDefault();
+                    try {
+                        this._originalFields[id][i] = {value: this.getField(i).getValue(), useDefault: this.getField(i).useDefault()};
+                    } catch(err) {}
                 }
                 return this._originalFields[id];
             }
@@ -382,7 +382,7 @@ function ($, Container, ajax, core, expression) {
             this.$jsTree().select_node(reference_id);
         },
         _subscribeToBlockEvents: function () {
-            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg'];
+            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg', 'Mana_Admin_Field_Hidden'];
             return this
                 ._super()
                 .on('load', this, function () {
@@ -398,6 +398,9 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('create')) this.getChild('create').on('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteNode);
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').on('click', this, this.goToOriginalPage);
+                    if(this.getField('url_key_preview')) {
+                        this.onChangeUrlKey();
+                    }
                     this.setDefaultValuesToChanges();
                     this._initOriginalFields(false);
                     this.disableFieldsIfReferencePage();
@@ -611,8 +614,9 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
             var url_key = expression.seoify(title);
-            if(typeof field !== "undefined" && field.useDefault()) {
+            if ((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name = "Mana_Admin_Field_Hidden")) {
                 field.setValue(url_key);
+                this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {

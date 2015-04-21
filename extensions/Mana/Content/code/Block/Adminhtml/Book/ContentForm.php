@@ -53,6 +53,23 @@ class Mana_Content_Block_Adminhtml_Book_ContentForm extends Mana_Content_Block_A
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        if(!$this->coreHelper()->isManadevCMSProInstalled()) {
+            $this->addField($fieldset, 'url_key_preview', 'note', array(
+                'name' => 'url_key_preview',
+                'label' => $this->__('URL Key (Preview)'),
+                'title' => $this->__('URL Key (Preview)'),
+            ));
+            $this->addField($fieldset, 'url_key', 'hidden', array(
+                'name' => 'url_key',
+                'default_bit_no' => Mana_Content_Model_Page_Abstract::DM_URL_KEY,
+                'default_label' => $this->__('Use Title'),
+                'default_store_label' => $this->__(
+                        !$this->adminHelper()->isGlobal() && $this->coreDbHelper()
+                            ->isModelContainsCustomSetting($this->getGlobalEditModel(), Mana_Content_Model_Page_Abstract::DM_URL_KEY)
+                        ? 'Same For All Stores' : 'Use Title'),
+            ));
+        }
+
         $fieldset = $this->addFieldset($form, 'mfs_content', array(
             'title' => $this->__('Content'),
             'class' => 'fieldset-wide',
