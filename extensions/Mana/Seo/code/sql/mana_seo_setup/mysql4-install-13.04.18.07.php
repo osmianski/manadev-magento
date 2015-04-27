@@ -47,7 +47,7 @@ $schema
     ->overrideCanonicalCategory(1)
     ->overrideCanonicalSearch(1)
     ->overrideCanonicalCms(1)
-    ->overrideCanonicalFilters(1)
+    ->overrideCanonicalFilters(0)
     ->overrideCanonicalLimitAll(0)
     ->overridePrevNextProductList(1)
     ->save();
