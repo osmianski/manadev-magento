@@ -118,7 +118,7 @@ function($, ajax, config, layout, undefined)
                     mainNav("nav", {"show_delay": "100", "hide_delay": "100"});
                 }
 
-                if (ConfigurableSwatchesList) {
+                if (! (typeof ConfigurableSwatchesList === 'undefined')) {
                     ConfigurableSwatchesList.init();
                 }
 
