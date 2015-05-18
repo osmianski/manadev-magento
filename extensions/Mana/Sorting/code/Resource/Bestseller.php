@@ -28,6 +28,11 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+        if (isset($tables['bestseller_stats'])) {
+            return;
+        }
+
         $select
             ->joinLeft(array('bestseller_stats' => new Zend_Db_Expr("(SELECT bestseller_stats.product_id AS product_id, SUM(bestseller_stats.qty_ordered - IFNULL(bestseller_stats.qty_canceled, 0)) AS qty_ordered".
                 " FROM {$this->getTable('sales/order_item')} AS bestseller_stats".
@@ -38,7 +43,6 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
                 " GROUP BY bestseller_stats.product_id)")),
                 "bestseller_stats.product_id = e.entity_id", null);
 
-        $tables = $select->getPart('from');
         if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                 ->joinLeft(
