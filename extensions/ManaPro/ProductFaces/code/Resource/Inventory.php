@@ -136,18 +136,24 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 
         // Reinsert parent product to last, so it goes first (highest priority) when sorted with same `m_unit` and `position`
         if(($key = array_search($thisIndex, $ids)) !== false) {
-            $tmp = $representingProductData[$key];
-            unset($representingProductData[$key]);
             unset($ids[$key]);
             array_push($ids, $thisIndex);
             end($ids);
-            $representingProductData[key($ids)] = $tmp;
+            $tmp = $representingProductData[key($ids)];
+            $representingProductData[key($ids)] = $representingProductData[$key];
+            $representingProductData[$key] = $tmp;
+            if(isset($virtualIds[key($ids)])) {
+                $tmp = $virtualIds[key($ids)];
+                unset($virtualIds[key($ids)]);
+                $virtualIds[$key] = $tmp;
+            }
         }
 
-		// order results by method (qty, then percent, then part-of) and by position
-		self::$_representingProductDataForSortingCallback = $representingProductData;
-		uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
-		foreach ($ids as $key => $id) {
+
+        // order results by method (qty, then percent, then part-of) and by position
+        self::$_representingProductDataForSortingCallback = $representingProductData;
+        uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
+        foreach ($ids as $key => $id) {
 			$result['qties'][$id] = 0;
             if (!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
                 $representingProductData[$key]['m_pack_qty'] = 1;
