@@ -9,6 +9,7 @@
     <mana_content_book_view>
         <update handle="mana_menu"/>
         <update handle="mana_ajax" />
+        <update handle="jquery_lighter" />
 
         <reference name="root">
             <action method="setTemplate">
