@@ -20,7 +20,7 @@ function($, ajax, config, layout, undefined)
             return config.getBaseUrl(url);
         },
         _isProductListToolbarClicked: function (element) {
-            return element !== undefined && (
+            return element !== undefined && !$(element).hasClass('btn-remove') && (
                 $(element).parents().hasClass('mb-category-products') ||
                     $(element).parents().hasClass('mb-cms-products') ||
                     $(element).parents().hasClass('mb-search-result')
