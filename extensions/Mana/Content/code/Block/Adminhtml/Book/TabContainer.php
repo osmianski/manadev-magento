@@ -39,21 +39,19 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
         $this->setChild('close_button', $button);
 
         if ($this->getFlatModel()->getId() && $this->adminHelper()->isGlobal()) {
-            if($this->getFlatModel()->getReferenceId()) {
-                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.goToOriginal")
-                    ->setData(array(
-                            'label' => $this->__('Go To Original Page'),
-                            'class' => 'go',
-                        ));
-                $this->setChild('create_button', $button);
-            } else {
-                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
-                    ->setData(array(
-                            'label' => $this->__('Create Child Page'),
-                            'class' => 'add',
-                        ));
-                $this->setChild('create_button', $button);
-            }
+            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.goToOriginal")
+                ->setData(array(
+                        'label' => $this->__('Go To Original Page'),
+                        'class' => 'go',
+                        'style' => 'display:none;',
+                    ));
+            $this->setChild('goToOriginal_button', $button);
+            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
+                ->setData(array(
+                        'label' => $this->__('Create Child Page'),
+                        'class' => 'add',
+                    ));
+            $this->setChild('create_button', $button);
             $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.delete")
                 ->setData(array(
                     'label' => $this->__('Delete Current Page'),
@@ -164,6 +162,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
     public function getButtonsHtml($area = null) {
         $html = '';
         $html .= $this->getChildHtml('close_button');
+        $html .= $this->getChildHtml('goToOriginal_button');
         $html .= $this->getChildHtml('create_button');
         $html .= $this->getChildHtml('delete_button');
         $html .= $this->getChildHtml('apply_button');
