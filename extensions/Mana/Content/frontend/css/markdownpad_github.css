@@ -295,6 +295,10 @@
 /* TABLES
 =============================================================================*/
 
+.std > .mana_content table {
+    max-width: 100%;
+}
+
 .std > .mana_content table th {
   font-weight: bold;
 }
