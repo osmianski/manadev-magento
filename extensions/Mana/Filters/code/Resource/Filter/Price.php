@@ -333,7 +333,37 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
             'main_table' . '.',
             $adapter->quoteIdentifier('main_table') . '.',
         );
-        return str_replace($oldAlias, $newAlias, $conditionString);
+        return $this->_replaceAliasExpr($oldAlias, $newAlias, $conditionString);
+    }
+
+    protected function _replaceAliasExpr($old, $new, $expr) {
+        if (is_array($old)) {
+            $result = $expr;
+            foreach (array_keys($old) as $index) {
+                $result = $this->_replaceAliasExpr($old[$index], $new[$index], $result);
+            }
+            return $result;
+        }
+        else {
+            $pattern = '/^(' . preg_quote($old) . ')|[^A-Za-z_0-9](' . preg_quote($old) . ')/';
+            $offset = 0;
+            $result = '';
+            while(preg_match($pattern, $expr, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+                $match = $matches[1][0] ? $matches[1] : $matches[2];
+                $strFound = $match[0];
+                $offsetFound = $match[1];
+                if ($offsetFound > $offset) {
+                    $result .= substr($expr, $offset, $offsetFound - $offset);
+                }
+                $result .= $new;
+                $offset = $offsetFound + strlen($strFound);
+            }
+            if (strlen($expr) > $offset) {
+                $result .= substr($expr, $offset);
+            }
+            return $result;
+
+        }
     }
 
 }
