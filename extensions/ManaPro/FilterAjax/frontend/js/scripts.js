@@ -23,6 +23,7 @@ function($, ajax, config, layout, undefined)
             return element !== undefined && !$(element).hasClass('btn-remove') && (
                 $(element).parents().hasClass('mb-category-products') ||
                     $(element).parents().hasClass('mb-cms-products') ||
+                    $(element).parents().hasClass('mb-option-view') ||
                     $(element).parents().hasClass('mb-search-result')
                 );
         },
