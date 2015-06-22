@@ -374,10 +374,10 @@ class Mana_Filters_Model_Filter_Category
             $storeId = $category->getStoreId();
             $collection->getSelect()
                 ->reset(Zend_Db_Select::COLUMNS)
-                ->columns('main_table.*')
+                ->columns($alias . '.*')
                 ->joinLeft(
                     array('url_rewrite' => $collection->getTable('core/url_rewrite')),
-                        'url_rewrite.category_id=main_table.entity_id AND url_rewrite.is_system=1 AND ' .
+                        'url_rewrite.category_id=' . $alias . '.entity_id AND url_rewrite.is_system=1 AND ' .
                                 $_conn->quoteInto(
                                     'url_rewrite.product_id IS NULL AND url_rewrite.store_id=? AND url_rewrite.id_path LIKE "category/%"',
                                     $storeId),
