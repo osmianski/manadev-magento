@@ -173,8 +173,8 @@ Copyright 2015 Kevin Sylvestre
       return image.onload = (function(_this) {
         return function() {
           return _this.resize({
-            width: image.width,
-            height: image.height
+            width: image.width * 2,
+            height: image.height * 2
           });
         };
       })(this);
