@@ -614,9 +614,11 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
             var url_key = expression.seoify(title);
-            if ((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name = "Mana_Admin_Field_Hidden")) {
+            if ((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name == "Mana_Admin_Field_Hidden")) {
                 field.setValue(url_key);
-                this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
+                if(this.getField('url_key_preview')) {
+                    this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
+                }
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {
