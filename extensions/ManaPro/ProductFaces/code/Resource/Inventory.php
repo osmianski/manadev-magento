@@ -135,17 +135,33 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 		$thisIndex = in_array('this', $ids) ? 'this' : $productData['entity_id'];
 
         // Reinsert parent product to last, so it goes first (highest priority) when sorted with same `m_unit` and `position`
+        // Products with same `m_unit` and `position` gets inverted.
+        // $representingProductsData [1, 2, 3] becomes [3, 2, 1] after uasort `_representingProductSortingCallback` if products 1, 2, and 3 have the same `m_unit` and `position`
+        // That's why 'this'(original) product is reinserted to last, so after uasort `_representingProductSortingCallback`, it will be first in the array.
         if(($key = array_search($thisIndex, $ids)) !== false) {
-            unset($ids[$key]);
-            array_push($ids, $thisIndex);
             end($ids);
-            $tmp = $representingProductData[key($ids)];
-            $representingProductData[key($ids)] = $representingProductData[$key];
-            $representingProductData[$key] = $tmp;
-            if(isset($virtualIds[key($ids)])) {
-                $tmp = $virtualIds[key($ids)];
-                unset($virtualIds[key($ids)]);
-                $virtualIds[$key] = $tmp;
+            $i = key($ids);
+
+            if($representingProductData[$i][$idIndex] != $thisIndex) {
+                unset($ids[$key]);
+                array_push($ids, $thisIndex);
+                end($ids);
+                $i = key($ids);
+
+                if(isset($representingProductData[$i])) {
+                    $tmp = $representingProductData[$key];
+                    $representingProductData[$key] = $representingProductData[$i];
+                    $representingProductData[$i] = $tmp;
+                } else {
+                    $representingProductData[$i] = $representingProductData[$key];
+                    unset($representingProductData[$key]);
+                }
+
+                if (isset($virtualIds[$i])) {
+                    $tmp = $virtualIds[$i];
+                    unset($virtualIds[$i]);
+                    $virtualIds[$key] = $tmp;
+                }
             }
         }
 
