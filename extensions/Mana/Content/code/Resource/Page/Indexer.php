@@ -186,11 +186,16 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
 
             if (isset($options['page_global_custom_settings_id'])) {
-                $select->where("`p_gcs`.`id` = ?", $options['page_global_custom_settings_id']);
+                $ids = Mage::getResourceModel("mana_content/page_globalCustomSettings")
+                    ->getAllChildren($options['page_global_custom_settings_id']);
+                $select->where("`p_gcs`.`id` IN (" . implode(",", $ids) . ")");
             }
 
             if (isset($options['page_global_id'])) {
-                $select->where("`p_g`.`id` = ?", $options['page_global_id']);
+                $customSettingsId = Mage::getModel('mana_content/page_global')->load($options['page_global_id'])->getData('page_global_custom_settings_id');
+                $ids = Mage::getResourceModel("mana_content/page_globalCustomSettings")
+                    ->getAllChildren($customSettingsId);
+                $select->where("`p_gcs`.`id` IN (" . implode(",", $ids) . ")");
             }
 
             // convert SELECT into UPDATE which acts as INSERT on DUPLICATE unique keys
