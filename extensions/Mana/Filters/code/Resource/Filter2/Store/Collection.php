@@ -35,7 +35,7 @@ class Mana_Filters_Resource_Filter2_Store_Collection extends Mana_Filters_Resour
             'main_table.global_id = global.id');
 
         $this->getSelect()
-            ->joinLeft(array('ea' => $this->getTable('eav/attribute')), "`ea`.`attribute_code` = `global`.`code`", null)
+            ->joinLeft(array('ea' => $this->getTable('eav/attribute')), "`ea`.`attribute_code` = `global`.`code` AND `ea`.`attribute_code` <> 'category'", null)
             ->joinLeft(array('et' => $this->getTable('eav/entity_type')),
                 "`et`.`entity_type_id` = `ea`.`entity_type_id` AND `et`.`entity_type_code` = 'catalog_product'", null)
             ->joinLeft(array('ca' => $this->getTable('catalog/eav_attribute')), "`ca`.`attribute_id` = `ea`.`attribute_id`", null)
