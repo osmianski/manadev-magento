@@ -198,4 +198,8 @@ class Mana_Page_Adminhtml_Mana_SpecialController extends Mana_Admin_Controller_V
         // validate if all required data is entered and makes sense
         $model->validate();
     }
+
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/special');
+    }
 }

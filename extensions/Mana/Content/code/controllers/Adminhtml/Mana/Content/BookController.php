@@ -57,6 +57,10 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $this->renderLayout();
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/contentpage');
+    }
+
     public function saveAction() {
         $response = new Varien_Object();
 
