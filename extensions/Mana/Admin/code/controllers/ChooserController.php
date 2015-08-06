@@ -16,4 +16,8 @@ class Mana_Admin_ChooserController extends Mage_Adminhtml_Controller_Action {
     public function cmsBlockAction() {
         $this->getResponse()->setBody(Mage::helper('mana_admin')->getCmsBlockChooserHtml());
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
 }
