@@ -31,6 +31,10 @@ class Mana_Admin_ManaController extends Mage_Adminhtml_Controller_Action {
         $this->getResponse()->setBody($content->toHtml());
     }
 
+    protected function _isAllowed() {
+        return true;
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Utils

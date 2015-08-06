@@ -15,6 +15,11 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 	protected function _getEntityName() {
 		return 'mana_filters/filter2';
 	}
+
+	protected function _isAllowed() {
+		return Mage::getSingleton('admin/session')->isAllowed('admin/mana/filters');
+	}
+
 	/**
 	 * Full page rendering action displaying list of entities of certain type. 
 	 */

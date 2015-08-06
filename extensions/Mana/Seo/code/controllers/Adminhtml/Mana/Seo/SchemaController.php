@@ -386,6 +386,10 @@ class Mana_Seo_Adminhtml_Mana_Seo_SchemaController extends Mana_Admin_Controller
         $this->getResponse()->setBody('ok');
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/seo_schema');
+    }
+
     #region Dependencies
     /**
      * @return Mana_Seo_Helper_Data
