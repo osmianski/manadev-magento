@@ -25,4 +25,13 @@ examples on what kind of actions can be applied to referenced blocks.
             <block type="local_manadev/order_address" name="order_address" />
         </reference>
 	</adminhtml_sales_billto_edit>
+	<adminhtml_sales_order_view>
+		<update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>downloadable</column><block>downloadable/adminhtml_sales_items_column_downloadable_name</block><template>local/manadev/sales-item/downloadable-name-column.phtml</template></action>
+        </reference>
+	</adminhtml_sales_order_view>
 </layout>
