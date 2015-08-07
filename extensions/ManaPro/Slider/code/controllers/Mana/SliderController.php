@@ -171,4 +171,8 @@ class ManaPro_Slider_Mana_SliderController extends Mage_Widget_Adminhtml_Widget_
             $edit['saved'][$model->getId()] = $model->getId();
         }
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
 }

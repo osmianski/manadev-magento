@@ -202,4 +202,8 @@ class ManaPro_ProductFaces_Representing_ProductsController extends Mage_Adminhtm
     {
         $this->getResponse()->setBody(Mage::helper('mana_admin')->getProductChooserHtml());
     }
+
+	protected function _isAllowed() {
+		return true;
+	}
 }

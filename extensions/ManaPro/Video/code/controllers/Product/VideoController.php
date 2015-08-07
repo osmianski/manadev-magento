@@ -57,4 +57,8 @@ class ManaPro_Video_Product_VideoController extends Mage_Adminhtml_Catalog_Produ
         // render AJAX result
         $this->renderLayout();
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
 }

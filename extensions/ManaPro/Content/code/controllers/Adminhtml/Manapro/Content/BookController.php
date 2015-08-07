@@ -33,7 +33,9 @@ class ManaPro_Content_Adminhtml_ManaPro_Content_BookController extends Mana_Admi
         $productGrid->setHiddenProducts(implode(',', Mage::registry('related_product_ids')));
     }
 
-
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/contentpage');
+    }
 
     #region Dependencies
     /**

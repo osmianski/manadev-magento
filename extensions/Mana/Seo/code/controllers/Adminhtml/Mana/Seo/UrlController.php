@@ -118,6 +118,10 @@ class Mana_Seo_Adminhtml_Mana_Seo_UrlController extends Mana_Admin_Controller_V2
         $this->getResponse()->setBody($response->toJson());
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/seo_url');
+    }
+
     #region Dependencies
     /**
      * @return Mana_Seo_Helper_Data

@@ -43,4 +43,8 @@ class Mana_Content_Adminhtml_Mana_Content_FolderController extends Mana_Admin_Co
         $this->renderLayout();
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/contentpage');
+    }
+
 }

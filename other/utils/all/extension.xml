@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config>
+    <name>utils/all</name>
+    <version>15.07.22.09</version>
+
+    <sync extension-file="adminer.php" project-file="adminer.php"/>
+    <sync extension-file="gulp-commit.bat" project-file="gulp-commit.bat"/>
+    <sync extension-file="hhvm.php" project-file="hhvm.php"/>
+    <sync extension-file="info.php" project-file="info.php"/>
+    <sync extension-file="mysql.php" project-file="mysql.php"/>
+    <sync extension-file="run.php" project-file="run.php"/>
+    <sync extension-file="run-sql.php" project-file="run-sql.php"/>
+    <sync extension-file="save_config.php" project-file="save_config.php"/>
+    <sync extension-file="sync-gulp.bat" project-file="sync-gulp.bat"/>
+    <sync extension-file="variables.php" project-file="variables.php"/>
+</config>
