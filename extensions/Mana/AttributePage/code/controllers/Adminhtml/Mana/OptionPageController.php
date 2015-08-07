@@ -340,4 +340,8 @@ class Mana_AttributePage_Adminhtml_Mana_OptionPageController extends Mana_Admin_
         // validate if all required data is entered and makes sense
         $model->validate();
     }
+
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/attributepage');
+    }
 }
