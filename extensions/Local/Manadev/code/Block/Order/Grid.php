@@ -62,4 +62,82 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
         return $this;
     }
 
+    protected function _prepareColumns() {
+        $this->addColumnAfter('customer_email', array(
+            'header' => Mage::helper('sales')->__('Customer Email'),
+            'index' => 'customer_email',
+            'type'  => 'text',
+            'width' => '300px',
+        ), 'billing_name');
+
+        $this->addColumnAfter('download_status', array(
+            'header' => Mage::helper('sales')->__('Download Status'),
+            'index' => 'download_status',
+            'type'  => 'options',
+            'width' => '150px',
+			'options' => Mage::getSingleton('local_manadev/source_downloadStatus')->getOptionArray(),
+        ), 'status');
+
+
+        parent::_prepareColumns();
+
+        $this->removeColumn('shipping_name');
+        $this->removeColumn('base_grand_total');
+        if (!Mage::app()->isSingleStoreMode()) {
+            $this->removeColumn('store_id');
+        }
+
+        return $this;
+    }
+
+    protected function _prepareCollection() {
+        $collection = Mage::getResourceModel($this->_getCollectionClass());
+
+        /* @var $resource Local_Manadev_Resource_Order */
+        $resource = Mage::getResourceSingleton('local_manadev/order');
+        $resource->addDownloadStatusToCollection($collection);
+        $resource->addEmailsToCollection($collection);
+
+        $this->setCollection($collection);
+        return $this->_basePrepareCollection();
+    }
+
+    protected function _basePrepareCollection() {
+        if ($this->getCollection()) {
+
+            $this->_preparePage();
+
+            $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
+            $dir      = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
+            $filter   = $this->getParam($this->getVarNameFilter(), null);
+
+            if (is_null($filter)) {
+                $filter = $this->_defaultFilter;
+            }
+
+            if (is_string($filter)) {
+                $data = $this->helper('adminhtml')->prepareFilterString($filter);
+                $this->_setFilterValues($data);
+            }
+            else if ($filter && is_array($filter)) {
+                $this->_setFilterValues($filter);
+            }
+            else if(0 !== sizeof($this->_defaultFilter)) {
+                $this->_setFilterValues($this->_defaultFilter);
+            }
+
+            if (isset($this->_columns[$columnId]) && $this->_columns[$columnId]->getIndex()) {
+                $dir = (strtolower($dir)=='desc') ? 'desc' : 'asc';
+                $this->_columns[$columnId]->setDir($dir);
+                $this->_setCollectionOrder($this->_columns[$columnId]);
+            }
+
+            if (!$this->_isExport) {
+                $this->getCollection()->load();
+                $this->_afterLoadCollection();
+            }
+        }
+
+        return $this;
+    }
 }

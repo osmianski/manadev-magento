@@ -55,6 +55,7 @@
 					<sales_order_creditmemo_view>Local_Manadev_Block_Creditmemo_View</sales_order_creditmemo_view>
 					<sales_creditmemo_grid>Local_Manadev_Block_Creditmemo_Grid</sales_creditmemo_grid>
                     <sales_order_grid>Local_Manadev_Block_Order_Grid</sales_order_grid>
+                    <customer_edit_tab_orders>Local_Manadev_Block_Customer_Order_Grid</customer_edit_tab_orders>
                 </rewrite>
 			</adminhtml>
 			<catalog>
