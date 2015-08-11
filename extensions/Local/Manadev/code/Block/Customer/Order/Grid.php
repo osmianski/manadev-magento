@@ -19,6 +19,11 @@ class Local_Manadev_Block_Customer_Order_Grid extends Mage_Adminhtml_Block_Custo
         $this->addColumnAfter('download_status', array(
             'header' => Mage::helper('sales')->__('Download Status'),
             'index' => 'download_status',
+            'filter_condition_callback' => function($collection, $column) {
+                /* @var $resource Local_Manadev_Resource_Order */
+                $resource = Mage::getResourceSingleton('local_manadev/order');
+                $resource->addDownloadStatusCollectionFilter($collection, $column->getFilter()->getCondition());
+            },
             'type'  => 'options',
             'width' => '150px',
 			'options' => Mage::getSingleton('local_manadev/source_downloadStatus')->getOptionArray(),
