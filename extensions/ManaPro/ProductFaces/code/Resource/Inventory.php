@@ -272,46 +272,54 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 						foreach ($ids as $key => $id) {
 							if ($representingProductData[$key]['m_unit'] == 'parts') {
 								$productsProcessed++;
-								
+
 								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_pack_qty']: 0;
 								if (empty($productData['is_qty_decimal'])) {
                                     $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 								}
-								
+
 								$result['qties'][$id] = $qty;
 								$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 							}
 						}
-						
+
 						if (empty($productData['is_qty_decimal'])) {
                             while($qtyLeft > 0) {
+                            	$processed = false;
                                 // in case we have positive rounding error, do +1 starting from most prioritized
                                 foreach ($ids as $key => $id) {
                                     if ($representingProductData[$key]['m_unit'] == 'parts') {
                                         if($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && ($qtyLeft > 0)) {
                                             $result['qties'][$id]++;
                                             $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
+                                            $processed = true;
                                         }
                                         if ($qtyLeft <= 0) {
                                             break;
                                         }
                                     }
                                 }
+                                if(!$processed) break;
                             }
                             while($qtyLeft < 0) {
+								$processed = false;
                                 // in case we have negative rounding error, do -1 starting from least prioritized
                                 foreach (array_reverse($ids, true) as $key => $id) {
                                     if ($representingProductData[$key]['m_unit'] == 'parts') {
                                         if ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && ($qtyLeft < 0)) {
                                             $result['qties'][$id]--;
                                             $qtyLeft += $representingProductData[$key]['m_pack_qty'];
-                                        }
+											$processed = true;
+										}
                                         if ($qtyLeft >= 0) {
                                             break;
                                         }
                                     }
                                 }
-                            }
+								if (!$processed) {
+									break;
+								}
+							}
 						}
 					}
 				}
