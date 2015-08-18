@@ -73,6 +73,11 @@
                     <!-- INSERT HERE: individual type rewrites -->
                 </rewrite>
             </cataloginventory>
+            <catalog>
+				<rewrite>
+					<product_attribute_backend_media>ManaPro_ProductFaces_Model_MediaAttribute</product_attribute_backend_media>
+				</rewrite>
+			</catalog>
 		</models>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/manapro_productfaces_setup directory for install/upgrade scripts. 
