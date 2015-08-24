@@ -17,6 +17,7 @@
             <block type="catalog/layer_view" name="catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
         </reference>
         <reference name="content">
+            <!--<block type="mana_core/excludeProductsNotAssignedToSubCategories" name="excludeProductsNotAssignedToSubCategories" />-->
             <block type="mana_attributepage/option_view" name="option_view" template="mana/attributepage/option/view.phtml">
                 <block type="catalog/product_list" name="product_list" template="catalog/product/list.phtml">
                     <block type="core/text_list" name="product_list.name.after" as="name.after" />
