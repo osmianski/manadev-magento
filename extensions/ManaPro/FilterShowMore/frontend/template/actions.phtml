@@ -36,7 +36,8 @@
         <script type="text/javascript">(function ($) {
                 $(document).trigger('m-filter-scroll-reset', [
                     '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
-                    <?php echo $_filter->getFilterOptions()->getShowMoreItemCount() ?>
+                    <?php echo $_filter->getFilterOptions()->getShowMoreItemCount() ?>,
+                    <?php echo Mage::getStoreConfigFlag('mana_filters/display/add_space_for_not_visible_selected_items') ? '0' : '1' ?>
                 ]);
             })(jQuery);</script>
     </div>
@@ -64,7 +65,8 @@
                     '<?php echo Mage::helper('mana_filters')->getFilterName($block, $_filter) ?>',
                     <?php echo $_filter->getFilterOptions()->getShowMoreItemCount() ?>,
                     <?php echo $_helper->isShowAllRequested($_filter) ? 'true' : 'false' ?>,
-                    <?php echo Mage::getStoreConfig('mana_filters/display/show_more_time') ?>
+                    <?php echo Mage::getStoreConfig('mana_filters/display/show_more_time') ?>,
+                    <?php echo Mage::getStoreConfigFlag('mana_filters/display/add_space_for_not_visible_selected_items') ? '0' : '1' ?>
                 ]);
             })(jQuery);</script>
     </div>

@@ -226,6 +226,7 @@
 		<mana_filters>
 			<display>
 				<show_more_item_count>4</show_more_item_count>
+				<add_space_for_not_visible_selected_items>1</add_space_for_not_visible_selected_items>
 				<show_more_preload>1</show_more_preload>
 				<show_more_time>200</show_more_time>
 				<show_more_method></show_more_method>

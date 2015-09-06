@@ -599,6 +599,7 @@ function ($, OptionSearch) {
 	var _states = {};
 	var _itemCounts = {};
 	var _time = {};
+	var _fixedHeight = {};
 
     function _calculateHeights(l, code) {
         if (l.is('.m-filter-colors.horizontal')) {
@@ -623,12 +624,19 @@ function ($, OptionSearch) {
 	    }
 		var heights = {less: 0, more: 0, count: 0};
 		l.children(':not(.m-no-match)').each(function(index, item) {
-            if (
-                index < _itemCounts[code] ||
-                !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
-                l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
-            ) {
-                heights.less += $(item).outerHeight(true);
+            if (_fixedHeight[code]) {
+                if (index < _itemCounts[code]) {
+                    heights.less += $(item).outerHeight(true);
+                }
+            }
+            else {
+                if (
+                    index < _itemCounts[code] ||
+                    !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
+                    l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
+                ) {
+                    heights.less += $(item).outerHeight(true);
+                }
             }
 
 			heights.more += $(item).outerHeight(true);
@@ -655,14 +663,20 @@ function ($, OptionSearch) {
                 firstTop = $item.position().top;
 		    }
 		    var bottom = $item.position().top - firstTop + $item.outerHeight(true);
-            if (
-                index < _itemCounts[code] ||
-                !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
-                l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
-            ) {
-                heights.less = bottom;
+            if (_fixedHeight[code]) {
+                if (index < _itemCounts[code]) {
+                    heights.less = bottom;
+                }
             }
-
+            else {
+                if (
+                    index < _itemCounts[code] ||
+                    !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
+                    l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
+                ) {
+                    heights.less = bottom;
+                }
+            }
 			heights.more = bottom;
             heights.count++;
         });
@@ -774,13 +788,14 @@ function ($, OptionSearch) {
 		return false;
 	}
 
-    $(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time) {
+    $(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time, fixedHeight) {
         var div = $('#' + prefix + code);
         if (!_inAjax){
 			_states[code] = showAll;
 		}
 		_itemCounts[code] = itemCount;
 		_time[code] = time;
+		_fixedHeight[code] = fixedHeight;
 		apply(code, false);
         div.parent().on('m-prepare', function() {
     		apply(code, false);
@@ -799,8 +814,9 @@ function ($, OptionSearch) {
             l.height('auto');
         }
     }
-    $(document).bind('m-filter-scroll-reset', function (e, code, itemCount) {
+    $(document).bind('m-filter-scroll-reset', function (e, code, itemCount, fixedHeight) {
         _itemCounts[code] = itemCount;
+        _fixedHeight[code] = fixedHeight;
         var div = $('#' + prefix + code);
         var l = div.parent().children(':not(.m-option-search)').first();
 
