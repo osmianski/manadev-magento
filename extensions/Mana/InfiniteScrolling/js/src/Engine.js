@@ -11,6 +11,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // ------------------------------------------------
 
         _init: function() {
+
             this._super();
 
             this.debugScrolling = false;
@@ -163,7 +164,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // region Product Loading
         // ------------------------------------------------
 
-        load: function(page, limit) {
+        load: function(page, limit, callback) {
             var self = this;
             self.showLoader();
 
@@ -177,11 +178,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
             }
 
-
             url = config.getBaseUrl(url) + this.getUrlKey() +
                 '/' + config.getData('ajax.currentRoute') +
                 '/' + this.getPageSeparator() +
-                '/' + page +
+                '/' + (self.page+1) +
                 '/' + this.getLimitSeparator() +
                 '/' + limit +
                 '/' + this.getRouteSeparator() +
@@ -192,7 +192,14 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 self.page++;
                 self.hideLoader();
                 layout.getPageBlock().resize();
+                if(self.page == page) {
+                    callback();
+                } else {
+                    window.scrollTo(null, self.$rows().last().offset().top - 20);
+                    self.load(page, limit, callback);
+                }
             }, { showWait: false, showOverlay: false, encode: queryPos != -1 ? { offset: 0, length: queryPos} : undefined });
+
         },
 
         showLoader: function() {

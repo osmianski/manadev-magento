@@ -22,6 +22,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // ------------------------------------------------
 
         _init: function() {
+
             this._super();
 
             this.debugScrolling = false;
@@ -174,7 +175,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // region Product Loading
         // ------------------------------------------------
 
-        load: function(page, limit) {
+        load: function(page, limit, callback) {
             var self = this;
             self.showLoader();
 
@@ -188,11 +189,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
             }
 
-
             url = config.getBaseUrl(url) + this.getUrlKey() +
                 '/' + config.getData('ajax.currentRoute') +
                 '/' + this.getPageSeparator() +
-                '/' + page +
+                '/' + (self.page+1) +
                 '/' + this.getLimitSeparator() +
                 '/' + limit +
                 '/' + this.getRouteSeparator() +
@@ -203,7 +203,14 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 self.page++;
                 self.hideLoader();
                 layout.getPageBlock().resize();
+                if(self.page == page) {
+                    callback();
+                } else {
+                    window.scrollTo(null, self.$rows().last().offset().top - 20);
+                    self.load(page, limit, callback);
+                }
             }, { showWait: false, showOverlay: false, encode: queryPos != -1 ? { offset: 0, length: queryPos} : undefined });
+
         },
 
         showLoader: function() {
@@ -301,6 +308,41 @@ function ($) {
         },
         $loaderLocation: function() {
             return this.$rows().last();
+        }
+    });
+});
+
+
+Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
+    $(function () {
+        var Engine = layout.getBlock('infinitescrolling-engine');
+        $(document).on('click', "a.product-image, .product-name a", function(e) {
+            var productImageList = $("a.product-image");
+            var index = productImageList.index(productImageList.withinviewport().first());
+            location.hash = "index=" + index;
+        });
+
+
+        var currentUrl = location.href;
+
+        var hash = currentUrl.split("#")[1];
+        if(hash) {
+            var rawDataArr = hash.split("&");
+            var data = {};
+            rawDataArr.each(function(rawData) {
+                var key = rawData.split("=")[0],
+                    value = rawData.split("=")[1];
+
+                data[key] = value;
+            });
+
+            var page = Math.floor(data.index / Engine.limit);
+            window.history.back();
+            window.scrollTo(null, Engine.getProductListBottom());
+            Engine.load(page + 1, Engine.limit, function() {
+                var topPosition = $("a.product-image").eq(data.index).offset().top - 10;
+                window.scrollTo(null, topPosition);
+            });
         }
     });
 });
