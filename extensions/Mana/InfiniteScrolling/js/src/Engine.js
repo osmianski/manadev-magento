@@ -15,6 +15,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             this._super();
 
             this.debugScrolling = false;
+            this.isShowMoreButtonVisible = this.getPagesPerShowMore() == 1;
         },
 
         _subscribeToHtmlEvents: function () {
@@ -31,6 +32,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     self.page = 1;
                     self.limit = this.getVisibleItemCount();
                     self.$scrollingArea().on('scroll', _scroll);
+                    this.showShowMoreButton();
                 })
                 .on('unbind', this, function () {
                     self.$scrollingArea().off('scroll', _scroll);
@@ -159,6 +161,28 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$items().length;
         },
 
+        getPagesPerShowMore: function () {
+            return this.$().data('pages-per-show-more');
+        },
+        
+        getRecoverScrollProgressOnBack: function() {
+            return this.$().data('recover-scroll-progress-on-back');
+        },
+
+        showShowMoreButton: function () {
+            var self = this;
+            if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible && self.page % self.getPagesPerShowMore() == 0) {
+                self.isShowMoreButtonVisible = true;
+                var button = $("<button id='m-show-more'><span>Show More...</span></button>");
+                button.insertAfter($('.products-grid').last());
+                button.addClass('button');
+                button.on('click', function () {
+                    $(this).remove();
+                    self.isShowMoreButtonVisible = false;
+                    self.load(self.page + 1, self.limit);
+                });
+            }
+        },
         // endregion
 
         // region Product Loading
@@ -193,6 +217,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 self.hideLoader();
                 layout.getPageBlock().resize();
                 if(self.page == page) {
+                    self.showShowMoreButton();
                     callback();
                 } else {
                     window.scrollTo(null, self.$rows().last().offset().top - 20);
@@ -249,7 +274,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // when window bottom reaches product list bottom
             if (this.getVisibleItemCount() < this.getProductCount() &&
                 this.getScrollingAreaBottom() >= this.getProductListBottom() &&
-                !this.isLoaderVisible())
+                !this.isLoaderVisible() && !this.isShowMoreButtonVisible)
             {
                 this.load(this.page + 1, this.limit);
             }

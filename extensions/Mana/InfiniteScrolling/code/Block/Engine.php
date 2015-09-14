@@ -36,7 +36,9 @@ class Mana_InfiniteScrolling_Block_Engine extends Mage_Core_Block_Text_List {
             'route_separator' => Mage::getStoreConfig('mana/ajax/route_separator_filter'),
             'page_separator' => Mage::getStoreConfig('mana/ajax/page_separator'),
             'limit_separator' => Mage::getStoreConfig('mana/ajax/limit_separator'),
-            'effect_duration' => Mage::getStoreConfig('mana/infinitescrolling/effect_duration'),
+            'effect_duration' => Mage::getStoreConfig('mana_infinitescrolling/infinitescrolling/effect_duration'),
+            'pages_per_show_more' => Mage::getStoreConfig('mana_infinitescrolling/infinitescrolling/pages_per_show_more'),
+            'recover_scroll_progress_on_back' => Mage::getStoreConfig('mana_infinitescrolling/infinitescrolling/recover_scroll_progress_on_back'),
 
             // product count
             'product_count' => $this->_getProductCount(),
