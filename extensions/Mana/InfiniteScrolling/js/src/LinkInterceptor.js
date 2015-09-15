@@ -35,7 +35,6 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                 Engine.load(page + 1, Engine.limit, function () {
                     var topPosition = $("a.product-image").eq(data.index).offset().top - 10;
                     window.scrollTo(null, topPosition);
-                    window.history.back();
                 });
             }
         }
