@@ -6,7 +6,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                 var productImageList = $("a.product-image");
                 var index = productImageList.index(productImageList.withinviewport().first());
                 if(index == "-1" || index == "0") {
-                    return;
+                    index = 0;
                 }
                 location.hash = "index=" + index + "&page=" + Engine.page;
             });
