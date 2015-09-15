@@ -8,7 +8,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                 if(index == "-1" || index == "0") {
                     return;
                 }
-                location.hash = "index=" + index;
+                location.hash = "index=" + index + "&page=" + Engine.page;
             });
 
             var currentUrl = location.href;
@@ -30,12 +30,11 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                     Engine.isShowMoreButtonVisible = false;
                 }
 
-                var page = Math.floor(data.index / Engine.limit);
                 window.scrollTo(null, Engine.getProductListBottom());
-                Engine.load(page + 1, Engine.limit, function () {
+                Engine.load(data.page, Engine.limit, function () {
                     var topPosition = $("a.product-image").eq(data.index).offset().top - 10;
                     window.scrollTo(null, topPosition);
-                });
+                }, true);
             }
         }
     });
