@@ -219,7 +219,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         }
     }
 
-    public function canShowFilterInBlock($block, $filter) {
+    protected function _canShowFilterInBlock($block, $filter) {
         if ($block->getData('show_'.$filter->getCode())) {
             return true;
         }
@@ -240,30 +240,64 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
             if (in_array($showInFilter, $showIn)) {
                 return true;
             }
-            if ($this->isMobileFilter($block, $filter))
-            {
-                return true;
-            }
             return false;
         }
         else {
             return true;
         }
     }
-    public function isMobileFilter($block, $filter) {
-        if ($showInFilter = $block->getShowInFilter()) {
-            $showIn = $filter->getShowIn();
-            if (!is_array($showIn)) {
-                $showIn = explode(',', $showIn);
-            }
-            if (in_array(Mage::getStoreConfig('mana_filters/mobile/column_filters'), array('copy', 'move')) &&
-                $showInFilter == 'above_products' && !in_array('above_products', $showIn)
-            ) {
-                return true;
+
+    protected function _findBlockForPosition($position) {
+        $layout = Mage::getSingleton('core/layout');
+        foreach (array("mana.catalog.{$position}nav", "mana.catalogsearch.{$position}nav") as $blockName) {
+            if ($block = $layout->getBlock($blockName)) {
+                return $block;
             }
         }
+
         return false;
     }
+
+    protected function _isMobileOnlyFilter($block, $filter) {
+        if (!($showInFilter = $block->getShowInFilter())) {
+            return false;
+        }
+
+        if ($showInFilter != 'above_products') {
+            return false;
+        }
+
+        if (!in_array(Mage::getStoreConfig('mana_filters/mobile/column_filters'), array('copy', 'move'))) {
+            return false;
+        }
+
+        $showIn = $filter->getShowIn();
+        if (!is_array($showIn)) {
+            $showIn = explode(',', $showIn);
+        }
+
+        foreach (array('left', 'right') as $position) {
+            if ($block = $this->_findBlockForPosition($position)) {
+                if ($this->_canShowFilterInBlock($block, $filter)) {
+                    return true;
+                }
+                elseif (in_array($position, $showIn)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function canShowFilterInBlock($block, $filter) {
+        return $this->_canShowFilterInBlock($block, $filter) || $this->_isMobileOnlyFilter($block, $filter);
+    }
+
+    public function isMobileFilter($block, $filter) {
+        return !$this->_canShowFilterInBlock($block, $filter) && $this->_isMobileOnlyFilter($block, $filter);
+    }
+
     public function getFilterLayoutName($block, $filter) {
         if ($showInFilter = $block->getShowInFilter()) {
             return 'm_' . $showInFilter . '_' . $filter->getCode() . '_filter';
