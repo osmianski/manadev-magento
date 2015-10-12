@@ -821,7 +821,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $flatTokens = array();
         foreach ($tokens as $suffix => $suffixTokens) {
             $result[$suffix] = array();
-            $flatTokens = array_merge($flatTokens, $suffixTokens);
+            foreach ($suffixTokens as $key => $token) {
+                $flatTokens[$key] = $token;
+            }
         }
         foreach ($this->_getUrls($flatTokens, Mana_Seo_Resource_Url_Collection::TYPE_PAGE) as $url) {
             foreach ($tokens as $suffix => $suffixTokens){
