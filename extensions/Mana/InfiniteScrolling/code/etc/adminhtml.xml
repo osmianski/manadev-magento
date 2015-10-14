@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_InfiniteScrolling
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <system_configuration>
+                    <children>
+                        <mana_infinitescrolling translate="title" module="mana_infinitescrolling">
+							<title>Infinite Scrolling</title>
+                            <action>adminhtml/system_config/edit/section/mana_infinitescrolling</action>
+                            <sort_order>1100</sort_order>
+                        </mana_infinitescrolling>
+                    </children>
+                </system_configuration>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<system_configuration>
+                                <children>
+                                    <mana_infinitescrolling translate="title" module="mana_infinitescrolling">
+                                        <title>Infinite Scrolling</title>
+                                        <sort_order>1100</sort_order>
+                                    </mana_infinitescrolling>
+                                </children>
+							</system_configuration>
+						</children>
+					</mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana_infinitescrolling translate="title" module="mana_infinitescrolling">
+										<title>MANAdev Infinite Scrolling</title>
+                                        <sort_order>52000</sort_order>
+                                    </mana_infinitescrolling>
+								</children>
+							</config>
+						</children>
+					</system>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

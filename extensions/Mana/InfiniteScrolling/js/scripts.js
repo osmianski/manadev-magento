@@ -22,9 +22,11 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // ------------------------------------------------
 
         _init: function() {
+
             this._super();
 
             this.debugScrolling = false;
+            this.isShowMoreButtonVisible = this.getPagesPerShowMore() == 1;
         },
 
         _subscribeToHtmlEvents: function () {
@@ -41,6 +43,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     self.page = 1;
                     self.limit = this.getVisibleItemCount();
                     self.$scrollingArea().on('scroll', _scroll);
+                    this.showShowMoreButton();
                 })
                 .on('unbind', this, function () {
                     self.$scrollingArea().off('scroll', _scroll);
@@ -169,13 +172,40 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$items().length;
         },
 
+        getPagesPerShowMore: function () {
+            return this.$().data('pages-per-show-more');
+        },
+        
+        getRecoverScrollProgressOnBack: function() {
+            return this.$().data('recover-scroll-progress-on-back');
+        },
+
+        showShowMoreButton: function () {
+            var self = this;
+            if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible && self.page % self.getPagesPerShowMore() == 0) {
+                self.isShowMoreButtonVisible = true;
+                var button = $("<button id='m-show-more'><span>Show More...</span></button>");
+                button.insertAfter($('.products-grid').last());
+                button.addClass('button');
+                button.on('click', function () {
+                    $(this).remove();
+                    self.isShowMoreButtonVisible = false;
+                    self.load(self.page + 1, self.limit);
+                });
+            }
+        },
         // endregion
 
         // region Product Loading
         // ------------------------------------------------
 
-        load: function(page, limit) {
+        load: function(page, limit, callback, reset) {
             var self = this;
+            var reset = (reset) ? reset : false;
+            if(reset) {
+                self.page = 0;
+                limit = page * limit;
+            }
             self.showLoader();
 
             var url = ajax.getDocumentUrl();
@@ -188,22 +218,33 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
             }
 
-
             url = config.getBaseUrl(url) + this.getUrlKey() +
                 '/' + config.getData('ajax.currentRoute') +
                 '/' + this.getPageSeparator() +
-                '/' + page +
+                '/' + (self.page+1) +
                 '/' + this.getLimitSeparator() +
                 '/' + limit +
                 '/' + this.getRouteSeparator() +
                 '/' + url.substr(config.getBaseUrl(url).length);
 
             ajax.get(url, function (response) {
-                self.addContent(response);
-                self.page++;
+                self.addContent(response, reset);
+                if(reset) {
+                    self.page = parseInt(page);
+                } else {
+                    self.page++;
+                }
                 self.hideLoader();
                 layout.getPageBlock().resize();
+                if(self.page == page) {
+                    self.showShowMoreButton();
+                    callback();
+                } else {
+                    window.scrollTo(null, self.$rows().last().offset().top - 20);
+                    self.load(page, limit, callback);
+                }
             }, { showWait: false, showOverlay: false, encode: queryPos != -1 ? { offset: 0, length: queryPos} : undefined });
+
         },
 
         showLoader: function() {
@@ -220,7 +261,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.loaderVisible;
         },
 
-        addContent: function(content) {
+        addContent: function(content, reset) {
             var $content = $(content);
             var $newRows = $content.find(this.getRowSelector());
             var self = this;
@@ -228,10 +269,15 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // prepare effect
             $newRows.hide();
 
+            var parent = $(self.$rows().parent());
+            if(reset) {
+                parent.html("");
+            }
+
             // insert new data
             self.$rows().last().removeClass('last');
             $newRows.each(function() {
-                self.$rows().last().after(this);
+                parent.append(this);
             });
 
             // start effect
@@ -253,7 +299,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // when window bottom reaches product list bottom
             if (this.getVisibleItemCount() < this.getProductCount() &&
                 this.getScrollingAreaBottom() >= this.getProductListBottom() &&
-                !this.isLoaderVisible())
+                !this.isLoaderVisible() && !this.isShowMoreButtonVisible)
             {
                 this.load(this.page + 1, this.limit);
             }
@@ -301,6 +347,49 @@ function ($) {
         },
         $loaderLocation: function() {
             return this.$rows().last();
+        }
+    });
+});
+
+
+Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
+    $(function () {
+        var Engine = layout.getBlock('infinitescrolling-engine');
+        if(Engine.getRecoverScrollProgressOnBack()) {
+            $(document).on('click', "a.product-image, .product-name a", function(e) {
+                var productImageList = $("a.product-image");
+                var index = productImageList.index(productImageList.withinviewport().first());
+                if(index == "-1" || index == "0") {
+                    index = 0;
+                }
+                location.hash = "index=" + index + "&page=" + Engine.page;
+            });
+
+            var currentUrl = location.href;
+
+            var hash = currentUrl.split("#")[1];
+            if (hash) {
+                var rawDataArr = hash.split("&");
+                var data = {};
+                rawDataArr.each(function (rawData) {
+                    var key = rawData.split("=")[0],
+                        value = rawData.split("=")[1];
+
+                    data[key] = value;
+                });
+
+                var showMoreButton = $("#m-show-more");
+                if (showMoreButton) {
+                    showMoreButton.remove();
+                    Engine.isShowMoreButtonVisible = false;
+                }
+
+                window.scrollTo(null, Engine.getProductListBottom());
+                Engine.load(data.page, Engine.limit, function () {
+                    var topPosition = $("a.product-image").eq(data.index).offset().top - 10;
+                    window.scrollTo(null, topPosition);
+                }, true);
+            }
         }
     });
 });

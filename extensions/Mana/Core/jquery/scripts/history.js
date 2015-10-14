@@ -7,7 +7,6 @@
 
 (function(window, jQuery, Object, undefined){
 	"use strict";
-
 	// --------------------------------------------------------------------------
 	// Initialise
 

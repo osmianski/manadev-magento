@@ -79,6 +79,9 @@ class Mana_Seo_Model_Observer {
                                 $query[$key] = null;
                             }
                         }
+                        elseif ($key == 'q') {
+                            // keep search query
+                        }
                         else {
                             $query[$key] = null;
                             $isOtherParameterSuppressed = true;

@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>15.04.29.14</version>
+		    <version>15.09.14.22</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -65,58 +65,16 @@
                         <!-- event handler method name -->
                     </manapro_filterseolinks>
                 </observers>
-            </controller_action_layout_generate_blocks_after>        
+            </controller_action_layout_generate_blocks_after>
 
-            <controller_action_layout_render_before_catalog_category_view><!-- this is event name this module listens for -->
+            <controller_action_layout_generate_blocks_after>
                 <observers>
-                    <manapro_filterseolinks_noindex>
+                    <manapro_filterseolinks_robots>
                         <class>manapro_filterseolinks/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>noindexCategoryView</method>
-                        <!-- event handler method name -->
-                    </manapro_filterseolinks_noindex>
+                        <method>noindex</method>
+                    </manapro_filterseolinks_robots>
                 </observers>
-            </controller_action_layout_render_before_catalog_category_view>
-            <controller_action_layout_render_before_catalogsearch_result_index><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filterseolinks_noindex>
-                        <class>manapro_filterseolinks/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>noindexSearchResult</method>
-                        <!-- event handler method name -->
-                    </manapro_filterseolinks_noindex>
-                </observers>
-            </controller_action_layout_render_before_catalogsearch_result_index>
-            <controller_action_layout_render_before_cms_page_view><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filterseolinks_noindex>
-                        <class>manapro_filterseolinks/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>noindexCmsPage</method>
-                        <!-- event handler method name -->
-                    </manapro_filterseolinks_noindex>
-                </observers>
-            </controller_action_layout_render_before_cms_page_view>
-            <controller_action_layout_render_before_cms_index_index><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filterseolinks_noindex>
-                        <class>manapro_filterseolinks/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>noindexCmsIndex</method>
-                        <!-- event handler method name -->
-                    </manapro_filterseolinks_noindex>
-                </observers>
-            </controller_action_layout_render_before_cms_index_index>
-            <controller_action_layout_render_before_mana_optionPage_view><!-- this is event name this module listens for -->
-                <observers>
-                    <manapro_filterseolinks_noindex>
-                        <class>manapro_filterseolinks/observer</class>
-                        <!-- model name of class containing event handler methods -->
-                        <method>noindexOptionPage</method>
-                        <!-- event handler method name -->
-                    </manapro_filterseolinks_noindex>
-                </observers>
-            </controller_action_layout_render_before_mana_optionPage_view>
+            </controller_action_layout_generate_blocks_after>
             <m_before_load_filter_collection><!-- this is event name this module listens for -->
                 <observers>
                     <manapro_filterseolinks>

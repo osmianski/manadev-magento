@@ -11,7 +11,7 @@
 .m-scrollable-filter { overflow-x: hidden !important; overflow-y: scroll !important; border: 1px solid #ccc; /*padding: 0 10px; margin: 0 5px; */background: rgba(255,255,255,0.5); }
 .m-scrollable-filter li { white-space: nowrap; }
 
-.m-filter-popup { padding: 10px; }
+.m-filter-popup { padding: 10px; box-sizing: content-box; }
 .m-filter-popup .m-columns { overflow: hidden; }
 .m-filter-popup .m-columns > li { float: left; width: 200px; text-align: left; }
 .m-filter-popup .m-columns.m-filter-colors.horizontal { width: 600px; }

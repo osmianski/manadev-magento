@@ -35,8 +35,15 @@ class ManaPro_FilterShowMore_Model_Observer {
 				    $index = 0;
 				    foreach ($items->getItems() as $key => $item) {
 				        /* @var $item Mana_Filters_Model_Item */
-				        if ($index < $maxItemCount || $item->getMSelected()) {
-				            $newItems[$key] = $item;
+				        if (Mage::getStoreConfigFlag('mana_filters/display/add_space_for_not_visible_selected_items')) {
+							if ($index < $maxItemCount || $item->getMSelected()) {
+								$newItems[$key] = $item;
+							}
+				        }
+				        else {
+							if ($index < $maxItemCount) {
+								$newItems[$key] = $item;
+							}
 				        }
 				        $index++;
 				    }
