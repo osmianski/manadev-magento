@@ -89,8 +89,6 @@ function($, ajax, config, layout, undefined)
         intercept: function (url, element) {
             var isProductListToolbarClicked = this._isProductListToolbarClicked(element);
             var parser = document.createElement('a');
-            var self = this;
-
             parser.href = url;
             if (window._gaq !== undefined) {
                 window._gaq.push(['_setAccount', config.getData('ga.account')]);
@@ -113,10 +111,6 @@ function($, ajax, config, layout, undefined)
                 '/' + config.getData('layeredNavigation.ajax.routeSeparator') + '/' +
                 url.substr(this._getBaseUrl(url).length);
 
-            if (!(typeof ConfigurableSwatchesList === 'undefined')) {
-                this.saveConfigurableSwatches();
-            }
-
             ajax.get(url, function (response) {
                 ajax.update(response);
                 layout.getPageBlock().resize();
@@ -127,7 +121,6 @@ function($, ajax, config, layout, undefined)
 
                 if (! (typeof ConfigurableSwatchesList === 'undefined')) {
                     ConfigurableSwatchesList.init();
-                    self.restoreConfigurableSwatches();
                 }
 
                 if (isProductListToolbarClicked && config.getData('layeredNavigation.ajax.scrollToTop')) {
@@ -151,39 +144,6 @@ function($, ajax, config, layout, undefined)
                     }
                 }
             }, { preventClicks: true, encode: queryPos != -1 ? { offset: 0, length : queryPos} : undefined });
-        },
-
-        saveConfigurableSwatches: function() {
-            var self = this;
-            this._savedConfigurableSwatches = {};
-
-            $('.configurable-swatch-list li').each(function() {
-                var $swatch = $(this);
-
-                if ($swatch.hasClass('selected')) {
-                    var productId = $swatch.data('product-id');
-                    var index = $swatch.parent().children().index($swatch);
-                    self._savedConfigurableSwatches[productId] = index;
-                }
-            });
-        },
-
-        restoreConfigurableSwatches: function() {
-            var self = this;
-
-            $('.configurable-swatch-list li').each(function () {
-                var $swatch = $(this);
-                var productId = $swatch.data('product-id');
-                var index = self._savedConfigurableSwatches[productId];
-
-                if (index !== undefined) {
-                    if (index == $swatch.parent().children().index($swatch)) {
-                        ConfigurableSwatchesList.handleSwatchSelect($swatch);
-                    }
-                }
-            });
-
-            //delete this._savedConfigurableSwatches;
         }
     });
 });

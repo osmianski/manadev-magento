@@ -24,6 +24,7 @@
     <sync extension-file="rwd/js/scripts.js" project-file="skin/frontend/rwd/default/js/{extension_name}.js"/>
     <sync extension-file="rwd/css/styles.css" project-file="skin/frontend/rwd/default/css/{extension_name}.css"/>
     <sync extension-dir="rwd/images" project-dir="skin/frontend/rwd/default/images/{extension_name}"/>
+    <sync extension-file="rwd/template-rewrite/configurableswatches-catalog-media-js.phtml" project-file="app/design/frontend/rwd/default/template/configurableswatches/catalog/media/js-manapro-filterajax.phtml"/>
 
     <!-- module backend files (having impact on Admin Panel) -->
     <sync extension-file="backend/layout.xml" project-file="app/design/adminhtml/default/default/layout/{extension_name}.xml"/>
