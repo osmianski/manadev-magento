@@ -17,6 +17,7 @@ class Mana_Filters_Model_Filter_Category
 {
     const GET_ALL_CHILDREN_RECURSIVELY = 'recursive';
     const GET_ALL_DIRECT_CHILDREN = 'direct';
+    const GET_ALL_PARENTS = 'parents';
     #region Category Specific logic
     protected $_countedCategories;
 
@@ -67,7 +68,7 @@ class Mana_Filters_Model_Filter_Category
                 	'label' => Mage::helper('core')->htmlEscape($category->getName()),
                     'value' => $category->getId(),
                     'count' => $category->getProductCount(),
-            		'm_selected' => $category->getId() == $this->getCategory()->getId()
+            		'm_selected' => $category->getId() == ($this->isApplied() ? $this->getAppliedCategory()->getId() : $this->getCategory()->getId())
                 );
             }
         }
@@ -359,6 +360,9 @@ class Mana_Filters_Model_Filter_Category
                 break;
             case self::GET_ALL_DIRECT_CHILDREN:
                 $categoryIds = $resource->getChildren($category, false);
+                break;
+            case self::GET_ALL_PARENTS:
+                $categoryIds = array_filter(explode(',', $category->getPathInStore()));
                 break;
         }
 

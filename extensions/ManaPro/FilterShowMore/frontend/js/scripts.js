@@ -205,9 +205,16 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
 
             if (core.count(items)) {
 
-                if (items.length == 1 && items[0].full_url) {
-                    setLocation(items[0].full_url);
-                    return;
+                if (core.count(items) == 1) {
+                    var firstItem = null;
+                    $.each(items, function(index, value) {
+                        firstItem = value;
+                    });
+
+                    if (firstItem && firstItem.full_url) {
+                        setLocation(firstItem.full_url);
+                        return;
+                    }
                 }
 
                 var groupedItems = [[], []];
@@ -322,8 +329,8 @@ function ($, Block, json) {
             var $element = $(element);
             var itemData = json.decodeAttribute($element.data('item'));
             itemData.index = $element.data('index');
-            var key = itemData.url;
-            this._selectedItems = {key: itemData };
+            this._selectedItems = { };
+            this._selectedItems[itemData.url] = itemData
             return false;
         }
     });
@@ -526,7 +533,7 @@ function ($, Block, undefined) {
             return this.$().find('input');
         },
         $list: function() {
-            return this.$().parent().children(':not(.m-option-search)').first();
+            return this.$().parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
         },
         $items: function() {
             return this.$list().children();
@@ -583,7 +590,7 @@ Mana.define('Mana/LayeredNavigation/OptionSearch/Popup', ['jquery', 'Mana/Layere
 function ($, OptionSearch) {
     return OptionSearch.extend('Mana/LayeredNavigation/OptionSearch/Popup', {
         $list: function () {
-            return this.$().parent().children(':not(.m-option-search)').first().find('.m-columns');
+            return this.$().parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first().find('.m-columns');
         },
         _afterSearch: function () {
             this._super();
@@ -687,7 +694,7 @@ function ($, OptionSearch) {
 	}
 	function apply(code, withTransition) {
 		var div = $('#'+prefix+code);
-		var l = div.parent().children(':not(.m-option-search)').first();
+		var l = div.parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
         var heights;
 
 //        l.addClass('m-expandable-filter');
@@ -818,7 +825,7 @@ function ($, OptionSearch) {
         _itemCounts[code] = itemCount;
         _fixedHeight[code] = fixedHeight;
         var div = $('#' + prefix + code);
-        var l = div.parent().children(':not(.m-option-search)').first();
+        var l = div.parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
 
         _initFilterScrollBar(l, code);
         l.parent().on('m-prepare', function() {

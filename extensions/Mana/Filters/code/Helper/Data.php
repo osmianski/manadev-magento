@@ -332,7 +332,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
             if ($inCurrentCategory) {
                 $from = $select->getPart(Varien_Db_Select::FROM);
                 if (isset($from['cat_index'])) {
-                    $categoryId = $this->getLayer()->getCurrentCategory()->getId();
+                    $categoryId = is_int($inCurrentCategory) ? $inCurrentCategory : $this->getLayer()->getCurrentCategory()->getId();
                     $from['cat_index']['joinCondition'] = preg_replace(
                         "/(.*)(`?)cat_index(`?).(`?)category_id(`?)='(\\d+)'(.*)/",
                         "$1$2cat_index$3.$4category_id$5='{$categoryId}'$7",
