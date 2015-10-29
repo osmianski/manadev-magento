@@ -180,11 +180,15 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$().data('recover-scroll-progress-on-back');
         },
 
+        getShowMoreText: function () {
+            return this.$().data('show-more-caption');
+        },
+
         showShowMoreButton: function () {
             var self = this;
             if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible && self.page % self.getPagesPerShowMore() == 0) {
                 self.isShowMoreButtonVisible = true;
-                var button = $("<button id='m-show-more'><span>Show More...</span></button>");
+                var button = $("<button id='m-show-more'><span>"+ self.getShowMoreText() +"</span></button>");
                 button.insertAfter($('.products-grid').last());
                 button.addClass('button');
                 button.on('click', function () {

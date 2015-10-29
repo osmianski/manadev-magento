@@ -43,6 +43,7 @@ class Mana_InfiniteScrolling_Block_Engine extends Mage_Core_Block_Text_List {
             // product count
             'product_count' => $this->_getProductCount(),
             'mode' => $this->_getMode(),
+            'show_more_caption' => $this->infiniteScrollingHelper()->__("Show More..."),
 
         )));
 
@@ -96,6 +97,10 @@ class Mana_InfiniteScrolling_Block_Engine extends Mage_Core_Block_Text_List {
      */
     public function jsonHelper() {
         return Mage::helper('mana_core/json');
+    }
+
+    public function infiniteScrollingHelper() {
+        return Mage::helper('mana_infinitescrolling');
     }
 
     #endregion
