@@ -8,4 +8,8 @@
 "Tree remembers collapsed/expanded state of each category, so on subsequent page loads remembered collapsed/expanded state is restored and not touched items are processed as specified here","Tree remembers collapsed/expanded state of each category, so on subsequent page loads remembered collapsed/expanded state is restored and not touched items are processed as specified here"
 "Tree (2nd level and down)","Tree (2nd level and down)"
 "Parents and Children (One Item Can Be Selected At A Time)","Parents and Children (One Item Can Be Selected At A Time)"
+"Show Siblings of Deepest Subcategories","Show Siblings of Deepest Subcategories"
+"Parents and Children Category Filter Template","Parents and Children Category Filter Template"
+"If current category doesn't have child categories, its sibling categories will be shown instead.","If current category doesn't have child categories, its sibling categories will be shown instead."
+"",""
 "",""

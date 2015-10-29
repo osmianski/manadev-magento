@@ -165,6 +165,9 @@
             <tree>
                 <expand_selected>1</expand_selected>
             </tree>
+            <parents_children>
+                <show_siblings_of_deepest_subcategory>1</show_siblings_of_deepest_subcategory>
+            </parents_children>
         </mana_filters>
     </default>
 </config>

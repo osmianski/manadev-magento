@@ -19,7 +19,9 @@ class ManaPro_FilterTree_Model_ParentsChildren extends Mana_Filters_Model_Filter
         if (!$this->_countedCategories) {
             $category = $this->isApplied() ? $this->getAppliedCategory() : $this->getCategory();
             $this->_countedCategories = $this->getChildrenCollection($category, self::GET_ALL_DIRECT_CHILDREN);
-            if (!count($this->_countedCategories)) {
+            if (!count($this->_countedCategories) &&
+                Mage::getStoreConfigFlag('mana_filters/parents_children/show_siblings_of_deepest_subcategory'))
+            {
                 $category = $category->getParentCategory();
                 $this->_countedCategories = $this->getChildrenCollection($category, self::GET_ALL_DIRECT_CHILDREN);
             }
@@ -42,6 +44,16 @@ class ManaPro_FilterTree_Model_ParentsChildren extends Mana_Filters_Model_Filter
             }
         }
     }
+
+    public function getItemsCount() {
+        $result = parent::getItemsCount();
+        if ($result == 0 && !Mage::getStoreConfigFlag('mana_filters/parents_children/show_siblings_of_deepest_subcategory')) {
+            $result = 1;
+        }
+
+        return $result;
+    }
+
     public function getCountedCategories() {
         $this->_getAllCategories();
         return $this->_countedCategories;
