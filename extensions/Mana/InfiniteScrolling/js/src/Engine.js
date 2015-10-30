@@ -15,7 +15,6 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             this._super();
 
             this.debugScrolling = false;
-            this.isShowMoreButtonVisible = this.getPagesPerShowMore() == 1;
         },
 
         _subscribeToHtmlEvents: function () {
@@ -173,16 +172,18 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$().data('show-more-caption');
         },
 
+        isShowMoreButtonVisible: function() {
+            return $('#m-show-more').length != 0;
+        },
+
         showShowMoreButton: function () {
             var self = this;
-            if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible && self.page % self.getPagesPerShowMore() == 0) {
-                self.isShowMoreButtonVisible = true;
+            if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible() && self.page % self.getPagesPerShowMore() == 0) {
                 var button = $("<button id='m-show-more'><span>"+ self.getShowMoreText() +"</span></button>");
                 button.insertAfter($('.products-grid').last());
                 button.addClass('button');
                 button.on('click', function () {
                     $(this).remove();
-                    self.isShowMoreButtonVisible = false;
                     self.load(self.page + 1, self.limit);
                 });
             }
@@ -292,7 +293,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // when window bottom reaches product list bottom
             if (this.getVisibleItemCount() < this.getProductCount() &&
                 this.getScrollingAreaBottom() >= this.getProductListBottom() &&
-                !this.isLoaderVisible() && !this.isShowMoreButtonVisible)
+                !this.isLoaderVisible() && !this.isShowMoreButtonVisible())
             {
                 this.load(this.page + 1, this.limit);
             }
