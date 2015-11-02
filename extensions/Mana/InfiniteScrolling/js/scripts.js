@@ -186,6 +186,9 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         isShowMoreButtonVisible: function() {
             return $('#m-show-more').length != 0;
         },
+        getLiClass: function() {
+            return this.$().data('li-class');
+        },
 
         showShowMoreButton: function () {
             var self = this;
@@ -360,9 +363,10 @@ function ($) {
 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
     $(function () {
         var Engine = layout.getBlock('infinitescrolling-engine');
+        var selector = ".category-products li." + Engine.getLiClass();
         if(Engine.getRecoverScrollProgressOnBack()) {
-            $(document).on('click', "a.product-image, .product-name a", function(e) {
-                var productImageList = $("a.product-image");
+            $(document).on('click', selector, function(e) {
+                var productImageList = $(selector);
                 var index = productImageList.index(productImageList.withinviewport().first());
                 if(index == "-1" || index == "0") {
                     index = 0;
@@ -371,6 +375,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
             });
 
             var currentUrl = location.href;
+
 
             var hash = currentUrl.split("#")[1];
             if (hash) {
@@ -386,12 +391,11 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                 var showMoreButton = $("#m-show-more");
                 if (showMoreButton) {
                     showMoreButton.remove();
-                    Engine.isShowMoreButtonVisible = false;
                 }
 
                 window.scrollTo(null, Engine.getProductListBottom());
                 Engine.load(data.page, Engine.limit, function () {
-                    var topPosition = $("a.product-image").eq(data.index).offset().top - 10;
+                    var topPosition = $(selector).eq(data.index).offset().top - 10;
                     window.scrollTo(null, topPosition);
                 }, true);
             }

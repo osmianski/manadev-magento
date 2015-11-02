@@ -175,6 +175,9 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         isShowMoreButtonVisible: function() {
             return $('#m-show-more').length != 0;
         },
+        getLiClass: function() {
+            return this.$().data('li-class');
+        },
 
         showShowMoreButton: function () {
             var self = this;

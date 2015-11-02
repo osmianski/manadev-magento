@@ -43,6 +43,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </recover_scroll_progress_on_back>
+                        <template_li_class translate="label comment">
+                            <label>Product `&lt;li&gt;` element class on theme.</label>
+                            <comment>This needs to be set up depending on the product list template so that product list recovery works.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template_li_class>
                     </fields>
                 </infinitescrolling>
             </groups>

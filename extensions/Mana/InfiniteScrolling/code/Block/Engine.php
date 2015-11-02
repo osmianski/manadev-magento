@@ -44,6 +44,7 @@ class Mana_InfiniteScrolling_Block_Engine extends Mage_Core_Block_Text_List {
             'product_count' => $this->_getProductCount(),
             'mode' => $this->_getMode(),
             'show_more_caption' => $this->infiniteScrollingHelper()->__("Show More..."),
+            'li_class' => Mage::getStoreConfig('mana_infinitescrolling/infinitescrolling/template_li_class'),
 
         )));
 
