@@ -1,7 +1,7 @@
 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
     $(function () {
         var Engine = layout.getBlock('infinitescrolling-engine');
-        var selector = ".category-products li." + Engine.getLiClass();
+        var selector = Engine.getItemSelector();
         if(Engine.getRecoverScrollProgressOnBack()) {
             $(document).on('click', selector, function(e) {
                 var productImageList = $(selector);

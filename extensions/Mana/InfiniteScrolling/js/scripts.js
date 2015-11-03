@@ -186,8 +186,8 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         isShowMoreButtonVisible: function() {
             return $('#m-show-more').length != 0;
         },
-        getLiClass: function() {
-            return this.$().data('li-class');
+        getItemSelector: function() {
+            return this.getContainerSelector() + " " + this.getModeHandler().getItemSelector();
         },
 
         showShowMoreButton: function () {
@@ -363,7 +363,7 @@ function ($) {
 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
     $(function () {
         var Engine = layout.getBlock('infinitescrolling-engine');
-        var selector = ".category-products li." + Engine.getLiClass();
+        var selector = Engine.getItemSelector();
         if(Engine.getRecoverScrollProgressOnBack()) {
             $(document).on('click', selector, function(e) {
                 var productImageList = $(selector);
