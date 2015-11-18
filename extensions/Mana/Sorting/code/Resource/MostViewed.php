@@ -65,7 +65,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("most_viewed_stats.view_count {$direction}");
     }
 

@@ -38,7 +38,7 @@ class Mana_Sorting_Resource_Quantity extends Mage_Core_Model_Mysql4_Abstract imp
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         if($this->coreHelper()->isManadevManySKUInstalled()) {
             $select->order("e.m_represented_qty {$direction}");
         } else {

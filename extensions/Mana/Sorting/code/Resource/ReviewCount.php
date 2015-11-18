@@ -53,7 +53,7 @@ class Mana_Sorting_Resource_ReviewCount extends Mage_Core_Model_Mysql4_Abstract 
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("review_count_stats.reviews_count {$direction}");
     }
 

@@ -56,7 +56,7 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("now_in_wishlist_stats.wishlist_count {$direction}");
     }
 

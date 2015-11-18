@@ -52,10 +52,8 @@ class Mana_Sorting_Resource_Bestseller extends Mage_Core_Model_Mysql4_Abstract i
                 );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("bestseller_stats.qty_ordered {$direction}");
-
-
     }
 
     public function getDate() {
