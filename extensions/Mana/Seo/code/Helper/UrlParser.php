@@ -981,13 +981,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
         foreach ($urls as $url) {
             $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
-            if (isset($result[$finalUrlKey])) {
-                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
-                $conflictingToken = $result[$finalUrlKey];
-                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
-                    unset($result[$finalUrlKey]);
-                }
-            }
+//            if (isset($result[$finalUrlKey])) {
+//                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
+//                $conflictingToken = $result[$finalUrlKey];
+//                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
+//                    unset($result[$finalUrlKey]);
+//                }
+//            }
             if (!isset($result[$finalUrlKey])) {
                 $token = $tokens[$finalUrlKey];
                 $token->setCategoryId($url->getCategoryId());
