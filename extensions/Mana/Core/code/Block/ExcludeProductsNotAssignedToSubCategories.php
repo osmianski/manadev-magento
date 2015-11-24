@@ -67,13 +67,13 @@ class Mana_Core_Block_ExcludeProductsNotAssignedToSubCategories extends Mage_Cor
     protected function _prepareProductCollection($collection, $categoryId) {
         $res = $collection->getResource();
         $db = $res->getReadConnection();
-
+        $storeId = Mage::app()->getStore()->getId();
         $subSelect = $db->select()
             ->from(array('subcat_index' => $res->getTable('catalog/category_product_index')),
                 new Zend_Db_Expr("`subcat_index`.`product_id`"))
             ->joinInner(array('subcat' => $res->getTable('catalog/category')),
                 "`subcat`.`entity_id` = `subcat_index`.`category_id`", null)
-            ->where("`subcat_index`.`store_id`=1 AND `subcat_index`.`visibility` IN(2, 4) AND `subcat`.`parent_id` = ?",
+            ->where("`subcat_index`.`store_id`=$storeId AND `subcat_index`.`visibility` IN(2, 4) AND `subcat`.`parent_id` = ?",
                 $categoryId);
 
         $collection->getSelect()->where("`e`.`entity_id` IN ({$subSelect})");
