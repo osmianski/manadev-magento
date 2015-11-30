@@ -52,7 +52,7 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
             foreach ($counts as $category) {
                 $result[] = $category->getData();
             }
-            $data = $this->_getCategoryItemsDataRecursively($this->getLayer()->getCurrentCategory()->getData(), $result);
+            $data = $this->_getCategoryItemsDataRecursively($this->getCategory()->getData(), $result);
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
