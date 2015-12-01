@@ -22,7 +22,7 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_ListGrid extends Mana_Admin_
         $this->addColumn('title', array(
             'header' => $this->__('Title'),
             'index' => 'title',
-            'filter_index' => "`main_table`.`title`",
+            'filter_index' => "main_table.title",
             'width' => '200px',
             'align' => 'left',
         ));
