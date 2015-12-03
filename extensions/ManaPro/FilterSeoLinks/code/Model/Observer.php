@@ -394,7 +394,7 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
         'catalogsearch/result/index',
         'cms/page/view',
         'cms/index/index',
-        'mana/optionpage/view',
+        'mana/optionPage/view',
     );
 
     /**
