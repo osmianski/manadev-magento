@@ -278,10 +278,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
 
         foreach (array('left', 'right') as $position) {
             if ($block = $this->_findBlockForPosition($position)) {
-                if ($this->_canShowFilterInBlock($block, $filter)) {
-                    return true;
-                }
-                elseif (in_array($position, $showIn)) {
+                if (in_array($position, $showIn) && $this->_canShowFilterInBlock($block, $filter)) {
                     return true;
                 }
             }
