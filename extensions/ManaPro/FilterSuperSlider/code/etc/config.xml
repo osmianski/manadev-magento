@@ -287,9 +287,6 @@
             <mobile>
                 <slider>1</slider>
             </mobile>
-            <slider>
-                <price_from_zero>1</price_from_zero>
-            </slider>
         </mana_filters>
     </default>
 </config>
