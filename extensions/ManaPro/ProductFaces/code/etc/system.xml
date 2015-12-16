@@ -81,7 +81,7 @@
                         </override>
                     </fields>
                 </cloning>
-                <default_values translate="label" module="manapro_productfaces">
+                <default_values translate="label comment" module="manapro_productfaces">
                     <label>Default Values When Creating Representing Products</label>
                     <comment>Initial values of Representing Products</comment>
                     <frontend_type>text</frontend_type>
