@@ -194,7 +194,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             var self = this;
             if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible() && self.page % self.getPagesPerShowMore() == 0) {
                 var button = $("<button id='m-show-more'><span>"+ self.getShowMoreText() +"</span></button>");
-                button.insertAfter($('.products-' + self.getMode()).last());
+                button.insertAfter($(this.getItemSelector()).last().parent());
                 button.addClass('button');
                 button.on('click', function () {
                     $(this).remove();
