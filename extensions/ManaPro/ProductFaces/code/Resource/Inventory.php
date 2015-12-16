@@ -401,10 +401,9 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$productIds[$linkedProductId] = $linkedProductId;
 			}
 			foreach ($options['potentiallyObsoleteIds'] as $linkedProductId) {
-                $representingProductData = $this->_getRepresentedProductData($linkedProductId, $representedProductsData);
                 $sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
 					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0,
-					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
+					  `m_pack_qty` = 1
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 

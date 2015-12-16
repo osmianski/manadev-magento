@@ -168,10 +168,10 @@ class ManaPro_ProductFaces_Representing_ProductsController extends Mage_Adminhtm
 		foreach ($ids as $id) {	
 			$response = array(
 				'entity_id' => $id,
-				'm_unit' => 'parts',
-				'm_parts' => 1,
-				'position' => 1,
-                'm_pack_qty' => 1,
+				'm_unit' => Mage::getStoreConfig('manapro_productfaces/default_values/unit_of_measure'),
+				'm_parts' => Mage::getStoreConfig('manapro_productfaces/default_values/parts'),
+				'position' => Mage::getStoreConfig('manapro_productfaces/default_values/position'),
+                'm_pack_qty' => Mage::getStoreConfig('manapro_productfaces/default_values/pack_qty'),
 			);
 			if ($product = Mage::getModel('catalog/product')->setStoreId($storeId)->load($id)) {
 				$response['sku'] = $product->getSku();
