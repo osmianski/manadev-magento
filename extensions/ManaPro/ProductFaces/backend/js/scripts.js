@@ -230,6 +230,10 @@
 		var id = _generateCopyId();
 		var data = Object.clone(t.row);
 		data['entity_id'] = id;
+		data['m_pack_qty'] = _options.defaultPackQty;
+		data['position'] = _options.defaultPosition;
+		data['m_parts'] = _options.defaultParts;
+		data['m_unit'] = _options.defaultUnitOfMeasure;
 		_serializer.gridData.set(id, data);
 		_updateHiddenState();
 		
