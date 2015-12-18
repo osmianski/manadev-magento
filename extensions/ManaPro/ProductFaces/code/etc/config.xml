@@ -320,8 +320,8 @@
         	</general>
         	<default_values>
 				<pack_qty>1</pack_qty>
-				<parts>1</parts>
-				<unit_of_measure>parts</unit_of_measure>
+				<parts>100</parts>
+				<unit_of_measure>virtual_percent</unit_of_measure>
 				<position>1</position>
 			</default_values>
         	<cloning>
