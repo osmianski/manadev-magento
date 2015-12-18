@@ -85,6 +85,10 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
                 Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process($this, $options);
             }
         }
+        /** @var ManaPro_ProductFaces_Model_Item $item */
+        foreach($fullSaveItems as $item) {
+            $item->load($item->getId());
+        }
         // MANA END
         $this->_getResource()->commit();
         return $fullSaveItems;
