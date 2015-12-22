@@ -301,6 +301,11 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
             }
 
             $this->_scopeXml[$fullEntityName] = empty($scopeXml) ? false : $scopeXml[0];
+
+            // HHVM fix
+            if ($scopeXml = $this->_scopeXml[$fullEntityName]) {
+                $scopeXml->asNiceXml();
+            }
         }
         return $this->_scopeXml[$fullEntityName];
     }
