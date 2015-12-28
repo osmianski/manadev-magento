@@ -1,6 +1,9 @@
 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
     $(function () {
         var Engine = layout.getBlock('infinitescrolling-engine');
+        if(!Engine) {
+            return;
+        }
         var selector = Engine.getItemSelector();
         if(Engine.getRecoverScrollProgressOnBack()) {
             $(document).on('click', selector, function(e) {
