@@ -415,7 +415,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			$this->_getWriteAdapter()->multi_query($sql);
             if ($options['runRelatedIndexes']) {
             	Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexProducts($productIds);
-            	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
+            	//Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
 	        $this->updateTextQties($productIds);
