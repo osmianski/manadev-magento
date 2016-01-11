@@ -436,12 +436,15 @@ class Mana_Filters_Model_Filter_Category
         else {
             $collection->getSelect()->where("1 <> 1");
         }
-        $collection
-            ->addAttributeToFilter('is_active', 1)
-            ->setOrder('position', 'ASC')
-            ->load();
+        $collection->addAttributeToFilter('is_active', 1);
+        $this->_orderCategoryItems($collection);
+        $collection->load();
 
         return $collection;
+    }
+
+    protected function _orderCategoryItems($collection) {
+        $collection->setOrder('position', 'ASC');
     }
 
     #region Dependencies
