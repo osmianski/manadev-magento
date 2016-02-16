@@ -51,7 +51,10 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
         for($x=0;$x<=4;$x++) {
             $attribute_id = $this->sortMethodModel->getData('attribute_id_'.$x);
             $sorting_method = $this->sortMethodModel->getData('sorting_method_' . $x);
-            $directionAttribute = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir") == 1 ? 'asc' : 'desc';
+            $sortdir = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir");
+            $sortdir = ($direction == 'asc') ? $sortdir : ($sortdir == 1) ? 1 : 0;
+            $directionAttribute = $sortdir == 1 ? 'asc' : 'desc';
+
             if(is_numeric($attribute_id)) {
                 $_attribute_code = Mage::getModel('eav/entity_attribute')->load($attribute_id)->getAttributeCode();
                 $collection->addAttributeToSort($_attribute_code, $directionAttribute);
