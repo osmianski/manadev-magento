@@ -57,16 +57,24 @@
                     <?php if (false) : ?>
                     <h2><?php echo $this->__('Quick Overview') ?></h2>
                     <?php endif; // false ?>
-                    <div class="std"><?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?></div>
+                    <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?></div>
                 </div>
             <?php endif;?>
             
         <?php echo $this->getChildHtml('product_type_data') ?>
 		    <div class="add-to-cart">
-		    <?php if ($_product->getFinalPrice() > 0) : ?>
-                <?php echo $this->getChildHtml('addtocart') ?>
+            <?php if ($_product->getFinalPrice() > 0) : ?>
+                <?php if ($_product->isSaleable()): ?>
+                    <?php echo $this->getChildHtml('addtocart') ?>
+                <?php else: ?>
+                    <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                <?php endif; ?>
 		    <?php else : ?>
-		    	<?php echo $this->getChildHtml('download.button') ?>
+                <?php if ($_product->isSaleable()): ?>
+    		    	<?php echo $this->getChildHtml('download.button') ?>
+                <?php else: ?>
+                    <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                <?php endif; ?>
 		    <?php endif; ?>
 		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getDemoFrontend(), 'demo_frontend')) : ?>
 		    	<a title="<?php echo $this->__('View live demo store') ?>" target="_blank" 

@@ -61,13 +61,17 @@
 	                    <?php if($_product->isSaleable()): ?>
 		                        <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
 	                    <?php else: ?>
-	                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+	                        <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
 	                    <?php endif; ?>
                     <?php else : ?>
-				    	<?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+	                    <?php if($_product->isSaleable()): ?>
+                            <?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+                        <?php else: ?>
+	                        <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+	                    <?php endif; ?>
                     <?php endif; ?>
                     <div class="desc std">
-                        <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        <?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?>
                         <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>
                     </div>
                 </div>
