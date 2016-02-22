@@ -100,7 +100,6 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			else {
 				$this->_redirect('');
 			}
-			$this->_redirect($redirectTo, $redirectArgs);
 			return null;
 		}
 		else {
@@ -120,7 +119,15 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setIsGuest($this->_getCustomerSession()->isLoggedIn())
 			->setCustomerId($this->_getCustomerSession()->getCustomerId())
 			->save();
-	
+
+		if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
+			$this->_getCustomerSession()
+				->addSuccess('Thank you for you interest in our products. Please find detailed installation instructions below.')
+				->setData('pending_download_product_id', $product->getId());
+			$this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
+			return;
+		}
+
 		// render thank you page
 		$pageId = Mage::getStoreConfig('local_manadev/downloads/thank_you_page');
 		if (!$pageId) $pageId = Mage::getStoreConfig('web/default/cms_home_page');

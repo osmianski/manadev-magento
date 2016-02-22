@@ -178,6 +178,17 @@ class Local_Manadev_Model_Observer {
             Mage::getSingleton('core/layout')->getBlock('head')->setTitle(Mage::helper('mana_core')->__('Review Your Order'));
         }
 
+        // initiate product download if there is a flag in session to do so
+        if ($pendingDownloadProductId = $this->_getCustomerSession()->getData('pending_download_product_id')) {
+            /* @var $js Mana_Core_Helper_Js */ $js = Mage::helper('mana_core/js');
+            $js->options("#download-initiator", array(
+                'fileUrl' => Mage::getUrl('actions/product/file', array('_direct' => 'actions/product/file/id/'. $pendingDownloadProductId.'.zip')),
+            ));
+            $this->_getCustomerSession()->unsetData('pending_download_product_id');
+        }
+    }
 
+    protected function _getCustomerSession() {
+        return Mage::getSingleton('customer/session');
     }
 }
