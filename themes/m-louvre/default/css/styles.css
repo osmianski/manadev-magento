@@ -23,12 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
- 
+@import url(https://fonts.googleapis.com/css?family=PT+Sans);
+
 /* Reset ================================================================================= */
 
 * { margin:0; padding:0; }
 
-body          { background:#f0f0f0; font:12px/1.35  Tahoma, Helvetica, sans-serif; color:#646464; text-align:center;}
+body          { background:#f0f0f0; font:16px/1.5  "PT Sans", Calibri, sans-serif; color:#646464; text-align:center;}
 
 img           { border:0; vertical-align:top; }
 
@@ -46,12 +47,13 @@ transition: color 0.1s ease-in-out;
 
 
 /* Headings */
-h1            { font-size:30px; font-weight:normal; line-height:1.15; color:#26b1ed; }
-h2            { font-size:18px; font-weight:normal; line-height: 1.25; color:#26b1ed; margin-bottom: 10px;}
-h3            { font-size:15px; font-weight:bold; line-height:1.25; color:#26b1ed; }
-h4            { font-size:14px; color: #ff6464; }
-h5            { font-size:12px; font-weight:bold; color: #646464; }
-h6            { font-size:11px; font-weight:bold; }
+
+h1            { font-size:33px; font-weight:normal; color:#26b1ed; }
+h2            { font-size:21px; font-weight:normal; color:#26b1ed; margin-bottom: 10px;}
+h3            { font-size:18px; font-weight:bold; color:#26b1ed; }
+h4            { font-size:17px; color: #ff6464; }
+h5            { font-size:16px; font-weight:bold; color: #646464; }
+h6            { font-size:15px; font-weight:bold; }
 
 /* Forms */
 form          { display:inline; }
@@ -650,10 +652,10 @@ a.m-twitter:hover { background-position: bottom right; }
 .header .welcome-msg a {}
 .header .links { float:right; margin-top: 3px;}
 .header .links li {}
-.header .links li a { color: white; text-decoration: none; padding: 5px;  border-radius: 5px; background: #969696; line-height: 24px; }
+.header .links li a { color: white; text-decoration: none; padding: 5px 10px;  border-radius: 5px; background: #969696; }
 .header .links li a:hover { background: #818181;}
 .header .links li.last a { color: #FF6464; font-weight: bold; background: transparent;}
-.header .links li a.top-link-cart { background: #FF6464 url(../images/i-cart.png) 5px 5px no-repeat; padding-left: 27px;}
+.header .links li a.top-link-cart { background-color: #FF6464; }
 .header .links li.last a:hover { color: #FD2E2E; }
 .header .links li a.top-link-cart:hover { background-color: #FD2E2E; }
 
@@ -695,7 +697,7 @@ a.m-twitter:hover { background-position: bottom right; }
 
 /* 1st Level */
 #nav li { float:left; }
-#nav li a { float:left; padding:5px 10px; color:#696969; font-weight: bold;}
+#nav li a { float:left; padding:5px 10px; color:#696969; }
 #nav li a:hover { color:#000; }
 #nav li.over a,
 #nav li.active a { color: #26B1ED; }
