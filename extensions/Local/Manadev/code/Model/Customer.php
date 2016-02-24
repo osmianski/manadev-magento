@@ -44,7 +44,7 @@ class Local_Manadev_Model_Customer extends Mage_Customer_Model_Customer {
         if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
             $errors[] = $customerHelper->__('The minimum password length is %s', 6);
         }
-        $confirmation = $this->getConfirmation();
+        $confirmation = $this->getPasswordConfirmation();
         if ($password != $confirmation) {
             $errors[] = $customerHelper->__('Please make sure your passwords match.');
         }
