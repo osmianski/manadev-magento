@@ -257,7 +257,7 @@ ul,ol         { list-style:none; }
 
 /* Global Styles ========================================================================= */
 /* Form Elements */
-input,select,textarea,button { font-size:12px; vertical-align:middle; }
+input,select,textarea,button { font: 16px/1.5 "PT Sans", Calibri, sans-serif; vertical-align:middle; }
 input.input-text,select,textarea { color: #646464; background:#fff; border-radius: 5px; padding: 3px; border: 2px solid #BFBFBF; border-width: 2px 0 0; }
 input.input-text,textarea { padding: 3px; border: solid; border-width: 2px 1px 0; border-color: #bfbfbf #dbdbdb;}
 select { }
@@ -274,11 +274,11 @@ button.button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
 
 /* nash: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px;} */
 /* mn: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px; padding: 0 0px;} */
-button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px; }
-
-button.button span { background: #26B1ED; border-radius: 5px; text-align:center; vertical-align:middle; white-space:nowrap; color:#fff; }
-button.button > span { background: #26B1ED; padding: 0 7px; display: block; }
-button.button > span:hover { background: #25A4DB; }
+button.button { overflow:visible; width:auto; border:0; padding:5px 10px; cursor:pointer; margin: 2px; background-color: #26B1ED; border-radius: 5px; }
+button.button:hover { background: #25A4DB; }
+button.button span { white-space:nowrap; color:#fff; }
+button.button > span {  }
+button.button > span:hover {}
 
 
 
@@ -650,7 +650,7 @@ a.m-twitter:hover { background-position: bottom right; }
 .header .welcome-msg .m-username{ color:#26b1ed; }
 
 .header .welcome-msg a {}
-.header .links { float:right; margin-top: 3px;}
+.header .links { float:right; margin-top: 3px; font-size: 14px; }
 .header .links li {}
 .header .links li a { color: white; text-decoration: none; padding: 5px 10px;  border-radius: 5px; background: #969696; }
 .header .links li a:hover { background: #818181;}
@@ -685,7 +685,7 @@ a.m-twitter:hover { background-position: bottom right; }
 
 /* All Levels */
 #nav li { text-align:left; position:relative; }
-#nav > li { height: 30px; padding: 2px 10px 0;}
+#nav > li { padding: 0 10px;}
 #nav > li.active { background: #efefef; border-radius: 5px 5px 0 0; box-shadow: 1px -2px 4px 0px rgba(0,0,0,0.2), -1px -2px 4px 0px rgba(0,0,0,0.2); }
 
 #nav li.over { z-index:998; }
@@ -696,8 +696,8 @@ a.m-twitter:hover { background-position: bottom right; }
 #nav li ul a span { white-space:normal; }
 
 /* 1st Level */
-#nav li { float:left; }
-#nav li a { float:left; padding:5px 10px; color:#696969; }
+#nav li { float:left; height: 32px; }
+#nav li a { float:left; padding:4px 10px; color:#696969; }
 #nav li a:hover { color:#000; }
 #nav li.over a,
 #nav li.active a { color: #26B1ED; }
