@@ -63,6 +63,6 @@
         }
     }
     $(_change);
-    $('#mf_general_display').live('change', _change);
-    $('#mf_general_min_max_slider_role').live('change', _minMaxRoleChange);
+    $(document).on('change', '#mf_general_display', _change);
+    $(document).on('change', '#mf_general_min_max_slider_role', _minMaxRoleChange);
 })(jQuery);

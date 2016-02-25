@@ -88,6 +88,10 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         return $expr;
     }
 
+    public function makeNotEmpty($expr) {
+        return "IF ($expr = '', '-', $expr)";
+    }
+
     public function getSeoSymbols() {
         return self::$_seoSymbols;
     }
@@ -102,5 +106,12 @@ class Mana_Core_Helper_Db extends Mage_Core_Helper_Abstract {
         Mage::register('m_reindex', $reindex);
 
         return $this;
+    }
+
+    public function indexRequiresReindexing($code) {
+        /* @var $indexer Mage_Index_Model_Indexer */
+        $indexer = Mage::getSingleton('index/indexer');
+        $process = $indexer->getProcessByCode($code);
+        return $process->getData('status') != Mage_Index_Model_Process::STATUS_PENDING;
     }
 }

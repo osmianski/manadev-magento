@@ -11,3 +11,5 @@
 .m-expanded > .m-tree-item:hover { background: transparent url(../images/manapro_filtertree/expanded_over.png) 0 4px no-repeat; }
 .m-collapsed > .m-tree-item:hover { background: transparent url(../images/manapro_filtertree/collapsed_over.png) 0 4px no-repeat; }
 .m-expanded > ul, .m-collapsed > ul { margin-left: 10px; }
+
+.m-child-category-list { margin-left: 10px; }

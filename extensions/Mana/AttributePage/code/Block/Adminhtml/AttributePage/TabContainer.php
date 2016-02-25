@@ -114,7 +114,8 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
                 'last_separator' => Mage::getStoreConfig('mana_attributepage/attribute_page_title/last_separator'),
             )),
             'attribute' => $this->jsonHelper()->encodeAttribute(
-                $this->getAttributeResource()->getAttributes(Mana_AttributePage_Resource_Attribute::FIELDS_OTHER))
+                $this->getAttributeResource()->getAttributes(Mana_AttributePage_Resource_Attribute::FIELDS_OTHER)),
+            'attribute_position' => $this->prepareAttributePosition()
         );
 
         if (!$this->adminHelper()->isGlobal()) {
@@ -150,6 +151,16 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
         $html .= $this->getChildHtml('save_button');
         $html .= parent::getButtonsHtml($area);
         return $html;
+    }
+
+    private function prepareAttributePosition() {
+        $attrList = $this->getAttributeSourceModel()->getAllOptions();
+        $tmp = array();
+        foreach($attrList as $x => $attr ) {
+            $attrList[$x]['position'] = $x;
+            $tmp[$attr['value']] = $attrList[$x];
+        }
+        return json_encode($tmp);
     }
 
     #region Dependencies
@@ -191,6 +202,12 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_TabContainer extends Mana
      */
     public function getAttributeResource() {
         return Mage::getResourceSingleton('mana_attributepage/attribute');
+    }
+    /**
+     * @return Mana_AttributePage_Model_Source_Attribute
+     */
+    public function getAttributeSourceModel() {
+        return Mage::getSingleton('mana_attributepage/source_attribute');
     }
     #endregion
 }

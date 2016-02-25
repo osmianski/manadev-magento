@@ -38,7 +38,11 @@ abstract class Mana_Core_Model_Source_Abstract {
     {
         $_options = array();
         foreach ($this->getAllOptions() as $option) {
-            $_options[$option['value']] = $option['label'];
+            if(!is_array($option['value'])) {
+                $_options[$option['value']] = $option['label'];
+            } else {
+                $_options[] = $option['label'];
+            }
         }
         return $_options;
     }

@@ -117,5 +117,12 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
     public function seoHelper() {
         return Mage::helper('mana_seo');
     }
+
+    /**
+     * @return Mana_Core_Helper_Db
+     */
+    public function dbHelper() {
+        return Mage::helper('mana_core/db');
+    }
     #endregion
 }

@@ -159,7 +159,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
      * @return bool
      */
     protected function _parseParameters($token) {
-        if (!$token->getTextToBeParsed()) {
+        if ($token->getTextToBeParsed() === '') {
             return $this->_setResult($token);
         }
 
@@ -193,7 +193,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         if ($tokens) {
             foreach ($tokens as $token) {
                 // eat "/", mark as correction if there are no values after "/"
-                if ($token->getTextToBeParsed()) {
+                if ($token->getTextToBeParsed() !== '') {
                     if ($this->_getParameterUrlKey($token)) {
                         if (!$this->_setCurrentAttribute($token,
                             $token->getParameterUrl()->getAttributeId(),
@@ -259,7 +259,7 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $cRedundantParameterName = Mana_Seo_Model_ParsedUrl::CORRECT_REDUNDANT_PARAMETER_NAME_FOR_ATTRIBUTE_FILTER_URL_KEY;
 
         // split by "-", add correction for token beginning with "-"
-        if (($text = $token->getTextToBeParsed()) && ($tokens = $this->_scanUntilSeparator($token, $this->_schema->getMultipleValueSeparator()))) {
+        if (($text = $token->getTextToBeParsed()) !== '' && ($tokens = $this->_scanUntilSeparator($token, $this->_schema->getMultipleValueSeparator()))) {
             // get all valid attribute value URL keys
             if ($tokens = $this->_getAttributeValueUrlKeys($tokens)) {
                 foreach ($tokens as $token) {
@@ -821,7 +821,9 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
         $flatTokens = array();
         foreach ($tokens as $suffix => $suffixTokens) {
             $result[$suffix] = array();
-            $flatTokens = array_merge($flatTokens, $suffixTokens);
+            foreach ($suffixTokens as $key => $token) {
+                $flatTokens[$key] = $token;
+            }
         }
         foreach ($this->_getUrls($flatTokens, Mana_Seo_Resource_Url_Collection::TYPE_PAGE) as $url) {
             foreach ($tokens as $suffix => $suffixTokens){
@@ -979,13 +981,13 @@ class Mana_Seo_Helper_UrlParser extends Mage_Core_Helper_Abstract  {
 
         foreach ($urls as $url) {
             $finalUrlKey = $this->unaccent($url->getFinalUrlKey());
-            if (isset($result[$finalUrlKey])) {
-                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
-                $conflictingToken = $result[$finalUrlKey];
-                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
-                    unset($result[$finalUrlKey]);
-                }
-            }
+//            if (isset($result[$finalUrlKey])) {
+//                /* @var $conflictingToken Mana_Seo_Model_ParsedUrl */
+//                $conflictingToken = $result[$finalUrlKey];
+//                if ($conflictingToken->getAttributeValueUrl()->getFinalIncludeFilterName()) {
+//                    unset($result[$finalUrlKey]);
+//                }
+//            }
             if (!isset($result[$finalUrlKey])) {
                 $token = $tokens[$finalUrlKey];
                 $token->setCategoryId($url->getCategoryId());

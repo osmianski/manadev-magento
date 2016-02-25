@@ -104,7 +104,7 @@
 //		b.	we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
 (function ($) {
     $(function () {
-        $('.m-wysiwyg').live('click', function () {
+        $(document).on('click', '.m-wysiwyg', function () {
             var elementId = $(this).prev()[0].id;
             manaWysiwygEditor.open($.options('#mana-wysiwyg-editor').url, elementId, $.options('#mana-wysiwyg-editor').storeId);
         });

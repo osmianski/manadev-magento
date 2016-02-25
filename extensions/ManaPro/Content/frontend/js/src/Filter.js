@@ -94,7 +94,7 @@ function ($, config) {
             return $.inArray(productId, this._relatedProducts) !== -1;
         },
         constructUrl: function() {
-            var url = config.getData('url.unfiltered');
+            var url = config.getData('mana_content.url');
             var params = {};
             if (this._searchValue.length > 0) {
                 params.search = this._searchValue;

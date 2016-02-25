@@ -32,23 +32,29 @@ class Mana_Sorting_Resource_ReviewCount extends Mage_Core_Model_Mysql4_Abstract 
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+
+        if (isset($tables['review_count_stats'])) {
+            return;
+        }
 
         $select
-                ->joinLeft(
-                    array(
-                        'stats' => new Zend_Db_Expr("(SELECT r.entity_pk_value AS product_id, count(*) review_count" .
-                                " FROM {$this->getTable('review/review')} AS r" .
-
-                                // " WHERE (r.created_at BETWEEN '{$from}' AND '{$to}') AND" .
-                                " WHERE " .
-                                $db->quoteInto(" r.status_id = ?", Mage_Review_Model_Review::STATUS_APPROVED) .
-                                " GROUP BY r.entity_pk_value)")
-                    ),
-                    "stats.product_id = e.entity_id",
-                    null
-                );
+            ->joinLeft(
+                 array('review_count_stats' => $this->getTable('review/review_aggregate')),
+                 'review_count_stats.entity_pk_value = e.entity_id AND review_count_stats.store_id=' . Mage::app()->getStore()->getId(),
+                 array()
+            );
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
         $direction = $direction == 'asc' ? 'desc' : 'asc';
-        $select->order("stats.review_count {$direction}");
+        $select->order("review_count_stats.reviews_count {$direction}");
     }
 
     public function getDate()

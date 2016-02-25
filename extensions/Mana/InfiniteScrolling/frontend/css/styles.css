@@ -7,3 +7,14 @@
 .mb-infinitescrolling-engine { display: none; }
 .infinite-scrolling-list-loader, .infinite-scrolling-grid-loader { text-align: center; }
 .infinite-scrolling-list-loader img, .infinite-scrolling-grid-loader img { display: inline; }
+#m-show-more {
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+}
+#m-show-more span {
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+}

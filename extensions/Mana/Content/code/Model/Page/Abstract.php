@@ -29,7 +29,7 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
 
     protected $rules = array(
         'title' => 'required',
-        'url_key' => 'required|unique',
+        'url_key' => 'required',
         'content' => 'required',
     );
     protected $captions = array(
@@ -45,6 +45,9 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
 
         if(!$validator->passes()) {
             throw new Mana_Core_Exception_Validation($validator->getMessages());
+        }
+        if(Mage::app()->getRequest()->getParam('rootPageId') == $this->getData('page_global_id') || Mage::app()->getRequest()->getParam('rootPageId') === "false") {
+            $this->_validateUrlKey();
         }
     }
 
@@ -100,13 +103,30 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
      */
     public function getValidator() {
         if(!$this->_validator) {
-            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this));
+            $this->_validator = Mage::getModel('mana_admin/validator', array($this->rules, $this->getData(), $this->captions, $this, array()));
         }
         return $this->_validator;
     }
 
     public function getReferencePages($root_id) {
         $this->getResource()->getReferencePages($root_id);
+    }
+
+    public function getIdentifier() {
+        $route = "mana_content/book/view";
+        if($this->adminHelper()->isGlobal()) {
+            $pageGlobalId = $this->getData('page_global_id');
+            $model = Mage::getModel('mana_content/page_store');
+            $model->setData('store_id', Mage::app()->getDefaultStoreView()->getId());
+            $model->load($pageGlobalId, 'page_global_id');
+            $id = $model->getId();
+        } else {
+            $id = $this->getId();
+        }
+        $url = Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id));
+        $currentUrl = Mage::getUrl();
+        $url = str_replace($currentUrl, '', $url);
+        return $url;
     }
 
     #region Dependencies
@@ -136,6 +156,29 @@ abstract class Mana_Content_Model_Page_Abstract extends Mage_Core_Model_Abstract
      */
     public function contentHelper() {
         return Mage::helper('mana_content');
+    }
+
+    protected function _validateUrlKey() {
+        $resource = $this->getResource();
+        $read = $resource->getReadConnection();
+        $select = $read->select();
+        $select->from(array('mps' => $resource->getTable('mana_content/page_store')), array('COUNT(*)'))
+            ->joinInner(array('mpg' => $resource->getTable('mana_content/page_global')), '`mpg`.`id` = `mps`.`page_global_id`', array())
+            ->joinInner(array('mpgcs' => $resource->getTable('mana_content/page_globalCustomSettings')), '`mpgcs`.`id` = `mpg`.`page_global_custom_settings_id`', array())
+            ->where('`mpgcs`.`parent_id` IS NULL')
+            ->where('`mps`.`url_key` = ?', $this->getUrlKey());
+
+        if($this->getId()) {
+            $select->where('`mps`.`page_global_id` <> ?', $this->getData('page_global_id'));
+        }
+        if (!$this->adminHelper()->isGlobal()) {
+            $select->where('`mps`.`store_id` = ?', $this->adminHelper()->getStore()->getId());
+        }
+
+        $count = $read->fetchOne($select);
+        if($count) {
+            throw new Exception($this->contentHelper()->__('Root book page with URL Key `%s` already exists', $this->getUrlKey()));
+        }
     }
 
     #endregion

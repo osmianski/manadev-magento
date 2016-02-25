@@ -20,9 +20,10 @@ function($, ajax, config, layout, undefined)
             return config.getBaseUrl(url);
         },
         _isProductListToolbarClicked: function (element) {
-            return element !== undefined && (
+            return element !== undefined && !$(element).hasClass('btn-remove') && (
                 $(element).parents().hasClass('mb-category-products') ||
                     $(element).parents().hasClass('mb-cms-products') ||
+                    $(element).parents().hasClass('mb-option-view') ||
                     $(element).parents().hasClass('mb-search-result')
                 );
         },
@@ -116,6 +117,10 @@ function($, ajax, config, layout, undefined)
 
                 if ($('#nav') && typeof mainNav != 'undefined') {
                     mainNav("nav", {"show_delay": "100", "hide_delay": "100"});
+                }
+
+                if (! (typeof ConfigurableSwatchesList === 'undefined')) {
+                    ConfigurableSwatchesList.init();
                 }
 
                 if (isProductListToolbarClicked && config.getData('layeredNavigation.ajax.scrollToTop')) {

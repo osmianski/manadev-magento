@@ -170,6 +170,15 @@ function ($, Container, ajax, core, expression) {
             this._super();
             this._customInit();
         },
+        save: function() {
+            if(typeof wysiwygmf_content_content !== "undefined") {
+                var content = this.getField('content').getValue();
+                content = wysiwygmf_content_content.decodeWidgets(content);
+                content = wysiwygmf_content_content.decodeDirectives(content);
+                this.getField('content').setValue(content);
+            }
+            return this._super();
+        },
         _customInit: function () {
             this._changes = {
                 // the keys are temporary IDs, format n123, "n" is to distinguish from IDs of
@@ -237,6 +246,32 @@ function ($, Container, ajax, core, expression) {
                 };
             }
         },
+        insertNodePosition: function(parent, node, position) {
+            var self = this;
+            var children = this.$jsTree().get_children_dom(parent);
+            var xpos = 0;
+            for(x = 0; x < children.length; x++) {
+                if(x == position) {
+                    xpos++;
+                }
+
+                var child = self.initChangesObj(children[x].id);
+                if(children[x].id == node) {
+                    child.position = {
+                        value: position,
+                        isDefault: 0
+                    };
+                } else {
+                    child.position = {
+                        value: xpos,
+                        isDefault: 0
+                    };
+                }
+                if(x != position ) {
+                    xpos++;
+                }
+            }
+        },
         _subscribeToHtmlEvents: function() {
             var self = this;
             var jsTreeChanged = function (e, data) {
@@ -247,7 +282,11 @@ function ($, Container, ajax, core, expression) {
                     params.form_key = FORM_KEY;
 
                     ajax.post(self.getUrl('load'), params, function (response) {
-                        if (core.isString(response)) {
+                        function processLoad() {
+                            if(typeof self.$varienTab() === "undefined") {
+                                setTimeout(processLoad, 100);
+                                return;
+                            }
                             var activeTab = self.$varienTab().activeTab;
                             var reference_pages = self.reference_pages;
                             self.setContent(response);
@@ -268,15 +307,41 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
+                            if(self.isReferencePage()) {
+                                $('.mb-container-goToOriginal').show();
+                                $('.mb-container-create').hide();
+                            } else {
+                                $('.mb-container-goToOriginal').hide();
+                                $('.mb-container-create').show();
+                            }
+
                             if(self.$().data('wysiwyg-enabled') == "enabled" && typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
                             }
 
+                            if (!self.isReferencePage() && typeof window.reinitMarkdown === "function") {
+                                window.reinitMarkdown();
+                            }
+
                             self._postAction("select");
                         }
+
+                        if (core.isString(response)) {
+                            if(typeof self.$varienTab() !== "undefined") {
+                                processLoad();
+                            } else {
+                                setTimeout(processLoad, 100);
+                            }
+                        }
                         else {
-                            ajax.update(response);
+                            // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                            // because the url has query parameter "isAjax=true"
+                            if(response.ajaxExpired == 1) {
+                                // Reload so that after logging in, it will redirect to the current book page.
+                                window.location.reload();
+                                return;
+                            }
                         }
                     });
                 }
@@ -286,7 +351,15 @@ function ($, Container, ajax, core, expression) {
                     state: self.$jsTree().get_state(),
                     form_key: FORM_KEY
                 };
-                ajax.post(self.getUrl('tree-save-state'), params);
+                ajax.post(self.getUrl('tree-save-state'), params, function(response){
+                    // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                    // because the url has query parameter "isAjax=true"
+                    if(response.ajaxExpired == 1) {
+                        // Reload so that after logging in, it will redirect to the current book page.
+                        window.location.reload();
+                        return;
+                    }
+                });
             };
 
             var jsTreeMoveNode = function(e, data) {
@@ -302,8 +375,13 @@ function ($, Container, ajax, core, expression) {
                     value: data.position,
                     isDefault: 0
                 };
-                self.resetNodePosition(data.old_parent, data.node.id);
-                self._setNodeColor("blue", data.node.id);
+                if(data.old_parent == data.parent){
+                    self.insertNodePosition(data.old_parent, data.node.id, data.position);
+                } else {
+                    self.resetNodePosition(data.old_parent, data.node.id);
+                }
+                var color = self._isTemporaryId(data.node.id) ? "green" : "blue";
+                self._setNodeColor(color, data.node.id)
             };
 
             var jsTreeCopyNode = function (e, data) {
@@ -322,6 +400,13 @@ function ($, Container, ajax, core, expression) {
                         id: id
                     };
                     ajax.post(self.getUrl('getRecord'), params, function (response) {
+                        // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+                        // because the url has query parameter "isAjax=true"
+                        if(response.ajaxExpired == 1) {
+                            // Reload so that after logging in, it will redirect to the current book page.
+                            window.location.reload();
+                            return;
+                        }
                         copyRecord(response.data);
                     });
                 }
@@ -448,9 +533,9 @@ function ($, Container, ajax, core, expression) {
             if(typeof this._originalFields[id] === "undefined") {
                 this._originalFields[id] = {};
                 for (var i in this.getFields()) {
-                    this._originalFields[id][i] = {};
-                    this._originalFields[id][i].value = this.getField(i).getValue();
-                    this._originalFields[id][i].useDefault = this.getField(i).useDefault();
+                    try {
+                        this._originalFields[id][i] = {value: this.getField(i).getValue(), useDefault: this.getField(i).useDefault()};
+                    } catch(err) {}
                 }
                 return this._originalFields[id];
             }
@@ -462,7 +547,7 @@ function ($, Container, ajax, core, expression) {
             this.$jsTree().select_node(reference_id);
         },
         _subscribeToBlockEvents: function () {
-            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg'];
+            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg', 'Mana_Admin_Field_Hidden'];
             return this
                 ._super()
                 .on('load', this, function () {
@@ -478,6 +563,9 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('create')) this.getChild('create').on('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteNode);
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').on('click', this, this.goToOriginalPage);
+                    if(this.getField('url_key_preview')) {
+                        this.onChangeUrlKey();
+                    }
                     this.setDefaultValuesToChanges();
                     this._initOriginalFields(false);
                     this.disableFieldsIfReferencePage();
@@ -498,7 +586,14 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').off('click', this, this.goToOriginalPage);
                 });
         },
-        _afterSave: function(response) {
+        _afterSave: function(response, callback) {
+            // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
+            // because the url has query parameter "isAjax=true"
+            if (response.ajaxExpired == 1) {
+                // Reload so that after logging in, it will redirect to the current book page.
+                window.location.reload();
+                return;
+            }
             var newIds = response.newId;
             for (var id in this.errorPerRecord) {
                 this.$jsTree().set_icon(id, true);
@@ -516,7 +611,7 @@ function ($, Container, ajax, core, expression) {
             }
 
             for(var id in this._changes.deleted) {
-                if(this.getCurrentId() == id) {
+                if(this.getCurrentId() == id && !core.isFunction(callback)) {
                     this.$jsTree().select_node(this.getUrlParam('id'));
                 }
                 this.$jsTree().delete_node(id);
@@ -543,7 +638,8 @@ function ($, Container, ajax, core, expression) {
                 form_key: FORM_KEY,
                 changes: this._changes,
                 selectedRecord: this.getCurrentId(),
-                rootPageId: this.getUrlParam('id')
+                rootPageId: this.getUrlParam('id'),
+                isAjax: true
             };
         },
         createNewRecord: function (recordData) {
@@ -683,8 +779,11 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
             var url_key = expression.seoify(title);
-            if(typeof field !== "undefined" && field.useDefault()) {
+            if ((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name == "Mana_Admin_Field_Hidden")) {
                 field.setValue(url_key);
+                if(this.getField('url_key_preview')) {
+                    this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
+                }
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {
@@ -698,8 +797,8 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('title');
             var obj = this.getCurrentId();
             var title = field.getValue();
+            var origTitle = title;
             var no_of_char = parseInt(this.$().data('visible-title-char'));
-            $("#" + obj).attr('title', title);
             if (title.length > no_of_char) {
                 title = title.substring(0, no_of_char);
                 title += "...";
@@ -708,6 +807,7 @@ function ($, Container, ajax, core, expression) {
             this.onChangeMetaTitle();
 
             this.$jsTree().rename_node(obj, title);
+            $("#" + obj).attr('title', origTitle);
             for(var i in this.reference_pages) {
                 if(this.reference_pages[i].reference_id == obj) {
                     this.$jsTree().rename_node(this.reference_pages[i], title);
@@ -799,7 +899,7 @@ function ($, TabContainer, expression) {
         },
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
-            if(typeof field !== "undefined" && field.useDefault()) {
+            if((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name = "Mana_Admin_Field_Hidden")) {
                 if (this.getJsonData('global-is-custom', 'url_key')) {
                     field.setValue(this.getJsonData('global', 'url_key'));
                 } else {
@@ -807,6 +907,7 @@ function ($, TabContainer, expression) {
                     var url_key = expression.seoify(title);
                     field.setValue(url_key);
                 }
+                this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {

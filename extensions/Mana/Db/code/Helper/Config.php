@@ -67,7 +67,7 @@ class Mana_Db_Helper_Config extends Mage_Core_Helper_Abstract {
                 Mage::getConfig()->loadModulesConfiguration('m_db.xml', $config);
                 $this->_xml = $config;
                 $this->_prepareXml();
-                if (Mage::app()->useCache('config')) {
+                if (Mage::app()->useCache('config') && !defined('HHVM_VERSION')) {
                     Mage::app()->saveCache($config->getXmlString(), 'm_db_config', array(Mage_Core_Model_Config::CACHE_TAG));
                 }
             }

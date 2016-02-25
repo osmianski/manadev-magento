@@ -39,21 +39,19 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
         $this->setChild('close_button', $button);
 
         if ($this->getFlatModel()->getId() && $this->adminHelper()->isGlobal()) {
-            if($this->getFlatModel()->getReferenceId()) {
-                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.goToOriginal")
-                    ->setData(array(
-                            'label' => $this->__('Go To Original Page'),
-                            'class' => 'go',
-                        ));
-                $this->setChild('create_button', $button);
-            } else {
-                $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
-                    ->setData(array(
-                            'label' => $this->__('Create Child Page'),
-                            'class' => 'add',
-                        ));
-                $this->setChild('create_button', $button);
-            }
+            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.goToOriginal")
+                ->setData(array(
+                        'label' => $this->__('Go To Original Page'),
+                        'class' => 'go',
+                        'style' => 'display:none;',
+                    ));
+            $this->setChild('goToOriginal_button', $button);
+            $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.create")
+                ->setData(array(
+                        'label' => $this->__('Create Child Page'),
+                        'class' => 'add',
+                    ));
+            $this->setChild('create_button', $button);
             $button = $this->getLayout()->createBlock('mana_admin/v2_action', "{$this->getNameInLayout()}.delete")
                 ->setData(array(
                     'label' => $this->__('Delete Current Page'),
@@ -116,7 +114,8 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
 
         $data = array(
             'type' => 'Mana/Content/Book/TabContainer/'.($this->adminHelper()->isGlobal() ? 'Global' : 'Store'),
-            'save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('save')),
+            // Add url parameter `isAjax=true` so that magento will return a JSON when a request fails (e.g. Session timeout)
+            'save_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('save') . "?isAjax=true"),
             'close_url' => $urlTemplate->encodeAttribute($this->getUrl('*/mana_content_folder/index',
                 $this->adminHelper()->isGlobal() ? array() : array('store' => $this->adminHelper()->getStore()->getId()))),
             'create_url' => $urlTemplate->encodeAttribute($this->getGlobalUrl('create')),
@@ -125,13 +124,16 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
             'delete_whole_page_text' => $this->__('Delete Whole Page'),
             'delete_reference_page_text' => $this->__('Delete Reference Page'),
             'delete_confirm_root_text' => $this->__('Are you sure you want to delete the whole book? You will be redirected to page list immediately.'),
-            'load_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('load')),
-            'tree_save_state_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('saveTreeState')),
+            // Add url parameter `isAjax=true` so that magento will return a JSON when a request fails (e.g. Session timeout)
+            'load_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('load')."?isAjax=true"),
+            // Add url parameter `isAjax=true` so that magento will return a JSON when a request fails (e.g. Session timeout)
+            'tree_save_state_url' => $urlTemplate->encodeAttribute($this->getStoreSpecificUrl('saveTreeState')."?isAjax=true"),
             'default_title_text' => Mage::getStoreConfig('mana_content/book/default_title'),
             'default_content_text' => Mage::getStoreConfig('mana_content/book/default_content'),
             'save_mode_text' => Mage::getStoreConfig('mana_content/book/save_mode'),
             'visible_title_char' => Mage::getStoreConfig('mana_content/general/visible_title_char'),
-            'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')),
+            // Add url parameter `isAjax=true` so that magento will return a JSON when a request fails (e.g. Session timeout)
+            'get_record_url' => $urlTemplate->encodeAttribute($this->getUrl('*/*/getRecord')."?isAjax=true"),
             'reference_pages' => json_encode($referencePages),
             'tree_icon_error_url' => $this->getSkinUrl('images/mana_content/tree-icon.png'),
             'wysiwyg_enabled' => Mage::getStoreConfig('cms/wysiwyg/enabled'),
@@ -160,6 +162,7 @@ class Mana_Content_Block_Adminhtml_Book_TabContainer extends Mana_Admin_Block_V2
     public function getButtonsHtml($area = null) {
         $html = '';
         $html .= $this->getChildHtml('close_button');
+        $html .= $this->getChildHtml('goToOriginal_button');
         $html .= $this->getChildHtml('create_button');
         $html .= $this->getChildHtml('delete_button');
         $html .= $this->getChildHtml('apply_button');

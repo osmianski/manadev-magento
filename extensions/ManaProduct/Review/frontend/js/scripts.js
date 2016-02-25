@@ -34,7 +34,7 @@
             }
         }
     });
-    $('a.m-open-review-list,a.m-open-review-form').live('click', function() {
+    $(document).on('click', 'a.m-open-review-list,a.m-open-review-form', function() {
         var id = $(this).hasClass('m-open-review-list') ? '#review-list' : '#review-form';
         _openTab(id);
         _scrollToElement(id);

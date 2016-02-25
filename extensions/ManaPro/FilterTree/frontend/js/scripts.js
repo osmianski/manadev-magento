@@ -108,7 +108,7 @@
 
     $(function () {
         _loadState();
-        $('.m-tree-item').live('click', function (e) {
+        $(document).on('click', '.m-tree-item', function (e) {
             if ($(e.target).prop("tagName").toLowerCase() == 'a') {
                 return true;
             }

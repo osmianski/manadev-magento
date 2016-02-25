@@ -11,7 +11,7 @@ function ($, TabContainer, expression) {
         },
         onChangeUrlKey: function() {
             var field = this.getField('url_key');
-            if(typeof field !== "undefined" && field.useDefault()) {
+            if((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name = "Mana_Admin_Field_Hidden")) {
                 if (this.getJsonData('global-is-custom', 'url_key')) {
                     field.setValue(this.getJsonData('global', 'url_key'));
                 } else {
@@ -19,6 +19,7 @@ function ($, TabContainer, expression) {
                     var url_key = expression.seoify(title);
                     field.setValue(url_key);
                 }
+                this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {

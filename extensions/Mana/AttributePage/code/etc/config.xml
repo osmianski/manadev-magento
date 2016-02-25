@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_AttributePage>
-            <version>14.12.08.14</version>
+            <version>15.12.01.12</version>
         </Mana_AttributePage>
     </modules>
     <global>
@@ -180,6 +180,16 @@
                 <digit_label>#</digit_label>
             </attribute_page_settings>
         </mana_attributepage>
+        <sitemap>
+            <m_attribute_page>
+                <priority>0.5</priority>
+                <changefreq>daily</changefreq>
+            </m_attribute_page>
+            <m_option_page>
+                <priority>0.5</priority>
+                <changefreq>daily</changefreq>
+            </m_option_page>
+        </sitemap>
     </default>
     <m_layout>
         <default>

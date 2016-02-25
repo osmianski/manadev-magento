@@ -295,6 +295,10 @@
 /* TABLES
 =============================================================================*/
 
+.std > .mana_content table {
+    max-width: 100%;
+}
+
 .std > .mana_content table th {
   font-weight: bold;
 }
@@ -319,4 +323,15 @@
 
 .std > .mana_content img {
   max-width: 100%
+}
+
+/* UL and OL
+=============================================================================*/
+
+.std > .mana_content ul {
+    list-style: disc;
+}
+
+.std > .mana_content ol {
+    list-style: decimal;
 }

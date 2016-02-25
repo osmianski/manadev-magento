@@ -11,6 +11,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // ------------------------------------------------
 
         _init: function() {
+
             this._super();
 
             this.debugScrolling = false;
@@ -30,6 +31,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     self.page = 1;
                     self.limit = this.getVisibleItemCount();
                     self.$scrollingArea().on('scroll', _scroll);
+                    this.showShowMoreButton();
                 })
                 .on('unbind', this, function () {
                     self.$scrollingArea().off('scroll', _scroll);
@@ -158,13 +160,49 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.$items().length;
         },
 
+        getPagesPerShowMore: function () {
+            return this.$().data('pages-per-show-more');
+        },
+        
+        getRecoverScrollProgressOnBack: function() {
+            return this.$().data('recover-scroll-progress-on-back');
+        },
+
+        getShowMoreText: function () {
+            return this.$().data('show-more-caption');
+        },
+
+        isShowMoreButtonVisible: function() {
+            return $('#m-show-more').length != 0;
+        },
+        getItemSelector: function() {
+            return this.getContainerSelector() + " " + this.getModeHandler().getItemSelector();
+        },
+
+        showShowMoreButton: function () {
+            var self = this;
+            if (self.getVisibleItemCount() < self.getProductCount() && !this.isShowMoreButtonVisible() && self.page % self.getPagesPerShowMore() == 0) {
+                var button = $("<button id='m-show-more'><span>"+ self.getShowMoreText() +"</span></button>");
+                button.insertAfter($(this.getItemSelector()).last().parent());
+                button.addClass('button');
+                button.on('click', function () {
+                    $(this).remove();
+                    self.load(self.page + 1, self.limit);
+                });
+            }
+        },
         // endregion
 
         // region Product Loading
         // ------------------------------------------------
 
-        load: function(page, limit) {
+        load: function(page, limit, callback, reset) {
             var self = this;
+            var reset = (reset) ? reset : false;
+            if(reset) {
+                self.page = 0;
+                limit = page * limit;
+            }
             self.showLoader();
 
             var url = ajax.getDocumentUrl();
@@ -177,22 +215,33 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 url = url.substr(0, queryPos) + '?' + encodedUrl.substr(encodedQueryPos + 1);
             }
 
-
             url = config.getBaseUrl(url) + this.getUrlKey() +
                 '/' + config.getData('ajax.currentRoute') +
                 '/' + this.getPageSeparator() +
-                '/' + page +
+                '/' + (self.page+1) +
                 '/' + this.getLimitSeparator() +
                 '/' + limit +
                 '/' + this.getRouteSeparator() +
                 '/' + url.substr(config.getBaseUrl(url).length);
 
             ajax.get(url, function (response) {
-                self.addContent(response);
-                self.page++;
+                self.addContent(response, reset);
+                if(reset) {
+                    self.page = parseInt(page);
+                } else {
+                    self.page++;
+                }
                 self.hideLoader();
                 layout.getPageBlock().resize();
+                if(self.page == page) {
+                    self.showShowMoreButton();
+                    callback();
+                } else {
+                    window.scrollTo(null, self.$rows().last().offset().top - 20);
+                    self.load(page, limit, callback);
+                }
             }, { showWait: false, showOverlay: false, encode: queryPos != -1 ? { offset: 0, length: queryPos} : undefined });
+
         },
 
         showLoader: function() {
@@ -209,7 +258,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             return this.loaderVisible;
         },
 
-        addContent: function(content) {
+        addContent: function(content, reset) {
             var $content = $(content);
             var $newRows = $content.find(this.getRowSelector());
             var self = this;
@@ -217,10 +266,15 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // prepare effect
             $newRows.hide();
 
+            var parent = $(self.$rows().parent());
+            if(reset) {
+                parent.html("");
+            }
+
             // insert new data
             self.$rows().last().removeClass('last');
             $newRows.each(function() {
-                self.$rows().last().after(this);
+                parent.append(this);
             });
 
             // start effect
@@ -242,7 +296,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // when window bottom reaches product list bottom
             if (this.getVisibleItemCount() < this.getProductCount() &&
                 this.getScrollingAreaBottom() >= this.getProductListBottom() &&
-                !this.isLoaderVisible())
+                !this.isLoaderVisible() && !this.isShowMoreButtonVisible())
             {
                 this.load(this.page + 1, this.limit);
             }

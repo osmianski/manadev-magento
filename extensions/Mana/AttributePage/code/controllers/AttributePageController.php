@@ -30,8 +30,12 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
             }
             if ($root = $this->getLayout()->getBlock('root')) {
                 /* @var $root Mage_Page_Block_Html */
-                $root->addBodyClass('m-'.Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template'));
+                $root->addBodyClass('attribute-page-' . $attributePage->getData('attribute_page_global_id'))
+                    ->addBodyClass('attribute-' . $attributePage->getData('url_key'));
+
+                $root->addBodyClass('m-' . Mage::getStoreConfig('mana_attributepage/attribute_page_settings/template'));
             }
+
             $this->renderLayout();
         } else {
             $this->_forward('noRoute');

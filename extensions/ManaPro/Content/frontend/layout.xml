@@ -12,7 +12,7 @@
             <action method="addItem"><type>skin_js</type><name>js/manapro/content.js</name><params/></action>
         </reference>
         <reference name="left">
-            <block type="manapro_content/filter_search" name="search" as="search">
+            <!--<block type="manapro_content/filter_search" name="search" as="search">
                 <action method="setMClientSideBlock">
                     <params>
                         <type>ManaPro/Content/Tree/Search</type>
@@ -28,7 +28,7 @@
                         <type>ManaPro/Content/Tree/Tag</type>
                     </params>
                 </action>
-            </block>
+            </block>-->
         </reference>
         <reference name="content">
             <block type="manapro_content/book_related" name="related_product" as="related_product" before="book_content"/>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Sorting
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+	<menu>
+		<mana>
+            <title>MANAdev</title>
+            <sort_order>79</sort_order>
+			<children>
+                <sortingmethod translate="title" module="mana_sorting">
+                    <title>Custom Sorting Methods</title>
+                    <sort_order>700</sort_order>
+                    <action>adminhtml/mana_sorting_method/</action>
+                </sortingmethod>
+                <system_configuration>
+                    <children>
+                        <mana_sorting translate="title" module="mana_sorting">
+                            <title>Sorting</title>
+                            <action>adminhtml/system_config/edit/section/mana_sorting</action>
+                            <sort_order>950</sort_order>
+                        </mana_sorting>
+                    </children>
+                </system_configuration>
+			</children>
+		</mana>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<mana>
+						<children>
+							<system_configuration>
+                                <children>
+                                    <mana_sorting translate="title" module="mana_sorting">
+                                        <title>Sorting</title>
+                                        <sort_order>950</sort_order>
+                                    </mana_sorting>
+                                </children>
+							</system_configuration>
+                            <sortingmethod translate="title" module="mana_sorting">
+                                <title>Custom Sorting Methods</title>
+                                <sort_order>700</sort_order>
+                            </sortingmethod>
+						</children>
+					</mana>
+                    <system>
+						<children>
+							<config>
+								<children>
+									<mana_sorting translate="title" module="mana_sorting">
+										<title>MANAdev Sorting</title>
+                                        <sort_order>50950</sort_order>
+                                    </mana_sorting>
+								</children>
+							</config>
+						</children>
+					</system>
+                </children>
+			</admin>
+		</resources>
+	</acl>
+</config>

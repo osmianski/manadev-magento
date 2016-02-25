@@ -255,19 +255,24 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
     }
 
     protected function _processPage($rule, &$globalVars) {
+        $t = Mage::helper('manapro_filterseolinks');
         if ($globalVars['page'] && $globalVars['page'] > 1) {
-            $globalVars['page'] = $this->_processValue((string)$rule['pattern'], $globalVars);
+            $globalVars['page'] = $this->_processValue($t->__((string)$rule['pattern']), $globalVars);
         }
     }
 
     protected function _processApply($instruction, &$globalVars, $var, $key = null) {
+        $t = Mage::helper('manapro_filterseolinks');
+
+        $qq = $t->__((string)$instruction['last_glued_by']);
+
         $pattern = array(
-            'pattern' => (string)$instruction['pattern'],
-            'glue' => (string)$instruction['glued_by'],
+            'pattern' => $t->__((string)$instruction['pattern']),
+            'glue' => $t->__((string)$instruction['glued_by']),
             'lastGlue' => isset($instruction['last_glued_by'])
-                ? (string)$instruction['last_glued_by']
-                : (string)$instruction['glued_by'],
-            'prefix' => isset($instruction['prefix']) ? $instruction['prefix'] : ''
+                ? $t->__((string)$instruction['last_glued_by'])
+                : $t->__((string)$instruction['glued_by']),
+            'prefix' => isset($instruction['prefix']) ? $t->__((string)$instruction['prefix']) : ''
         );
         if ($key === null) {
             $globalVars[$var] = $pattern;
@@ -383,40 +388,23 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             }
         }
     }
+
+    protected static $_routePathsWhereRobotsAreManaged = array(
+        'catalog/category/view',
+        'catalogsearch/result/index',
+        'cms/page/view',
+        'cms/index/index',
+        'mana/optionPage/view',
+    );
+
     /**
-     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_catalog_category_view")
+     * Handles event "controller_action_layout_generate_blocks_after".
      * @param Varien_Event_Observer $observer
      */
-    public function noindexCategoryView($observer) {
-        $this->_noindex();
-    }
-    /**
-     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_catalogsearch_result_index  ")
-     * @param Varien_Event_Observer $observer
-     */
-    public function noindexSearchResult($observer) {
-        $this->_noindex();
-    }
-    /**
-     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_cms_page_view")
-     * @param Varien_Event_Observer $observer
-     */
-    public function noindexCmsPage($observer) {
-        $this->_noindex();
-    }
-    /**
-     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_cms_index_index")
-     * @param Varien_Event_Observer $observer
-     */
-    public function noindexCmsIndex($observer) {
-        $this->_noindex();
-    }
-    /**
-     * Adds NOINDEX if configured so (handles event "controller_action_layout_render_before_mana_optionpage_view")
-     * @param Varien_Event_Observer $observer
-     */
-    public function noindexOptionPage($observer) {
-        $this->_noindex();
+    public function noindex($observer) {
+        if (in_array($this->coreHelper()->getRoutePath(), self::$_routePathsWhereRobotsAreManaged)) {
+            $this->_noindex();
+        }
     }
     /**
      * REPLACE THIS WITH DESCRIPTION (handles event "m_before_load_filter_collection")
@@ -685,5 +673,13 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
     public function filterHelper() {
         return Mage::helper('mana_filters');
     }
+
+    /**
+     * @return Mana_Core_Helper_Data
+     */
+    public function coreHelper() {
+        return Mage::helper('mana_core');
+    }
+
     #endregion
 }

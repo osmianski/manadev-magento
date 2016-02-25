@@ -205,9 +205,16 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
 
             if (core.count(items)) {
 
-                if (items.length == 1 && items[0].full_url) {
-                    setLocation(items[0].full_url);
-                    return;
+                if (core.count(items) == 1) {
+                    var firstItem = null;
+                    $.each(items, function(index, value) {
+                        firstItem = value;
+                    });
+
+                    if (firstItem && firstItem.full_url) {
+                        setLocation(firstItem.full_url);
+                        return;
+                    }
                 }
 
                 var groupedItems = [[], []];
@@ -322,8 +329,8 @@ function ($, Block, json) {
             var $element = $(element);
             var itemData = json.decodeAttribute($element.data('item'));
             itemData.index = $element.data('index');
-            var key = itemData.url;
-            this._selectedItems = {key: itemData };
+            this._selectedItems = { };
+            this._selectedItems[itemData.url] = itemData
             return false;
         }
     });
@@ -526,7 +533,7 @@ function ($, Block, undefined) {
             return this.$().find('input');
         },
         $list: function() {
-            return this.$().parent().children(':not(.m-option-search)').first();
+            return this.$().parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
         },
         $items: function() {
             return this.$list().children();
@@ -583,7 +590,7 @@ Mana.define('Mana/LayeredNavigation/OptionSearch/Popup', ['jquery', 'Mana/Layere
 function ($, OptionSearch) {
     return OptionSearch.extend('Mana/LayeredNavigation/OptionSearch/Popup', {
         $list: function () {
-            return this.$().parent().children(':not(.m-option-search)').first().find('.m-columns');
+            return this.$().parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first().find('.m-columns');
         },
         _afterSearch: function () {
             this._super();
@@ -599,6 +606,7 @@ function ($, OptionSearch) {
 	var _states = {};
 	var _itemCounts = {};
 	var _time = {};
+	var _fixedHeight = {};
 
     function _calculateHeights(l, code) {
         if (l.is('.m-filter-colors.horizontal')) {
@@ -623,12 +631,19 @@ function ($, OptionSearch) {
 	    }
 		var heights = {less: 0, more: 0, count: 0};
 		l.children(':not(.m-no-match)').each(function(index, item) {
-            if (
-                index < _itemCounts[code] ||
-                !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
-                l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
-            ) {
-                heights.less += $(item).outerHeight(true);
+            if (_fixedHeight[code]) {
+                if (index < _itemCounts[code]) {
+                    heights.less += $(item).outerHeight(true);
+                }
+            }
+            else {
+                if (
+                    index < _itemCounts[code] ||
+                    !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
+                    l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
+                ) {
+                    heights.less += $(item).outerHeight(true);
+                }
             }
 
 			heights.more += $(item).outerHeight(true);
@@ -655,14 +670,20 @@ function ($, OptionSearch) {
                 firstTop = $item.position().top;
 		    }
 		    var bottom = $item.position().top - firstTop + $item.outerHeight(true);
-            if (
-                index < _itemCounts[code] ||
-                !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
-                l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
-            ) {
-                heights.less = bottom;
+            if (_fixedHeight[code]) {
+                if (index < _itemCounts[code]) {
+                    heights.less = bottom;
+                }
             }
-
+            else {
+                if (
+                    index < _itemCounts[code] ||
+                    !l.hasClass('m-reverse') && $(item).hasClass('m-selected-ln-item') ||
+                    l.hasClass('m-reverse') && !$(item).hasClass('m-selected-ln-item')
+                ) {
+                    heights.less = bottom;
+                }
+            }
 			heights.more = bottom;
             heights.count++;
         });
@@ -673,7 +694,7 @@ function ($, OptionSearch) {
 	}
 	function apply(code, withTransition) {
 		var div = $('#'+prefix+code);
-		var l = div.parent().children(':not(.m-option-search)').first();
+		var l = div.parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
         var heights;
 
 //        l.addClass('m-expandable-filter');
@@ -774,13 +795,14 @@ function ($, OptionSearch) {
 		return false;
 	}
 
-    $(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time) {
+    $(document).bind('m-show-more-reset', function(e, code, itemCount, showAll, time, fixedHeight) {
         var div = $('#' + prefix + code);
         if (!_inAjax){
 			_states[code] = showAll;
 		}
 		_itemCounts[code] = itemCount;
 		_time[code] = time;
+		_fixedHeight[code] = fixedHeight;
 		apply(code, false);
         div.parent().on('m-prepare', function() {
     		apply(code, false);
@@ -799,10 +821,11 @@ function ($, OptionSearch) {
             l.height('auto');
         }
     }
-    $(document).bind('m-filter-scroll-reset', function (e, code, itemCount) {
+    $(document).bind('m-filter-scroll-reset', function (e, code, itemCount, fixedHeight) {
         _itemCounts[code] = itemCount;
+        _fixedHeight[code] = fixedHeight;
         var div = $('#' + prefix + code);
-        var l = div.parent().children(':not(.m-option-search)').first();
+        var l = div.parent().children(':not(.m-option-search):not(.m-parent-category-list):not(.m-current-category)').first();
 
         _initFilterScrollBar(l, code);
         l.parent().on('m-prepare', function() {
@@ -821,8 +844,8 @@ function ($, OptionSearch) {
 		}
 		_inAjax = false;
 	});
-	$('a.m-show-less-action').live('click', clickHandler);
-	$('a.m-show-more-action').live('click', clickHandler);
+	$(document).on('click', 'a.m-show-less-action', clickHandler);
+	$(document).on('click', 'a.m-show-more-action', clickHandler);
 
 })(jQuery);
 //endregion

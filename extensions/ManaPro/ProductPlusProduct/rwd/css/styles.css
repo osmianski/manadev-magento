@@ -1,0 +1,30 @@
+/**
+ * @category    Mana
+ * @package     ManaPro_ProductPlusProduct
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */    
+.m-bought-together {}
+.m-bought-together-visuals { overflow: hidden; }
+.m-bought-together-products { overflow: hidden; }
+.m-bought-together-products>li { float: left; margin: 0 5px 10px 5px; }
+.m-bought-together-summary { float: left; }
+.m-bought-together-options { margin-bottom: 10px; }
+.m-bought-together-add-to-box { float: none; margin: 0; padding: 0; }
+.m-bought-together .add-to-links,
+.m-bought-together .add-to-cart { float: none; margin: 10px 0 0; padding: 0; }
+.m-bought-together button.button  { margin:0; padding:0; }
+.m-bought-together .m-separator { background: transparent url(../images/manapro_productplusproduct/plus.png) center center no-repeat; width:30px; margin: 0 0 12px; }
+.m-bought-together .m-product img { border: 1px solid #bbb; }
+.m-bought-together .button {
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0px 30px;
+  min-width: 160px;
+  white-space: normal;
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+}
+
+

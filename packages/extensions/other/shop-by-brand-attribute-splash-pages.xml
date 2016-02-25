@@ -7,4 +7,5 @@
     <part name="Mana/Db"/>
     <part name="Mana/Filters"/>
     <part name="Mana/Seo"/>
+    <part name="Mana/Sitemap"/>
 </config>

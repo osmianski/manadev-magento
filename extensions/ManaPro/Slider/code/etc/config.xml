@@ -11,7 +11,7 @@
         <ManaPro_Slider>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>13.01.03.15</version>
+            <version>15.08.07.07</version>
         </ManaPro_Slider>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 

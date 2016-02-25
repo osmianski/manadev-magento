@@ -8,7 +8,7 @@
 <config>
     <modules>
         <ManaPro_FilterContent>
-            <version>14.07.14.18</version>
+            <version>15.08.07.07</version>
         </ManaPro_FilterContent>
     </modules>
     <global>
@@ -299,7 +299,7 @@ and separators in between#}
 
 {% for option in filters %}
     {% if loop.first %}
-        <echo>. Applied filters: </echo>
+        <echo>. </echo>
     {% elseif not loop.last %}
         <echo>, </echo>
     {% else %}

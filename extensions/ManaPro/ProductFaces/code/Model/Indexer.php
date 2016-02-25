@@ -13,7 +13,6 @@
  */
 class ManaPro_ProductFaces_Model_Indexer extends Mage_Index_Model_Indexer_Abstract {
 	// INDEXING ITSELF
-	
     protected function _construct()
     {
         $this->_init('manapro_productfaces/inventory');
@@ -33,8 +32,8 @@ class ManaPro_ProductFaces_Model_Indexer extends Mage_Index_Model_Indexer_Abstra
     {
     }
 	public function reindexAll() {
-		$this->_getResource()->updateAll();
-	}
+        $this->_getResource()->updateAll();
+    }
     
     // ERROR REPORTING IN CRON
     protected $_errors = array();

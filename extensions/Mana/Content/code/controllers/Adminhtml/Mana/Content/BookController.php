@@ -17,7 +17,6 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     public function editAction() {
-        Mage::register('cms_page', Mage::getModel('cms/page')->load('home', 'identifier'));
         try {
             $models = $this->contentHelper()->registerModels($this->getRequest()->getParam('id'));
             Mage::dispatchEvent('m_load_related_products');
@@ -58,6 +57,10 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $this->renderLayout();
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/contentpage');
+    }
+
     public function saveAction() {
         $response = new Varien_Object();
 
@@ -69,39 +72,26 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $newId = array();
         $messagesPerRecord = array();
 
-        // Workaround for the Markdown plugin adding suffix to content field.
-        // Content field reset in here instead of down below so that it will enter validation.
-        foreach($changes as $action => $data) {
-            foreach($data as $id => $fields) {
-                if(is_array($fields)) {
-                    foreach ($fields as $key => $value) {
-                        if (substr($key, 0, 8) == "content_") {
-                            $changes[$action][$id]['content'] = $value;
-                            unset($changes[$action][$id][$key]);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        $this->recoverContentField($changes);
 
         if($this->validateChangesObject($changes, $messagesPerRecord)) {
             foreach($changes as $action => $data) {
                 foreach ($data as $id => $fields) {
                     $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
                     $model = $models['customSettings'];
-                    if(isset($fields['parent_id']) && substr( $fields['parent_id']['value'], 0, 1) <> "n") {
-                        $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
-                    }
-
-                    if($action == "created") {
-                        if (isset($fields['id'])) {
-                            $tmpId = $fields['id']['value'];
-                            unset($fields['id']);
+                    if(is_array($fields)) {
+                        if (isset($fields['parent_id']['value']) && substr($fields['parent_id']['value'], 0, 1) <> "n") {
+                            $fields['parent_id']['value'] = $model->getCustomSettingId($fields['parent_id']['value']);
                         }
-                    }
-                    if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
-                        $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
+                        if ($action == "created") {
+                            if (isset($fields['id'])) {
+                                $tmpId = $fields['id']['value'];
+                                unset($fields['id']);
+                            }
+                        }
+                        if (isset($fields['parent_id']['value']) && isset($newId[$fields['parent_id']['value']])) {
+                            $fields['parent_id']['value'] = $newId[$fields['parent_id']['value']];
+                        }
                     }
                     if($action != "deleted") {
                         // data
@@ -194,6 +184,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
 
     public function loadAction() {
         $changes = $this->getRequest()->getPost('changes');
+        $changes = is_array($changes) ? $changes : array();
         $id = $this->getRequest()->getPost('id');
         if(substr($id, 0, 1) == "n") {
             $id = null;
@@ -202,6 +193,7 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         $model = $models['finalSettings'];
 
         if(!is_null($changes)) {
+            $this->recoverContentField($changes);
             if(!is_null($id)) {
                 if(isset($changes['modified'])) {
                     foreach($changes['modified'] as $id => $field) {
@@ -319,63 +311,26 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
     }
 
     private function validateChangesObject($changes, &$messagePerRecord) {
-        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $connection->beginTransaction();
-        if(isset($changes['deleted'])) {
-            foreach($changes['deleted'] as $id => $fields) {
-                $models = $this->contentHelper()->registerModels($id, false);
-                $model = $models['customSettings'];
-                $model->delete();
-            }
-        }
-        if(isset($changes['modified'])) {
-            foreach($changes['modified'] as $id => $fields) {
-                $models = $this->contentHelper()->registerModels($id, false);
-                $model = $models['customSettings'];
-                if(isset($fields['parent_id'])) {
-                    unset($fields['parent_id']);
-                }
-                $this->contentHelper()->setModelData($model, $fields, true);
-                $model->save();
-            }
-        }
-
         try {
-            $url_keys = array();
-            if(isset($changes['created'])) {
-                foreach ($changes['created'] as $id => $fields) {
-                    if(!isset($fields['reference_id']['value'])) {
-                        if (in_array($fields['url_key']['value'], $url_keys)) {
-                            $message = Mage::getModel('mana_content/page_global')->getValidator()->getMessage('url_key', 'unique');
-                            throw new Exception($message);
-                        } else {
-                            array_push($url_keys, $fields['url_key']['value']);
-                        }
-                    }
-                }
-            }
             foreach($changes as $action => $data) {
                 if($action != "deleted") {
                     foreach($data as $id => $fields) {
-                            $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
-                            /** @var Mana_Content_Model_Page_Abstract $model */
-                            $model = $models['customSettings'];
-                            $tmpId = $id;
-                            unset($fields['parent_id']);
-                            if($action == "modified") {
-                                $model->load($id);
-                            } elseif($action == "created") {
-                                if(isset($fields['id'])) {
-                                    $tmpId = $fields['id']['value'];
-                                    unset($fields['id']);
-                                }
+                        $models = $this->contentHelper()->registerModels(($action == "created") ? null : $id, false);
+                        /** @var Mana_Content_Model_Page_Abstract $model */
+                        $model = $models['customSettings'];
+                        $tmpId = $id;
+                        unset($fields['parent_id']);
+                        if($action == "modified") {
+                            $model->load($id);
+                        } elseif($action == "created") {
+                            if(isset($fields['id'])) {
+                                $tmpId = $fields['id']['value'];
+                                unset($fields['id']);
                             }
-                            $this->contentHelper()->setModelData($model, $fields);
-                            if($model->getReferenceId()) {
-                                $model->getValidator()->ignoreRule('unique');
-                            }
-                            $model->validate();
-                            Mage::dispatchEvent('m_validate', array('object' => $model, 'fields' => $fields));
+                        }
+                        $this->contentHelper()->setModelData($model, $fields);
+                        $model->validate();
+                        Mage::dispatchEvent('m_validate', array('object' => $model, 'fields' => $fields));
                     }
                 }
             }
@@ -389,13 +344,30 @@ class Mana_Content_Adminhtml_Mana_Content_BookController extends Mana_Admin_Cont
         } catch (Exception $e) {
             $messagePerRecord[$id] = $this->getLayout()->createBlock('adminhtml/messages')->addError($e->getMessage());
         }
-        $connection->rollback();
         foreach($messagePerRecord as $id => $messages) {
             if(count($messages) > 0) {
                 return false;
             }
         }
         return true;
+    }
+
+    protected function recoverContentField(&$changes) {
+        // Workaround for the Markdown plugin adding suffix to content field.
+        // Content field reset in here instead of down below so that it will enter validation.
+        foreach ($changes as $action => $data) {
+            foreach ($data as $id => $fields) {
+                if (is_array($fields)) {
+                    foreach ($fields as $key => $value) {
+                        if (substr($key, 0, 8) == "content_") {
+                            $changes[$action][$id]['content'] = $value;
+                            unset($changes[$action][$id][$key]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     #region Dependencies

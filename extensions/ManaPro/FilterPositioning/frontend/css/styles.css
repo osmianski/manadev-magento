@@ -11,6 +11,8 @@
 .mb-top-layered-navigation,
 .mb-top-layered-navigation .block-content { background: transparent; border: none; padding: 0; margin: 20px 0 0; position: relative;}
 
+.mb-top-layered-navigation .block-content:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+
 /* Titles SHOP BY and CURRENTLY SHOPPING BY */
 .mb-top-layered-navigation .block-subtitle,
 .mb-top-layered-navigation .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
@@ -90,8 +92,10 @@ transition: background 300ms ease-in-out;
 .mb-top-layered-navigation.one-filter-column .currently + div .block-subtitle,
 .mb-top-layered-navigation.one-filter-column .currently + div + div .block-subtitle { display: none; }
 
-.mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; }
-.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by { display: none; }
+.mb-top-layered-navigation.m-wide.m-mobile-only { margin: 0; display: none; }
+.mb-top-layered-navigation.m-wide.m-mobile-only .m-shop-by,
+.mb-top-layered-navigation.m-wide.m-mobile-only .actions,
+.mb-top-layered-navigation.m-wide.m-mobile-only .currently { display: none; }
 
 /* Types styling for Top LN only */
 .m-standard {} /* One item can be selected at the time */

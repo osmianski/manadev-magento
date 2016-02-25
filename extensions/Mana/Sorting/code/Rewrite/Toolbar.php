@@ -10,15 +10,39 @@
  *
  */
 class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolbar {
-    protected function _construct() {
-        parent::_construct();
-        $this->_addOrders();
-   }
+    protected $overrideDefaultOrder;
 
     public function setAvailableOrders($orders) {
-        $this->_availableOrder = $orders;
-        $this->_addOrders();
-        return $this;
+        $category = $this->sortingHelper()->getCategory();
+        if($category->getAvailableSortBy()) {
+            foreach ($category->getAvailableSortBy() as $sortBy) {
+                if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
+                    $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
+                }
+            }
+        }
+        parent::setAvailableOrders($orders);
+        if(!$category->getAvailableSortBy()) {
+            $this->_addOrders();
+        }
+    }
+
+    public function setDefaultOrder($field) {
+        if(isset($this->overrideDefaultOrder)) {
+            $field = $this->overrideDefaultOrder;
+        } else {
+            $category = $this->sortingHelper()->getCategory();
+            if($category->getData('default_sort_by')) {
+                $field = $category->getData('default_sort_by');
+            } else {
+                $field = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
+            }
+        }
+        return parent::setDefaultOrder($field);
+    }
+
+    public function overrideDefaultOrder($field) {
+        $this->overrideDefaultOrder = $field;
     }
 
     public function setCollection($collection) {
@@ -41,8 +65,9 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
     }
 
     protected function _addOrders() {
-        foreach ($this->sortingHelper()->getSortingMethodXmls() as $xml) {
-            $this->_availableOrder[(string)$xml->code] = (string)$xml->label;
+        $sortingMethods = $this->sortingHelper()->addManaSortingOptions();
+        foreach($sortingMethods as $sortMethod) {
+            $this->_availableOrder[$sortMethod['value']] = $sortMethod['label'];
         }
     }
 
@@ -54,6 +79,7 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
      */
     protected function _setOrder($collection, $order, $direction) {
         $xmls = $this->sortingHelper()->getSortingMethodXmls();
+        $customMethods = $this->sortingHelper()->getCustomSortMethodCollection()->addFieldToFilter('url_key', $order);
         if (isset($xmls[$order])) {
             /* @var $resource Mana_Sorting_ResourceInterface */
             $resource = Mage::getResourceSingleton((string)$xmls[$order]->resource);
@@ -61,6 +87,15 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
                 throw new Exception('Sorting resource class must implement Mana_Sorting_ResourceInterface.');
             }
             $resource->setOrder($collection, $order, $direction);
+            return true;
+        }
+        elseif(count($customMethods)) {
+            $id = $customMethods->getFirstItem()->getId();
+            /** @var Mana_Sorting_Resource_CustomSortMethod $resource */
+            $resource = Mage::getResourceSingleton('mana_sorting/customSortMethod');
+            $resource->setCustomSortMethodId($id);
+            $resource->setOrder($collection, $order, $direction);
+
             return true;
         }
         else {

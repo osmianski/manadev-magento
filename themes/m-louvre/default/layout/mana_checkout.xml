@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_Checkout
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- This file defines the rules which should be applied when module mana_checkout is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+    <checkout_index_index>
+        <update handle="jquery_core"/>
+        <update handle="mana_ajax" />
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/mana_checkout.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/mana_checkout.js</name><params/></action>
+        </reference>
+		<!--<reference name="m_ajax_update">
+            <action method="addBlock"><block>mana_checkout_order_info</block><on>update</on></action>
+		</reference>-->
+        <reference name="content">
+            <block type="mana_checkout/container" name="mana_checkout_container" as="container">
+                <block type="mana_checkout/billing_address" name="mana_checkout_billing_address" as="billing_address" />
+                <block type="mana_checkout/shipping" name="mana_checkout_shipping" as="shipping"/>
+                <block type="mana_checkout/payment_method" name="mana_checkout_payment_method" as="payment_method">
+                    <block type="mana_checkout/payment_methods" name="mana_checkout_payment_methods" as="methods">
+                        <action method="setMethodFormTemplate">
+                            <method>purchaseorder</method>
+                            <template>payment/form/purchaseorder.phtml</template>
+                        </action>
+                    </block>
+                </block>
+                <block type="mana_checkout/order_review" name="mana_checkout_order_review" as="order_review">
+                    <block type="mana_checkout/order_info" name="mana_checkout_order_info" as="info">
+                        <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+                        <action method="addItemRender">
+                            <type>default</type>
+                            <block>mana_checkout/item_default</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>grouped</type>
+                            <block>mana_checkout/item_grouped</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>configurable</type>
+                            <block>mana_checkout/item_configurable</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>bundle</type>
+                            <block>mana_checkout/item_bundle</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>downloadable</type>
+                            <block>mana_checkout/item_downloadable</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <block type="mana_checkout/order_totals" name="mana_checkout_order_totals" as="totals" />
+                    </block>
+                    <block type="mana_checkout/terms" name="mana_checkout_terms" as="terms"/>
+                </block>
+                <block type="mana_checkout/login" name="mana_checkout_login" as="login"/>
+                <block type="mana_checkout/payment_cvv" name="mana_checkout_payment_cvv" as="payment_cvv"/>
+            </block>
+        </reference>
+    </checkout_index_index>
+</layout>

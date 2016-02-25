@@ -82,8 +82,9 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
             ? Mage::getResourceModel("mana_content/page_globalCustomSettings")->getAllChildren($options['page_global_custom_settings_id'])
             : array();
 
+        $urlExpr = $this->_seoify('`cp`.`url_key`', $schema);
         $fields = array(
-            'url_key' => new Zend_Db_Expr("`cp`.`url_key`"),
+            'url_key' => new Zend_Db_Expr($urlExpr),
             'type' => new Zend_Db_Expr("'book_page'"),
             'is_page' => new Zend_Db_Expr('1'),
             'is_parameter' => new Zend_Db_Expr('0'),
@@ -133,8 +134,9 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
 
         $db->exec($sql);
         for ($x = 1; $x <= $maxLevel; $x++) {
+            $urlExpr = $this->_seoify("CONCAT(`msu`.`url_key`, '/', `cp`.`url_key`)", $schema);
             $customFields = array(
-                'url_key' => new Zend_Db_Expr("CONCAT(`msu`.`url_key`, '/', `cp`.`url_key`)"),
+                'url_key' => new Zend_Db_Expr($urlExpr),
             );
 
             $select = $read->select()

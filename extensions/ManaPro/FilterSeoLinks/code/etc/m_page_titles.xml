@@ -9,7 +9,7 @@
         <apply pattern="{$value->title}" glued_by="," last_glued_by="," prefix="," />
     </keyword_values>
     <description_values as="value">
-        <apply pattern="{$value->title}" glued_by=", " last_glued_by=" and " prefix=" Applied filters: " />
+        <apply pattern="{$value->title}" glued_by=", " last_glued_by=" and " prefix="" />
     </description_values>
     <page pattern=" (Page {$page})" />
     <finally>

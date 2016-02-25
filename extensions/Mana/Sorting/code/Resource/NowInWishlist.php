@@ -26,32 +26,38 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
      */
     public function setOrder($collection, $order, $direction)
     {
-        foreach (Mage::getModel('reports/event_type')->getCollection() as $eventType) {
-            if ($eventType->getEventName() == 'catalog_product_view') {
-                $productViewEvent = $eventType->getId();
-                break;
-            }
-        }
-
         $to = $this->getDate()->addDay(1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
         $from = $this->getDate()->addYear(-1)->toString(Varien_Date::DATE_INTERNAL_FORMAT);
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+        if (isset($tables['now_in_wishlist_stats'])) {
+            return;
+        }
 
         $select
                 ->joinLeft(
                     array(
-                        'stats' => new Zend_Db_Expr("(SELECT stats.product_id, count(*) AS wishlist_count" .
-                                " FROM {$this-> getTable('wishlist/item')} AS stats" .
-                                " WHERE (stats.added_at BETWEEN '{$from}' AND '{$to}') " .
-                                " GROUP BY stats.product_id)")
+                        'now_in_wishlist_stats' => new Zend_Db_Expr("(SELECT now_in_wishlist_stats.product_id, count(*) AS wishlist_count" .
+                                " FROM {$this-> getTable('wishlist/item')} AS now_in_wishlist_stats" .
+                                " WHERE (now_in_wishlist_stats.added_at BETWEEN '{$from}' AND '{$to}') " .
+                                " GROUP BY now_in_wishlist_stats.product_id)")
                     ),
-                    "stats.product_id = e.entity_id",
+                    "now_in_wishlist_stats.product_id = e.entity_id",
                     null
                 );
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
         $direction = $direction == 'asc' ? 'desc' : 'asc';
-        $select->order("stats.wishlist_count {$direction}");
+        $select->order("now_in_wishlist_stats.wishlist_count {$direction}");
     }
 
     public function getDate()

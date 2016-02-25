@@ -22,6 +22,8 @@
     <sync extension-file="frontend/js/scripts.js" project-file="skin/frontend/base/default/js/{extension_name}.js"/>
     <sync extension-file="frontend/css/styles.css" project-file="skin/frontend/base/default/css/{extension_name}.css"/>
     <sync extension-dir="frontend/images" project-dir="skin/frontend/base/default/images/{extension_name}"/>
+    <sync extension-dir="frontend/lib/jquery-lighter" project-dir="skin/frontend/base/default/lib/jquery-lighter"/>
+    <sync extension-dir="frontend/lib/jquery-withinviewport" project-dir="skin/frontend/base/default/lib/jquery-withinviewport"/>
 
     <!-- rwd theme module frontend files (having impact on store pages) -->
     <sync extension-file="rwd/layout.xml" project-file="app/design/frontend/rwd/default/layout/{extension_name}.xml"/>

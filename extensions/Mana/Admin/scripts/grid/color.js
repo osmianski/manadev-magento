@@ -28,7 +28,7 @@
         var value = $.gridData(td, 'value');
         $('#m-color-helper .mcf-manual input')
             .val(value == '' ? 'transparent' : value)
-            .mMarkAttr('disabled', $.gridData(td, 'show_use_default') && $(helper).find('input.m-default').attr('checked') == 'checked');
+            .mMarkAttr('disabled', $.gridData(td, 'show_use_default') && $(helper).find('input.m-default').is(':checked'));
 		_helper = helper;
 		_td = td;
 	}
@@ -43,7 +43,7 @@
         }
 		$.gridData(td, {
 		    value: value,
-		    is_default: $(helper).find('input.m-default').attr('checked') == 'checked'
+		    is_default: $(helper).find('input.m-default').is(':checked')
 		});
 		$(td).find('div').css({'background-color': value == ''? 'transparent' : value});
 		_helper = null;
@@ -126,7 +126,7 @@
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
 	// executed when referenced DOM elements are still being loaded.
 	$(function() {
-		$('.ct-color').live('mouseover', function() {
+		$(document).on('mouseover', '.ct-color', function() {
 			if ($.gridData(this, 'show_helper')) { 
 				$.helperPopup({
 					host: this, 
@@ -139,7 +139,7 @@
 
         $('#m-color-helper .mc-palette')
             .mousemove(function(e) {
-                if ($('#m-color-helper-checkbox').attr('checked') == 'checked') {
+                if ($('#m-color-helper-checkbox').is(':checked')) {
                     return; 
                 }
                 var offset = $(this).offset();
@@ -155,7 +155,7 @@
             });
         $('#m-color-helper .mc-gray')
             .mousemove(function(e) {
-                if ($('#m-color-helper-checkbox').attr('checked') == 'checked') {
+                if ($('#m-color-helper-checkbox').is(':checked')) {
                     return;
                 }
                 var offset = $(this).offset();
@@ -171,7 +171,7 @@
             });
         $('#m-color-helper .mc-predefined li')
             .mousemove(function(e) {
-                if ($('#m-color-helper-checkbox').attr('checked') == 'checked') {
+                if ($('#m-color-helper-checkbox').is(':checked')) {
                     return;
                 }
                 var color = _hex($(this).css('background-color'));
@@ -186,7 +186,7 @@
             });
         $('#m-color-helper .mcf-transparent')
             .mousemove(function(e) {
-                if ($('#m-color-helper-checkbox').attr('checked') == 'checked') {
+                if ($('#m-color-helper-checkbox').is(':checked')) {
                     return;
                 }
                 var color = 'transparent';
@@ -210,7 +210,7 @@
             }
         });
         $('#m-color-helper input.m-default').click(function() {
-            $('#m-color-helper .mcf-manual input').mMarkAttr('disabled', $(this).attr('checked') == 'checked');
+            $('#m-color-helper .mcf-manual input').mMarkAttr('disabled', $(this).is(':checked'));
         });
 	});
 })(jQuery);

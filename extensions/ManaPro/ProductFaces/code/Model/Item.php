@@ -165,4 +165,23 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
         return $result;
     }
 
+    /**
+     * Chceck if item should be in stock or out of stock based on $qty param of existing item qty
+     *
+     * @param float|null $qty
+     * @return bool true - item in stock | false - item out of stock
+     */
+    public function verifyStock($qty = null)
+    {
+        if ($qty === null) {
+            // MANAdev: start
+            $qty = $this->_getMQty();
+            // MANAdev: end
+        }
+        if ($this->getBackorders() == Mage_CatalogInventory_Model_Stock::BACKORDERS_NO && $qty <= $this->getMinQty()) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -46,4 +46,8 @@ class ManaPro_FilterColors_Mana_FiltersController extends Mana_Admin_Controller_
 		// render AJAX result
 		$this->renderLayout(); 
 	}
+
+	protected function _isAllowed() {
+		return true;
+	}
 }

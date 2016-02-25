@@ -29,6 +29,7 @@ examples on what kind of actions can be applied to referenced blocks.
 	</adminhtml_catalog_product_new>
 	<adminhtml_catalog_product_edit>
 		<update handle="jquery_core" />
+        <update handle="mana_admin"/>
 		<reference name="head">
 			<action method="addCss"><stylesheet>css/manapro_productfaces.css</stylesheet></action>
         	<action method="addItem"><type>skin_js</type><name>js/manapro_productfaces.js</name><params/></action>

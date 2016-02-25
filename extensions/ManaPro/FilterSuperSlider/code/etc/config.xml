@@ -11,7 +11,7 @@
         <ManaPro_FilterSuperSlider>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>14.10.30.19</version>
+            <version>15.12.04.14</version>
         </ManaPro_FilterSuperSlider>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 

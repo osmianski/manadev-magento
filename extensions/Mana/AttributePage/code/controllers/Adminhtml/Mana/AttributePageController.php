@@ -323,4 +323,7 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
         $this->_redirect('*/*/');
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/attributepage');
+    }
 }

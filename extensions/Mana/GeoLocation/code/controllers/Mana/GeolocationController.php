@@ -247,4 +247,8 @@ class Mana_GeoLocation_Mana_GeolocationController extends Mage_Adminhtml_Control
         }
         $this->_redirect('*/*/');
     }
+
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/geolocation');
+    }
 }

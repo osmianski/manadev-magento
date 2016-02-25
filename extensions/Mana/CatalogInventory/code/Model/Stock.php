@@ -28,7 +28,12 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
             $canSubtractQty = $stockItem->getId() && $stockItem->canSubtractQty();
             if ($canSubtractQty && Mage::helper('catalogInventory')->isQty($stockItem->getTypeId())) {
                 // MANA BEGIN
-                $qtys[$productId] = $item['qty'] * $item['item']->getData('m_pack_qty');
+                if($this->helper()->isManadevProductFacesInstalled()) {
+                    $m_pack_qty = Mage::getSingleton('cataloginventory/stock_item')->loadByProduct($productId)->getData('m_pack_qty');
+                    $qtys[$productId] = $item['qty'] * $m_pack_qty;
+                } else {
+                    $qtys[$productId] = $item['qty'];
+                }
                 // MANA END
             }
         }
@@ -79,6 +84,10 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
                 $options = array('product_id' => $item->getProductId());
                 Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process($this, $options);
             }
+        }
+        /** @var ManaPro_ProductFaces_Model_Item $item */
+        foreach($fullSaveItems as $item) {
+            $item->load($item->getId());
         }
         // MANA END
         $this->_getResource()->commit();
@@ -185,7 +194,9 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
     	$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId);
         if ($stockItem->getId() && Mage::helper('catalogInventory')->isQty($stockItem->getTypeId())) {
             // MANA BEGIN
-            $qty *= $stockItem->getData('m_pack_qty');
+            if ($this->helper()->isManadevProductFacesInstalled()) {
+                $qty *= $stockItem->getData('m_pack_qty');
+            }
             // MANA END
             $stockItem->addQty($qty);
             if ($stockItem->getCanBackInStock() && $stockItem->getQty() > $stockItem->getMinQty()) {

@@ -12,7 +12,7 @@
 		<ManaPro_FilterShowMore>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>14.10.10.17</version>
+		    <version>15.10.16.16</version>
 		</ManaPro_FilterShowMore>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -226,6 +226,7 @@
 		<mana_filters>
 			<display>
 				<show_more_item_count>4</show_more_item_count>
+				<add_space_for_not_visible_selected_items>1</add_space_for_not_visible_selected_items>
 				<show_more_preload>1</show_more_preload>
 				<show_more_time>200</show_more_time>
 				<show_more_method></show_more_method>
