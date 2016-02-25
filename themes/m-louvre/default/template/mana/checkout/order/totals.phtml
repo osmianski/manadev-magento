@@ -1,0 +1,30 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Mana_Checkout
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/**
+ * @author Mana Team
+ *
+ */
+ /* @var $this Mana_Checkout_Block_Order_Totals */
+?>
+<?php if ($this->getTotals()): ?>
+<tfoot>
+    <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 6 : 4; ?>
+    <?php echo $this->renderTotals(null, $_colspan); ?>
+    <?php echo $this->renderTotals('footer', $_colspan); ?>
+    <?php if ($this->needDisplayBaseGrandtotal()): ?>
+<tr>
+    <td class="a-right" colspan="<?php echo $_colspan; ?>">
+        <small><?php echo $this->helper('sales')->__('Your credit card will be charged for') ?></small>
+    </td>
+    <td class="a-right">
+        <small><?php echo $this->displayBaseGrandtotal() ?></small>
+    </td>
+</tr>
+    <?php endif?>
+</tfoot>
+<?php endif; ?>

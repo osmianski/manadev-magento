@@ -1592,12 +1592,13 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
 	}
 
 	$.fn.mMarkAttr = function (attr, condition) {
-		if (condition) {
-			this.attr(attr, attr);
-		}
-		else {
-			this.removeAttr(attr);
-		}
+	    this.prop(attr, condition);
+		//if (condition) {
+		//	this.attr(attr, attr);
+		//}
+		//else {
+		//	this.removeAttr(attr);
+		//}
 		return this;
 	}; 
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
@@ -1731,7 +1732,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout', 'singleton:Mana/Core/Ajax'
                 popup: { contentSelector:'.' + name + '-text', containerClass:'m-' + name + '-popup-container', top:100 }
 
             }, options);
-            $(this).live('click', function() {
+            $(document).on('click', this, function() {
                 if ($.mPopupClosing()) {
                     return false;
                 }

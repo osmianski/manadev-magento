@@ -54,7 +54,7 @@
 
     function _showHideFieldNowAndOnChange(ifField, equals, thenShowHideField) {
         _showHideField('#manapro_slider_'+ ifField, equals, '#manapro_slider_' + thenShowHideField);
-        $('#manapro_slider_' + ifField).live('change', _changedField(equals, '#manapro_slider_' + thenShowHideField));
+        $(document).on('change', '#manapro_slider_' + ifField, _changedField(equals, '#manapro_slider_' + thenShowHideField));
     }
     //endregion
 
@@ -76,7 +76,7 @@
         _initShowHide();
     };
 //        _showHideFieldset('#mana_featured_category_template', 'carousel', '#mana_featured_category_carousel_fields');
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_fields'));
+//        $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_fields'));
 
 //        _showHideFieldset('#mana_featured_category_template', 'carousel', '#mana_featured_category_carousel_effect');
 //        _showHideFieldset('#mana_featured_category_template', 'carousel', '#mana_featured_category_carousel_helper');
@@ -114,50 +114,50 @@
 //        _showHideField('#mana_featured_category_carousel_navigation_template', 'custom', '#mana_featured_category_carousel_navigation_custom_prev');
 //        _showHideField('#mana_featured_category_carousel_navigation_template', 'custom', '#mana_featured_category_carousel_navigation_custom_next');
 //
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_effect'));
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_helper'));
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_navigation'));
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_decoration'));
-//        $('#mana_featured_category_template').live('change', _changedFieldset('carousel', '#mana_featured_category_carousel_other'));
+//       $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_effect'));
+//       $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_helper'));
+//       $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_navigation'));
+//       $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_decoration'));
+//       $(document).on('change', '#mana_featured_category_template', _changedFieldset('carousel', '#mana_featured_category_carousel_other'));
 //
-//        $('#mana_featured_category_carousel_effect_hide').live('change', _changedField('custom', '#mana_featured_category_carousel_effect_hide_custom'));
-//        $('#mana_featured_category_carousel_effect_hide').live('change', _changedField('blind', '#mana_featured_category_carousel_effect_hide_blind_direction'));
-//        $('#mana_featured_category_carousel_effect_hide').live('change', _changedField('clip', '#mana_featured_category_carousel_effect_hide_clip_direction'));
-//        $('#mana_featured_category_carousel_effect_hide').live('change', _changedField('drop', '#mana_featured_category_carousel_effect_hide_drop_direction'));
-//        $('#mana_featured_category_carousel_effect_show').live('change', _changedField('custom', '#mana_featured_category_carousel_effect_show_custom'));
-//        $('#mana_featured_category_carousel_effect_show').live('change', _changedField('random', '#mana_featured_category_carousel_effect_show_random'));
-//        $('#mana_featured_category_carousel_effect_show').live('change', _changedField('blind', '#mana_featured_category_carousel_effect_show_blind_direction'));
-//        $('#mana_featured_category_carousel_effect_show').live('change', _changedField('clip', '#mana_featured_category_carousel_effect_show_clip_direction'));
-//        $('#mana_featured_category_carousel_effect_show').live('change', _changedField('drop', '#mana_featured_category_carousel_effect_show_drop_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_hide', _changedField('custom', '#mana_featured_category_carousel_effect_hide_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_hide', _changedField('blind', '#mana_featured_category_carousel_effect_hide_blind_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_hide', _changedField('clip', '#mana_featured_category_carousel_effect_hide_clip_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_hide', _changedField('drop', '#mana_featured_category_carousel_effect_hide_drop_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_show', _changedField('custom', '#mana_featured_category_carousel_effect_show_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_show', _changedField('random', '#mana_featured_category_carousel_effect_show_random'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_show', _changedField('blind', '#mana_featured_category_carousel_effect_show_blind_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_show', _changedField('clip', '#mana_featured_category_carousel_effect_show_clip_direction'));
+//       $(document).on('change', '#mana_featured_category_carousel_effect_show', _changedField('drop', '#mana_featured_category_carousel_effect_show_drop_direction'));
 //
-//        $('#mana_featured_category_carousel_helper_template').live('change', _changedField('custom', '#mana_featured_category_carousel_helper_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_helper_template', _changedField('custom', '#mana_featured_category_carousel_helper_custom'));
 //
-//        $('#mana_featured_category_carousel_decoration_top_left').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_top_left_custom'));
-//        $('#mana_featured_category_carousel_decoration_top').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_top_custom'));
-//        $('#mana_featured_category_carousel_decoration_top_right').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_top_right_custom'));
-//        $('#mana_featured_category_carousel_decoration_right').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_right_custom'));
-//        $('#mana_featured_category_carousel_decoration_bottom_right').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_right_custom'));
-//        $('#mana_featured_category_carousel_decoration_bottom').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_custom'));
-//        $('#mana_featured_category_carousel_decoration_bottom_left').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_left_custom'));
-//        $('#mana_featured_category_carousel_decoration_left').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_left_custom'));
-//        $('#mana_featured_category_carousel_decoration_shadow').live('change', _changedField('custom', '#mana_featured_category_carousel_decoration_shadow_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_top_left', _changedField('custom', '#mana_featured_category_carousel_decoration_top_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_top', _changedField('custom', '#mana_featured_category_carousel_decoration_top_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_top_right', _changedField('custom', '#mana_featured_category_carousel_decoration_top_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_right', _changedField('custom', '#mana_featured_category_carousel_decoration_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_bottom_right', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_bottom', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_bottom_left', _changedField('custom', '#mana_featured_category_carousel_decoration_bottom_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_left', _changedField('custom', '#mana_featured_category_carousel_decoration_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_decoration_shadow', _changedField('custom', '#mana_featured_category_carousel_decoration_shadow_custom'));
 //
-//        $('#mana_featured_category_carousel_si_decoration_top_left').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_left_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_top').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_top_right').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_right_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_right').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_right_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_bottom_right').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_right_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_bottom').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_bottom_left').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_left_custom'));
-//        $('#mana_featured_category_carousel_si_decoration_left').live('change', _changedField('custom', '#mana_featured_category_carousel_si_decoration_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_top_left', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_top', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_top_right', _changedField('custom', '#mana_featured_category_carousel_si_decoration_top_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_right', _changedField('custom', '#mana_featured_category_carousel_si_decoration_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_bottom_right', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_right_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_bottom', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_bottom_left', _changedField('custom', '#mana_featured_category_carousel_si_decoration_bottom_left_custom'));
+//       $(document).on('change', '#mana_featured_category_carousel_si_decoration_left', _changedField('custom', '#mana_featured_category_carousel_si_decoration_left_custom'));
 //
-//        $('#mana_featured_category_carousel_navigation_template').live('change', _changedField('custom', '#mana_featured_category_carousel_navigation_custom_prev'));
-//        $('#mana_featured_category_carousel_navigation_template').live('change', _changedField('custom', '#mana_featured_category_carousel_navigation_custom_next'));
+//       $(document).on('change', '#mana_featured_category_carousel_navigation_template', _changedField('custom', '#mana_featured_category_carousel_navigation_custom_prev'));
+//       $(document).on('change', '#mana_featured_category_carousel_navigation_template', _changedField('custom', '#mana_featured_category_carousel_navigation_custom_next'));
 
     //endregion
 
     //region Product Grid Logic
-    $('#mSliderProductGrid .filter-actions .m-add').live('click', function () {
+    $(document).on('click', '#mSliderProductGrid .filter-actions .m-add', function () {
         $.mChooseProducts({
             url: $.options('#mSliderProductGrid').chooserUrl,
             params:function () {
@@ -170,13 +170,13 @@
             }
         });
     });
-    $('#mSliderProductGrid .filter-actions .m-remove').live('click', function () {
+    $(document).on('click', '#mSliderProductGrid .filter-actions .m-remove', function () {
         $.gridAction('mSliderProductGrid', 'remove');
     });
     //endregion
 
     //region CMS Block Grid Logic
-    $('#mSliderCmsblockGrid .filter-actions .m-add').live('click', function () {
+    $(document).on('click', '#mSliderCmsblockGrid .filter-actions .m-add', function () {
         $.mChooseCmsBlocks({
             url:$.options('#mSliderCmsblockGrid').chooserUrl,
             params:function () {
@@ -189,16 +189,16 @@
             }
         });
     });
-    $('#mSliderCmsblockGrid .filter-actions .m-remove').live('click', function () {
+    $(document).on('click', '#mSliderCmsblockGrid .filter-actions .m-remove', function () {
         $.gridAction('mSliderCmsblockGrid', 'remove');
     });
     //endregion
 
     //region HTML Block Grid Logic
-    $('#mSliderHtmlblockGrid .filter-actions .m-add').live('click', function () {
+    $(document).on('click', '#mSliderHtmlblockGrid .filter-actions .m-add', function () {
         $.gridAction('mSliderHtmlblockGrid', 'add');
     });
-    $('#mSliderHtmlblockGrid .filter-actions .m-remove').live('click', function () {
+    $(document).on('click', '#mSliderHtmlblockGrid .filter-actions .m-remove', function () {
         $.gridAction('mSliderHtmlblockGrid', 'remove');
     });
     //endregion

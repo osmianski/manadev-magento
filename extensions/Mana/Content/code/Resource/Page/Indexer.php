@@ -104,7 +104,9 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                     `p_scs`.`url_key`,
                     IF({$dbHelper->isCustom('p_gcs', Mana_Content_Model_Page_Abstract::DM_URL_KEY)},
                         `p_gcs`.`url_key`,
-                        `p_g`.`url_key`
+                        IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_TITLE)},
+                            {$this->seoHelper()->seoifyExpr("`p_scs`.`title`")},
+                            {$this->seoHelper()->seoifyExpr("`p_gcs`.`title`")})
                     )
                 )",
                 'title' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_TITLE)},
@@ -140,8 +142,13 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                     `p_gcs`.`custom_layout_xml`
                 )",
                 'meta_title' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_META_TITLE)},
-                    `p_gcs`.`title`,
-                    `p_gcs`.`meta_title`
+                    `p_scs`.`meta_title`,
+                    IF({$dbHelper->isCustom('p_gcs', Mana_Content_Model_Page_Abstract::DM_META_TITLE)},
+                        `p_gcs`.`meta_title`,
+                        IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_TITLE)},
+                            `p_scs`.`title`,
+                            `p_gcs`.`title`)
+                    )
                 )",
                 'meta_keywords' => "IF({$dbHelper->isCustom('p_scs', Mana_Content_Model_Page_Abstract::DM_META_KEYWORDS)},
                     `p_scs`.`meta_keywords`,

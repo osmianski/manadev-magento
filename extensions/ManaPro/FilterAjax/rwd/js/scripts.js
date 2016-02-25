@@ -118,6 +118,10 @@ function($, ajax, config, layout, undefined)
                     mainNav("nav", {"show_delay": "100", "hide_delay": "100"});
                 }
 
+                if (ConfigurableSwatchesList) {
+                    ConfigurableSwatchesList.init();
+                }
+
                 if (isProductListToolbarClicked && config.getData('layeredNavigation.ajax.scrollToTop')) {
                     var offset = -1;
                     $.each(response.blocks, function (blockName) {

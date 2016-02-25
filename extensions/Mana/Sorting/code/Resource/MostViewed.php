@@ -26,6 +26,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
      */
     public function setOrder($collection, $order, $direction)
     {
+        $productViewEvent = 0;
         foreach (Mage::getModel('reports/event_type')->getCollection() as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = $eventType->getId();
@@ -42,17 +43,27 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
         $select
                 ->joinLeft(
                     array(
-                        'stats' => new Zend_Db_Expr("(SELECT stats.object_id AS product_id, count(*) AS view_count" .
-                                " FROM {$this->getTable('reports/event')} AS stats" .
-                                " WHERE (stats.logged_at BETWEEN '{$from}' AND '{$to}') AND" .
-                                $db->quoteInto(" stats.event_type_id = ?", $productViewEvent) .
-                                " GROUP BY stats.object_id)")
+                        'most_viewed_stats' => new Zend_Db_Expr("(SELECT most_viewed_stats.object_id AS product_id, count(*) AS view_count" .
+                                " FROM {$this->getTable('reports/event')} AS most_viewed_stats" .
+                                " WHERE (most_viewed_stats.logged_at BETWEEN '{$from}' AND '{$to}') AND" .
+                                $db->quoteInto(" most_viewed_stats.event_type_id = ?", $productViewEvent) .
+                                " GROUP BY most_viewed_stats.object_id)")
                     ),
-                    "stats.product_id = e.entity_id",
+                    "most_viewed_stats.product_id = e.entity_id",
                     null
                 );
-        $direction = $direction == 'asc' ? 'desc' : 'asc';
-        $select->order("stats.view_count {$direction}");
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
+            $select
+                    ->joinLeft(
+                        array('s' => $this->getTable('cataloginventory/stock_item')),
+                        ' s.product_id = e.entity_id ',
+                        array()
+                    );
+            $select->order("s.is_in_stock desc");
+        }
+        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $select->order("most_viewed_stats.view_count {$direction}");
     }
 
     public function getDate()

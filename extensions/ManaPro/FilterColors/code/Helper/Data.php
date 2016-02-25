@@ -11,8 +11,8 @@
  * @author Mana Team
  */
 class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
-	public function getCssRelativeUrl($filterOptions) {
-	    return 'm-filter-'.$filterOptions->getStoreId().'-'.$filterOptions->getGlobalId().'.css';
+	public function getCssRelativeUrl($storeId) {
+	    return 'm-filter-'. $storeId . '.css';
 	}
     public function getFilterClass($filterOptions) {
         return 'mf-'.$filterOptions->getStoreId().'-'.$filterOptions->getGlobalId();
@@ -39,11 +39,23 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $result;
     }
-    public function generateCss($filterOptions) {
+    public function generateCss($storeId) {
         /* @var $files Mana_Core_Helper_Files */ $files = Mage::helper(strtolower('Mana_Core/Files'));
-        $values = Mage::getResourceModel('mana_filters/filter2_value_store_collection');
-        $values->addFieldToFilter('filter_id', $filterOptions->getId())->setEditFilter(true);
+        $filters = Mage::getResourceModel('mana_filters/filter2_store_collection');
+        $filters
+            ->addColorsFilter()
+            ->addFieldToFilter('store_id', $storeId)
+            ;
+
         ob_start();
+
+        foreach ($filters as $filterOptions) {
+            /* @var $filterOptions Mana_Filters_Model_Filter2_Store */
+
+            $values = Mage::getResourceModel('mana_filters/filter2_value_store_collection');
+            $values
+                ->addFieldToFilter('filter_id', $filterOptions->getId())
+                ->setEditFilter(true);
 ?>
 
 <?php foreach ($values as $value) : ?>
@@ -89,8 +101,9 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
 
 <?php endforeach; ?>
 <?php
+        }
         $css = ob_get_clean();
-        $filename = $files->getFilename($this->getCssRelativeUrl($filterOptions), 'css', true);
+        $filename = $files->getFilename($this->getCssRelativeUrl($storeId), 'css', true);
         $fh = fopen($filename, 'w');
         fwrite($fh, $css);
         fclose($fh);

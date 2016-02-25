@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Local_Manadev
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<!-- BASED ON SNIPPET: Static Visuals/Empty layout file -->
+<!-- This file defines the rules which should be applied when module local_manadev is installed and active. Typically, 
+rules consists of the following parts:
+	1. 	You say on which types of pages you would like your changes to be applied (in Magento wording, you need to 
+		specify layout handle), for example, layout handle "catalog_category_layered" selects all pages where 
+		specific category products are shown and where layered navigation is enabled. Layout handle "default" selects
+		every each page rendered by Magento.
+	2. 	You say in which blocks you would like to make the changes (in Magento wording you reference parent block).
+	3.	You say what changes you would like to apply to that block (you could specify to remove child blocks, to add
+		your own blocks, to invoke methods on referenced block).
+Review standard Magento layout XML's for full list of available layout handles, blocks to be referenced, and for 
+examples on what kind of actions can be applied to referenced blocks. 
+ -->
+<layout version="0.1.0">
+    <jquery>
+        <update handle="jquery_core" />
+        <update handle="jquery_basic_effects" />
+        <update handle="jquery_ui" />
+    </jquery>
+	<default> <!-- apply actions below on each and every page in store frontend -->
+        <update handle="jquery" />
+		<reference name="head">
+        	<action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+	</default>
+	<PRODUCT_TYPE_downloadable> <!-- apply the following actions to downloadable product page -->
+		<reference name="product.info">
+			<block name="download.button" type="local_manadev/download_button" template="local/manadev/download/button.phtml" />
+		</reference>
+		<reference name="before_body_end">
+			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
+		</reference>
+	</PRODUCT_TYPE_downloadable>
+	<catalog_category_default> <!-- apply the following actions to category page -->
+		<update handle="jquery" />
+		<reference name="product_list">
+			<block name="download.button" type="local_manadev/download_button" template="local/manadev/download/button.phtml" />
+		</reference>
+		<reference name="before_body_end">
+			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
+		</reference>
+	</catalog_category_default>
+	<catalog_category_layered> <!-- apply the following actions to category page -->
+		<update handle="jquery" />
+		<reference name="product_list">
+			<block name="download.button" type="local_manadev/download_button" template="local/manadev/download/button.phtml" />
+		</reference>
+		<reference name="before_body_end">
+			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
+		</reference>
+	</catalog_category_layered>
+	<local_manadev_product_download><!--  apply the following actions to thank you page -->
+		<update handle="jquery" />
+		<reference name="before_body_end">
+			<block type="local_manadev/download_initiator" />
+		</reference>
+	</local_manadev_product_download>
+	<cms_index_index>
+		<update handle="jquery" />
+	</cms_index_index>
+	<cms_page>
+		<update handle="jquery" />
+	</cms_page>
+    <checkout_onepage_index>
+		<update handle="jquery" />
+    </checkout_onepage_index>
+</layout>

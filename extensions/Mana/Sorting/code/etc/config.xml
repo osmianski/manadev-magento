@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Sorting>
-            <version>14.04.06.18</version>
+            <version>15.02.10.18</version>
         </Mana_Sorting>
     </modules>
     <global>
@@ -35,10 +35,38 @@
             <mana_sorting_resources>
                 <class>Mana_Sorting_Resource</class>
                 <entities>
-
+                    <method><table>m_sorting_method</table></method>
+                    <method_store><table>m_sorting_method_store</table></method_store>
+                    <method_storeCustomSettings><table>m_sorting_method_store_custom_settings</table></method_storeCustomSettings>
                 </entities>
             </mana_sorting_resources>
+            <adminhtml>
+                <rewrite>
+                    <system_config_source_catalog_listSort>Mana_Sorting_Rewrite_System_Source_ListSort</system_config_source_catalog_listSort>
+                </rewrite>
+            </adminhtml>
+            <catalog>
+                <rewrite>
+                    <category_attribute_source_sortby>Mana_Sorting_Rewrite_Category_Source_SortBy</category_attribute_source_sortby>
+                </rewrite>
+            </catalog>
         </models>
+        <resources>
+            <mana_sorting_setup>
+                <setup>
+                    <module>Mana_Sorting</module>
+                </setup>
+            </mana_sorting_setup>
+        </resources>
+        <index>
+            <indexer>
+                <mana_sorting_method translate="name description" module="mana_sorting">
+                    <model>mana_sorting/method_indexer</model>
+                    <name>Custom Sorting Methods (MANAdev)</name>
+                    <description>Recalculates custom sorting methods store-level settings.</description>
+                </mana_sorting_method>
+            </indexer>
+        </index>
         <events>
             <m_toolbar_orders>
                 <observers>
@@ -61,6 +89,38 @@
             </modules>
         </translate>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mana_sorting before="Mage_Adminhtml">Mana_Sorting_Adminhtml</mana_sorting>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <!-- BASED ON SNIPPET: Translation support/Adminhtml (config.xml) -->
+        <!-- This section registers additional translation file with our module-specific strings to be loaded
+        during admin area request processing -->
+        <translate>
+            <modules>
+                <Mana_Sorting>
+                    <files>
+                        <default>Mana_Sorting.csv</default>
+                    </files>
+                </Mana_Sorting>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <mana_sorting>
+                    <file>mana_sorting.xml</file>
+                </mana_sorting>
+            </updates>
+        </layout>
+    </adminhtml>
     <mana_sorting>
         <newest translate="label" module="Mana_Sorting">
             <label>Newest</label>
@@ -95,4 +155,40 @@
             <resource>mana_sorting/nowInWishlist</resource>
         </now_in_wishlist>
     </mana_sorting>
+    <default>
+        <mana_sorting>
+            <newest>
+                <enabled>1</enabled>
+                <position>100</position>
+            </newest>
+            <bestsellers>
+                <enabled>1</enabled>
+                <position>200</position>
+            </bestsellers>
+            <most_viewed>
+                <enabled>1</enabled>
+                <position>300</position>
+            </most_viewed>
+            <biggest_saving>
+                <enabled>1</enabled>
+                <position>400</position>
+            </biggest_saving>
+            <top_rated>
+                <enabled>1</enabled>
+                <position>500</position>
+            </top_rated>
+            <review_count>
+                <enabled>1</enabled>
+                <position>600</position>
+            </review_count>
+            <quantity>
+                <enabled>1</enabled>
+                <position>700</position>
+            </quantity>
+            <now_in_wishlist>
+                <enabled>1</enabled>
+                <position>800</position>
+            </now_in_wishlist>
+        </mana_sorting>
+    </default>
 </config>

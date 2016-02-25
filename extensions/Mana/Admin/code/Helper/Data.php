@@ -423,6 +423,14 @@ class Mana_Admin_Helper_Data extends Mage_Core_Helper_Abstract {
         $this->jsHelper()->setConfig('url.symbols', $symbols);
     }
 
+    public function underscoreToCapitalize($field) {
+        return ucwords(str_replace("_", " ", $field));
+    }
+
+    public function underscoreToCamelcase($field) {
+        return str_replace(" ", "", $this->underscoreToCapitalize($field));
+    }
+
     #region Dependencies
 
     /**

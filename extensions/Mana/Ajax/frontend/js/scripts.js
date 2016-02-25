@@ -115,7 +115,7 @@
             window.setLocation = setLocation;
         }
 
-        $('a').live('click', function() {
+        $(document).on('click', 'a', function() {
             var action = _urlAjaxAction(this.href);
             if (action) {
                 return setLocation(this.href, this);

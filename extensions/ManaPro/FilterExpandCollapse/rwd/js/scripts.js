@@ -75,7 +75,7 @@
             restoreState(element);
         });
     });
-    $('.block-layered-nav .m-collapseable').live('click', function() {
+    $(document).on('click', '.block-layered-nav .m-collapseable', function() {
         if (Mana.rwdIsMobile) {
             return true;
         }
@@ -127,8 +127,8 @@
         }
     }
 
-    $(_selectors.dt)
-        .live('click', function () {
+    $(document)
+        .on('click', _selectors.dt, function () {
             if (Mana.rwdIsMobile) {
                 return true;
             }

@@ -29,6 +29,7 @@ examples on what kind of actions can be applied to referenced blocks.
 	        <block type="manapro_productplusproduct/list" name="product.m_also_bought" as="m_also_bought" 
 	        	template="manapro/productplusproduct/horizontal.phtml">
 	            <action method="addToParentGroup"><group>detailed_info</group></action>
+	            <action method="setTitle"><title>Frequently Bought Together</title></action>
 	        </block>
         </reference>
 	</catalog_product_view>

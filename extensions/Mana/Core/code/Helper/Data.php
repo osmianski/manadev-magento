@@ -18,6 +18,11 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     protected $_rootCategory;
 
     /**
+     * @var Mage_Core_Model_Store
+     */
+    protected $_actualCurrentStore;
+
+    /**
      * Retrieve config value for store by path. By default uses standard Magento function to query core_config_data
      * table and use config.xml for default value. Though this could be replaced by extensions (in later versions).
      *
@@ -753,6 +758,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->isModuleEnabled('Mana_Filters');
     }
 
+    public function isManadevPaidLayeredNavigationInstalled() {
+        return $this->isModuleEnabled('ManaPro_FilterAdmin');
+    }
+
     public function isManadevLayeredNavigationCheckboxesInstalled() {
         return $this->isModuleEnabled('ManaPro_FilterCheckboxes');
     }
@@ -767,6 +776,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isManadevAttributePageInstalled() {
         return $this->isModuleEnabled('Mana_AttributePage');
+    }
+
+    public function isManadevSortingInstalled() {
+        return $this->isModuleEnabled('Mana_Sorting');
     }
 
     public function isManadevLayeredNavigationTreeInstalled() {
@@ -797,6 +810,10 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function isManadevCMSInstalled() {
         return $this->isModuleEnabled('Mana_Content');
+    }
+
+    public function isManadevManySKUInstalled() {
+        return $this->isModuleEnabled('ManaPro_ProductFaces');
     }
 
     protected $_accentTranslations = array(
@@ -932,5 +949,20 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
 
         }
         return $this->_rootCategory;
+    }
+
+    public function setCurrentStore($store) {
+        if (!$this->_actualCurrentStore) {
+            $this->_actualCurrentStore = Mage::app()->getStore();
+        }
+
+        Mage::app()->setCurrentStore(Mage::app()->getStore($store));
+    }
+
+    public function restoreCurrentStore() {
+        if ($this->_actualCurrentStore) {
+            Mage::app()->setCurrentStore($this->_actualCurrentStore);
+            $this->_actualCurrentStore = null;
+        }
     }
 }

@@ -17,12 +17,12 @@
         var template = $.options('#name_wysiwyg').template;
         return template.replace('{{name}}', $('#name').val());
     }
-    $('#name').live('blur', function () {
+    $(document).on('blur', '#name', function () {
         if (!$('#name_wysiwyg').val()) {
             $('#name_wysiwyg').val(_formatName());
         }
     });
-    $('#name_wysiwyg').live('focus', function () {
+    $(document).on('focus', '#name_wysiwyg', function () {
         if (!$('#name_wysiwyg').val()) {
             $('#name_wysiwyg').val(_formatName());
         }

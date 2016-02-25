@@ -440,7 +440,7 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
             foreach ($filterCollection as $filter) {
                 /* @var $filter Mana_Filters_Model_Filter2_Store */
                 if ($filter->getType() == 'category') {
-                    if ($filter->getData('display') == 'tree') {
+                    if ($filter->getData('display') == 'tree' || $filter->getData('display') == 'subtree') {
                         return true;
                     }
                 }

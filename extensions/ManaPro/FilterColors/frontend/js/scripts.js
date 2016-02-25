@@ -11,10 +11,10 @@
 //			would not interfere with other global variables.
 //		b.	we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
 ;(function($) {
-    $('.m-filter-colors .m-color, .state.m-color').live('mouseover', function() {
+    $(document).on('mouseover', '.m-filter-colors .m-color, .state.m-color', function() {
         $(this).addClass('hovered');
     });
-    $('.m-filter-colors .m-color, .state.m-color').live('mouseout', function() {
+    $(document).on('mouseout', '.m-filter-colors .m-color, .state.m-color', function() {
         $(this).removeClass('hovered');
     });
 })(jQuery);

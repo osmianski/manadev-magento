@@ -29,10 +29,14 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
                 return $this->treeHelper()->getRootCategory();
             }
             else {
-                return parent::getCategory();
+                return $this->getCurrentCategory();
             }
         }
         return $this->treeHelper()->getRootCategory();
+    }
+
+    public function getCurrentCategory() {
+        return parent::getCategory();
     }
 
     public function countOnCollection($collection) {

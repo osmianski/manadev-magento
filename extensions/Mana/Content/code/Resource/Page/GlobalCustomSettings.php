@@ -73,8 +73,7 @@ class Mana_Content_Resource_Page_GlobalCustomSettings extends Mana_Content_Resou
         $select->from(array('mps' => $this->getTable('mana_content/page_store')), array())
             ->joinInner(array('mpg' => $this->getTable('mana_content/page_global')), 'mps.page_global_id = mpg.id', array())
             ->joinInner(array('mpgcs' => $this->getTable('mana_content/page_globalCustomSettings')), 'mpg.page_global_custom_settings_id = mpgcs.id', array())
-            ->joinInner(array('mpgcs2' => $this->getTable('mana_content/page_globalCustomSettings')), 'mpgcs.reference_id = mpgcs2.id', array())
-            ->joinInner(array('mpg2' => $this->getTable('mana_content/page_global')), 'mpgcs2.id = mpg2.page_global_custom_settings_id', array())
+            ->joinInner(array('mpg2' => $this->getTable('mana_content/page_global')), 'mpg2.id = mpgcs.reference_id', array())
             ->joinInner(array('mps2' => $this->getTable('mana_content/page_store')), 'mps2.page_global_id = mpg2.id' ,array('mps2.id'))
             ->where('mps2.store_id = ?', Mage::app()->getStore()->getId())
             ->where('mps.id = ?', $page_store_id);

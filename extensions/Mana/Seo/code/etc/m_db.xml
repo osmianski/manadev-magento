@@ -16,6 +16,7 @@
                 <v13.11.08.16>13.01.21.22</v13.11.08.16>
                 <v14.05.28.18>13.01.21.22</v14.05.28.18>
                 <v14.11.03.02>13.01.21.22</v14.11.03.02>
+                <v15.03.17.16>13.01.21.22</v15.03.17.16>
             </installer_versions>
             <entities>
                 <schema>
@@ -71,6 +72,7 @@
                         <accent_insensitive version="13.11.08.16"><type>tinyint</type><default_value>0</default_value><no>23</no></accent_insensitive>
                         <canonical_option_page version="14.05.28.18"><type>tinyint</type><no>24</no><default_value>1</default_value><affects_url/></canonical_option_page>
                         <canonical_book_page version="14.11.03.02"><type>tinyint</type><no>25</no><default_value>1</default_value><affects_url/></canonical_book_page>
+                        <canonical_remove_when_pager_is_used version="15.03.17.16"><type>varchar(20)</type><no>26</no><default_value></default_value></canonical_remove_when_pager_is_used>
                     </fields>
                     <scopes>
                         <global/>
@@ -135,6 +137,7 @@
                                 <accent_insensitive version="13.11.08.16"><default_formula>{{= global.accent_insensitive}}</default_formula></accent_insensitive>
                                 <canonical_option_page version="14.05.28.18"><default_formula>{{= global.canonical_option_page}}</default_formula></canonical_option_page>
                                 <canonical_book_page version="14.11.03.02"><default_formula>{{= global.canonical_book_page}}</default_formula></canonical_book_page>
+                                <canonical_remove_when_pager_is_used version="15.03.17.16"><default_formula>{{= global.canonical_remove_when_pager_is_used}}</default_formula></canonical_remove_when_pager_is_used>
                             </fields>
                         </store_flat>
                     </scopes>

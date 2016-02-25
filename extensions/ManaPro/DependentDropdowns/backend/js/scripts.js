@@ -40,5 +40,5 @@
     $(function () {
         _showHideFieldset('#frontend_input', 'select', '#m_dependent_fieldset');
     });
-    $('#frontend_input').live('change', _changedFieldset('select', '#m_dependent_fieldset'));
+    $(document).on('change', '#frontend_input', _changedFieldset('select', '#m_dependent_fieldset'));
 })(jQuery);

@@ -10,13 +10,6 @@
  * @author Mana Team
  */
 class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
-    public function underscoreToCapitalize($field) {
-        return ucwords(str_replace("_", " ", $field));
-    }
-
-    public function underscoreToCamelcase($field) {
-        return str_replace(" ", "", $this->underscoreToCapitalize($field));
-    }
 
     /**
      * @param null $id
@@ -104,6 +97,7 @@ class Mana_Content_Helper_Data extends Mage_Core_Helper_Abstract {
                     $this->setModelData($finalSettings, $fieldData);
                 }
                 Mage::register('m_edit_model', $customSettings);
+                Mage::register('cms_page', $customSettings);
                 Mage::register('m_flat_model', $finalSettings);
             }
         }
