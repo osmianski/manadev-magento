@@ -3,7 +3,8 @@ module.exports = Extension.extend({
         this.loadJsTasks('global', 'js', [
             'src/header.js',
             'src/Engine.js',
-            'src/ModeHandler.js'
+            'src/ModeHandler.js',
+            'src/LinkInterceptor.js'
         ]);
         this.loadJsTasks('frontend', 'frontend/js', [
             'src/header.js',

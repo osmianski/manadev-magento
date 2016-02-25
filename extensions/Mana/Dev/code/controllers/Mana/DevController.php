@@ -25,4 +25,8 @@ class Mana_Dev_Mana_DevController extends Mage_Adminhtml_Controller_Action {
         Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('mana_dev')->__('All cache types has been cleared.'));
         $this->_redirectReferer();
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
 }

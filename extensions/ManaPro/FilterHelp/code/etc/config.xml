@@ -11,7 +11,7 @@
         <ManaPro_FilterHelp>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>15.01.05.08</version>
+            <version>15.04.20.22</version>
         </ManaPro_FilterHelp>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 

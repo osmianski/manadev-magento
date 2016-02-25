@@ -38,6 +38,11 @@ class ManaPro_Guestbook_Manapro_GuestbookController extends Mana_Admin_Controlle
         $this->_setActiveMenu('mana/guestbook');
         $this->renderLayout();
     }
+
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/guestbook');
+    }
+
     public function approveAction() {
         $ids = $this->getRequest()->getPost('ids');
         if (!empty($ids)) {

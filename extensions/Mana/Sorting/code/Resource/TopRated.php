@@ -32,6 +32,11 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+
+        if (isset($tables['top_rated_stats'])) {
+            return;
+        }
 
         $select
                 ->joinLeft(
@@ -52,7 +57,6 @@ class Mana_Sorting_Resource_TopRated extends Mage_Core_Model_Mysql4_Abstract imp
                     "top_rated_stats.product_id = e.entity_id",
                     null
                 );
-        $tables = $select->getPart('from');
         if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(

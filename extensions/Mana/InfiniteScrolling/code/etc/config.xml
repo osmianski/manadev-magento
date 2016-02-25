@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_InfiniteScrolling>
-            <version>15.02.27.20</version>
+            <version>15.12.28.16</version>
         </Mana_InfiniteScrolling>
     </modules>
     <global>
@@ -31,6 +31,15 @@
                 </mana_infinitescrolling>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mana_InfiniteScrolling>
+                    <files>
+                        <default>Mana_InfiniteScrolling.csv</default>
+                    </files>
+                </Mana_InfiniteScrolling>
+            </modules>
+        </translate>
     </frontend>
     <mana_core>
         <routers>
@@ -48,9 +57,13 @@
                 <page_separator>page</page_separator>
                 <limit_separator>limit</limit_separator>
             </ajax>
-            <infinitescrolling>
-                <effect_duration>300</effect_duration>
-            </infinitescrolling>
         </mana>
+        <mana_infinitescrolling>
+            <infinitescrolling>
+                <pages_per_show_more>5</pages_per_show_more>
+                <effect_duration>300</effect_duration>
+                <recover_scroll_progress_on_back>1</recover_scroll_progress_on_back>
+            </infinitescrolling>
+        </mana_infinitescrolling>
     </default>
 </config>

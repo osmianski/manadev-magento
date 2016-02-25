@@ -89,6 +89,14 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
                 'name' => 'canonical_limit_all',
                 'required' => true,
             ));
+
+            $this->addField($fieldset, 'canonical_paging', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Canonical URL Contains Page Parameter'),
+                'name' => 'canonical_paging',
+                'required' => true,
+            ));
+
         }
 
         if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {

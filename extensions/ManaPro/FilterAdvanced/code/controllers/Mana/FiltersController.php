@@ -25,4 +25,10 @@ class ManaPro_FilterAdvanced_Mana_FiltersController extends Mana_Admin_Controlle
         // render AJAX result
         $this->renderLayout();
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
+
+
 }

@@ -78,4 +78,8 @@ class Mana_Admin_UploadController extends Mage_Adminhtml_Controller_Action {
 		}
 		
 	}
+
+	protected function _isAllowed() {
+		return true;
+	}
 }

@@ -27,7 +27,7 @@ class Mana_Seo_Model_Observer {
             ($schema = $this->seoHelper()->getActiveSchema(Mage::app()->getStore()->getId()))) {
             $renderCanonicalUrl = false;
             $preventRenderingCanonicalUrlWhenPagerIsApplied = false;
-            $renderLayeredNavigationFilters = true;
+            $pageContainsLayeredNavigation = true;
 
             /* @var $head Mage_Page_Block_Html_Head */
             if ($this->coreHelper()->getRoutePath() == 'catalog/category/view') {
@@ -50,7 +50,7 @@ class Mana_Seo_Model_Observer {
             }
             elseif ($this->coreHelper()->getRoutePath() == 'mana_content/book/view' && $this->coreHelper()->isManadevCMSInstalled()) {
                 $renderCanonicalUrl = $schema->getCanonicalBookPage();
-                $renderLayeredNavigationFilters = false;
+                $pageContainsLayeredNavigation = false;
             }
 
             if ($renderCanonicalUrl) {
@@ -59,10 +59,10 @@ class Mana_Seo_Model_Observer {
                 $originalQuery = $query = Mage::app()->getRequest()->getQuery();
                 $areFiltersApplied = false;
 
-                $filters = $renderLayeredNavigationFilters ? $this->_getFilters() : array();
+                $filters = $pageContainsLayeredNavigation ? $this->_getFilters() : array();
                 $isOtherParameterSuppressed = false;
                 foreach (array_keys($query) as $key) {
-                    if ($renderLayeredNavigationFilters) {
+                    if ($pageContainsLayeredNavigation) {
                         if (isset($filters[$key])) {
                             $areFiltersApplied = true;
                             if ($filters[$key]['include_in_canonical_url'] == 'never' ||
@@ -73,11 +73,18 @@ class Mana_Seo_Model_Observer {
                             ) {
                                 $query[$key] = null;
                             }
-                        } else {
-                            $query[$key] = null;
-                            if ($key != 'p') {
-                                $isOtherParameterSuppressed = true;
+                        }
+                        elseif ($key == 'p') {
+                            if (!$schema->getCanonicalPaging()) {
+                                $query[$key] = null;
                             }
+                        }
+                        elseif ($key == 'q') {
+                            // keep search query
+                        }
+                        else {
+                            $query[$key] = null;
+                            $isOtherParameterSuppressed = true;
                         }
                     }
                     else {
@@ -94,6 +101,7 @@ class Mana_Seo_Model_Observer {
 
                         $collection->setCurPage($toolbar->getCurrentPage());
                         $limit = (int)$toolbar->getLimit();
+                        $toolbar->unsetData('_current_limit');
                         if ($limit) {
                             $collection->setPageSize($limit);
                         }
@@ -109,7 +117,7 @@ class Mana_Seo_Model_Observer {
                                     $preventRenderingCanonicalUrlWhenPagerIsApplied = count($originalQuery) == 1 && isset($originalQuery['p']);
                                     break;
                                 case Mana_Seo_Model_Source_Canonical_HideWhenPagerIsUsed::ON_ALL_PAGES_EXCEPT_HAVING_TOOLBAR_PARAMETERS:
-                                    if ($renderLayeredNavigationFilters) {
+                                    if ($pageContainsLayeredNavigation) {
                                         $preventRenderingCanonicalUrlWhenPagerIsApplied = !$isOtherParameterSuppressed;
                                     }
                                     else {

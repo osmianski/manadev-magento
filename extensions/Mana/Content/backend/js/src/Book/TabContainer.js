@@ -5,6 +5,15 @@ function ($, Container, ajax, core, expression) {
             this._super();
             this._customInit();
         },
+        save: function() {
+            if(typeof wysiwygmf_content_content !== "undefined") {
+                var content = this.getField('content').getValue();
+                content = wysiwygmf_content_content.decodeWidgets(content);
+                content = wysiwygmf_content_content.decodeDirectives(content);
+                this.getField('content').setValue(content);
+            }
+            return this._super();
+        },
         _customInit: function () {
             this._changes = {
                 // the keys are temporary IDs, format n123, "n" is to distinguish from IDs of
@@ -108,7 +117,11 @@ function ($, Container, ajax, core, expression) {
                     params.form_key = FORM_KEY;
 
                     ajax.post(self.getUrl('load'), params, function (response) {
-                        if (core.isString(response)) {
+                        function processLoad() {
+                            if(typeof self.$varienTab() === "undefined") {
+                                setTimeout(processLoad, 100);
+                                return;
+                            }
                             var activeTab = self.$varienTab().activeTab;
                             var reference_pages = self.reference_pages;
                             self.setContent(response);
@@ -129,16 +142,32 @@ function ($, Container, ajax, core, expression) {
                                 self.getField('title').$field().focus();
                             }
 
+                            if(self.isReferencePage()) {
+                                $('.mb-container-goToOriginal').show();
+                                $('.mb-container-create').hide();
+                            } else {
+                                $('.mb-container-goToOriginal').hide();
+                                $('.mb-container-create').show();
+                            }
+
                             if(self.$().data('wysiwyg-enabled') == "enabled" && typeof wysiwygmf_content_content !== "undefined" && !self.isReferencePage()) {
                                 // This line will reactivate wysiwyg `content` field.
                                 wysiwygmf_content_content.setup("exact");
                             }
 
-                            if(typeof window.reinitMarkdown === "function") {
+                            if (!self.isReferencePage() && typeof window.reinitMarkdown === "function") {
                                 window.reinitMarkdown();
                             }
 
                             self._postAction("select");
+                        }
+
+                        if (core.isString(response)) {
+                            if(typeof self.$varienTab() !== "undefined") {
+                                processLoad();
+                            } else {
+                                setTimeout(processLoad, 100);
+                            }
                         }
                         else {
                             // Ajax request returns {ajaxExpired: 1, ajaxRedirect: ....} when ajax request fails
@@ -186,7 +215,7 @@ function ($, Container, ajax, core, expression) {
                 } else {
                     self.resetNodePosition(data.old_parent, data.node.id);
                 }
-                var color = self._isTemporaryId(self.getCurrentId()) ? "green" : "blue";
+                var color = self._isTemporaryId(data.node.id) ? "green" : "blue";
                 self._setNodeColor(color, data.node.id)
             };
 
@@ -339,9 +368,9 @@ function ($, Container, ajax, core, expression) {
             if(typeof this._originalFields[id] === "undefined") {
                 this._originalFields[id] = {};
                 for (var i in this.getFields()) {
-                    this._originalFields[id][i] = {};
-                    this._originalFields[id][i].value = this.getField(i).getValue();
-                    this._originalFields[id][i].useDefault = this.getField(i).useDefault();
+                    try {
+                        this._originalFields[id][i] = {value: this.getField(i).getValue(), useDefault: this.getField(i).useDefault()};
+                    } catch(err) {}
                 }
                 return this._originalFields[id];
             }
@@ -353,7 +382,7 @@ function ($, Container, ajax, core, expression) {
             this.$jsTree().select_node(reference_id);
         },
         _subscribeToBlockEvents: function () {
-            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg'];
+            var watchedClasses = ['Mana_Admin_Field_Text', 'Mana_Admin_Field_TextArea', 'Mana_Admin_Field_Select', 'Mana_Content_Wysiwyg', 'Mana_Admin_Field_Hidden'];
             return this
                 ._super()
                 .on('load', this, function () {
@@ -369,6 +398,9 @@ function ($, Container, ajax, core, expression) {
                     if (this.getChild('create')) this.getChild('create').on('click', this, this.createChildNode);
                     if (this.getChild('delete')) this.getChild('delete').on('click', this, this.deleteNode);
                     if (this.getChild('goToOriginal')) this.getChild('goToOriginal').on('click', this, this.goToOriginalPage);
+                    if(this.getField('url_key_preview')) {
+                        this.onChangeUrlKey();
+                    }
                     this.setDefaultValuesToChanges();
                     this._initOriginalFields(false);
                     this.disableFieldsIfReferencePage();
@@ -582,8 +614,11 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('url_key');
             var title = this.getField('title').getValue();
             var url_key = expression.seoify(title);
-            if(typeof field !== "undefined" && field.useDefault()) {
+            if ((typeof field !== "undefined" && field.useDefault()) || (field.constructor.name == "Mana_Admin_Field_Hidden")) {
                 field.setValue(url_key);
+                if(this.getField('url_key_preview')) {
+                    this.getField('url_key_preview').$().find(".value span")[0].innerHTML = field.getValue();
+                }
             }
             if(typeof field === "undefined") {
                 this.initChangesObj()['url_key'] = {
@@ -597,8 +632,8 @@ function ($, Container, ajax, core, expression) {
             var field = this.getField('title');
             var obj = this.getCurrentId();
             var title = field.getValue();
+            var origTitle = title;
             var no_of_char = parseInt(this.$().data('visible-title-char'));
-            $("#" + obj).attr('title', title);
             if (title.length > no_of_char) {
                 title = title.substring(0, no_of_char);
                 title += "...";
@@ -607,6 +642,7 @@ function ($, Container, ajax, core, expression) {
             this.onChangeMetaTitle();
 
             this.$jsTree().rename_node(obj, title);
+            $("#" + obj).attr('title', origTitle);
             for(var i in this.reference_pages) {
                 if(this.reference_pages[i].reference_id == obj) {
                     this.$jsTree().rename_node(this.reference_pages[i], title);

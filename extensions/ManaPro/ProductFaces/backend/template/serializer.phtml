@@ -31,6 +31,10 @@
 		noItemsSelectedMsg: "<?php echo Mage::helper('manapro_productfaces')->__('Please select one or more products or perform this action upon.') ?>",
 		confirmOverrideMsg: "<?php echo Mage::helper('manapro_productfaces')->__('Please confirm that all atributes of added products will be overridden.') ?>",
 		productId: "<?php echo Mage::registry('current_product')->getId() ?>",
-		productAlreadyAddedMsg: "<?php echo Mage::helper('manapro_productfaces')->__('This product is already in the list.') ?>"
+		productAlreadyAddedMsg: "<?php echo Mage::helper('manapro_productfaces')->__('This product is already in the list.') ?>",
+		defaultPackQty: '<?php echo Mage::getStoreConfig('manapro_productfaces/default_values/pack_qty') ?>',
+		defaultPosition: '<?php echo Mage::getStoreConfig('manapro_productfaces/default_values/position') ?>',
+		defaultParts: '<?php echo Mage::getStoreConfig('manapro_productfaces/default_values/parts') ?>',
+		defaultUnitOfMeasure: '<?php echo Mage::getStoreConfig('manapro_productfaces/default_values/unit_of_measure') ?>'
 	}]);
 </script>

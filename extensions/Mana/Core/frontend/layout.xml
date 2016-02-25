@@ -67,4 +67,10 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="addJs"><script>jquery/validate/jquery.validate.js</script></action>
 		</reference>
 	</jquery_ui>
+    <jquery_lighter>
+        <reference name="head">
+            <action method="addCss"><stylesheet>lib/jquery-lighter/jquery.lighter.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>lib/jquery-lighter/jquery.lighter.js</name><params/></action>
+        </reference>
+    </jquery_lighter>
 </layout>

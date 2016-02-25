@@ -133,11 +133,43 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 
 		}
 		$thisIndex = in_array('this', $ids) ? 'this' : $productData['entity_id'];
-		
-		// order results by method (qty, then percent, then part-of) and by position
-		self::$_representingProductDataForSortingCallback = $representingProductData;
-		uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
-		foreach ($ids as $key => $id) {
+
+        // Reinsert parent product to last, so it goes first (highest priority) when sorted with same `m_unit` and `position`
+        // Products with same `m_unit` and `position` gets inverted.
+        // $representingProductsData [1, 2, 3] becomes [3, 2, 1] after uasort `_representingProductSortingCallback` if products 1, 2, and 3 have the same `m_unit` and `position`
+        // That's why 'this'(original) product is reinserted to last, so after uasort `_representingProductSortingCallback`, it will be first in the array.
+        if(($key = array_search($thisIndex, $ids)) !== false) {
+            end($ids);
+            $i = key($ids);
+
+            if($representingProductData[$i][$idIndex] != $thisIndex) {
+                unset($ids[$key]);
+                array_push($ids, $thisIndex);
+                end($ids);
+                $i = key($ids);
+
+                if(isset($representingProductData[$i])) {
+                    $tmp = $representingProductData[$key];
+                    $representingProductData[$key] = $representingProductData[$i];
+                    $representingProductData[$i] = $tmp;
+                } else {
+                    $representingProductData[$i] = $representingProductData[$key];
+                    unset($representingProductData[$key]);
+                }
+
+                if (isset($virtualIds[$i])) {
+                    $tmp = $virtualIds[$i];
+                    unset($virtualIds[$i]);
+                    $virtualIds[$key] = $tmp;
+                }
+            }
+        }
+
+
+        // order results by method (qty, then percent, then part-of) and by position
+        self::$_representingProductDataForSortingCallback = $representingProductData;
+        uasort($ids, array('ManaPro_ProductFaces_Resource_Inventory', '_representingProductSortingCallback'));
+        foreach ($ids as $key => $id) {
 			$result['qties'][$id] = 0;
             if (!isset($representingProductData[$key]['m_pack_qty']) || $representingProductData[$key]['m_pack_qty'] <= 0) {
                 $representingProductData[$key]['m_pack_qty'] = 1;
@@ -240,44 +272,52 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 						foreach ($ids as $key => $id) {
 							if ($representingProductData[$key]['m_unit'] == 'parts') {
 								$productsProcessed++;
-								
+
 								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_pack_qty']: 0;
 								if (empty($productData['is_qty_decimal'])) {
                                     $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 								}
-								
+
 								$result['qties'][$id] = $qty;
 								$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 							}
 						}
-						
+
 						if (empty($productData['is_qty_decimal'])) {
-							if ($qtyLeft > 0) {
-								// in case we have positive rounding error, do +1 starting from most prioritized
-								foreach ($ids as $key => $id) {
-									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && !($qtyLeft >= 0)) {
+                            while($qtyLeft > 0) {
+                            	$processed = false;
+                                // in case we have positive rounding error, do +1 starting from most prioritized
+                                foreach ($ids as $key => $id) {
+                                    if ($representingProductData[$key]['m_unit'] == 'parts') {
+                                        if($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && ($qtyLeft > 0)) {
                                             $result['qties'][$id]++;
                                             $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
+                                            $processed = true;
                                         }
-										if ($qtyLeft <= 0) {
-											break;
-										}
-									}
-								}
-							}
-							elseif ($qtyLeft < 0) {
-								// in case we have negative rounding error, do -1 starting from least prioritized
-								foreach (array_reverse($ids, true) as $key => $id) {
-									if ($representingProductData[$key]['m_unit'] == 'parts') {
-                                        while ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && !($qtyLeft >= 0)) {
+                                        if ($qtyLeft <= 0) {
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(!$processed) break;
+                            }
+                            while($qtyLeft < 0) {
+								$processed = false;
+                                // in case we have negative rounding error, do -1 starting from least prioritized
+                                foreach (array_reverse($ids, true) as $key => $id) {
+                                    if ($representingProductData[$key]['m_unit'] == 'parts') {
+                                        if ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && ($qtyLeft < 0)) {
                                             $result['qties'][$id]--;
                                             $qtyLeft += $representingProductData[$key]['m_pack_qty'];
-                                        }
-										if ($qtyLeft >= 0) {
-											break;
+											$processed = true;
 										}
-									}
+                                        if ($qtyLeft >= 0) {
+                                            break;
+                                        }
+                                    }
+                                }
+								if (!$processed) {
+									break;
 								}
 							}
 						}
@@ -361,10 +401,9 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$productIds[$linkedProductId] = $linkedProductId;
 			}
 			foreach ($options['potentiallyObsoleteIds'] as $linkedProductId) {
-                $representingProductData = $this->_getRepresentedProductData($linkedProductId, $representedProductsData);
                 $sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
 					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0,
-					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
+					  `m_pack_qty` = 1
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -376,7 +415,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			$this->_getWriteAdapter()->multi_query($sql);
             if ($options['runRelatedIndexes']) {
             	Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexProducts($productIds);
-            	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
+            	//Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
 	        $this->updateTextQties($productIds);

@@ -92,6 +92,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </currently_shopping_by_title>
+                        <position_in_static_block translate="label comment">
+                            <label>When CMS Static Block Is Shown, Position Top Layered Navigation</label>
+                            <comment>Only applicable to category pages</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_positionInStaticBlock</source_model>
+                            <sort_order>600</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </position_in_static_block>
                     </fields>
                 </positioning>
                 <mobile translate="label" module="manapro_filterpositioning">
@@ -129,6 +139,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </behavior>
+                        <subtitle_behavior translate="label comment">
+                            <label>Whole Block Is</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>manapro_filterpositioning/source_subtitleBehavior</source_model>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </subtitle_behavior>
                         <duration translate="label">
                             <label>Effect Duration</label>
                             <frontend_type>text</frontend_type>

@@ -48,6 +48,11 @@ class ManaPro_FilterContent_Adminhtml_Mana_FiltersController extends Mana_Admin_
         // render AJAX result
         $this->renderLayout();
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
+
     #region Dependencies
     /**
      * @return Mana_Admin_Helper_Data

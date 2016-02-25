@@ -17,4 +17,8 @@ class ManaPro_ProductPlusProduct_Bought_TogetherController extends Mana_ProductL
         $this->setUsedModuleName('ManaPro_ProductPlusProduct');
         $this->_linkType = ManaPro_ProductPlusProduct_Resource_Setup::LINK_TYPE;
     }
+
+    protected function _isAllowed() {
+        return true;
+    }
 }

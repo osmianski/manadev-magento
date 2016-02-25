@@ -52,7 +52,7 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
             foreach ($counts as $category) {
                 $result[] = $category->getData();
             }
-            $data = $this->_getCategoryItemsDataRecursively($this->getLayer()->getCurrentCategory()->getData(), $result);
+            $data = $this->_getCategoryItemsDataRecursively($this->getCategory()->getData(), $result);
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
@@ -78,7 +78,7 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
                     'label' => Mage::helper('core')->htmlEscape($childCategory['name']),
                     'value' => $childCategory['entity_id'],
                     'count' => $childCategory['product_count'],
-                    'm_selected' => false, // filled out during apply phase
+                    'm_selected' => $childCategory['entity_id'] == $this->getLayer()->getCurrentCategory()->getId(),
                     'items' => $this->_getCategoryItemsDataRecursively($childCategory, $children),
                 );
             }
@@ -127,6 +127,11 @@ class ManaPro_FilterTree_Model_Solr_Category extends Mana_Filters_Model_Solr_Cat
     public function isCountedOnMainCollection()
     {
         return false;
+    }
+
+    public function countOnCollection($collection) {
+        $collection->addCategoryFilter($this->getCategory());
+        return parent::countOnCollection($collection);
     }
 
     public function getResetValue() {

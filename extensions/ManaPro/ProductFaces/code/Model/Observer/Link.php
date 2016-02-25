@@ -186,9 +186,6 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 					$errors[] = $helper->__('Error while saving representing product %s: %s', $linkedProduct->getSku(), $e->getMessage());
 				}
 			}
-			if (isset($fields['m_parts']) && (!$fields['m_parts'] || !is_numeric($fields['m_parts']) || $fields['m_parts'] <= 0)) {
-				$errors[] = $helper->__('Parts should be positive number, but %s is not.', $fields['m_parts']).$errorSuffix;
-			}
 			if (isset($fields['position']) && !is_numeric($fields['position'])) {
 				$errors[] = $helper->__('Position should be a number, but %s is not.', $fields['position']).$errorSuffix;
 			}
@@ -461,10 +458,13 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 		/* @var $inventory ManaPro_ProductFaces_Resource_Inventory */ $inventory = Mage::getResourceModel('manapro_productfaces/inventory');
 		
 		// update backlink
-		if ($representedProductId = Mage::getResourceModel('manapro_productfaces/link')->getRepresentedProductId($product->getId())) {
+		$linkResource = Mage::getResourceModel('manapro_productfaces/link');
+		if ($representedProductId = $linkResource->getRepresentedProductId($product->getId())) {
 			// update inventory
 			// TD: handle deletion of multiple products
 			Mage::register('updateRepresentedProductAfterDelete', $representedProductId);
+			$obsoleteIds = $linkResource->getRepresentingProductsAndOptions($representedProductId);
+			Mage::register('obsoleteRepresentingProducts', $obsoleteIds);
 		}
 	}
 	public function deleteRepresentingProducts($observer) {
@@ -474,8 +474,17 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 		// update backlink
 		if ($representedProductId = Mage::registry('updateRepresentedProductAfterDelete')) {
 			// update inventory
+			$obsoleteIds = array($product->getId());
+			if($representedProductId == $product->getId()) {
+				foreach(Mage::registry('obsoleteRepresentingProducts') as $representingProductData) {
+					$linked_product_id = $representingProductData['linked_product_id'];
+					if(!in_array($obsoleteIds, $linked_product_id)) {
+						array_push($obsoleteIds, $linked_product_id);
+					}
+				}
+			}
 			$inventory->updateRepresentingProducts($representedProductId, true,
-				array('potentiallyObsoleteIds' => array($product->getId())));
+				array('potentiallyObsoleteIds' => $obsoleteIds));
 		}
 	}
 	/* BASED ON SNIPPET: Models/Event handler */
@@ -516,7 +525,18 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			}
 		}
 	}
-	/**
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function afterProductImport($observer) {
+        /* @var $inventory ManaPro_ProductFaces_Resource_Inventory */ $inventory = Mage::getResourceModel('manapro_productfaces/inventory');
+        foreach($observer->getEvent()->getAdapter()->getAffectedEntityIds() as $entityId) {
+            $inventory->updateRepresentingProducts($entityId);
+        }
+    }
+
+    /**
 	 * Enter description here ...
 	 * @param Mage_Catalog_Model_Product $target
 	 * @param Mage_Catalog_Model_Product $source

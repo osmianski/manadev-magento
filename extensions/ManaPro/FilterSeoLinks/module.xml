@@ -20,5 +20,10 @@
 				<Mana_Seo />
 			</depends>
         </ManaPro_FilterSeoLinks>
+        <ManaPro_FilterContent>
+            <depends>
+                <ManaPro_FilterSeoLinks/>
+            </depends>
+        </ManaPro_FilterContent>
     </modules>
 </config>

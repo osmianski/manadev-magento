@@ -240,6 +240,10 @@ class Mana_Sorting_Adminhtml_Mana_Sorting_MethodController extends Mana_Admin_Co
         $this->_redirect('*/*/');
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/mana/sortingmethod');
+    }
+
     #region Dependencies
 
     /**

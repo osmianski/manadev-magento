@@ -30,10 +30,10 @@ class ManaPage_AttributeOption_Block_Widget extends Mana_Page_Block_Widget
             /* @var $attributes Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Collection */
             $attributes = Mage::getResourceModel('catalog/product_attribute_collection');
             $attributes
-                ->addFieldToFilter('attribute_code', array('in', $this->_getAttributeCodes()))
+                ->addFieldToFilter('attribute_code', array('in' => $this->_getAttributeCodes()))
                 ->setItemObjectClass('catalog/resource_eav_attribute');
             $attributes->getSelect()->distinct(true);
-
+ 
             $this->_attributes = $attributes;
         }
         return $this->_attributes;
@@ -83,39 +83,67 @@ class ManaPage_AttributeOption_Block_Widget extends Mana_Page_Block_Widget
         return $this;
     }
 
-    protected function _prepareCollection($collection)
-    {
+    public function _prepareCollection($collection) {
         $this->_prepareFilters();
-        /* @var $res Mage_Core_Model_Resource */
-        $res = Mage::getSingleton('core/resource');
-        $db = $res->getConnection('read');
 
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $collection->getConnection();
+
+        $condition = array();
         foreach ($this->_filters as $options) {
             $attributeCode = $options['attributeCode'];
             unset($options['attributeCode']);
-            $attribute = $this->_getAttribute($attributeCode);
             $options = $this->_translateOptions($attributeCode, $options);
-            if (!empty($options['useAttributeIndex'])) {
-                $tableAlias = $attributeCode . '_mpc_idx';
-                $conditions = array(
-                    "{$tableAlias}.entity_id = e.entity_id",
-                    $db->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
-                    $db->quoteInto("{$tableAlias}.store_id = ?", $this->getStoreId()),
-                    "{$tableAlias}.value in (" . implode(',', array_filter(explode('_', $options['value']))) . ")"
-                );
-                $collection->getSelect()
-                        ->distinct()
-                        ->join(
-                    array($tableAlias => $res->getTableName('catalog/product_index_eav')),
-                    join(' AND ', $conditions),
-                    array()
-                );
-            }
-            else {
-                $collection->addAttributeToFilter($attributeCode, array($options['operator'] => $options['value']));
+            $attributeExpr = $this->joinAttribute($collection, $attributeCode);
+            switch ($options['operator']) {
+                case 'eq':
+                    $condition[] = $db->quoteInto("$attributeExpr = ?", $options['value']);
+                    break;
+                case 'neq':
+                    $condition[] = $db->quoteInto("$attributeExpr IS NULL OR $attributeExpr <> ?", $options['value']);
+                    break;
+                case 'finset':
+                    $condition[] = $db->quoteInto("find_in_set(?,$attributeExpr)", $options['value']);
+                    break;
             }
         }
+
+        $condition = strtolower($this->getOperation()) == 'or'
+            ? implode(' OR ', $condition)
+            : implode(' AND ', $condition);
+
+        $collection->getSelect()->distinct()->where($condition);
+        
         return $this;
+    }
+
+    public function joinAttribute($collection, $attributeCode) {
+        /* @var $core Mana_Core_Helper_Data */
+        $core = Mage::helper(strtolower('Mana_Core'));
+
+        /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+        $attribute = $this->_getAttribute($attributeCode);
+
+        /* @var $db Varien_Db_Adapter_Pdo_Mysql */
+        $db = $collection->getConnection();
+        /* @var $res Mage_Core_Model_Resource */
+        $res = Mage::getSingleton('core/resource');
+
+        $alias = 'mp_'.$attributeCode;
+        $from = $collection->getSelect()->getPart(Varien_Db_Select::FROM);
+        if (!isset($from[$alias])) {
+            $collection->getSelect()->joinLeft(
+                array($alias => $attribute->getBackendTable()),
+                implode(' AND ', array(
+                    "`$alias`.`entity_id` = `e`.`entity_id`",
+                    $db->quoteInto("`$alias`.`attribute_id` = ?", $attribute->getId()),
+                    "`$alias`.`store_id` = 0",
+                )),
+                null
+            );
+        }
+
+        return "`$alias`.`value`";
     }
 
     public function getType() {

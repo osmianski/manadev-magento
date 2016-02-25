@@ -39,6 +39,10 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+        if (isset($tables['most_viewed_stats'])) {
+            return;
+        }
 
         $select
                 ->joinLeft(
@@ -52,7 +56,6 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
                     "most_viewed_stats.product_id = e.entity_id",
                     null
                 );
-        $tables = $select->getPart('from');
         if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
@@ -62,7 +65,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("most_viewed_stats.view_count {$direction}");
     }
 

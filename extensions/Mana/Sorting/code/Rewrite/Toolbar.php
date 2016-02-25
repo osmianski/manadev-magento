@@ -10,6 +10,8 @@
  *
  */
 class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolbar {
+    protected $overrideDefaultOrder;
+
     public function setAvailableOrders($orders) {
         $category = $this->sortingHelper()->getCategory();
         if($category->getAvailableSortBy()) {
@@ -26,13 +28,21 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
     }
 
     public function setDefaultOrder($field) {
-        $category = $this->sortingHelper()->getCategory();
-        if($category->getData('default_sort_by')) {
-            $field = $category->getData('default_sort_by');
+        if(isset($this->overrideDefaultOrder)) {
+            $field = $this->overrideDefaultOrder;
         } else {
-            $field = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
+            $category = $this->sortingHelper()->getCategory();
+            if($category->getData('default_sort_by')) {
+                $field = $category->getData('default_sort_by');
+            } else {
+                $field = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
+            }
         }
         return parent::setDefaultOrder($field);
+    }
+
+    public function overrideDefaultOrder($field) {
+        $this->overrideDefaultOrder = $field;
     }
 
     public function setCollection($collection) {

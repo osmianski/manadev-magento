@@ -120,7 +120,7 @@ class Mana_AttributePage_Resource_OptionPage_UrlIndexer extends Mana_Seo_Resourc
         $db = $this->_getWriteAdapter();
 
         $fields = array(
-            'url_key' => new Zend_Db_Expr("`op`.`url_key`"),
+            'url_key' => new Zend_Db_Expr($this->dbHelper()->makeNotEmpty("`op`.`url_key`")),
             'type' => new Zend_Db_Expr("'option_page'"),
             'is_page' => new Zend_Db_Expr('1'),
             'is_parameter' => new Zend_Db_Expr('0'),

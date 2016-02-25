@@ -56,10 +56,45 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
             $counts = $query->getFilterCounts($this->getFilterOptions()->getCode());
 
             $result = array();
-            foreach ($counts as $category) {
-                $result[] = $category->getData();
+
+            $category = $this->getCategory()->getData();
+            $parents = array();
+            foreach ($counts as $childCat) {
+                $childCategory = $childCat->getData();
+                $found = false;
+                if ($childCategory['is_active'] &&
+                    strpos($childCategory['path'], $category['path'] . '/') === 0 &&
+                    ($this->filterHelper()->isFilterEnabled($this->getFilterOptions()) == 2 || $childCategory['product_count']))
+                {
+                    if (strpos($childCategory['path'], '/', strlen($category['path'] . '/')) === false) {
+                        // $childCategory direct child of current root category
+                        // add it to $result - array of current category children
+                        $found = true;
+                        $addTo = &$result;
+                    }
+                    else {
+                        // $childCategory is indirect child of current category
+                        $parentPath = substr($childCategory['path'], 0, strrpos($childCategory['path'], '/'));
+                        if (isset($parents[$parentPath])) {
+                            $found = true;
+                            $addTo = &$parents[$parentPath]['items'];
+                        }
+                }
+                }
+                if ($found) {
+                    $addTo[] = array(
+                        'label' => Mage::helper('core')->htmlEscape($childCategory['name']),
+                        'value' => $childCategory['entity_id'],
+                        'count' => $childCategory['product_count'],
+                        'm_selected' => $childCategory['entity_id'] == $this->getLayer()->getCurrentCategory()->getId(),
+                        'items' => array(),
+                        'position' => $childCategory['position'],
+                    );
+                    $parents[$childCategory['path']] = &$addTo[count($addTo) - 1];
+                }
             }
-            $data = $this->_getCategoryItemsDataRecursively($this->getCategory()->getData(), $result);
+            $this->_sortCategoryItemsDataRecursively($result);
+            $data = $result;
             $tags = $this->getLayer()->getStateTags();
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
@@ -126,6 +161,27 @@ class ManaPro_FilterTree_Model_Category extends Mana_Filters_Model_Filter_Catego
 
     public function getResetValue() {
         return null;
+    }
+
+    protected function _orderCategoryItems($collection) {
+        $collection->setOrder('path', 'ASC');
+    }
+
+    protected function _sortCategoryItemsDataRecursively(&$items) {
+        if (!count($items)) {
+            return;
+        }
+
+        usort($items, array($this, '_compareCategoryItemData'));
+        foreach (array_keys($items) as $key) {
+            $this->_sortCategoryItemsDataRecursively($items[$key]['items']);
+        }
+    }
+
+    public function _compareCategoryItemData($a, $b) {
+        if ($a['position'] < $b['position']) return -1;
+        if ($a['position'] > $b['position']) return 1;
+        return 0;
     }
 
     #region Dependencies

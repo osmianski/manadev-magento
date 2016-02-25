@@ -31,6 +31,10 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
 
         $select = $collection->getSelect();
         $db = $this->getReadConnection();
+        $tables = $select->getPart('from');
+        if (isset($tables['now_in_wishlist_stats'])) {
+            return;
+        }
 
         $select
                 ->joinLeft(
@@ -43,7 +47,6 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
                     "now_in_wishlist_stats.product_id = e.entity_id",
                     null
                 );
-        $tables = $select->getPart('from');
         if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
             $select
                     ->joinLeft(
@@ -53,7 +56,7 @@ class Mana_Sorting_Resource_NowInWishlist extends Mage_Core_Model_Mysql4_Abstrac
                     );
             $select->order("s.is_in_stock desc");
         }
-        $direction = $direction == 'asc' ? 'asc' : 'desc';
+        $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("now_in_wishlist_stats.wishlist_count {$direction}");
     }
 
