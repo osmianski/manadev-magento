@@ -28,8 +28,14 @@
 				Mage::helper() calls. -->
 				<class>Local_Manadev_Helper</class>
 			</local_manadev>
-		</helpers>
-		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+
+            <!-- fix for 1.9.2.3 -->
+            <googlecheckout>
+                <class>Mage_GoogleCheckout_Helper</class>
+            </googlecheckout>
+        </helpers>
+
+        <!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
 		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
 		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
 		Local_Manadev_Block_XXX_YYY classes are accessible as 'local_manadev/xxx_yyy' type strings both in layout files
