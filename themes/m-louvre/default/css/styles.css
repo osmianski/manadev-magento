@@ -38,16 +38,16 @@
 	font-style: normal;
 }
 
-:before {
+:before, :after {
 	font-family: 'themify';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
 	text-transform: none;
-	padding-right: 5px;
+    line-height: 1;
+	padding: 0 5px;
 	font-size:  14px;
-
 	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -130,7 +130,7 @@ ul,ol         { list-style:none; }
 .no-margin    { margin:0 !important; }
 .no-padding   { padding:0 !important; }
 .no-bg        { background:none !important; }
-.read-more    { display: block; text-align: right; font-style: normal; color: #646464; }
+.read-more    { display: block; text-align: right; font-style: normal; text-decoration:none; }
 .m-widget-position { background-color: rgba(176, 234, 248, 0.3); width: 100%; height: 100%; text-align:center !important; box-shadow: inset 0 0 20px #AAA; }
 .m-widget-position>div { padding: 10px; }
 
@@ -257,16 +257,16 @@ ul,ol         { list-style:none; }
 /* Bullet list*/
 .m-bullet-list h3, .what-we-do h3      { color: #646464; margin-bottom: 5px; white-space: nowrap; }
 .m-bullet-list p { padding-left:60px; }
-.m-bullet     { padding: 0px 0px; background:#ff6364; border-radius: 20px; box-shadow: -1px 1px 4px -1px rgba(0,0,0,0.5) ; font-size: 20px; width: 40px; height: 40px; text-align: center; line-height: 40px; float: left; margin: 0 10px;}
-.col-1 .m-bullet     { background-color:#ffb264; }
-.col-2 .m-bullet     { background-color:#e6e664; }
-.col-3 .m-bullet     { background-color:#b3e665; }
-.col-4 .m-bullet     { background-color:#64e564; }
+.m-bullet-list h3:before     { padding: 0px 0px; background:#ff6364; border-radius: 20px; box-shadow: -1px 1px 4px -1px rgba(0,0,0,0.5) ; font-size: 20px; width: 40px; height: 40px; text-align: center; line-height: 40px; float: left; margin: 0 10px;}
+.m-bullet-list .col-1 h3:before     { background-color:#ffb264; }
+.m-bullet-list .col-2 h3:before     { background-color:#e6e664; }
+.m-bullet-list .col-3 h3:before     { background-color:#b3e665; }
+.m-bullet-list .col-4 h3:before     { background-color:#64e564; }
 
-.we-guarantee .col-1 .m-bullet { background: #ffb264 url(../images/i-quality.png) center no-repeat; }
-.we-guarantee .col-2 .m-bullet { background: #e6e664 url(../images/i-free-updates.png) center no-repeat; }
-.we-guarantee .col-3 .m-bullet { background: #b3e665 url(../images/i-security.png) center no-repeat; }
-.we-guarantee .col-4 .m-bullet { background: #64e564 url(../images/i-worry-free.png) center no-repeat; }
+.we-guarantee .col-1 h3:before { content: "\e60a"; }
+.we-guarantee .col-2 h3:before { content: "\e68c"; }
+.we-guarantee .col-3 h3:before { content: "\e62b"; }
+.we-guarantee .col-4 h3:before { content: "\e71f"; }
 
 /* We Accept*/
 .we-accept { line-height: 50px; margin: 10px auto;}
@@ -2025,8 +2025,8 @@ a.grey-link:hover       { text-decoration:none; }
 
 .status { background: transparent url(../images/i_status.png) 0 0 no-repeat;}
 
-.read-more { text-align: right; padding-right: 20px; padding-bottom: 5px; background: transparent url(../images/i_read_more.png) top right no-repeat;}
-
+.read-more { }
+.read-more:after { content: "\e628"; }
 
 
 .request-row > .accepted .truncated { border-bottom: 1px dashed #bbb; margin-bottom: 5px; padding-bottom: 5px; }
