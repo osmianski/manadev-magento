@@ -45,7 +45,6 @@
 	font-weight: normal;
 	font-variant: normal;
 	text-transform: none;
-	line-height: 1;
 	padding-right: 5px;
 	font-size:  14px;
 
@@ -627,13 +626,13 @@ tr.summary-details-excluded { font-style:italic; }
 .link-compare {  }
 .link-print { background:url(../images/i_print.gif) 0 2px no-repeat; padding:2px 0 2px 25px; }
 .link-rss { background:url(../images/i_rss.gif) 0 1px no-repeat; padding-left:18px; white-space:nowrap; }
-.btn-remove { display:block; width:11px; height: 11px; font-size:0; line-height:0; background:url(../images/btn_remove.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; position: relative; top: 3px;}
-.btn-remove2 { display:block; width:16px; height:16px; font-size:0; line-height:0; background:url(../images/btn_trash.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; margin-bottom: 12px;}
-.btn-edit    { display:block; width:11px; height:11px; font-size:0; line-height:0; background:url(../images/btn_edit.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; position: relative; top: 2px; right: 4px;}
+.btn-remove,
+.btn-remove2,
+.btn-edit { font-size:0; text-decoration: none; color: #646464; }
 
-.btn-remove:before {  }
-.btn-remove2:before { content: "\e605"; }
-.btn-edit:before    {  }
+.btn-remove:before { content: "\e646"; }
+.btn-remove2:before { content: "\e605"; font-size: 16px; }
+.btn-edit:before    {  content: "\e61c"; }
 
 .cards-list dt { margin:5px 0 0; }
 .cards-list .offset { padding:2px 0 2px 20px; }
