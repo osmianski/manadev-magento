@@ -23,7 +23,36 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+/* Google font */
 @import url(https://fonts.googleapis.com/css?family=PT+Sans);
+
+/* Themify icons font */
+@font-face {
+	font-family: 'themify';
+	src:url('fonts/themify.eot?-fvbane');
+	src:url('fonts/themify.eot?#iefix-fvbane') format('embedded-opentype'),
+		url('fonts/themify.woff?-fvbane') format('woff'),
+		url('fonts/themify.ttf?-fvbane') format('truetype'),
+		url('fonts/themify.svg?-fvbane#themify') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+:before {
+	font-family: 'themify';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	padding-right: 5px;
+	font-size:  14px;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
 
 /* Reset ================================================================================= */
 
@@ -429,11 +458,11 @@ p.required { font-size:10px; text-align:right; color:#ff6464; }
 .error-msg,
 .success-msg,
 .note-msg,
-.notice-msg { background-position: 5px 5px !important; background-repeat:no-repeat !important; padding: 8px 10px 8px 32px !important; font-size: 11px !important; font-weight:bold !important; background: #787878; border-radius: 7px; color: white;}
-.error-msg { background-image: url(../images/i_msg-error.png); }
-.success-msg { background-image: url(../images/i_msg-success.png); }
-.note-msg { background-image: url(../images/i_msg-note.png); }
-.notice-msg { background-image: url(../images/i_msg-notice.png); }
+.notice-msg { padding: 5px 15px; background-color: #787878; border-radius: 7px; color: white; box-shadow: 3px 3px 4px 0px rgba(0,0,0,0.2);}
+p.success-msg:before, .success-msg ul li:before { content: "\e64c"; color:#64E564; }
+p.error-msg:before, .error-msg ul li:before { content: "\e646"; color:#FF6464; }
+p.notice-msg:before, .notice-msg ul li:before { content: "\e717"; color:#DAECF8; }
+p.note-msg:before, .note-msg ul li:before { content: "\e717"; color:#DAECF8; }
 
 /* BreadCrumbs */
 .breadcrumbs { padding:0 15px; margin:0 0 10px; }
@@ -602,6 +631,10 @@ tr.summary-details-excluded { font-style:italic; }
 .btn-remove2 { display:block; width:16px; height:16px; font-size:0; line-height:0; background:url(../images/btn_trash.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; margin-bottom: 12px;}
 .btn-edit    { display:block; width:11px; height:11px; font-size:0; line-height:0; background:url(../images/btn_edit.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; position: relative; top: 2px; right: 4px;}
 
+.btn-remove:before {  }
+.btn-remove2:before { content: "\e605"; }
+.btn-edit:before    {  }
+
 .cards-list dt { margin:5px 0 0; }
 .cards-list .offset { padding:2px 0 2px 20px; }
 
@@ -656,14 +689,17 @@ a.m-twitter:hover { background-position: bottom right; }
 .header .links li a:hover { background: #818181;}
 .header .links li.last a { color: #FF6464; font-weight: bold; background: transparent;}
 .header .links li a.top-link-cart { background-color: #FF6464; }
+.header .links li a.top-link-cart:before { content: "\e60d"; }
+
+
 .header .links li.last a:hover { color: #FD2E2E; }
 .header .links li a.top-link-cart:hover { background-color: #FD2E2E; }
 
 .header .form-search { display: inline; float: left; margin-right: -15px;}
-.header .form-search input { padding:5px 25px 5px 5px; width: 200px; margin: 1px;}
-.header .form-search button { position: relative; left: -25px; top: 2px; }
-.header .form-search button span { background: white url(../images/i-search.jpg) 0 6px no-repeat; display: block; width: 15px; height: 20px; padding: 0;}
-.header .form-search button span span{ display: none;  }
+.header .form-search input { padding:5px 36px 5px 5px; width: 200px; margin: 1px;}
+.header .form-search button { position: relative; left: -42px; top: 1px; border-radius: 0; background-color: transparent; }
+.header .form-search button span { font-size:0; }
+.header .form-search button span span:before { 	content: "\e610"; padding:0; color:#646464; }
 
 .header .form-search .search-autocomplete { z-index:999; }
 .header .form-search .search-autocomplete ul { border:1px solid #ddd; background-color:#fff; }
