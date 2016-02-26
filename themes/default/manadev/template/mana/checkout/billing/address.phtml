@@ -81,7 +81,7 @@
                             <?php echo $this->getCountryHtmlSelect('billing') ?>
                         </div>
                     </div>
-                    <div class="field billing-state">
+                    <!--<div class="field billing-state">
                         <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?>
                         </label>
 
@@ -102,13 +102,7 @@
                                    style="display:none;"
                                    />
                         </div>
-                    </div>
-                    <script>
-                        var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region',
-                            'billing:region_id', <?php echo $this->helper('directory')->getRegionJson() ?>,
-                            undefined, 'billing:postcode');
-
-                    </script>
+                    </div>-->
                 </li>
             </ul>
         </div>
