@@ -82,7 +82,7 @@ class Mana_Checkout_Model_Processing_Express_Controller extends Mage_Paypal_Cont
      * Instantiate quote and checkout
      * @throws Mage_Core_Exception
      */
-    private function _initCheckout() {
+    protected function _initCheckout() {
         $quote = $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
@@ -111,7 +111,7 @@ class Mana_Checkout_Model_Processing_Express_Controller extends Mage_Paypal_Cont
      *
      * @return Mage_Checkout_Model_Session
      */
-    private function _getCheckoutSession() {
+    protected function _getCheckoutSession() {
         return Mage::getSingleton('checkout/session');
     }
 
