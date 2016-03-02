@@ -302,9 +302,9 @@ button.button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
 
 /* nash: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px;} */
 /* mn: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px; padding: 0 0px;} */
-button.button { overflow:visible; width:auto; border:0; padding:5px 10px; cursor:pointer; margin: 2px; background-color: #26B1ED; border-radius: 5px; }
+button.button { color:white; overflow:visible; width:100%; border:0; padding:5px 10px; cursor:pointer; margin: 2px; background-color: #26B1ED; border-radius: 5px; }
 button.button:hover { background: #25A4DB; }
-button.button span { white-space:nowrap; color:#fff; }
+button.button span { white-space:nowrap; }
 button.button > span {  }
 button.button > span:hover {}
 
@@ -314,12 +314,8 @@ button.button span span { background: transparent; }
 button.disabled {}
 button.disabled span {}
 
-button.btn-checkout span {
-    background: #FF6464;
-}
-button.btn-checkout span:hover {
-    background: #FD2E2E;
-}
+button.btn-checkout { background: #FF6464; }
+button.btn-checkout:hover { background: #FD2E2E; }
 
 button.btn-checkout.no-checkout {}
 
@@ -457,7 +453,7 @@ p.required { font-size:10px; text-align:right; color:#ff6464; }
 .error-msg,
 .success-msg,
 .note-msg,
-.notice-msg { padding: 5px 15px; background-color: #787878; border-radius: 7px; color: white; box-shadow: 3px 3px 4px 0px rgba(0,0,0,0.2);}
+.notice-msg { padding: 5px 10px; background-color: #787878; border-radius: 7px; color: white; box-shadow: 3px 3px 4px 0px rgba(0,0,0,0.2);}
 p.success-msg:before, .success-msg ul li:before { content: "\e64c"; color:#64E564; }
 p.error-msg:before, .error-msg ul li:before { content: "\e646"; color:#FF6464; }
 p.notice-msg:before, .notice-msg ul li:before { content: "\e717"; color:#DAECF8; }
@@ -794,9 +790,11 @@ transition: all 1s ease-in;
 /* ======================================================================================= */
 
 /* Sidebar =============================================================================== */
+.sidebar .product-name a { font-weight:normal; font-size: 14px; }
+
 .block { margin:0 0 10px; padding: 0 10px; position: relative; }
 .block .block-title { color: #26b1ed; padding: 5px 10px 5px;}
-.block .block-title strong { font-size:14px; font-weight:bold; }
+.block .block-title strong {  }
 .block .block-title strong span {}
 .block .block-title a { text-decoration:none !important; }
 .block .block-subtitle { font-size:13px; font-weight:bold;}
@@ -870,8 +868,8 @@ transition: all 1s ease-in;
 .block-cart .subtotal { text-align:center; }
 .block-cart .subtotal .price { font-weight: bold; font-size: 14px; }
 .block-cart .summary { padding: 20px 20px 15px; background: #f8f8f8; width:180px; position: relative; right: 20px; border-radius: 10px; margin: 10px 0 0;}
-.block-cart .actions { position: absolute; top: 15px; right: 20px; }
-.block-cart .actions button.button span { background: #FF6464; }
+.block-cart .actions { position: absolute; top: -7px; right: 20px; }
+.block-cart .actions button.button { background: #FF6464; }
 
 .block-cart .actions .paypal-logo { float:left; width:100%; margin:3px 0 0; text-align:right; }
 .block-cart .actions .paypal-logo .paypal-or { clear:both; display:block; padding:0 55px 5px 0; }
@@ -990,7 +988,7 @@ transition: all 1s ease-in;
 .category-description { margin:0 0 10px; }
 .category-products {}
 /* View Type: Grid */
-.actions-wrapper {  width: 115px; margin: 0 auto; padding-bottom: 28px; }
+.actions-wrapper {  margin: 0 auto; padding-bottom: 28px; }
 .products-grid { position:relative; margin: 0 auto 20px;}
 .products-grid.last { border-bottom:0; }
 .products-grid.first { border-top:0; }
@@ -1008,7 +1006,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 
 
 .products-grid .product-image { display:block; margin: 0 auto 10px; position: relative; }
-.products-grid .product-name { margin:0 0 5px; font-size:13px; clear: both; }
+.products-grid .product-name { margin:0 0 5px; font-size:16px; clear: both; }
 .products-grid .product-name a {}
 .products-grid .price-box { margin:5px 0; }
 .products-grid .availability { line-height:21px; }
@@ -1189,7 +1187,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 /********** < Product Prices */
 .price { color: #26B1ED;}
 
-.price-box { font-size: 12px; font-weight: normal; color: #646464; }
+.price-box { font-weight: normal; color: #646464; }
 .price-box .price { font-weight:bold; }
 .sidebar .price-box { font-size: 11px; }
 .sidebar .price-box .special-price .price { font-size: 12px; }
@@ -1207,7 +1205,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 /* Special price */
 .special-price {}
 .special-price .price-label { font-weight:bold; white-space:nowrap; }
-.special-price .price { font-weight:bold; color: #FF6464; font-size: 14px;}
+.special-price .price { font-weight:bold; color: #FF6464; font-size: 18px;}
 /*
 .ribbons-container { position: relative; float: left; }
 .special-price:before { position: absolute; top: 8px; left: -9999px; content:""; z-index: 2; width: 78px; height: 78px; background: transparent url(../images/i-special-price.png) 0 0 no-repeat; }
@@ -1283,8 +1281,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 /* Add to Links */
 .add-to-links .separator { display:none; }
 .add-to-links {}
-.add-to-links li { line-height: 25px; margin-bottom: 5px; }
-.add-to-links li a{ line-height: 25px; color:#646464; text-decoration: none; padding: 0 0px; background: gainsboro;  border-radius: 5px; display: inline-block; margin: 0; font-weight: normal; font-size: 12px; width: 100%; }
+.add-to-links li {  }
+.add-to-links li a{ color:#646464; text-decoration: none; margin: 2px; padding: 5px 10px; background: gainsboro;  border-radius: 5px; display: inline-block; width: 100%; }
+
 .add-to-links li a:hover { color:#535353; background-color: #cbcbcb; }
 .in-wishlist .add-to-links li a.link-wishlist,
 .in-compare .add-to-links li a.link-compare { color: #dcdcdc; background-color: #969696;}
@@ -1343,7 +1342,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 
 
 /* Add to Cart */
-button.btn-cart { margin-bottom: 5px; }
 .add-to-cart label { float:left; margin-right:5px; }
 .add-to-cart .qty { float:left; }
 .add-to-cart button.button { float:left; margin-left:5px; }
@@ -1357,7 +1355,7 @@ button.btn-cart { margin-bottom: 5px; }
 .add-to-box .or { float:left; margin:0 10px; }
 .add-to-box .add-to-links { float:left; }
 button.btn-cart>span,
-.add-to-links li a { width: auto; text-align: center;}
+.add-to-links li a { text-align: center; box-sizing: border-box; }
 .product-view button.btn-cart>span,
 .product-view .add-to-links li a,
 .sidebar button.btn-cart>span,
@@ -1610,12 +1608,10 @@ margin-left: -68px;
     float: left;
 }
 .cart .totals { width: 220px; margin-left: 20px;  float: right;}
-.cart .totals .shipping-form button span,
-.cart .totals .discount-form button span { background: #dcdcdc; color:#646464; }
-.cart .totals .shipping-form button span span,
-.cart .totals .discount-form button span span { background: transparent; }
-.cart .totals .shipping-form button span:hover,
-.cart .totals .discount-form button span:hover { background: #cbcbcb; color:#535353; }
+.cart .totals .shipping-form button,
+.cart .totals .discount-form button { background: #dcdcdc; color:#646464; }
+.cart .totals .shipping-form button:hover,
+.cart .totals .discount-form button:hover { background: #cbcbcb; color:#535353; }
 .cart-table .product-image { display: block; }
 .cart-table input.qty { position: relative; bottom: 3px; }
 .cart-table td { padding: 7px 5px; }
@@ -1628,9 +1624,10 @@ margin-left: -68px;
 
 /* Shopping Cart Table */
 .cart-table .item-msg { font-size:10px; }
-.cart-table button.button span { background: #dcdcdc; color: #646464; }
-.cart-table button.button span span { background: transparent; }
-.cart-table button.button span:hover { background: #cbcbcb; color: #535353; }
+button.btn-continue,
+button.btn-update { background: #dcdcdc; color: #646464; }
+button.btn-continue:hover,
+button.btn-update:hover { background: #dcdcdc; color: #646464; }
 
 /* Shopping Cart Collateral boxes */
 .cart .cart-collaterals { padding:25px 0 0;}
@@ -1649,7 +1646,6 @@ margin-left: -68px;
 .cart .crosssell .product-details .special-price::before { left:-5px; top:-5px; }
 .cart .crosssell li.item { margin: 0 0 0 31px; width: 130px; float: left; text-align: center;}
 .cart .crosssell li.item .add-to-links{ position: absolute; bottom: 0; width: 125px; }
-.cart .crosssell li.item button{ margin-bottom: 0; }
 
 /* Discount Codes & Estimate Shipping and Tax Boxes */
 .cart .discount,
