@@ -64,7 +64,7 @@
 						url: $.options("#download-dialog").registerUrl,
 						data: $("#register-and-download-form").serializeArray(),
 						success: function(data, status, request) {
-							if (typeof(data) === 'string') { data = $.parseJSON(data); }
+							if (data && typeof(data) === 'string') { data = $.parseJSON(data); }
 							if (!data || !data.error) {
 								// close dialog and just open download page. Server should have been
 								// prepared to accept this download attempt
