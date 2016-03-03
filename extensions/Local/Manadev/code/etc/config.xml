@@ -69,6 +69,11 @@
                     <product_widget_new>Local_Manadev_Block_Product_Widget_New</product_widget_new>
                 </rewrite>
 			</catalog>
+			<customer>
+                <rewrite>
+                    <account_navigation>Local_Manadev_Block_Customer_Account_Navigation</account_navigation>
+                </rewrite>
+            </customer>
 		</blocks>
 		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
 		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
