@@ -79,6 +79,7 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
             $processor = $helper->getBlockTemplateProcessor();
             $bookPage->setContent($processor->filter($bookPage->getContent()));
 
+            $this->initLayoutMessages(array('customer/session'));
             $this->renderLayout();
         } else {
             $this->_forward('noRoute');

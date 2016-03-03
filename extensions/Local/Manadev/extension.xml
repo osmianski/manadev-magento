@@ -26,4 +26,5 @@
     <sync extension-dir="backend/images" project-dir="skin/adminhtml/default/default/images/{extension_name}"/>
 
     <sync extension-file="rewrite/Zend/Pdf/FileParserDataSource/File.php" project-file="app/code/local/Zend/Pdf/FileParserDataSource/File.php"/>
+    <sync extension-file="rewrite/Mage/Adminhtml/Helper/Sales.php" project-file="app/code/local/Mage/Adminhtml/Helper/Sales.php"/>
 </config>

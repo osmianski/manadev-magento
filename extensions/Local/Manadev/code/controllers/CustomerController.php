@@ -96,7 +96,7 @@ class Local_Manadev_CustomerController extends Mage_Core_Controller_Front_Action
 	                    $customerForm->compactData($customerData);
 	                    // MANA BEGIN: changed field names
 	                    $customer->setPassword($this->getRequest()->getPost('customer_password'));
-	                    $customer->setConfirmation($this->getRequest()->getPost('customer_password_confirmed'));
+	                    $customer->setPasswordConfirmation($this->getRequest()->getPost('customer_password_confirmed'));
 	                    // MANA END
 	                    $customerErrors = $customer->validate();
 	                    if (is_array($customerErrors)) {

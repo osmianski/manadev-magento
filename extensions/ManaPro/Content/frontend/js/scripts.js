@@ -192,7 +192,8 @@ function($, ajax, config, layout, filter, undefined)
 Mana.require(['jquery', 'singleton:Mana/Core/Ajax', 'singleton:ManaPro/Content/AjaxInterceptor'],
 function($, ajax, contentAjaxInterceptor)
 {
-    ajax.addInterceptor(contentAjaxInterceptor);
+    // disabled as it doesn't work anymore after upgrade to 1.9
+    //ajax.addInterceptor(contentAjaxInterceptor);
 });
 
 

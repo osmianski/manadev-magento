@@ -21,6 +21,7 @@
 				<Mage_Customer />
 				<Mana_Core />
 				<Mage_Widget />
+				<Mage_Adminhtml />
 			</depends>
 			<!-- INSERT HERE: depends -->
         </Local_Manadev>

@@ -219,6 +219,9 @@ class Mana_Checkout_Model_Processing extends Mage_Checkout_Model_Type_Onepage {
         if (isset($data['email'])) {
             $data['email'] = trim($data['email']);
         }
+        if (isset($data['region']) && $data['region'] == 1) {
+            unset($data['region']);
+        }
         Mage::helper('mana_checkout')->implodeTelephone($data);
     }
     protected function __() {

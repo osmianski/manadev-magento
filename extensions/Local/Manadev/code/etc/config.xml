@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>14.04.25.15</version>
+		    <version>16.03.02.17</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -28,8 +28,14 @@
 				Mage::helper() calls. -->
 				<class>Local_Manadev_Helper</class>
 			</local_manadev>
-		</helpers>
-		<!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
+
+            <!-- fix for 1.9.2.3 -->
+            <googlecheckout>
+                <class>Mage_GoogleCheckout_Helper</class>
+            </googlecheckout>
+        </helpers>
+
+        <!-- BASED ON SNIPPET: Blocks/Block support (config.xml) -->
 		<!-- This section registers block classes to be accessible from layout XML files (in type="<block type>") or 
 		through calls to $this->getLayout()->createBlock('<block type>') in block or controller code. That is, 
 		Local_Manadev_Block_XXX_YYY classes are accessible as 'local_manadev/xxx_yyy' type strings both in layout files
@@ -55,6 +61,7 @@
 					<sales_order_creditmemo_view>Local_Manadev_Block_Creditmemo_View</sales_order_creditmemo_view>
 					<sales_creditmemo_grid>Local_Manadev_Block_Creditmemo_Grid</sales_creditmemo_grid>
                     <sales_order_grid>Local_Manadev_Block_Order_Grid</sales_order_grid>
+                    <customer_edit_tab_orders>Local_Manadev_Block_Customer_Order_Grid</customer_edit_tab_orders>
                 </rewrite>
 			</adminhtml>
 			<catalog>
