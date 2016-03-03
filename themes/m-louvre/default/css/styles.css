@@ -189,6 +189,11 @@ ul,ol         { list-style:none; }
 
 /* ======================================================================================= */
 
+/* Buttons =============================================================================== */
+
+button.button.btn-gray { background: #dcdcdc; color: #646464; }
+button.button.btn-gray:hover { background: #969696; color: #fff; }
+
 /* lightgrey, darkgrey, pink, blue, line, shadow =============================================================================== */
 .m-lightgrey, .m-darkgrey { border-radius: 10px !important; padding: 20px !important;}
 
@@ -302,7 +307,7 @@ button.button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
 
 /* nash: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px;} */
 /* mn: button.button { line-height: 25px; overflow:visible; width:auto; border:0; padding:0; background:transparent; cursor:pointer; margin: 0 1px; padding: 0 0px;} */
-button.button { color:white; overflow:visible; width:100%; border:0; padding:5px 10px; cursor:pointer; margin: 2px; background-color: #26B1ED; border-radius: 5px; }
+button.button { color:white; overflow:visible; width:auto; border:0; padding:5px 10px; cursor:pointer; margin: 2px; background-color: #26B1ED; border-radius: 5px; }
 button.button:hover { background: #25A4DB; }
 button.button span { white-space:nowrap; }
 button.button > span {  }
@@ -345,9 +350,9 @@ p.control input.radio { margin-right:6px; }
 .form-list li.control input.checkbox { margin-right:6px; }
 .form-list li.control .input-box { clear:none; display:inline; width:auto; }
 /*.form-list li.fields { margin-right:-15px; }*/
-.form-list .input-box { display:block; clear:both; width:260px; }
+.form-list .input-box { display:block; clear:both; margin:2px; }
 .form-list .field { float:left; width:275px; }
-.form-list input.input-text { width: 250px; margin: 5px 0;}
+.form-list input.input-text { width: 100%; box-sizing: border-box; }
 .form-list textarea { width:254px; height:10em; }
 .form-list select { width:260px; }
 .form-list li.wide .input-box { width:535px; }
@@ -1006,9 +1011,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 
 
 .products-grid .product-image { display:block; margin: 0 auto 10px; position: relative; }
-.products-grid .product-name { margin:0 0 5px; font-size:16px; clear: both; }
+.products-grid .product-name { margin:0 0 5px; clear: both; }
 .products-grid .product-name a {}
-.products-grid .price-box { margin:5px 0; }
+.products-grid .price-box { margin:5px 0; clear: both; }
 .products-grid .availability { line-height:21px; }
 .products-grid .actions { position:absolute; bottom: 0; text-align: center; width: 155px; background: url(../images/border.png) bottom repeat-x; }
 .products-grid .actions .add-to-links {}
@@ -1049,7 +1054,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .col3-layout .products-list .product-shop { width: 200px; }
 .products-list .actions-block { width: 110px; float: right; }
 
-.products-list .product-name { margin:0 0 5px; font-weight:bold; font-size:14px; }
+.products-list .product-name { margin:0 0 5px; }
 .products-list .product-name a {}
 .products-list .price-box { font-size:14px; margin: 5px 0px 10px 0px; text-align: center; width: 100%;}
 .products-list .price-box .special-price .price,
@@ -1282,7 +1287,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .add-to-links .separator { display:none; }
 .add-to-links {}
 .add-to-links li {  }
-.add-to-links li a{ color:#646464; text-decoration: none; margin: 2px; padding: 5px 10px; background: gainsboro;  border-radius: 5px; display: inline-block; width: 100%; }
+.add-to-links li a{ color:#646464; text-decoration: none; margin: 2px; padding: 5px 10px; background: gainsboro;  border-radius: 5px; display: inline-block; }
 
 .add-to-links li a:hover { color:#535353; background-color: #cbcbcb; }
 .in-wishlist .add-to-links li a.link-wishlist,
@@ -1807,19 +1812,13 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .m-register-login .new-users,
 .m-register-login .registered-users { padding: 20px 20px 60px; border-radius: 10px; background: #f8f8f8; }
 
-.new-users {  }
-.registered-users { }
-.account-login { width: 530px; padding: 20px; border-radius: 10px; margin: 20px auto; background: #f8f8f8;}
-.account-login .new-users { width: 255px; margin-right: 20px; }
-.account-login .registered-users { width: 255px; }
+.account-login,
+.account-create { max-width: 350px; padding: 20px; border-radius: 10px; margin: 20px auto; background: #f8f8f8;}
+.account-login h1 { font-size: 22px; }
+.account-login .buttons-set { text-align: center; }
+.account-login .buttons-set button { float: none; width: 100%; }
 
-.account-login input {  }
-.account-create {
-    width: 320px;
-    margin: 20px auto;
-}
-.m-register-login {}
-m-register-login-actions {}
+.account-login .buttons-set a { text-decoration: none; }
 
 /* Account Forgot Password Page ============================================================ */
 .customer-account-forgotpassword .col-main { width: 320px; margin: 20px auto; }
@@ -2444,6 +2443,8 @@ ul.buttons .register {padding-bottom: 20px;}
 .footer .block-subscribe .col-3 { width: 100%; }
 .what-we-do { text-align: left !important; }
 .what-we-do img { float: left; width: 80px; position: relative; bottom: 10px; right:10px; }
+.account-login h1 { font-size: 18px; }
+
 }
 
 
