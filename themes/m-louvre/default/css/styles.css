@@ -458,7 +458,7 @@ p.required { font-size:10px; text-align:right; color:#ff6464; }
 .error-msg,
 .success-msg,
 .note-msg,
-.notice-msg { padding: 5px 10px; background-color: #787878; border-radius: 7px; color: white; box-shadow: 3px 3px 4px 0px rgba(0,0,0,0.2);}
+.notice-msg { padding: 5px 10px; background-color: #787878; border-radius: 7px; color: white; box-shadow: 0px 5px 4px -3px rgba(0,0,0,0.2);}
 p.success-msg:before, .success-msg ul li:before { content: "\e64c"; color:#64E564; }
 p.error-msg:before, .error-msg ul li:before { content: "\e646"; color:#FF6464; }
 p.notice-msg:before, .notice-msg ul li:before { content: "\e717"; color:#DAECF8; }
@@ -1813,16 +1813,23 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .m-register-login .registered-users { padding: 20px 20px 60px; border-radius: 10px; background: #f8f8f8; }
 
 .account-login,
-.account-create { max-width: 350px; padding: 20px; border-radius: 10px; margin: 20px auto; background: #f8f8f8;}
+.account-create,
+.account-forgotpassword,
+.account-resset-password { max-width: 350px; padding: 20px; border-radius: 10px; margin: 20px auto; background: #f8f8f8;}
 .account-login h1 { font-size: 22px; }
 .account-login .buttons-set { text-align: center; }
-.account-login .buttons-set button { float: none; width: 100%; }
+.account-login .buttons-set button,
+.account-resset-password .buttons-set button { float: none; width: 100%; }
 
 .account-login .buttons-set a { text-decoration: none; }
 
-.account-create button.button { padding: 5px 30px; }
+.account-create button.button,
+.account-forgotpassword button { padding: 5px 30px; }
+
 /* Account Forgot Password Page ============================================================ */
-.customer-account-forgotpassword .col-main { width: 320px; margin: 20px auto; }
+.account-forgotpassword p { margin-bottom: 20px; }
+
+.account-resset-password {}
 
 
 /* Remember Me Popup ===================================================================== */
@@ -2445,7 +2452,12 @@ ul.buttons .register {padding-bottom: 20px;}
 .what-we-do { text-align: left !important; }
 .what-we-do img { float: left; width: 80px; position: relative; bottom: 10px; right:10px; }
 .account-login h1 { font-size: 18px; }
-.account-create h1 { font-size: 22px; }
+h1            { font-size:20px; }
+h2            { font-size:16px; }
+h3            { font-size:16px; }
+h4            { font-size:16px; }
+h5            { font-size:16px; }
+h6            { font-size:15px; }
 
 }
 
