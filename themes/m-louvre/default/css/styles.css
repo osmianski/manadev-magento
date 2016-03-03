@@ -351,7 +351,7 @@ p.control input.radio { margin-right:6px; }
 .form-list li.control .input-box { clear:none; display:inline; width:auto; }
 /*.form-list li.fields { margin-right:-15px; }*/
 .form-list .input-box { display:block; clear:both; margin:2px; }
-.form-list .field { float:left; width:275px; }
+.form-list .field { }
 .form-list input.input-text { width: 100%; box-sizing: border-box; }
 .form-list textarea { width:254px; height:10em; }
 .form-list select { width:260px; }
@@ -370,47 +370,47 @@ p.control input.radio { margin-right:6px; }
 .form-list .customer-name-middlename-suffix .input-box,
 .form-list .customer-name-prefix-middlename-suffix .input-box { width:auto; }
 
-.form-list .name-prefix { width:65px; }
-.form-list .name-prefix select { width:55px; }
-.form-list .name-prefix input.input-text { width:49px; }
+.form-list .name-prefix { }
+.form-list .name-prefix select { }
+.form-list .name-prefix input.input-text {  }
 
-.form-list .name-suffix { width:65px; }
-.form-list .name-suffix select { width:55px; }
-.form-list .name-suffix input.input-text { width:49px; }
+.form-list .name-suffix {  }
+.form-list .name-suffix select {  }
+.form-list .name-suffix input.input-text {  }
 
-.form-list .name-middlename { width:70px; }
-.form-list .name-middlename input.input-text { width:49px; }
+.form-list .name-middlename {  }
+.form-list .name-middlename input.input-text {  }
 
 .form-list .customer-name-prefix-middlename-suffix .name-firstname,
-.form-list .customer-name-prefix-middlename .name-firstname { width:140px; }
+.form-list .customer-name-prefix-middlename .name-firstname {  }
 .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text,
-.form-list .customer-name-prefix-middlename .name-firstname input.input-text { width:124px; }
-.form-list .customer-name-prefix-middlename-suffix .name-lastname { width:205px; }
-.form-list .customer-name-prefix-middlename-suffix .name-lastname input.input-text { width:189px; }
+.form-list .customer-name-prefix-middlename .name-firstname input.input-text {  }
+.form-list .customer-name-prefix-middlename-suffix .name-lastname {  }
+.form-list .customer-name-prefix-middlename-suffix .name-lastname input.input-text {  }
 
-.form-list .customer-name-prefix-suffix .name-firstname { width:210px; }
-.form-list .customer-name-prefix-suffix .name-lastname { width:205px; }
+.form-list .customer-name-prefix-suffix .name-firstname {  }
+.form-list .customer-name-prefix-suffix .name-lastname {  }
 .form-list .customer-name-prefix-suffix .name-firstname input.input-text,
-.form-list .customer-name-prefix-suffix .name-lastname input.input-text { width:189px; }
+.form-list .customer-name-prefix-suffix .name-lastname input.input-text { }
 
-.form-list .customer-name-prefix-suffix .name-firstname { width:210px; }
-.form-list .customer-name-prefix-suffix .name-lastname { width:205px; }
+.form-list .customer-name-prefix-suffix .name-firstname {  }
+.form-list .customer-name-prefix-suffix .name-lastname {  }
 .form-list .customer-name-prefix-suffix .name-firstname input.input-text,
-.form-list .customer-name-prefix-suffix .name-lastname input.input-text { width:189px; }
+.form-list .customer-name-prefix-suffix .name-lastname input.input-text {  }
 
 .form-list .customer-name-prefix .name-firstname,
-.form-list .customer-name-middlename .name-firstname { width:210px; }
+.form-list .customer-name-middlename .name-firstname {  }
 
 .form-list .customer-name-suffix .name-lastname,
 .form-list .customer-name-middlename .name-firstname,
 .form-list .customer-name-middlename-suffix .name-firstname,
-.form-list .customer-name-middlename-suffix .name-lastname { width:205px; }
+.form-list .customer-name-middlename-suffix .name-lastname { }
 
 .form-list .customer-name-prefix .name-firstname input.input-text,
 .form-list .customer-name-suffix .name-lastname input.input-text,
 .form-list .customer-name-middlename .name-firstname input.input-text,
 .form-list .customer-name-middlename-suffix .name-firstname input.input-text,
-.form-list .customer-name-middlename-suffix .name-lastname input.input-text { width:189px; }
+.form-list .customer-name-middlename-suffix .name-lastname input.input-text {  }
 
 .form-list .customer-dob .dob-month,
 .form-list .customer-dob .dob-day,
@@ -431,8 +431,8 @@ p.control input.radio { margin-right:6px; }
 
 .buttons-set-order {}
 
-.fieldset { background: #f8f8f8; padding: 20px 25px 12px 33px; margin: 45px 0 10px; border-radius: 10px;}
-.fieldset .legend { float:left; margin: -45px 0 0 -10px; padding:0 8px; position:relative; color: #FF6464;}
+.fieldset { background: #f8f8f8;  border-radius: 10px;}
+.fieldset .legend { position:relative; color: #FF6464;}
 
 /* Form Validation */
 .validation-advice { clear:both; min-height:13px; margin:3px 0 0; padding-left:17px; font-size:10px; line-height:13px; background:url(../images/validation_advice_bg.gif) 2px 1px no-repeat; color:#f00; }
@@ -2444,6 +2444,7 @@ ul.buttons .register {padding-bottom: 20px;}
 .what-we-do { text-align: left !important; }
 .what-we-do img { float: left; width: 80px; position: relative; bottom: 10px; right:10px; }
 .account-login h1 { font-size: 18px; }
+.account-create h1 { font-size: 22px; }
 
 }
 
