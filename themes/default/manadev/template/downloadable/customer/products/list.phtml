@@ -34,14 +34,6 @@
     <h1><?php echo Mage::helper('downloadable')->__('My Downloadable Products') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<ul class="messages">
-  <li class="notice-msg">
-    <ul>
-      <li><span>IMPORTANT: After updating any of Layered navigation group extension please also update CMS page layout xml according to <a href="http://www.manadev.com/blog/layered-navigation-on-home-or-any-other-cms-page/" title="Layered Navigation on Home or any SMS page" >this Blog post</a></span>
-      </li>
-    </ul>
-  </li>
-</ul>
 <?php echo $this->getChildHtml('pager'); ?>
 <?php if(count($_items)): ?>
     <table class="data-table" id="my-downloadable-products-table">
