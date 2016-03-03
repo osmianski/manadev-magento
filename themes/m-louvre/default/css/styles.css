@@ -1820,6 +1820,7 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 
 .account-login .buttons-set a { text-decoration: none; }
 
+.account-create button.button { padding: 5px 30px; }
 /* Account Forgot Password Page ============================================================ */
 .customer-account-forgotpassword .col-main { width: 320px; margin: 20px auto; }
 
