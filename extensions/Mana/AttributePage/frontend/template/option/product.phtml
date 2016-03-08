@@ -14,8 +14,9 @@ $_filesHelper = $this->filesHelper();
 <?php if ($_count) : ?>
     <ul class="m-option-page-product">
         <?php foreach ($this->getOptionPages() as $_optionPage) : $i++;?>
-            <?php if ($_optionPage->getData('show_product_image') && ($_imgUrl = $_optionPage->getData('product_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
+            <?php if ($_optionPage->getData('show_product_image')): ?>
             <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
+            <?php if (($_imgUrl = $_optionPage->getData('product_image')) && $_filesHelper->shouldRenderImage($_imgUrl)) : ?>
                 <li class="category-image m-option-page-image">
 
                         <a href="<?php echo $_optionPage->getUrl() ?>">
@@ -23,6 +24,12 @@ $_filesHelper = $this->filesHelper();
                             <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_optionPage->getData('product_image_width'), $_optionPage->getData('product_image_height')) ?>  >
                         </a>
                 </li>
+            <?php else: ?>
+                <li class="category-image m-option-page-image">
+
+                        <a href="<?php echo $_optionPage->getUrl() ?>" title="<?php echo $_escapedTitle ?>"><?php echo $_escapedTitle ?></a>
+                </li>
+            <?php endif; ?>
         <?php endif; ?>
         <?php endforeach; ?>
     </ul>
