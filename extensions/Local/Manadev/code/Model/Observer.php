@@ -188,6 +188,39 @@ class Local_Manadev_Model_Observer {
         }
     }
 
+    public function setLinkStatus($observer) {
+        $order = $observer->getEvent()->getOrder();
+
+        if (!$order->getId()) {
+            //order not saved in the database
+            return $this;
+        }
+
+        $downloadableItemsId = [];
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
+                || $item->getRealProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
+            ) {
+                $downloadableItemsId[] = $item->getId();
+            }
+        }
+
+        if($downloadableItemsId) {
+            $linkPurchased = Mage::getResourceModel('downloadable/link_purchased_item_collection')
+                ->addFieldToFilter('order_item_id', array('in' => $downloadableItemsId));
+            foreach ($linkPurchased as $link) {
+                if($link->getStatus() == Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_AVAILABLE
+                    && trim($link->getData('m_registered_domain')) == ""
+                ) {
+                    $link->setStatus(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED)
+                    ->save();
+                }
+            }
+        }
+
+        return $this;
+    }
+
     protected function _getCustomerSession() {
         return Mage::getSingleton('customer/session');
     }

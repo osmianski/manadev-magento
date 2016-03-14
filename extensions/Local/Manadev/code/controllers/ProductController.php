@@ -143,7 +143,7 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		// retrieve full file name of a downloadable 
 		/* @var $links Mage_Downloadable_Model_Mysql4_Link_Collection */ $links = Mage::getResourceModel(strtolower('Downloadable/Link_Collection'));
 		$links->addFieldToFilter('product_id', $product->getId())->setPageSize(1)->setCurPage(1);
-		/* @var $link Downloadable_Model_Link */ $link = null; foreach ($links as $link) break; // take first element
+		/* @var $link Mage_Downloadable_Model_Link */ $link = null; foreach ($links as $link) break; // take first element
 		if (!$link) return $this->_reportFailureAndRedirect($this->__('Product %s (%d) and no downloadable files attached.', $product->getName(), $product->getId()), $product->getId(), $product);
 		/* @var $storage Mage_Downloadable_Helper_File */ $storage = Mage::helper('downloadable/file');
 		$resource  = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $link->getLinkFile());

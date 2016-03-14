@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @var $this Local_Manadev_Block_Domain_Registration
+ */
+?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="page-title">
+    <h1><?php echo Mage::helper('local_manadev')->__('Product Registration') ?></h1>
+</div>
+<form action="<?php echo $this->getFormAction(); ?>" id="domainForm" method="post">
+    <div>
+        <strong>Product:</strong> <?php echo $this->getProductName(); ?>
+    </div>
+    <div>
+        <strong>Order #:</strong> <?php echo $this->getOrderNo(); ?>
+    </div>
+    <br/>
+    <div>
+        <strong>Domain(s):</strong> <br/>
+
+        <ul id="domainList">
+            <li>
+                URL: <input type="text" name="domain[]" />
+            </li>
+        </ul>
+    </div>
+
+    <button id="addUrlButton" type="button" title="<?php echo Mage::helper('local_manadev')->__('Add URL') ?>" class="button"><span><span><?php echo Mage::helper('local_manadev')->__('Add URL') ?></span></span></button>
+
+    <div class="buttons-set">
+        <button type="submit" title="<?php echo Mage::helper('local_manadev')->__('Register and Download') ?>" class="button"><span><span><?php echo Mage::helper('local_manadev')->__('Register and Download') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+    //<![CDATA[
+        jQuery(function() {
+            jQuery("#addUrlButton").on('click', function () {
+                jQuery("#domainList").append('<li>URL: <input type="text" name="domain[]"/></li>');
+            });
+        });
+    //]]>
+</script>

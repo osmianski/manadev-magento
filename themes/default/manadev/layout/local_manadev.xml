@@ -78,4 +78,10 @@ examples on what kind of actions can be applied to referenced blocks.
         <action method="addLink" translate="label"><name>downloadable_products</name><path>downloadable/customer/products</path><label>My Licenses and Downloads</label></action>
         </reference>
     </customer_account>
+
+    <local_manadev_domain_register>
+		<reference name="content">
+			<block name="domain_registration" type="local_manadev/domain_registration" template="local/manadev/domain/registration.phtml" />
+		</reference>
+	</local_manadev_domain_register>
 </layout>

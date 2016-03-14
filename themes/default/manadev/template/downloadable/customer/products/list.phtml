@@ -26,7 +26,10 @@
 ?>
 <?php
 /**
- * @see Mage_Downloadable_Block_Customer_Products_List
+ * @see Local_Manadev_Block_Customer_Products_List
+ */
+/**
+ * @var $this Local_Manadev_Block_Customer_Products_List
  */
 ?>
 <?php $_items = $this->getItems(); ?>
@@ -40,15 +43,15 @@
         <col width="1" />
         <col width="1" />
         <col />
-        <col width="1" />
-        <col width="1" />
+        <col />
+        <col />
         <thead>
             <tr>
                 <th><?php echo Mage::helper('downloadable')->__('Order #') ?></th>
                 <th><?php echo Mage::helper('downloadable')->__('Date') ?></th>
                 <th><?php echo Mage::helper('downloadable')->__('Title') ?></th>
                 <th><?php echo Mage::helper('downloadable')->__('Status') ?></th>
-                <th><span class="nobr"><?php echo Mage::helper('downloadable')->__('Remaining Downloads') ?></span></th>
+                <th><?php echo Mage::helper('downloadable')->__('Registered Domain') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -57,9 +60,9 @@
                 <tr>
                     <td><a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a></td>
                     <td><span class="nobr"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></span></td>
-                    <td><?php echo $this->htmlEscape($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo Mage::helper('downloadable')->__('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $_item->getLinkTitle() ?></a></td>
-                    <td><em><?php echo Mage::helper('downloadable')->__(ucfirst($_item->getStatus())) ?></em></td>
-                    <td><?php echo $this->getRemainingDownloads($_item) ?></td>
+                    <td><?php echo $this->htmlEscape($_item->getPurchased()->getProductName()) . $this->getAvailableActions($_item) ?></td>
+                    <td><em><?php echo $this->getStatusLabel($_item) ?></em></td>
+                    <td><?php echo $this->getRegisteredDomain($_item); ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
