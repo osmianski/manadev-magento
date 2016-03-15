@@ -186,6 +186,13 @@ class Local_Manadev_Model_Observer {
             ));
             $this->_getCustomerSession()->unsetData('pending_download_product_id');
         }
+
+        if($pendingDownloadLinkHash = $this->_getCustomerSession()->getData('m_pending_download_link_hash')) {
+            $block = Mage::getSingleton('core/layout')->addBlock('Local_Manadev_Block_Download', 'download');
+            $block->setData('link_hash', $pendingDownloadLinkHash);
+            Mage::getSingleton('core/layout')->getBlock('content')->insert($block);
+            $this->_getCustomerSession()->unsetData('m_pending_download_link_hash');
+        }
     }
 
     public function setLinkStatus($observer) {

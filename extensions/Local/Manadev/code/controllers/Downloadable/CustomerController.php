@@ -14,10 +14,6 @@ class Local_Manadev_Downloadable_CustomerController extends Mage_Downloadable_Cu
     public function productsAction() {
 
         $this->loadLayout();
-        if($download = $this->getRequest()->getParam('download')) {
-            $block = $this->getLayout()->addBlock('Local_Manadev_Block_Download', 'download');
-            $this->getLayout()->getBlock('content')->insert($block);
-        }
         $this->_initLayoutMessages('customer/session');
         if ($block = $this->getLayout()->getBlock('downloadable_customer_products_list')) {
             $block->setRefererUrl($this->_getRefererUrl());

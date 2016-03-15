@@ -53,7 +53,22 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             ->setData('link_file', $newZipFilename)
             ->save();
 
-        $this->_redirect('downloadable/customer/products', array('download' => $linkPurchasedItem->getLinkHash()));
+        /* @var $product Mage_Catalog_Model_Product */ $product = Mage::getModel(strtolower('catalog/product'));
+        $productId = $linkPurchasedItem->getData('product_id');
+        $product->load($productId);
+
+        if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
+
+        $this->_getCustomerSession()
+            ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
+            ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+
+        if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
+            $this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
+        } else {
+            $this->_redirect('downloadable/customer/products');
+        }
+
 
         return $this;
     }
@@ -76,5 +91,13 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             $zip->close();
         }
         return str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
+    }
+
+    /**
+     * Returns object containing current user's customer data
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getCustomerSession() {
+        return Mage::getSingleton('customer/session');
     }
 }

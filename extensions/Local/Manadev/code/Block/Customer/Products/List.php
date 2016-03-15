@@ -54,7 +54,7 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     public function getDownloadButton($item) {
         $title = Mage::helper('downloadable')->__('Start Download');
         $url = $this->getDownloadUrl($item);
-        $template = "<a href='{$url}' title='{$title}' {$this->_openNewWindow()}>{$item->getLinkTitle()}</a>";
+        $template = "<a href='{$url}' title='{$title}' {$this->_openNewWindow()}>Download</a>";
 
         return $template;
     }
