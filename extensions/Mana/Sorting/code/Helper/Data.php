@@ -147,6 +147,16 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         $collection->filterActive();
         return $collection;
     }
+    public function applyOutOfStockSortingIfRequired($select) {
+        $tables = $select->getPart('from');
+        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
+            $table = Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status');
+            $select
+                ->joinLeft(array('s' => $table), ' s.product_id = e.entity_id ', null)
+                ->order("s.stock_status desc");
+        }
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
