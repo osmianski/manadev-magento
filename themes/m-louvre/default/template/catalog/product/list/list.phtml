@@ -102,7 +102,11 @@
                     <?php endif; ?>
                     <?php if($_product->isSaleable()): ?>
                         <?php if ($_theme->isVisibleInProductList($this, 'cart')): ?>
-                            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                            <?php if ($_product->getFinalPrice() > 0) : ?>
+                                <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                            <?php else: ?>
+                                <?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if ($_theme->isVisibleInProductList($this, 'out_of_stock')): ?>
