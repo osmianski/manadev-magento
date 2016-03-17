@@ -79,9 +79,20 @@ examples on what kind of actions can be applied to referenced blocks.
         </reference>
     </customer_account>
 
-    <local_manadev_domain_register>
+    <m_domain_registration>
+    <reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
+        </reference>
 		<reference name="content">
 			<block name="domain_registration" type="local_manadev/domain_registration" template="local/manadev/domain/registration.phtml" />
 		</reference>
+	</m_domain_registration>
+
+	<local_manadev_domain_register>
+		<update handle="m_domain_registration"/>
 	</local_manadev_domain_register>
+
+	<local_manadev_domain_modify>
+		<update handle="m_domain_registration"/>
+	</local_manadev_domain_modify>
 </layout>

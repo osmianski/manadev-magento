@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.03.08.12</version>
+		    <version>16.03.16.09</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -104,6 +104,7 @@
 					<download><table>m_download</table></download>
 					<download_failure><table>m_download_failure</table></download_failure>
 					<request><table>m_request</table></request>
+					<domainHistory><table>m_domain_history</table></domainHistory>
 				</entities>
 			</local_manadev_resources>
 			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->

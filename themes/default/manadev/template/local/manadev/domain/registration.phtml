@@ -17,36 +17,21 @@
     </div>
     <br/>
     <div>
-        <strong>Domain(s):</strong> <br/>
-
-        <ul id="domainList">
-            <li>
-                URL: <input type="text" name="domain[]" />
-            </li>
-        </ul>
+        <strong>Please enter your Store Admin Panel URL:</strong> <br/>
+        <input id="admin_panel_url" type="text" name="domain[]" value="<?php echo $this->getDomain(); ?>"/>
+        <p class="note">You may only use this purchased product and get support for it on this store.</p>
+        <p class="note">The entered URL will be validated to make sure that it exists.</p>
+        <p class="note">Admin panel URL is requested instead of base URL because it is possible to use multiple domains for a magento installation, but there is only one admin panel URL.</p>
     </div>
+    <br/>
 
-    <button id="addUrlButton" type="button" title="<?php echo Mage::helper('local_manadev')->__('Add URL') ?>" class="button"><span><span><?php echo Mage::helper('local_manadev')->__('Add URL') ?></span></span></button>
+    <div>
+        <strong>In case you don't have a configured store yet, please provide your store information</strong> <br/>
+        <textarea rows="10" cols="64" name="m_store_info"><?php echo $this->getStoreInfo() ?></textarea>
+        <p class="note">For example, "The extension will be used for selling XYZ products of ABC company. I cannot provide my store admin panel URL right now because ..."</p>
+    </div>
 
     <div class="buttons-set">
         <button type="submit" title="<?php echo Mage::helper('local_manadev')->__('Register and Download') ?>" class="button"><span><span><?php echo Mage::helper('local_manadev')->__('Register and Download') ?></span></span></button>
     </div>
 </form>
-<style type="text/css">
-    #domainList li {
-        margin: 10px;
-    }
-
-    #domainList input {
-        width: 400px;
-    }
-</style>
-<script type="text/javascript">
-    //<![CDATA[
-        jQuery(function() {
-            jQuery("#addUrlButton").on('click', function () {
-                jQuery("#domainList").append('<li>URL: <input type="text" name="domain[]"/></li>');
-            });
-        });
-    //]]>
-</script>

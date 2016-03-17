@@ -1,0 +1,15 @@
+#admin_panel_url {
+    width: 400px;
+}
+
+#domainForm p.note {
+    width: 400px;
+    background: url(../images/note_bg.gif) 1px 6px no-repeat;
+    font-size: 11px;
+    padding: 0 0 0 13px;
+    margin: 0;
+}
+
+#domainForm textarea {
+    resize: none;
+}

@@ -6,18 +6,36 @@
  */
 class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 {
-    public function registerAction() {
+    protected function _init() {
         $id = $this->getRequest()->getParam('id', 0);
         /** @var Mage_Downloadable_Model_Mysql4_Link_Purchased_Item $linkPurchasedItem */
         $linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id, 'link_hash');
-        Mage::register('m_purchased_item', $linkPurchasedItem);
+
         if(!$linkPurchasedItem->getId()) {
             $this->_forward('defaultNoRoute');
             return $this;
         }
+
+        if($post_data = $this->_getSession()->getData('post_data')) {
+            $domain = reset($post_data['domain']);
+            $linkPurchasedItem
+                ->setData('m_registered_domain', $domain)
+                ->setData('m_store_info', $post_data['m_store_info']);
+            $this->_getSession()->unsetData('post_data');
+        }
+
+        Mage::register('m_purchased_item', $linkPurchasedItem);
         $this->loadLayout();
         $this->renderLayout();
         return $this;
+    }
+
+    public function registerAction() {
+        return $this->_init();
+    }
+
+    public function modifyAction() {
+        return $this->_init();
     }
 
     public function saveAction() {
@@ -29,29 +47,49 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             return $this;
         }
 
-        $urls = $this->getRequest()->getParam('domain');
-        foreach($urls as $x => $url) {
-            if(trim($url) === "") {
-                unset($urls[$x]);
-                continue;
-            }
+        try{
+            $urls = $this->getRequest()->getParam('domain');
+            foreach($urls as $x => $url) {
+                if(trim($url) === "") {
+                    unset($urls[$x]);
+                    continue;
+                }
 
-            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-                Mage::getSingleton('core/session')->addError(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
-                $this->_redirect('*/*/register', array('id' => $id));
-                return $this;
+                if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
+                }
+
+                $headers = @get_headers($url);
+                if(strpos($headers[0],'200') === false) {
+                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+                }
             }
+            $domain = implode(",", $urls);
+            $storeInfo = $this->getRequest()->getParam('m_store_info', "");
+            if(trim($domain) === "" && trim($storeInfo) === "") {
+                throw new Mana_Core_Exception_Validation(Mage::helper('local_manadev')->__("Please provide either your store admin panel URL or your store information."));
+            }
+        } catch(Mana_Core_Exception_Validation $e) {
+            $this->_getSession()->addError($e->getErrors());
+            $this->_getSession()->setData('post_data', $this->getRequest()->getParams());
+            $this->_redirect('*/*/register', array('id' => $id));
+
+            return $this;
         }
-
-        $domain = implode(",", $urls);
 
         $newZipFilename = $this->_createNewZipFileWithLicense($linkPurchasedItem);
 
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
+            ->setData('m_store_info', $storeInfo)
             ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
             ->setData('link_file', $newZipFilename)
             ->save();
+
+        /** @var Local_Manadev_Resource_DomainHistory $dhResource */
+        $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
+        $dhResource->insertHistory($linkPurchasedItem->getId(), $domain, $storeInfo);
+
 
         /* @var $product Mage_Catalog_Model_Product */ $product = Mage::getModel(strtolower('catalog/product'));
         $productId = $linkPurchasedItem->getData('product_id');
@@ -99,5 +137,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      */
     protected function _getCustomerSession() {
         return Mage::getSingleton('customer/session');
+    }
+
+    /**
+     * @return Mage_Core_Model_Abstract
+     */
+    protected function _getSession() {
+        return Mage::getSingleton('core/session');
     }
 }

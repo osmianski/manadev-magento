@@ -47,4 +47,12 @@ class Local_Manadev_Block_Domain_Registration extends Mage_Core_Block_Template
     public function getFormAction() {
         return $this->getUrl('*/*/save', array('id' => $this->_getPurchasedItem()->getLinkHash(), '_secure' => true));
     }
+
+    public function getStoreInfo() {
+        return $this->_getPurchasedItem()->getData('m_store_info');
+    }
+
+    public function getDomain() {
+        return $this->_getPurchasedItem()->getData('m_registered_domain');
+    }
 }

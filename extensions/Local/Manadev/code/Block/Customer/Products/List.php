@@ -81,6 +81,17 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     }
 
     public function getRegisteredDomain($_item) {
-        return implode("<br/>", explode(",", $_item->getData('m_registered_domain')));
+        $result = implode("<br/>", explode(",", $_item->getData('m_registered_domain')));
+        if(!in_array($_item->getStatus(),
+            array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED))
+        ) {
+            $result .= "<br/>";
+            $title = Mage::helper('downloadable')->__('Modify');
+            $url = $this->getUrl('actions/domain/modify', array('id' => $_item->getLinkHash()));
+            $result .= "<a href='{$url}' title='{$title}'>{$title}</a>";
+
+        }
+
+        return $result;
     }
 }
