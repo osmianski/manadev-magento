@@ -31,10 +31,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
     }
 
     public function registerAction() {
+        $this->_getCustomerSession()->setData('m_start_download', true);
         return $this->_init();
     }
 
     public function modifyAction() {
+        $this->_getCustomerSession()->setData('m_start_download', false);
         return $this->_init();
     }
 
@@ -76,12 +78,23 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
             return $this;
         }
+        $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
 
-        $newZipFilename = $this->_createNewZipFileWithLicense($linkPurchasedItem);
+        if(is_null($licenseVerificationNo)) {
+            $licenseVerificationNo = uniqid();
+
+            // Recreate id if it is already used. Not very likely to happen, but just to be sure.
+            while(Mage::getModel('downloadable/link_purchased_item')->load($licenseVerificationNo, 'm_license_verification_no')->getId()) {
+                $licenseVerificationNo = uniqid();
+            }
+        }
+
+        $newZipFilename = $this->_createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo);
 
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
             ->setData('m_store_info', $storeInfo)
+            ->setData('m_license_verification_no', $licenseVerificationNo)
             ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
             ->setData('link_file', $newZipFilename)
             ->save();
@@ -97,9 +110,16 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
         if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
 
-        $this->_getCustomerSession()
-            ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
-            ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+        if($this->_getCustomerSession()->getData('m_start_download')) {
+            $this->_getCustomerSession()
+                ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
+                ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+        } else {
+            $this->_getCustomerSession()
+                ->addSuccess('Thank you for updating your domain.');
+        }
+
+        $this->_getCustomerSession()->unsetData('m_start_download');
 
         if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
             $this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
@@ -111,22 +131,25 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         return $this;
     }
 
-    protected function _createNewZipFileWithLicense($linkPurchasedItem) {
+    protected function _createNewZipFileWithLicense($linkPurchasedItem, $id) {
         /* @var $storage Mage_Downloadable_Helper_File */
         $storage = Mage::helper('downloadable/file');
-        $id = $linkPurchasedItem->getId();
-        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkPurchasedItem->getLinkFile());
+        /** @var Mage_Downloadable_Model_Link $linkModel */
+        $linkModel = Mage::getModel('downloadable/link')->load($linkPurchasedItem->getLinkId());
+        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkModel->getLinkFile());
 
         $pathinfo = pathinfo($resource);
 
         $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $id . "." . $pathinfo['extension'];
-        copy($resource, $newZipFilename);
-        $zip = new ZipArchive();
-        if ($zip->open($newZipFilename) === true) {
-            $licenseDir = "app/code/local/Mana/Core/license";
-            $zip->addEmptyDir($licenseDir);
-            $zip->addFromString("{$licenseDir}/{$id}", $id);
-            $zip->close();
+        if(!file_exists($newZipFilename)) {
+            copy($resource, $newZipFilename);
+            $zip = new ZipArchive();
+            if ($zip->open($newZipFilename) === true) {
+                $licenseDir = "app/code/local/Mana/Core/license";
+                $zip->addEmptyDir($licenseDir);
+                $zip->addFromString("{$licenseDir}/{$id}", $id);
+                $zip->close();
+            }
         }
         return str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
     }
