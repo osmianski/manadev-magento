@@ -35,7 +35,7 @@ class ManaPro_FilterSuperSlider_Resource_Price extends Mana_Filters_Resource_Fil
         ));
         $select->reset(Zend_Db_Select::WHERE);
         $select->where("{$table}.min_price > 0");
-        $select->group('value');
+        //$select->group('value');
         $select->order('value ASC');
         return $connection->fetchCol($select);
     }
