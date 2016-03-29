@@ -175,11 +175,7 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
     {
         if ($qty === null) {
             // MANAdev: start
-            if($this->getData('m_represents')) {
-                $qty = $this->getData('m_represented_qty');
-            } else {
-                $qty = $this->getQty();
-            }
+            $qty = $this->_getMQty();
             // MANAdev: end
         }
         if ($this->getBackorders() == Mage_CatalogInventory_Model_Stock::BACKORDERS_NO && $qty <= $this->getMinQty()) {

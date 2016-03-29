@@ -235,7 +235,12 @@ class ManaPro_FilterPositioning_Model_Observer {
             /* @var $cmsBlock Mage_Cms_Block_Block */
             $cmsBlock = $block->getLayout()->createBlock('cms/block');
             $cmsBlock->setData('block_id', $block->getCurrentCategory()->getDataUsingMethod('landing_page'));
-            $html = $aboveBlock->toHtml(). $cmsBlock->toHtml();
+            if (Mage::getStoreConfig('mana_filters/positioning/position_in_static_block') == 'after') {
+                $html = $cmsBlock->toHtml() . $aboveBlock->toHtml();
+            }
+            else {
+                $html = $aboveBlock->toHtml() . $cmsBlock->toHtml();
+            }
             $aboveBlock->setData('m_already_rendered', true);
             $block->setData('cms_block_html', $html);
         }

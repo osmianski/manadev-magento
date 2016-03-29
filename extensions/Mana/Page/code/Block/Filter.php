@@ -184,7 +184,7 @@ abstract class Mana_Page_Block_Filter extends Mage_Core_Block_Template {
                 ->getAttributeCollection();
 
             if ($this->_usedAttributes) {
-                $this->_attributes->addFieldToFilter('attribute_code', array('in' => $this->_usedAttributes));
+                //$this->_attributes->addFieldToFilter('attribute_code', array('in' => $this->_usedAttributes));
             }
         }
 

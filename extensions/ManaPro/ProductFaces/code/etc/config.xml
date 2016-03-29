@@ -13,7 +13,7 @@
 		<ManaPro_ProductFaces>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>15.08.07.07</version>
+		    <version>16.01.28.17</version>
 		</ManaPro_ProductFaces>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -73,6 +73,11 @@
                     <!-- INSERT HERE: individual type rewrites -->
                 </rewrite>
             </cataloginventory>
+            <catalog>
+				<rewrite>
+					<product_attribute_backend_media>ManaPro_ProductFaces_Model_MediaAttribute</product_attribute_backend_media>
+				</rewrite>
+			</catalog>
 		</models>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/manapro_productfaces_setup directory for install/upgrade scripts. 
@@ -313,6 +318,12 @@
         	<general>
         		<show_sku_in_grid>1</show_sku_in_grid>
         	</general>
+        	<default_values>
+				<pack_qty>1</pack_qty>
+				<parts>100</parts>
+				<unit_of_measure>virtual_percent</unit_of_measure>
+				<position>1</position>
+			</default_values>
         	<cloning>
         		<status>2</status>
         		<sku_suffix>_</sku_suffix>

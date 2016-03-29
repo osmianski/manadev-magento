@@ -36,7 +36,7 @@ class ManaPro_FilterSuperSlider_Model_Decimal extends Mana_Filters_Model_Filter_
     }
 
     public function getItemsCount() {
-        return $this->getMaxValue() > $this->getMinValue();
+        return $this->getMaxValue() > $this->getMinValue() ? 2 : 0;
     }
 
 }

@@ -458,10 +458,13 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 		/* @var $inventory ManaPro_ProductFaces_Resource_Inventory */ $inventory = Mage::getResourceModel('manapro_productfaces/inventory');
 		
 		// update backlink
-		if ($representedProductId = Mage::getResourceModel('manapro_productfaces/link')->getRepresentedProductId($product->getId())) {
+		$linkResource = Mage::getResourceModel('manapro_productfaces/link');
+		if ($representedProductId = $linkResource->getRepresentedProductId($product->getId())) {
 			// update inventory
 			// TD: handle deletion of multiple products
 			Mage::register('updateRepresentedProductAfterDelete', $representedProductId);
+			$obsoleteIds = $linkResource->getRepresentingProductsAndOptions($representedProductId);
+			Mage::register('obsoleteRepresentingProducts', $obsoleteIds);
 		}
 	}
 	public function deleteRepresentingProducts($observer) {
@@ -471,8 +474,17 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 		// update backlink
 		if ($representedProductId = Mage::registry('updateRepresentedProductAfterDelete')) {
 			// update inventory
+			$obsoleteIds = array($product->getId());
+			if($representedProductId == $product->getId()) {
+				foreach(Mage::registry('obsoleteRepresentingProducts') as $representingProductData) {
+					$linked_product_id = $representingProductData['linked_product_id'];
+					if(!in_array($obsoleteIds, $linked_product_id)) {
+						array_push($obsoleteIds, $linked_product_id);
+					}
+				}
+			}
 			$inventory->updateRepresentingProducts($representedProductId, true,
-				array('potentiallyObsoleteIds' => array($product->getId())));
+				array('potentiallyObsoleteIds' => $obsoleteIds));
 		}
 	}
 	/* BASED ON SNIPPET: Models/Event handler */

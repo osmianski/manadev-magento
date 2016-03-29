@@ -15,7 +15,7 @@ class Mana_Core_Helper_UrlTemplate extends Mage_Core_Helper_Abstract {
             return $data;
         }
         else {
-            return $this->urlEncode($data);
+            return $this->urlEncode(Mage::getSingleton('core/url')->sessionUrlVar($data));
         }
     }
 }
