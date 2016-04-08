@@ -718,4 +718,100 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             'timezone' => $timezone,
         );
     }
+
+    public function createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo) {
+        /* @var $storage Mage_Downloadable_Helper_File */
+        $storage = Mage::helper('downloadable/file');
+        /** @var Mage_Downloadable_Model_Link $linkModel */
+        $linkModel = Mage::getModel('downloadable/link')->load($linkPurchasedItem->getLinkId());
+        $productModel = Mage::getModel('catalog/product')->load($linkPurchasedItem->getProductId());
+        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkModel->getLinkFile());
+
+        $pathinfo = pathinfo($resource);
+
+        $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
+
+        if (file_exists($newZipFilename)) {
+            unlink($newZipFilename);
+        }
+
+        if(!file_exists($newZipFilename)) {
+            copy($resource, $newZipFilename);
+            $zip = new ZipArchive();
+            if ($zip->open($newZipFilename) === true) {
+
+                if($productModel->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
+                    $moduleDir = "app/code/Manadev/Core/";
+                } else {
+                    $moduleDir = "app/code/local/Mana/Core/";
+                }
+                $licenseDir = $moduleDir . "license";
+                $pubKeyDir = $moduleDir . "key/public";
+                $privateKeyDir = $moduleDir . "key/private";
+                $zip->addEmptyDir($licenseDir);
+                $zip->addEmptyDir($pubKeyDir);
+                $zip->addEmptyDir($privateKeyDir);
+
+                $sku = $productModel->getData('sku');
+                $version = Mage::getModel('local_manadev/key')->getVersionFromZipFile($linkModel->getLinkFile());
+                $module = $productModel->getData('main_module');
+
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}", "{$sku} --- {$version} -- {$module}");
+
+                $keys = $this->generateKeys();
+                $keyName = uniqid() . ".pem";
+                $zip->addFromString("{$pubKeyDir}/{$keyName}", $keys['public']);
+                $zip->addFromString("{$privateKeyDir}/{$keyName}", $keys['private']);
+                $availableKeysDir = Mage::getBaseDir() . DS . 'available_keys';
+                $localPubKeyDir = $availableKeysDir . DS . 'public' . DS;
+                $localPrivateKeyDir = $availableKeysDir . DS . 'private' . DS;
+                if(!file_exists($availableKeysDir)) {
+                    mkdir($availableKeysDir);
+                }
+                if (!file_exists($localPubKeyDir)) {
+                    mkdir($localPubKeyDir, null, true);
+                }
+                if (!file_exists($localPrivateKeyDir)) {
+                    mkdir($localPrivateKeyDir, null, true);
+                }
+
+                $localPubKey = $localPubKeyDir . $keyName;
+                $localPrivateKey = $localPrivateKeyDir . $keyName;
+                file_put_contents($localPubKey, $keys['public']);
+                file_put_contents($localPrivateKey, $keys['private']);
+                $linkPurchasedItem->setData('m_key', $keyName);
+
+                $zip->close();
+            }
+
+            $linkPurchasedItem->setData('link_file', str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename));
+        }
+    }
+
+    public function generateKeys() {
+        // TODO: Find a way to set config file outside code
+        $config = array(
+            "digest_alg" => "sha512",
+            "private_key_bits" => 4096,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            'config' => 'C:/wamp/bin/php/php5.5.12/extras/ssl/openssl.cnf',
+        );
+
+        $res = openssl_pkey_new($config);
+
+        if ($res === false) {
+            $err = openssl_error_string();
+        }
+        // Extract the private key from $res to $privateKey
+        openssl_pkey_export($res, $privateKey, null, $config);
+
+        // Extract the public key from $res to $pubKey
+        $pubKey = openssl_pkey_get_details($res);
+        $pubKey = $pubKey["key"];
+
+        return array(
+            'public' => $pubKey,
+            'private' => $privateKey
+        );
+    }
 }

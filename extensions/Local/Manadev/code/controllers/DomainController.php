@@ -62,7 +62,8 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 }
 
                 $headers = @get_headers($url);
-                if(strpos($headers[0],'200') === false) {
+                // Also allow 302 because of magento secret key redirect
+                if(!(strpos($headers[0],'200') === false || strpos($headers[0], '302') === false)) {
                     throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
                 }
             }
@@ -89,14 +90,13 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        $newZipFilename = $this->_createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo);
+        $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo);
 
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
             ->setData('m_store_info', $storeInfo)
             ->setData('m_license_verification_no', $licenseVerificationNo)
             ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
-            ->setData('link_file', $newZipFilename)
             ->save();
 
         /** @var Local_Manadev_Resource_DomainHistory $dhResource */
@@ -127,31 +127,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             $this->_redirect('downloadable/customer/products');
         }
 
-
         return $this;
-    }
-
-    protected function _createNewZipFileWithLicense($linkPurchasedItem, $id) {
-        /* @var $storage Mage_Downloadable_Helper_File */
-        $storage = Mage::helper('downloadable/file');
-        /** @var Mage_Downloadable_Model_Link $linkModel */
-        $linkModel = Mage::getModel('downloadable/link')->load($linkPurchasedItem->getLinkId());
-        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkModel->getLinkFile());
-
-        $pathinfo = pathinfo($resource);
-
-        $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $id . "." . $pathinfo['extension'];
-        if(!file_exists($newZipFilename)) {
-            copy($resource, $newZipFilename);
-            $zip = new ZipArchive();
-            if ($zip->open($newZipFilename) === true) {
-                $licenseDir = "app/code/local/Mana/Core/license";
-                $zip->addEmptyDir($licenseDir);
-                $zip->addFromString("{$licenseDir}/{$id}", $id);
-                $zip->close();
-            }
-        }
-        return str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
     }
 
     /**
@@ -167,5 +143,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      */
     protected function _getSession() {
         return Mage::getSingleton('core/session');
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function _getHelper() {
+        return Mage::helper('local_manadev');
     }
 }

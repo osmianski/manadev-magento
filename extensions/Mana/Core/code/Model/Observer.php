@@ -338,13 +338,144 @@ class Mana_Core_Model_Observer {
         }
     }
 
-    #region Dependencies
-    /**
+	public function getLatestExtensionVersionNumbers() {
+		$manadevHttp = "http://127.0.0.1/magento-manadev/actions/extension/update";
+		/** @var Local_Manadev_Model_Key $keyModel */
+		$keyModel = Mage::getSingleton('local_manadev/key');
+
+		$mInstanceId = $this->_getMagentoId();
+		$installedManaExtensions = $this->_getLicenseVerificationNumbers();
+		$installedModules = $this->_getInstalledModules();
+		$adminPanelUrl = $this->_getAdminPanelUrl();
+		$frontendUrls = $this->_getFrontendUrls();
+		$key = $keyModel->getPublicKeyByRandom();
+
+		$dataForKey = array(
+			'magentoInstanceId' => $mInstanceId,
+			'installedManadevExtensions' => $installedManaExtensions,
+			'installedModules' => $installedModules,
+			'adminPanelUrl' => $adminPanelUrl,
+			'frontendUrls' => $frontendUrls,
+		);
+
+		$signature = $keyModel->generateSignature($keyModel->dataToString($dataForKey), $key);
+
+		$data = array_merge($dataForKey, array(
+			'magentoInstanceSignature' => $signature,
+			'magentoInstancePublicKey' => $key,
+		));
+
+		$result = $this->sendRequestToManadev($data, $manadevHttp);
+		$result = $keyModel->stringToDataSerialize($result);
+
+		// TODO: What to do with result on Magento 1?
+    }
+
+	/**
+	 * @param $data
+	 * @param $manadevHttp
+	 * @return string
+	 */
+	protected function sendRequestToManadev($data, $manadevHttp) {
+		$options = array(
+			'http' => array(
+				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method' => 'POST',
+				'content' => http_build_query($data)
+			)
+		);
+		$context = stream_context_create($options);
+		return file_get_contents($manadevHttp, false, $context);
+	}
+
+	protected function _getLicenseVerificationNumbers() {
+		$licenseDir = Mage::getModuleDir(null, 'Mana_Core');
+		$licenseDir .= DS.'license';
+
+		$result = array();
+		if(is_dir($licenseDir)) {
+			foreach(scandir($licenseDir) as $file) {
+				if(in_array($file, array('.', '..'))) { continue; }
+
+				$data = explode(" --- ", file_get_contents($licenseDir.DS.$file));
+
+				$extension = array(
+					'code' => $data[0],
+					'version' => $data[1],
+					'license_verification_no' => $file,
+				);
+				$result[] = $extension;
+			}
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	protected function _getInstalledModules() {
+		$result = array();
+
+		/** @var Mage_Core_Model_Config $configModel */
+		$configModel = Mage::getConfig();
+		$modules = array_keys((array)$configModel->getModuleConfig());
+
+		foreach($modules as $module) {
+			// Ignore Magento modules
+			if(strpos($module, 'Mage_') === 0) continue;
+
+				$result[$module] = (string)$configModel->getModuleConfig($module)->version;
+		}
+
+		return $result;
+	}
+
+	protected function _getAdminPanelUrl() {
+		/** @var Mage_Adminhtml_Model_Url $urlModel */
+		$urlModel = Mage::getModel('adminhtml/url');
+		$urlModel->turnOffSecretKey();
+
+		$result = $urlModel->getUrl('adminhtml');
+		return $result;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function _getFrontendUrls() {
+		$result = array();
+		/** @var Mage_Core_Model_Store $store */
+		foreach(Mage::app()->getStores() as $store) {
+			$result[] = $store->getUrl();
+		}
+		return $result;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function _getMagentoId() {
+		$magentoIdFile = Mage::getModuleDir(null, 'Mana_Core') . DS . '.magento_id';
+
+		if (file_exists($magentoIdFile)) {
+			$result = file_get_contents($magentoIdFile);
+		} else {
+			$result = "M-" . uniqid();
+			file_put_contents($magentoIdFile, $result);
+		}
+
+		return $result;
+	}
+
+	#region Dependencies
+	/**
      * @return Mana_Core_Helper_Data
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
-    #endregion
+	#endregion
 }
 
