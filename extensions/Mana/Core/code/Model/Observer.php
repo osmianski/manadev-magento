@@ -457,16 +457,13 @@ class Mana_Core_Model_Observer {
 	 * @return string
 	 */
 	protected function _getMagentoId() {
-		$magentoIdFile = Mage::getModuleDir(null, 'Mana_Core') . DS . '.magento_id';
-
-		if (file_exists($magentoIdFile)) {
-			$result = file_get_contents($magentoIdFile);
-		} else {
-			$result = "M-" . uniqid();
-			file_put_contents($magentoIdFile, $result);
+		$magento_id = Mage::getStoreConfig('mana_update/magento_id');
+		if(!$magento_id) {
+			$magento_id = "M-" . uniqid();
+			Mage::getConfig()->saveConfig('mana_update/magento_id', $magento_id);
 		}
 
-		return $result;
+		return $magento_id;
 	}
 
 	#region Dependencies
