@@ -27,10 +27,13 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $instanceModel->setData('magento_id', $params['magentoInstanceId']);
             }
             $instanceModel->setData('admin_url', $params['adminPanelUrl'])
-                ->setData('frontend_urls', implode(',', $params['frontendUrls']));
+                ->setData('remote_ip', $params['remoteIp'])
+                ->setData('base_dir', $params['baseDir'])
+                ->setData('magento_version', $params['magentoVersion']);
 
             $instanceModel->setModules($params['installedModules']);
             $instanceModel->setExtensions($params['installedManadevExtensions']);
+            $instanceModel->setStores($params['stores']);
             $instanceModel->save();
 
             $result = array(

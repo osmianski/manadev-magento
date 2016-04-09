@@ -348,14 +348,21 @@ class Mana_Core_Model_Observer {
 		$installedModules = $this->_getInstalledModules();
 		$adminPanelUrl = $this->_getAdminPanelUrl();
 		$frontendUrls = $this->_getFrontendUrls();
-		$key = $keyModel->getPublicKeyByRandom();
+        $remoteIp = $this->_getRemoteIp();
+        $baseDir = Mage::getBaseDir();
+        $magentoVersion = Mage::getVersion();
 
-		$dataForKey = array(
+        $key = $keyModel->getPublicKeyByRandom();
+
+        $dataForKey = array(
 			'magentoInstanceId' => $mInstanceId,
 			'installedManadevExtensions' => $installedManaExtensions,
 			'installedModules' => $installedModules,
 			'adminPanelUrl' => $adminPanelUrl,
-			'frontendUrls' => $frontendUrls,
+			'stores' => $frontendUrls,
+            'remoteIp' => $remoteIp,
+            'baseDir' => $baseDir,
+            'magentoVersion' => $magentoVersion,
 		);
 
 		$signature = $keyModel->generateSignature($keyModel->dataToString($dataForKey), $key);
@@ -448,7 +455,11 @@ class Mana_Core_Model_Observer {
 		$result = array();
 		/** @var Mage_Core_Model_Store $store */
 		foreach(Mage::app()->getStores() as $store) {
-			$result[] = $store->getUrl();
+			$result[] = array(
+				'storeId' => $store->getId(),
+				'url' => $store->getUrl(),
+				'theme' => Mage::getStoreConfig('design/theme/default', $store),
+			);
 		}
 		return $result;
 	}
@@ -473,6 +484,10 @@ class Mana_Core_Model_Observer {
     public function coreHelper() {
         return Mage::helper('mana_core');
     }
-	#endregion
+
+    protected function _getRemoteIp() {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+    #endregion
 }
 

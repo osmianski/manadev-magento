@@ -19,9 +19,12 @@ class Local_Manadev_Resource_License_Instance extends Mage_Core_Model_Mysql4_Abs
         $moduleCollection = Mage::getResourceModel('local_manadev/license_module_collection')->addFieldToFilter('instance_id', $object->getId());
         /** @var Local_Manadev_Resource_License_Extension_Collection $extensionCollection */
         $extensionCollection = Mage::getResourceModel('local_manadev/license_extension_collection')->addFieldToFilter('instance_id', $object->getId());
+        /** @var Local_Manadev_Resource_License_Store_Collection $storesCollection */
+        $storesCollection = Mage::getResourceModel('local_manadev/license_store_collection')->addFieldToFilter('instance_id', $object->getId());
 
         $modules = array();
         $extensions = array();
+        $stores = array();
 
         foreach($moduleCollection->getItems() as $row) {
             $modules[$row['module']] = $row['version'];
@@ -35,8 +38,17 @@ class Local_Manadev_Resource_License_Instance extends Mage_Core_Model_Mysql4_Abs
             );
         }
 
+        foreach($storesCollection->getItems() as $row) {
+            $stores[] = array(
+                'storeId' => $row['store_id'],
+                'url' => $row['frontend_url'],
+                'theme' => $row['theme'],
+            );
+        }
+
         $object->setModules($modules);
         $object->setExtensions($extensions);
+        $object->setStores($stores);
 
         return $this;
     }
@@ -58,7 +70,12 @@ class Local_Manadev_Resource_License_Instance extends Mage_Core_Model_Mysql4_Abs
             );
             $moduleCodes[] = "'{$code}'";
         }
-        $where = new Zend_Db_Expr("module NOT IN(". implode(',', $moduleCodes) .") AND instance_id = " . $object->getId());
+        $whereStr = "instance_id = " . $object->getId();
+
+        if(count($moduleCodes)) {
+            $whereStr .= " AND module NOT IN(". implode(',', $moduleCodes) .")";
+        }
+        $where = new Zend_Db_Expr($whereStr);
 
         $this->_getWriteAdapter()->delete($moduleResource->getMainTable(), $where);
         $this->_getWriteAdapter()->insertOnDuplicate($moduleResource->getMainTable(), $modules, array('version'));
@@ -71,10 +88,40 @@ class Local_Manadev_Resource_License_Instance extends Mage_Core_Model_Mysql4_Abs
             $extensions[$x]['instance_id'] = $object->getId();
             $licenseVerificationNos[] = "'".$row['license_verification_no']."'";
         }
-        $where = new Zend_Db_Expr("license_verification_no NOT IN(" . implode(',', $licenseVerificationNos) . ") AND instance_id = " . $object->getId());
+        $whereStr = "instance_id = " . $object->getId();
+        if(count($licenseVerificationNos)) {
+            $whereStr .= " AND license_verification_no NOT IN(" . implode(',', $licenseVerificationNos) . ")";
+        }
+
+        $where = new Zend_Db_Expr($whereStr);
 
         $this->_getWriteAdapter()->delete($extensionResource->getMainTable(), $where);
         $this->_getWriteAdapter()->insertOnDuplicate($extensionResource->getMainTable(), $extensions, array('version'));
+
+        /** @var Local_Manadev_Resource_License_Store $extensionResource */
+        $storeResource = Mage::getResourceModel('local_manadev/license_store');
+        $stores = $object->getStores();
+        Mage::log($stores, Zend_Log::DEBUG, 'manadev-stores.log', true);
+        $storeIds = array();
+        foreach($stores as $x => $store) {
+            $stores[$x]['instance_id'] = $object->getId();
+            $storeIds[] = $store['storeId'];
+            $stores[$x]['store_id'] = $store['storeId'];
+            unset($stores[$x]['storeId']);
+            $stores[$x]['frontend_url'] = $store['url'];
+            unset($stores[$x]['url']);
+        }
+
+        $whereStr = "instance_id = " . $object->getId();
+
+        if(count($storeIds)) {
+            $whereStr .= " AND store_id NOT IN(" . implode(',', $storeIds) . ")";
+        }
+
+        $where = new Zend_Db_Expr($whereStr);
+
+        $this->_getWriteAdapter()->delete($storeResource->getMainTable(), $where);
+        $this->_getWriteAdapter()->insertOnDuplicate($storeResource->getMainTable(), $stores, array('frontend_url', 'theme'));
 
         return $this;
     }
