@@ -477,16 +477,16 @@ class Mana_Core_Model_Observer {
 		return $magento_id;
 	}
 
-	#region Dependencies
-	/**
+    protected function _getRemoteIp() {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+
+    #region Dependencies
+    /**
      * @return Mana_Core_Helper_Data
      */
     public function coreHelper() {
         return Mage::helper('mana_core');
-    }
-
-    protected function _getRemoteIp() {
-        return $_SERVER['REMOTE_ADDR'];
     }
     #endregion
 }

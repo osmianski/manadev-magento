@@ -20,21 +20,48 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
         $keyModel = Mage::getSingleton('local_manadev/key');
 
         if($keyModel->verifySignatureFromAvailableKeys($keyModel->dataToString($params), $signature, $key)) {
-            /** @var Local_Manadev_Model_License_Instance $instanceModel */
-            $instanceModel = Mage::getModel('local_manadev/license_instance')->load($params['magentoInstanceId'], 'magento_id');
+            /** @var Local_Manadev_Model_License_Request $requestModel */
+            $requestModel = Mage::getModel('local_manadev/license_request')->load($params['magentoInstanceId'], 'magento_id');
+            $willSave = false;
+            $modulesInDb = $requestModel->getModules();
+            $modulesInRequest = $params['installedModules'];
+            ksort($modulesInDb);
+            ksort($modulesInRequest);
 
-            if(!$instanceModel->getId()) {
-                $instanceModel->setData('magento_id', $params['magentoInstanceId']);
+            // New Magento ID.
+            if(!$requestModel->getId()) {
+                $willSave = true;
+                $requestModel->setData('magento_id', $params['magentoInstanceId']);
+            } else {
+                $match = $requestModel->getData('admin_url') == $params['adminPanelUrl'];
+                $match = $match && $requestModel->getData('remote_ip') == $params['remoteIp'];
+                $match = $match && $requestModel->getData('base_dir') == $params['baseDir'];
+                $match = $match && $requestModel->getData('magento_version') == $params['magentoVersion'];
+
+                $match = $match && json_encode($modulesInDb) == json_encode($modulesInRequest);
+                $match = $match && json_encode($requestModel->getExtensions()) == json_encode($params['installedManadevExtensions']);
+                $match = $match && json_encode($requestModel->getStores()) == json_encode($params['stores']);
+
+                if(!$match) {
+                    $willSave = true;
+                }
             }
-            $instanceModel->setData('admin_url', $params['adminPanelUrl'])
-                ->setData('remote_ip', $params['remoteIp'])
-                ->setData('base_dir', $params['baseDir'])
-                ->setData('magento_version', $params['magentoVersion']);
 
-            $instanceModel->setModules($params['installedModules']);
-            $instanceModel->setExtensions($params['installedManadevExtensions']);
-            $instanceModel->setStores($params['stores']);
-            $instanceModel->save();
+            if($willSave) {
+                Mage::log($params, Zend_Log::DEBUG, 'manadev-something-changed.log', true);
+                $requestModel = Mage::getModel('local_manadev/license_request');
+                $requestModel
+                    ->setData('magento_id', $params['magentoInstanceId'])
+                    ->setData('admin_url', $params['adminPanelUrl'])
+                    ->setData('remote_ip', $params['remoteIp'])
+                    ->setData('base_dir', $params['baseDir'])
+                    ->setData('magento_version', $params['magentoVersion']);
+
+                $requestModel->setModules($modulesInRequest);
+                $requestModel->setExtensions($params['installedManadevExtensions']);
+                $requestModel->setStores($params['stores']);
+                $requestModel->save();
+            }
 
             $result = array(
                 'latestManadevExtensionVersions' => $this->_getLatestVersionOfExtensions($params['installedManadevExtensions']),
