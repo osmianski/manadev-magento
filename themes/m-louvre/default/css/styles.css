@@ -24,7 +24,7 @@
  */
 
 /* Google font */
-@import url(https://fonts.googleapis.com/css?family=PT+Sans);
+@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,700);
 
 /* Themify icons font */
 @font-face {
@@ -722,7 +722,7 @@ a.m-twitter:hover { background-position: bottom right; }
 /* All Levels */
 #nav li { text-align:left; position:relative; }
 #nav > li { padding: 0 10px;}
-#nav > li.active { background: #efefef; border-radius: 5px 5px 0 0; box-shadow: 1px -2px 4px 0px rgba(0,0,0,0.2), -1px -2px 4px 0px rgba(0,0,0,0.2); }
+#nav > li.active { background: #efefef; border-radius: 5px 5px 0 0; box-shadow:  3px -3px 4px -2px rgba(0,0,0,0.2), -3px -3px 4px -2px rgba(0,0,0,0.2);}
 
 #nav li.over { z-index:998; }
 #nav li.parent {  }
@@ -1565,7 +1565,7 @@ margin-left: -68px;
 
 /* Content Styles ================================================================= */
 .product-name { font-size:1em; font-weight:normal; }
-.product-name a {text-decoration:none; font-weight:bold;}
+.product-name a {text-decoration:none; font-weight: bold; }
 
 /* Product Tags */
 .col-main .tags-list { font-size: 18px; }
