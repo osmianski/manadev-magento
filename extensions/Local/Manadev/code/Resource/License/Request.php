@@ -10,6 +10,29 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $this->_init('local_manadev/license_request', 'id');
     }
 
+    public function ipHasExceededRequestLimit($ip_address) {
+        $select = $this->_getWriteAdapter()->select();
+        $select
+            ->from($this->getMainTable())
+            ->where("remote_ip = ?", $ip_address)
+            ->order("created_at DESC")
+            ->limit(1, 14);
+        $data = $this->_getReadAdapter()->fetchRow($select);
+
+        if($data) {
+            $last15Rec = new DateTime($data['created_at']);
+            $varienNow = Varien_Date::now();
+            $now = new DateTime($varienNow);
+            $diff = $last15Rec->diff($now);
+
+            if($diff->format('%h') == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param Local_Manadev_Model_License_Request|Mage_Core_Model_Abstract $object
      * @return $this
@@ -83,14 +106,15 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         /** @var Local_Manadev_Resource_License_Extension $extensionResource */
         $extensionResource = Mage::getResourceModel('local_manadev/license_extension');
         $extensions = $object->getExtensions();
-        $licenseVerificationNos = array();
+
+        $codes = array();
         foreach($extensions as $x => $row) {
             $extensions[$x]['request_id'] = $object->getId();
-            $licenseVerificationNos[] = "'".$row['license_verification_no']."'";
+            $codes[] = "'".$row['code']."'";
         }
         $whereStr = "request_id = " . $object->getId();
-        if(count($licenseVerificationNos)) {
-            $whereStr .= " AND license_verification_no NOT IN(" . implode(',', $licenseVerificationNos) . ")";
+        if(count($codes)) {
+            $whereStr .= " AND code NOT IN(" . implode(',', $codes) . ")";
         }
 
         $where = new Zend_Db_Expr($whereStr);
@@ -101,7 +125,6 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         /** @var Local_Manadev_Resource_License_Store $extensionResource */
         $storeResource = Mage::getResourceModel('local_manadev/license_store');
         $stores = $object->getStores();
-        Mage::log($stores, Zend_Log::DEBUG, 'manadev-stores.log', true);
         $storeIds = array();
         foreach($stores as $x => $store) {
             $stores[$x]['request_id'] = $object->getId();

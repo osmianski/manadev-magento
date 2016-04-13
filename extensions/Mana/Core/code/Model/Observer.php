@@ -338,10 +338,33 @@ class Mana_Core_Model_Observer {
         }
     }
 
+	public function updateVersionNumber($observer) {
+		$last_check_date = Mage::getStoreConfig("manadev_update/last_check_date");
+		$dateToday = strtotime(Varien_Date::now());
+		$dateToday = date('Y-m-d', $dateToday);
+		if($last_check_date) {
+			$last_check_date = date('Y-m-d', $last_check_date);
+
+			$date1 = new DateTime($last_check_date);
+			$date2 = new DateTime($dateToday);
+
+			$diff = $date1->diff($date2);
+			$diffInMonths = ($diff->format('%y') * 12) + $diff->format('%m');
+		} else {
+			// Force update because there is no last_check_date record in config.
+			$diffInMonths = 1;
+		}
+
+		if($diffInMonths > 0) {
+			$this->getLatestExtensionVersionNumbers();
+			Mage::getConfig()->saveConfig('manadev_update/last_check_date', strtotime($dateToday));
+		}
+	}
+
 	public function getLatestExtensionVersionNumbers() {
 		$manadevHttp = "http://127.0.0.1/magento-manadev/actions/extension/update";
-		/** @var Local_Manadev_Model_Key $keyModel */
-		$keyModel = Mage::getSingleton('local_manadev/key');
+		/** @var Mana_Core_Model_Key $keyModel */
+		$keyModel = Mage::getSingleton('mana_core/key');
 
 		$mInstanceId = $this->_getMagentoId();
 		$installedManaExtensions = $this->_getLicenseVerificationNumbers();

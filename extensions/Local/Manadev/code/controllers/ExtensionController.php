@@ -7,83 +7,120 @@
 class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Action
 {
     public function updateAction(){
-        $params = $this->getRequest()->getParams();
+        try {
+            $params = $this->getRequest()->getParams();
 
-        Mage::log($params, Zend_Log::DEBUG, 'manadev-client.log', true);
-        $signature = $params['magentoInstanceSignature'];
-        $key = $params['magentoInstancePublicKey'];
+            if(!$params) {
+                throw new Exception("Invalid request");
+            }
 
-        unset($params['magentoInstancePublicKey']);
-        unset($params['magentoInstanceSignature']);
+            $signature = $params['magentoInstanceSignature'];
+            $key = $params['magentoInstancePublicKey'];
 
-        /** @var Local_Manadev_Model_Key $keyModel */
-        $keyModel = Mage::getSingleton('local_manadev/key');
+            unset($params['magentoInstancePublicKey']);
+            unset($params['magentoInstanceSignature']);
 
-        if($keyModel->verifySignatureFromAvailableKeys($keyModel->dataToString($params), $signature, $key)) {
-            /** @var Local_Manadev_Model_License_Request $requestModel */
-            $requestModel = Mage::getModel('local_manadev/license_request')->load($params['magentoInstanceId'], 'magento_id');
-            $willSave = false;
-            $modulesInDb = $requestModel->getModules();
-            $modulesInRequest = $params['installedModules'];
-            ksort($modulesInDb);
-            ksort($modulesInRequest);
+            /** @var Local_Manadev_Model_Key $localKeyModel */
+            $localKeyModel = Mage::getSingleton('local_manadev/key');
+            /** @var Mana_Core_Model_Key $coreKeyModel */
+            $coreKeyModel = Mage::getSingleton('mana_core/key');
 
-            // New Magento ID.
-            if(!$requestModel->getId()) {
-                $willSave = true;
-                $requestModel->setData('magento_id', $params['magentoInstanceId']);
-            } else {
-                $match = $requestModel->getData('admin_url') == $params['adminPanelUrl'];
-                $match = $match && $requestModel->getData('remote_ip') == $params['remoteIp'];
-                $match = $match && $requestModel->getData('base_dir') == $params['baseDir'];
-                $match = $match && $requestModel->getData('magento_version') == $params['magentoVersion'];
-
-                $match = $match && json_encode($modulesInDb) == json_encode($modulesInRequest);
-                $match = $match && json_encode($requestModel->getExtensions()) == json_encode($params['installedManadevExtensions']);
-                $match = $match && json_encode($requestModel->getStores()) == json_encode($params['stores']);
-
-                if(!$match) {
-                    $willSave = true;
+            $requiredData = array(
+                'magentoInstanceId',
+                'installedManadevExtensions',
+                'installedModules',
+                'adminPanelUrl',
+                'stores',
+                'remoteIp',
+                'baseDir',
+                'magentoVersion',
+            );
+            foreach($requiredData as $requiredField) {
+                if(!array_key_exists($requiredField, $params)) {
+                    throw new Exception("Some required data are missing.");
                 }
             }
 
-            if($willSave) {
-                Mage::log($params, Zend_Log::DEBUG, 'manadev-something-changed.log', true);
-                $requestModel = Mage::getModel('local_manadev/license_request');
-                $requestModel
-                    ->setData('magento_id', $params['magentoInstanceId'])
-                    ->setData('admin_url', $params['adminPanelUrl'])
-                    ->setData('remote_ip', $params['remoteIp'])
-                    ->setData('base_dir', $params['baseDir'])
-                    ->setData('magento_version', $params['magentoVersion']);
+            if($localKeyModel->verifySignatureFromAvailableKeys($coreKeyModel->dataToString($params), $signature, $key)) {
+                if(Mage::getResourceModel('local_manadev/license_request')->ipHasExceededRequestLimit($params['remoteIp'])) {
+                    throw new Exception("Maximum number of request reached! Please try again after 1 hour.");
+                }
 
-                $requestModel->setModules($modulesInRequest);
-                $requestModel->setExtensions($params['installedManadevExtensions']);
-                $requestModel->setStores($params['stores']);
-                $requestModel->save();
+                /** @var Local_Manadev_Model_License_Request $requestModel */
+                $requestModel = Mage::getModel('local_manadev/license_request')->load($params['magentoInstanceId'], 'magento_id');
+                $willSave = false;
+                $modulesInDb = $requestModel->getModules();
+                $modulesInRequest = $params['installedModules'];
+                ksort($modulesInDb);
+                ksort($modulesInRequest);
+                $extensionsInDb = $requestModel->getExtensions();
+                $extensionsInRequest = $params['installedManadevExtensions'];
+                array_multisort($extensionsInDb);
+                array_multisort($extensionsInRequest);
+                $storesInDb = $requestModel->getStores();
+                $storesInRequest = $params['stores'];
+                array_multisort($storesInDb);
+                array_multisort($storesInRequest);
+
+                if(!$requestModel->getId()) {
+                    // Magento ID is not recognized. Save as new record.
+                    $willSave = true;
+                    $requestModel->setData('magento_id', $params['magentoInstanceId']);
+                } else {
+                    // Magento ID detected. Save only if there are any changes.
+                    $match = $requestModel->getData('admin_url') == $params['adminPanelUrl'];
+                    $match = $match && $requestModel->getData('remote_ip') == $params['remoteIp'];
+                    $match = $match && $requestModel->getData('base_dir') == $params['baseDir'];
+                    $match = $match && $requestModel->getData('magento_version') == $params['magentoVersion'];
+                    $match = $match && json_encode($modulesInDb) == json_encode($modulesInRequest);
+                    $match = $match && json_encode($extensionsInDb) == json_encode($extensionsInRequest);
+                    $match = $match && json_encode($storesInDb) == json_encode($storesInRequest);
+
+                    if(!$match) {
+                        $willSave = true;
+                    }
+                }
+
+                if($willSave) {
+                    $requestModel = Mage::getModel('local_manadev/license_request');
+                    $requestModel
+                        ->setData('magento_id', $params['magentoInstanceId'])
+                        ->setData('admin_url', $params['adminPanelUrl'])
+                        ->setData('remote_ip', $params['remoteIp'])
+                        ->setData('base_dir', $params['baseDir'])
+                        ->setData('magento_version', $params['magentoVersion']);
+
+                    $requestModel->setModules($modulesInRequest);
+                    $requestModel->setExtensions($params['installedManadevExtensions']);
+                    $requestModel->setStores($params['stores']);
+                    try {
+                        $requestModel->save();
+                    } catch (Exception $e) {
+                        throw new Exception("Something is wrong with the data provided.");
+                    }
+                }
+
+                $result = array(
+                    'latestManadevExtensionVersions' => $this->_getLatestVersionOfExtensions($params['installedManadevExtensions']),
+                );
+
+                echo $coreKeyModel->ssl_encrypt($coreKeyModel->dataToStringSerialize($result), 'public', $localKeyModel->getPublicKeyResource($key));
+                exit();
+            } else {
+                throw new Exception("Key/Signature pair did not match");
             }
-
-            $result = array(
-                'latestManadevExtensionVersions' => $this->_getLatestVersionOfExtensions($params['installedManadevExtensions']),
-            );
-
-            $newSignature = $keyModel->generateSignatureFromAvailableKeys($keyModel->dataToString($result), $key);
-
-            $result = array_merge($result, array(
-                'manadevStorePublicKey' => $key,
-                'manadevStoreSignature' => $newSignature,
-            ));
-            echo $keyModel->dataToStringSerialize($result);
-        } else {
-            // Invalid data
-            die("invalid key");
+        } catch (Exception $e) {
+            $protocol = "HTTP/1.0";
+            if ( "HTTP/1.1" == $_SERVER["SERVER_PROTOCOL"] ) {
+                $protocol = "HTTP/1.1";
+            }
+            header("$protocol 503 Service Unavailable", true, 503);
+            header("Status: 503 Service Unavailable", true, 503);
+            echo $e->getMessage();
+            Mage::log($e, Zend_Log::DEBUG, 'manadev-exception.log', true);
+            exit();
         }
-    }
 
-    public function testAction() {
-        /** @var Mana_Core_Model_Observer $observer */
-        $observer = Mage::getModel('mana_core/observer');
-        $observer->getLatestExtensionVersionNumbers();
     }
 
     protected function _getLatestVersionOfExtensions($installedManadevExtensions) {
@@ -100,21 +137,24 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $licenseNo = '';
                 $version = $extension['version'];
             } else {
-                $version = Mage::getModel('local_manadev/key')->getVersionFromZipFile($itemModel->getLinkFile());
+                $version = $this->_getLocalKeyModel()->getVersionFromZipFile($itemModel->getLinkFile());
             }
 
             $sku = $extension['code'];
-            $productResource = Mage::getResourceModel('catalog/product');
-            $storeId = Mage::app()->getStore()->getId();
-            $main_module = $productResource->getAttributeRawValue($productResource->getIdBySku($sku), 'main_module', $storeId);
             $result[] = array(
                 'code' => $sku,
                 'version' => $version,
                 'license' => $licenseNo,
-                'main_module' => $main_module
             );
         }
 
         return $result;
+    }
+
+    /**
+     * @return Local_Manadev_Model_Key
+     */
+    protected function _getLocalKeyModel() {
+        return Mage::getModel('local_manadev/key');
     }
 }

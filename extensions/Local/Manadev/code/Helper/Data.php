@@ -719,7 +719,18 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         );
     }
 
-    public function createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo) {
+    public function createNewZipFileWithLicense($linkPurchasedItem) {
+        $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
+        if (!$licenseVerificationNo) {
+            $licenseVerificationNo = uniqid();
+
+            // Recreate id if it is already used. Not very likely to happen, but just to be sure.
+            while(Mage::getModel('downloadable/link_purchased_item')->load($licenseVerificationNo, 'm_license_verification_no')->getId()) {
+                $licenseVerificationNo = uniqid();
+            }
+        }
+        $linkPurchasedItem->setData('m_license_verification_no', $licenseVerificationNo);
+
         /* @var $storage Mage_Downloadable_Helper_File */
         $storage = Mage::helper('downloadable/file');
         /** @var Mage_Downloadable_Model_Link $linkModel */
@@ -730,10 +741,6 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         $pathinfo = pathinfo($resource);
 
         $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
-
-        if (file_exists($newZipFilename)) {
-            unlink($newZipFilename);
-        }
 
         if(!file_exists($newZipFilename)) {
             copy($resource, $newZipFilename);
@@ -753,10 +760,9 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $zip->addEmptyDir($privateKeyDir);
 
                 $sku = $productModel->getData('sku');
-                $version = Mage::getModel('local_manadev/key')->getVersionFromZipFile($linkModel->getLinkFile());
-                $module = $productModel->getData('main_module');
+                $version = $this->_getLocalKeyModel()->getVersionFromZipFile($linkModel->getLinkFile());
 
-                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}", "{$sku} --- {$version} -- {$module}");
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}", "{$sku} --- {$version}");
 
                 $keys = $this->generateKeys();
                 $keyName = uniqid() . ".pem";
@@ -813,5 +819,12 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             'public' => $pubKey,
             'private' => $privateKey
         );
+    }
+
+    /**
+     * @return Local_Manadev_Model_Key
+     */
+    protected function _getLocalKeyModel() {
+        return Mage::getModel('local_manadev/key');
     }
 }

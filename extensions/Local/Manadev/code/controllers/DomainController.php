@@ -79,23 +79,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
             return $this;
         }
-        $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
 
-        if(is_null($licenseVerificationNo)) {
-            $licenseVerificationNo = uniqid();
-
-            // Recreate id if it is already used. Not very likely to happen, but just to be sure.
-            while(Mage::getModel('downloadable/link_purchased_item')->load($licenseVerificationNo, 'm_license_verification_no')->getId()) {
-                $licenseVerificationNo = uniqid();
-            }
-        }
-
-        $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem, $licenseVerificationNo);
+        $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem);
 
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
             ->setData('m_store_info', $storeInfo)
-            ->setData('m_license_verification_no', $licenseVerificationNo)
             ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
             ->save();
 

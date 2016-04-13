@@ -32,11 +32,11 @@ $installer->run("
     CREATE TABLE `m_license_extension` (
       `id` bigint(20) NOT NULL AUTO_INCREMENT,
       `instance_id` bigint(20) NOT NULL,
-      `license_verification_no` varchar(50) NOT NULL,
+      `license_verification_no` varchar(50) NULL,
       `code` varchar(255) NOT NULL,
       `version` varchar(50) NOT NULL,
       PRIMARY KEY (`id`),
-      UNIQUE KEY `unique_key` (`instance_id`, `license_verification_no`, `code`)
+      UNIQUE KEY `unique_key` (`instance_id`, `code`)
     );
 ");
 
