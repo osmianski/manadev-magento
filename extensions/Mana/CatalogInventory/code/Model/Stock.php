@@ -87,8 +87,34 @@ class Mana_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Stoc
         }
         /** @var ManaPro_ProductFaces_Model_Item $item */
         foreach($fullSaveItems as $item) {
-            $item->load($item->getId())->setDataChanges(true);
-            $item->save();
+            $item->load($item->getId());
+
+            $typeId = $item->getTypeId();
+            if ($productTypeId = $item->getProductTypeId()) {
+                $typeId = $productTypeId;
+            }
+
+            $isQty = Mage::helper('catalogInventory')->isQty($typeId);
+
+            if ($isQty) {
+                if (!$item->verifyStock()) {
+                    $item->setIsInStock(false)
+                        ->setStockStatusChangedAutomaticallyFlag(true);
+                }
+            }
+
+            // if qty is below notify qty, update the low stock date to today date otherwise set null
+            $item->setLowStockDate(null);
+            if ($item->verifyNotification()) {
+                $item->setLowStockDate(Mage::app()->getLocale()->date(null, null, null, false)
+                    ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)
+                );
+            }
+
+            $item->setStockStatusChangedAutomatically(0);
+            if ($item->hasStockStatusChangedAutomaticallyFlag()) {
+                $item->setStockStatusChangedAutomatically((int)$item->getStockStatusChangedAutomaticallyFlag());
+            }
         }
         // MANA END
         $this->_getResource()->commit();
