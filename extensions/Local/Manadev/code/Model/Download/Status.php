@@ -22,11 +22,19 @@ class Local_Manadev_Model_Download_Status
         self::M_LINK_STATUS_NOT_REGISTERED => 'Not Registered',
     );
 
-    public static function getStatusLabel($status, $item) {
+    public static function getStatusLabel($status, $item = array()) {
         if(!isset(static::$statuses[$status])) {
             return false;
         }
 
-        return Mage::helper('local_manadev')->__(static::$statuses[$status]);
+        $label = Mage::helper('local_manadev')->__(static::$statuses[$status]);
+
+        if(isset($item['m_support_valid_til']) && $status == self::M_LINK_STATUS_AVAILABLE_TIL) {
+            $supportValidTil = $item['m_support_valid_til'];
+            $formattedDate = date("F j, Y", strtotime($supportValidTil));
+            $label = str_replace("XX", $formattedDate, $label);
+        }
+
+        return $label;
     }
 }

@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file defines new permissions in system -->
 <config>
+	<menu>
+        <mana>
+            <children>
+                <licenses translate="title" module="local_manadev">
+                    <title>Licenses</title>
+                    <sort_order>10000</sort_order>
+                    <children>
+                        <issued_license translate="title" module="local_manadev">
+                            <title>Issued Licenses</title>
+                            <action>adminhtml/license/issuedLicenses</action>
+                            <sort_order>10</sort_order>
+                        </issued_license>
+                        <magento_instances translate="title" module="local_manadev">
+							<title>Magento Instances</title>
+							<action>adminhtml/license/magentoInstances</action>
+							<sort_order>20</sort_order>
+						</magento_instances>
+						<magento_instance_history>
+							<title>Magento Instance History</title>
+							<action></action>
+							<sort_order>30</sort_order>
+						</magento_instance_history>
+                    </children>
+                </licenses>
+            </children>
+        </mana>
+    </menu>
 	<acl>
 		<resources>
 			<admin>

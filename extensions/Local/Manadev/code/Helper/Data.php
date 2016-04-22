@@ -721,15 +721,6 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function createNewZipFileWithLicense($linkPurchasedItem) {
         $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
-        if (!$licenseVerificationNo) {
-            $licenseVerificationNo = uniqid();
-
-            // Recreate id if it is already used. Not very likely to happen, but just to be sure.
-            while(Mage::getModel('downloadable/link_purchased_item')->load($licenseVerificationNo, 'm_license_verification_no')->getId()) {
-                $licenseVerificationNo = uniqid();
-            }
-        }
-        $linkPurchasedItem->setData('m_license_verification_no', $licenseVerificationNo);
 
         /* @var $storage Mage_Downloadable_Helper_File */
         $storage = Mage::helper('downloadable/file');

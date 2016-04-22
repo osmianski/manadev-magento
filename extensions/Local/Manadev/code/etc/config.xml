@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.04.12.16</version>
+		    <version>16.04.18.13</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -154,6 +154,11 @@
                     <express_checkout>Local_Manadev_Model_Express_Checkout</express_checkout>
                 </rewrite>
 			</paypal>
+			<downloadable>
+                <rewrite>
+                    <link_purchased_item>Local_Manadev_Model_Downloadable_Item</link_purchased_item>
+                </rewrite>
+            </downloadable>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
 		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->

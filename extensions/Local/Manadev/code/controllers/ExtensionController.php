@@ -128,11 +128,6 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
         foreach($installedManadevExtensions as $extension) {
             $itemModel = Mage::getModel('downloadable/link_purchased_item')->load($extension['license_verification_no'], 'm_license_verification_no');
             $licenseNo = $itemModel->getData('m_license_no');
-            if(!$licenseNo && $itemModel->getId()) {
-                $licenseNo = uniqid();
-                $itemModel->setData('m_license_no', $licenseNo);
-                $itemModel->save();
-            }
             if(is_null($licenseNo)) {
                 $licenseNo = '';
                 $version = $extension['version'];
