@@ -27,8 +27,8 @@ class Local_Manadev_Block_Adminhtml_Renderer_Customers extends Mage_Adminhtml_Bl
                     $url = $this->getUrl('adminhtml/customer/edit', array('id' => $customer_ids[$x]));
                     $html .= "<a href='{$url}'>{$line}</a> <br/>";
                     $customer_names[] = $line;
+                    $x++;
                 }
-                $x++;
             }
             if($x >= 5) {
                 $html .= "</div>";

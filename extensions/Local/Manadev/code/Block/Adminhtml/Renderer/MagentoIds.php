@@ -17,7 +17,7 @@ class Local_Manadev_Block_Adminhtml_Renderer_MagentoIds extends Mage_Adminhtml_B
 
                 $filter = 'magento_id='.$line;
                 $filter = base64_encode($filter);
-                $url = Mage::helper('adminhtml')->getUrl('*/*/magentoInstances', array('filter'=>$filter));
+                $url = Mage::helper('adminhtml')->getUrl('adminhtml/license/magentoInstances', array('filter'=>$filter));
 
                 $html .= "<a href='{$url}'>{$line}</a> <br/>";
             }

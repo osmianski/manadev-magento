@@ -10,7 +10,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
         $this->setDefaultSort('magento_id');
         $this->setDefaultDir('asc');
         $this->setUseAjax(true);
-        $this->setSaveParametersInSession(true);
+        $this->setSaveParametersInSession(false);
     }
 
     protected function _prepareColumns() {

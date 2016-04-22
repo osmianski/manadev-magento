@@ -62,6 +62,7 @@
 					<sales_creditmemo_grid>Local_Manadev_Block_Creditmemo_Grid</sales_creditmemo_grid>
                     <sales_order_grid>Local_Manadev_Block_Order_Grid</sales_order_grid>
                     <customer_edit_tab_orders>Local_Manadev_Block_Customer_Order_Grid</customer_edit_tab_orders>
+                    <customer_grid>Local_Manadev_Block_Customer_Grid</customer_grid>
                 </rewrite>
 			</adminhtml>
 			<catalog>

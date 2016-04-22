@@ -17,7 +17,7 @@ class Local_Manadev_Block_Adminhtml_Renderer_LicenseNumbers extends Mage_Adminht
 
                 $filter = 'm_license_no='.$line;
                 $filter = base64_encode($filter);
-                $url = Mage::helper('adminhtml')->getUrl('*/*/issuedLicenses', array('filter'=>$filter));
+                $url = Mage::helper('adminhtml')->getUrl('adminhtml/license/issuedLicenses', array('filter'=>$filter));
 
                 $html .= "<a href='{$url}'>{$line}</a> <br/>";
             }

@@ -9,7 +9,7 @@ class Local_Manadev_Block_Adminhtml_Renderer_History extends Mage_Adminhtml_Bloc
     protected function _getValue(Varien_Object $row) {
         $filter = 'magento_id='.$row->getData('magento_id');
         $filter = base64_encode($filter);
-        $url = Mage::helper('adminhtml')->getUrl('*/*/magentoInstanceHistory', array('filter'=>$filter));
+        $url = Mage::helper('adminhtml')->getUrl('adminhtml/license/magentoInstanceHistory', array('filter'=>$filter));
         $label = Mage::helper('local_manadev')->__("See History...");
         $html = "<a href='{$url}'>{$label}</a>";
 
