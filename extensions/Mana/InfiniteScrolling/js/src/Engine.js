@@ -236,7 +236,9 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     $.globalEval(this.innerHTML);
                 });
 
-                $(document).trigger('product-media-loaded', ProductMediaManager);
+                if (typeof ProductMediaManager != 'undefined') {
+                    $(document).trigger('product-media-loaded', ProductMediaManager);
+                }
 
                 self.hideLoader();
                 layout.getPageBlock().resize();

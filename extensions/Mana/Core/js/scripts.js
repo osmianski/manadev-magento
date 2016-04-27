@@ -1078,6 +1078,7 @@ function ($, layout, json, core, config, undefined)
                 if (self._preventClicks && url == location.href + '#') {
                     return false;
                 }
+                self._matchedInterceptorCache = {};
                 if (self._findMatchingInterceptor(url, this)) {
                     return self._callInterceptionCallback(url, this);
                 }
