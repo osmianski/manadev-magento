@@ -109,6 +109,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             )
         );
 
+        /** @var Local_Manadev_Model_Download_Status $downloadStatusModel */
+        $downloadStatusModel = Mage::getSingleton('local_manadev/download_status');
         $this->addColumn(
             'status',
             array(
@@ -116,7 +118,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 'index' => 'status',
                 'width' => '100px',
                 'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_status'
+                'renderer' => 'local_manadev/adminhtml_renderer_status',
             )
         );
 
@@ -125,10 +127,18 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Expire Date'),
                 'index' => 'm_support_valid_til',
+                'type' => 'datetime',
                 'width' => '100px',
                 'align' => 'left',
+                'renderer' => 'local_manadev/adminhtml_renderer_date'
             )
         );
+
+        /** @var Mana_Core_Helper_Js $jsHelper */
+        $jsHelper = Mage::helper('mana_core/js');
+
+        $jsHelper->setConfig('url.saveLicense', $this->getUrl('adminhtml/license/saveLicenseInfo'));
+
 
         return parent::_prepareColumns();
     }

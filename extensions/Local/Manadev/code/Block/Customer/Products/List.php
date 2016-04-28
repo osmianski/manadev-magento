@@ -29,7 +29,9 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     );
 
     public function getStatusLabel($item) {
-        return Local_Manadev_Model_Download_Status::getStatusLabel($item->getStatus(), $item);
+        /** @var Local_Manadev_Model_Download_Status $model */
+        $model = Mage::getSingleton('local_manadev/download_status');
+        return $model->getStatusLabel($item->getStatus(), $item);
     }
 
     public function getAvailableActions($item) {

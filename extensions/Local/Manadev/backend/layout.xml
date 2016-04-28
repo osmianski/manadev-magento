@@ -34,6 +34,10 @@ examples on what kind of actions can be applied to referenced blocks.
         <update handle="mana_admin2"/>
 	    <reference name="head">
             <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params></params></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
         </reference>
         <reference name="content">
             <block type="local_manadev/adminhtml_license_issuedLicensesContainer" name="container" as="container">
