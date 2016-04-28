@@ -101,16 +101,20 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $where = new Zend_Db_Expr($whereStr);
 
         $this->_getWriteAdapter()->delete($moduleResource->getMainTable(), $where);
-        $this->_getWriteAdapter()->insertOnDuplicate($moduleResource->getMainTable(), $modules, array('version'));
+        if($modules) {
+            $this->_getWriteAdapter()->insertOnDuplicate($moduleResource->getMainTable(), $modules, array('version'));
+        }
 
         /** @var Local_Manadev_Resource_License_Extension $extensionResource */
         $extensionResource = Mage::getResourceModel('local_manadev/license_extension');
         $extensions = $object->getExtensions();
 
         $codes = array();
+        $licenseVerificationNos = array();
         foreach($extensions as $x => $row) {
             $extensions[$x]['request_id'] = $object->getId();
             $codes[] = "'".$row['code']."'";
+            $licenseVerificationNos[] = $row['license_verification_no'];
         }
         $whereStr = "request_id = " . $object->getId();
         if(count($codes)) {
@@ -120,7 +124,13 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $where = new Zend_Db_Expr($whereStr);
 
         $this->_getWriteAdapter()->delete($extensionResource->getMainTable(), $where);
-        $this->_getWriteAdapter()->insertOnDuplicate($extensionResource->getMainTable(), $extensions, array('version'));
+        if($extensions) {
+            $this->_getWriteAdapter()->insertOnDuplicate($extensionResource->getMainTable(), $extensions, array('version'));
+        }
+
+        /** @var Local_Manadev_Resource_Downloadable_Item $purchasedItem */
+        $purchasedItem = Mage::getResourceModel('downloadable/link_purchased_item');
+        $purchasedItem->upgradeAggregateByLicenseVerificationNos($licenseVerificationNos);
 
         /** @var Local_Manadev_Resource_License_Store $extensionResource */
         $storeResource = Mage::getResourceModel('local_manadev/license_store');
@@ -144,11 +154,38 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $where = new Zend_Db_Expr($whereStr);
 
         $this->_getWriteAdapter()->delete($storeResource->getMainTable(), $where);
-        $this->_getWriteAdapter()->insertOnDuplicate($storeResource->getMainTable(), $stores, array('frontend_url', 'theme'));
+        if($stores) {
+            $this->_getWriteAdapter()->insertOnDuplicate($storeResource->getMainTable(), $stores, array('frontend_url', 'theme'));
+        }
 
         return $this;
     }
 
+
+    /**
+     * @param Local_Manadev_Model_License_Request|Mage_Core_Model_Abstract $object
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
+    protected function _beforeSave(Mage_Core_Model_Abstract $object) {
+        $stores = $object->getStores();
+        $urls = array();
+        $themes = array();
+        foreach($stores as $x => $store) {
+            $urls[] = $store['url'];
+            $themes[] = $store['theme'];
+        }
+        $object->setData('agg_frontend_urls', implode('|', array_unique($urls)));
+        $object->setData('agg_themes', implode('|', array_unique($themes)));
+
+        $moduleCodes = array();
+        implode('|', array_keys($object->getModules()));
+        foreach ($object->getModules() as $code => $version) {
+            $moduleCodes[] = $code;
+        }
+        $object->setData('agg_modules', implode('|', $moduleCodes));
+
+        return $this;
+    }
 
     protected function _prepareDataForSave(Mage_Core_Model_Abstract $object) {
         $currentTime = Varien_Date::now();

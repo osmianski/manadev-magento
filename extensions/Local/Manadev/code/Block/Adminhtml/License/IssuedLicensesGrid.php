@@ -155,6 +155,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             new Zend_Db_Expr("`lp`.`order_increment_id` AS order_number"),
             new Zend_Db_Expr("`lp`.`order_id`"),
             new Zend_Db_Expr("`lp`.`product_name`"),
+            'used_on_magento_ids' => new Zend_Db_Expr("`main_table`.`agg_magento_ids`"),
+            'used_at_ip_addresses' => new Zend_Db_Expr("`main_table`.`agg_remote_ips`"),
         );
 
         $collection->getSelect()
@@ -163,17 +165,16 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             ->joinLeft(array('cefn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `cefn`.`entity_id` AND `cefn`.`attribute_id` = '.$fn->getAttributeId(), array())
             ->joinLeft(array('celn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `celn`.`entity_id` AND `celn`.`attribute_id` = '.$ln->getAttributeId(), array())
             ->joinLeft(array('mlr' => new Zend_Db_Expr("(
-                SELECT license_verification_no, GROUP_CONCAT(magento_id SEPARATOR '|') AS used_on_magento_ids, GROUP_CONCAT(DISTINCT actual_admin_panel_url SEPARATOR '|') AS actual_admin_panel_url, GROUP_CONCAT(DISTINCT actual_frontend_urls SEPARATOR '|') AS actual_frontend_urls, GROUP_CONCAT(DISTINCT remote_ip SEPARATOR '|') AS used_at_ip_addresses
+                SELECT license_verification_no, actual_admin_panel_url, agg_frontend_urls AS actual_frontend_urls
                 FROM (
-                    SELECT mlr.id, mlr.magento_id, mlr.`admin_url` AS actual_admin_panel_url, mle.license_verification_no, mls.actual_frontend_urls, mlr.`remote_ip`
+                    SELECT mlr.id, mlr.magento_id, mlr.`admin_url` AS actual_admin_panel_url, mle.license_verification_no, mlr.agg_frontend_urls, mlr.`remote_ip`
                     FROM ". $collection->getTable('local_manadev/license_request') ." mlr
                     INNER JOIN (SELECT magento_id, MAX(created_at) as created_at FROM ". $collection->getTable('local_manadev/license_request') ." GROUP BY magento_id) mlrl ON mlr.`magento_id` = mlrl.`magento_id` AND `mlr`.`created_at` = `mlrl`.`created_at`
                     INNER JOIN ". $collection->getTable('local_manadev/license_extension') ." mle ON mlr.id = mle.request_id
-                    INNER JOIN (SELECT request_id, GROUP_CONCAT(frontend_url SEPARATOR '|') AS actual_frontend_urls FROM ". $collection->getTable('local_manadev/license_store') ." GROUP BY request_id) AS mls ON mls.request_id = mlr.id
                     WHERE TRIM(license_verification_no) <> '' AND mle.license_verification_no IS NOT NULL
                 ) AS tmp
                 GROUP BY license_verification_no
-                )")), '`mlr`.`license_verification_no` = `main_table`.`m_license_verification_no`', array('actual_admin_panel_url', 'actual_frontend_urls', 'used_on_magento_ids', 'used_at_ip_addresses'))
+                )")), '`mlr`.`license_verification_no` = `main_table`.`m_license_verification_no`', array('actual_admin_panel_url', 'actual_frontend_urls'))
             ->columns($columns);
         $sql = $collection->getSelectSql(true);
         $this->setCollection($collection);

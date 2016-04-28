@@ -339,7 +339,7 @@ class Mana_Core_Model_Observer {
     }
 
 	public function updateVersionNumber($observer) {
-		$last_check_date = Mage::getStoreConfig("manadev_update/last_check_date");
+		$last_check_date = Mage::getStoreConfig("mana_update/last_check_date");
 		$dateToday = strtotime(Varien_Date::now());
 		$dateToday = date('Y-m-d', $dateToday);
 		if($last_check_date) {
@@ -357,7 +357,7 @@ class Mana_Core_Model_Observer {
 
 		if($diffInMonths > 0) {
 			$this->getLatestExtensionVersionNumbers();
-			Mage::getConfig()->saveConfig('manadev_update/last_check_date', strtotime($dateToday));
+			Mage::getConfig()->saveConfig('mana_update/last_check_date', strtotime($dateToday));
 		}
 	}
 

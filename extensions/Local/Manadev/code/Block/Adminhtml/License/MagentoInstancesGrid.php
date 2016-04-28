@@ -165,16 +165,11 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $ln->getAttributeId() ."
                 GROUP BY request_id
             )")), "`e`.`request_id` = `main_table`.`id`", array('customer_ids', 'customer_names', 'order_numbers', 'order_ids', 'extensions', 'license_numbers'))
-            ->joinLeft(array('lm' => new Zend_Db_Expr("(
-                SELECT request_id, GROUP_CONCAT(module SEPARATOR '|') as modules
-                FROM ". $collection->getTable('local_manadev/license_module') ."
-                GROUP BY request_id
-            )")), "lm.request_id = `main_table`.`id`", array('modules'))
-            ->joinLeft(array('ls' => new Zend_Db_Expr("(
-                SELECT request_id, GROUP_CONCAT(DISTINCT frontend_url SEPARATOR '|') as frontend_urls, GROUP_CONCAT(DISTINCT theme SEPARATOR '|') as themes
-                FROM ". $collection->getTable('local_manadev/license_store') ."
-                GROUP BY request_id
-            )")), "ls.request_id = `main_table`.`id`", array('frontend_urls', 'themes'))
+            ->columns(array(
+                new Zend_Db_Expr("`main_table`.`agg_modules` AS modules"),
+                new Zend_Db_Expr("`main_table`.`agg_frontend_urls` AS frontend_urls"),
+                new Zend_Db_Expr("`main_table`.`agg_themes` AS themes"),
+            ))
             ;
         $sql = $collection->getSelectSql(true);
 
