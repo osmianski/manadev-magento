@@ -29,6 +29,15 @@
                             <show_in_store>1</show_in_store>
                             <comment>If not set, customer will be redirected to home page</comment>
                         </thank_you_page>
+                        <openssl_config_file translate="label">
+                            <label>OpenSSL Configuration File</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>If not set properly, customer will not be able to download ZIP files.</comment>
+                        </openssl_config_file>
 					</fields>
 				</downloads>
                 <accounting translate="label">

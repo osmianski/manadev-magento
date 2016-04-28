@@ -786,18 +786,18 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     public function generateKeys() {
-        // TODO: Find a way to set config file outside code
         $config = array(
             "digest_alg" => "sha512",
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-            'config' => 'C:/wamp/bin/php/php5.5.12/extras/ssl/openssl.cnf',
+            'config' => Mage::getStoreConfig('local_manadev/downloads/openssl_config_file'),
         );
 
         $res = openssl_pkey_new($config);
 
         if ($res === false) {
             $err = openssl_error_string();
+            throw new Exception("OpenSSL config file not setup properly: ". $err);
         }
         // Extract the private key from $res to $privateKey
         openssl_pkey_export($res, $privateKey, null, $config);
