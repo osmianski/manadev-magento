@@ -7,8 +7,8 @@
 class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
-        $this->setDefaultSort('m_license_no');
-        $this->setDefaultDir('asc');
+        $this->setDefaultSort('order_number');
+        $this->setDefaultDir('desc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);
     }
@@ -109,8 +109,6 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             )
         );
 
-        /** @var Local_Manadev_Model_Download_Status $downloadStatusModel */
-        $downloadStatusModel = Mage::getSingleton('local_manadev/download_status');
         $this->addColumn(
             'status',
             array(

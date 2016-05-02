@@ -7,8 +7,8 @@
 class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
-        $this->setDefaultSort('magento_id');
-        $this->setDefaultDir('asc');
+        $this->setDefaultSort('created_at');
+        $this->setDefaultDir('desc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(false);
     }
@@ -155,8 +155,8 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
                     GROUP_CONCAT(TRIM(CONCAT(IFNULL(`cf`.`value`, ''), ' ', IFNULL(`cl`.`value`, '')))  SEPARATOR '|') AS customer_names,
                     GROUP_CONCAT(dlpi.m_license_no SEPARATOR '|') as license_numbers
                 FROM " . $collection->getTable('local_manadev/license_extension') . " mle
-                INNER JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.`m_license_verification_no` = mle.`license_verification_no`
-                INNER JOIN " . $collection->getTable('downloadable/link_purchased') . " dlp ON dlpi.`purchased_id` = dlp.`purchased_id`
+                LEFT JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.`m_license_verification_no` = mle.`license_verification_no`
+                LEFT JOIN " . $collection->getTable('downloadable/link_purchased') . " dlp ON dlpi.`purchased_id` = dlp.`purchased_id`
                 LEFT JOIN `" . $collection->getTable('catalog/product') . "_varchar` pn ON pn.`entity_id` = dlpi.`product_id` AND pn.`attribute_id` = ". $productName->getAttributeId() ."
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cf ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $fn->getAttributeId() ."
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $ln->getAttributeId() ."
@@ -181,6 +181,6 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
     }
 
     public function getGridUrl() {
-        return $this->adminHelper()->getStoreUrl('*/*/magentoInstancesGrid');
+        return $this->adminHelper()->getStoreUrl('*/*/magentoInstanceHistoryGrid');
     }
 }

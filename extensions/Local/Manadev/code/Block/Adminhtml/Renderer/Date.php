@@ -12,10 +12,10 @@ class Local_Manadev_Block_Adminhtml_Renderer_Date extends Mage_Adminhtml_Block_W
         $format = Mage::app()->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
 
         $html = '
-            <input type="text" id="'.$htmlId.'" value="'. $this->_getValue($row).'" class="input-text no-changes m-save-on-change m-date"/>
             <img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
                 . ' id="'.$htmlId.'_trig"'
                 . ' title="' . $this->escapeHtml(Mage::helper('adminhtml')->__('Date selector')) . '"/>
+            <input type="text" id="' . $htmlId . '" value="' . $this->_getValue($row) . '" class="input-text no-changes m-save-on-change m-date"/>
         ';
 
         $html.= '<script type="text/javascript">

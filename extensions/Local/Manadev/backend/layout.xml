@@ -37,6 +37,7 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params></params></action>
             <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
             <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name></action>
             <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
         </reference>
         <reference name="content">

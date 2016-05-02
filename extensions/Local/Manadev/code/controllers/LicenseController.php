@@ -8,6 +8,8 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
 {
     public function issuedLicensesAction() {
         $this->loadLayout();
+        $this->_title('Mana')->_title($this->__("Issued Licenses"));
+        $this->_setActiveMenu('mana/licenses/issued_licenses');
         $this->renderLayout();
     }
 
@@ -18,6 +20,8 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
 
     public function magentoInstancesAction() {
         $this->loadLayout();
+        $this->_title('Mana')->_title($this->__("Magento Instances"));
+        $this->_setActiveMenu('mana/licenses/magento_instances');
         $this->renderLayout();
     }
 
@@ -28,6 +32,8 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
 
     public function magentoInstanceHistoryAction() {
         $this->loadLayout();
+        $this->_title('Mana')->_title($this->__("Magento Instance History"));
+        $this->_setActiveMenu('mana/licenses/magento_instance_history');
         $this->renderLayout();
     }
 

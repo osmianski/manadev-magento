@@ -493,7 +493,7 @@ class Mana_Core_Model_Observer {
 	protected function _getMagentoId() {
 		$magento_id = Mage::getStoreConfig('mana_update/magento_id');
 		if(!$magento_id) {
-			$magento_id = "M-" . uniqid();
+			$magento_id = "M" . uniqid();
 			Mage::getConfig()->saveConfig('mana_update/magento_id', $magento_id);
 		}
 

@@ -20,7 +20,7 @@
 						</magento_instances>
 						<magento_instance_history>
 							<title>Magento Instance History</title>
-							<action></action>
+							<action>adminhtml/license/magentoInstanceHistory</action>
 							<sort_order>30</sort_order>
 						</magento_instance_history>
                     </children>

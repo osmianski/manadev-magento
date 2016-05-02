@@ -68,6 +68,7 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
 
         )")), "`ml`.`customer_id` = `e`.`entity_id`", array('customer_id', 'license_numbers', 'order_numbers', 'magento_ids', 'remote_ips'));
 
+        $sql = (string)$collection->getSelect();
         $this->setCollection($collection);
 
 
@@ -112,6 +113,29 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
 
         return $this;
     }
+
+
+    protected function _addColumnFilterToCollection($column)
+    {
+        $fields = array(
+            'license_numbers',
+            'order_numbers',
+            'magento_ids',
+            'remote_ips',
+        );
+        if(in_array($column->getIndex(), $fields)) {
+            $field = ($column->getFilterIndex()) ? $column->getFilterIndex() : $column->getIndex();
+            $cond = $column->getFilter()->getCondition();
+            if($field && isset($cond)) {
+                $condition = $this->getCollection()->getConnection()->prepareSqlCondition($field, $cond);
+                $this->getCollection()->getSelect()->where($condition);
+            }
+            return $this;
+        } else {
+            return parent::_addColumnFilterToCollection($column);
+        }
+    }
+
     protected function _prepareColumns()
     {
 
@@ -133,6 +157,7 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
             array(
                 'header' => $this->__('Orders'),
                 'index' => 'order_numbers',
+                'filter_index' => 'ml.order_numbers',
                 'width' => '90',
                 'align' => 'center',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
