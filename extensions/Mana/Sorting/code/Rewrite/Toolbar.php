@@ -17,7 +17,7 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
             $availableSortBys = explode(',', $optionPage->getData('available_sort_by'));
         } else {
             $category = $this->sortingHelper()->getCategory();
-            $availableSortBys = [];
+            $availableSortBys = array();
             if($category->getAvailableSortBy()) {
                 $availableSortBys = $category->getAvailableSortBy();
             }
