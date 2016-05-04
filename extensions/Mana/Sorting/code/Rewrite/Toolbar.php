@@ -13,32 +13,47 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
     protected $overrideDefaultOrder;
 
     public function setAvailableOrders($orders) {
-        $category = $this->sortingHelper()->getCategory();
-        if($category->getAvailableSortBy()) {
-            foreach ($category->getAvailableSortBy() as $sortBy) {
-                if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
-                    $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
-                }
+        if($optionPage = Mage::registry('current_option_page')) {
+            $availableSortBys = explode(',', $optionPage->getData('available_sort_by'));
+        } else {
+            $category = $this->sortingHelper()->getCategory();
+            $availableSortBys = [];
+            if($category->getAvailableSortBy()) {
+                $availableSortBys = $category->getAvailableSortBy();
             }
         }
+
+        foreach ($availableSortBys as $sortBy) {
+            if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
+                $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
+            }
+        }
+
         parent::setAvailableOrders($orders);
-        if(!$category->getAvailableSortBy()) {
+
+        // If the only order is position, add all sorting methods (both custom and standard sorting methods)
+        if(count($availableSortBys) == 0) {
             $this->_addOrders();
         }
     }
 
     public function setDefaultOrder($field) {
         if(isset($this->overrideDefaultOrder)) {
-            $field = $this->overrideDefaultOrder;
+            $defaultSortBy = $this->overrideDefaultOrder;
         } else {
-            $category = $this->sortingHelper()->getCategory();
-            if($category->getData('default_sort_by')) {
-                $field = $category->getData('default_sort_by');
+            if ($optionPage = Mage::registry('current_option_page')) {
+                $defaultSortBy = $optionPage->getData('default_sort_by');
             } else {
-                $field = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
+                $category = $this->sortingHelper()->getCategory();
+                if ($category->getData('default_sort_by')) {
+                    $defaultSortBy = $category->getData('default_sort_by');
+                }
+            }
+            if(!isset($defaultSortBy)) {
+                $defaultSortBy = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
             }
         }
-        return parent::setDefaultOrder($field);
+        return parent::setDefaultOrder($defaultSortBy);
     }
 
     public function overrideDefaultOrder($field) {
