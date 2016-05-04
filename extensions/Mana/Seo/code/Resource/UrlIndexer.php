@@ -98,7 +98,7 @@ abstract class Mana_Seo_Resource_UrlIndexer extends Mana_Core_Resource_Indexer {
     public function makeAllRowsObsolete($options, $condition) {
         $db = $this->_getWriteAdapter();
 
-        $db->query("UPDATE `{$this->getTable('mana_seo/url')}` SET `status` = 'obsolete' WHERE `status` = 'active' AND (".
+        $db->query("UPDATE `{$this->getTable('mana_seo/url')}` SET `status` = '". Mana_Seo_Model_Url::STATUS_OBSOLETE ."' WHERE `status` = '". Mana_Seo_Model_Url::STATUS_ACTIVE ."' AND (".
             $condition .")");
     }
 
