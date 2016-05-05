@@ -54,7 +54,16 @@ class Mana_AttributePage_Helper_PageType_AttributePage extends Mana_Core_Helper_
         }
         if (!isset($this->_urlKeys[$attributePageId])) {
             $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
-            $urlCollection->addFieldToFilter('attribute_page_id', $attributePageId);
+            $loadId = $attributePageId;
+            if(isset($_GET['___from_store'])) {
+                $fromStore = Mage::app()->getStore($_GET['___from_store']);
+                $fromStoreModel = Mage::getModel('mana_attributepage/attributePage_store')->setData('store_id', $fromStore->getId())->load($attributePageId);
+                $newStoreModel = Mage::getModel('mana_attributepage/attributePage_store')->setData('store_id', $urlModel->getStore()->getId())
+                    ->load($fromStoreModel->getData('attribute_page_global_id'), 'attribute_page_global_id');
+                $loadId = $newStoreModel->getId();
+            }
+
+            $urlCollection->addFieldToFilter('attribute_page_id', $loadId);
             $urlCollection->getSelect()->where('main_table.option_page_id IS NULL');
             if (!($result = $urlModel->getUrlKey($urlCollection))) {
                 $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'attribute page URL key', 'id', $attributePageId));
