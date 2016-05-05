@@ -17,7 +17,6 @@
             <codePool>local</codePool>
 			<depends>
 				<ManaPro_FilterAdmin />
-				<ManaPro_FilterDependent />
 			</depends>
         </ManaPro_FilterColors>
         <ManaPro_FilterAttributes>
