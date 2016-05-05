@@ -54,7 +54,17 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
         }
         if (!isset($this->_urlKeys[$optionPageId])) {
             $urlCollection = $seo->getUrlCollection($urlModel->getSchema(), Mana_Seo_Resource_Url_Collection::TYPE_PAGE);
-            $urlCollection->addFieldToFilter('option_page_id', $optionPageId);
+
+            $loadId = $optionPageId;
+            if(isset($_GET['___from_store'])) {
+                $fromStore = Mage::app()->getStore($_GET['___from_store']);
+                $fromStoreModel = Mage::getModel('mana_attributepage/optionPage_store')->setData('store_id', $fromStore->getId())->load($optionPageId);
+                $newStoreModel = Mage::getModel('mana_attributepage/optionPage_store')->setData('store_id', $urlModel->getStore()->getId())
+                    ->load($fromStoreModel->getData('option_page_global_id'), 'option_page_global_id');
+                $loadId = $newStoreModel->getId();
+            }
+
+            $urlCollection->addFieldToFilter('option_page_id', $loadId);
             if (!($result = $urlModel->getUrlKey($urlCollection))) {
                 $logger->logSeoUrl(sprintf('WARNING: %s not found by  %s %s', 'option page URL key', 'id', $optionPageId));
             }
