@@ -436,12 +436,36 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                                 }
                             });
 
+                            function getHeightOfFixedElements() {
+                                // Default allowance
+                                var result = 10;
+                                var elements = document.getElementsByTagName('*');
+                                for (var i in elements) {
+                                    try {
+                                        var position = jQuery.css(elements[i], 'position');
+                                        if (position == "fixed") {
+                                            var height = jQuery.css(elements[i], 'height');
+                                            var display = jQuery.css(elements[i], 'display');
+                                            var top = jQuery.css(elements[i], 'top');
+                                            if(height != "0px" && display != "none" && top == "0px") {
+                                                height = height.replace("px", "");
+                                                height = parseInt(height);
+                                                result = height;
+                                                break;
+                                            }
+                                        }
+                                    } catch (err) {
+                                    }
+                                }
+                                return result;
+                            }
+
                             if (m_allImagesLoaded) {
                                 clearInterval(m_timer);
 
                                 // DO YOUR STUFF HERE
-
-                                var topPosition = $(selector).eq(data.index).offset().top - 10;
+                                var space = getHeightOfFixedElements();
+                                var topPosition = $(selector).eq(data.index).offset().top - space;
                                 window.scrollTo(null, topPosition);
                             }
 
