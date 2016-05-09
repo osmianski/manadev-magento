@@ -4,14 +4,31 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
         if(!Engine) {
             return;
         }
+
+        function isElementInViewport(el) {
+
+            //special bonus for those using jQuery
+            if (typeof jQuery === "function" && el instanceof jQuery) {
+                el = el[0];
+            }
+
+            var rect = el.getBoundingClientRect();
+
+            // If 70% of height is visible, consider it in viewport.
+            return (rect.bottom / el.getHeight()) * 100 >= 70;
+        }
+
         var selector = Engine.getItemSelector();
         if(Engine.getRecoverScrollProgressOnBack()) {
             $(document).on('click', selector, function(e) {
                 var productImageList = $(selector);
-                var index = productImageList.index(productImageList.withinviewport().first());
-                if(index == "-1" || index == "0") {
-                    index = 0;
-                }
+                var index = 0;
+                productImageList.each(function(i) {
+                    if(isElementInViewport(this)) {
+                        index = i;
+                        return false;
+                    }
+                });
                 location.hash = "index=" + index + "&page=" + Engine.page;
             });
 
@@ -36,8 +53,24 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
 
                 window.scrollTo(null, Engine.getProductListBottom());
                 Engine.load(data.page, Engine.limit, function () {
-                    var topPosition = $(selector).eq(data.index).offset().top - 10;
-                    window.scrollTo(null, topPosition);
+                        var m_timer = setInterval(function() {
+                            var m_allImagesLoaded = true;
+                            $(selector + ' img').each(function() {
+                                if (!$(this).height()) {
+                                    m_allImagesLoaded = false;
+                                }
+                            });
+
+                            if (m_allImagesLoaded) {
+                                clearInterval(m_timer);
+
+                                // DO YOUR STUFF HERE
+
+                                var topPosition = $(selector).eq(data.index).offset().top - 10;
+                                window.scrollTo(null, topPosition);
+                            }
+
+                        }, 100); // timeout to load the images
                 }, true);
             }
         }

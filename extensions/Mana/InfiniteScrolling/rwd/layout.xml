@@ -12,8 +12,6 @@
             <action method="addJs"><script>mana/infinitescrolling.js</script></action>
             <action method="addItem"><type>skin_js</type><name>js/mana/infinitescrolling.js</name><params/></action>
             <action method="addCss"><stylesheet>css/mana_infinitescrolling.css</stylesheet></action>
-            <action method="addItem"><type>skin_js</type><name>lib/jquery-withinviewport/withinviewport.js</name><params/></action>
-            <action method="addItem"><type>skin_js</type><name>lib/jquery-withinviewport/jquery.withinviewport.js</name><params/></action>
         </reference>
         <reference name="before_body_end">
             <block type="mana_infinitescrolling/engine" name="infinitescrolling_engine">

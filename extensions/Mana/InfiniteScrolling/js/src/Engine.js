@@ -163,7 +163,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         getPagesPerShowMore: function () {
             return this.$().data('pages-per-show-more');
         },
-        
+
         getRecoverScrollProgressOnBack: function() {
             return this.$().data('recover-scroll-progress-on-back');
         },
@@ -202,6 +202,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             if(reset) {
                 self.page = 0;
                 limit = page * limit;
+                if(limit == 0) {
+                    callback();
+                    return;
+                }
             }
             self.showLoader();
 
