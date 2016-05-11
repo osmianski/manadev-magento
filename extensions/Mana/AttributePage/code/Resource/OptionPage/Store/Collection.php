@@ -29,6 +29,16 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         return $this;
     }
 
+    public function getSelectCountSql() {
+        $this->_renderFilters();
+
+        $countSelect = $this->getConnection()->select();
+        $countSelect->from(array('tmp' => new Zend_Db_Expr("(" . $this->getSelect()->__toString() . ")")), array());
+        $countSelect->columns('COUNT(*)');
+
+        return $countSelect;
+    }
+
     public function addHavingProductsFilter() {
         $db = $this->getConnection();
         if ($sampleOptionPage = $this->getSampleItem()) {
