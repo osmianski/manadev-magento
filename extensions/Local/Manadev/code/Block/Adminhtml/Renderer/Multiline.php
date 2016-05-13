@@ -14,10 +14,14 @@ class Local_Manadev_Block_Adminhtml_Renderer_Multiline extends Mage_Adminhtml_Bl
                 if($x == 5) {
                     $html .= "<div class='mana-multiline' style='display:none;'>";
                 }
-                $html .= $line."<br/>";
+                $html .= $line;
+                if (count($lines) != ($x + 1)) {
+                    $html .= "<br/>";
+                }
             }
-            if(count($lines) >= 5) {
+            if(count($lines) > 5) {
                 $html .= "</div>";
+                $html .= "<br/>";
                 $html .= "<a href='#' class='mana-multiline-show-more'>".Mage::helper('local_manadev')->__('Show More...')."</a>";
                 $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Show Less...') . "</a>";
             }

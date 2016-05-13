@@ -34,6 +34,34 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
     }
 
     /**
+     * @param Local_Manadev_Model_License_Request $requestModel
+     * @return string
+     */
+    public function generateMagentoId($requestModel) {
+        $prefix = "M";
+        $salt = "r2RKKMBx6ZUmPQQ8";
+
+        $x = json_encode(ksort($requestModel->getModules())) . '|' .
+            json_encode(array_multisort($requestModel->getStores())) . '|' .
+            $requestModel->getData('admin_url') . '|' .
+            $requestModel->getData('remote_ip') . '|' .
+            $requestModel->getData('base_dir') . '|' .
+            $salt
+        ;
+
+        $magento_id = $this->_getKeyModel()->shaToLicenseNo(sha1($x));
+        $magento_id = $prefix .
+            substr($magento_id, 0, 5) . '-' .
+            substr($magento_id, 5, 6) . '-' .
+            substr($magento_id, 11, 5) . '-' .
+            substr($magento_id, 16, 6) . '-' .
+            substr($magento_id, 22, 5);
+
+        return $magento_id;
+
+    }
+
+    /**
      * @param Local_Manadev_Model_License_Request|Mage_Core_Model_Abstract $object
      * @return $this
      */
@@ -205,5 +233,12 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
             ->limit(1)
             ->order("created_at desc");
         return $select;
+    }
+
+    /**
+     * @return Local_Manadev_Model_Key
+     */
+    protected function _getKeyModel() {
+        return Mage::getModel('local_manadev/key');
     }
 }

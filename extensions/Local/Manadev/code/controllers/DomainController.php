@@ -50,24 +50,44 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         try{
-            $urls = $this->getRequest()->getParam('domain');
-            foreach($urls as $x => $url) {
-                if(trim($url) === "") {
-                    unset($urls[$x]);
-                    continue;
-                }
+            $postDomain = trim($this->getRequest()->getParam('domain'));
+            $url = $postDomain;
 
-                if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
-                }
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
+            }
 
+            $checkLimit = 5;
+            $isResponseValid = false;
+            for($x=0; $x<$checkLimit; $x++) {
                 $headers = @get_headers($url);
-                // Also allow 302 because of magento secret key redirect
-                if(!(strpos($headers[0],'200') === false || strpos($headers[0], '302') === false)) {
-                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+                if(strpos($headers[0], '200') !== false) {
+                    $isResponseValid = true;
+                }
+
+                if(strpos($headers[0], '302') !== false) {
+                    foreach($headers as $header) {
+                        if(strpos($header, "Location: ") !== false) {
+                            $newUrl = str_replace("Location: ", "", $header);
+                            // If the domain is the same but only added `key` in parameter (Magento Secret Key), assume valid.
+                            if(strpos($newUrl, $url) === 0 && strpos($newUrl, "/key/") !== false) {
+                                $isResponseValid = true;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+                if($isResponseValid) {
+                    break;
                 }
             }
-            $domain = implode(",", $urls);
+
+            if(!$isResponseValid) {
+                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+            }
+
+            $domain = $postDomain;
             $storeInfo = $this->getRequest()->getParam('m_store_info', "");
             if(trim($domain) === "" && trim($storeInfo) === "") {
                 throw new Mana_Core_Exception_Validation(Mage::helper('local_manadev')->__("Please provide either your store admin panel URL or your store information."));
@@ -82,10 +102,17 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
         $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem);
 
+        $platform = Mage::getResourceModel('catalog/product')->getAttributeRawValue($linkPurchasedItem->getData('product_id'), 'platform', 0);
+
+        // Magento 2 only uses 'available_til'
+        $status = ($platform == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) ?
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL :
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE;
+
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
             ->setData('m_store_info', $storeInfo)
-            ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
+            ->setData('status', $status)
             ->save();
 
         /** @var Local_Manadev_Resource_DomainHistory $dhResource */

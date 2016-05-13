@@ -6,14 +6,15 @@
  */
 class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link_Purchased_Item
 {
-    const SALT = '3jY65MRSVsCrnmuU';
+    const LICENSE_NO_SALT = '3jY65MRSVsCrnmuU';
+    const LICENSE_VERIFICATION_SALT = '6BCRWtJJp8GsEBmy';
 
     public function _beforeSave() {
         $result = parent::_beforeSave();
 
         if(!$this->getId()) {
-            $this->setData('m_license_verification_no', uniqid())
-                ->setData('m_license_no', uniqid());
+            $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
+                ->setData('m_license_no', $this->generateLicenseNumber());
 
             $date = Mage::app()->getLocale()->date(
                 Varien_Date::toTimestamp($this->getCreatedAt()),
@@ -30,13 +31,21 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function generateLicenseNumber() {
+        return $this->_generateKey("L", self::LICENSE_NO_SALT);
+    }
+
+    public function generateLicenseVerificationNo() {
+        return $this->_generateKey("V", self::LICENSE_VERIFICATION_SALT);
+    }
+
+    protected function _generateKey($prefix, $salt) {
         /** @var Mage_Downloadable_Model_Link_Purchased $puchasedModel */
         $puchasedModel = Mage::getModel('downloadable/link_purchased')->load($this->getPurchasedId());
         /** @var Mage_Customer_Model_Customer $customerModel */
         $customerModel = Mage::getModel('customer/customer')->load($puchasedModel->getCustomerId());
-        $x = $puchasedModel->getOrderIncrementId() . '|' . $customerModel->getEmail() . '|' . $this->getId() . '|' . self::SALT;
+        $x = $puchasedModel->getOrderIncrementId() . '|' . $customerModel->getEmail() . '|' . $this->getId() . '|' . $salt;
         $licenseNo = $this->_getKeyModel()->shaToLicenseNo(sha1($x));
-        $licenseNo = 'L' .
+        $licenseNo = $prefix .
             substr($licenseNo, 0, 5) . '-' .
             substr($licenseNo, 5, 6) . '-' .
             substr($licenseNo, 11, 5) . '-' .
@@ -51,5 +60,5 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
      */
     protected function _getKeyModel() {
         return Mage::getModel('local_manadev/key');
-}
+    }
 }

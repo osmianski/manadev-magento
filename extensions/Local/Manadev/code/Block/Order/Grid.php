@@ -75,19 +75,6 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
             'width' => '300px',
         ), 'billing_name');
 
-        $this->addColumnAfter('download_status', array(
-            'header' => Mage::helper('sales')->__('Download Status'),
-            'index' => 'download_status',
-            'filter_condition_callback' => function($collection, $column) {
-                /* @var $resource Local_Manadev_Resource_Order */
-                $resource = Mage::getResourceSingleton('local_manadev/order');
-                $resource->addDownloadStatusCollectionFilter($collection, $column->getFilter()->getCondition());
-            },
-            'type'  => 'options',
-            'width' => '150px',
-			'options' => Mage::getSingleton('local_manadev/source_downloadStatus')->getOptionArray(),
-        ), 'status');
-
         $this->addColumnAfter(
             'license_numbers',
             array(
@@ -144,7 +131,6 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
 
         /* @var $resource Local_Manadev_Resource_Order */
         $resource = Mage::getResourceSingleton('local_manadev/order');
-        $resource->addDownloadStatusToCollection($collection);
         $resource->addEmailsToCollection($collection);
 
 

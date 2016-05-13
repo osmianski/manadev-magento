@@ -737,52 +737,35 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             copy($resource, $newZipFilename);
             $zip = new ZipArchive();
             if ($zip->open($newZipFilename) === true) {
-
                 if($productModel->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
                     $moduleDir = "app/code/Manadev/Core/";
                 } else {
                     $moduleDir = "app/code/local/Mana/Core/";
                 }
                 $licenseDir = $moduleDir . "license";
-                $pubKeyDir = $moduleDir . "key/public";
-                $privateKeyDir = $moduleDir . "key/private";
                 $zip->addEmptyDir($licenseDir);
-                $zip->addEmptyDir($pubKeyDir);
-                $zip->addEmptyDir($privateKeyDir);
 
                 $sku = $productModel->getData('sku');
                 $version = $this->_getLocalKeyModel()->getVersionFromZipFile($linkModel->getLinkFile());
 
-                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}", "{$sku} --- {$version}");
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.license", "{$sku} --- {$version}");
 
                 $keys = $this->generateKeys();
-                $keyName = uniqid() . ".pem";
-                $zip->addFromString("{$pubKeyDir}/{$keyName}", $keys['public']);
-                $zip->addFromString("{$privateKeyDir}/{$keyName}", $keys['private']);
-                $availableKeysDir = Mage::getBaseDir() . DS . 'available_keys';
-                $localPubKeyDir = $availableKeysDir . DS . 'public' . DS;
-                $localPrivateKeyDir = $availableKeysDir . DS . 'private' . DS;
-                if(!file_exists($availableKeysDir)) {
-                    mkdir($availableKeysDir);
-                }
-                if (!file_exists($localPubKeyDir)) {
-                    mkdir($localPubKeyDir, null, true);
-                }
-                if (!file_exists($localPrivateKeyDir)) {
-                    mkdir($localPrivateKeyDir, null, true);
-                }
-
-                $localPubKey = $localPubKeyDir . $keyName;
-                $localPrivateKey = $localPrivateKeyDir . $keyName;
-                file_put_contents($localPubKey, $keys['public']);
-                file_put_contents($localPrivateKey, $keys['private']);
-                $linkPurchasedItem->setData('m_key', $keyName);
-
+                $keyName = uniqid();
+                $zip->addFromString("{$licenseDir}/{$keyName}.public.pem", $keys['public']);
+                $zip->addFromString("{$licenseDir}/{$keyName}.private.pem", $keys['private']);
                 $zip->close();
+
+                $linkPurchasedItem->setData('m_key_public', $keys['public']);
+                $linkPurchasedItem->setData('m_key_private', $keys['private']);
+                $linkPurchasedItem->setData('m_key', $keyName);
             }
 
             $linkPurchasedItem->setData('link_file', str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename));
+            return true;
         }
+
+        return false;
     }
 
     public function generateKeys() {

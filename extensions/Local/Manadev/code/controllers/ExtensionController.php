@@ -26,7 +26,6 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             $coreKeyModel = Mage::getSingleton('mana_core/key');
 
             $requiredData = array(
-                'magentoInstanceId',
                 'installedManadevExtensions',
                 'installedModules',
                 'adminPanelUrl',
@@ -46,8 +45,20 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                     throw new Exception("Maximum number of request reached! Please try again after 1 hour.");
                 }
 
+                if(isset($params['magentoInstanceId'])) {
+                    $magento_id = $params['magentoInstanceId'];
+                    $newMagentoId = false;
+                } else {
+                    $magento_id = false;
+                    $newMagentoId = true;
+                }
                 /** @var Local_Manadev_Model_License_Request $requestModel */
-                $requestModel = Mage::getModel('local_manadev/license_request')->load($params['magentoInstanceId'], 'magento_id');
+                $requestModel = Mage::getModel('local_manadev/license_request');
+                if($magento_id) {
+                    $requestModel->load($magento_id, 'magento_id');
+                } else {
+                    $magento_id = $requestModel->getResource()->generateMagentoId($requestModel);
+                }
                 $willSave = false;
                 $modulesInDb = $requestModel->getModules();
                 $modulesInRequest = $params['installedModules'];
@@ -65,7 +76,7 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 if(!$requestModel->getId()) {
                     // Magento ID is not recognized. Save as new record.
                     $willSave = true;
-                    $requestModel->setData('magento_id', $params['magentoInstanceId']);
+                    $requestModel->setData('magento_id', $magento_id);
                 } else {
                     // Magento ID detected. Save only if there are any changes.
                     $match = $requestModel->getData('admin_url') == $params['adminPanelUrl'];
@@ -78,13 +89,16 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
 
                     if(!$match) {
                         $willSave = true;
+                    } else {
+                        // Will not create a new record. Update last_checked instead.
+                        $requestModel->setData('last_checked', Varien_Date::now())->save();
                     }
                 }
 
                 if($willSave) {
                     $requestModel = Mage::getModel('local_manadev/license_request');
                     $requestModel
-                        ->setData('magento_id', $params['magentoInstanceId'])
+                        ->setData('magento_id', $magento_id)
                         ->setData('admin_url', $params['adminPanelUrl'])
                         ->setData('remote_ip', $params['remoteIp'])
                         ->setData('base_dir', $params['baseDir'])
@@ -103,6 +117,9 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $result = array(
                     'latestManadevExtensionVersions' => $this->_getLatestVersionOfExtensions($params['installedManadevExtensions']),
                 );
+                if($newMagentoId) {
+                    $result['generatedMagentoId'] = $magento_id;
+                }
 
                 echo $coreKeyModel->ssl_encrypt($coreKeyModel->dataToStringSerialize($result), 'public', $localKeyModel->getPublicKeyResource($key));
                 exit();

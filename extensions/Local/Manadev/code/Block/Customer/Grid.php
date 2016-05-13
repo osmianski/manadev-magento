@@ -147,7 +147,7 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
                 'filter_index' => 'ml.license_numbers',
                 'width' => '50',
                 'align' => 'center',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+                'renderer' => 'local_manadev/adminhtml_renderer_licenseNumbers',
             ),
             'customer_since'
         );
@@ -191,6 +191,15 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
             'magento_ids'
         );
 
-        return parent::_prepareColumns();
+        parent::_prepareColumns();
+
+        $this->removeColumn('Telephone');
+        $this->removeColumn('billing_postcode');
+        $this->removeColumn('website_id');
+        $this->removeColumn('action');
+        $this->removeColumn('billing_region');
+
+
+        return $this;
     }
 }

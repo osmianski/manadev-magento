@@ -38,8 +38,19 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
         $this->addColumn(
             'created_at',
             array(
-                'header' => $this->__('Date/Time Received'),
+                'header' => $this->__('Date Received'),
                 'index' => 'created_at',
+                'width' => '50px',
+                'align' => 'left',
+                'type' => 'datetime',
+            )
+        );
+
+        $this->addColumn(
+            'last_checked',
+            array(
+                'header' => $this->__('Last Checked'),
+                'index' => 'last_checked',
                 'width' => '50px',
                 'align' => 'left',
                 'type' => 'datetime',
@@ -83,7 +94,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
             'modules',
             array(
                 'header' => $this->__('Modules'),
-                'index' => 'modules',
+                'index' => 'agg_modules',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -104,7 +115,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
             'frontend_urls',
             array(
                 'header' => $this->__('Frontend URLs'),
-                'index' => 'frontend_urls',
+                'index' => 'agg_frontend_urls',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -115,7 +126,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
             'themes',
             array(
                 'header' => $this->__('Themes'),
-                'index' => 'themes',
+                'index' => 'agg_themes',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -162,16 +173,6 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $ln->getAttributeId() ."
                 GROUP BY request_id
             )")), "`e`.`request_id` = `main_table`.`id`", array('customer_ids', 'customer_names', 'order_numbers', 'order_ids', 'extensions', 'license_numbers'))
-            ->joinLeft(array('lm' => new Zend_Db_Expr("(
-                SELECT request_id, GROUP_CONCAT(module SEPARATOR '|') as modules
-                FROM ". $collection->getTable('local_manadev/license_module') ."
-                GROUP BY request_id
-            )")), "lm.request_id = `main_table`.`id`", array('modules'))
-            ->joinLeft(array('ls' => new Zend_Db_Expr("(
-                SELECT request_id, GROUP_CONCAT(DISTINCT frontend_url SEPARATOR '|') as frontend_urls, GROUP_CONCAT(DISTINCT theme SEPARATOR '|') as themes
-                FROM ". $collection->getTable('local_manadev/license_store') ."
-                GROUP BY request_id
-            )")), "ls.request_id = `main_table`.`id`", array('frontend_urls', 'themes'))
             ;
         $sql = $collection->getSelectSql(true);
 

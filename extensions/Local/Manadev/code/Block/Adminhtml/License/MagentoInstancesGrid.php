@@ -60,7 +60,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
         $this->addColumn(
             'extensions',
             array(
-                'header' => $this->__('Extensions'),
+                'header' => $this->__('Paid Extensions'),
                 'index' => 'extensions',
                 'width' => '50px',
                 'align' => 'left',
@@ -72,7 +72,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
             'modules',
             array(
                 'header' => $this->__('Modules'),
-                'index' => 'modules',
+                'index' => 'agg_modules',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -93,7 +93,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
             'frontend_urls',
             array(
                 'header' => $this->__('Frontend URLs'),
-                'index' => 'frontend_urls',
+                'index' => 'agg_frontend_urls',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -104,7 +104,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
             'themes',
             array(
                 'header' => $this->__('Themes'),
-                'index' => 'themes',
+                'index' => 'agg_themes',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
@@ -162,14 +162,10 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 LEFT JOIN " . $collection->getTable('downloadable/link_purchased') . " dlp ON dlpi.`purchased_id` = dlp.`purchased_id`
                 LEFT JOIN `" . $collection->getTable('catalog/product') . "_varchar` pn ON pn.`entity_id` = dlpi.`product_id` AND pn.`attribute_id` = ". $productName->getAttributeId() ."
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cf ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $fn->getAttributeId() ."
-                LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $ln->getAttributeId() ."
+                LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cl.`entity_id` = dlp.`customer_id` AND cl.`attribute_id` = ". $ln->getAttributeId() ."
+                WHERE `dlpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE ."'
                 GROUP BY request_id
             )")), "`e`.`request_id` = `main_table`.`id`", array('customer_ids', 'customer_names', 'order_numbers', 'order_ids', 'extensions', 'license_numbers'))
-            ->columns(array(
-                new Zend_Db_Expr("`main_table`.`agg_modules` AS modules"),
-                new Zend_Db_Expr("`main_table`.`agg_frontend_urls` AS frontend_urls"),
-                new Zend_Db_Expr("`main_table`.`agg_themes` AS themes"),
-            ))
             ;
         $sql = $collection->getSelectSql(true);
 

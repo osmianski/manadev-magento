@@ -23,10 +23,14 @@ class Local_Manadev_Block_Adminhtml_Renderer_Extensions extends Mage_Adminhtml_B
                 }
                 $url = $this->getUrl('adminhtml/customer/edit', array('id' => $customer_ids[$x]));
 
-                $html .= "<a href='{$url}'>{$line}</a> <br/>";
+                $html .= "<a href='{$url}'>{$line}</a>";
+                if (count($lines) != ($x + 1)) {
+                    $html .= "<br/>";
+                }
             }
-            if(count($lines) >= 5) {
+            if(count($lines) > 5) {
                 $html .= "</div>";
+                $html .= "<br/>";
                 $html .= "<a href='#' class='mana-multiline-show-more'>".Mage::helper('local_manadev')->__('Show More...')."</a>";
                 $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Show Less...') . "</a>";
             }

@@ -29,6 +29,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Customer'),
                 'index' => 'customer_name',
+                'filter_index' => new Zend_Db_Expr("CONCAT(IFNULL(`cefn`.`value`, ''), ' ',IFNULL(`celn`.`value`, ''))"),
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_customer',
@@ -40,6 +41,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Order'),
                 'index' => 'order_number',
+                'filter_index' => 'order_increment_id',
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_order',
@@ -103,6 +105,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Used At IP Addresses'),
                 'index' => 'used_at_ip_addresses',
+                'filter_index' => 'main_table.agg_remote_ips',
                 'width' => '100px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline'
@@ -114,8 +117,10 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Status'),
                 'index' => 'status',
+                'type' => 'select',
                 'width' => '100px',
                 'align' => 'left',
+                'options' => Mage::getSingleton('local_manadev/download_status')->toOptionArray(),
                 'renderer' => 'local_manadev/adminhtml_renderer_status',
             )
         );

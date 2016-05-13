@@ -20,13 +20,17 @@ class Local_Manadev_Block_Adminhtml_Renderer_Orders extends Mage_Adminhtml_Block
                 }
                 if (!in_array($line, $order_numbers)) {
                     $url = $this->getUrl('adminhtml/sales_order/view', array('order_id' => $order_ids[$x]));
-                    $html .= "<a href='{$url}'>{$line}</a> <br/>";
+                    $html .= "<a href='{$url}'>{$line}</a>";
+                    if (count($lines) != ($x + 1)) {
+                        $html .= "<br/>";
+                    }
                     $order_numbers[] = $line;
                     $x++;
                 }
             }
-            if(count($lines) >= 5) {
+            if(count($lines) > 5) {
                 $html .= "</div>";
+                $html .= "<br/>";
                 $html .= "<a href='#' class='mana-multiline-show-more'>".Mage::helper('local_manadev')->__('Show More...')."</a>";
                 $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Show Less...') . "</a>";
             }

@@ -35,19 +35,30 @@ class Local_Manadev_Model_Key {
     }
 
     public function getPublicKeyResource($keyName) {
-        $publicKeyFile = $this->_getAvailableKeysDir() . DS . 'public' . DS . $keyName;
-        if (!file_exists($publicKeyFile)) {
+        $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($keyName, 'm_key');
+
+        if (!$purchasedItem->getId()) {
             throw new Exception("Key not found.");
         }
-        return file_get_contents($publicKeyFile);
+        return $purchasedItem->getData('m_key_public');
     }
 
     public function getPrivateKeyResource($keyName) {
-        $privateKeyFile = $this->_getAvailableKeysDir() . DS . 'private' . DS . $keyName;
-        if (!file_exists($privateKeyFile)) {
+        $purchasedItem = Mage::getModel('downloadable/link_puchased_item')->load($keyName, 'm_key');
+
+        if (!$purchasedItem->getId()) {
             throw new Exception("Key not found.");
         }
-        return openssl_pkey_get_private("file://" . $privateKeyFile);
+        $tmpKeyDir = $this->getTmpKeyDir();
+        $privateKeyFile = $tmpKeyDir . DS . $keyName;
+
+        file_put_contents($privateKeyFile, $purchasedItem->getData('m_key_private'));
+
+        $resource = openssl_pkey_get_private("file://" . $privateKeyFile);
+
+        unlink($privateKeyFile);
+
+        return $resource;
     }
 
     /**
@@ -105,7 +116,12 @@ class Local_Manadev_Model_Key {
     /**
      * @return string
      */
-    protected function _getAvailableKeysDir() {
-        return Mage::getBaseDir() . DS . 'available_keys';
+    protected function getTmpKeyDir() {
+        $keyDir = Mage::getBaseDir('var') . DS . 'keys';
+        if(!file_exists($keyDir)) {
+            mkdir($keyDir);
+        }
+
+        return $keyDir;
     }
 }

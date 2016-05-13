@@ -27,7 +27,7 @@ class Local_Manadev_Model_Download_Status
             return false;
         }
 
-        $label = Mage::helper('local_manadev')->__($this->statuses[$status]);
+        $label = $this->_getHelper()->__($this->statuses[$status]);
 
         if(isset($item['m_support_valid_til']) && $status == self::M_LINK_STATUS_AVAILABLE_TIL) {
             $supportValidTil = $item['m_support_valid_til'];
@@ -39,6 +39,18 @@ class Local_Manadev_Model_Download_Status
     }
 
     public function toOptionArray(){
-        return $this->statuses;
+        $result = [];
+        foreach($this->statuses as $status => $label) {
+            $result[$status] = $this->_getHelper()->__($label);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function _getHelper() {
+        return Mage::helper('local_manadev');
     }
 }
