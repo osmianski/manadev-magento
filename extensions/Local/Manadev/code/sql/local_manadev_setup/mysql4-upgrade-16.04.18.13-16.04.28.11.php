@@ -19,8 +19,4 @@ $installer->run("
       ADD `agg_remote_ips` TEXT NOT NULL
 ");
 
-foreach(Mage::getResourceModel('downloadable/link_purchased_item_collection')->getItems() as $item) {
-    $item->save();
-}
-
 $installer->endSetup();
