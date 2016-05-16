@@ -193,14 +193,6 @@
                     </enterprise_pagecache>
                 </observers>
             </controller_front_send_response_before>
-            <adminhtml_controller_action_predispatch_start>
-                <observers>
-                    <mana_core>
-                        <class>mana_core/observer</class>
-                        <method>updateVersionNumber</method>
-                    </mana_core>
-                </observers>
-            </adminhtml_controller_action_predispatch_start>
         </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
