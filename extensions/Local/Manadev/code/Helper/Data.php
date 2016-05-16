@@ -732,10 +732,12 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         $pathinfo = pathinfo($resource);
 
         $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
-        if(!file_exists($newZipFilename) && $linkPurchasedItem->getData('link_file') != $newZipFilename) {
+        $newLinkFile = str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
+        if(!file_exists($newZipFilename) || $linkPurchasedItem->getData('link_file') != $newLinkFile) {
             copy($resource, $newZipFilename);
             $zip = new ZipArchive();
             if ($zip->open($newZipFilename) === true) {
+                $this->_setPlatformValueIfNotSet($productModel, $zip);
                 if($productModel->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
                     $moduleDir = "app/code/Manadev/Core/";
                 } else {
@@ -760,7 +762,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $linkPurchasedItem->setData('m_key', $keyName);
             }
 
-            $linkPurchasedItem->setData('link_file', str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename));
+            $linkPurchasedItem->setData('link_file', $newLinkFile);
             return true;
         }
 
@@ -804,5 +806,16 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     protected function _getLocalKeyModel() {
         return Mage::getModel('local_manadev/key');
+    }
+
+    protected function _setPlatformValueIfNotSet($productModel, $zip) {
+        if(!$productModel->getData('platform')) {
+            $platform = Local_Manadev_Model_Platform::VALUE_MAGENTO_1;
+            if($zip->getFromName('app/code/Manadev/Core/registration.php')) {
+                $platform = Local_Manadev_Model_Platform::VALUE_MAGENTO_2;
+            }
+            $productModel->setData('platform', $platform);
+            $productModel->save();
+        }
     }
 }
