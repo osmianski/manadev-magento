@@ -37,7 +37,7 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
     protected function _prepareCollection()
     {
         $collection = Mage::getResourceModel('customer/customer_collection')
-            ->addNameToSelect()
+//            ->addNameToSelect()
             ->addAttributeToSelect('email')
             ->addAttributeToSelect('created_at')
             ->addAttributeToSelect('group_id')
@@ -46,6 +46,8 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
             ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
             ->joinAttribute('billing_region', 'customer_address/region', 'default_billing', null, 'left')
             ->joinAttribute('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left');
+
+        $this->_addNameToSelect($collection);
 
         $collection->getSelect()
         ->joinLeft(array('ml' => new Zend_Db_Expr("(
@@ -73,6 +75,61 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
 
 
         return $this->_basePrepareCollection();
+    }
+
+    protected function _addNameToSelect($collection) {
+        $fields = array();
+        $customerAccount = Mage::getConfig()->getFieldset('customer_account');
+        foreach ($customerAccount as $code => $node) {
+            if ($node->is('name')) {
+                $fields[$code] = $code;
+            }
+        }
+
+        $adapter = $collection->getConnection();
+        $concatenate = array();
+        if (isset($fields['prefix'])) {
+            $concatenate[] = $adapter->getCheckSql(
+                '{{prefix}} IS NOT NULL AND {{prefix}} != \'\'',
+                $adapter->getConcatSql(array('LTRIM(RTRIM({{prefix}}))', '\' \'')),
+                '\'\'');
+        }
+        
+        if (isset($fields['firstname'])) {
+            $concatenate[] = $adapter->getCheckSql(
+                '{{firstname}} IS NOT NULL AND {{firstname}} != \'\'',
+                $adapter->getConcatSql(array('LTRIM(RTRIM({{firstname}}))', '\' \'')),
+                '\'\'');
+        }
+        
+        $concatenate[] = '\' \'';
+        if (isset($fields['middlename'])) {
+            $concatenate[] = $adapter->getCheckSql(
+                '{{middlename}} IS NOT NULL AND {{middlename}} != \'\'',
+                $adapter->getConcatSql(array('LTRIM(RTRIM({{middlename}}))', '\' \'')),
+                '\'\'');
+        }
+        
+        if (isset($fields['lastname'])) {
+            $concatenate[] = $adapter->getCheckSql(
+                '{{lastname}} IS NOT NULL AND {{lastname}} != \'\'',
+                $adapter->getConcatSql(array('LTRIM(RTRIM({{lastname}}))', '\' \'')),
+                '\'\''
+            );
+        }
+        
+        if (isset($fields['suffix'])) {
+            $concatenate[] = $adapter
+                    ->getCheckSql('{{suffix}} IS NOT NULL AND {{suffix}} != \'\'',
+                $adapter->getConcatSql(array('\' \'', 'LTRIM(RTRIM({{suffix}}))')),
+                '\'\'');
+        }
+
+        $nameExpr = $adapter->getConcatSql($concatenate);
+
+        $collection->addExpressionAttributeToSelect('name', $nameExpr, $fields);
+
+        return $this;
     }
 
     protected function _basePrepareCollection() {
