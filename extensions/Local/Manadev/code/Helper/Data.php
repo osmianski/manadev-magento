@@ -732,8 +732,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         $pathinfo = pathinfo($resource);
 
         $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
-
-        if(!file_exists($newZipFilename)) {
+        if(!file_exists($newZipFilename) && $linkPurchasedItem->getData('link_file') != $newZipFilename) {
             copy($resource, $newZipFilename);
             $zip = new ZipArchive();
             if ($zip->open($newZipFilename) === true) {
@@ -769,11 +768,16 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     public function generateKeys() {
+        $configFile = Mage::getStoreConfig('local_manadev/downloads/openssl_config_file');
+        if(!$configFile) {
+            throw new Exception("OpenSSL Config file is not configured. Set value for 'System Configuration -> MANAdev -> manadev.com -> Downloads -> OpensSL Configuration File'");
+        }
+
         $config = array(
             "digest_alg" => "sha512",
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-            'config' => Mage::getStoreConfig('local_manadev/downloads/openssl_config_file'),
+            'config' => $configFile,
         );
 
         $res = openssl_pkey_new($config);
