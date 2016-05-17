@@ -63,8 +63,9 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Registered URL'),
                 'index' => 'm_registered_domain',
-                'width' => '100px',
+                'width' => '200px',
                 'align' => 'left',
+                'renderer' => 'local_manadev/adminhtml_renderer_registeredDomain',
             )
         );
 

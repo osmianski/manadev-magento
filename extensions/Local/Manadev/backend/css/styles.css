@@ -2,3 +2,7 @@
      width: 65%;
      margin-left: 10px;
 }
+
+.grid td input.m-registered-domain {
+     width: 95%;
+}

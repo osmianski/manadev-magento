@@ -26,13 +26,19 @@
 
         $(document).on('change', '.m-save-on-change', function (e) {
             var id = this.parentElement.parentElement.dataset['rowId'];
-            var status = $(this.parentElement.parentElement).find(".m-status").val();
-            var expireDate = $(this.parentElement.parentElement).find(".m-date").val();
+            var rowElement = $(this.parentElement.parentElement);
+            var status = rowElement.find(".m-status").val();
+            var expireDate = rowElement.find(".m-date").val();
+            var registeredUrl = rowElement.find(".m-registered-domain").val();
+            var target = e.target;
+            var insertHistory = target.hasClassName("m-registered-domain");
             Mana.require(['singleton:Mana/Core/Config', 'singleton:Mana/Core/Ajax'], function(config, ajax) {
                 var params = [
                     {name: 'id', value: id},
                     {name: 'status', value: status},
                     {name: 'expireDate', value: expireDate},
+                    {name: 'registeredDomain', value: registeredUrl},
+                    {name: 'insertHistory', value: insertHistory},
                     {name: 'form_key', value: FORM_KEY}
                 ];
 
@@ -48,6 +54,11 @@
                         var messages = $("#messages").find("ul.messages");
                     }
                     messages.append("<li class='success-msg'><ul><li><span>"+ response.message +"</span></li></ul></li>");
+
+                    if(insertHistory && response.m_registered_domain_history) {
+                        target.parentElement.innerHTML = target.outerHTML + response.m_registered_domain_history;
+                        rowElement.find(".m-registered-domain").val(registeredUrl);
+                    }
                 });
             });
         });
