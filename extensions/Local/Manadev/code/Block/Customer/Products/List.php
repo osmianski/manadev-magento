@@ -45,6 +45,12 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
                 case "register":
                     $actions .= $this->getRegisterButton($item);
                     break;
+                case "open_support_ticket":
+                    $actions .= $this->getOpenSupportTicketButton($item);
+                    break;
+                case "prolong_support_period";
+                    $actions .= $this->getProlongSupportPeriodButton($item);
+                    break;
                 default:
                     $actions .= "<a href='#'>{$this->actionTemplates[$action]}</a>";
             }
@@ -64,6 +70,22 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     public function getRegisterButton($item) {
         $title = Mage::helper('downloadable')->__('Register And Download');
         $url = $this->getProductRegistrationUrl($item);
+        $template = "<a href='{$url}' title='{$title}' {$this->_openNewWindow()}>{$title}</a>";
+
+        return $template;
+    }
+
+    public function getOpenSupportTicketButton($item) {
+        $title = Mage::helper('downloadable')->__('Open Support Ticket');
+        $url = $this->getUrl('actions/support/openTicket', array('id' => $item->getLinkHash(), '_secure' => true));
+        $template = "<a href='{$url}' title='{$title}' {$this->_openNewWindow()}>{$title}</a>";
+
+        return $template;
+    }
+
+    public function getProlongSupportPeriodButton($item) {
+        $title = Mage::helper('downloadable')->__('Extend Support Period');
+        $url = $this->getUrl('actions/support/extend', array('id' => $item->getLinkHash(), '_secure' => true));
         $template = "<a href='{$url}' title='{$title}' {$this->_openNewWindow()}>{$title}</a>";
 
         return $template;

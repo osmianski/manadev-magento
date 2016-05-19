@@ -2,7 +2,7 @@
     width: 400px;
 }
 
-#domainForm p.note {
+.m-form p.note {
     width: 400px;
     background: url(../images/note_bg.gif) 1px 6px no-repeat;
     font-size: 11px;
@@ -10,6 +10,10 @@
     margin: 0;
 }
 
-#domainForm textarea {
+#contactForm, #ticketForm p.note {
+    width: 100%;
+}
+
+.m-form textarea {
     resize: none;
 }

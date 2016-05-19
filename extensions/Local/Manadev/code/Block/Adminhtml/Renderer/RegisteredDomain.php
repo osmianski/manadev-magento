@@ -12,24 +12,10 @@ class Local_Manadev_Block_Adminhtml_Renderer_RegisteredDomain extends Mage_Admin
 
         $html = '<input type="text" id="' . $htmlId . '" value="' . $this->_getValue($row) . '" class="input-text no-changes m-save-on-change m-registered-domain"/>';
 
-        /** @var Local_Manadev_Resource_DomainHistory_Collection $dhCollection */
-        $dhCollection = Mage::getResourceModel('local_manadev/domainHistory_collection');
-        $dhCollection->addFieldToFilter('item_id', $row->getData('item_id'))
-            ->setOrder('created_at')->load();
+        $dhCollection = $this->localHelper()->prepareDomainHistoryCollection($row->getData('item_id'));
 
         if($dhCollection->count() > 1) {
-            $html .= "<br/><br/>";
-            $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show Previous URLs...') . "</a>";
-            $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide Previous URLs...') . "</a>";
-            $html .= "<div class='mana-multiline' style='display:none;'>";
-
-            /** @var Local_Manadev_Model_DomainHistory $dh */
-            foreach($dhCollection->getItems() as $dh) {
-                $html .= $dh->getData('m_registered_domain');
-                $html .= "<br/>";
-            }
-
-            $html .= "</div>";
+            $html .= $this->localHelper()->getDomainHistoryHtml($dhCollection);
         }
 
 
@@ -54,5 +40,12 @@ class Local_Manadev_Block_Adminhtml_Renderer_RegisteredDomain extends Mage_Admin
         $model = Mage::getSingleton('local_manadev/download_status');
 
         return $model;
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function localHelper() {
+        return Mage::helper('local_manadev');
     }
 }

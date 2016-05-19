@@ -48,6 +48,7 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
         $expireDate = $this->getRequest()->getParam('expireDate');
         $registeredUrl = $this->getRequest()->getParam('registeredDomain');
         $insertHistory = $this->getRequest()->getParam('insertHistory');
+        $doUpdateStatus = $this->getRequest()->getParam('doUpdateStatus');
 
         $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id);
 
@@ -63,25 +64,9 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
             $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
             $dhResource->insertHistory($purchasedItem->getId(), $registeredUrl, $purchasedItem->getData('m_store_info'));
 
-            /** @var Local_Manadev_Resource_DomainHistory_Collection $dhCollection */
-            $dhCollection = Mage::getResourceModel('local_manadev/domainHistory_collection');
-            $dhCollection->addFieldToFilter('item_id', $id)
-                ->setOrder('created_at')->load();
+            $dhCollection = $this->localHelper()->prepareDomainHistoryCollection($id);
 
-            $html = "";
-
-            $html .= "<br/><br/>";
-            $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show Previous URLs...') . "</a>";
-            $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide Previous URLs...') . "</a>";
-            $html .= "<div class='mana-multiline' style='display:none;'>";
-
-            /** @var Local_Manadev_Model_DomainHistory $dh */
-            foreach($dhCollection->getItems() as $dh) {
-                $html .= $dh->getData('m_registered_domain');
-                $html .= "<br/>";
-            }
-
-            $html .= "</div>";
+            $html = $this->localHelper()->getDomainHistoryHtml($dhCollection);
         }
 
         $purchasedItem
@@ -94,7 +79,17 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
         if(isset($html)) {
             $response['m_registered_domain_history'] = $html;
         }
+        if($doUpdateStatus) {
+            $response['new_status'] = Mage::getModel('downloadable/link_purchased_item')->load($id)->getStatus();
+        }
 
         $this->getResponse()->setBody(json_encode($response));
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function localHelper() {
+        return Mage::helper('local_manadev');
     }
 }

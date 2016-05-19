@@ -6,9 +6,9 @@
  */
 class Local_Manadev_Model_Download_Status
 {
-    const M_LINK_STATUS_AVAILABLE = 'available';
+    const M_LINK_STATUS_AVAILABLE = 'available'; // For Magento 1. When m_support_valid_til is current date, the status becomes `period_expired`. Customer can still download
     const M_LINK_STATUS_NOT_AVAILABLE = 'expired'; // `expired` status has been reused and treated as not available for download. This happens when the product is refunded.
-    const M_LINK_STATUS_AVAILABLE_TIL = 'available_til';
+    const M_LINK_STATUS_AVAILABLE_TIL = 'available_til'; // For Magento 2. When m_support_valid_til is current date, the status becomes `download_expired`
     const M_LINK_STATUS_PERIOD_EXPIRED = 'period_expired';
     const M_LINK_STATUS_DOWNLOAD_EXPIRED = 'download_expired'; // When download is expired, it is assumed that support is also expired.
     const M_LINK_STATUS_NOT_REGISTERED = 'not_registered';

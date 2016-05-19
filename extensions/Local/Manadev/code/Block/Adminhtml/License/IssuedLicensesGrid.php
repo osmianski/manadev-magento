@@ -147,6 +147,10 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         return parent::_prepareColumns();
     }
 
+    public function getRowUrl($item) {
+        return false;
+    }
+
     protected function _prepareCollection() {
         $fn = Mage::getModel('eav/entity_attribute')->loadByCode('customer', 'firstname');
         $ln = Mage::getModel('eav/entity_attribute')->loadByCode('customer', 'lastname');

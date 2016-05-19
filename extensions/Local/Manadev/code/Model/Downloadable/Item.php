@@ -8,6 +8,17 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
 {
     const LICENSE_NO_SALT = '3jY65MRSVsCrnmuU';
     const LICENSE_VERIFICATION_SALT = '6BCRWtJJp8GsEBmy';
+    const ENTITY = 'downloadable/link_purchased_item';
+    protected $_frontendLabel;
+
+    public function getFrontendLabel() {
+        if(!$this->_frontendLabel) {
+            $purchased = Mage::getModel('downloadable/link_purchased')->load($this->getPurchasedId());
+            $this->_frontendLabel = $purchased->getOrderIncrementId() . ' --- ' . $purchased->getProductName();
+        }
+
+        return $this->_frontendLabel;
+    }
 
     public function _beforeSave() {
         $result = parent::_beforeSave();
@@ -60,5 +71,22 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
      */
     protected function _getKeyModel() {
         return Mage::getModel('local_manadev/key');
+    }
+
+
+    public function afterCommitCallback() {
+        parent::afterCommitCallback();
+        if (!Mage::registry('m_prevent_indexing_on_save')) {
+            $this->getIndexerSingleton()->processEntityAction($this, static::ENTITY,
+                Mage_Index_Model_Event::TYPE_SAVE);
+        }
+        return $this;
+    }
+
+    /**
+     * @return Mage_Index_Model_Indexer
+     */
+    public function getIndexerSingleton() {
+        return Mage::getSingleton('index/indexer');
     }
 }

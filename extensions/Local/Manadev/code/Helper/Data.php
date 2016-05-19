@@ -14,6 +14,8 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     const VAT_METHOD_1_ALWAYS_21 = 'v1_always_21';
     const VAT_METHOD_2_NOT_PAYER = 'v2_not_payer';
     const VAT_METHOD_3_AS_SPECIFIED_IN_RULES = 'v3_as_specified_in_rules';
+    protected $_customerLicenseCollection;
+
     protected function _vatMethod($date) {
         if ($date['date'] > '2012-05-01') {
             return self::VAT_METHOD_3_AS_SPECIFIED_IN_RULES;
@@ -50,6 +52,32 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     protected $_customerVatNumbers = array();
+
+    public function prepareDomainHistoryCollection($item_id) {
+        /** @var Local_Manadev_Resource_DomainHistory_Collection $dhCollection */
+        $dhCollection = Mage::getResourceModel('local_manadev/domainHistory_collection');
+        $dhCollection->addFieldToFilter('item_id', $item_id)->addFieldToFilter('m_registered_domain', array('neq' => ''))
+            ->setOrder('created_at')->load();
+        return $dhCollection;
+    }
+
+    public function getDomainHistoryHtml($dhCollection) {
+        $html = "<br/>";
+        $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show Previous URLs...') . "</a>";
+        $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide Previous URLs...') . "</a>";
+        $html .= "<div class='mana-multiline' style='display:none;'>";
+
+        /** @var Local_Manadev_Model_DomainHistory $dh */
+        foreach($dhCollection->getItems() as $dh) {
+            $html .= $dh->getData('m_registered_domain');
+            $html .= "<br/>";
+        }
+
+        $html .= "</div>";
+
+        return $html;
+    }
+
     protected function _getCustomerVatNumber($customerId) {
         if ($customerId) {
             if (!isset($this->_customerVatNumbers[$customerId])) {
@@ -799,6 +827,38 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             'public' => $pubKey,
             'private' => $privateKey
         );
+    }
+
+    public function getCustomerLicenseCollection(){
+        if(!$this->_customerLicenseCollection) {
+            $session = Mage::getSingleton('customer/session');
+            $purchased = Mage::getResourceModel('downloadable/link_purchased_collection')
+                ->addFieldToFilter('customer_id', $session->getCustomerId())
+                ->addOrder('created_at', 'desc');
+            $purchasedIds = array();
+            foreach ($purchased as $_item) {
+                $purchasedIds[] = $_item->getId();
+            }
+            if (empty($purchasedIds)) {
+                $purchasedIds = array(null);
+            }
+            $this->_customerLicenseCollection = Mage::getResourceModel('downloadable/link_purchased_item_collection')
+                ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
+                ->addFieldToFilter(
+                    'status',
+                    array(
+                        'in' => array(
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED
+                        )
+                    )
+                )
+                ->setOrder('item_id', 'desc');
+        }
+
+        return $this->_customerLicenseCollection;
     }
 
     /**

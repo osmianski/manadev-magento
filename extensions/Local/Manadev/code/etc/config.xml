@@ -137,9 +137,15 @@
 			<checkout>
 				<rewrite>
 					<type_onepage>Local_Manadev_Model_Onepage</type_onepage>
+					<cart>Local_Manadev_Model_Cart</cart>
 					<!-- INSERT HERE: individual type rewrites -->
 				</rewrite>
 			</checkout>
+			<catalog>
+                <rewrite>
+                    <product_type_virtual>Local_Manadev_Model_Virtual</product_type_virtual>
+                </rewrite>
+            </catalog>
 			<sales>
                 <rewrite>
                     <order_address>Local_Manadev_Model_Address_Order</order_address>
@@ -237,8 +243,20 @@
                    <file>local_manadev/owner/request_new.html</file>
                    <type>html</type>
                </local_manadev_emails_new_request_to_owner_template>
+               <local_manadev_emails_open_support_ticket_template translate="label" module="local_manadev">
+                   <label>local_manadev/customer/open_support_ticket.html</label>
+                   <file>local_manadev/customer/open_support_ticket.html</file>
+                   <type>html</type>
+               </local_manadev_emails_open_support_ticket_template>
             </email>
 		</template>
+		<index>
+            <indexer>
+                <local_manadev_license_status>
+                    <model>local_manadev/indexer</model>
+                </local_manadev_license_status>
+            </indexer>
+        </index>
 		<!-- INSERT HERE: blocks, models, ... -->
 		<cms>
 			<!-- here we specify class to be responsible for template directive processing in content -->
@@ -496,6 +514,9 @@
         </allowed_actions>
     </mana_ajax>
     <default>
+        <local_manadev>
+            <support_services_sku>support-services</support_services_sku>
+        </local_manadev>
 		<local_manadev_emails>
 			<new_request_to_customer>
 				<enabled>1</enabled>
@@ -507,7 +528,23 @@
 				<identity>general</identity>
 				<copy_method>bcc</copy_method>
 			</new_request_to_owner>
+            <open_support_ticket>
+                <enabled>1</enabled>
+                <identity>general</identity>
+            </open_support_ticket>
 		</local_manadev_emails>
 	</default>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->
+    <crontab>
+        <jobs>
+            <local_manadev_update_license_status>
+                <schedule>
+                    <cron_expr>0 0 3 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>local_manadev/indexer::runCronjob</model>
+                </run>
+            </local_manadev_update_license_status>
+        </jobs>
+    </crontab>
 </config>

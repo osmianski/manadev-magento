@@ -12,7 +12,7 @@ class Local_Manadev_Block_Adminhtml_Renderer_Date extends Mage_Adminhtml_Block_W
         $format = Mage::app()->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
 
         $html = '
-            <img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
+            <img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle m-date-trigger"'
                 . ' id="'.$htmlId.'_trig"'
                 . ' title="' . $this->escapeHtml(Mage::helper('adminhtml')->__('Date selector')) . '"/>
             <input type="text" id="' . $htmlId . '" value="' . $this->_getValue($row) . '" class="input-text no-changes m-save-on-change m-date"/>
@@ -24,7 +24,8 @@ class Local_Manadev_Block_Adminhtml_Renderer_Date extends Mage_Adminhtml_Block_W
                 ifFormat : "'.$format.'",
                 button : "'.$htmlId.'_trig",
                 align : "Bl",
-                singleClick : true
+                singleClick : true,
+                electric: false
             });
 
             $("'.$htmlId.'_trig").observe("click", showCalendar);

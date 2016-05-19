@@ -177,4 +177,9 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
     public function getGridUrl() {
         return $this->adminHelper()->getStoreUrl('*/*/magentoInstancesGrid');
     }
+
+    public function getRowUrl($item) {
+        return false;
+    }
+
 }

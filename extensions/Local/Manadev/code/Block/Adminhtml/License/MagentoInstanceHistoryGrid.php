@@ -184,4 +184,9 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
     public function getGridUrl() {
         return $this->adminHelper()->getStoreUrl('*/*/magentoInstanceHistoryGrid');
     }
+
+    public function getRowUrl($item) {
+        return false;
+    }
+
 }

@@ -19,6 +19,31 @@ class Local_Manadev_Model_Observer {
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
+
+        foreach($object->getAllItems() as $invoiceItem) {
+		    $sku = Mage::getModel('catalog/product')->load($invoiceItem->getProductId())->getSku();
+		    if($sku == Mage::getStoreConfig('local_manadev/support_services_sku')) {
+                $buyRequest = $invoiceItem->getOrderItem()->getProductOptionByCode('info_buyRequest');
+                if(!isset($buyRequest['m_license'])) {
+                    continue;
+                }
+
+                $item_id = $buyRequest['m_license'];
+                $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
+
+                $new_date = !in_array($item->getStatus(), array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
+                        Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL)) ?
+                        date('Y-m-d', Varien_Date::toTimestamp($object->getOrder()->getCreatedAt())) :
+                        $item->getData('m_support_valid_til');
+
+                for($x = 0; $x<$invoiceItem->getQty(); $x++) {
+                    $new_date = strtotime("+6 months", Varien_Date::toTimestamp($new_date));
+                    $new_date = date("Y-m-d", $new_date);
+                }
+                $item->setData('m_support_valid_til', $new_date)
+                    ->save();
+		    }
+		}
 	}
 	
 	/* BASED ON SNIPPET: Models/Event handler */
@@ -31,6 +56,27 @@ class Local_Manadev_Model_Observer {
 		
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
+		}
+
+		foreach($object->getAllItems() as $invoiceItem) {
+		    $sku = Mage::getModel('catalog/product')->load($invoiceItem->getProductId())->getSku();
+		    if($sku == Mage::getStoreConfig('local_manadev/support_services_sku')) {
+                $buyRequest = $invoiceItem->getOrderItem()->getProductOptionByCode('info_buyRequest');
+                if(!isset($buyRequest['m_license'])) {
+                    continue;
+                }
+
+                $item_id = $buyRequest['m_license'];
+                $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
+
+                $new_date = $item->getData('m_support_valid_til');
+                for($x = 0; $x<$invoiceItem->getQty(); $x++) {
+                    $new_date = strtotime("-6 months", strtotime($new_date));
+                    $new_date = date("Y-m-d", $new_date);
+                }
+                $item->setData('m_support_valid_til', $new_date)
+                    ->save();
+		    }
 		}
 	}
 

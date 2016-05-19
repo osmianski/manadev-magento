@@ -32,6 +32,13 @@
             var registeredUrl = rowElement.find(".m-registered-domain").val();
             var target = e.target;
             var insertHistory = target.hasClassName("m-registered-domain");
+
+            var showMoreLink = $(target.parentElement).find('.mana-multiline-show-more')[0];
+            var isShowMore = false;
+            if(showMoreLink) {
+                isShowMore = showMoreLink.style.display == "none";
+            }
+            var doUpdateStatus = $(target.parentElement).find('.m-date');
             Mana.require(['singleton:Mana/Core/Config', 'singleton:Mana/Core/Ajax'], function(config, ajax) {
                 var params = [
                     {name: 'id', value: id},
@@ -39,6 +46,7 @@
                     {name: 'expireDate', value: expireDate},
                     {name: 'registeredDomain', value: registeredUrl},
                     {name: 'insertHistory', value: insertHistory},
+                    {name: 'doUpdateStatus', value: doUpdateStatus},
                     {name: 'form_key', value: FORM_KEY}
                 ];
 
@@ -58,7 +66,14 @@
                     if(insertHistory && response.m_registered_domain_history) {
                         target.parentElement.innerHTML = target.outerHTML + response.m_registered_domain_history;
                         rowElement.find(".m-registered-domain").val(registeredUrl);
+                        if(isShowMore) {
+                            rowElement.find(".mana-multiline-show-more").click();
+                        }
                     }
+                    if(doUpdateStatus && response.new_status) {
+                        rowElement.find(".m-status").val(response.new_status);
+                    }
+
                 });
             });
         });
