@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_NegativePrices
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <modules>
+        <Mana_NegativePrices>
+            <version>16.05.2516</version>
+        </Mana_NegativePrices>
+    </modules>
+    <global>
+        <helpers>
+            <mana_negativeprices>
+                <class>Mana_NegativePrices_Helper</class>
+            </mana_negativeprices>
+        </helpers>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <catalog_product_helper_form_price>Mana_NegativePrices_Rewrite_PriceFormHelper</catalog_product_helper_form_price>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+    </global>
+</config>
