@@ -388,7 +388,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$qtyUpdate = $linkedProductId != $representedProductId ? '`qty` = 0, ' : '';
 				$sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
 					SET $qtyUpdate`m_represented_qty` = $qty, {$this->isInStockUpdate("$qty > `min_qty`")}, `m_represents` = 1,
-					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
+					  `m_pack_qty` = ". ($representingProductData['m_pack_qty'] ? $representingProductData['m_pack_qty'] : 1) ."
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
