@@ -246,8 +246,8 @@
         $.mChooseProducts({
             url: _options.chooserUrl,
             result: function (ids) {
-                $('#m_productfaces_cloning_override').change(function () {
-                    var override = $('#m_productfaces_cloning_override').val();
+                $('#m_productfaces_clone_override').change(function () {
+                    var override = $('#m_productfaces_clone_override').val();
                     var decision = $('#m_productfaces_cloning_override_decision').val();
                     if (decision === '' && (override == 1 || override == 3)) {
                         $('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');
@@ -266,7 +266,7 @@
                             // call server to update visuals
                             _recalculationPending = true;
                             _serializer.grid.reload(_serializer.grid.url);
-                            var override = $('#m_productfaces_cloning_override').val();
+                            var override = $('#m_productfaces_clone_override').val();
                             var decision = $('#m_productfaces_cloning_override_decision').val();
                             if (decision === '' && (override == 1 || override == 3)) {
                                 $('#m_productfaces_cloning_override_decision').val(confirm(_options.confirmOverrideMsg) ? '1' : '0');

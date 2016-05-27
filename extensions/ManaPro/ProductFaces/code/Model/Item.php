@@ -105,6 +105,33 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
             return $result;
         }
 
+        foreach($this->_getRepresentingProducts() as $representedProductId => $representingProducts) {
+            $isManySkuProduct = false;
+            $requestedQty = 0;
+
+            foreach($representingProducts as $representingProductId => $representingQty) {
+                $requestedQty += $representingQty;
+                if($representingProductId == $this->getProductId()) {
+                    $isManySkuProduct = true;
+                }
+            }
+
+            if($isManySkuProduct) {
+                $representedStock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($representedProductId);
+                $representedStock->setData('m_check_actual_qty', true);
+                if(!$representedStock->checkQty($requestedQty)) {
+                    $message = Mage::helper('cataloginventory')->__('The requested quantity for "%s" is not available.', $this->getProductName());
+                    $result->setHasError(true)
+                        ->setMessage($message)
+                        ->setQuoteMessage($message)
+                        ->setQuoteMessageIndex('qty');
+
+                    return $result;
+                }
+            }
+        }
+
+
         if (!$this->checkQty($summaryQty) || !$this->checkQty($qty)) {
             $message = Mage::helper('cataloginventory')->__('The requested quantity for "%s" is not available.', $this->getProductName());
             $result->setHasError(true)
@@ -182,6 +209,33 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getRepresentingProducts() {
+        $result = Mage::registry("m_productfaces_represented_stocks");
+        if (!$result) {
+            /** @var ManaPro_ProductFaces_Resource_Link $linkResource */
+            $linkResource = Mage::getResourceModel('manapro_productfaces/link');
+            $result = array();
+
+            foreach (Mage::getSingleton('checkout/session')->getQuote()->getAllItems() as $item) {
+                $representedProductId = $linkResource->getRepresentedProductId($item->getProductId());
+
+                foreach ($linkResource->getRepresentingProductsAndOptions($representedProductId) as $data) {
+                    if ($item->getProductId() == $data['linked_product_id']) {
+                        $result[$representedProductId][$item->getProductId()] = $item->getQty() * $data['m_pack_qty'];
+                        break;
+                    }
+                }
+            }
+
+            Mage::register("m_productfaces_represented_stocks", $result);
+        }
+
+        return $result;
     }
 
 }
