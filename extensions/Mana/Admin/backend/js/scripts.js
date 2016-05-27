@@ -135,7 +135,8 @@
             }, $.options('#m_product_chooser_dialog'), options);
 
             if (!_chooserContent) {
-                $.get(_options.url, _options.params())
+                var params = (typeof _options.params == "function") ? _options.params() : _options.params;
+                $.get(_options.url, params)
                     .done(function (response) {
                         _chooserContent = '<div id="m_product_chooser_dialog">' + (response || '') + '</div>';
                         _openChooser();

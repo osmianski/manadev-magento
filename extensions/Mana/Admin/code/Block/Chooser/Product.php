@@ -34,7 +34,10 @@ class Mana_Admin_Block_Chooser_Product extends Mage_Adminhtml_Block_Catalog_Prod
         }
 
         if ($productIds = $this->getHiddenProducts()) {
-            $collection->addFieldToFilter('entity_id', array('nin' => explode(',', $productIds)));
+            if(!is_array($productIds)) {
+                $productIds = explode(',', $productIds);
+            }
+            $collection->addFieldToFilter('entity_id', array('nin' => $productIds));
         }
 
         $this->setCollection($collection);

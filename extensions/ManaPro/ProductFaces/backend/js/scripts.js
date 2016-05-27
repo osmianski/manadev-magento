@@ -241,10 +241,25 @@
 		_recalculationPending = true;
 		_serializer.grid.reload(_serializer.grid.url);
 	}
+
+	function _getRepresentingProductsId() {
+		var keys = _serializer.gridData.keys();
+        for(var i in keys) {
+			if(keys[i] == 'this') {
+				keys[i] = _options.productId;
+				break;
+			}
+		}
+
+		return keys;
+	}
 	
 	function _addExisting() {
         $.mChooseProducts({
             url: _options.chooserUrl,
+			params: {
+				hidden_products: _getRepresentingProductsId
+			},
             result: function (ids) {
                 $('#m_productfaces_clone_override').change(function () {
                     var override = $('#m_productfaces_clone_override').val();
