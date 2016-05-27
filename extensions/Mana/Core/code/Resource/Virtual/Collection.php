@@ -50,7 +50,7 @@ class Mana_Core_Resource_Virtual_Collection extends Varien_Data_Collection {
 				$value = $item->$method();
 				if (isset($filter['condition']['like'])) {
 					$value = mb_convert_case($value, MB_CASE_UPPER, "UTF-8");
-					$test = mb_convert_case($filter['condition']['like'], MB_CASE_UPPER, "UTF-8");
+					$test = mb_convert_case(trim($filter['condition']['like'], "'"), MB_CASE_UPPER, "UTF-8");
 					if (mb_strpos($value, mb_substr($test, 1, mb_strlen($test) - 2)) === false) {
 						$conforms = false;
 						break;
