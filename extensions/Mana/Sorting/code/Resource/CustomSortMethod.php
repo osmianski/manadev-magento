@@ -38,20 +38,21 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
         }
 
         $select = $collection->getSelect();
-        $tables = $select->getPart('from');
-        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
-            $select
-                    ->joinLeft(
-                        array('s' => $this->getTable('cataloginventory/stock_item')),
-                        ' s.product_id = e.entity_id ',
-                        array()
-                    );
-            $select->order("s.is_in_stock desc");
-        }
+        Mage::helper('mana_sorting')->applyOutOfStockSortingIfRequired($select);
         for($x=0;$x<=4;$x++) {
             $attribute_id = $this->sortMethodModel->getData('attribute_id_'.$x);
             $sorting_method = $this->sortMethodModel->getData('sorting_method_' . $x);
-            $directionAttribute = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir") == 1 ? 'asc' : 'desc';
+            $sortdir = $this->sortMethodModel->getData("attribute_id_{$x}_sortdir");
+            if ($direction == 'desc') {
+                if($sortdir == 1){
+                    $sortdir = 0;
+                }
+                elseif($sortdir == 0){
+                    $sortdir = 1;
+                }
+            }
+            $directionAttribute = $sortdir == 1 ? 'asc' : 'desc';
+
             if(is_numeric($attribute_id)) {
                 $_attribute_code = Mage::getModel('eav/entity_attribute')->load($attribute_id)->getAttributeCode();
                 $collection->addAttributeToSort($_attribute_code, $directionAttribute);

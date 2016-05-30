@@ -30,10 +30,10 @@ class ManaPro_ProductFaces_Model_Indexer extends Mage_Index_Model_Indexer_Abstra
     }
     protected function _processEvent(Mage_Index_Model_Event $event)
     {
-        $this->runCronjob();
     }
 	public function reindexAll() {
-	}
+        $this->_getResource()->updateAll();
+    }
     
     // ERROR REPORTING IN CRON
     protected $_errors = array();

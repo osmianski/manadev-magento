@@ -15,13 +15,12 @@
             <active>true</active>
             <!-- This instructs Magento to search for module code in app/code/local directory. -->
             <codePool>local</codePool>
-
-            <Enterprise_PageCache>
-                <depends>
-                    <Mana_Core />
-                </depends>
-            </Enterprise_PageCache>
 			<!-- INSERT HERE: depends -->
         </Mana_Core>
+        <Enterprise_PageCache>
+            <depends>
+                <Mana_Core/>
+            </depends>
+        </Enterprise_PageCache>
     </modules>
 </config>

@@ -38,7 +38,7 @@ function($, ajax, config, layout, undefined)
             }
             var result = false;
             var exception = false;
-            if (url == location.href + '#') {
+            if (url == location.href || url == location.href + '#') {
                 return result;
             }
             var decodedUrl = decodeURIComponent(url);

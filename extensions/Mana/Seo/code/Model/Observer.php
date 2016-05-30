@@ -79,6 +79,9 @@ class Mana_Seo_Model_Observer {
                                 $query[$key] = null;
                             }
                         }
+                        elseif ($key == 'q') {
+                            // keep search query
+                        }
                         else {
                             $query[$key] = null;
                             $isOtherParameterSuppressed = true;
@@ -98,6 +101,7 @@ class Mana_Seo_Model_Observer {
 
                         $collection->setCurPage($toolbar->getCurrentPage());
                         $limit = (int)$toolbar->getLimit();
+                        $toolbar->unsetData('_current_limit');
                         if ($limit) {
                             $collection->setPageSize($limit);
                         }

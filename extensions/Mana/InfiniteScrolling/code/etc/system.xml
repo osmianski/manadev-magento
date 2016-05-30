@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@category    Mana
+@package     Mana_InfiniteScrolling
+@copyright   Copyright (c) http://www.manadev.com
+@license     http://www.manadev.com/license  Proprietary License
+ -->
+<config>
+    <sections>
+        <mana_infinitescrolling translate="label" module="mana_infinitescrolling">
+            <label>Infinite Scrolling</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>2000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <infinitescrolling translate="label">
+                    <label>Infinite Scrolling</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <pages_per_show_more translate="label comment">
+                            <label>No. of Pages loaded before the "Show More..." button appears.</label>
+                            <comment>Sets the page number interval when the "Show More..." button will appear</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pages_per_show_more>
+                        <recover_scroll_progress_on_back translate="label comment">
+                            <label>Recover product list upon pressing the back button.</label>
+                            <comment>Reloads the product list so the store customer does not have to scroll down to where he/she was before</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </recover_scroll_progress_on_back>
+                    </fields>
+                </infinitescrolling>
+            </groups>
+        </mana_infinitescrolling>
+    </sections>
+</config>

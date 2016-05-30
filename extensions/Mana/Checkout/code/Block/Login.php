@@ -16,11 +16,13 @@ class Mana_Checkout_Block_Login extends Mage_Customer_Block_Form_Login {
     }
 
     public function getPostActionUrl() {
-        $referer = Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
+        $referer = Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true,
+            '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()));
         $referer = Mage::helper('core')->urlEncode($referer);
 
         return Mage::getUrl('actions/account/loginPost', array(
-            Mage_Customer_Helper_Data::REFERER_QUERY_PARAM_NAME => $referer
+            Mage_Customer_Helper_Data::REFERER_QUERY_PARAM_NAME => $referer,
+            '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()
         ));
     }
 }

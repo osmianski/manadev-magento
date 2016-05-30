@@ -272,46 +272,54 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 						foreach ($ids as $key => $id) {
 							if ($representingProductData[$key]['m_unit'] == 'parts') {
 								$productsProcessed++;
-								
+
 								$qty = ($totalParts > 0) ? ($qtyTotal * $representingProductData[$key]['m_parts'] / $totalParts) / $representingProductData[$key]['m_pack_qty']: 0;
 								if (empty($productData['is_qty_decimal'])) {
                                     $qty = ($representingProductData[$key]['m_pack_qty'] == 1) ? round($qty) : floor($qty);
 								}
-								
+
 								$result['qties'][$id] = $qty;
 								$qtyLeft -= $qty * $representingProductData[$key]['m_pack_qty'];
 							}
 						}
-						
+
 						if (empty($productData['is_qty_decimal'])) {
                             while($qtyLeft > 0) {
+                            	$processed = false;
                                 // in case we have positive rounding error, do +1 starting from most prioritized
                                 foreach ($ids as $key => $id) {
                                     if ($representingProductData[$key]['m_unit'] == 'parts') {
                                         if($representingProductData[$key]['m_pack_qty'] <= $qtyLeft && ($qtyLeft > 0)) {
                                             $result['qties'][$id]++;
                                             $qtyLeft -= $representingProductData[$key]['m_pack_qty'];
+                                            $processed = true;
                                         }
                                         if ($qtyLeft <= 0) {
                                             break;
                                         }
                                     }
                                 }
+                                if(!$processed) break;
                             }
                             while($qtyLeft < 0) {
+								$processed = false;
                                 // in case we have negative rounding error, do -1 starting from least prioritized
                                 foreach (array_reverse($ids, true) as $key => $id) {
                                     if ($representingProductData[$key]['m_unit'] == 'parts') {
                                         if ($representingProductData[$key]['m_pack_qty'] > $qtyLeft && ($qtyLeft < 0)) {
                                             $result['qties'][$id]--;
                                             $qtyLeft += $representingProductData[$key]['m_pack_qty'];
-                                        }
+											$processed = true;
+										}
                                         if ($qtyLeft >= 0) {
                                             break;
                                         }
                                     }
                                 }
-                            }
+								if (!$processed) {
+									break;
+								}
+							}
 						}
 					}
 				}
@@ -393,10 +401,9 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 				$productIds[$linkedProductId] = $linkedProductId;
 			}
 			foreach ($options['potentiallyObsoleteIds'] as $linkedProductId) {
-                $representingProductData = $this->_getRepresentedProductData($linkedProductId, $representedProductsData);
                 $sql .= "UPDATE {$this->getTable('cataloginventory/stock_item')}
 					SET `m_represented_qty` = 0, {$this->isInStockUpdate("0 > `min_qty`")}, `m_represents` = 0,
-					  `m_pack_qty` = {$representingProductData['m_pack_qty']}
+					  `m_pack_qty` = 1
 					WHERE (`product_id` = {$linkedProductId}) AND (`stock_id` = $stockId);
 					";
 				$entitySql .= "UPDATE {$this->getTable('catalog/product')} 
@@ -408,7 +415,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			$this->_getWriteAdapter()->multi_query($sql);
             if ($options['runRelatedIndexes']) {
             	Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexProducts($productIds);
-            	Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
+            	//Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
 	        $this->updateTextQties($productIds);

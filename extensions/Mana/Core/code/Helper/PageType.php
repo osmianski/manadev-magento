@@ -35,12 +35,15 @@ abstract class Mana_Core_Helper_PageType extends Mage_Core_Helper_Abstract {
     }
 
     public function getPageContent() {
+        $layout = Mage::getSingleton('core/layout');
+        $headBlock = $layout->getBlock('head');
+
         return array(
             'page_type' => $this->getPageTypeId(),
             'meta_title' => Mage::getStoreConfig('design/head/default_title'),
             'meta_keywords' => Mage::getStoreConfig('design/head/default_keywords'),
             'meta_description' => Mage::getStoreConfig('design/head/default_description'),
-            'meta_robots' => Mage::getStoreConfig('design/head/default_robots'),
+            'meta_robots' => $headBlock ? $headBlock->getRobots() : Mage::getStoreConfig('design/head/default_robots'),
             'title' => '',
             'description' => '',
         );

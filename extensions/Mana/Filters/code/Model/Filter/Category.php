@@ -17,6 +17,7 @@ class Mana_Filters_Model_Filter_Category
 {
     const GET_ALL_CHILDREN_RECURSIVELY = 'recursive';
     const GET_ALL_DIRECT_CHILDREN = 'direct';
+    const GET_ALL_PARENTS = 'parents';
     #region Category Specific logic
     protected $_countedCategories;
 
@@ -67,7 +68,7 @@ class Mana_Filters_Model_Filter_Category
                 	'label' => Mage::helper('core')->htmlEscape($category->getName()),
                     'value' => $category->getId(),
                     'count' => $category->getProductCount(),
-            		'm_selected' => $category->getId() == $this->getCategory()->getId()
+            		'm_selected' => $category->getId() == ($this->isApplied() ? $this->getAppliedCategory()->getId() : $this->getCategory()->getId())
                 );
             }
         }
@@ -360,6 +361,9 @@ class Mana_Filters_Model_Filter_Category
             case self::GET_ALL_DIRECT_CHILDREN:
                 $categoryIds = $resource->getChildren($category, false);
                 break;
+            case self::GET_ALL_PARENTS:
+                $categoryIds = array_filter(explode(',', $category->getPathInStore()));
+                break;
         }
 
         $collection = $category->getCollection();
@@ -432,12 +436,15 @@ class Mana_Filters_Model_Filter_Category
         else {
             $collection->getSelect()->where("1 <> 1");
         }
-        $collection
-            ->addAttributeToFilter('is_active', 1)
-            ->setOrder('position', 'ASC')
-            ->load();
+        $collection->addAttributeToFilter('is_active', 1);
+        $this->_orderCategoryItems($collection);
+        $collection->load();
 
         return $collection;
+    }
+
+    protected function _orderCategoryItems($collection) {
+        $collection->setOrder('position', 'ASC');
     }
 
     #region Dependencies

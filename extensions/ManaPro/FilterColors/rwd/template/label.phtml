@@ -32,12 +32,11 @@
                     <div class="m-layer1"></div>
                 </div>
                 <?php echo $this->escapeHtml($_item->getLabel()) ?>
-            </a>
         <?php endif; ?>
         <?php if (Mage::getStoreConfigFlag('mana_filters/display/count')) : ?>
         <span class="count">(<?php echo $_item->getCount() ?>)</span>
-            </a>
     <?php endif; ?>
+            </a>
     </li>
     <?php endforeach ?>
 </ol>

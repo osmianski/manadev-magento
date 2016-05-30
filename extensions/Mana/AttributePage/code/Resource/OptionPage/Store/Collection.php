@@ -33,8 +33,8 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
         $db = $this->getConnection();
         if ($sampleOptionPage = $this->getSampleItem()) {
             // basic SQL selecting all products
-            $productSelect = $db->select()
-                ->from(array('e' => $this->getTable('catalog/product')), 'entity_id');
+            $productSelect = $this->getSelect()->distinct()
+                ->from(array('e' => $this->getTable('catalog/product')), null);
 
             // get number of attributes which option based are based upon
             if (!$sampleOptionPage->getData('option_id_1')) {
@@ -62,7 +62,7 @@ class Mana_AttributePage_Resource_OptionPage_Store_Collection extends Mana_Attri
                         null)
                     ->where("`eav_$i`.`value` = `op_g`.`option_id_$i`");
             }
-            $this->getSelect()->where("EXISTS($productSelect)");
+            $sql = $productSelect->__toString();
         }
         return $this;
     }

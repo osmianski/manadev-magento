@@ -56,11 +56,6 @@ class ManaPro_FilterSuperSlider_Model_Price extends Mana_Filters_Model_Filter_Pr
     }
 
     public function isFilterAppliedWhenCounting($modelToBeApplied) {
-        if ($this->_getIsFilterable() != 2) {
-            return $modelToBeApplied != $this && !$this->isApplied();
-        }
-        else {
-            return false;
-        }
+        return false;
     }
 }

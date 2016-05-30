@@ -60,6 +60,12 @@ class ManaPro_FilterAjax_Model_Observer {
                         if ($suffix && $core->endsWith($url, $suffix)) {
                             $url = substr($url, 0, strlen($url) - strlen($suffix));
                         }
+                        if (Mage::app()->getFrontController()->getRequest()->isSecure() &&
+                            strpos($url, Mage::getStoreConfig('web/unsecure/base_url')) === 0)
+                        {
+                            $url = Mage::getStoreConfig('web/secure/base_url') .
+                                substr($url, strlen(Mage::getStoreConfig('web/unsecure/base_url')));
+                        }
                         $unfilteredUrl[] = $url;
 
                     }
