@@ -31,10 +31,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
     }
 
     public function registerAction() {
+        $this->_getCustomerSession()->setData('m_start_download', true);
         return $this->_init();
     }
 
     public function modifyAction() {
+        $this->_getCustomerSession()->setData('m_start_download', false);
         return $this->_init();
     }
 
@@ -48,23 +50,44 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         try{
-            $urls = $this->getRequest()->getParam('domain');
-            foreach($urls as $x => $url) {
-                if(trim($url) === "") {
-                    unset($urls[$x]);
-                    continue;
-                }
+            $postDomain = trim($this->getRequest()->getParam('domain'));
+            $url = $postDomain;
 
-                if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
-                }
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
+            }
 
+            $checkLimit = 5;
+            $isResponseValid = false;
+            for($x=0; $x<$checkLimit; $x++) {
                 $headers = @get_headers($url);
-                if(strpos($headers[0],'200') === false) {
-                    throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+                if(strpos($headers[0], '200') !== false) {
+                    $isResponseValid = true;
+                }
+
+                if(strpos($headers[0], '302') !== false) {
+                    foreach($headers as $header) {
+                        if(strpos($header, "Location: ") !== false) {
+                            $newUrl = str_replace("Location: ", "", $header);
+                            // If the domain is the same but only added `key` in parameter (Magento Secret Key), assume valid.
+                            if(strpos($newUrl, $url) === 0 && strpos($newUrl, "/key/") !== false) {
+                                $isResponseValid = true;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+                if($isResponseValid) {
+                    break;
                 }
             }
-            $domain = implode(",", $urls);
+
+            if(!$isResponseValid) {
+                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+            }
+
+            $domain = $postDomain;
             $storeInfo = $this->getRequest()->getParam('m_store_info', "");
             if(trim($domain) === "" && trim($storeInfo) === "") {
                 throw new Mana_Core_Exception_Validation(Mage::helper('local_manadev')->__("Please provide either your store admin panel URL or your store information."));
@@ -77,13 +100,19 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             return $this;
         }
 
-        $newZipFilename = $this->_createNewZipFileWithLicense($linkPurchasedItem);
+        $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem);
+
+        $platform = Mage::getResourceModel('catalog/product')->getAttributeRawValue($linkPurchasedItem->getData('product_id'), 'platform', 0);
+
+        // Magento 2 only uses 'available_til'
+        $status = ($platform == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) ?
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL :
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE;
 
         $linkPurchasedItem
             ->setData('m_registered_domain', $domain)
             ->setData('m_store_info', $storeInfo)
-            ->setData('status', Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE)
-            ->setData('link_file', $newZipFilename)
+            ->setData('status', $status)
             ->save();
 
         /** @var Local_Manadev_Resource_DomainHistory $dhResource */
@@ -97,9 +126,16 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
         if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
 
-        $this->_getCustomerSession()
-            ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
-            ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+        if($this->_getCustomerSession()->getData('m_start_download')) {
+            $this->_getCustomerSession()
+                ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
+                ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+        } else {
+            $this->_getCustomerSession()
+                ->addSuccess('Thank you for updating your domain.');
+        }
+
+        $this->_getCustomerSession()->unsetData('m_start_download');
 
         if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
             $this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
@@ -107,28 +143,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             $this->_redirect('downloadable/customer/products');
         }
 
-
         return $this;
-    }
-
-    protected function _createNewZipFileWithLicense($linkPurchasedItem) {
-        /* @var $storage Mage_Downloadable_Helper_File */
-        $storage = Mage::helper('downloadable/file');
-        $id = $linkPurchasedItem->getId();
-        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkPurchasedItem->getLinkFile());
-
-        $pathinfo = pathinfo($resource);
-
-        $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $id . "." . $pathinfo['extension'];
-        copy($resource, $newZipFilename);
-        $zip = new ZipArchive();
-        if ($zip->open($newZipFilename) === true) {
-            $licenseDir = "app/code/local/Mana/Core/license";
-            $zip->addEmptyDir($licenseDir);
-            $zip->addFromString("{$licenseDir}/{$id}", $id);
-            $zip->close();
-        }
-        return str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
     }
 
     /**
@@ -144,5 +159,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      */
     protected function _getSession() {
         return Mage::getSingleton('core/session');
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function _getHelper() {
+        return Mage::helper('local_manadev');
     }
 }

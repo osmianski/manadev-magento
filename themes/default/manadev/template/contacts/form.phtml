@@ -28,7 +28,7 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
 </div>
-<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" class="m-form" method="post">
     <div class="fieldset">
         <h2 class="legend"><?php echo Mage::helper('contacts')->__('Contact Information') ?></h2>
         <ul class="form-list">
@@ -50,6 +50,12 @@
                 <label for="comment" class="required"><em>*</em><?php echo Mage::helper('contacts')->__('Comment') ?></label>
                 <div class="input-box">
                     <textarea name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+                    <p class="note">
+                        This contact form is for pre-sale questions only.
+                    </p>
+                    <p class="note">
+                        For any help with purchased extensions, please use "Open Support Ticket" action in My Account page, <a target="_blank" href="<?php echo $this->getUrl('downloadable/customer/products') ?>">My Licenses and Downloads</a> section.
+                    </p>
                 </div>
             </li>
         </ul>

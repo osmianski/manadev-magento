@@ -58,6 +58,10 @@
                     <h2><?php echo $this->__('Quick Overview') ?></h2>
                     <?php endif; // false ?>
                     <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?></div>
+
+                    <?php if(Mage::getStoreConfig('local_manadev/support_services_sku') == $_product->getSku()): ?>
+                        <?php echo $this->getChildHtml('m_license_selection'); ?>
+                    <?php endif; ?>
                 </div>
             <?php endif;?>
             

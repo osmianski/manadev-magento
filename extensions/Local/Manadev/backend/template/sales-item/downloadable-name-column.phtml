@@ -54,24 +54,20 @@
         <dl class="item-options">
             <dt><?php echo $this->getLinksTitle(); ?></dt>
             <?php foreach ($this->getLinks()->getPurchasedItems() as $_link): ?>
-                <dd data-m-block="Local/Manadev/SalesItem/DownloadableName"
-                    data-link-id="<?php echo $_link->getId(); ?>"
-                    data-url="<?php echo $this->getUrl('*/downloadable/changeStatus') ?>"
-                >
-                    <p>
+                <dd>
                         <?php echo $_link->getLinkTitle() ?> (<?php echo $_link->getNumberOfDownloadsUsed() . ' / ' .
                         ($_link->getNumberOfDownloadsBought()?$_link->getNumberOfDownloadsBought():Mage::helper('downloadable')->__('U')) ?>)
-                        <?php if ($_link->getStatus() == 'available') : ?>
-                            <span class="m-download-status available"><?php echo $this->__('Available') ?></span>
-                            <a class="m-download-action disable-downloads" href="#">Disable downloads</a>
-                        <?php else : ?>
-                            <span class="m-download-status not-available"><?php echo $this->__('Not Available') ?></span>
-                            <a class="m-download-action enable-downloads" href="#">Enable downloads</a>
-                        <?php endif; ?>
-                    </p>
                 </dd>
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>
+    <dl class="item-options">
+        <dt><?php echo Mage::helper('local_manadev')->__("License No"); ?></dt>
+        <?php foreach ($this->getLinks()->getPurchasedItems() as $_link): ?>
+            <dd>
+                <?php echo $_link->getData('m_license_no'); ?>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
     <?php echo $this->htmlEscape($_item->getDescription()) ?>
 <?php endif; ?>

@@ -8,7 +8,7 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('local_manadev')->__('Product Registration') ?></h1>
 </div>
-<form action="<?php echo $this->getFormAction(); ?>" id="domainForm" method="post">
+<form action="<?php echo $this->getFormAction(); ?>" id="domainForm" class="m-form" method="post">
     <div>
         <strong>Product:</strong> <?php echo $this->getProductName(); ?>
     </div>
@@ -18,7 +18,7 @@
     <br/>
     <div>
         <strong>Please enter your Store Admin Panel URL:</strong> <br/>
-        <input id="admin_panel_url" type="text" name="domain[]" value="<?php echo $this->getDomain(); ?>"/>
+        <input id="admin_panel_url" type="text" name="domain" value="<?php echo $this->getDomain(); ?>"/>
         <p class="note">You may only use this purchased product and get support for it on this store.</p>
         <p class="note">The entered URL will be validated to make sure that it exists.</p>
         <p class="note">Admin panel URL is requested instead of base URL because it is possible to use multiple domains for a magento installation, but there is only one admin panel URL.</p>

@@ -57,19 +57,43 @@
                     <?php echo $this->getReviewsSummaryHtml($_product) ?>
                     <?php endif; ?>
 	                    <?php echo $this->getPriceHtml($_product, true) ?>
-				    <?php if ($_product->getFinalPrice() > 0) : ?>
-	                    <?php if($_product->isSaleable()): ?>
-		                        <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
-	                    <?php else: ?>
-	                        <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
-	                    <?php endif; ?>
-                    <?php else : ?>
-	                    <?php if($_product->isSaleable()): ?>
-                            <?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
-                        <?php else: ?>
-	                        <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
-	                    <?php endif; ?>
+
+                    <?php if (Mage::getStoreConfig('local_manadev/support_services_sku') == $_product->getSku()): ?>
+                        <?php if ($_product->getFinalPrice() > 0) : ?>
+                            <?php if($_product->isSaleable()): ?>
+                                    <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation(document.getElementById('m_license').value)"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                            <?php else: ?>
+                                <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <?php if($_product->isSaleable()): ?>
+                                <?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+                            <?php else: ?>
+                                <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <select id="m_license">
+                            <option value="">Please select one</option>
+                            <?php foreach (Mage::helper('local_manadev')->getCustomerLicenseCollection() as $license): ?>
+                                <option value="<?php echo $this->getAddToCartUrl($_product, array('m_license' => $license->getId())) ?>"><?php echo $license->getFrontendLabel(); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php else: ?>
+                        <?php if ($_product->getFinalPrice() > 0) : ?>
+                            <?php if($_product->isSaleable()): ?>
+                                    <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                            <?php else: ?>
+                                <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <?php if($_product->isSaleable()): ?>
+                                <?php echo $this->getChild('download.button')->setProduct($_product)->toHtml() ?>
+                            <?php else: ?>
+                                <p class="availability out-of-stock"><span><?php echo $this->__('') ?></span></p>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     <?php endif; ?>
+
                     <div class="desc std">
                         <?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?>
                         <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>
