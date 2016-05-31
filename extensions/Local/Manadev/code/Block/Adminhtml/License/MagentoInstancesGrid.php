@@ -148,7 +148,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
             ->join(array('mlr' => new Zend_Db_Expr("(
                 SELECT magento_id, id, MAX(created_at) AS created_at FROM ". $collection->getTable('local_manadev/license_request') ." GROUP BY magento_id
             )")), "`main_table`.`magento_id` = mlr.`magento_id` AND `main_table`.`created_at` = `mlr`.`created_at`", array())
-            ->join(array('e' => new Zend_Db_Expr("(
+            ->joinLeft(array('e' => new Zend_Db_Expr("(
                 SELECT
                     request_id,
                     GROUP_CONCAT(DISTINCT dlp.`order_increment_id` SEPARATOR '|') AS order_numbers,
