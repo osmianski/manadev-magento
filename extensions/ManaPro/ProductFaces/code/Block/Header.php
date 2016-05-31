@@ -37,8 +37,9 @@ class ManaPro_ProductFaces_Block_Header extends Mage_Adminhtml_Block_Widget_Form
         $attributeId = $db->fetchOne("SELECT attribute_id FROM {$res->getTableName('eav_attribute')} 
 			WHERE entity_type_id = {$product->getEntityTypeId()} 
 			AND attribute_code = 'm_productfaces_clone_override'");
-        if (!($override = $db->fetchOne("SELECT value FROM {$res->getTableName('catalog_product_entity_int')}
-        	WHERE attribute_id = $attributeId && entity_id = ".Mage::registry('current_product')->getId()))) 
+        $override = $db->fetchOne("SELECT value FROM {$res->getTableName('catalog_product_entity_int')}
+        	WHERE attribute_id = $attributeId && entity_id = ".Mage::registry('current_product')->getId());
+        if ($override === false) 
         {
         	$override = Mage::getStoreConfigFlag('manapro_productfaces/cloning/override') ? '3' : '2';
         }
