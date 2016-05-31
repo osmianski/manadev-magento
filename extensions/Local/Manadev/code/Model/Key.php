@@ -70,6 +70,11 @@ class Local_Manadev_Model_Key {
         if(count($matches)) {
             return reset($matches);
         }
+        preg_match('/\d{2}.\d{2}.\d{4}/', $linkFile, $matches);
+        if (count($matches)) {
+            return reset($matches);
+        }
+
 
         throw new Exception("Could not determine extension version from zip file name");
     }
