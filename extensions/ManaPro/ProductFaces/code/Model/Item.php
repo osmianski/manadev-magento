@@ -233,6 +233,8 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
             }
 
             Mage::register("m_productfaces_represented_stocks", $result);
+        } else {
+            $result = array();
         }
 
         return $result;
