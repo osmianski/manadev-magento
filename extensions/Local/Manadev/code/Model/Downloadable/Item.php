@@ -21,7 +21,7 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function _beforeSave() {
-        $result = parent::_beforeSave();
+        $result = $this->_baseBeforeSave();
 
         if(!$this->getId()) {
             $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
@@ -88,5 +88,15 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
      */
     public function getIndexerSingleton() {
         return Mage::getSingleton('index/indexer');
+    }
+
+    protected function _baseBeforeSave() {
+        if (!$this->getId()) {
+            $this->isObjectNew(true);
+        }
+        Mage::dispatchEvent('model_save_before', array('object' => $this));
+        Mage::dispatchEvent($this->_eventPrefix . '_save_before', $this->_getEventData());
+
+        return $this;
     }
 }
