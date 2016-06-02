@@ -51,6 +51,9 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
         try{
             $postDomain = trim($this->getRequest()->getParam('domain'));
+            if(strpos($postDomain, "http") === false) {
+                $postDomain = "http://" . $postDomain;
+            }
             $url = $postDomain;
 
             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
@@ -69,6 +72,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                     foreach($headers as $header) {
                         if(strpos($header, "Location: ") !== false) {
                             $newUrl = str_replace("Location: ", "", $header);
+                            $url = $newUrl;
                             // If the domain is the same but only added `key` in parameter (Magento Secret Key), assume valid.
                             if(strpos($newUrl, $url) === 0 && strpos($newUrl, "/key/") !== false) {
                                 $isResponseValid = true;
@@ -85,6 +89,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
             if(!$isResponseValid) {
                 throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
+            }
+
+            $contents = $this->getPage($url);
+
+            if(strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` is not a Magento Admin Panel page."), $url));
             }
 
             $domain = $postDomain;
@@ -144,6 +154,32 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         return $this;
+    }
+
+    protected function getPage($url) {
+        $useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
+        $timeout = 120;
+        $dir = dirname(__FILE__);
+        $cookie_file = $dir . '/cookies/' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_ENCODING, "");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com/');
+        $content = curl_exec($ch);
+        curl_close($ch);
+        unlink($cookie_file);
+        return $content;
     }
 
     /**

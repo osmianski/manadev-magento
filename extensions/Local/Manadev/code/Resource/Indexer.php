@@ -26,41 +26,55 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
         $date = Mage::app()->getLocale()->date();
         $currentDate = date("Y-m-d", $date->getTimestamp());
 
-        $db = $this->_getWriteAdapter();
-        $fields = array(
-            'item_id' => '`lpi`.`item_id`',
-            'status' => "IF( IFNULL(`pl`.`value`, '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."') = '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."',
-                IF(`lpi`.`status` = '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE ."' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
-                    '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED ."',
-                    IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
-                        '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "',
-                        `lpi`.`status`
+
+        $multi_fields = array(
+            array(
+                'item_id' => '`lpi`.`item_id`',
+                'status' =>
+                "IF(TRIM(`lpi`.`m_registered_domain`) = '' AND TRIM(`lpi`.`m_store_info`) = '' AND `lpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED ."',
+                    '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED."',
+                    `lpi`.`status`
+                )"
+            ),
+            array(
+                'item_id' => '`lpi`.`item_id`',
+                'status' => "IF( IFNULL(`pl`.`value`, '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."') = '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."',
+                    IF(`lpi`.`status` = '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE ."' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
+                        '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED ."',
+                        IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
+                            '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "',
+                            `lpi`.`status`
+                        )
+                    ),
+                    IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
+                        '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "',
+                        IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
+                            '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "',
+                            `lpi`.`status`
+                        )
                     )
-                ),
-                IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
-                    '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "',
-                    IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
-                        '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "',
-                        `lpi`.`status`
-                    )
-                )
-            )"
+                )"
+            )
         );
-        $select = $db->select();
 
-        $select
-            ->from(array('lpi' => $this->getTable(Local_Manadev_Model_Downloadable_Item::ENTITY)), null)
-            ->joinLeft(array('pl' => $this->getTable('catalog/product').'_int'), "`lpi`.`product_id` = `pl`.`entity_id` AND `pl`.`attribute_id` = ". $platformAttr->getId(), null);
+        $db = $this->_getWriteAdapter();
+        foreach($multi_fields as $fields) {
+            $select = $db->select();
 
-        $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+            $select
+                ->from(array('lpi' => $this->getTable(Local_Manadev_Model_Downloadable_Item::ENTITY)), null)
+                ->joinLeft(array('pl' => $this->getTable('catalog/product').'_int'), "`lpi`.`product_id` = `pl`.`entity_id` AND `pl`.`attribute_id` = ". $platformAttr->getId(), null);
 
-        if(isset($options['item_id'])) {
-            $select->where("`lpi`.`item_id` = ?", $options['item_id']);
+            $select->columns($this->dbHelper()->wrapIntoZendDbExpr($fields));
+
+            if(isset($options['item_id'])) {
+                $select->where("`lpi`.`item_id` = ?", $options['item_id']);
+            }
+
+            $selectSql = $select->__toString();
+            $sql = $select->insertFromSelect($this->getTable(Local_Manadev_Model_Downloadable_Item::ENTITY), array_keys($fields));
+            $db->exec($sql);
         }
-
-        $selectSql = $select->__toString();
-        $sql = $select->insertFromSelect($this->getTable(Local_Manadev_Model_Downloadable_Item::ENTITY), array_keys($fields));
-        $db->exec($sql);
     }
 
     public function reindexAll(){

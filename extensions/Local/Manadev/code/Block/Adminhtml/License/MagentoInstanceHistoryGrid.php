@@ -156,7 +156,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
         $collection = Mage::getResourceModel("local_manadev/license_request_collection");
 
         $collection->getSelect()
-            ->join(array('e' => new Zend_Db_Expr("(
+            ->joinLeft(array('e' => new Zend_Db_Expr("(
                 SELECT
                     request_id,
                     GROUP_CONCAT(DISTINCT dlp.`order_increment_id` SEPARATOR '|') AS order_numbers,

@@ -48,7 +48,6 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
         $expireDate = $this->getRequest()->getParam('expireDate');
         $registeredUrl = $this->getRequest()->getParam('registeredDomain');
         $insertHistory = $this->getRequest()->getParam('insertHistory');
-        $doUpdateStatus = $this->getRequest()->getParam('doUpdateStatus');
 
         $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id);
 
@@ -58,7 +57,7 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
             $expireDate = null;
         }
 
-        if($insertHistory) {
+        if($insertHistory == "true") {
             $purchasedItem->setData('m_registered_domain', $registeredUrl);
             /** @var Local_Manadev_Resource_DomainHistory $dhResource */
             $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
@@ -79,9 +78,7 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
         if(isset($html)) {
             $response['m_registered_domain_history'] = $html;
         }
-        if($doUpdateStatus) {
-            $response['new_status'] = Mage::getModel('downloadable/link_purchased_item')->load($id)->getStatus();
-        }
+        $response['new_status'] = Mage::getModel('downloadable/link_purchased_item')->load($id)->getStatus();
 
         $this->getResponse()->setBody(json_encode($response));
     }

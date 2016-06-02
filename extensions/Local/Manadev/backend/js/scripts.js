@@ -38,7 +38,6 @@
             if(showMoreLink) {
                 isShowMore = showMoreLink.style.display == "none";
             }
-            var doUpdateStatus = $(target.parentElement).find('.m-date');
             Mana.require(['singleton:Mana/Core/Config', 'singleton:Mana/Core/Ajax'], function(config, ajax) {
                 var params = [
                     {name: 'id', value: id},
@@ -46,7 +45,6 @@
                     {name: 'expireDate', value: expireDate},
                     {name: 'registeredDomain', value: registeredUrl},
                     {name: 'insertHistory', value: insertHistory},
-                    {name: 'doUpdateStatus', value: doUpdateStatus},
                     {name: 'form_key', value: FORM_KEY}
                 ];
 
@@ -70,7 +68,7 @@
                             rowElement.find(".mana-multiline-show-more").click();
                         }
                     }
-                    if(doUpdateStatus && response.new_status) {
+                    if(response.new_status) {
                         rowElement.find(".m-status").val(response.new_status);
                     }
 

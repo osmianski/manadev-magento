@@ -39,7 +39,7 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
 			
 			Mage::register('product', $product); // thank you block will need this
-			
+
 			// decide if product is suitable to be downloaded
 			if ($product->getTypeId() != 'downloadable') throw new Mage_Core_Exception($this->__('Product "%s" (%d) is not downloadable.', $product->getName(), $productId));
 			if ($product->getPrice() > 0) throw new Mage_Core_Exception($this->__('Product "%s" (%d) is not free.', $product->getName(), $productId));
@@ -145,8 +145,37 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		$links->addFieldToFilter('product_id', $product->getId())->setPageSize(1)->setCurPage(1);
 		/* @var $link Mage_Downloadable_Model_Link */ $link = null; foreach ($links as $link) break; // take first element
 		if (!$link) return $this->_reportFailureAndRedirect($this->__('Product %s (%d) and no downloadable files attached.', $product->getName(), $product->getId()), $product->getId(), $product);
+
+		$platform = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product->getId(), 'platform', 0);
+		$status = ($platform == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) ?
+			Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL :
+			Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE;
+		/** @var Local_Manadev_Model_Downloadable_Item $linkPurchasedItem */
+		$linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item');
+		$linkHash = strtr(base64_encode(microtime() . $product->getId()), '+/=', '-_,');
+		$linkPurchasedItem
+			->setOrderItemId(null)
+			->setPurchasedId(null)
+			->setLinkId($link->getId())
+			->setProductId($product->getId())
+			->setIsShareable(0)
+			->setLinkFile($link->getLinkFile())
+			->setLinkType($link->getLinkType())
+			->setStatus($status)
+			->setLinkHash($linkHash)
+			->setCreatedAt(strftime('%Y-%m-%d', time()))
+			->setUpdatedAt(strftime('%Y-%m-%d', time()))
+			->setData('m_is_free', 1)
+			->save();
+		/** @var Local_Manadev_Helper_Data $helper */
+		$helper = Mage::helper('local_manadev');
+		if($helper->createNewZipFileWithLicense($linkPurchasedItem)) {
+			$linkPurchasedItem->save();
+		}
+
+
 		/* @var $storage Mage_Downloadable_Helper_File */ $storage = Mage::helper('downloadable/file');
-		$resource  = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $link->getLinkFile());
+		$resource  = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkPurchasedItem->getLinkFile());
 		
 		// prepare headers - in other words, tell browser that this will be not page but file, tell its size, type,
 		// tell not to cache results
