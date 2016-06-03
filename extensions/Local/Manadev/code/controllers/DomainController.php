@@ -50,54 +50,10 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         try{
-            $postDomain = trim($this->getRequest()->getParam('domain'));
-            if(strpos($postDomain, "http") === false) {
-                $postDomain = "http://" . $postDomain;
+            $domain = $this->getRequest()->getParam('domain', false);
+            if($domain) {
+                $domain = $this->_validateDomain(trim($this->getRequest()->getParam('domain')));
             }
-            $url = $postDomain;
-
-            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("Invalid URL: %s"), $url));
-            }
-
-            $checkLimit = 5;
-            $isResponseValid = false;
-            for($x=0; $x<$checkLimit; $x++) {
-                $headers = @get_headers($url);
-                if(strpos($headers[0], '200') !== false) {
-                    $isResponseValid = true;
-                }
-
-                if(strpos($headers[0], '302') !== false) {
-                    foreach($headers as $header) {
-                        if(strpos($header, "Location: ") !== false) {
-                            $newUrl = str_replace("Location: ", "", $header);
-                            $url = $newUrl;
-                            // If the domain is the same but only added `key` in parameter (Magento Secret Key), assume valid.
-                            if(strpos($newUrl, $url) === 0 && strpos($newUrl, "/key/") !== false) {
-                                $isResponseValid = true;
-                            }
-
-                            break;
-                        }
-                    }
-                }
-                if($isResponseValid) {
-                    break;
-                }
-            }
-
-            if(!$isResponseValid) {
-                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` did not return a 200 OK response."), $url));
-            }
-
-            $contents = $this->getPage($url);
-
-            if(strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
-                throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("URL `%s` is not a Magento Admin Panel page."), $url));
-            }
-
-            $domain = $postDomain;
             $storeInfo = $this->getRequest()->getParam('m_store_info', "");
             if(trim($domain) === "" && trim($storeInfo) === "") {
                 throw new Mana_Core_Exception_Validation(Mage::helper('local_manadev')->__("Please provide either your store admin panel URL or your store information."));
@@ -202,5 +158,89 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      */
     protected function _getHelper() {
         return Mage::helper('local_manadev');
+    }
+
+    /**
+     * @param $url
+     * @return array
+     */
+    public function _getHeaders(&$url, $recursionLevel = 0) {
+        $headers = @get_headers($url);
+        $orig_url = $url;
+        if (strpos($headers[0], '200') !== false) {
+            return true;
+        }
+
+        if (strpos($headers[0], '302') !== false) {
+            $newUrl = "";
+            foreach ($headers as $header) {
+                if (strpos($header, "Location: ") !== false) {
+                    $newUrl = str_replace("Location: ", "", $header);
+                    $url = $newUrl;
+                    break;
+                }
+            }
+            // If the domain is the same but only added `key` in parameter (Magento Secret Key), assume valid.
+            if (strpos($newUrl, $orig_url) === 0 && strpos($newUrl, "/key/") !== false) {
+                return true;
+            } else {
+                if($recursionLevel < 5) {
+                    return $this->_getHeaders($url, $recursionLevel + 1);
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     * @throws Mana_Core_Exception_Validation
+     */
+    public function _validateDomain($postDomain) {
+        if (strpos($postDomain, "http") === false && trim($postDomain) != "") {
+            $postDomain = "http://" . $postDomain;
+        }
+        $postDomain = trim($postDomain, "/") . "/";
+        $url = $postDomain;
+
+        try{
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                throw new Exception;
+            }
+
+            $isResponseValid = $this->_getHeaders($url);
+
+            if (!$isResponseValid) {
+                throw new Exception;
+            }
+
+            $contents = $this->getPage($url);
+
+            if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+                // Retry with original url and append `/admin`
+                $url = $postDomain . "admin/";
+                $isResponseValid = $this->_getHeaders($url);
+
+                if (!$isResponseValid) {
+                    throw new Exception;
+                }
+
+                $contents = $this->getPage($url);
+                if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+                    throw new Exception;
+                } else {
+                    $postDomain .= "admin/";
+                }
+            }
+        } catch(Exception $e) {
+            throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("`%s` is not a Magento Admin Panel URL."), $postDomain));
+        }
+
+        $domain = $postDomain;
+
+        return $domain;
     }
 }
