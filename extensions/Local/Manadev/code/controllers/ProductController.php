@@ -165,7 +165,6 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setLinkHash($linkHash)
 			->setCreatedAt(strftime('%Y-%m-%d', time()))
 			->setUpdatedAt(strftime('%Y-%m-%d', time()))
-			->setData('m_is_free', 1)
 			->save();
 		/** @var Local_Manadev_Helper_Data $helper */
 		$helper = Mage::helper('local_manadev');
