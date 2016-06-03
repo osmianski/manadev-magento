@@ -57,6 +57,7 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
 //            && ($downloadsLeft || $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
 //        ) {
 
+        Mage::register("m_link_purchased_item", $linkPurchasedItem);
         $availableStatuses = array(
             Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
             Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE
@@ -104,5 +105,42 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
             );
         }
         return $this->_redirect('*/customer/products');
+    }
+
+    protected function _processDownload($resource, $resourceType) {
+        $helper = Mage::helper('downloadable/download');
+        /* @var $helper Mage_Downloadable_Helper_Download */
+
+        $helper->setResource($resource, $resourceType);
+
+//        $fileName       = $helper->getFilename();
+        /** @var Local_Manadev_Model_Downloadable_Item $linkPurchasedItem */
+        $linkPurchasedItem = Mage::registry("m_link_purchased_item");
+        $fileName = str_replace("-".$linkPurchasedItem->getData('m_license_verification_no'), "", $helper->getFilename());
+        $contentType    = $helper->getContentType();
+
+        $this->getResponse()
+            ->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Content-type', $contentType, true);
+
+        if ($fileSize = $helper->getFilesize()) {
+            $this->getResponse()
+                ->setHeader('Content-Length', $fileSize);
+        }
+
+        if ($contentDisposition = $helper->getContentDisposition()) {
+            $this->getResponse()
+                ->setHeader('Content-Disposition', $contentDisposition . '; filename='.$fileName);
+        }
+
+        $this->getResponse()
+            ->clearBody();
+        $this->getResponse()
+            ->sendHeaders();
+
+        session_write_close();
+        $helper->output();
     }
 }

@@ -182,6 +182,9 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		/* @var $downloader Mage_Downloadable_Helper_Download */ $downloader = Mage::helper('downloadable/download');
 		$downloader->setResource($resource, Mage_Downloadable_Helper_Download::LINK_TYPE_FILE);
 		$fileName       = $downloader->getFilename();
+
+		$licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
+		$fileName = str_replace("-".$licenseVerificationNo, "", $fileName);
         $contentType    = $downloader->getContentType();
         $this->getResponse()
             ->setHttpResponseCode(200)->setHeader('Pragma', 'public', true)
