@@ -531,6 +531,7 @@
             <open_support_ticket>
                 <enabled>1</enabled>
                 <identity>general</identity>
+                <template>local_manadev_emails_open_support_ticket_template</template>
             </open_support_ticket>
 		</local_manadev_emails>
 	</default>
