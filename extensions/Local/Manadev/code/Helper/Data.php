@@ -861,6 +861,10 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         return $this->_customerLicenseCollection;
     }
 
+    public function getAccountUrl(){
+        return Mage::getUrl('downloadable/customer/products' , array('_secure' => true));
+    }
+
     /**
      * @return Local_Manadev_Model_Key
      */
