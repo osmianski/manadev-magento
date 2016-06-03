@@ -60,7 +60,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
         $this->addColumn(
             'extensions',
             array(
-                'header' => $this->__('Paid Extensions'),
+                'header' => $this->__('Extensions'),
                 'index' => 'extensions',
                 'width' => '50px',
                 'align' => 'left',
@@ -86,6 +86,8 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 'index' => 'admin_url',
                 'width' => '100px',
                 'align' => 'left',
+                'link' => array('link' => "{{admin_url}}"),
+                'renderer' => 'local_manadev/adminhtml_renderer_link',
             )
         );
 
@@ -96,7 +98,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 'index' => 'agg_frontend_urls',
                 'width' => '50px',
                 'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+                'renderer' => 'local_manadev/adminhtml_renderer_linkMultiline',
             )
         );
 

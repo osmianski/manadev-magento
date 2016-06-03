@@ -108,6 +108,8 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
                 'index' => 'admin_url',
                 'width' => '100px',
                 'align' => 'left',
+                'link' => array('link' => "{{admin_url}}"),
+                'renderer' => 'local_manadev/adminhtml_renderer_link',
             )
         );
 
@@ -118,7 +120,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstanceHistoryGrid extends M
                 'index' => 'agg_frontend_urls',
                 'width' => '50px',
                 'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+                'renderer' => 'local_manadev/adminhtml_renderer_linkMultiline',
             )
         );
 
