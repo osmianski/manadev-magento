@@ -152,6 +152,9 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $licenseNo = '';
                 $version = $extension['version'];
             } else {
+                if(Mage::helper('local_manadev')->createNewZipFileWithLicense($itemModel)) {
+                    $itemModel->save();
+                }
                 $version = $this->_getLocalKeyModel()->getVersionFromZipFile($itemModel->getLinkFile());
             }
 
