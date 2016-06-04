@@ -35,7 +35,7 @@ class Local_Manadev_Model_Key {
     }
 
     public function getPublicKeyResource($keyName) {
-        $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($keyName, 'm_key');
+        $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($keyName, 'm_license_verification_no');
 
         if (!$purchasedItem->getId()) {
             throw new Exception("Key not found.");
@@ -44,7 +44,7 @@ class Local_Manadev_Model_Key {
     }
 
     public function getPrivateKeyResource($keyName) {
-        $purchasedItem = Mage::getModel('downloadable/link_puchased_item')->load($keyName, 'm_key');
+        $purchasedItem = Mage::getModel('downloadable/link_puchased_item')->load($keyName, 'm_license_verification_no');
 
         if (!$purchasedItem->getId()) {
             throw new Exception("Key not found.");

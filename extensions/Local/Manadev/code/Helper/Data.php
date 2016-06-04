@@ -782,20 +782,17 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 if($linkPurchasedItem->getData('m_key_public')) {
                     $publicKey = $linkPurchasedItem->getData('m_key_public');
                     $privateKey = $linkPurchasedItem->getData('m_key_private');
-                    $keyName = $linkPurchasedItem->getData('m_key');
                 } else {
                     $keys = $this->generateKeys();
-                    $keyName = uniqid();
                     $publicKey = $keys['public'];
                     $privateKey = $keys['private'];
                 }
-                $zip->addFromString("{$licenseDir}/{$keyName}.public.pem", $publicKey);
-                $zip->addFromString("{$licenseDir}/{$keyName}.private.pem", $privateKey);
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.public.pem", $publicKey);
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.private.pem", $privateKey);
                 $zip->close();
 
                 $linkPurchasedItem->setData('m_key_public', $publicKey);
                 $linkPurchasedItem->setData('m_key_private', $privateKey);
-                $linkPurchasedItem->setData('m_key', $keyName);
             }
 
             $linkPurchasedItem->setData('link_file', $newLinkFile);
