@@ -55,6 +55,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 'index' => 'product_name',
                 'width' => '200px',
                 'align' => 'left',
+                'link' => array('route' => 'adminhtml/catalog_product/edit', 'params' => array('id' => '{{product_id}}')),
+                'renderer' => 'local_manadev/adminhtml_renderer_link',
             )
         );
 
@@ -76,6 +78,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 'index' => 'actual_admin_panel_url',
                 'width' => '100px',
                 'align' => 'left',
+                'link' => array('link' => "{{actual_admin_panel_url}}"),
+                'renderer' => 'local_manadev/adminhtml_renderer_link',
             )
         );
 
@@ -86,7 +90,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 'index' => 'actual_frontend_urls',
                 'width' => '100px',
                 'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline'
+                'renderer' => 'local_manadev/adminhtml_renderer_linkMultiline'
             )
         );
 
@@ -168,8 +172,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         );
 
         $collection->getSelect()
-            ->join(array('lp' => $collection->getTable('downloadable/link_purchased')), '`lp`.`purchased_id` = `main_table`.`purchased_id`', array())
-            ->join(array('ce' => $collection->getTable('customer/entity')), '`ce`.`entity_id` = `lp`.`customer_id`', array())
+            ->joinLeft(array('lp' => $collection->getTable('downloadable/link_purchased')), '`lp`.`purchased_id` = `main_table`.`purchased_id`', array())
+            ->joinLeft(array('ce' => $collection->getTable('customer/entity')), '`ce`.`entity_id` = `lp`.`customer_id`', array())
             ->joinLeft(array('cefn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `cefn`.`entity_id` AND `cefn`.`attribute_id` = '.$fn->getAttributeId(), array())
             ->joinLeft(array('celn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `celn`.`entity_id` AND `celn`.`attribute_id` = '.$ln->getAttributeId(), array())
             ->joinLeft(array('mlr' => new Zend_Db_Expr("(

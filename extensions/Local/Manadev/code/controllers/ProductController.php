@@ -165,7 +165,6 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setLinkHash($linkHash)
 			->setCreatedAt(strftime('%Y-%m-%d', time()))
 			->setUpdatedAt(strftime('%Y-%m-%d', time()))
-			->setData('m_is_free', 1)
 			->save();
 		/** @var Local_Manadev_Helper_Data $helper */
 		$helper = Mage::helper('local_manadev');
@@ -182,6 +181,9 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		/* @var $downloader Mage_Downloadable_Helper_Download */ $downloader = Mage::helper('downloadable/download');
 		$downloader->setResource($resource, Mage_Downloadable_Helper_Download::LINK_TYPE_FILE);
 		$fileName       = $downloader->getFilename();
+
+		$licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
+		$fileName = str_replace("-".$licenseVerificationNo, "", $fileName);
         $contentType    = $downloader->getContentType();
         $this->getResponse()
             ->setHttpResponseCode(200)->setHeader('Pragma', 'public', true)

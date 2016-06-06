@@ -779,15 +779,20 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
 
                 $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.license", "{$sku} --- {$version}");
 
-                $keys = $this->generateKeys();
-                $keyName = uniqid();
-                $zip->addFromString("{$licenseDir}/{$keyName}.public.pem", $keys['public']);
-                $zip->addFromString("{$licenseDir}/{$keyName}.private.pem", $keys['private']);
+                if($linkPurchasedItem->getData('m_key_public')) {
+                    $publicKey = $linkPurchasedItem->getData('m_key_public');
+                    $privateKey = $linkPurchasedItem->getData('m_key_private');
+                } else {
+                    $keys = $this->generateKeys();
+                    $publicKey = $keys['public'];
+                    $privateKey = $keys['private'];
+                }
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.public.pem", $publicKey);
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.private.pem", $privateKey);
                 $zip->close();
 
-                $linkPurchasedItem->setData('m_key_public', $keys['public']);
-                $linkPurchasedItem->setData('m_key_private', $keys['private']);
-                $linkPurchasedItem->setData('m_key', $keyName);
+                $linkPurchasedItem->setData('m_key_public', $publicKey);
+                $linkPurchasedItem->setData('m_key_private', $privateKey);
             }
 
             $linkPurchasedItem->setData('link_file', $newLinkFile);
@@ -859,6 +864,10 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         return $this->_customerLicenseCollection;
+    }
+
+    public function getAccountUrl(){
+        return Mage::getUrl('downloadable/customer/products' , array('_secure' => true));
     }
 
     /**

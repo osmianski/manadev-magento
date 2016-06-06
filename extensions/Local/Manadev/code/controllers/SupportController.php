@@ -75,6 +75,11 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             $files = array();
             try{
                 for($x = 1; $x <= 3; $x++) {
+                    if($_FILES['screenshot_'.$x]['name'] != "" && $_FILES['screenshot_'.$x]['error'] == 1) {
+                        throw new Mana_Core_Exception_Validation("");
+                    }
+                }
+                for($x = 1; $x <= 3; $x++) {
                     if (isset($_FILES['screenshot_'.$x]['name']) && $_FILES['screenshot_' . $x]['name'] != '') {
                         $fileName = $_FILES['screenshot_' . $x]['name'];
                         $fileExt = strtolower(substr(strrchr($fileName, ".") ,1));
@@ -82,18 +87,27 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                         $fileName = preg_replace('/\s+', '', $fileNamewoe) . time() . '.' . $fileExt;
 
                         $uploader = new Varien_File_Uploader('screenshot_' . $x);
-                        $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png'));
+                        $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png', 'gif'));
                         $uploader->setAllowRenameFiles(true);
                         $uploader->setFilesDispersion(false);
                         $path = Mage::getBaseDir('media') . DS . 'support-ticket-images';
                         if(!is_dir($path)){
                             mkdir($path, 0777, true);
                         }
+                        if(!$uploader->checkAllowedExtension($uploader->getFileExtension())) {
+                            throw new Mana_Core_Exception_Validation("");
+                        }
+
                         $result = $uploader->save($path . DS, $fileName );
                         $files[] = $result['path'] . $result['file'];
                     }
                 }
-            } catch(Exception $e) {
+            }
+            catch(Mana_Core_Exception_Validation $e) {
+                $sizeLimit = ini_get("upload_max_filesize");
+                throw new Exception(sprintf(Mage::helper('local_manadev')->__("Can't upload screenshot files. Screenshot files must be JPEG, JPG, GIF, and PNG files that is not larger than %s each."), $sizeLimit));
+            }
+            catch(Exception $e) {
                 throw new Exception("Something went wrong with the attached files. Please try again.");
             }
         } catch(Exception $e) {
@@ -131,6 +145,17 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             );
         }
         return $this->_redirect('');
+    }
+
+    protected function _parseSize($size) {
+        $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+        $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
+        if ($unit) {
+            // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+            return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+        } else {
+            return round($size);
+        }
     }
 
     /**

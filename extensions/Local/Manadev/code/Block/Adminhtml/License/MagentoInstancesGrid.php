@@ -60,7 +60,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
         $this->addColumn(
             'extensions',
             array(
-                'header' => $this->__('Paid Extensions'),
+                'header' => $this->__('Extensions'),
                 'index' => 'extensions',
                 'width' => '50px',
                 'align' => 'left',
@@ -86,6 +86,8 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 'index' => 'admin_url',
                 'width' => '100px',
                 'align' => 'left',
+                'link' => array('link' => "{{admin_url}}"),
+                'renderer' => 'local_manadev/adminhtml_renderer_link',
             )
         );
 
@@ -96,7 +98,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 'index' => 'agg_frontend_urls',
                 'width' => '50px',
                 'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+                'renderer' => 'local_manadev/adminhtml_renderer_linkMultiline',
             )
         );
 
@@ -156,7 +158,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                     GROUP_CONCAT(dlp.`customer_id` SEPARATOR '|') as customer_ids,
                     GROUP_CONCAT(DISTINCT `pn`.`value` SEPARATOR '|') as extensions,
                     GROUP_CONCAT(TRIM(CONCAT(IFNULL(`cf`.`value`, ''), ' ', IFNULL(`cl`.`value`, '')))  SEPARATOR '|') AS customer_names,
-                    GROUP_CONCAT(dlpi.m_license_no SEPARATOR '|') as license_numbers
+                    GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers
                 FROM " . $collection->getTable('local_manadev/license_extension') . " mle
                 LEFT JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.`m_license_verification_no` = mle.`license_verification_no`
                 LEFT JOIN " . $collection->getTable('downloadable/link_purchased') . " dlp ON dlpi.`purchased_id` = dlp.`purchased_id`
