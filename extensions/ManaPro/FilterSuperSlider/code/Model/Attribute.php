@@ -78,8 +78,15 @@ class ManaPro_FilterSuperSlider_Model_Attribute extends Mana_Filters_Model_Filte
             $itemData['label'] = $item->getData('label');
             $result[] = $itemData;
         }
+        usort($result, array($this, '_sortExistingValues'));
         return $result;
     }
+    public function _sortExistingValues($a, $b) {
+        if ($a['position'] < $b['position']) return -1;
+        if ($a['position'] > $b['position']) return 1;
+        return 0;
+    }
+
     protected function _getItemsData() {
         $selectedOptionIds = $this->getMSelectedValues();
 
