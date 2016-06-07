@@ -105,7 +105,17 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     }
 
     public function getRegisteredDomain($_item) {
-        $result = implode("<br/>", explode(",", $_item->getData('m_registered_domain')));
+        if($domain = $_item->getData('m_registered_domain')) {
+            $result = $domain;
+        } else {
+            $storeInfo = $_item->getData('m_store_info');
+            if(strlen($storeInfo) < 256) {
+                $result = $storeInfo;
+            } else {
+                $result = substr($storeInfo, 0, 255);
+            }
+        }
+        $result = htmlentities($result);
         if(!in_array($_item->getStatus(),
             array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED))
         ) {

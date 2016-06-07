@@ -2,9 +2,13 @@
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
-"var issue_details": "Issue Details",
+"htmlescape var=$issue_details": "Issue Details",
 "htmlescape var=$order.getCustomerName()":"Customer Name",
 "htmlescape var=$order.getCustomerEmail()":"Customer Email",
+"htmlescape var=$order.getIncrementId()":"Order #"
+"htmlescape var=$purchased_item.getProductName()":"Product",
+"htmlescape var=$purchased_item.getFormattedSupportExpiry()":"Support Valid Until",
+"htmlescape var=$purchased_item.getRegisteredDomain()":"Registered URL",
 "var order.increment_id":"Order Id"}
 @-->
 <!--@styles
@@ -31,10 +35,14 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <td valign="top">
                             <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0; padding:13px 18px; background:#f9f9f9;">
                                 <strong>Name:</strong> {{htmlescape var=$order.getCustomerName()}}<br/>
-                                <strong>E-mail:</strong> {{htmlescape var=$order.getCustomerEmail()}}
+                                <strong>E-mail:</strong> {{htmlescape var=$order.getCustomerEmail()}}<br/>
+                                <strong>Order #:</strong> {{htmlescape var=$order.getIncrementId()}}<br/>
+                                <strong>Product:</strong> {{htmlescape var=$purchased_item.getProductName()}}<br/>
+                                <strong>Support Valid Until:</strong> {{htmlescape var=$purchased_item.getFormattedSupportExpiry()}}<br/>
+                                <strong>Registered URL:</strong> {{htmlescape var=$purchased_item.getRegisteredDomain()}}
                             <p>
                             <p style="font-size:12px; line-height:16px; margin:10px; padding: 20px 10px;">
-                                <strong>Issue Details:</strong> {{var issue_details}}
+                                <strong>Issue Details:</strong> {{htmlescape var=$issue_details}}
                             </p>
                         </td>
                     </tr>

@@ -14,10 +14,10 @@ class Local_Manadev_Model_Download_Status
     const M_LINK_STATUS_NOT_REGISTERED = 'not_registered';
 
     public $statuses = array(
-        self::M_LINK_STATUS_AVAILABLE => 'Available',
+        self::M_LINK_STATUS_AVAILABLE => 'Available. Support Period Expires at XX',
         self::M_LINK_STATUS_NOT_AVAILABLE => 'Not Available',
         self::M_LINK_STATUS_AVAILABLE_TIL => 'Available until XX',
-        self::M_LINK_STATUS_PERIOD_EXPIRED => 'Support Period Expired',
+        self::M_LINK_STATUS_PERIOD_EXPIRED => 'Available. Support Period Expired',
         self::M_LINK_STATUS_DOWNLOAD_EXPIRED => 'Download and Support Expired',
         self::M_LINK_STATUS_NOT_REGISTERED => 'Not Registered',
     );
@@ -29,7 +29,7 @@ class Local_Manadev_Model_Download_Status
 
         $label = $this->_getHelper()->__($this->statuses[$status]);
 
-        if(isset($item['m_support_valid_til']) && $status == self::M_LINK_STATUS_AVAILABLE_TIL) {
+        if(isset($item['m_support_valid_til']) && strpos($label, "XX") !== false) {
             $supportValidTil = $item['m_support_valid_til'];
             $formattedDate = date("F j, Y", strtotime($supportValidTil));
             $label = str_replace("XX", $formattedDate, $label);

@@ -16,4 +16,16 @@
 
 .m-form textarea {
     resize: none;
+    height: 100%;
+}
+
+.m-beside-issue {
+    min-height: 1px;
+    height: 1px;
+}
+.m-beside-issue .space {
+    height: 65px;
+}
+.m-beside-issue input.input-text {
+    width: 330px;
 }

@@ -8,13 +8,14 @@ class Local_Manadev_Block_Support_TicketForm extends Mage_Core_Block_Template
 {
     protected $_productModel;
     protected $_purchasedModel;
+    protected $_customerModel;
 
     public function getProductName() {
         return $this->_getProductModel()->getName();
     }
 
     /**
-     * @return Mage_Downloadable_Model_Link_Purchased_Item
+     * @return Local_Manadev_Model_Downloadable_Item
      */
     protected function _getPurchasedItem() {
         return Mage::registry('m_purchased_item');
@@ -25,11 +26,7 @@ class Local_Manadev_Block_Support_TicketForm extends Mage_Core_Block_Template
      * @return Mage_Core_Model_Abstract
      */
     protected function _getProductModel() {
-        if(!$this->_productModel) {
-            $this->_productModel = Mage::getModel('catalog/product')->load($this->_getPurchasedItem()->getProductId());
-        }
-
-        return $this->_productModel;
+        return $this->_getPurchasedItem()->getProduct();
     }
 
     public function _getPurchasedModel() {
@@ -57,5 +54,34 @@ class Local_Manadev_Block_Support_TicketForm extends Mage_Core_Block_Template
      */
     protected function _getSession() {
         return Mage::getSingleton('core/session');
+    }
+
+    public function getCustomerName() {
+        return $this->_getCustomerModel()->getName();
+    }
+
+    /**
+     * @return Mage_Customer_Model_Customer
+     */
+    public function _getCustomerModel() {
+        if(!$this->_customerModel) {
+            $this->_customerModel = Mage::getModel('customer/customer')->load($this->_getPurchasedModel()->getCustomerId());
+        }
+
+        return $this->_customerModel;
+    }
+
+    public function getEmail() {
+        return $this->_getCustomerModel()->getEmail();
+    }
+
+    public function getSupportValidTil() {
+        $date = $this->_getPurchasedItem()->getData('m_support_valid_til');
+
+        return date('F j, Y', strtotime($date));
+    }
+
+    public function getRegisteredURL() {
+        return $this->_getPurchasedItem()->getRegisteredDomain();
     }
 }

@@ -55,4 +55,12 @@ class Local_Manadev_Block_Domain_Registration extends Mage_Core_Block_Template
     public function getDomain() {
         return $this->_getPurchasedItem()->getData('m_registered_domain');
     }
+
+    public function getSubmitButtonLabel() {
+        if(Mage::getSingleton('customer/session')->getData('m_start_download')) {
+            return Mage::helper('local_manadev')->__('Register and Download');
+        } else {
+            return Mage::helper('local_manadev')->__('Save Changes');
+        }
+    }
 }
