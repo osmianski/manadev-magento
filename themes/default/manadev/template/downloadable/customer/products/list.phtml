@@ -62,7 +62,7 @@
                         <?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?>
                     </td>
                     <td>
-                        <?php echo $this->htmlEscape($_item->getPurchased()->getProductName()) ?> <br/><br/>
+                        <a href="<?php echo $this->getProductUrl($_item)?>" title="<?php echo Mage::helper('local_manadev')->__('View Product') ?>"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></a> <br/><br/>
                         <em><?php echo $this->getStatusLabel($_item) ?></em> <br/>
                         <?php echo $this->getAvailableActions($_item) ?>
                     </td>

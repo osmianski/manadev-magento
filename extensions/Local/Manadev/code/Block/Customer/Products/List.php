@@ -125,4 +125,9 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
 
         return $result;
     }
+
+    public function getProductUrl($_item) {
+        $url = $this->getUrl('catalog/product/view', array('id'=>$_item->getProductId()));
+        return $url;
+    }
 }
