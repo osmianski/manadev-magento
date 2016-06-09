@@ -9,6 +9,7 @@
 "htmlescape var=$purchased_item.getProductName()":"Product",
 "htmlescape var=$purchased_item.getFormattedSupportExpiry()":"Support Valid Until",
 "htmlescape var=$purchased_item.getRegisteredDomain()":"Registered URL",
+"htmlescape var=$contact_email": "Contact Email",
 "var order.increment_id":"Order Id"}
 @-->
 <!--@styles
@@ -39,7 +40,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                 <strong>Order #:</strong> {{htmlescape var=$order.getIncrementId()}}<br/>
                                 <strong>Product:</strong> {{htmlescape var=$purchased_item.getProductName()}}<br/>
                                 <strong>Support Valid Until:</strong> {{htmlescape var=$purchased_item.getFormattedSupportExpiry()}}<br/>
-                                <strong>Registered URL:</strong> {{htmlescape var=$purchased_item.getRegisteredDomain()}}
+                                <strong>Registered URL:</strong> {{htmlescape var=$purchased_item.getRegisteredDomain()}}<br/>
+                                <strong>Contact Email:</strong> {{htmlescape var=$contact_email}}
                             <p>
                             <p style="font-size:12px; line-height:16px; margin:10px; padding: 20px 10px;">
                                 <strong>Issue Details:</strong> {{htmlescape var=$issue_details}}
