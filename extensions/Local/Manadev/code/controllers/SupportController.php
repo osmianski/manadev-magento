@@ -64,6 +64,7 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
         $issueDetails = $this->getRequest()->getParam('issue_details');
         $vars = array(
             'order' => $order,
+            'purchased_item' => $linkPurchasedItem,
             'issue_details' => $issueDetails,
         );
 
@@ -144,7 +145,7 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                 Mage::helper('local_manadev')->__('Unable to submit support ticket. Please try again later.')
             );
         }
-        return $this->_redirect('');
+        return $this->_redirect('downloadable/customer/products');
     }
 
     protected function _parseSize($size) {

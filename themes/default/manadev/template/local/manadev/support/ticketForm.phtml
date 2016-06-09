@@ -15,14 +15,55 @@
             <li class="fields">
                 <h2 class="legend"><?php echo Mage::helper('local_manadev')->__('Product Information') ?></h2>
                 <div class="field">
-                    <label for="productName">Product</label>
-                    <div id="productName" class="input-box"><?php echo $this->getProductName(); ?></div>
+                    <label for="customerName">Name: </label>
+                    <div id="customerName" class="input-box"><?php echo $this->getCustomerName(); ?></div>
                 </div>
+                <div class="field">
+                    <label for="email">E-mail: </label>
+                    <div id="orderNumber" class="input-box"><?php echo $this->getEmail(); ?></div>
+                </div>
+            </li>
+
+            <li class="fields">
                 <div class="field">
                     <label for="orderNumber">Order #</label>
                     <div id="orderNumber" class="input-box"><?php echo $this->getOrderNo(); ?></div>
                 </div>
+                <div class="field">
+                    <label for="productName">Product</label>
+                    <div id="productName" class="input-box"><?php echo $this->getProductName(); ?></div>
+                </div>
             </li>
+
+            <li class="fields">
+                <div class="field">
+                    <label for="productName">Support Valid Until</label>
+                    <div id="productName" class="input-box"><?php echo $this->getSupportValidTil(); ?></div>
+                </div>
+                <div class="field">
+                    <label for="registeredUrl">Registered URL</label>
+                    <div id="productName" class="input-box"><?php echo $this->getRegisteredURL(); ?></div>
+                </div>
+
+                <div class="field m-beside-issue">
+                    <div class="space"></div>
+                    <label for="screenshot_1"><?php echo Mage::helper('contacts')->__('Screenshot 1') ?></label>
+                    <div class="input-box">
+                        <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                        <br/>
+                        <p class="note">Accepts JPEG and PNG files only.</p>
+                    </div>
+                    <label for="screenshot_2"><?php echo Mage::helper('contacts')->__('Screenshot 2') ?></label>
+                    <div class="input-box">
+                        <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                    </div>
+                    <label for="screenshot_3"><?php echo Mage::helper('contacts')->__('Screenshot 3') ?></label>
+                    <div class="input-box">
+                        <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                    </div>
+                </div>
+            </li>
+
 
             <li class="wide">
                 <label for="issue_details"><strong><?php echo Mage::helper('local_manadev')->__('Issue Details') ?>:</strong></label>
@@ -34,23 +75,6 @@
                     <p class="note">If site is protected by .htaccess or other means, please provide corresponding credentials.</p>
                     <p class="note">If you think that we need detailed examination on the server, please provide Magento Admin Panel and SFTP credentials.</p>
                     <!--        <p class="note">Please provide direct link to page having the issue and describe exact steps to reproduce the issue.</p>-->
-                </div>
-            </li>
-
-            <li>
-                <label for="screenshot_1"><?php echo Mage::helper('contacts')->__('Screenshot 1') ?></label>
-                <div class="input-box">
-                    <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg"/>
-                    <br/>
-                    <p class="note">Accepts JPEG and PNG files only.</p>
-                </div>
-                <label for="screenshot_2"><?php echo Mage::helper('contacts')->__('Screenshot 2') ?></label>
-                <div class="input-box">
-                    <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg"/>
-                </div>
-                <label for="screenshot_3"><?php echo Mage::helper('contacts')->__('Screenshot 3') ?></label>
-                <div class="input-box">
-                    <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg"/>
                 </div>
             </li>
         </ul>

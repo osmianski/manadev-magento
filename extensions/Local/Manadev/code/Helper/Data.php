@@ -56,20 +56,36 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     public function prepareDomainHistoryCollection($item_id) {
         /** @var Local_Manadev_Resource_DomainHistory_Collection $dhCollection */
         $dhCollection = Mage::getResourceModel('local_manadev/domainHistory_collection');
-        $dhCollection->addFieldToFilter('item_id', $item_id)->addFieldToFilter('m_registered_domain', array('neq' => ''))
-            ->setOrder('created_at')->load();
+        $dhCollection->addFieldToFilter('item_id', $item_id)->setOrder('created_at')->load();
         return $dhCollection;
     }
 
     public function getDomainHistoryHtml($dhCollection) {
-        $html = "<br/>";
-        $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show Previous URLs...') . "</a>";
-        $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide Previous URLs...') . "</a>";
+        if($dhCollection->count() < 2) {
+            return "";
+        }
+
+        $html = "";
+        $displayedCount = $dhCollection->count() - 1;
+
+        $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show History ('.$displayedCount.')') . "</a>";
+        $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide History (' . $displayedCount . ')') . "</a>";
         $html .= "<div class='mana-multiline' style='display:none;'>";
 
+        $skipFirst = true;
         /** @var Local_Manadev_Model_DomainHistory $dh */
         foreach($dhCollection->getItems() as $dh) {
-            $html .= $dh->getData('m_registered_domain');
+            if($skipFirst) {
+                $skipFirst = false;
+                continue;
+            }
+            $domain = $dh->getData('m_registered_domain');
+            if(trim($domain) != "") {
+                $item = "URL: ".$domain;
+            } else {
+                $item = "INFO: ".$dh->getData('m_store_info');
+            }
+            $html .= $item;
             $html .= "<br/>";
         }
 

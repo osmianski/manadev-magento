@@ -10,6 +10,7 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     const LICENSE_VERIFICATION_SALT = '6BCRWtJJp8GsEBmy';
     const ENTITY = 'downloadable/link_purchased_item';
     protected $_frontendLabel;
+    protected $_product;
 
     public function getFrontendLabel() {
         if(!$this->_frontendLabel) {
@@ -18,6 +19,34 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
         }
 
         return $this->_frontendLabel;
+    }
+
+    /**
+     * @return Mage_Catalog_Model_Product
+     */
+    public function getProduct(){
+        if(!$this->_product) {
+            $this->_product = Mage::getModel('catalog/product')->load($this->getProductId());
+        }
+
+        return $this->_product;
+    }
+
+    public function getProductName() {
+        return $this->getProduct()->getName();
+    }
+
+    public function getFormattedSupportExpiry() {
+        return date("F j, Y", strtotime($this->getData('m_support_valid_til')));
+    }
+
+    public function getRegisteredDomain() {
+        $domain = $this->getData('m_registered_domain');
+        if (trim($domain) == "") {
+            $domain = Mage::helper('local_manadev')->__("(None)");
+        }
+
+        return $domain;
     }
 
     public function _beforeSave() {

@@ -14,6 +14,6 @@ $installer->run("
       `store_id` bigint(20) NOT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `unique_key` (`instance_id`, `store_id`)
-    );
+    )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';
 ");
 $installer->endSetup();

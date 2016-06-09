@@ -16,7 +16,7 @@ $installer->run("
       `m_registered_domain` varchar(255) NOT NULL DEFAULT '',
       `m_store_info` text NOT NULL,
       PRIMARY KEY (`id`)
-    );
+    )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';
 
 ");
 $installer->endSetup();

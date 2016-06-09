@@ -79,6 +79,7 @@
             <downloadable>
                 <rewrite>
                     <customer_products_list>Local_Manadev_Block_Customer_Products_List</customer_products_list>
+                    <sales_order_email_items_order_downloadable>Local_Manadev_Block_Email_Order_Item</sales_order_email_items_order_downloadable>
                 </rewrite>
             </downloadable>
 		</blocks>
@@ -244,7 +245,7 @@
                    <type>html</type>
                </local_manadev_emails_new_request_to_owner_template>
                <local_manadev_emails_open_support_ticket_template translate="label" module="local_manadev">
-                   <label>local_manadev/customer/open_support_ticket.html</label>
+                   <label>MANAdev Support Ticket</label>
                    <file>local_manadev/customer/open_support_ticket.html</file>
                    <type>html</type>
                </local_manadev_emails_open_support_ticket_template>

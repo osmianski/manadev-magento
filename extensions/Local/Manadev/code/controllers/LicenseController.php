@@ -47,6 +47,7 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
         $status = $this->getRequest()->getParam('status');
         $expireDate = $this->getRequest()->getParam('expireDate');
         $registeredUrl = $this->getRequest()->getParam('registeredDomain');
+        $storeInfo = $this->getRequest()->getParam('storeInfo');
         $insertHistory = $this->getRequest()->getParam('insertHistory');
 
         $purchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id);
@@ -59,9 +60,11 @@ class Local_Manadev_LicenseController extends Mana_Admin_Controller_V2_Controlle
 
         if($insertHistory == "true") {
             $purchasedItem->setData('m_registered_domain', $registeredUrl);
+            $purchasedItem->setData('m_store_info', $storeInfo);
+
             /** @var Local_Manadev_Resource_DomainHistory $dhResource */
             $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
-            $dhResource->insertHistory($purchasedItem->getId(), $registeredUrl, $purchasedItem->getData('m_store_info'));
+            $dhResource->insertHistory($purchasedItem->getId(), $purchasedItem->getData('m_registered_domain'), $purchasedItem->getData('m_store_info'));
 
             $dhCollection = $this->localHelper()->prepareDomainHistoryCollection($id);
 

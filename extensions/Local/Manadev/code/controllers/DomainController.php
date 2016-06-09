@@ -6,13 +6,44 @@
  */
 class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 {
-    protected function _init() {
+    /**
+     * Check customer authentication
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        $loginUrl = Mage::helper('customer')->getLoginUrl();
+
+        if (!Mage::getSingleton('customer/session')->authenticate($this, $loginUrl)) {
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+        }
+    }
+
+    /**
+     * @return Local_Manadev_Model_Downloadable_Item
+     */
+    protected function _getItemModelFromRequest() {
         $id = $this->getRequest()->getParam('id', 0);
-        /** @var Mage_Downloadable_Model_Mysql4_Link_Purchased_Item $linkPurchasedItem */
+        /** @var Local_Manadev_Model_Downloadable_Item $linkPurchasedItem */
         $linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id, 'link_hash');
+
+        return $linkPurchasedItem;
+    }
+
+    protected function _init() {
+        $linkPurchasedItem = $this->_getItemModelFromRequest();
 
         if(!$linkPurchasedItem->getId()) {
             $this->_forward('defaultNoRoute');
+            return $this;
+        }
+        /** @var Mage_Downloadable_Model_Link_Purchased $linkPurchased */
+        $linkPurchased = Mage::getModel('downloadable/link_purchased')->load($linkPurchasedItem->getPurchasedId());
+
+        if ($this->_getCustomerSession()->getCustomerId() != $linkPurchased->getCustomerId()) {
+            $this->_getSession()->addError(Mage::helper('local_manadev')->__("You do not have access to this downloadable item."));
+            $this->_redirect('');
             return $this;
         }
 
@@ -40,14 +71,33 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         return $this->_init();
     }
 
+    public function linkAction() {
+        $linkPurchasedItem = $this->_getItemModelFromRequest();
+        if($linkPurchasedItem->getStatus() == Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED) {
+            return $this->_redirect('*/*/register', array('id' => $this->getRequest()->getParam('id')));
+        } elseif(in_array($linkPurchasedItem->getStatus(), array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED))) {
+            return $this->_redirect('downloadable/download/link', array('id' => $this->getRequest()->getParam('id')));
+        }
+
+        return $this->_redirect('');
+    }
+
     public function saveAction() {
-        $id = $this->getRequest()->getParam('id', 0);
-        /** @var Mage_Downloadable_Model_Mysql4_Link_Purchased_Item $linkPurchasedItem */
-        $linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item')->load($id, 'link_hash');
+        $linkPurchasedItem = $this->_getItemModelFromRequest();
         if (!$linkPurchasedItem->getId()) {
             $this->_redirect('');
             return $this;
         }
+        /** @var Mage_Downloadable_Model_Link_Purchased $linkPurchased */
+        $linkPurchased = Mage::getModel('downloadable/link_purchased')->load($linkPurchasedItem->getPurchasedId());
+
+        if ($this->_getCustomerSession()->getCustomerId() != $linkPurchased->getCustomerId()) {
+            $this->_getSession()->addError(Mage::helper('local_manadev')->__("You do not have access to this downloadable item."));
+            $this->_redirect('');
+            return $this;
+        }
+
 
         try{
             $domain = $this->getRequest()->getParam('domain', false);
@@ -61,7 +111,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         } catch(Mana_Core_Exception_Validation $e) {
             $this->_getSession()->addError($e->getErrors());
             $this->_getSession()->setData('post_data', $this->getRequest()->getParams());
-            $this->_redirect('*/*/register', array('id' => $id));
+            $this->_redirect('*/*/register', array('id' => $this->getRequest()->getParam('id')));
 
             return $this;
         }
@@ -98,17 +148,18 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
         } else {
             $this->_getCustomerSession()
-                ->addSuccess('Thank you for updating your domain.');
+                ->addSuccess('Registered URL has been updated.');
         }
 
-        $this->_getCustomerSession()->unsetData('m_start_download');
-
-        if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
-            $this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
+        if($this->_getCustomerSession()->getData('m_start_download', true)) {
+            if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
+                $this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
+            } else {
+                $this->_redirect('downloadable/customer/products');
+            }
         } else {
             $this->_redirect('downloadable/customer/products');
         }
-
         return $this;
     }
 
@@ -132,6 +183,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
         curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com/');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $content = curl_exec($ch);
         curl_close($ch);
         unlink($cookie_file);

@@ -10,3 +10,8 @@
 .grid td img.m-date-trigger {
      cursor: pointer;
 }
+
+textarea.m-store-info {
+     width: 95%;
+     resize: none;
+}
