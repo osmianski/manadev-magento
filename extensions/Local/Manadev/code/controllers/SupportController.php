@@ -137,6 +137,11 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                     null,
                     $vars
                 );
+
+            if (!$mailTemplate->getSentSuccess()) {
+                throw new Exception();
+            }
+
             Mage::getSingleton('customer/session')->addSuccess(
                 Mage::helper('local_manadev')->__('Your support ticket was submitted. Our Technical Support Representative will be in touch with you as soon as possible.')
             );
