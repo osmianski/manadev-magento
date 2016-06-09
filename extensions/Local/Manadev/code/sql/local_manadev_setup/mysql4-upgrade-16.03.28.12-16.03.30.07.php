@@ -14,7 +14,7 @@ $installer->run("
       `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`),
       UNIQUE KEY `unique_key` (`magento_id`)
-    );
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';
 ");
 
 $installer->run("
@@ -25,7 +25,7 @@ $installer->run("
       `version` varchar(50) NOT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `unique_key` (`instance_id`, `module`)
-    );
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';
 ");
 
 $installer->run("
@@ -37,7 +37,7 @@ $installer->run("
       `version` varchar(50) NOT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `unique_key` (`instance_id`, `code`)
-    );
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';
 ");
 
 $installer->endSetup();
