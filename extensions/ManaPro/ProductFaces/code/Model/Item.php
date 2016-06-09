@@ -216,7 +216,7 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
      */
     protected function _getRepresentingProducts() {
         $result = Mage::registry("m_productfaces_represented_stocks");
-        if (!is_null($result)) {
+        if (is_null($result)) {
             /** @var ManaPro_ProductFaces_Resource_Link $linkResource */
             $linkResource = Mage::getResourceModel('manapro_productfaces/link');
             $result = array();
@@ -233,8 +233,6 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
             }
 
             Mage::register("m_productfaces_represented_stocks", $result);
-        } else {
-            $result = array();
         }
 
         return $result;
