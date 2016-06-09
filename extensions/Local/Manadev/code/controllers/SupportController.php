@@ -62,6 +62,8 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
         $order = Mage::getModel('sales/order')->load($linkPurchased->getOrderId());
 
         $issueDetails = $this->getRequest()->getParam('issue_details');
+        $issueDetails = htmlentities($issueDetails);
+        $issueDetails = str_replace(PHP_EOL, "<br/>", $issueDetails);
         $contactEmail = $this->getRequest()->getParam('contact_email');
         $vars = array(
             'order' => $order,

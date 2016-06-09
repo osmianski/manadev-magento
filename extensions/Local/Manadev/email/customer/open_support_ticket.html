@@ -2,7 +2,7 @@
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
-"htmlescape var=$issue_details": "Issue Details",
+"var issue_details": "Issue Details",
 "htmlescape var=$order.getCustomerName()":"Customer Name",
 "htmlescape var=$order.getCustomerEmail()":"Customer Email",
 "htmlescape var=$order.getIncrementId()":"Order #"
@@ -44,7 +44,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                 <strong>Contact Email:</strong> {{htmlescape var=$contact_email}}
                             <p>
                             <p style="font-size:12px; line-height:16px; margin:10px; padding: 20px 10px;">
-                                <strong>Issue Details:</strong> {{htmlescape var=$issue_details}}
+                                <strong>Issue Details:</strong> {{var issue_details}}
                             </p>
                         </td>
                     </tr>
