@@ -222,11 +222,16 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
             $result = array();
 
             foreach (Mage::getSingleton('checkout/session')->getQuote()->getAllItems() as $item) {
-                $representedProductId = $linkResource->getRepresentedProductId($item->getProductId());
+                $itemQty = $item->getData('qty');
+                if($item->getParentItem()) {
+                    $itemQty = $item->getParentItem()->getData('qty') ;
+                }
+                $productId = Mage::getModel('catalog/product')->getIdBySku($item->getSku());
+                $representedProductId = $linkResource->getRepresentedProductId($productId);
 
                 foreach ($linkResource->getRepresentingProductsAndOptions($representedProductId) as $data) {
-                    if ($item->getProductId() == $data['linked_product_id']) {
-                        $result[$representedProductId][$item->getProductId()] = $item->getQty() * $data['m_pack_qty'];
+                    if ($productId == $data['linked_product_id']) {
+                        $result[$representedProductId][$productId] = $itemQty * $data['m_pack_qty'];
                         break;
                     }
                 }
