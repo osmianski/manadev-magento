@@ -48,9 +48,11 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                 return false;
             }
 
-            $this->coreHelper()->setCurrentStore($fromStore);
-            $parsedUrl = $parser->parse($path);
-            $this->coreHelper()->restoreCurrentStore();
+            if (!($parsedUrl = $parser->parse($path))) {
+                $this->coreHelper()->setCurrentStore($fromStore);
+                $parsedUrl = $parser->parse($path);
+                $this->coreHelper()->restoreCurrentStore();
+            }
 
             if ($parsedUrl) {
 
