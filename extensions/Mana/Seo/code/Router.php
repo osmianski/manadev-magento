@@ -48,12 +48,15 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
                 return false;
             }
 
-            if (!($parsedUrl = $parser->parse($path))) {
-                $this->coreHelper()->setCurrentStore($fromStore);
-                $parsedUrl = $parser->parse($path);
-                $this->coreHelper()->restoreCurrentStore();
+            $this->coreHelper()->setCurrentStore($fromStore);
+            $parsedUrl = $parser->parse($path);
+            $this->coreHelper()->restoreCurrentStore();
+            if ($parsedUrl && $parsedUrl->getData('route') == 'cms/page/view') {
+                if (!$this->isCmsPageEnabledForStore($parsedUrl->getParameter('page_id'), Mage::app()->getStore()->getId())) {
+                    $parsedUrl = $parser->parse($path);
+                }
             }
-
+            
             if ($parsedUrl) {
 
                 if (count($parsedUrl->getQueryParameters())) {
@@ -124,6 +127,16 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
         return false;
     }
 
+    protected function isCmsPageEnabledForStore($pageId, $storeId) {
+        $res = Mage::getSingleton('core/resource');
+        $db = $res->getConnection('read');
+        $select = $db->select()->from($res->getTableName('cms/page_store'), 'page_id')
+            ->where('page_id = ?', $pageId)
+            ->where('store_id = 0 OR store_id = ?', $storeId);
+
+        return $db->fetchOne($select) != null;
+    }
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
@@ -138,5 +151,6 @@ class Mana_Seo_Router extends Mage_Core_Controller_Varien_Router_Abstract  {
     public function seoHelper() {
         return Mage::helper('mana_seo');
     }
+
     #endregion
 }
