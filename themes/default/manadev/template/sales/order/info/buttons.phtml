@@ -38,8 +38,8 @@
     <?php if (!$_separatorNeeded) : $_separatorNeeded = true; else: ?><span class="separator">|</span><?php endif ?>
     <a href="<?php echo $this->getReorderUrl($_order) ?>" class="link-reorder"><?php echo $this->__('Reorder') ?></a>
 <?php endif ?>
-<?php if ($_order->getBillingAddress()->getCompany()) : ?>
+<?php //if ($_order->getBillingAddress()->getCompany()) : ?>
     <?php if (!$_separatorNeeded) : $_separatorNeeded = true; else: ?><span class="separator">|</span><?php endif ?>
     <a href="<?php echo $this->getUrl('local_manadev/invoice/print', array('order_id' => $_order->getId())) ?>" class="link-print"><?php echo $this->__('Print Invoice') ?></a>
-<?php endif ?>
+<?php //endif ?>
 <?php echo $this->getChildHtml(); ?>
