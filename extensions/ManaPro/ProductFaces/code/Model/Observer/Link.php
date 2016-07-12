@@ -478,7 +478,7 @@ class ManaPro_ProductFaces_Model_Observer_Link {
 			if($representedProductId == $product->getId()) {
 				foreach(Mage::registry('obsoleteRepresentingProducts') as $representingProductData) {
 					$linked_product_id = $representingProductData['linked_product_id'];
-					if(!in_array($obsoleteIds, $linked_product_id)) {
+					if(!in_array($linked_product_id, $obsoleteIds)) {
 						array_push($obsoleteIds, $linked_product_id);
 					}
 				}
