@@ -193,6 +193,14 @@
                     </enterprise_pagecache>
                 </observers>
             </controller_front_send_response_before>
+            <catalog_product_collection_load_before>
+                <observers>
+                    <mana_core>
+                        <class>mana_core/observer</class>
+                        <method>applyProductDuplicateFix</method>
+                    </mana_core>
+                </observers>
+            </catalog_product_collection_load_before>
         </events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/mana_core_setup directory for install/upgrade scripts. 
@@ -318,6 +326,9 @@
                 <percent>--percent-</percent>
                 <ampersand>--and-</ampersand>
             </seo_symbols>
+            <product_collection>
+                <fix_duplicate>0</fix_duplicate>
+            </product_collection>
         </mana>
 	</default>
 </config>
