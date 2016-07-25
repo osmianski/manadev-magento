@@ -25,7 +25,8 @@ class Mana_Page_Model_Observer {
             if (strpos($condition, 'e.entity_id = ') !== false ||
                 strpos($condition, '`e`.`entity_id` = ') !== false ||
                 strpos($condition, '`e`.`entity_id` IN ') !== false ||
-                strpos($condition, '`mp_') !== false)
+                strpos($condition, '`mp_') !== false ||
+                strpos($condition, '`meav_') !== false)
             {
                 $result[$key] = $key;
             }

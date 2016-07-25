@@ -92,7 +92,7 @@ function ($, layout, json, core, config, undefined)
             }
         },
         getSectionSeparator: function() {
-            return "\n91b5970cd70e2353d866806f8003c1cd56646961\n";
+            return "91b5970cd70e2353d866806f8003c1cd56646961";
         },
         _before: function(options, url, data) {
             var page = layout.getPageBlock();
