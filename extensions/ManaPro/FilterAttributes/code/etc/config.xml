@@ -82,6 +82,11 @@
                         <manapro_filterattributes/>
                     </depends>
                 </catalog_product_flat>
+                <mana_seo_url>
+                    <depends>
+                        <manapro_filterattributes/>
+                    </depends>
+                </mana_seo_url>
             </indexer>
         </index>
 		<events>
