@@ -48,7 +48,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         if($post_data = $this->_getSession()->getData('post_data')) {
-            $domain = reset($post_data['domain']);
+            $domain = $post_data['domain'];
             $linkPurchasedItem
                 ->setData('m_registered_domain', $domain)
                 ->setData('m_store_info', $post_data['m_store_info']);
@@ -111,8 +111,8 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         } catch(Mana_Core_Exception_Validation $e) {
             $this->_getSession()->addError($e->getErrors());
             $this->_getSession()->setData('post_data', $this->getRequest()->getParams());
-            $this->_redirect('*/*/register', array('id' => $this->getRequest()->getParam('id')));
 
+            $this->_redirectUrl($this->_getRefererUrl());
             return $this;
         }
 

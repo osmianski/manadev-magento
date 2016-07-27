@@ -415,6 +415,14 @@
                     </modules>
                 </args>
             </downloadable>
+
+            <customer>
+                <args>
+                    <modules>
+                        <local_manadev before="Mage_Customer">Local_Manadev_Customer</local_manadev>
+                    </modules>
+                </args>
+            </customer>
 		</routers>
         <events>
             <controller_action_layout_render_before_checkout_index_index>

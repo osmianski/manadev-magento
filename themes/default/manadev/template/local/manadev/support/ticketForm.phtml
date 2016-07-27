@@ -15,11 +15,11 @@
             <li class="fields">
                 <h2 class="legend"><?php echo Mage::helper('local_manadev')->__('Product Information') ?></h2>
                 <div class="field">
-                    <label for="customerName">Name: </label>
+                    <label for="customerName">Name </label>
                     <div id="customerName" class="input-box"><?php echo $this->getCustomerName(); ?></div>
                 </div>
                 <div class="field">
-                    <label for="email">E-mail: </label>
+                    <label for="email">E-mail </label>
                     <div id="orderNumber" class="input-box"><?php echo $this->getEmail(); ?></div>
                 </div>
             </li>
@@ -49,26 +49,36 @@
                     <div class="space"></div>
                     <label for="screenshot_1"><?php echo Mage::helper('contacts')->__('Screenshot 1') ?></label>
                     <div class="input-box">
-                        <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                        <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
                         <br/>
-                        <p class="note">Accepts JPEG and PNG files only.</p>
+                        <p class="note">Accepts JPEG, PNG, and GIF files only.</p>
                     </div>
                     <label for="screenshot_2"><?php echo Mage::helper('contacts')->__('Screenshot 2') ?></label>
                     <div class="input-box">
-                        <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                        <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
                     </div>
                     <label for="screenshot_3"><?php echo Mage::helper('contacts')->__('Screenshot 3') ?></label>
                     <div class="input-box">
-                        <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg"/>
+                        <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
+                    </div>
+                </div>
+            </li>
+
+            <li class="wide">
+                <div class="field">
+                    <label for="contact_email" class="required"><?php echo Mage::helper('local_manadev')->__('Contact Email') ?><em>*</em></label>
+                    <div class="input-box">
+                        <input name="contact_email" id="contact_email" class="input-text required-entry validate-email" type="text" value="<?php echo $this->getEmail()?>"/>
+                        <p class="note">We will reply to you in this email.</p>
                     </div>
                 </div>
             </li>
 
 
             <li class="wide">
-                <label for="issue_details"><strong><?php echo Mage::helper('local_manadev')->__('Issue Details') ?>:</strong></label>
+                <label for="issue_details" class="required"><strong><?php echo Mage::helper('local_manadev')->__('Issue Details') ?><em>*</em></strong></label>
                 <div class="input-box">
-                    <textarea rows="10" cols="100" name="issue_details"><?php echo $this->getIssueDetails()?></textarea>
+                    <textarea rows="10" cols="100" name="issue_details" class="input-text required-entry"><?php echo $this->getIssueDetails()?></textarea>
                     <br/>
                     <em>Please provide the following information on the Issue Details:</em>
                     <p class="note">Direct link to page having the issue and specify exact steps on how to reproduce the issue.</p>
@@ -84,3 +94,8 @@
         <button type="submit" title="<?php echo Mage::helper('local_manadev')->__('Submit Support Ticket') ?>" class="button"><span><span><?php echo Mage::helper('local_manadev')->__('Submit Support Ticket') ?></span></span></button>
     </div>
 </form>
+<script type="text/javascript">
+    //<![CDATA[
+    var contactForm = new VarienForm('ticketForm', true);
+    //]]>
+</script>

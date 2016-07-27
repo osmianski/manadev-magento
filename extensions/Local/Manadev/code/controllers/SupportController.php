@@ -62,15 +62,22 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
         $order = Mage::getModel('sales/order')->load($linkPurchased->getOrderId());
 
         $issueDetails = $this->getRequest()->getParam('issue_details');
+        $issueDetails = htmlentities($issueDetails);
+        $issueDetails = str_replace(PHP_EOL, "<br/>", $issueDetails);
+        $contactEmail = $this->getRequest()->getParam('contact_email');
         $vars = array(
             'order' => $order,
             'purchased_item' => $linkPurchasedItem,
             'issue_details' => $issueDetails,
+            'contact_email' => $contactEmail,
         );
 
         try {
             if(!$issueDetails) {
                 throw new Exception("Issue details cannot be blank.");
+            }
+            if (!$contactEmail) {
+                throw new Exception("Contact Email cannot be blank.");
             }
 
             $files = array();
@@ -121,7 +128,7 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             $mailTemplate = Mage::getModel('core/email_template');
             /* @var $mailTemplate Mage_Core_Model_Email_Template */
             $mailTemplate->setDesignConfig(array('area' => 'frontend'))
-                ->setReplyTo($order->getCustomerEmail());
+                ->setReplyTo($contactEmail);
 
             foreach($files as $attachFile) {
                 $fileContents = file_get_contents($attachFile);
@@ -137,6 +144,11 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                     null,
                     $vars
                 );
+
+            if (!$mailTemplate->getSentSuccess()) {
+                throw new Exception();
+            }
+
             Mage::getSingleton('customer/session')->addSuccess(
                 Mage::helper('local_manadev')->__('Your support ticket was submitted. Our Technical Support Representative will be in touch with you as soon as possible.')
             );
