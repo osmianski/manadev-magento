@@ -7,7 +7,7 @@
 class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
-        $this->setDefaultSort('order_number');
+        $this->setDefaultSort('created_at');
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);
@@ -139,6 +139,17 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 'width' => '100px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_date'
+            )
+        );
+
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => $this->__('Created At'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'width' => '50px',
+                'align' => 'left',
             )
         );
 
