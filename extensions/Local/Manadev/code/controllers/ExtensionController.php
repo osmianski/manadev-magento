@@ -55,51 +55,21 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $magento_id = false;
                 $newMagentoId = true;
             }
-            /** @var Local_Manadev_Model_License_Request $requestModel */
+
+            $modulesInRequest = $params['installedModules'];
+            ksort($modulesInRequest);
+
+            $extensionsInRequest = $params['installedManadevExtensions'];
+            array_multisort($extensionsInRequest);
+
+            $storesInRequest = $params['stores'];
+            array_multisort($storesInRequest);
+
+
             $requestModel = Mage::getModel('local_manadev/license_request');
             if($magento_id) {
                 $requestModel->load($magento_id, 'magento_id');
             } else {
-                $magento_id = $requestModel->getResource()->generateMagentoId($requestModel);
-            }
-            $willSave = false;
-            $modulesInDb = $requestModel->getModules();
-            $modulesInRequest = $params['installedModules'];
-            ksort($modulesInDb);
-            ksort($modulesInRequest);
-            $extensionsInDb = $requestModel->getExtensions();
-            $extensionsInRequest = $params['installedManadevExtensions'];
-            array_multisort($extensionsInDb);
-            array_multisort($extensionsInRequest);
-            $storesInDb = $requestModel->getStores();
-            $storesInRequest = $params['stores'];
-            array_multisort($storesInDb);
-            array_multisort($storesInRequest);
-
-            if(!$requestModel->getId()) {
-                // Magento ID is not recognized. Save as new record.
-                $willSave = true;
-                $requestModel->setData('magento_id', $magento_id);
-            } else {
-                // Magento ID detected. Save only if there are any changes.
-                $match = $requestModel->getData('admin_url') == $params['adminPanelUrl'];
-                $match = $match && $requestModel->getData('remote_ip') == $params['remoteIp'];
-                $match = $match && $requestModel->getData('base_dir') == $params['baseDir'];
-                $match = $match && $requestModel->getData('magento_version') == $params['magentoVersion'];
-                $match = $match && json_encode($modulesInDb) == json_encode($modulesInRequest);
-                $match = $match && json_encode($extensionsInDb) == json_encode($extensionsInRequest);
-                $match = $match && json_encode($storesInDb) == json_encode($storesInRequest);
-
-                if(!$match) {
-                    $willSave = true;
-                } else {
-                    // Will not create a new record. Update last_checked instead.
-                    $requestModel->setData('last_checked', Varien_Date::now())->save();
-                }
-            }
-
-            if($willSave) {
-                $requestModel = Mage::getModel('local_manadev/license_request');
                 $requestModel
                     ->setData('magento_id', $magento_id)
                     ->setData('admin_url', $params['adminPanelUrl'])
@@ -110,6 +80,53 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 $requestModel->setModules($modulesInRequest);
                 $requestModel->setExtensions($params['installedManadevExtensions']);
                 $requestModel->setStores($params['stores']);
+                $magento_id = $requestModel->getResource()->generateMagentoId($requestModel);
+                $requestModel->setData('magento_id', $magento_id);
+            }
+
+
+            $willSave = false;
+            $checkDup = Mage::getModel('local_manadev/license_request')->load($magento_id, 'magento_id');
+            if(!$checkDup->getId()) {
+                // Magento ID is not recognized. Save as new record.
+                $willSave = true;
+            } else {
+                $modulesInDb = $requestModel->getModules();
+                ksort($modulesInDb);
+                $extensionsInDb = $requestModel->getExtensions();
+                array_multisort($extensionsInDb);
+                $storesInDb = $requestModel->getStores();
+                array_multisort($storesInDb);
+
+                $itemsToCheck = array(
+                    'admin_url' => $requestModel->getData('admin_url') == $params['adminPanelUrl'],
+                    'remote_ip' => $requestModel->getData('remote_ip') == $params['remoteIp'],
+                    'basedir' => $requestModel->getData('base_dir') == $params['baseDir'],
+                    'magento_version' => $requestModel->getData('magento_version') == $params['magentoVersion'],
+                    'modules' => json_encode($modulesInDb) == json_encode($modulesInRequest),
+                    'extensions' => json_encode($extensionsInDb) == json_encode($extensionsInRequest),
+                    'stores' => json_encode($storesInDb) == json_encode($storesInRequest),
+                );
+
+                $perfectMatch = true;
+                foreach($itemsToCheck as $data => $match) {
+                    if(!$match) {
+                        $perfectMatch = false;
+                        break;
+                    }
+                }
+
+                if(!$perfectMatch) {
+                    // Something changed, save it.
+                    $willSave = true;
+                } else {
+                    // Same data. Do not create a new record. Update last_checked instead.
+                    $requestModel->load($checkDup->getId());
+                    $requestModel->setData('last_checked', Varien_Date::now())->save();
+                }
+            }
+
+            if($willSave) {
                 try {
                     $requestModel->save();
                 } catch (Exception $e) {
