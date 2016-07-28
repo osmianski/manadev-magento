@@ -167,13 +167,8 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setLinkHash($linkHash)
 			->setCreatedAt(strftime('%Y-%m-%d', time()))
 			->setUpdatedAt(strftime('%Y-%m-%d', time()))
-            ->setLicenseNumbers()
-            ->setMFreeCustomerId($customerId);
-
-        $checkDup = Mage::getModel('downloadable/link_purchased_item')->load($linkPurchasedItem->getData('m_license_no'), 'm_license_no');
-        if($checkDup->getId()) {
-            $linkPurchasedItem->load($checkDup->getId());
-        }
+            ->setMFreeCustomerId($customerId)
+            ->save();
 
 		/** @var Local_Manadev_Helper_Data $helper */
 		$helper = Mage::helper('local_manadev');

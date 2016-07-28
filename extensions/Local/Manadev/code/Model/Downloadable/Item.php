@@ -50,23 +50,19 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function _beforeSave() {
-        $result = $this->_baseBeforeSave();
+        return $this->_baseBeforeSave();
+    }
 
-        if(!$this->getId()) {
-            $this->setLicenseNumbers();
-
-            $date = Mage::app()->getLocale()->date(
-                Varien_Date::toTimestamp($this->getCreatedAt()),
-                null,
-                null,
-                true
-            );
-            $expire_date = strtotime("+6 months", $date->getTimestamp());
-            $expire_date = date("Y-m-d", $expire_date);
-            $this->setData('m_support_valid_til', $expire_date);
+    protected function _afterSave() {
+        if($this->isObjectNew()) {
+            Mage::getModel('local_manadev/downloadable_item')
+                ->load($this->getId())
+                ->setLicenseNumbers()
+                ->save();
+            $this->load($this->getId());
         }
 
-        return $result;
+        return parent::_afterSave();
     }
 
     public function generateLicenseNumber() {
@@ -136,7 +132,19 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function setLicenseNumbers() {
-        return $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
+        $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
             ->setData('m_license_no', $this->generateLicenseNumber());
+
+        $date = Mage::app()->getLocale()->date(
+            Varien_Date::toTimestamp($this->getCreatedAt()),
+            null,
+            null,
+            true
+        );
+        $expire_date = strtotime("+6 months", $date->getTimestamp());
+        $expire_date = date("Y-m-d", $expire_date);
+        $this->setData('m_support_valid_til', $expire_date);
+
+        return $this;
     }
 }

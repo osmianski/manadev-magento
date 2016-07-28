@@ -903,4 +903,12 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             $productModel->save();
         }
     }
+
+    public function getLoggedNotInLabel() {
+        return "No Account";
+    }
+
+    public function getNoOrderStr() {
+        return "No Order";
+    }
 }
