@@ -75,16 +75,6 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
                     )
                 )"
             ),
-            array(
-                'item_id' => '`lpi`.`item_id`',
-                'status' => "IF(`price`.`value` = 0,
-                    IF(IFNULL(`pl`.`value`, '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "') = '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "',
-                        '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "',
-                        '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL. "'
-                    ),
-                    `lpi`.`status`
-                )",
-            )
         );
 
         $db = $this->_getWriteAdapter();
