@@ -345,7 +345,7 @@ class Mana_Core_Model_Observer {
 		if(!Mage::getStoreConfigFlag("mana/product_collection/fix_duplicate")) {
 			return;
 		}
-		/** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
+		/** @var Mage_Catalog_Model_Resource_Product_Collection|Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $collection */
 		$collection = $observer->getEvent()->getData('collection');
 		/** @var Varien_Db_Select $select */
 		$select = $collection->getSelect();
@@ -371,8 +371,8 @@ class Mana_Core_Model_Observer {
 				break;
 			}
 		}
-		if(!$isApplied) {
-			$select->order("{$alias}.entity_id desc");
+        if(!$isApplied) {
+            $collection->addOrder("entity_id", 'desc');
 		}
 	}
 
