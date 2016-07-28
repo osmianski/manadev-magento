@@ -338,6 +338,44 @@ class Mana_Core_Model_Observer {
         }
     }
 
+	/**
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function applyProductDuplicateFix($observer) {
+		if(!Mage::getStoreConfigFlag("mana/product_collection/fix_duplicate")) {
+			return;
+		}
+		/** @var Mage_Catalog_Model_Resource_Product_Collection|Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $collection */
+		$collection = $observer->getEvent()->getData('collection');
+		/** @var Varien_Db_Select $select */
+		$select = $collection->getSelect();
+		$from = $select->getPart(Zend_Db_Table_Select::FROM);
+
+		$alias = false;
+		if(isset($from['e'])) {
+			$alias = 'e';
+		} elseif(isset($from['main_table'])) {
+			$alias = 'main_table';
+		}
+		if(!$alias) {
+			// Only apply order by on `e` or `main_table`
+			return;
+		}
+
+
+		$isApplied = false;
+		$orders = $select->getPart(Zend_Db_Table_Select::ORDER);
+		foreach($orders as $order) {
+			if($order[0] == "{$alias}.entity_id") {
+				$isApplied = true;
+				break;
+			}
+		}
+        if(!$isApplied) {
+            $collection->addOrder("entity_id", 'desc');
+		}
+	}
+
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Data
