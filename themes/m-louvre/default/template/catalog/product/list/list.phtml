@@ -69,7 +69,7 @@
                     <?php if ($_theme->isVisibleInProductList($this, 'description') || $_theme->isVisibleInProductList($this, 'read_more')): ?>
                     <div class="desc std">
                         <?php if ($_theme->isVisibleInProductList($this, 'description')): ?>
-                            <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                            <?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?>
                         <?php endif; ?>
                         <?php if ($_theme->isVisibleInProductList($this, 'read_more')): ?>
                             <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>

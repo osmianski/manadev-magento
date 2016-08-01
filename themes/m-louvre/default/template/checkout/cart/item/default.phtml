@@ -68,11 +68,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
             <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif;?>
     </td>
-    <td class="a-center">
-        <?php if ($isVisibleProduct): ?>
-        <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo $this->__('Edit item parameters') ?>"><?php echo $this->__('Edit') ?></a>
-        <?php endif ?>
-    </td>
     <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
     <td class="a-center">
         <?php if ($isVisibleProduct): ?>

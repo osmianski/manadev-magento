@@ -6,7 +6,7 @@
 		<h3><?php echo $post->getCreatedTime(); ?></h3>
     </div>
 	
-	<div class="postContent"><?php echo $post->getPostContent(); ?></div>
+	<div class="postContent"><div class="mana_content"><?php echo Mage::helper('markdown')->render($post->getPostContent()); ?></div></div>
 	<?php echo $this->getBookmarkHtml($post) ?>
 	<div class="tags"><?php echo Mage::getBlockSingleton('blog/blog')->getTagsHtml($post) ?></div>
 	<div class="postDetails">

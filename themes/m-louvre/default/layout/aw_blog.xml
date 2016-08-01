@@ -55,6 +55,9 @@
     </default>
 
     <blog_index_index>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
+        </reference>
         <reference name="footer" >
               <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
         </reference>
@@ -64,6 +67,9 @@
     </blog_index_index>
 	
     <blog_index_list>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
+        </reference>
         <reference name="footer" >
               <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
         </reference>
@@ -72,6 +78,9 @@
         </reference>
     </blog_index_list>	
 	<blog_post_view>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
+        </reference>
         <reference name="footer" >
               <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
         </reference>

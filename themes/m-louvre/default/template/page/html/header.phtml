@@ -45,11 +45,11 @@
     <div class="header">
         <div class="quick-access">
             <div class="forms-box">
-                <?php echo $this->getChildHtml('topSearch') ?>
-                <?php echo $this->getChildHtml('store_language') ?>
-                <?php echo $this->getChildHtml('m_social_links') ?>
+                <?php //echo $this->getChildHtml('topSearch') ?>
+                <?php //echo $this->getChildHtml('store_language') ?>
             </div>
             <div class="user-links">
+                <?php echo $this->getChildHtml('m_social_links') ?>
                 <?php echo $this->getChildHtml('topLinks') ?>
                 <?php if (Mage::getStoreConfigFlag('mana_louvre/toplinks/show_welcome_link')):?>
                     <span class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></span>

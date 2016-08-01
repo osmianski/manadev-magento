@@ -34,7 +34,7 @@
 .sidebar .widget .widget-title h2 {  padding: 0 20px; }
 
 .widget .block .block-title strong,
-.widget .block .block-title a { color: #646464; font-size: 12px; }
+.widget .block .block-title a { color: #646464; }
 .sidebar .widget .block .block-title strong,
 .sidebar .widget .block .block-title a { color: #26B1ED; font-size: 14px; }
 
