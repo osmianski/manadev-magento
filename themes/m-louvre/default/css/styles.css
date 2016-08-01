@@ -655,16 +655,16 @@ tr.summary-details-excluded { font-style:italic; }
 
 /* Header ================================================================================ */
 a.m-twitter,
-a.m-facebook { display: inline-block; color: white; text-decoration: none; border-radius: 5px; background-color: #969696; width: 31px; height: 31px; position: relative; }
-a.m-facebook {   }
+a.m-facebook { display: inline-block; color: white; text-decoration: none; border-radius: 5px; background-color: #969696; width: 11px; height: 21px; position: relative; }
+.header .links li a.m-facebook:hover { background: #4267b2; }
 a.m-facebook:before { content: "\e741"; position: absolute; right:0; bottom: 0; font-size: 22px; padding: 0; }
 a.m-twitter { background-position: top right; }
-a.m-twitter:hover { background-position: bottom right; }
+.header .links li a.m-twitter:hover { background-position: bottom right; background: #25A4DB; }
 
-.quick-access { text-align: left; margin-bottom: 10px;}
+.quick-access { text-align: left; }
 .forms-box { width:auto; float: left; text-align: left; }
 .user-links { width:auto; float: right; text-align: right; }
-.quick-access .forms-box form { display:none; }
+.quick-access .forms-box form {  }
 
 #m-header1,
 #m-header2,
@@ -687,7 +687,7 @@ a.m-twitter:hover { background-position: bottom right; }
 
 .header .welcome-msg a {}
 .header .links { float:right; font-size: 14px; overflow: auto; }
-.header .links li { display: inline-block; }
+.header .links li { display: inline-block; vertical-align: top; }
 .header .links li a { color: white; text-decoration: none; padding: 5px 10px;  border-radius: 5px; background: #969696; display: inline-block; }
 .header .links li a:hover { background: #818181;}
 .header .links li.last a { color: #FF6464; font-weight: bold; background: transparent;}
@@ -699,8 +699,8 @@ a.m-twitter:hover { background-position: bottom right; }
 .header .links li a.top-link-cart:hover { background-color: #FD2E2E; }
 
 .header .form-search { display: inline; float: left; margin-right: -15px;}
-.header .form-search input { padding:5px 36px 5px 5px; width: 200px; margin: 1px;}
-.header .form-search button { position: relative; left: -42px; top: 1px; border-radius: 0; background-color: transparent; }
+.header .form-search input { padding:2px 36px 3px 5px; width: 200px; margin: 0 0 10px 0;}
+.header .form-search button { position: relative; left: -42px; top: -3px; border-radius: 0; background-color: transparent; }
 .header .form-search button span { font-size:0; }
 .header .form-search button span span:before { 	content: "\e610"; padding:0; color:#646464; }
 
@@ -2347,7 +2347,7 @@ ul.buttons .register {padding-bottom: 20px;}
 /* Phones portrait ===================================================================== */
 @media (max-width: 550px) {
 .i-any-409 { display: inline; }
-.header .form-search { display: none; }
+.header .form-search {  }
 .footer .block-subscribe .sunscribe-form { width: 250px; }
 .block-subscribe input { width: 160px; }
 .nav-container {background: none; height:auto; }
@@ -2358,7 +2358,7 @@ ul.buttons .register {padding-bottom: 20px;}
 /*1 col with left sidebar*/
 @media (min-width: 410px) and (max-width: 589px) {
 .i-410px-589 { display: inline; }
-.header .form-search input { width: 100px; }
+.header .form-search input {  }
 .header .form-search { margin-right: -20px; }
 }
 
