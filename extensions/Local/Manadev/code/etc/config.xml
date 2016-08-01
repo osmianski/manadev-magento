@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.06.04.04</version>
+		    <version>16.07.2820</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -469,6 +469,17 @@
                     </local_manadev>
                 </observers>
             </controller_action_layout_generate_blocks_after>
+            <sales_order_item_save_commit_after>
+                <observers>
+                    <downloadable_observer>
+                        <type>disabled</type>
+                    </downloadable_observer>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <method>saveDownloadableOrderItem</method>
+                    </local_manadev>
+                </observers>
+            </sales_order_item_save_commit_after>
         </events>
 		<!-- INSERT HERE: layout, translate, routers -->
 	</frontend>

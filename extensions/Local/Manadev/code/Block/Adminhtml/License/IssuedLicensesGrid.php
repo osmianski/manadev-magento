@@ -7,7 +7,7 @@
 class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
-        $this->setDefaultSort('order_number');
+        $this->setDefaultSort('created_at');
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);
@@ -29,7 +29,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Customer'),
                 'index' => 'customer_name',
-                'filter_index' => new Zend_Db_Expr("CONCAT(IFNULL(`cefn`.`value`, ''), ' ',IFNULL(`celn`.`value`, ''))"),
+                'filter_index' => new Zend_Db_Expr($this->_getCustomerNameExpr()),
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_customer',
@@ -37,11 +37,11 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         );
 
         $this->addColumn(
-            'order_number',
+            'order_increment_id',
             array(
                 'header' => $this->__('Order'),
-                'index' => 'order_number',
-                'filter_index' => 'order_increment_id',
+                'index' => 'order_increment_id',
+                'filter_index' => new Zend_Db_Expr($this->_getOrderNoExpr()),
                 'width' => '50px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_order',
@@ -142,6 +142,17 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             )
         );
 
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => $this->__('Created At'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'width' => '50px',
+                'align' => 'left',
+            )
+        );
+
         /** @var Mana_Core_Helper_Js $jsHelper */
         $jsHelper = Mage::helper('mana_core/js');
 
@@ -158,22 +169,26 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
     protected function _prepareCollection() {
         $fn = Mage::getModel('eav/entity_attribute')->loadByCode('customer', 'firstname');
         $ln = Mage::getModel('eav/entity_attribute')->loadByCode('customer', 'lastname');
+        $pn = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'name');
 
         /** @var Mage_Downloadable_Model_Resource_Link_Purchased_Item_Collection $collection */
         $collection = Mage::getResourceModel("downloadable/link_purchased_item_collection");
+        $customerNameExpr = $this->_getCustomerNameExpr();
+        $orderNoExpr = $this->_getOrderNoExpr();
         $columns = array(
             new Zend_Db_Expr("`ce`.`entity_id` AS customer_id"),
-            new Zend_Db_Expr("CONCAT(IFNULL(`cefn`.`value`, ''), ' ',IFNULL(`celn`.`value`, '')) AS customer_name"),
-            new Zend_Db_Expr("`lp`.`order_increment_id` AS order_number"),
+            new Zend_Db_Expr("{$customerNameExpr} AS customer_name"),
+            new Zend_Db_Expr("{$orderNoExpr} AS order_increment_id"),
             new Zend_Db_Expr("`lp`.`order_id`"),
-            new Zend_Db_Expr("`lp`.`product_name`"),
+            new Zend_Db_Expr("`pn`.`value` as product_name"),
             'used_on_magento_ids' => new Zend_Db_Expr("`main_table`.`agg_magento_ids`"),
             'used_at_ip_addresses' => new Zend_Db_Expr("`main_table`.`agg_remote_ips`"),
         );
 
         $collection->getSelect()
+            ->join(array('pn' => $collection->getTable('catalog/product').'_varchar'), '`pn`.`entity_id` = `main_table`.`product_id` AND `pn`.`store_id` = 0 AND `pn`.`attribute_id` = '.$pn->getAttributeId(), array())
             ->joinLeft(array('lp' => $collection->getTable('downloadable/link_purchased')), '`lp`.`purchased_id` = `main_table`.`purchased_id`', array())
-            ->joinLeft(array('ce' => $collection->getTable('customer/entity')), '`ce`.`entity_id` = `lp`.`customer_id`', array())
+            ->joinLeft(array('ce' => $collection->getTable('customer/entity')), '`ce`.`entity_id` = COALESCE(`lp`.`customer_id`, `main_table`.`m_free_customer_id`)', array())
             ->joinLeft(array('cefn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `cefn`.`entity_id` AND `cefn`.`attribute_id` = '.$fn->getAttributeId(), array())
             ->joinLeft(array('celn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `celn`.`entity_id` AND `celn`.`attribute_id` = '.$ln->getAttributeId(), array())
             ->joinLeft(array('mlr' => new Zend_Db_Expr("(
@@ -196,5 +211,39 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
 
     public function getGridUrl() {
         return $this->adminHelper()->getStoreUrl('*/*/issuedLicensesGrid');
+    }
+
+    protected function _getNotLoggedInStr() {
+        return $this->localHelper()->getLoggedNotInLabel();
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getCustomerNameExpr() {
+        $customerNameExpr = "CONCAT(
+            IFNULL(`cefn`.`value`, ''), 
+            ' ',
+            IFNULL(`celn`.`value`, '')
+        )";
+        return "IF(TRIM({$customerNameExpr}) = '', '" . $this->_getNotLoggedInStr() . "', {$customerNameExpr})";
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function localHelper() {
+        return Mage::helper('local_manadev');
+    }
+
+    protected function _getNoOrderStr() {
+        return $this->localHelper()->getNoOrderStr();
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getOrderNoExpr() {
+        return "COALESCE(`lp`.`order_increment_id`, '{$this->_getNoOrderStr()}')";
     }
 }

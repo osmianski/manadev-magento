@@ -50,24 +50,19 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function _beforeSave() {
-        $result = $this->_baseBeforeSave();
+        return $this->_baseBeforeSave();
+    }
 
-        if(!$this->getId()) {
-            $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
-                ->setData('m_license_no', $this->generateLicenseNumber());
-
-            $date = Mage::app()->getLocale()->date(
-                Varien_Date::toTimestamp($this->getCreatedAt()),
-                null,
-                null,
-                true
-            );
-            $expire_date = strtotime("+6 months", $date->getTimestamp());
-            $expire_date = date("Y-m-d", $expire_date);
-            $this->setData('m_support_valid_til', $expire_date);
+    protected function _afterSave() {
+        if($this->isObjectNew()) {
+            Mage::getModel('local_manadev/downloadable_item')
+                ->load($this->getId())
+                ->setLicenseNumbers()
+                ->save();
+            $this->load($this->getId());
         }
 
-        return $result;
+        return parent::_afterSave();
     }
 
     public function generateLicenseNumber() {
@@ -79,11 +74,18 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     protected function _generateKey($prefix, $salt) {
-        /** @var Mage_Downloadable_Model_Link_Purchased $puchasedModel */
-        $puchasedModel = Mage::getModel('downloadable/link_purchased')->load($this->getPurchasedId());
+        $orderIncrementId = "";
+        $customerId = $this->getMFreeCustomerId();
+        if($this->getPurchasedId()) {
+            /** @var Mage_Downloadable_Model_Link_Purchased $puchasedModel */
+            $puchasedModel = Mage::getModel('downloadable/link_purchased')->load($this->getPurchasedId());
+            $customerId = $puchasedModel->getCustomerId();
+            $orderIncrementId = $puchasedModel->getOrderIncrementId();
+        }
+
         /** @var Mage_Customer_Model_Customer $customerModel */
-        $customerModel = Mage::getModel('customer/customer')->load($puchasedModel->getCustomerId());
-        $x = $puchasedModel->getOrderIncrementId() . '|' . $customerModel->getEmail() . '|' . $this->getId() . '|' . $salt;
+        $customerModel = Mage::getModel('customer/customer')->load($customerId);
+        $x = $orderIncrementId . '|' . $customerModel->getEmail() . '|' . $this->getId() . '|' . $salt;
         $licenseNo = $this->_getKeyModel()->shaToLicenseNo(sha1($x));
         $licenseNo = $prefix .
             substr($licenseNo, 0, 5) . '-' .
@@ -125,6 +127,23 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
         }
         Mage::dispatchEvent('model_save_before', array('object' => $this));
         Mage::dispatchEvent($this->_eventPrefix . '_save_before', $this->_getEventData());
+
+        return $this;
+    }
+
+    public function setLicenseNumbers() {
+        $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
+            ->setData('m_license_no', $this->generateLicenseNumber());
+
+        $date = Mage::app()->getLocale()->date(
+            Varien_Date::toTimestamp($this->getCreatedAt()),
+            null,
+            null,
+            true
+        );
+        $expire_date = strtotime("+6 months", $date->getTimestamp());
+        $expire_date = date("Y-m-d", $expire_date);
+        $this->setData('m_support_valid_til', $expire_date);
 
         return $this;
     }

@@ -153,6 +153,8 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		/** @var Local_Manadev_Model_Downloadable_Item $linkPurchasedItem */
 		$linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item');
 		$linkHash = strtr(base64_encode(microtime() . $product->getId()), '+/=', '-_,');
+        $customerId = $this->_getCustomerSession()->isLoggedIn() ? $this->_getCustomerSession()->getId() : null;
+
 		$linkPurchasedItem
 			->setOrderItemId(null)
 			->setPurchasedId(null)
@@ -165,7 +167,9 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setLinkHash($linkHash)
 			->setCreatedAt(strftime('%Y-%m-%d', time()))
 			->setUpdatedAt(strftime('%Y-%m-%d', time()))
-			->save();
+            ->setMFreeCustomerId($customerId)
+            ->save();
+
 		/** @var Local_Manadev_Helper_Data $helper */
 		$helper = Mage::helper('local_manadev');
 		if($helper->createNewZipFileWithLicense($linkPurchasedItem)) {
