@@ -945,7 +945,7 @@ transition: all 1s ease-in;
 .footer .block-subscribe,
 .footer .block-subscribe .block-content { padding: 10px 0; }
 .footer .block-subscribe .col-1 { text-align:center; }
-.footer .block-subscribe .sunscribe-form { width: 267px; height: 36px; margin: 0 auto; }
+.footer .block-subscribe .sunscribe-form { width: 296px; height: 36px; margin: 0 auto; }
 .footer .block-subscribe { overflow: hidden; border-bottom: 1px solid #F8FAF9; }
 .footer .block-subscribe .form-subscribe-header { margin:0; font-size:18px; }
 .footer .block-subscribe form { display: block; }
