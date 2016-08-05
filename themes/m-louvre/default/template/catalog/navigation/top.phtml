@@ -54,4 +54,25 @@
 
 </div>
 
+
+<div id="menuPopup" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="initManaMenu().hideMenuPopup()">x</span>
+        <ul id="popupNav">
+            <li <?php if (Mage::helper('mana_theme')->isHomePage()) : ?>class="active"<?php endif; ?> data="<?php echo Mage::helper('mana_theme')->getFullActionName() ?>">
+                <a href="<?php echo $this->getUrl() ?>"><?php echo $this->__('Home') ?></a>
+            </li>
+            <?php echo $_menu ?>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var initWidth = "<?php echo Mage::getStoreConfig('mana_louvre/topmenu/mobile_menu_width')?>";
+    var config = {initWidth: initWidth};
+    initManaMenu(config);
+    Event.observe(window, 'resize', function () {
+        initManaMenu();
+    });
+</script>
+
 <?php endif ?>
