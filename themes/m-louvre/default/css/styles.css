@@ -746,6 +746,8 @@ a.m-twitter { background-position: top right; }
 #nav div { padding:10px; position: absolute; width:15em; top: 50px; left:-10000px; background-color: #919191; background-color: rgba(136,136,136,0.9); border-radius: 7px;}
 #nav > li.parent > a { border-bottom: 30px solid transparent; }
 #nav li > ul:after { position: absolute; background: transparent url(../images/menu-pointer1.png) 0 0 no-repeat; content:""; width: 17px; height:10px; top: -10px; left: 25%; }
+#nav li.last > ul:after,
+#nav li:nth-last-child(2) > ul:after { left: 75%; }
 #nav div ul { position:static; width:auto; border:none; }
 #nav li > ul { opacity: 0; }
 #nav li:hover > ul { opacity: 1; -webkit-transition: opacity .5s ease-in-out; }
@@ -783,12 +785,18 @@ transition: all 1s ease-in;
 
 /* Show menu */
 #nav li ul.shown-sub,
-#nav li div.shown-sub { left:0; z-index:999;
-
-}
+#nav li div.shown-sub { left:0; z-index:999; }
 
 #nav li .shown-sub ul.shown-sub,
 #nav li .shown-sub li div.shown-sub { left:115px; }
+
+#nav li.last ul.shown-sub,
+#nav li.last div.shown-sub,
+#nav li:nth-last-child(2) ul.shown-sub,
+#nav li:nth-last-child(2) div.shown-sub { left:-160px; }
+
+
+
 
 
 
