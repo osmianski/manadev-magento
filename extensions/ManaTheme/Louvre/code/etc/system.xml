@@ -149,6 +149,25 @@
                         </show_loginout_link>
                     </fields>
                 </toplinks>
+                <topmenu translate="label">
+                    <label>Top Menu</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <mobile_menu_width translate="label comment">
+                            <label>Enable Mobile Menu Starting From Specified Screen Width</label>
+                            <comment>Width in pixels. Leave blank to disable mobile menu.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mobile_menu_width>
+                    </fields>
+                </topmenu>
                 <positioning translate="label">
                     <label>Sidebar Block Positioning</label>
                     <comment>Layered Navigation and Categories Block positions in System->Configuration->MANAdev->Layered Navigation->Filter Positioning</comment>

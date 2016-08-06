@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<widgets>
+    <cms_page_link>
+        <parameters>
+            <template>
+                <values>
+                    <raw_link translate="label">
+                        <value>local/manadev/widget/raw_link.phtml</value>
+                        <label>URL String to CMS Page</label>
+                    </raw_link>
+                </values>
+            </template>
+        </parameters>
+    </cms_page_link>
+    <catalog_product_link>
+        <parameters>
+            <template>
+                <values>
+                    <raw_link translate="label">
+                        <value>local/manadev/widget/raw_link.phtml</value>
+                        <label>URL String to Product Page</label>
+                    </raw_link>
+                </values>
+            </template>
+        </parameters>
+    </catalog_product_link>
+</widgets>

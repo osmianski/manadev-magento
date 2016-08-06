@@ -67,6 +67,7 @@
 			<catalog>
                 <rewrite>
                     <product_widget_new>Local_Manadev_Block_Product_Widget_New</product_widget_new>
+                    <navigation>Local_Manadev_Block_Navigation</navigation>
                 </rewrite>
 			</catalog>
 		</blocks>
