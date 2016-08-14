@@ -78,11 +78,11 @@ class ManaPro_FilterColors_Helper_Data extends Mage_Core_Helper_Abstract {
 <?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()),
     $filterOptions->getImageNormal(), $value->getNormalImage()) ?>
 <?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.hovered',
-    $filterOptions->getImageNormalHovered(), $value->getNormalHoveredImage()) ?>
+    $filterOptions->getImageNormalHovered(), $value->getNormalHoveredImage() ? $value->getNormalHoveredImage() : $value->getNormalImage()) ?>
 <?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected',
-    $filterOptions->getImageSelected(), $value->getSelectedImage()) ?>
+    $filterOptions->getImageSelected(), $value->getSelectedImage() ? $value->getSelectedImage() :  $value->getNormalImage()) ?>
 <?php echo $this->_renderBackgrounds($filterOptions, $this->getFilterValueClass($filterOptions, $value->getOptionId()) . '.selected.hovered',
-    $filterOptions->getImageSelectedHovered(), $value->getSelectedHoveredImage()) ?>
+    $filterOptions->getImageSelectedHovered(), $value->getSelectedHoveredImage() ? $value->getSelectedHoveredImage() :  $value->getNormalImage()) ?>
 .<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state,
 .<?php echo $this->getFilterValueClass($filterOptions, $value->getOptionId()) ?>-state .m-layer1 {
     width: <?php echo $filterOptions->getStateWidth() ?>px;
