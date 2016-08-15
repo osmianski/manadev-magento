@@ -57,7 +57,7 @@
 
 <div id="menuPopup" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="initManaMenu().hideMenuPopup()">x</span>
+        <span class="close" onclick="initManaMenu().hideMenuTrigger()">x</span>
         <ul id="popupNav">
             <li <?php if (Mage::helper('mana_theme')->isHomePage()) : ?>class="active"<?php endif; ?> data="<?php echo Mage::helper('mana_theme')->getFullActionName() ?>">
                 <a href="<?php echo $this->getUrl() ?>"><?php echo $this->__('Home') ?></a>
