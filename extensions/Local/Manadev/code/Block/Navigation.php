@@ -8,6 +8,8 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
 {
     const MANA_MENU_BLOCK_BEFORE_TEMPLATE = "mana_menu_%s_before";
     const MANA_MENU_BLOCK_AFTER_TEMPLATE = "mana_menu_%s_after";
+    const MANA_MENU_BLOCK_SIBLING_AFTER_TEMPLATE = "mana_menu_%s_sibling_after";
+    const MANA_MENU_BLOCK_SIBLING_BEFORE_TEMPLATE = "mana_menu_%s_sibling_before";
 
     protected function _renderCategoryMenuItemHtml($category, $level = 0, $isLast = false, $isFirst = false,
         $isOutermost = false, $outermostItemClass = '', $childrenWrapClass = '', $noEventAttributes = false)
@@ -27,7 +29,10 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
             $children = $category->getChildren();
             $childrenCount = $children->count();
         }
-        $hasChildren = ($children && $childrenCount);
+        $before = $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_BEFORE_TEMPLATE, $category);
+        $after = $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_AFTER_TEMPLATE, $category);
+        $hasBeforeOrAfterBlock = strlen($before) || strlen($after);
+        $hasChildren = ($children && $childrenCount) || $hasBeforeOrAfterBlock;
 
         // select active children
         $activeChildren = array();
@@ -37,7 +42,7 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
             }
         }
         $activeChildrenCount = count($activeChildren);
-        $hasActiveChildren = ($activeChildrenCount > 0);
+        $hasActiveChildren = ($activeChildrenCount > 0) || $hasBeforeOrAfterBlock;
 
         // prepare list item html classes
         $classes = array();
@@ -99,20 +104,20 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
             );
             $j++;
         }
-        if (!empty($htmlChildren)) {
+        if (!empty($htmlChildren) || $hasBeforeOrAfterBlock) {
             if ($childrenWrapClass) {
                 $html[] = '<div class="' . $childrenWrapClass . '">';
             }
             $html[] = '<ul class="level' . $level . '">';
 
-            $before = $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_BEFORE_TEMPLATE, $category);
             if($before) {
                 $html[] = $before;
             }
 
-            $html[] = $htmlChildren;
+            if($htmlChildren) {
+                $html[] = $htmlChildren;
+            }
 
-            $after = $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_AFTER_TEMPLATE, $category);
             if ($after) {
                 $html[] = $after;
             }
@@ -129,9 +134,45 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
         return $html;
     }
 
+    public function renderCategoriesMenuHtml($level = 0, $outermostItemClass = '', $childrenWrapClass = '')
+    {
+        $activeCategories = array();
+        foreach ($this->getStoreCategories() as $child) {
+            if ($child->getIsActive()) {
+                $activeCategories[] = $child;
+            }
+        }
+        $activeCategoriesCount = count($activeCategories);
+        $hasActiveCategoriesCount = ($activeCategoriesCount > 0);
+
+        if (!$hasActiveCategoriesCount) {
+            return '';
+        }
+
+        $html = '';
+        $j = 0;
+        foreach ($activeCategories as $category) {
+            $html .= $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_SIBLING_BEFORE_TEMPLATE, $category);
+            $html .= $this->_renderCategoryMenuItemHtml(
+                $category,
+                $level,
+                ($j == $activeCategoriesCount - 1),
+                ($j == 0),
+                true,
+                $outermostItemClass,
+                $childrenWrapClass,
+                true
+            );
+            $html .= $this->getStaticBlockHtml(self::MANA_MENU_BLOCK_SIBLING_AFTER_TEMPLATE, $category);
+            $j++;
+        }
+
+        return $html;
+    }
+
     /**
      * @param $template
-     * @param Mage_Catalog_Model_Category $category
+     * @param Mage_Catalog_Model_Category|mixed $category
      *
      * @return mixed
      */
