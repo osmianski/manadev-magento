@@ -40,14 +40,19 @@ class Mana_AttributePage_Resource_Layer_Mysql extends Mage_Core_Model_Mysql4_Abs
         // apply option page filters
         $select->distinct();
         for ($i = 0; $i < Mana_AttributePage_Model_AttributePage_Store::MAX_ATTRIBUTE_COUNT; $i++) {
-            if (($attributeId = $attributePage->getData("attribute_id_$i")) && ($optionId = $optionPage->getData("option_id_$i"))) {
+            if (($attributeId = $attributePage->getData("attribute_id_$i"))) {
                 $tableAlias = "mapidx_$attributeId";
                 $conditions = array(
                     "{$tableAlias}.entity_id = e.entity_id",
                     $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attributeId),
                     $connection->quoteInto("{$tableAlias}.store_id = ?", $collection->getStoreId()),
-                    $connection->quoteInto("{$tableAlias}.value = ?", $optionId),
                 );
+
+                if($optionPage) {
+                    $optionId = $optionPage->getData("option_id_$i");
+                    $conditions[] = $connection->quoteInto("{$tableAlias}.value = ?", $optionId);
+                }
+
                 $conditions = join(' AND ', $conditions);
                 $select->joinInner(array($tableAlias => $this->getMainTable()), $conditions, null);
             }
