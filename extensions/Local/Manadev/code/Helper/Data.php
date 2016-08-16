@@ -821,7 +821,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     public function generateKeys() {
         $configFile = Mage::getStoreConfig('local_manadev/downloads/openssl_config_file');
         if(!$configFile) {
-            throw new Exception("OpenSSL Config file is not configured. Set value for 'System Configuration -> MANAdev -> manadev.com -> Downloads -> OpensSL Configuration File'");
+            $configFile = Mage::getModuleDir(null, "Local_Manadev").DS."openssl.cnf";
         }
 
         $config = array(
@@ -835,7 +835,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
 
         if ($res === false) {
             $err = openssl_error_string();
-            throw new Exception("OpenSSL config file not setup properly: ". $err);
+            throw new Exception("OpenSSL config file not setup properly. Make sure the value for 'System Configuration -> MANAdev -> manadev.com -> Downloads -> OpensSL Configuration File' is correct. Error:". $err);
         }
         // Extract the private key from $res to $privateKey
         openssl_pkey_export($res, $privateKey, null, $config);

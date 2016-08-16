@@ -29,38 +29,41 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
 
 
         $multi_fields = array(
+            // Other statuses like 'pending_payment', 'payment_review' , etc. will be considered as Not Available
             array(
                 'item_id' => '`lpi`.`item_id`',
                 'status' =>
-                "IF(TRIM(`lpi`.`m_registered_domain`) = '' AND TRIM(`lpi`.`m_store_info`) = '' AND `lpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED ."',
+                    "IF(`lpi`.`status` NOT IN (". implode(", ", array(
+                        "'". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE ."'",
+                        "'" .Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE . "'",
+                        "'" .Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "'",
+                        "'" .Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "'",
+                        "'" .Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "'",
+                        "'" .Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED . "'"
+                    )) ."),
+                    '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE . "',
+                    `lpi`.`status`
+                )"
+            ),
+            // If status is not `Not Available`, check if it has registration info. If none, set to Not Registered. Retain status otherwise.
+            array(
+                'item_id' => '`lpi`.`item_id`',
+                'status' =>
+                "IF(
+                        `lpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE ."'
+                        AND TRIM(`lpi`.`m_registered_domain`) = '' 
+                        AND TRIM(`lpi`.`m_store_info`) = '' 
+                        AND `lpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED ."',
                     '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED."',
                     `lpi`.`status`
                 )"
             ),
+            // Show expired if the support validity expires. Needs to run daily
             array(
                 'item_id' => '`lpi`.`item_id`',
                 'status' => "IF( IFNULL(`pl`.`value`, '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "') = '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "',
                     IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
                         '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "',
-                        IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
-                            '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "',
-                            `lpi`.`status`
-                        )
-                    ),
-                    IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
-                        '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "',
-                        IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
-                            '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL . "',
-                            `lpi`.`status`
-                        )
-                    )
-                )"
-            ),
-            array(
-                'item_id' => '`lpi`.`item_id`',
-                'status' => "IF( IFNULL(`pl`.`value`, '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."') = '".Local_Manadev_Model_Platform::VALUE_MAGENTO_1."',
-                    IF(`lpi`.`status` = '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE ."' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
-                        '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED ."',
                         IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "' AND `lpi`.`m_support_valid_til` > '{$currentDate}',
                             '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "',
                             `lpi`.`status`
