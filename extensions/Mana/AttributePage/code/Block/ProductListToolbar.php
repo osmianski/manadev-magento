@@ -7,7 +7,7 @@
  */
 class Mana_AttributePage_Block_ProductListToolbar extends Mage_Catalog_Block_Product_List_Toolbar
 {
-    protected $_pageVarName         = 'p2';
+    protected $_pageVarName         = 'product-list-page';
     protected $_orderVarName        = 'order2';
     protected $_directionVarName    = 'dir2';
     protected $_modeVarName         = 'mode2';
