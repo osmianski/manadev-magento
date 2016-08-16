@@ -50,6 +50,8 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
                 'include_in_menu' => "`ap_gcs`.`include_in_menu`",
                 'template' => "`ap_gcs`.`template`",
                 'show_alphabetic_search' => "`ap_gcs`.`show_alphabetic_search`",
+                'show_product_list' => "`ap_gcs`.`show_product_list`",
+                'product_list_description' => "`ap_gcs`.`product_list_description`",
                 'show_featured_options' => "`ap_gcs`.`show_featured_options`",
                 'column_count' => "`ap_gcs`.`column_count`",
                 'page_layout' => "`ap_gcs`.`page_layout`",

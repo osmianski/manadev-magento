@@ -11,6 +11,7 @@ $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
 $_description = $_attributePage->getData('description');
 $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
+$_productListDescription = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_attributePage->getData('product_list_description'));
 ?>
 <div class="page-title category-title m-attribute-page-title">
     <h1><?php echo $_escapedTitle ?></h1>
@@ -35,4 +36,13 @@ $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_descr
     <div class="category-description m-attribute-page-description std">
         <?php echo $_description ?>
     </div>
+<?php endif; ?>
+
+<?php if($_attributePage->getData('show_product_list')): ?>
+    <?php if($_productListDescription): ?>
+        <div class="category-description m-attribute-page-product-list-description std">
+            <?php echo $_productListDescription ?>
+        </div>
+    <?php endif; ?>
+    <?php echo $this->getChildHtml('product_list') ?>
 <?php endif; ?>

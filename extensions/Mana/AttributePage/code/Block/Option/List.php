@@ -25,7 +25,7 @@ class Mana_AttributePage_Block_Option_List extends Mage_Core_Block_Template {
         parent::_prepareLayout();
 
         /* @var $pager Mage_Page_Block_Html_Pager */
-        $pager = $this->getLayout()->createBlock('page/html_pager', 'option_list_pager');
+        $pager = $this->getLayout()->createBlock('mana_attributepage/pager', 'option_list_pager');
         $pager->setAvailableLimit($this->getAvailableLimit());
         $pager
             ->setCollection($this->getCollection())

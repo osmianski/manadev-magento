@@ -259,7 +259,8 @@ class Mana_AttributePage_Adminhtml_Mana_AttributePageController extends Mana_Adm
             'option_page_image_width', 'option_page_image_height',
             'option_page_featured_image_width', 'option_page_featured_image_height',
             'option_page_product_image_width', 'option_page_product_image_height',
-            'option_page_sidebar_image_width', 'option_page_sidebar_image_height', ) as $key)
+            'option_page_sidebar_image_width', 'option_page_sidebar_image_height',
+            'product_list_description',) as $key)
         {
             if ($model->hasData($key) && !trim($model->getData($key))) {
                 $model->setData($key, null);

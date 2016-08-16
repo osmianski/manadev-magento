@@ -45,6 +45,16 @@ class Mana_AttributePage_Block_Attribute_View extends Mage_Core_Block_Template {
         return $this;
     }
 
+    protected function _beforeToHtml() {
+        if ($productListBlock = $this->getChild('product_list')) {
+            for($x=0; $x<5;$x++) {
+                if($attributeId = $this->getAttributePage()->getData("attribute_id_$x")) {
+                    $productListBlock->getLoadedProductCollection()->addAttributeToFilter($attributeId, array('notnull'=>true));
+                }
+            }
+        }
+    }
+
     /**
      * Retrieve HTML title value separator (with space)
      *

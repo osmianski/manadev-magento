@@ -243,6 +243,14 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                     `ap_scs`.`column_count`,
                     `ap_gcs`.`column_count`
                 )",
+                'show_product_list' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_PRODUCT_LIST)},
+                    `ap_scs`.`show_product_list`,
+                    `ap_gcs`.`show_product_list`
+                )",
+                'product_list_description' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_PRODUCT_LIST_DESCRIPTION)},
+                    `ap_scs`.`product_list_description`,
+                    `ap_gcs`.`product_list_description`
+                )",
                 'page_layout' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_PAGE_LAYOUT)},
                     `ap_scs`.`page_layout`,
                     `ap_gcs`.`page_layout`

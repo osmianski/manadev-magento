@@ -78,6 +78,28 @@ class Mana_AttributePage_Block_Adminhtml_AttributePage_DisplayForm extends Mana_
             'default_store_label' => $this->__('Same For All Stores'),
         ));
 
+        $this->addField($fieldset, 'show_product_list', 'select', array(
+            'label' => $this->__('Show Product List'),
+            'title' => $this->__('Show Product List'),
+            'note' => $this->__('If Yes, then product list having the current attribute is shown on the attribute page.'),
+            'options' => $this->getYesNoSourceModel()->getOptionArray(),
+            'name' => 'show_product_list',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_SHOW_PRODUCT_LIST,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
+        $this->addField($fieldset, 'product_list_description', 'wysiwyg', array(
+            'name'      => 'product_list_description',
+            'label'     => $this->__('Product List Description'),
+            'title'     => $this->__('Product List Description'),
+            'note' => $this->__('Displayed on top of the product list. Will be displayed if product list is shown.'),
+            'required'  => false,
+            'default_bit_no' => Mana_AttributePage_Model_AttributePage_Abstract::DM_PRODUCT_LIST_DESCRIPTION,
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $fieldset = $this->addFieldset($form, 'mfs_options_pre_page', array(
             'title' => $this->__('Options per Page'),
             'legend' => $this->__('Options per Page'),
