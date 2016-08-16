@@ -14,5 +14,10 @@
                 <Mana_Core/>
             </depends>
         </Mana_Sorting>
+        <Mana_AttributePage>
+            <depends>
+                <Mana_Sorting/>
+            </depends>
+        </Mana_AttributePage>
     </modules>
 </config>

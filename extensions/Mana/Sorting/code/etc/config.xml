@@ -26,6 +26,11 @@
                     <product_list_toolbar>Mana_Sorting_Rewrite_Toolbar</product_list_toolbar>
                 </rewrite>
             </catalog>
+            <mana_attributepage>
+                <rewrite>
+                    <productListToolbar>Mana_Sorting_Rewrite_AttributePageToolbar</productListToolbar>
+                </rewrite>
+            </mana_attributepage>
         </blocks>
         <models>
             <mana_sorting>
