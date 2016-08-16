@@ -147,10 +147,7 @@ class Mana_AttributePage_Resource_AttributePage_UrlIndexer extends Mana_Seo_Reso
             $attributePageIds = $this->getAttributePageResource()->getIdsByGlobalId(
                 $options['attribute_page_global_custom_settings_id']);
         }
-        if ($attributePageIds !== false) {
-            if (!count($attributePageIds)) {
-                return;
-            }
+        if ($attributePageIds !== false && count($attributePageIds)) {
             $select->where('`ap`.`id` IN (?)', $attributePageIds);
             $obsoleteCondition .= ' AND (`attribute_page_id` IN (' . $db->quote($attributePageIds) . '))';
         }
