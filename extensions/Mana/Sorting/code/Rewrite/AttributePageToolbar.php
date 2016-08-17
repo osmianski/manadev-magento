@@ -9,10 +9,10 @@
 class Mana_Sorting_Rewrite_AttributePageToolbar extends Mana_Sorting_Rewrite_Toolbar
 {
     protected $_pageVarName         = 'product-list-page';
-    protected $_orderVarName        = 'order2';
-    protected $_directionVarName    = 'dir2';
-    protected $_modeVarName         = 'mode2';
-    protected $_limitVarName        = 'limit2';
+    protected $_orderVarName        = 'product-list-order';
+    protected $_directionVarName    = 'product-list-dir';
+    protected $_modeVarName         = 'product-list-mode';
+    protected $_limitVarName        = 'product-list-limit';
 
     public function getPagerUrl($params = array()) {
         // Pager URL is processed in the custom pager block so that it works well with the option list pager
