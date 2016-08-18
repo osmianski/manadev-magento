@@ -18,6 +18,9 @@ class Mana_AttributePage_OptionPageController extends Mage_Core_Controller_Front
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
+            if(Mage::helper('core')->isModuleEnabled('Mana_InfiniteScrolling')) {
+                $this->getLayout()->getUpdate()->addHandle("mana_infinitescrolling");
+            }
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {
                 $this->getLayout()->getUpdate()->addUpdate($layoutXml);

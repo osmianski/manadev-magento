@@ -46,7 +46,10 @@ class Mana_AttributePage_Block_Attribute_View extends Mage_Core_Block_Template {
     }
 
     protected function _beforeToHtml() {
-        Mage::getResourceModel('mana_attributepage/layer_mysql')->apply();
+        if($this->getAttributePage()->getData('show_product_list')) {
+            // Apply filters on the product list
+            Mage::getResourceModel('mana_attributepage/layer_mysql')->apply();
+        }
     }
 
     /**
