@@ -308,7 +308,14 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
             // insert new data
             self.$rows().last().removeClass('last');
             $newRows.each(function() {
-                parent.append(this);
+                try{
+                    parent.append(this);
+                } catch(e) {
+                    console.log("The following error occurred while trying to load next page via infinite scrolling:");
+                    // Display appended HTML javascript error.
+                    console.error(e);
+                    console.info(this);
+                }
             });
 
             // start effect

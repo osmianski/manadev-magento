@@ -108,6 +108,7 @@ class Mana_InfiniteScrolling_Router extends Mage_Core_Controller_Varien_Router_A
         ) {
             // for toolbar to set page limit successfully, the limit must be added to available
             // limits
+            $toolbarBlock->unsetData('_current_limit');
             $toolbarBlock->addPagerLimit($toolbarBlock->getCurrentMode(), $this->_limit);
 
             $html = $layoutHelper->renderBlock($listBlockName);
