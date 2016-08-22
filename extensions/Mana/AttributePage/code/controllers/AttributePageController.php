@@ -19,7 +19,7 @@ class Mana_AttributePage_AttributePageController extends Mage_Core_Controller_Fr
             $this->addActionLayoutHandles();
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
             if(Mage::helper('core')->isModuleEnabled('Mana_InfiniteScrolling') && $attributePage->getData('show_product_list')) {
-                $this->getLayout()->getUpdate()->addHandle("mana_infinitescrolling");
+                $this->getLayout()->getUpdate()->addHandle("mana_attributepage_infinitescrolling");
             }
             $this->loadLayoutUpdates();
             if (trim($layoutXml)) {

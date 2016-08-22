@@ -65,4 +65,11 @@
             <block type="mana_attributepage/option_product" name="m_option_product" before="-" template="mana/attributepage/option/product.phtml" />
         </reference>
     </catalog_product_view>
+    <mana_attributepage_infinitescrolling>
+        <update handle="mana_infinitescrolling"/>
+        <reference name='infinitescrolling_engine'>
+            <action method='setData'><key>page_var_name</key><value>product-list-page</value></action>
+            <action method='setData'><key>limit_var_name</key><value>product-list-limit</value></action>
+        </reference>
+    </mana_attributepage_infinitescrolling>
 </layout>

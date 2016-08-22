@@ -45,9 +45,12 @@ class Mana_InfiniteScrolling_Router extends Mage_Core_Controller_Varien_Router_A
         $pageSeparator = '/' . Mage::getStoreConfig('mana/ajax/page_separator') . '/';
         $limitSeparator = '/' . Mage::getStoreConfig('mana/ajax/limit_separator') . '/';
         $routeSeparator = '/' . Mage::getStoreConfig('mana/ajax/route_separator_filter') . '/';
+        $pageVarSeparator = '/pageVarName/';
+        $limitVarSeparator = '/limitVarName/';
 
         $regex = preg_quote($urlKey, '/') . '(.+)' . preg_quote($pageSeparator, '/') . '([0-9]+)' .
-            preg_quote($limitSeparator, '/') . '([0-9]+)' . preg_quote($routeSeparator, '/') . '(.*)';
+            preg_quote($limitSeparator, '/') . '([0-9]+)' . preg_quote($pageVarSeparator, '/') . '(.*)' .
+            preg_quote($limitVarSeparator, '/') . '(.*)' . preg_quote($routeSeparator, '/') . '(.*)';
         if (preg_match("/$regex/", $path, $matches)) {
             // fetch all URL dynamic parts into object fields which are used later in render method
             //      ajax/infinite-scrolling/{$route}/page/{page}/limit/{$limit}/requested-url/{path}
@@ -55,7 +58,9 @@ class Mana_InfiniteScrolling_Router extends Mage_Core_Controller_Varien_Router_A
             $this->_route = $matches[1];
             $this->_page = $matches[2];
             $this->_limit = $matches[3];
-            $path = $matches[4];
+            $pageVarName = $matches[4];
+            $limitVarName = $matches[5];
+            $path = $matches[6];
 
             // let all further Magento logic think that we just received $path. Prevent full page
             // Magento rendering and instead call render() method of this class
@@ -63,7 +68,7 @@ class Mana_InfiniteScrolling_Router extends Mage_Core_Controller_Varien_Router_A
                 ->changePath($path)
                 ->processWithoutRendering($this, 'render');
 
-            $_GET = array_merge($_GET, array('p' => $this->_page, 'limit' => $this->_limit));
+            $_GET = array_merge($_GET, array($pageVarName => $this->_page, $limitVarName => $this->_limit));
 
             $baseUrl = parse_url(Mage::getUrl(null, array('_nosid' => true)));
             Mage::register('m_original_request_uri', $_SERVER['REQUEST_URI']);

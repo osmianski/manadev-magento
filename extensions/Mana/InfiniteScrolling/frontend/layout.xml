@@ -28,6 +28,9 @@
             	<action method="setData"><key>item_in_grid_mode</key><value>li.item</value></action>
             	<action method="setData"><key>loader_in_grid_mode</key><value>.infinite-scrolling-grid-loader</value></action>
 
+                <action method='setData'><key>page_var_name</key><value>p</value></action>
+                <action method='setData'><key>limit_var_name</key><value>limit</value></action>
+
                 <!-- change these Magento layout block names if product list blocks in your theme
                      are named differently that in standard theme -->
             	<action method="setData"><key>list_block_name</key><value>product_list</value></action>

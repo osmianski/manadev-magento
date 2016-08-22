@@ -191,6 +191,12 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 });
             }
         },
+        getPageVarName: function () {
+            return this.$().data('pageVarName');
+        },
+        getLimitVarName: function () {
+            return this.$().data('limitVarName');
+        },
         // endregion
 
         // region Product Loading
@@ -225,6 +231,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 '/' + (self.page+1) +
                 '/' + this.getLimitSeparator() +
                 '/' + limit +
+                '/' + "pageVarName" +
+                '/' + this.getPageVarName() +
+                '/' + "limitVarName" +
+                '/' + this.getLimitVarName() +
                 '/' + this.getRouteSeparator() +
                 '/' + url.substr(config.getBaseUrl(url).length);
 
