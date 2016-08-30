@@ -36,7 +36,7 @@ class Local_Manadev_Model_Observer {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
 
-        $this->_decreateSupportValidDate($object);
+        $this->_decreaseSupportValidDate($object);
         $this->_setLicenseToNotAvailable($object);
     }
 
@@ -294,6 +294,7 @@ class Local_Manadev_Model_Observer {
                                 ->setNumberOfDownloadsBought($numberOfDownloads)
                                 ->setStatus(Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING)
                                 ->setMLicenseQtyNo($x)
+                                ->setData('m_support_last_purchased_at', date('Y-m-d', Varien_Date::toTimestamp($orderItem->getCreatedAt())))
                                 ->setCreatedAt($orderItem->getCreatedAt())
                                 ->setUpdatedAt($orderItem->getUpdatedAt())
                                 ->save();
@@ -324,23 +325,29 @@ class Local_Manadev_Model_Observer {
                 }
 
                 $item_id = $buyRequest['m_license'];
+                /** @var Local_Manadev_Model_Downloadable_Item $item */
                 $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
 
-                $new_date = !in_array(
+                // Calculate new date from the date support date is ordered (or the date when the support expires if it is still active)
+                $is_support_active = in_array(
                     $item->getStatus(),
                     array(
                         Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
                         Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL
                     )
-                ) ?
-                    date('Y-m-d', Varien_Date::toTimestamp($object->getOrder()->getCreatedAt())) :
-                    $item->getData('m_support_valid_til');
+                );
+                // If support is active, add 6 months from `m_support_valid_til`. Use the order creation date otherwise.
+                $new_date = $is_support_active ?
+                    $item->getData('m_support_valid_til') :
+                    date('Y-m-d', Varien_Date::toTimestamp($object->getOrder()->getCreatedAt()));
 
+                // Increase the support period 6 months for each quantity of support item invoiced.
                 for ($x = 0; $x < $invoiceItem->getQty(); $x++) {
                     $new_date = strtotime("+6 months", Varien_Date::toTimestamp($new_date));
                     $new_date = date("Y-m-d", $new_date);
                 }
-                $item->setData('m_support_valid_til', $new_date)
+                // Change `m_support_last_purchased_at` and it will automatically update `m_support_valid_til` in the model's _beforeSave() method
+                $item->setData('m_support_last_purchased_at', $new_date)
                     ->save();
             }
         }
@@ -349,7 +356,7 @@ class Local_Manadev_Model_Observer {
     /**
      * @param $object
      */
-    protected function _decreateSupportValidDate($object) {
+    protected function _decreaseSupportValidDate($object) {
         foreach ($object->getAllItems() as $invoiceItem) {
             $sku = Mage::getModel('catalog/product')->load($invoiceItem->getProductId())->getSku();
             if ($sku == Mage::getStoreConfig('local_manadev/support_services_sku')) {
@@ -361,12 +368,13 @@ class Local_Manadev_Model_Observer {
                 $item_id = $buyRequest['m_license'];
                 $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
 
-                $new_date = $item->getData('m_support_valid_til');
+                $new_date = $item->getData('m_support_last_purchased_at');
                 for ($x = 0; $x < $invoiceItem->getQty(); $x++) {
                     $new_date = strtotime("-6 months", strtotime($new_date));
                     $new_date = date("Y-m-d", $new_date);
                 }
-                $item->setData('m_support_valid_til', $new_date)
+                // Change `m_support_last_purchased_at` and it will automatically update `m_support_valid_til` in the model's _beforeSave() method
+                $item->setData('m_support_last_purchased_at', $new_date)
                     ->save();
             }
         }

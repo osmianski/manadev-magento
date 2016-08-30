@@ -7,7 +7,7 @@
 class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admin_Block_V2_Grid {
     public function __construct() {
         parent::__construct();
-        $this->setDefaultSort('created_at');
+        $this->setDefaultSort('m_support_last_purchased_at');
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);
@@ -143,13 +143,14 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         );
 
         $this->addColumn(
-            'created_at',
+            'm_support_last_purchased_at',
             array(
-                'header' => $this->__('Created At'),
-                'index' => 'created_at',
+                'header' => $this->__('Last Purchased Support At'),
+                'index' => 'm_support_last_purchased_at',
                 'type' => 'datetime',
                 'width' => '50px',
                 'align' => 'left',
+                'frame_callback' => array($this, 'styleDate')
             )
         );
 
@@ -160,6 +161,13 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
 
 
         return parent::_prepareColumns();
+    }
+
+    public function styleDate($value, $row, $column, $isExport) {
+        $locale = Mage::app()->getLocale();
+        $date = $locale->date($value, $locale->getDateFormat(), $locale->getLocaleCode(), false)->toString($locale->getDateFormat());
+
+        return $date;
     }
 
     public function getRowUrl($item) {
