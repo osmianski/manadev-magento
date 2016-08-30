@@ -50,6 +50,13 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     }
 
     public function _beforeSave() {
+        if($this->_isSupportLastPurchasedDateChanged()) {
+            // If `m_support_last_purchased_at` changed, update `m_support_valid_til` as well.
+            $new_support_valid_date = date('Y-m-d', strtotime("+6 months", Varien_Date::toTimestamp($this->getData('m_support_last_purchased_at'))));
+            $this->setData('m_support_valid_til', $new_support_valid_date);
+        }
+
+        // Do not return parent _beforeSave(), because it will fail when a free extension is downloaded
         return $this->_baseBeforeSave();
     }
 
@@ -135,16 +142,24 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
         $this->setData('m_license_verification_no', $this->generateLicenseVerificationNo())
             ->setData('m_license_no', $this->generateLicenseNumber());
 
-        $date = Mage::app()->getLocale()->date(
-            Varien_Date::toTimestamp($this->getCreatedAt()),
-            null,
-            null,
-            true
-        );
-        $expire_date = strtotime("+6 months", $date->getTimestamp());
+        $expire_date = strtotime("+6 months", strtotime($this->getData('m_support_last_purchased_at')));
         $expire_date = date("Y-m-d", $expire_date);
         $this->setData('m_support_valid_til', $expire_date);
 
         return $this;
+    }
+
+    /**
+     * @return false|string
+     */
+    protected function _formatDate($date) {
+        return date('Y-m-d', Varien_Date::toTimeStamp($date));
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isSupportLastPurchasedDateChanged() {
+        return $this->_formatDate($this->getData('m_support_last_purchased_at')) != $this->_formatDate($this->getOrigData('m_support_last_purchased_at'));
     }
 }
