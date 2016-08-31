@@ -32,7 +32,7 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
             // Other statuses like 'pending_payment', 'payment_review' , etc. will be considered as Not Available
             array(
                 'item_id' => '`lpi`.`item_id`',
-                'created_at' => '`lpi`.`created_at`',
+                //'created_at' => '`lpi`.`created_at`',
                 'status' =>
                     "IF(`lpi`.`status` NOT IN (". implode(", ", array(
                         "'". Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE ."'",
@@ -49,7 +49,7 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
             // If status is not `Not Available`, check if it has registration info. If none, set to Not Registered. Retain status otherwise.
             array(
                 'item_id' => '`lpi`.`item_id`',
-                'created_at' => '`lpi`.`created_at`',
+                //'created_at' => '`lpi`.`created_at`',
                 'status' =>
                 "IF(
                         `lpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE ."'
@@ -63,7 +63,7 @@ class Local_Manadev_Resource_Indexer extends Mage_Core_Model_Mysql4_Abstract
             // Show expired if the support validity expires. Needs to run daily
             array(
                 'item_id' => '`lpi`.`item_id`',
-                'created_at' => '`lpi`.`created_at`',
+                //'created_at' => '`lpi`.`created_at`',
                 'status' => "IF( IFNULL(`pl`.`value`, '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "') = '" . Local_Manadev_Model_Platform::VALUE_MAGENTO_1 . "',
                     IF(`lpi`.`status` = '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE . "' AND `lpi`.`m_support_valid_til` <= '{$currentDate}',
                         '" . Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED . "',
