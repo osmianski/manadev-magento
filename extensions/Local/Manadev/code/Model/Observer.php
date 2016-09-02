@@ -209,7 +209,7 @@ class Local_Manadev_Model_Observer {
             return $this;
         }
 
-        $downloadableItemsId = [];
+        $downloadableItemsId = array();
         foreach ($order->getAllItems() as $item) {
             if ($item->getProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
                 || $item->getRealProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE

@@ -11,7 +11,7 @@ $installer->run("
       `admin_url` varchar(255) NOT NULL,
       `frontend_urls` TEXT NOT NULL,
       `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `updated_at` timestamp NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `unique_key` (`magento_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';

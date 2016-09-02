@@ -39,7 +39,7 @@ class Local_Manadev_Model_Download_Status
     }
 
     public function toOptionArray(){
-        $result = [];
+        $result = array();
         foreach($this->statuses as $status => $label) {
             $result[$status] = $this->_getHelper()->__($label);
         }
