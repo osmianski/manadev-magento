@@ -60,7 +60,8 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
         Mage::register("m_link_purchased_item", $linkPurchasedItem);
         $availableStatuses = array(
             Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
-            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
+            Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED
         );
         if (in_array($status, $availableStatuses)
             && ($downloadsLeft || $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
