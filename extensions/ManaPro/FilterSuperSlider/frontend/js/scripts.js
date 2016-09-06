@@ -12,9 +12,16 @@ ManaPro.filterSuperSlider = function(id, o) {
     var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
     var $_to = jQuery('#' + id + '-applied input.m-slider.m-to');
     var _value = [
-        parseFloat($_from.val()),
-        parseFloat($_to.val())
+        _parse($_from.val()),
+        _parse($_to.val())
     ];
+
+    function _parse(stringValue) {
+        if (typeof stringValue != 'undefined') {
+            stringValue = stringValue.replace(/,([^,]*)$/, '.$1');
+        }
+        return parseFloat(stringValue);
+    }
 
     function _round(value) {
         if (o.existingValues.length) {
@@ -27,13 +34,13 @@ ManaPro.filterSuperSlider = function(id, o) {
                 }
             });
             //console.log(value + ' => ' + o.existingValues[found]);
-            value = parseFloat(o.existingValues[found]);
+            value = _parse(o.existingValues[found]);
         }
         if (o.formatThreshold && value >= o.formatThreshold) {
-            return o.decimalDigits2 ? parseFloat(value.toFixed(o.decimalDigits2)) : value.round();
+            return o.decimalDigits2 ? _parse(value.toFixed(o.decimalDigits2)) : value.round();
         }
         else {
-            return o.decimalDigits ? parseFloat(value.toFixed(o.decimalDigits)) : value.round();
+            return o.decimalDigits ? _parse(value.toFixed(o.decimalDigits)) : value.round();
         }
     }
     function _format(value) {
@@ -70,8 +77,8 @@ ManaPro.filterSuperSlider = function(id, o) {
 
         if (value === undefined) {
             value = [
-                parseFloat($_from.val()),
-                parseFloat($_to.val())
+                _parse($_from.val()),
+                _parse($_to.val())
             ];
             if (isNaN(value[0]) || isNaN(value[1])) {
                 _changing = false;
@@ -345,9 +352,17 @@ ManaPro.filterRangeInput = function (id, o) {
     var $_from = jQuery('#' + id + '-applied input.m-slider.m-from');
     var $_to = jQuery('#' + id + '-applied input.m-slider.m-to');
     var _value = [
-        parseFloat($_from.val()),
-        parseFloat($_to.val())
+        _parse($_from.val()),
+        _parse($_to.val())
     ];
+
+    function _parse(stringValue) {
+        if (typeof stringValue != 'undefined') {
+            stringValue = stringValue.replace(/,([^,]*)$/, '.$1');
+        }
+        return parseFloat(stringValue);
+    }
+
 
     function _round(value) {
         if (o.formatThreshold && value >= o.formatThreshold) {
@@ -364,8 +379,8 @@ ManaPro.filterRangeInput = function (id, o) {
         }
         _changing = true;
         value = [
-            parseFloat($_from.val()),
-            parseFloat($_to.val())
+            _parse($_from.val()),
+            _parse($_to.val())
         ];
         if (isNaN(value[0]) || isNaN(value[1])) {
             _changing = false;
