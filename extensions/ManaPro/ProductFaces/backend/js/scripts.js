@@ -324,7 +324,8 @@
 	
 	window.m_warnAndNavigate = function(url) {
 		if(confirm(_options.navigationWarning)){
-			setLocation(url);
+			//setLocation(url);
+			window.open(url, '_blank');
 			return true;
 		}
 		return false;
