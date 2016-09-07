@@ -42,21 +42,20 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         if (empty($purchasedIds)) {
             $purchasedIds = array(null);
         }
+
         $purchasedItems = Mage::getResourceModel('downloadable/link_purchased_item_collection')
             ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
-            ->addFieldToFilter('status',
+            ->addFieldToFilter('`main_table`.`status`',
                 array(
                     'nin' => array(
                         Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING_PAYMENT,
                         Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PAYMENT_REVIEW,
-                        // MANAdev Start:
-                        // Do not display license with status "Not Available"
-                        Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE,
-                        // MANAdev End:
                     )
                 )
             )
-            ->setOrder('item_id', 'desc');
+            ->setOrder('item_id', 'desc')
+            ->join(array('oi' => 'sales/order_item'), '`oi`.`item_id` = `main_table`.`order_item_id`', array())
+            ->join(array('o' => 'sales/order'), '`oi`.`order_id` = `o`.`entity_id` AND `o`.`status` = "complete"', array());
         $this->setItems($purchasedItems);
     }
 

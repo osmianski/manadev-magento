@@ -196,6 +196,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
 
         $collection->getSelect()
             ->join(array('pn' => $collection->getTable('catalog/product').'_varchar'), '`pn`.`entity_id` = `main_table`.`product_id` AND `pn`.`store_id` = 0 AND `pn`.`attribute_id` = '.$pn->getAttributeId(), array())
+            ->joinLeft(array('oi' => $collection->getTable('sales/order_item')), '`oi`.`item_id` = `main_table`.`order_item_id`', array())
+            ->joinLeft(array('o' => $collection->getTable('sales/order')), '`oi`.`order_id` = `o`.`entity_id`', array())
             ->joinLeft(array('lp' => $collection->getTable('downloadable/link_purchased')), '`lp`.`purchased_id` = `main_table`.`purchased_id`', array())
             ->joinLeft(array('ce' => $collection->getTable('customer/entity')), '`ce`.`entity_id` = COALESCE(`lp`.`customer_id`, `main_table`.`m_free_customer_id`)', array())
             ->joinLeft(array('cefn' => $collection->getTable('customer/entity').'_varchar'), '`ce`.`entity_id` = `cefn`.`entity_id` AND `cefn`.`attribute_id` = '.$fn->getAttributeId(), array())
@@ -211,9 +213,9 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 ) AS tmp
                 GROUP BY license_verification_no
                 )")), '`mlr`.`license_verification_no` = `main_table`.`m_license_verification_no`', array('actual_admin_panel_url', 'actual_frontend_urls'))
+            // Coalesce so that free licenses without orders will be displayed
+            ->where('COALESCE(`o`.`status`, "complete") = "complete"')
             ->columns($columns);
-
-        $collection->addFieldToFilter('status', array('nin' => Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE));
 
         $sql = $collection->getSelectSql(true);
         $this->setCollection($collection);
