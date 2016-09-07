@@ -23,7 +23,9 @@ class Local_Manadev_Block_Adminhtml_Renderer_RegisteredDomain extends Mage_Admin
         $html .= "</div>";
 
         $html .= "<div class='mana-toggle-2' $toggle2_style>";
-        $html .= '    <textarea row="2" class="m-store-info m-save-on-change">'.$row->getData('m_store_info').'</textarea>';
+        $lines = 1 + substr_count($row->getData('m_store_info'), "\n");
+        $line_height = 15;
+        $html .= '    <textarea row="2" class="m-store-info m-save-on-change" style="height:'. ($line_height *$lines) .'px">'.$row->getData('m_store_info').'</textarea>';
         $html .= "</div>";
 
         $html .= "<a href='#' class='mana-toggle-1-trigger' $toggle2_style>" . Mage::helper('local_manadev')->__('Show Registered URL') . "</a>";
