@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.08.3014</version>
+		    <version>16.09.0707</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -249,6 +249,11 @@
                    <file>local_manadev/customer/open_support_ticket.html</file>
                    <type>html</type>
                </local_manadev_emails_open_support_ticket_template>
+                <local_manadev_emails_domain_confirmation_template>
+                    <label>MANAdev Domain Confirmation</label>
+                    <file>local_manadev/owner/domain_confirmation.html</file>
+                    <type>html</type>
+                </local_manadev_emails_domain_confirmation_template>
             </email>
 		</template>
 		<index>
@@ -552,7 +557,14 @@
                 <enabled>1</enabled>
                 <identity>general</identity>
                 <template>local_manadev_emails_open_support_ticket_template</template>
+                <to>team@manadev.com</to>
             </open_support_ticket>
+            <domain_confirmation>
+                <enabled>1</enabled>
+                <identity>general</identity>
+                <template>local_manadev_emails_domain_confirmation_template</template>
+                <to>team@manadev.com</to>
+            </domain_confirmation>
 		</local_manadev_emails>
 	</default>
 	<!-- INSERT HERE: adminhtml, frontend, ... -->

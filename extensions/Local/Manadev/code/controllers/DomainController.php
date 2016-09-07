@@ -6,6 +6,11 @@
  */
 class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 {
+    const XML_PATH_EMAIL_RECIPIENT = 'local_manadev_emails/domain_confirmation/to';
+    const XML_PATH_EMAIL_SENDER = 'local_manadev_emails/domain_confirmation/identity';
+    const XML_PATH_EMAIL_TEMPLATE = 'local_manadev_emails/domain_confirmation/template';
+    const XML_PATH_ENABLED = 'local_manadev_emails/domain_confirmation/enabled';
+
     /**
      * Check customer authentication
      */
@@ -42,7 +47,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         $linkPurchased = Mage::getModel('downloadable/link_purchased')->load($linkPurchasedItem->getPurchasedId());
 
         if ($this->_getCustomerSession()->getCustomerId() != $linkPurchased->getCustomerId()) {
-            $this->_getSession()->addError(Mage::helper('local_manadev')->__("You do not have access to this downloadable item."));
+            $this->_getSession()->addError($this->localHelper()->__("You do not have access to this downloadable item."));
             $this->_redirect('');
             return $this;
         }
@@ -93,7 +98,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         $linkPurchased = Mage::getModel('downloadable/link_purchased')->load($linkPurchasedItem->getPurchasedId());
 
         if ($this->_getCustomerSession()->getCustomerId() != $linkPurchased->getCustomerId()) {
-            $this->_getSession()->addError(Mage::helper('local_manadev')->__("You do not have access to this downloadable item."));
+            $this->_getSession()->addError($this->localHelper()->__("You do not have access to this downloadable item."));
             $this->_redirect('');
             return $this;
         }
@@ -106,7 +111,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             }
             $storeInfo = $this->getRequest()->getParam('m_store_info', "");
             if(trim($domain) === "" && trim($storeInfo) === "") {
-                throw new Mana_Core_Exception_Validation(Mage::helper('local_manadev')->__("Please provide either your store admin panel URL or your store information."));
+                throw new Mana_Core_Exception_Validation($this->localHelper()->__("Please provide either your store admin panel URL or your store information."));
             }
         } catch(Mana_Core_Exception_Validation $e) {
             $this->_getSession()->addError($e->getErrors());
@@ -126,8 +131,15 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE;
 
         $linkPurchasedItem
-            ->setData('m_registered_domain', $domain)
-            ->setData('m_store_info', $storeInfo)
+            ->setData('m_registered_domain_pending', $domain)
+            ->setData('m_store_info_pending', $storeInfo);
+        $is_newly_registered = $this->_getCustomerSession()->getData('m_start_download');
+        if($is_newly_registered) {
+            // If store info set for the first time, no need for confirmation.
+            $linkPurchasedItem->updateStoreInfoFromPending();
+        }
+
+        $linkPurchasedItem
             ->setData('status', $status)
             ->save();
 
@@ -147,8 +159,16 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
                 ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
         } else {
-            $this->_getCustomerSession()
-                ->addSuccess('Registered URL has been updated.');
+            // If it is disabled, then just update store info automatically
+            $domain_registration_confirm_enabled = Mage::getStoreConfig(self::XML_PATH_ENABLED);
+            if($domain_registration_confirm_enabled && $this->_sendConfirmationEmailToManaTeam($linkPurchasedItem)) {
+                $this->_getCustomerSession()
+                    ->addSuccess('Registered URL has been submitted for review. It will be updated once it has been reviewed by the MANAdev Team.');
+            } else {
+                $linkPurchasedItem->updateStoreInfoFromPending();
+                $this->_getCustomerSession()
+                    ->addSuccess('Registered URL has been updated.');
+            }
         }
 
         if($this->_getCustomerSession()->getData('m_start_download', true)) {
@@ -209,7 +229,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      * @return Local_Manadev_Helper_Data
      */
     protected function _getHelper() {
-        return Mage::helper('local_manadev');
+        return $this->localHelper();
     }
 
     /**
@@ -288,11 +308,91 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 }
             }
         } catch(Exception $e) {
-            throw new Mana_Core_Exception_Validation(sprintf(Mage::helper('local_manadev')->__("`%s` is not a Magento Admin Panel URL."), $postDomain));
+            throw new Mana_Core_Exception_Validation(sprintf($this->localHelper()->__("`%s` is not a Magento Admin Panel URL."), $postDomain));
         }
 
         $domain = $postDomain;
 
         return $domain;
+    }
+
+    /**
+     * @param Local_Manadev_Model_Downloadable_Item $linkPurchasedItem
+     *
+     * @return bool
+     */
+    private function _sendConfirmationEmailToManaTeam($linkPurchasedItem) {
+        try {
+            $mailTemplate = Mage::getModel('core/email_template');
+            $contactEmail = $this->_getCustomerSession()->getCustomer()->getEmail();
+            /* @var $mailTemplate Mage_Core_Model_Email_Template */
+            $mailTemplate->setDesignConfig(array('area' => 'frontend'))
+                ->setReplyTo($contactEmail);
+
+            $recipients = explode(",", Mage::getStoreConfig(self::XML_PATH_EMAIL_RECIPIENT));
+            $recipients = array_filter($recipients);
+            if (!$recipients) {
+                throw new Local_Manadev_Exception_NoRecipientException;
+            }
+            $pending_hash = $linkPurchasedItem->generatePendingHash();
+            $confirmUrl = Mage::getUrl('*/*/confirm', array('hash' => $pending_hash));
+
+            $orderItem = Mage::getModel('sales/order_item')->load($linkPurchasedItem->getOrderItemId());
+            $order = Mage::getModel('sales/order')->load($orderItem->getOrderId());
+
+            $vars = array(
+                'order' => $order,
+                'purchased_item' => $linkPurchasedItem,
+                'contact_email' => $contactEmail,
+                'confirm_url' => $confirmUrl,
+            );
+
+            $mailTemplate
+                ->sendTransactional(
+                    Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE),
+                    Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER),
+                    $recipients,
+                    null,
+                    $vars
+                );
+
+            if (!$mailTemplate->getSentSuccess()) {
+                throw new Exception();
+            }
+
+            return true;
+        } catch (Local_Manadev_Exception_NoRecipientException $e) {
+            $this->_getCustomerSession()->addError(
+                $this->localHelper()->__('No recipient configured on System Configuration -> manadev.com Emails -> Domain Confirmation -> Send Email To')
+            );
+        } catch (Exception $e) {
+            $this->_getCustomerSession()->addError(
+                $this->localHelper()->__('Domain confirmation email sending failed. Please check access to the configured mail server in System Configuration -> System -> Mail Sending Settings.')
+            );
+        }
+
+        return false;
+    }
+
+    public function confirmAction() {
+        $hash = $this->getRequest()->getParam('hash');
+        /** @var Local_Manadev_Model_Downloadable_Item $link_purchased_item */
+        $link_purchased_item = Mage::getModel('downloadable/link_purchased_item')->load($hash, 'm_pending_hash');
+        if($link_purchased_item->getId()) {
+            $link_purchased_item
+                ->setData('m_pending_hash', null)
+                ->updateStoreInfoFromPending();
+            $this->_getSession()->addSuccess($this->localHelper()->__("New domain registration information has been applied."));
+        } else {
+            $this->_getSession()->addError($this->localHelper()->__("Pending domain registration information not found. Please check if it is already applied."));
+        }
+        return $this->_redirect('');
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function localHelper() {
+        return Mage::helper('local_manadev');
     }
 }

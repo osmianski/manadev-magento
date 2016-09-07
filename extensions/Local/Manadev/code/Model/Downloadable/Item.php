@@ -54,6 +54,14 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
         return $this->getData('m_store_info');
     }
 
+    public function getPendingRegisteredDomain(){
+        return $this->getData('m_registered_domain_pending');
+    }
+
+    public function getPendingStoreInfo(){
+        return $this->getData('m_store_info_pending');
+    }
+
     public function getRegistrationHistoryHtml() {
         $historyCollection = $this->localHelper()->prepareDomainHistoryCollection($this->getId());
         $html = "";
@@ -76,6 +84,24 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
     public function _beforeSave() {
         // Do not return parent _beforeSave(), because it will fail when a free extension is downloaded
         return $this->_baseBeforeSave();
+    }
+
+    public function updateStoreInfoFromPending() {
+        $this
+            ->setData('m_registered_domain', $this->getData('m_registered_domain_pending'))
+            ->setData('m_store_info', $this->getData('m_store_info_pending'))
+            ->setData('m_store_info_pending', null)
+            ->setData('m_registered_domain_pending', null)
+            ->save();
+    }
+
+    public function generatePendingHash() {
+        $pending_hash = strtr(base64_encode(microtime() . $this->getId()), '+/=', '-_,');
+        $this
+            ->setData('m_pending_hash', $pending_hash)
+            ->save();
+
+        return $pending_hash;
     }
 
     protected function _afterSave() {
