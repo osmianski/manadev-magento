@@ -92,7 +92,7 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                         $fileName = $_FILES['screenshot_' . $x]['name'];
                         $fileExt = strtolower(substr(strrchr($fileName, ".") ,1));
                         $fileNamewoe = rtrim($fileName, $fileExt);
-                        $fileName = preg_replace('/\s+', '', $fileNamewoe) . time() . '.' . $fileExt;
+                        $fileName = preg_replace('/\s+/', '', $fileNamewoe) . time() . '.' . $fileExt;
 
                         $uploader = new Varien_File_Uploader('screenshot_' . $x);
                         $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png', 'gif'));
@@ -133,7 +133,8 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             foreach($files as $attachFile) {
                 $fileContents = file_get_contents($attachFile);
                 $attachment = $mailTemplate->getMail()->createAttachment($fileContents);
-                $attachment->filename = array_pop(explode(DS, $attachFile));
+                $tmpFiles = explode(DS, $attachFile);
+                $attachment->filename = array_pop($tmpFiles);
             }
 
             $mailTemplate
