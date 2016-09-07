@@ -42,11 +42,35 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
 
     public function getRegisteredDomain() {
         $domain = $this->getData('m_registered_domain');
-        if (trim($domain) == "") {
-            $domain = Mage::helper('local_manadev')->__("(None)");
-        }
+        // Return empty string instead of "(None)"
+//        if (trim($domain) == "") {
+//            $domain = Mage::helper('local_manadev')->__("(None)");
+//        }
 
         return $domain;
+    }
+
+    public function getStoreInfo() {
+        return $this->getData('m_store_info');
+    }
+
+    public function getRegistrationHistoryHtml() {
+        $historyCollection = $this->localHelper()->prepareDomainHistoryCollection($this->getId());
+        $html = "";
+
+        if ($historyCollection->count() >= 2) {
+            $skipFirst = true;
+            /** @var Local_Manadev_Model_DomainHistory $item */
+            foreach($historyCollection->getItems() as $item) {
+                if($skipFirst) {
+                    $skipFirst = false;
+                    continue;
+                }
+                $html .= "&nbsp;&nbsp;&nbsp;&nbsp;" . htmlentities($item->getItemString()) . " <br/>";
+            }
+        }
+
+        return $html;
     }
 
     public function _beforeSave() {
@@ -161,5 +185,12 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
      */
     protected function _isSupportLastPurchasedDateChanged() {
         return $this->_formatDate($this->getData('m_support_last_purchased_at')) != $this->_formatDate($this->getOrigData('m_support_last_purchased_at'));
+    }
+
+    /**
+     * @return Local_Manadev_Helper_Data
+     */
+    protected function localHelper() {
+        return Mage::helper('local_manadev');
     }
 }

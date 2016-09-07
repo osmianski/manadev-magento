@@ -130,18 +130,23 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             $mailTemplate->setDesignConfig(array('area' => 'frontend'))
                 ->setReplyTo($contactEmail);
 
-            foreach($files as $attachFile) {
+            foreach ($files as $attachFile) {
                 $fileContents = file_get_contents($attachFile);
                 $attachment = $mailTemplate->getMail()->createAttachment($fileContents);
                 $tmpFiles = explode(DS, $attachFile);
                 $attachment->filename = array_pop($tmpFiles);
             }
 
+            $recipients = explode(",", Mage::getStoreConfig(self::XML_PATH_EMAIL_RECIPIENT));
+            $recipients = array_filter($recipients);
+            if (!$recipients) {
+                throw new Local_Manadev_Exception_NoRecipientException;
+            }
             $mailTemplate
                 ->sendTransactional(
                     Mage::getStoreConfig(self::XML_PATH_EMAIL_TEMPLATE),
                     Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER),
-                    explode(",", Mage::getStoreConfig(self::XML_PATH_EMAIL_RECIPIENT)),
+                    $recipients,
                     null,
                     $vars
                 );
@@ -153,9 +158,13 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
             Mage::getSingleton('customer/session')->addSuccess(
                 Mage::helper('local_manadev')->__('Your support ticket was submitted. Our Technical Support Representative will be in touch with you as soon as possible.')
             );
+        } catch (Local_Manadev_Exception_NoRecipientException $exception) {
+            Mage::getSingleton('customer/session')->addError(
+                Mage::helper('local_manadev')->__('No recipient configured on System Configuration -> manadev.com Emails -> Support Ticket -> Send Email To')
+            );
         } catch (Exception $error) {
             Mage::getSingleton('customer/session')->addError(
-                Mage::helper('local_manadev')->__('Unable to submit support ticket. Please try again later.')
+                Mage::helper('local_manadev')->__('Support ticket email sending failed. Please check access to the configured mail server in System Configuration -> System -> Mail Sending Settings.')
             );
         }
         return $this->_redirect('downloadable/customer/products');

@@ -10,4 +10,14 @@ class Local_Manadev_Model_DomainHistory extends Mage_Core_Model_Abstract
         $this->_init('local_manadev/domainHistory');
     }
 
+    public function getItemString() {
+        $domain = $this->getData('m_registered_domain');
+        if (trim($domain) != "") {
+            $item = "URL: " . $domain;
+        } else {
+            $item = "INFO: " . $this->getData('m_store_info');
+        }
+
+        return $item;
+    }
 }

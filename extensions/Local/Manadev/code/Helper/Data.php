@@ -79,13 +79,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $skipFirst = false;
                 continue;
             }
-            $domain = $dh->getData('m_registered_domain');
-            if(trim($domain) != "") {
-                $item = "URL: ".$domain;
-            } else {
-                $item = "INFO: ".$dh->getData('m_store_info');
-            }
-            $html .= $item;
+            $html .= $dh->getItemString();
             $html .= "<br/>";
         }
 
