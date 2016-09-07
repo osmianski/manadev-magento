@@ -212,6 +212,9 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 GROUP BY license_verification_no
                 )")), '`mlr`.`license_verification_no` = `main_table`.`m_license_verification_no`', array('actual_admin_panel_url', 'actual_frontend_urls'))
             ->columns($columns);
+
+        $collection->addFieldToFilter('status', array('nin' => Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE));
+
         $sql = $collection->getSelectSql(true);
         $this->setCollection($collection);
 
