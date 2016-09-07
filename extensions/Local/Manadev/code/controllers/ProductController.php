@@ -155,6 +155,10 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		$linkHash = strtr(base64_encode(microtime() . $product->getId()), '+/=', '-_,');
         $customerId = $this->_getCustomerSession()->isLoggedIn() ? $this->_getCustomerSession()->getId() : null;
 
+        $last_valid_date = strftime('%Y-%m-%d', time());
+        $expire_date = strtotime("+6 months", Varien_Date::toTimestamp($last_valid_date));
+        $expire_date = date("Y-m-d", $expire_date);
+
 		$linkPurchasedItem
 			->setOrderItemId(null)
 			->setPurchasedId(null)
@@ -168,6 +172,8 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 			->setCreatedAt(strftime('%Y-%m-%d', time()))
 			->setUpdatedAt(strftime('%Y-%m-%d', time()))
             ->setMFreeCustomerId($customerId)
+            ->setData('m_support_valid_til', $expire_date)
+            ->setData('m_support_last_purchased_at', $last_valid_date)
             ->save();
 
 		/** @var Local_Manadev_Helper_Data $helper */
