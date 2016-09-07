@@ -265,7 +265,8 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         if (!$value = $column->getFilter()->getValue()) {
             return;
         }
-        $this->getCollection()->addFilter('m_license_no', $value, 'or');
-        $this->getCollection()->addFilter('m_license_verification_no', $value, 'or');
+        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $condition = new Zend_Db_Expr($read->quoteInto("`main_table`.`m_license_no` = ? OR `main_table`.`m_license_verification_no` = ?", $value, $value));
+        $this->getCollection()->addFilter('m_license_no',$condition, 'string');
     }
 }
