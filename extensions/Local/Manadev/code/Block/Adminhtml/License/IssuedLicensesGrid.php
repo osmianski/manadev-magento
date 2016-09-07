@@ -19,6 +19,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('License Number'),
                 'index' => 'm_license_no',
+                'filter_condition_callback' => array($this, '_filterLicenseNo'),
                 'width' => '100px',
                 'align' => 'left',
             )
@@ -253,5 +254,13 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
      */
     protected function _getOrderNoExpr() {
         return "COALESCE(`lp`.`order_increment_id`, '{$this->_getNoOrderStr()}')";
+    }
+
+    protected function _filterLicenseNo($collection, $column) {
+        if (!$value = $column->getFilter()->getValue()) {
+            return;
+        }
+        $this->getCollection()->addFilter('m_license_no', $value, 'or');
+        $this->getCollection()->addFilter('m_license_verification_no', $value, 'or');
     }
 }
