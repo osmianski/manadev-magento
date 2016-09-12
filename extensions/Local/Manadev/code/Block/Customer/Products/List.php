@@ -141,15 +141,15 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
             }
         }
         $result = htmlentities($result);
-//        if(!in_array($_item->getStatus(),
-//            array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED))
-//        ) {
-//            $result .= "<br/>";
-//            $title = Mage::helper('downloadable')->__('Modify');
-//            $url = $this->getUrl('actions/domain/modify', array('id' => $_item->getLinkHash()));
-//            $result .= "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
-//
-//        }
+        if(!in_array($_item->getStatus(),
+            array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED))
+        ) {
+            $result .= "<br/>";
+            $title = Mage::helper('downloadable')->__('Modify');
+            $url = $this->getUrl('actions/domain/modify', array('id' => $_item->getLinkHash()));
+            $result .= "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
+
+        }
 
         return $result;
     }
