@@ -161,9 +161,11 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         } else {
             // If it is disabled, then just update store info automatically
             $domain_registration_confirm_enabled = Mage::getStoreConfig(self::XML_PATH_ENABLED);
-            if($domain_registration_confirm_enabled && $this->_sendConfirmationEmailToManaTeam($linkPurchasedItem)) {
-                $this->_getCustomerSession()
-                    ->addSuccess('Registered URL has been submitted for review. It will be updated once it has been reviewed by the MANAdev Team.');
+            if($domain_registration_confirm_enabled) {
+                if($this->_sendConfirmationEmailToManaTeam($linkPurchasedItem)) {
+                    $this->_getCustomerSession()
+                        ->addSuccess('Registered URL has been submitted for review. It will be updated once it has been reviewed by the MANAdev Team.');
+                }
             } else {
                 $linkPurchasedItem->updateStoreInfoFromPending();
                 $this->_getCustomerSession()
@@ -321,7 +323,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      *
      * @return bool
      */
-    private function _sendConfirmationEmailToManaTeam($linkPurchasedItem) {
+    protected function _sendConfirmationEmailToManaTeam($linkPurchasedItem) {
         try {
             $mailTemplate = Mage::getModel('core/email_template');
             $contactEmail = $this->_getCustomerSession()->getCustomer()->getEmail();
