@@ -45,17 +45,14 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
 
         $purchasedItems = Mage::getResourceModel('downloadable/link_purchased_item_collection')
             ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
-            ->addFieldToFilter('`main_table`.`status`',
-                array(
-                    'nin' => array(
-                        Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING_PAYMENT,
-                        Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PAYMENT_REVIEW,
-                    )
-                )
-            )
             ->setOrder('item_id', 'desc')
             ->join(array('oi' => 'sales/order_item'), '`oi`.`item_id` = `main_table`.`order_item_id`', array())
             ->join(array('o' => 'sales/order'), '`oi`.`order_id` = `o`.`entity_id` AND `o`.`status` = "complete"', array());
+
+        $purchasedItems->getSelect()->where("`main_table`.`status` NOT IN (?)", array(
+            Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING_PAYMENT,
+            Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PAYMENT_REVIEW)
+        );
         $this->setItems($purchasedItems);
     }
 
