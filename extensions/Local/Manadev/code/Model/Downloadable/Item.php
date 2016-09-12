@@ -93,6 +93,9 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
             ->setData('m_store_info_pending', null)
             ->setData('m_registered_domain_pending', null)
             ->save();
+        /** @var Local_Manadev_Resource_DomainHistory $dhResource */
+        $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
+        $dhResource->insertHistory($this->getId(), $this->getData('m_registered_domain'), $this->getData('m_store_info'));
     }
 
     public function generatePendingHash() {
