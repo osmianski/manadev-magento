@@ -124,7 +124,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Status'),
                 'index' => 'status',
-                'filter_index' => '`main_table`.`status`',
+                'filter_index' => 'main_table.status',
                 'type' => 'select',
                 'width' => '100px',
                 'align' => 'left',
@@ -238,9 +238,9 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
      */
     protected function _getCustomerNameExpr() {
         $customerNameExpr = "CONCAT(
-            IFNULL(`cefn`.`value`, ''), 
+            IFNULL(cefn.value, ''), 
             ' ',
-            IFNULL(`celn`.`value`, '')
+            IFNULL(celn.value, '')
         )";
         return "IF(TRIM({$customerNameExpr}) = '', '" . $this->_getNotLoggedInStr() . "', {$customerNameExpr})";
     }
@@ -260,7 +260,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
      * @return string
      */
     protected function _getOrderNoExpr() {
-        return "COALESCE(`lp`.`order_increment_id`, '{$this->_getNoOrderStr()}')";
+        return "COALESCE(lp.order_increment_id, '{$this->_getNoOrderStr()}')";
     }
 
     protected function _filterLicenseNo($collection, $column) {
