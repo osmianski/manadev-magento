@@ -285,8 +285,5 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 FROM m_domain_history
                 WHERE m_registered_domain LIKE ? OR m_store_info LIKE ?
             )", array("%$value%")))), "`rh`.`item_id` = `main_table`.`item_id`", array());
-//        $condition = new Zend_Db_Expr("`rh`.`registered_domains` = ? OR `rh`.`store_infos` = ?", $value, $value);
-//        $condition = "`rh`.`registered_domains` = '{$value}' OR `rh`.`store_infos` = '{$value}'";
-//        $collection->getSelect()->where("`rh`.`registered_domains` LIKE ? OR `rh`.`store_infos` LIKE ?", array("%$value%"));
     }
 }
