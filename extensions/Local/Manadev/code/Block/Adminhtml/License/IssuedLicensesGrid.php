@@ -66,6 +66,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Registered URL'),
                 'index' => 'm_registered_domain',
+                'filter_condition_callback' => array($this, '_filterRegisteredDomain'),
                 'width' => '200px',
                 'align' => 'left',
                 'renderer' => 'local_manadev/adminhtml_renderer_registeredDomain',
@@ -269,5 +270,23 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         $read = Mage::getSingleton('core/resource')->getConnection('core_read');
         $condition = new Zend_Db_Expr($read->quoteInto("`main_table`.`m_license_no` = ? OR `main_table`.`m_license_verification_no` = ?", $value, $value));
         $this->getCollection()->addFilter('m_license_no',$condition, 'string');
+    }
+
+    protected function _filterRegisteredDomain($collection, $column) {
+        if (!$value = $column->getFilter()->getValue()) {
+            return;
+        }
+        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
+        /** @var Mage_Downloadable_Model_Resource_Link_Purchased_Item_Collection $collection */
+        $collection = $this->getCollection();
+        $collection->getSelect()
+            ->join(array('rh' => new Zend_Db_Expr($read->quoteInto("(
+                SELECT DISTINCT item_id
+                FROM m_domain_history
+                WHERE m_registered_domain LIKE ? OR m_store_info LIKE ?
+            )", array("%$value%")))), "`rh`.`item_id` = `main_table`.`item_id`", array());
+//        $condition = new Zend_Db_Expr("`rh`.`registered_domains` = ? OR `rh`.`store_infos` = ?", $value, $value);
+//        $condition = "`rh`.`registered_domains` = '{$value}' OR `rh`.`store_infos` = '{$value}'";
+//        $collection->getSelect()->where("`rh`.`registered_domains` LIKE ? OR `rh`.`store_infos` LIKE ?", array("%$value%"));
     }
 }
