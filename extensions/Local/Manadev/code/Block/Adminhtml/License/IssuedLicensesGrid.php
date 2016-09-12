@@ -124,7 +124,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Status'),
                 'index' => 'status',
-                'filter_index' => '`main_table`.`status`',
+                'filter_index' => 'main_table.status',
                 'type' => 'select',
                 'width' => '100px',
                 'align' => 'left',
