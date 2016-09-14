@@ -19,9 +19,32 @@ class Local_Manadev_Model_Observer {
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
+    }
 
+    /**
+     * Sets the license information of the order (handles event "sales_order_invoice_save_before")
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function processLicense($observer) {
+        /* @var $object Mage_Sales_Model_Order_Invoice */ $object = $observer->getEvent()->getDataObject();
+
+        // Support date will be adjusted if "Support Services" product is on the order
         $this->_increaseSupportValidDate($object);
         $this->_setLicenseToNotRegistered($object);
+    }
+
+    /**
+     * Revokes the license of the ordered extension (handles event "sales_order_invoice_save_before")
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function revokeLicense($observer) {
+        /* @var $object Mage_Sales_Model_Order_Invoice */ $object = $observer->getEvent()->getDataObject();
+
+        // Support date will be adjusted if "Support Services" product is on the order
+        $this->_decreaseSupportValidDate($object);
+        $this->_setLicenseToNotAvailable($object);
     }
 	
 	/* BASED ON SNIPPET: Models/Event handler */
@@ -35,9 +58,6 @@ class Local_Manadev_Model_Observer {
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
-
-        $this->_decreaseSupportValidDate($object);
-        $this->_setLicenseToNotAvailable($object);
     }
 
     /**
@@ -390,7 +410,6 @@ class Local_Manadev_Model_Observer {
                     $new_date = strtotime("-6 months", strtotime($new_date));
                     $new_date = date("Y-m-d", $new_date);
                 }
-                $last_puchased_at = strtotime("-6 months", strtotime($new_date));
                 $last_puchased_at = date("Y-m-d", $new_date);
                 // Change `m_support_last_purchased_at` and it will automatically update `m_support_valid_til` in the model's _beforeSave() method
                 $item->setData('m_support_valid_til', $new_date)
