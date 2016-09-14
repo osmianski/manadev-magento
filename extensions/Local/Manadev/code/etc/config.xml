@@ -189,6 +189,22 @@
 					</local_manadev>
 				</observers>
 			</sales_order_invoice_save_before>
+            <sales_order_invoice_save_commit_after>
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class> <!-- model name of class containing event handler methods -->
+                        <method>processLicense</method> <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </sales_order_invoice_save_commit_after>
+            <sales_order_creditmemo_save_commit_after>
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class> <!-- model name of class containing event handler methods -->
+                        <method>revokeLicense</method> <!-- event handler method name -->
+                    </local_manadev>
+                </observers>
+            </sales_order_creditmemo_save_commit_after>
 			<sales_order_creditmemo_save_before><!-- this is event name this module listens for -->
 				<observers>
 					<local_manadev>
