@@ -337,7 +337,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 throw new Local_Manadev_Exception_NoRecipientException;
             }
             $pending_hash = $linkPurchasedItem->generatePendingHash();
-            $confirmUrl = Mage::getUrl('*/*/confirm', array('hash' => $pending_hash));
+            $confirmUrl = Mage::getUrl('*/domainChange/confirm', array('hash' => $pending_hash));
 
             $orderItem = Mage::getModel('sales/order_item')->load($linkPurchasedItem->getOrderItemId());
             $order = Mage::getModel('sales/order')->load($orderItem->getOrderId());
@@ -374,21 +374,6 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         return false;
-    }
-
-    public function confirmAction() {
-        $hash = $this->getRequest()->getParam('hash');
-        /** @var Local_Manadev_Model_Downloadable_Item $link_purchased_item */
-        $link_purchased_item = Mage::getModel('downloadable/link_purchased_item')->load($hash, 'm_pending_hash');
-        if($link_purchased_item->getId()) {
-            $link_purchased_item
-                ->setData('m_pending_hash', null)
-                ->updateStoreInfoFromPending();
-            $this->_getSession()->addSuccess($this->localHelper()->__("New domain registration information has been applied."));
-        } else {
-            $this->_getSession()->addError($this->localHelper()->__("Pending domain registration information not found. Please check if it is already applied."));
-        }
-        return $this->_redirect('');
     }
 
     /**
