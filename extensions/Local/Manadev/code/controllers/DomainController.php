@@ -136,7 +136,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         $is_newly_registered = $this->_getCustomerSession()->getData('m_start_download');
         if($is_newly_registered) {
             // If store info set for the first time, no need for confirmation.
-            $linkPurchasedItem->updateStoreInfoFromPending();
+            $linkPurchasedItem->updateStoreInfoFromPending(false);
         }
 
         $linkPurchasedItem

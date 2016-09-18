@@ -86,10 +86,12 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
         return $this->_baseBeforeSave();
     }
 
-    public function updateStoreInfoFromPending() {
-        /** @var Local_Manadev_Resource_DomainHistory $dhResource */
-        $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
-        $dhResource->insertHistory($this->getId(), $this->getData('m_registered_domain'), $this->getData('m_store_info'));
+    public function updateStoreInfoFromPending($insertHistory = true) {
+        if($insertHistory) {
+            /** @var Local_Manadev_Resource_DomainHistory $dhResource */
+            $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
+            $dhResource->insertHistory($this->getId(), $this->getData('m_registered_domain'), $this->getData('m_store_info'));
+        }
 
         $this
             ->setData('m_registered_domain', $this->getData('m_registered_domain_pending'))
