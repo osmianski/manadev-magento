@@ -11,7 +11,7 @@
         <ManaTheme_Uffizi>
             <!-- This actually an activation instruction. You can set it to false to temporarily deactivate module (
         	in this case Magento will behave as if module does not exist). -->
-            <active>true</active>
+            <active>false</active>
             <!-- This instructs Magento to search for module code in app/code/local directory. -->
             <codePool>local</codePool>
             <depends>
