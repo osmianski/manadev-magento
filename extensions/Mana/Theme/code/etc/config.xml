@@ -41,7 +41,7 @@
             </customer>
             <catalog>
                 <rewrite>
-                    <product_list_toolbar>Mana_Theme_Block_List_Toolbar</product_list_toolbar>
+                    <!--<product_list_toolbar>Mana_Theme_Block_List_Toolbar</product_list_toolbar>-->
                 </rewrite>
             </catalog>
             <checkout>
