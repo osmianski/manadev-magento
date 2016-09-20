@@ -54,6 +54,7 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
             array(
                 'header' => $this->__('Product'),
                 'index' => 'product_name',
+                'filter_index' => 'pn.value',
                 'width' => '200px',
                 'align' => 'left',
                 'link' => array('route' => 'adminhtml/catalog_product/edit', 'params' => array('id' => '{{product_id}}')),
