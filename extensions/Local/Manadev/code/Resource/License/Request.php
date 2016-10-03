@@ -153,7 +153,7 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
 
         $this->_getWriteAdapter()->delete($extensionResource->getMainTable(), $where);
         if($extensions) {
-            $this->_getWriteAdapter()->insertOnDuplicate($extensionResource->getMainTable(), $extensions, array('version'));
+            $this->_getWriteAdapter()->insertOnDuplicate($extensionResource->getMainTable(), $extensions, array('version', 'license_verification_no'));
         }
 
         /** @var Local_Manadev_Resource_Downloadable_Item $purchasedItem */
