@@ -7,7 +7,7 @@
 class Local_Manadev_Block_Adminhtml_Renderer_Multiline extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
     protected function _getValue(Varien_Object $row) {
-        $lines = explode("|", parent::_getValue($row));
+        $lines = array_values(array_filter(explode("|", parent::_getValue($row))));
         $html = "";
         if(is_array($lines)) {
             foreach($lines as $x => $line) {
@@ -17,6 +17,9 @@ class Local_Manadev_Block_Adminhtml_Renderer_Multiline extends Mage_Adminhtml_Bl
                 $html .= $line;
                 if (count($lines) != ($x + 1)) {
                     $html .= "<br/>";
+                    if($this->getColumn()->getData('double_line')) {
+                        $html .= "<br/>";
+                    }
                 }
             }
             if(count($lines) > 5) {

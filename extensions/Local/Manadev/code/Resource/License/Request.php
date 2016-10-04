@@ -10,29 +10,6 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $this->_init('local_manadev/license_request', 'id');
     }
 
-    public function ipHasExceededRequestLimit($ip_address) {
-        $select = $this->_getWriteAdapter()->select();
-        $select
-            ->from($this->getMainTable())
-            ->where("remote_ip = ?", $ip_address)
-            ->order("created_at DESC")
-            ->limit(1, 14);
-        $data = $this->_getReadAdapter()->fetchRow($select);
-
-        if($data) {
-            $last15Rec = new DateTime($data['created_at']);
-            $varienNow = Varien_Date::now();
-            $now = new DateTime($varienNow);
-            $diff = $last15Rec->diff($now);
-
-            if($diff->format('%h') == 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param Local_Manadev_Model_License_Request $requestModel
      * @return string

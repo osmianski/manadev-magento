@@ -64,7 +64,19 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
                 'index' => 'extensions',
                 'width' => '50px',
                 'align' => 'left',
+                'double_line' => true,
                 'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+            )
+        );
+
+        $this->addColumn(
+            'license_numbers',
+            array(
+                'header' => $this->__('License Numbers'),
+                'index' => 'license_numbers',
+                'width' => '50px',
+                'align' => 'left',
+                'renderer' => 'local_manadev/adminhtml_renderer_licenseNumbers',
             )
         );
 
@@ -114,20 +126,10 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
         );
 
         $this->addColumn(
-            'license_numbers',
-            array(
-                'header' => $this->__('License Numbers'),
-                'index' => 'license_numbers',
-                'width' => '50px',
-                'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_licenseNumbers',
-            )
-        );
-
-        $this->addColumn(
-            'history',
+            'history_count',
             array(
                 'header' => $this->__('History'),
+                'index' => 'history_count',
                 'width' => '100px',
                 'align' => 'left',
                 'filter' => false,
@@ -146,27 +148,33 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
         /** @var Local_Manadev_Resource_License_Request_Collection $collection */
         $collection = Mage::getResourceModel("local_manadev/license_request_collection");
 
+        $licenseExpr = "COALESCE(`dlpi`.`m_license_no`, `mle`.`license_verification_no`)";
+        $customerExpr = "TRIM(CONCAT(IFNULL(`cf`.`value`, ''), ' ', IFNULL(`cl`.`value`, '')))";
         $collection->getSelect()
             ->join(array('mlr' => new Zend_Db_Expr("(
                 SELECT magento_id, id, MAX(created_at) AS created_at FROM ". $collection->getTable('local_manadev/license_request') ." GROUP BY magento_id
             )")), "`main_table`.`magento_id` = mlr.`magento_id` AND `main_table`.`created_at` = `mlr`.`created_at`", array())
-            ->joinLeft(array('e' => new Zend_Db_Expr("(
+            ->join(array('mlh' => new Zend_Db_Expr("(
+                SELECT magento_id, COUNT(*) as history_count FROM ". $collection->getTable('local_manadev/license_request') ." GROUP BY magento_id
+            )")), "mlr.magento_id = mlh.magento_id", array("history_count"))
+            ->joinLeft(array('e' => new Zend_Db_Expr(
+                "(
                 SELECT
                     request_id,
-                    GROUP_CONCAT(DISTINCT dlp.`order_increment_id` SEPARATOR '|') AS order_numbers,
-                    GROUP_CONCAT(DISTINCT dlp.`order_id` SEPARATOR '|') as order_ids,
-                    GROUP_CONCAT(dlp.`customer_id` SEPARATOR '|') as customer_ids,
-                    GROUP_CONCAT(DISTINCT `pn`.`value` SEPARATOR '|') as extensions,
-                    GROUP_CONCAT(TRIM(CONCAT(IFNULL(`cf`.`value`, ''), ' ', IFNULL(`cl`.`value`, '')))  SEPARATOR '|') AS customer_names,
-                    GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers
+                    GROUP_CONCAT(dlp.`order_increment_id` SEPARATOR '|') AS order_numbers,
+                    GROUP_CONCAT(dlp.`order_id` SEPARATOR '|') as order_ids,
+                    GROUP_CONCAT(COALESCE(dlp.`customer_id`, '') SEPARATOR '|') as customer_ids,
+                    GROUP_CONCAT(COALESCE(`pn`.`value`, `mle`.`code`) SEPARATOR '|') as extensions,
+                    GROUP_CONCAT(IF({$customerExpr} = '', 'Not Registered', {$customerExpr})  SEPARATOR '|') AS customer_names,
+                    GROUP_CONCAT(IF({$licenseExpr} = '', 'Unlicensed', {$licenseExpr}) SEPARATOR '|') as license_numbers
                 FROM " . $collection->getTable('local_manadev/license_extension') . " mle
                 LEFT JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.`m_license_verification_no` = mle.`license_verification_no`
                 LEFT JOIN " . $collection->getTable('downloadable/link_purchased') . " dlp ON dlpi.`purchased_id` = dlp.`purchased_id`
-                LEFT JOIN `" . $collection->getTable('catalog/product') . "_varchar` pn ON pn.`entity_id` = dlpi.`product_id` AND pn.`attribute_id` = ". $productName->getAttributeId() ."
+                LEFT JOIN `" . $collection->getTable('catalog/product') . "_varchar` pn ON `pn`.`store_id` = 0 AND pn.`entity_id` = dlpi.`product_id` AND pn.`attribute_id` = ". $productName->getAttributeId() ."
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cf ON cf.`entity_id` = dlp.`customer_id` AND cf.`attribute_id` = ". $fn->getAttributeId() ."
                 LEFT JOIN `". $collection->getTable('customer/entity') ."_varchar` cl ON cl.`entity_id` = dlp.`customer_id` AND cl.`attribute_id` = ". $ln->getAttributeId() ."
-                WHERE `dlpi`.`status` <> '". Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE ."'
                 GROUP BY request_id
+                ORDER BY `mle`.`id`
             )")), "`e`.`request_id` = `main_table`.`id`", array('customer_ids', 'customer_names', 'order_numbers', 'order_ids', 'extensions', 'license_numbers'))
             ;
         $sql = $collection->getSelectSql(true);

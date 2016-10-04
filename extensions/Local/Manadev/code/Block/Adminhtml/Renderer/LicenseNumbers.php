@@ -15,11 +15,17 @@ class Local_Manadev_Block_Adminhtml_Renderer_LicenseNumbers extends Mage_Adminht
                     $html .= "<div class='mana-multiline' style='display:none;'>";
                 }
 
-                $filter = 'm_license_no='.$line;
-                $filter = base64_encode($filter);
-                $url = Mage::helper('adminhtml')->getUrl('adminhtml/license/issuedLicenses', array('filter'=>$filter));
+                $isLink = substr($line, 0, 1) == "L";
 
-                $html .= "<a href='{$url}'>{$line}</a>";
+                if($isLink) {
+                    $filter = 'm_license_no='.$line;
+                    $filter = base64_encode($filter);
+                    $url = Mage::helper('adminhtml')->getUrl('adminhtml/license/issuedLicenses', array('filter'=>$filter));
+
+                    $html .= "<a href='{$url}'>{$line}</a>";
+                } else {
+                    $html .= $line;
+                }
                 if(count($lines) != ($x + 1)) {
                     $html .= '<br/><br/>';
                 }

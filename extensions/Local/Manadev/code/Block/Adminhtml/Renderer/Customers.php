@@ -14,14 +14,18 @@ class Local_Manadev_Block_Adminhtml_Renderer_Customers extends Mage_Adminhtml_Bl
         $html = "";
         if(is_array($lines)) {
             $x = 0;
-            foreach($lines as $line) {
+            foreach($lines as $y => $line) {
                 if($x == 5) {
                     $html .= "<div class='mana-multiline' style='display:none;'>";
                 }
 
                 if(!in_array($line, $customer_names)) {
-                    $url = $this->getUrl('adminhtml/customer/edit', array('id' => $customer_ids[$x]));
-                    $html .= "<a href='{$url}'>{$line}</a>";
+                    if($customer_ids[$y] != "") {
+                        $url = $this->getUrl('adminhtml/customer/edit', array('id' => $customer_ids[$y]));
+                        $html .= "<a href='{$url}'>{$line}</a>";
+                    } else {
+                        $html .= $line;
+                    }
                     if (count($lines) != ($x + 1)) {
                         $html .= "<br/>";
                     }

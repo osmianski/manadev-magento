@@ -10,6 +10,14 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
         try {
             $params = $this->getRequest()->getParams();
 
+            /** @var Local_Manadev_Resource_License_Request_Log $logResource */
+            $logResource = Mage::getResourceModel('local_manadev/license_request_log');
+            $logResource->deleteOldRequestLogs();
+            if($logResource->hasExceededRequestLimit()) {
+                throw new Exception("Maximum number of request reached! Please try again after 1 hour.");
+            }
+            $logResource->logRequest();
+
             if(!$params) {
                 throw new Exception("Invalid request");
             }
@@ -38,14 +46,6 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 if(!array_key_exists($requiredField, $params)) {
                     throw new Exception("Some required data are missing.");
                 }
-            }
-
-            if($signature && !$localKeyModel->verifySignatureFromAvailableKeys($coreKeyModel->dataToString($params), $signature, $key)) {
-                throw new Exception("Key/Signature pair did not match");
-            }
-
-            if(Mage::getResourceModel('local_manadev/license_request')->ipHasExceededRequestLimit($params['remoteIp'])) {
-                throw new Exception("Maximum number of request reached! Please try again after 1 hour.");
             }
 
             if(isset($params['magentoInstanceId'])) {
@@ -86,16 +86,17 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 );
 
                 $perfectMatch = true;
+                $changedData = array();
                 foreach($itemsToCheck as $data => $match) {
                     if(!$match) {
+                        $changedData[] = $data;
                         $perfectMatch = false;
-                        break;
                     }
                 }
 
                 if(!$perfectMatch) {
                     // Something changed, save it.
-                    $this->saveRequestToDb($params);
+                    $this->saveRequestToDb($params, $changedData);
                 } else {
                     // Same data. Do not create a new record. Update last_checked instead.
                     Mage::getModel('local_manadev/license_request')
@@ -111,14 +112,11 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             $result = array(
                 'latestManadevExtensionVersions' => $this->_getLatestVersionOfExtensions($params['installedManadevExtensions']),
             );
-            if($newMagentoId) {
+            if($newMagentoId ) {
                 $result['generatedMagentoId'] = $magento_id;
             }
 
-            if($key === false) {
-                throw new Exception("");
-            }
-            echo $coreKeyModel->ssl_encrypt($coreKeyModel->dataToStringSerialize($result), 'public', $localKeyModel->getPublicKeyResource($key));
+            echo $coreKeyModel->dataToStringSerialize($result);
             exit();
         } catch (Exception $e) {
             $protocol = "HTTP/1.0";
@@ -128,7 +126,15 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             header("$protocol 503 Service Unavailable", true, 503);
             header("Status: 503 Service Unavailable", true, 503);
             echo $e->getMessage();
-            Mage::log($e, Zend_Log::DEBUG, 'manadev-exception.log');
+            $log = $e->getMessage();
+
+            if(isset($params)) {
+                $log .= "\r\n";
+                $log .= "\r\n";
+                $log .= json_encode($params);
+            }
+
+            Mage::log($log, Zend_Log::DEBUG, 'manadev-license-exception.log');
             exit();
         }
 
@@ -170,15 +176,19 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
         return Mage::getModel('local_manadev/key');
     }
 
-    private function saveRequestToDb($params) {
+    protected function saveRequestToDb($params, $changedData = array()) {
         try {
+            $changedData = count($changedData) ? $this->_humanizeChangedData($changedData): null;
+
+            /** @var Local_Manadev_Model_License_Request $requestModel */
             $requestModel = Mage::getModel('local_manadev/license_request');
 
             $requestModel
                 ->setData('admin_url', $params['adminPanelUrl'])
                 ->setData('remote_ip', $params['remoteIp'])
                 ->setData('base_dir', $params['baseDir'])
-                ->setData('magento_version', $params['magentoVersion']);
+                ->setData('magento_version', $params['magentoVersion'])
+                ->setData('changed_data', $changedData);
             $requestModel->setModules($params['installedModules']);
             $requestModel->setExtensions($params['installedManadevExtensions']);
             $requestModel->setStores($params['stores']);
@@ -205,5 +215,23 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
         $storesInRequest = $params['stores'];
         array_multisort($storesInRequest);
         $params['stores'] = $storesInRequest;
+    }
+
+    protected function _humanizeChangedData($changedData) {
+        $values = array(
+            'admin_url' => "Admin Panel URL",
+            'remote_ip' => "Server IP Address",
+            'basedir' => "Installation Base Directory",
+            'magento_version' => "Magento Version",
+            'modules' => "Modules",
+            'extensions' => "Installed Extensions",
+            'stores' => "Store Information",
+        );
+
+        $result = array();
+        foreach($changedData as $key) {
+            $result[] = $values[$key];
+        }
+        return implode(", ", $result);
     }
 }

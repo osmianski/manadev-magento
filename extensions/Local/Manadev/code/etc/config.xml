@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.09.1821</version>
+		    <version>16.10.0417</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -109,6 +109,7 @@
 					<request><table>m_request</table></request>
 					<domainHistory><table>m_domain_history</table></domainHistory>
 					<license_request><table>m_license_request</table></license_request>
+                    <license_request_log><table>m_license_request_log</table></license_request_log>
 					<license_module><table>m_license_module</table></license_module>
 					<license_extension><table>m_license_extension</table></license_extension>
 					<license_store><table>m_license_store</table></license_store>
