@@ -413,6 +413,87 @@ class Local_Manadev_Model_Pdf extends Mage_Sales_Model_Order_Pdf_Abstract
         $this->text($this->__('Issued by: director Vladislav Ošmianskij'), 85, $y + 5, 500, '#000000', 'Regular', 11, 'right', $this->page);
     }
 
+    /**
+     * @param $document
+     *
+     * One line (no matter how many actual products are in invoice) - development services
+     * Row and subtotal are without VAT
+     * Then total VAT and total with VAT are shown
+     */
+    protected function _printEuroOnly($document) {
+        // invoice caption
+        $vatCaption = ($this->getLanguage() == 'lt' && $this->getDocumentType() == 'invoice') ? 'PVM ' : '';
+        $this->text($vatCaption . $this->__($this->caption) . $document->getIncrementId(), 85, 715, 567, '#808080', 'Bold', 20, 'center', $this->page);
+        $this->text($this->__($this->dateLabel) . $this->_date($document->getMDate()), 85, 687, 567, '#000000', 'Regular', 11, 'center', $this->page);
+
+        // supplier info
+        $this->text($this->__('Supplier'), 85, 650, 322, '#000000', 'Bold', 16, 'left', $this->page);
+        foreach (explode("\n", Mage::getStoreConfig($this->__('sales/identity/address'), $this->store)) as $i => $value) {
+            $this->text($value, 85, 628 - $i * 14, 322, '#000000', 'Regular', 11, 'left', $this->page);
+        }
+
+        // customer info
+        $this->text($this->__('Customer'), 330, 650, 567, '#000000', 'Bold', 16, 'left', $this->page);
+        foreach ($this->_formatAddress($this->order->getBillingAddress()->format($this->__('pdf'))) as $i => $value) {
+            $this->text($value, 330, 628 - $i * 14, 567, '#000000', 'Regular', 11, 'left', $this->page);
+        }
+
+        // payment info
+        $this->text($this->__($this->paidLabel), 330, 520, 567, '#000000', 'Bold', 16, 'left', $this->page);
+        $y = 506;
+        foreach (explode('{{pdf_row_separator}}', Mage::helper('payment')->getInfoBlock($this->order->getPayment())->setIsSecureMode(true)->toPdf()) as $value) {
+            if (strip_tags(trim($value))) {
+                $this->text(strip_tags(trim($value)), 330, $y, 567, '#000000', 'Regular', 11, 'left', $this->page);
+                $y -= 14;
+            }
+        }
+
+        // print header line
+        $this->rectangle(85, 425, 403, 442, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->rectangle(403, 425, 483, 442, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->rectangle(483, 425, 567, 442, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->text($this->__('Services'), 87, 430, 400, '#000000', 'Bold', 11, 'left', $this->page);
+        $this->text($this->__('Price'), 405, 430, 480, '#000000', 'Bold', 11, 'center', $this->page);
+        $this->text($this->__('Subtotal'), 485, 430, 565, '#000000', 'Bold', 11, 'center', $this->page);
+        $this->line(85, 442, 567, 442, 1, '#000000', $this->page);
+
+        // print service line
+        $this->rectangle(85, 381, 403, 425, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->rectangle(403, 381, 483, 425, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->rectangle(483, 381, 567, 425, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->text($this->__('Magento development services'), 87, 414, 400, '#000000', 'Regular', 9, 'left', $this->page);
+        $this->text($this->__('According to order #%s, created at %s', $this->order->getIncrementId(), $this->_date($document->getCreatedAt(), true)), 100, 400, 400, '#000000', 'Regular', 9, 'left', $this->page);
+        $this->text($this->_price($document->getMUsdTotal(), $this->curr), 405, 414, 480, '#000000', 'Regular', 9, 'center', $this->page);
+        $this->text($this->_price($document->getMUsdTotal(), $this->curr), 485, 414, 565, '#000000', 'Regular', 9, 'center', $this->page);
+        $y = 364;
+
+        // print USD without VAT
+        $this->text($this->__('Total without VAT:'), 330, $y + 5, 475, '#000000', 'Bold', 11, 'right', $this->page);
+        $this->rectangle(483, $y + 17, 567, $y, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->text($this->_price($document->getMUsdTotal(), $this->curr), 485, $y + 5, 565, '#000000', 'Bold', 9, 'center', $this->page);
+        $y -= 17;
+
+        // print USD VAT
+        $this->text($this->__('%s%% VAT:', $document->getMVatPercent() * 1), 330, $y + 5, 475, '#000000', 'Bold', 11, 'right', $this->page);
+        $this->rectangle(483, $y + 17, 567, $y, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->text($this->_price($document->getMUsdVat(), $this->curr), 485, $y + 5, 565, '#000000', 'Bold', 9, 'center', $this->page);
+        $y -= 17;
+
+        // print USD with VAT
+        $this->text($this->__('Total with VAT:'), 330, $y + 5, 475, '#000000', 'Bold', 11, 'right', $this->page);
+        $this->rectangle(483, $y + 17, 567, $y, 0.5, '#000000', '#FFFFFF', $this->page);
+        $this->text($this->_price($document->getGrandTotal(), $this->curr), 485, $y + 5, 565, '#000000', 'Bold', 9, 'center', $this->page);
+        $y -= 17;
+
+        // words
+        $y -= 50;
+        if ($this->getLanguage() == 'lt') {
+            $this->text($this->_words($document->getGrandTotal(), $this->curr), 85, $y + 5, 567, '#000000', 'Regular', 11, 'left', $this->page);
+        }
+        $y -= 34;
+        $this->text($this->__('Issued by: director Vladislav Ošmianskij'), 85, $y + 5, 500, '#000000', 'Regular', 11, 'right', $this->page);
+    }
+
     public $caption;
     public $dateLabel;
     public $paidLabel;
