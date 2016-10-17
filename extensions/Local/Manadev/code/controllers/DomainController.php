@@ -236,7 +236,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
     /**
      * @param $url
-     * @return array
+     * @return bool
      */
     public function _getHeaders(&$url, $recursionLevel = 0) {
         $headers = @get_headers($url);
@@ -245,7 +245,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             return true;
         }
 
-        if (strpos($headers[0], '302') !== false) {
+        if (strpos($headers[0], '302') !== false || strpos($headers[0], '301') !== false) {
             $newUrl = "";
             foreach ($headers as $header) {
                 if (strpos($header, "Location: ") !== false) {
