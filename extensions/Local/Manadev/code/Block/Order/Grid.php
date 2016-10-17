@@ -13,6 +13,11 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
             ));
         }
 
+        $this->getMassactionBlock()->addItem('complete_free', array(
+            'label' => Mage::helper('sales')->__('Complete Free'),
+            'url' => $this->getUrl('*/sales_order/completeFree'),
+        ));
+
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/hold')) {
             $this->getMassactionBlock()->addItem('hold_order', array(
                 'label' => Mage::helper('sales')->__('Hold'),
