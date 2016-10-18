@@ -236,10 +236,14 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
     /**
      * @param $url
+     * @param int $recursionLevel
      * @return bool
      */
     public function _getHeaders(&$url, $recursionLevel = 0) {
-        $headers = @get_headers($url);
+        if (($headers = @get_headers($url)) === false) {
+            return false;
+        }
+
         $orig_url = $url;
         if (strpos($headers[0], '200') !== false) {
             return true;

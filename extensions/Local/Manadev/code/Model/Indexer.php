@@ -48,4 +48,8 @@ class Local_Manadev_Model_Indexer extends Mana_Core_Model_Indexer
     public function getDescription() {
         return Mage::helper('local_manadev')->__('Sets license status to expired if it has exceeded its expire date.');
     }
+
+    public function runCronJob() {
+        $this->reindexAll();
+    }
 }

@@ -592,7 +592,7 @@
                     <cron_expr>0 0 3 * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>local_manadev/indexer::runCronjob</model>
+                    <model>local_manadev/indexer::runCronJob</model>
                 </run>
             </local_manadev_update_license_status>
         </jobs>
