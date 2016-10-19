@@ -50,6 +50,26 @@ class Local_Manadev_Model_Indexer extends Mana_Core_Model_Indexer
     }
 
     public function runCronJob() {
-        $this->reindexAll();
+        try {
+            $this->reindexAll();
+        }
+        catch (Exception $e) {
+            $subject = 'License status error: ' . $e->getMessage();
+            $body = $e->getTraceAsString();
+
+            $emailTemplate = Mage::getModel('core/email_template');
+            /* @var $emailTemplate Mage_Core_Model_Email_Template */
+            $emailTemplate->setDesignConfig(array('area' => 'backend'));
+
+            $emailTemplate->setSentSuccess(false);
+
+            $emailTemplate->setTemplateSubject($subject);
+            $emailTemplate->setTemplateText($body);
+
+            $emailTemplate->setSenderName('team@manadev.com');
+            $emailTemplate->setSenderEmail('team@manadev.com');
+
+            $emailTemplate->setSentSuccess($emailTemplate->send('vo@manadev.com'));
+        }
     }
 }
