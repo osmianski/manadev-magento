@@ -6,6 +6,8 @@
  */
 class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 {
+    protected $domainLoggingEnabled = false;
+
     const XML_PATH_EMAIL_RECIPIENT = 'local_manadev_emails/domain_confirmation/to';
     const XML_PATH_EMAIL_SENDER = 'local_manadev_emails/domain_confirmation/identity';
     const XML_PATH_EMAIL_TEMPLATE = 'local_manadev_emails/domain_confirmation/template';
@@ -206,7 +208,14 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
         curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com/');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $content = curl_exec($ch);
+        if (!$content) {
+            if ($this->domainLoggingEnabled) {
+                Mage::log("No content for $url", Zend_Log::DEBUG, 'domain_validation.log');
+                Mage::log("Curl error: " . curl_error($ch), Zend_Log::DEBUG, 'domain_validation.log');
+            }
+        }
         curl_close($ch);
         unlink($cookie_file);
         return $content;
@@ -241,6 +250,9 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
      */
     public function _getHeaders(&$url, $recursionLevel = 0) {
         if (($headers = @get_headers($url)) === false) {
+            if ($this->domainLoggingEnabled) {
+                Mage::log("$recursionLevel: get_headers($url) error", Zend_Log::DEBUG, 'domain_validation.log');
+            }
             return false;
         }
 
@@ -263,13 +275,23 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 return true;
             } else {
                 if($recursionLevel < 5) {
+                    if ($this->domainLoggingEnabled) {
+                        Mage::log("Redirecting $orig_url to $url", Zend_Log::DEBUG, 'domain_validation.log');
+                    }
+
                     return $this->_getHeaders($url, $recursionLevel + 1);
                 } else {
+                    if ($this->domainLoggingEnabled) {
+                        Mage::log("Too many redirects", Zend_Log::DEBUG, 'domain_validation.log');
+                    }
                     return false;
                 }
             }
         }
 
+        if ($this->domainLoggingEnabled) {
+            Mage::log("Unknown response for $orig_url: " . json_encode($headers, JSON_PRETTY_PRINT), Zend_Log::DEBUG, 'domain_validation.log');
+        }
         return false;
     }
 
@@ -298,6 +320,10 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             $contents = $this->getPage($url);
 
             if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+                if ($this->domainLoggingEnabled) {
+                    Mage::log("Login form not found", Zend_Log::DEBUG, 'domain_validation.log');
+                    Mage::log($contents, Zend_Log::DEBUG, 'domain_validation.log');
+                }
                 // Retry with original url and append `/admin`
                 $url = $postDomain . "admin/";
                 $isResponseValid = $this->_getHeaders($url);
@@ -314,6 +340,12 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 }
             }
         } catch(Exception $e) {
+            if ($this->domainLoggingEnabled) {
+                Mage::log("Invalid domain: $postDomain", Zend_Log::DEBUG, 'domain_validation.log');
+                Mage::log("Domain tested: $url", Zend_Log::DEBUG, 'domain_validation.log');
+                Mage::log("Error: {$e->getMessage()}", Zend_Log::DEBUG, 'domain_validation.log');
+                Mage::log($e->getTraceAsString(), Zend_Log::DEBUG, 'domain_validation.log');
+            }
             throw new Mana_Core_Exception_Validation(sprintf($this->localHelper()->__("`%s` is not a Magento Admin Panel URL."), $postDomain));
         }
 
