@@ -6,7 +6,7 @@
  */
 class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 {
-    protected $domainLoggingEnabled = false;
+    protected $domainLoggingEnabled = true;
 
     const XML_PATH_EMAIL_RECIPIENT = 'local_manadev_emails/domain_confirmation/to';
     const XML_PATH_EMAIL_SENDER = 'local_manadev_emails/domain_confirmation/identity';
@@ -290,7 +290,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         }
 
         if ($this->domainLoggingEnabled) {
-            Mage::log("Unknown response for $orig_url: " . json_encode($headers, JSON_PRETTY_PRINT), Zend_Log::DEBUG, 'domain_validation.log');
+            Mage::log("Unknown response for $orig_url: " . json_encode($headers), Zend_Log::DEBUG, 'domain_validation.log');
         }
         return false;
     }
