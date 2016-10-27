@@ -21,6 +21,8 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         // region Construction/Destruction/Event Binding
         // ------------------------------------------------
 
+        scrollDisabled: false,
+
         _init: function() {
 
             this._super();
@@ -35,6 +37,14 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 self.onScroll();
             }
 
+            function _disableScrolling() {
+                self.scrollDisabled = true;
+            }
+
+            function _enableScrolling() {
+                self.scrollDisabled = false;
+            }
+
             return this
                 ._super()
                 .on('bind', this, function () {
@@ -43,9 +53,15 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     self.limit = this.getVisibleItemCount();
                     self.$scrollingArea().on('scroll', _scroll);
                     this.showShowMoreButton();
+                    $(document)
+                        .on("m-ajax-before", _disableScrolling)
+                        .on("m-ajax-after", _enableScrolling);
                 })
                 .on('unbind', this, function () {
                     self.$scrollingArea().off('scroll', _scroll);
+                    $(document)
+                        .off("m-ajax-before", _disableScrolling)
+                        .off("m-ajax-after", _enableScrolling);
                 });
 
         },
@@ -332,6 +348,10 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 console.log('visible bottom: %d, list bottom: %d, visible count: %d, product count: %d',
                     this.getScrollingAreaBottom(), this.getProductListBottom(),
                     this.getVisibleItemCount(), this.getProductCount());
+            }
+
+            if (this.scrollDisabled) {
+                return;
             }
 
             // when window bottom reaches product list bottom
