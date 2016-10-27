@@ -366,7 +366,7 @@ class Mana_Core_Model_Observer {
 		$isApplied = false;
 		$orders = $select->getPart(Zend_Db_Table_Select::ORDER);
 		foreach($orders as $order) {
-			if($order[0] == "{$alias}.entity_id") {
+			if(is_array($order) && $order[0] == $alias.".entity_id") {
 				$isApplied = true;
 				break;
 			}
