@@ -62,7 +62,7 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             $collection = Mage::getResourceModel('local_manadev/license_request_collection');
             $lastRequest = $collection
                 ->addFieldToFilter("magento_id", $magento_id)
-                ->addOrder("created_at")
+                ->addOrder("created_at", 'desc')
                 ->getFirstItem();
 
             if($lastRequest->getId()) {
@@ -77,13 +77,17 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
 
                 $itemsToCheck = array(
                     'admin_url' => $lastRequest->getData('admin_url') == $params['adminPanelUrl'],
-                    'remote_ip' => $lastRequest->getData('remote_ip') == $params['remoteIp'],
+                    'remote_ip' => $lastRequest->getData('remote_ip') == $_SERVER['REMOTE_ADDR'],
                     'basedir' => $lastRequest->getData('base_dir') == $params['baseDir'],
                     'magento_version' => $lastRequest->getData('magento_version') == $params['magentoVersion'],
                     'modules' => json_encode($modulesInDb) == json_encode($params['installedModules']),
                     'extensions' => json_encode($extensionsInDb) == json_encode($params['installedManadevExtensions']),
                     'stores' => json_encode($storesInDb) == json_encode($params['stores']),
                 );
+
+                Mage::log($lastRequest->getId(), Zend_Log::DEBUG, 'debug.log');
+                Mage::log($lastRequest->getData('remote_ip'), Zend_Log::DEBUG, 'debug.log');
+                Mage::log($_SERVER['REMOTE_ADDR'], Zend_Log::DEBUG, 'debug.log');
 
                 $perfectMatch = true;
                 $changedData = array();
@@ -125,16 +129,15 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             }
             header("$protocol 503 Service Unavailable", true, 503);
             header("Status: 503 Service Unavailable", true, 503);
-            echo $e->getMessage();
-            $log = $e->getMessage();
+            echo 'Invalid Magento instance data.';
+
+            Mage::log($e->getMessage(), Zend_Log::DEBUG, 'manadev-license-exception.log');
+            Mage::log($e->getTraceAsString(), Zend_Log::DEBUG, 'manadev-license-exception.log');
 
             if(isset($params)) {
-                $log .= "\r\n";
-                $log .= "\r\n";
-                $log .= json_encode($params);
+                Mage::log(json_encode($params), Zend_Log::DEBUG, 'manadev-license-exception.log');
             }
 
-            Mage::log($log, Zend_Log::DEBUG, 'manadev-license-exception.log');
             exit();
         }
 
@@ -177,30 +180,32 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
     }
 
     protected function saveRequestToDb($params, $changedData = array()) {
-        try {
-            $changedData = count($changedData) ? $this->_humanizeChangedData($changedData): null;
+        $changedData = count($changedData) ? $this->_humanizeChangedData($changedData): null;
 
-            /** @var Local_Manadev_Model_License_Request $requestModel */
-            $requestModel = Mage::getModel('local_manadev/license_request');
+        /** @var Local_Manadev_Model_License_Request $requestModel */
+        $requestModel = Mage::getModel('local_manadev/license_request');
 
-            $requestModel
-                ->setData('admin_url', $params['adminPanelUrl'])
-                ->setData('remote_ip', $params['remoteIp'])
-                ->setData('base_dir', $params['baseDir'])
-                ->setData('magento_version', $params['magentoVersion'])
-                ->setData('changed_data', $changedData);
-            $requestModel->setModules($params['installedModules']);
-            $requestModel->setExtensions($params['installedManadevExtensions']);
-            $requestModel->setStores($params['stores']);
+        $requestModel
+            ->setData('admin_url', $params['adminPanelUrl'])
+            ->setData('remote_ip', $_SERVER['REMOTE_ADDR'])
+            ->setData('base_dir', $params['baseDir'])
+            ->setData('magento_version', $params['magentoVersion'])
+            ->setData('last_checked', Varien_Date::now())
+            ->setData('changed_data', $changedData);
+        $requestModel->setModules($params['installedModules']);
+        $requestModel->setExtensions($params['installedManadevExtensions']);
+        $requestModel->setStores($params['stores']);
 
-            $magento_id = $requestModel->getResource()->generateMagentoId($requestModel);
-            $requestModel->setData('magento_id', $magento_id);
-
-            $requestModel->save();
-            return $requestModel;
-        } catch (Exception $e) {
-            throw new Exception("Something is wrong with the data provided.");
+        if (isset($params['magentoInstanceId'])) {
+            $magento_id = $params['magentoInstanceId'];
         }
+        else {
+            $magento_id = $requestModel->getResource()->generateMagentoId($requestModel);
+        }
+        $requestModel->setData('magento_id', $magento_id);
+
+        $requestModel->save();
+        return $magento_id;
     }
 
     protected function _sortItems(&$params) {

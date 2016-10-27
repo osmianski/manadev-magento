@@ -178,6 +178,7 @@ class Local_Manadev_Block_Adminhtml_License_MagentoInstancesGrid extends Mana_Ad
             )")), "`e`.`request_id` = `main_table`.`id`", array('customer_ids', 'customer_names', 'order_numbers', 'order_ids', 'extensions', 'license_numbers'))
             ;
         $sql = $collection->getSelectSql(true);
+        //Mage::log($sql, Zend_Log::DEBUG, 'debug.log');
 
         $this->setCollection($collection);
 
