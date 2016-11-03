@@ -55,7 +55,7 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $stores = array();
 
         foreach($moduleCollection->getItems() as $row) {
-            $modules[$row['module']] = $row['version'];
+            $modules[] = $row['module'];
         }
 
         foreach($extensionCollection->getItems() as $row) {
@@ -68,7 +68,6 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
 
         foreach($storesCollection->getItems() as $row) {
             $stores[] = array(
-                'storeId' => $row['store_id'],
                 'url' => $row['frontend_url'],
                 'theme' => $row['theme'],
             );
@@ -90,10 +89,10 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $moduleResource = Mage::getResourceModel('local_manadev/license_module');
         $modules = array();
         $moduleCodes = array();
-        foreach($object->getModules() as $code => $version) {
+        foreach($object->getModules() as $code) {
             $modules[] = array(
                 'module' => $code,
-                'version' => $version,
+                'version' => '',
                 'request_id' => $object->getId(),
             );
             $moduleCodes[] = "'{$code}'";
@@ -140,20 +139,20 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         /** @var Local_Manadev_Resource_License_Store $extensionResource */
         $storeResource = Mage::getResourceModel('local_manadev/license_store');
         $stores = $object->getStores();
-        $storeIds = array();
+        $storeUrls = array();
         foreach($stores as $x => $store) {
             $stores[$x]['request_id'] = $object->getId();
-            $storeIds[] = $store['storeId'];
-            $stores[$x]['store_id'] = $store['storeId'];
+            $stores[$x]['store_id'] = 0;
             unset($stores[$x]['storeId']);
             $stores[$x]['frontend_url'] = $store['url'];
             unset($stores[$x]['url']);
+            $storeUrls[] = "'{$store['url']}'";
         }
 
         $whereStr = "request_id = " . $object->getId();
 
-        if(count($storeIds)) {
-            $whereStr .= " AND store_id NOT IN(" . implode(',', $storeIds) . ")";
+        if(count($storeUrls)) {
+            $whereStr .= " AND frontend_url NOT IN(" . implode(',', $storeUrls) . ")";
         }
 
         $where = new Zend_Db_Expr($whereStr);
@@ -181,13 +180,7 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         }
         $object->setData('agg_frontend_urls', implode('|', array_unique($urls)));
         $object->setData('agg_themes', implode('|', array_unique($themes)));
-
-        $moduleCodes = array();
-        implode('|', array_keys($object->getModules()));
-        foreach ($object->getModules() as $code => $version) {
-            $moduleCodes[] = $code;
-        }
-        $object->setData('agg_modules', implode('|', $moduleCodes));
+        $object->setData('agg_modules', implode('|', $object->getModules()));
 
         return $this;
     }

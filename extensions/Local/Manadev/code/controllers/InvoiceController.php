@@ -12,7 +12,7 @@ class Local_Manadev_InvoiceController extends Mage_Core_Controller_Front_Action 
             $this->_prepareDownloadResponse($invoice['filename'], $pdf->render(), 'application/pdf');
         }
         else {
-            $this->_forward('');
+            $this->_forward('noRoute');
         }
     }
 
