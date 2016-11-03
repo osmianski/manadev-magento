@@ -1502,7 +1502,7 @@ li.active { margin:0 7px 10px 0; border:1px solid #bbb; background:#ececec; }*/
 
 .products-grid.last { border-bottom:0; }
 
-.products-grid li.item { float:left; width:192px; padding:0 0 70px; text-align: center; }
+.products-grid li.item { float:left; width:192px; padding:0 0 50px; text-align: center; }
 
 .products-grid .product-image { display:block; margin:0 0 10px; }
 
@@ -3400,7 +3400,7 @@ ul.carousel-labels>li { cursor: pointer; }
 
 .mana-service li {width: 98%; margin: 20px 0;}
 
-.featured {margin: 20px 0; text-shadow: white 1px 1px 5px; position: relative; width: 480px; float: left;}
+.featured {margin: 0 0 20px; text-shadow: white 1px 1px 5px; position: relative; width: 480px; float: left;}
 
 .featured-last {border-left: 1px dashed #bbb; padding-left: 18px; width: 460px;}
 
