@@ -771,6 +771,9 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
 
         $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
         $newLinkFile = str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
+        if (file_exists($newZipFilename)) {
+            unlink($newZipFilename);
+        }
         if(!file_exists($newZipFilename) || $linkPurchasedItem->getData('link_file') != $newLinkFile) {
             copy($resource, $newZipFilename);
             $zip = new ZipArchive();
@@ -787,7 +790,40 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $sku = $productModel->getData('sku');
                 $version = $this->_getLocalKeyModel()->getVersionFromZipFile($linkModel->getLinkFile());
 
-                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.license", "{$sku} --- {$version}");
+                $licenseText = "{$productModel->getName()}\nVersion {$version}\n";
+
+                /* @var $res Mage_Core_Model_Resource */
+                $res = Mage::getSingleton(strtolower('Core/Resource'));
+                $db = $res->getConnection('read');
+
+                $customerName = '';
+                if ($orderItemId = $linkPurchasedItem->getData('order_item_id')) {
+                    $row = $db->fetchRow($db->select()
+                        ->from(array('o' => 'sales_flat_order'), array('customer_firstname', 'customer_email'))
+                        ->joinInner(array('oi' => 'sales_flat_order_item'), "`oi`.`order_id` = `o`.`entity_id`", null)
+                        ->where("`oi`.`item_id` = ?", $orderItemId)
+                    );
+                    if ($row) {
+                        $customerName = $row['customer_firstname'];
+                    }
+                }
+                else {
+                    if ($customerId = $linkPurchasedItem->getData('m_free_customer_id')) {
+                        $customer = Mage::getModel('customer/customer')->load($customerId);
+                        $customerName = $customer->getData('firstname');
+                    }
+                }
+
+                if ($customerName) {
+                    $licenseText .= "\nLicensed to $customerName\n";
+                }
+
+                $s = "$sku|$licenseVerificationNo";
+                $r=''; for ($i=0;$i<strlen($s);$i++) $r.=($i+1==strlen($s)&&$i%2==0)?$s[$i]:($i%2==0?$s[$i+1]:$s[$i-1]);
+                $s = base64_encode(implode(array_map(function($r){return chr(ord($r)+1);},str_split($r))));
+                $licenseText .= "\n$s\n";
+
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.license", "$licenseText");
 
                 if($linkPurchasedItem->getData('m_key_public')) {
                     $publicKey = $linkPurchasedItem->getData('m_key_public');
