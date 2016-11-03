@@ -1804,7 +1804,7 @@ li.active { margin:0 7px 10px 0; border:1px solid #bbb; background:#ececec; }*/
 
 .price-box-bundle .price { color:#222; }
 
-f/********** Product Prices > */
+/********** Product Prices > */
 
 
 
@@ -3420,7 +3420,7 @@ ul.carousel-labels>li { cursor: pointer; }
 
 .featured>ul>li.last>ul { padding-left: 30px; }
 
-.featured>ul>li.last>ul>li>span { font-weight: strong;}
+.featured>ul>li.last>ul>li>span { font-weight: bold;}
 
 .featured>ul>li.last>p { margin:0 0 5px 0; }
 
