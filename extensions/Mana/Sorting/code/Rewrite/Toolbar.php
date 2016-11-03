@@ -23,16 +23,13 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
             }
         }
 
-        $newOrders = array();
         foreach ($availableSortBys as $sortBy) {
             if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
-                $newOrders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
-            } else {
-                $newOrders[$sortBy] = $orders[$sortBy];
+                $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
             }
         }
 
-        parent::setAvailableOrders($newOrders);
+        parent::setAvailableOrders($orders);
 
         // If the only order is position, add all sorting methods (both custom and standard sorting methods)
         if(count($availableSortBys) == 0) {
