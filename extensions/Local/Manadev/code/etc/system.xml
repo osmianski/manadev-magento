@@ -120,13 +120,21 @@
                             <show_in_store>1</show_in_store>
                         </service_account>
                         <product_account translate="label comment">
-                            <label>Product Account</label>
+                            <label>Magento 1 Product Account</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </product_account>
+                        <m2_product_account translate="label comment">
+                            <label>Magento 2 Product Account</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </m2_product_account>
                     </fields>
                 </accounting>
                 <demo>

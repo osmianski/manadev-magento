@@ -579,7 +579,12 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                             ->load($item->getProductId());
 
                     if (!$product->getIsService()) {
-                        $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/product_account', $order->getStore());
+                        if ($product->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
+                            $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/m2_product_account', $order->getStore());
+                        }
+                        else {
+                            $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/product_account', $order->getStore());
+                        }
                         break;
                     }
                 }
