@@ -229,10 +229,12 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             );
             if($newMagentoId ) {
                 $result['id'] = $magento_id;
-                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID (newly assigned): ' . $magento_id, Zend_Log::DEBUG, 'license_request.log');
+                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID (newly assigned): ' . $magento_id .
+                    ', '. $params['admin'], Zend_Log::DEBUG, 'license_request.log');
             }
             else {
-                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID: ' . $magento_id, Zend_Log::DEBUG, 'license_request.log');
+                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID: ' . $magento_id .
+                    ', ' . $params['admin'], Zend_Log::DEBUG, 'license_request.log');
             }
 
             Mage::log($_SERVER['REMOTE_ADDR'] . ' response: ' . json_encode($result), Zend_Log::DEBUG, 'license_request.log');
