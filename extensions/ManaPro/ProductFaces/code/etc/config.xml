@@ -254,7 +254,7 @@
                 <observers>
                     <manapro_productfaces>
                         <class>manapro_productfaces/observer_inventory</class>
-                        <method>updateAll</method>
+                        <method>createDropTrigger</method>
                     </manapro_productfaces>
                 </observers>
             </admin_system_config_changed_section_manapro_productfaces>
@@ -332,10 +332,17 @@
         		<attribute0>price</attribute0>
         	</quick_edit>
             <schedule>
-                <cron_expr></cron_expr>
-                <error_email></error_email>
+                <cron_expr />
+                <error_email />
                 <error_email_identity>general</error_email_identity>
             </schedule>
+            <inventory_change_log>
+				<is_enabled>0</is_enabled>
+				<cron_expr>*/5 * * * *</cron_expr>
+				<log>1</log>
+				<error_email/>
+				<error_email_identity>general</error_email_identity>
+			</inventory_change_log>
         </manapro_productfaces>
     </default>
     <crontab>
@@ -348,6 +355,14 @@
                     <model>manapro_productfaces/indexer::runCronjob</model>
                 </run>
             </manapro_productfaces_update_all>
+            <manapro_productfaces_process_inventory_change_log>
+            	<schedule>
+                    <config_path>manapro_productfaces/inventory_change_log/cron_expr</config_path>
+            	</schedule>
+                <run>
+                    <model>manapro_productfaces/changeLog::runCronJob</model>
+                </run>
+            </manapro_productfaces_process_inventory_change_log>
         </jobs>
     </crontab>
 </config>

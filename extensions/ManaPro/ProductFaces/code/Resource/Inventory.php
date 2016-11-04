@@ -419,6 +419,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
 	        $this->updateTextQties($productIds);
+	        Mage::getResourceSingleton('manapro_productfaces/changeLog')->deleteProductIdFromChangeLog($productId);
         	if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
         catch (Exception $e) {
@@ -585,18 +586,20 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 	}
 
     public function updateStockProductMReprepresendedQty($productId, $requireTransaction = true) {
-        $sql = "UPDATE {$this->getTable('cataloginventory/stock_item')}
-                    SET `m_represented_qty` = `qty`
-                    WHERE `product_id` = $productId";
-        $this->_getWriteAdapter()->multi_query($sql);
-
-        $entitySql = "UPDATE {$this->getTable('catalog/product')} e, {$this->getTable('cataloginventory/stock_item')} i
-                          SET e.m_represented_qty = i.qty
-                          WHERE i.product_id = e.entity_id AND i.product_id  = $productId";
-        $this->_getWriteAdapter()->multi_query($entitySql);
-        $this->updateTextQties(array($productId => $productId));
-
+		if ($requireTransaction) $this->_getWriteAdapter()->beginTransaction();
         try {
+            $sql = "UPDATE {$this->getTable('cataloginventory/stock_item')}
+                        SET `m_represented_qty` = `qty`
+                        WHERE `product_id` = $productId";
+            $this->_getWriteAdapter()->multi_query($sql);
+
+            $entitySql = "UPDATE {$this->getTable('catalog/product')} e, {$this->getTable('cataloginventory/stock_item')} i
+                              SET e.m_represented_qty = i.qty
+                              WHERE i.product_id = e.entity_id AND i.product_id  = $productId";
+            $this->_getWriteAdapter()->multi_query($entitySql);
+            $this->updateTextQties(array($productId => $productId));
+            Mage::getResourceSingleton('manapro_productfaces/changeLog')->deleteProductIdFromChangeLog($productId);
+
             if ($requireTransaction) $this->_getWriteAdapter()->commit();
         } catch (Exception $e) {
             if ($requireTransaction) $this->_getWriteAdapter()->rollback();

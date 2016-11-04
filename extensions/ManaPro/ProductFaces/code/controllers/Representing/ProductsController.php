@@ -203,6 +203,26 @@ class ManaPro_ProductFaces_Representing_ProductsController extends Mage_Adminhtm
         $this->getResponse()->setBody(Mage::helper('mana_admin')->getProductChooserHtml());
     }
 
+    public function processInventoryChangeLogAction() {
+        /* @var ManaPro_ProductFaces_Model_ChangeLog $changeLog */
+        $changeLog = Mage::getSingleton('manapro_productfaces/changeLog');
+
+        try {
+            if ($count = $changeLog->runManually()) {
+                $this->_getSession()->addSuccess($this->__('%s pending inventory change(s) were processed.', $count));
+            }
+            else {
+                $this->_getSession()->addSuccess($this->__('All inventory is up to date, there is nothing to process.'));
+            }
+
+        }
+        catch (Exception $e) {
+                $this->_getSession()->addError($this->__('There was an error while processing inventory changes: %s',
+                    $e->getMessage()));
+        }
+        $this->_redirect('adminhtml/system_config/edit', array('section' => 'manapro_productfaces'));
+    }
+
 	protected function _isAllowed() {
 		return true;
 	}

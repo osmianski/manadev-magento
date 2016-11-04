@@ -59,7 +59,7 @@ class ManaPro_ProductFaces_Model_Observer_Inventory {
 		/* @var $resource ManaPro_ProductFaces_Resource_Inventory */ $resource = Mage::getResourceModel('manapro_productfaces/inventory');
 		/* @var $creditmemo Mage_Sales_Model_Order_Creditmemo */ $creditmemo = $observer->getEvent()->getCreditmemo();
 		$items = array();
-        foreach ($quote->getItemsCollection() as /* @var $item Mage_Sales_Model_Order_Creditmemo_Item */ $item) {
+        foreach ($creditmemo->getItemsCollection() as /* @var $item Mage_Sales_Model_Order_Creditmemo_Item */ $item) {
         	$items[$item->getProductId()] = $item->getQty();
         }        
         $resource->updateRepresentedProducts($items, 1);
@@ -72,6 +72,10 @@ class ManaPro_ProductFaces_Model_Observer_Inventory {
 	public function updateAll($observer) {
 		/* @var $resource ManaPro_ProductFaces_Resource_Inventory */ $resource = Mage::getResourceModel('manapro_productfaces/inventory');
 		$resource->updateAll();
+	}
+
+	public function createDropTrigger($observer) {
+        Mage::getSingleton('manapro_productfaces/changeLog')->createDropTriggerAsConfigured();
 	}
 	
 }
