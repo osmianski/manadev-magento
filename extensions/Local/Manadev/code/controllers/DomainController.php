@@ -190,8 +190,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
     protected function getPage($url) {
         $useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
         $timeout = 120;
-        $dir = dirname(__FILE__);
-        $cookie_file = $dir . '/cookies/' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
+        $cookie_file = BP . '/var/cookies/' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
@@ -217,7 +216,9 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             }
         }
         curl_close($ch);
-        unlink($cookie_file);
+        if (file_exists($cookie_file)) {
+            unlink($cookie_file);
+        }
         return $content;
     }
 
@@ -322,7 +323,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
                 if ($this->domainLoggingEnabled) {
                     Mage::log("Login form not found", Zend_Log::DEBUG, 'domain_validation.log');
-                    Mage::log($contents, Zend_Log::DEBUG, 'domain_validation.log');
+                    //Mage::log($contents, Zend_Log::DEBUG, 'domain_validation.log');
                 }
                 // Retry with original url and append `/admin`
                 $url = $postDomain . "admin/";
