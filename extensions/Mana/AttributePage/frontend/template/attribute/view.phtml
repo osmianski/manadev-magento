@@ -11,6 +11,8 @@ $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_attributePage->getData('title'));
 $_description = $_attributePage->getData('description');
 $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
+$_descriptionBottom = $_attributePage->getData('description_bottom');
+$_descriptionBottom = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_descriptionBottom);
 $_productListDescription = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_attributePage->getData('product_list_description'));
 ?>
 <div class="page-title category-title m-attribute-page-title">
@@ -23,20 +25,13 @@ $_productListDescription = Mage::helper('cms')->getBlockTemplateProcessor()->fil
             <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_attributePage->getData('image_width'), $_attributePage->getData('image_height')) ?> />
     </p>
 <?php endif; ?>
-<?php if ($_description && $_attributePage->getData('description_position') == 'top'): ?>
-    <div class="category-description m-attribute-page-description std">
-        <?php echo $_description ?>
-    </div>
-<?php endif; ?>
+<div class="category-description m-attribute-page-description top std">
+    <?php echo $_description ?>
+</div>
 <?php if ($_attributePage->getData('')) ?>
 <?php echo $this->getChildHtml('option_featured') ?>
 <?php echo $this->getChildHtml('option_alpha') ?>
 <?php echo $this->getChildHtml('option_list') ?>
-<?php if ($_description && $_attributePage->getData('description_position') == 'bottom'): ?>
-    <div class="category-description m-attribute-page-description std">
-        <?php echo $_description ?>
-    </div>
-<?php endif; ?>
 
 <?php if($_attributePage->getData('show_product_list')): ?>
     <?php if($_productListDescription): ?>
@@ -46,3 +41,7 @@ $_productListDescription = Mage::helper('cms')->getBlockTemplateProcessor()->fil
     <?php endif; ?>
     <?php echo $this->getChildHtml('product_list') ?>
 <?php endif; ?>
+
+<div class="category-description m-attribute-page-description bottom std">
+    <?php echo $_descriptionBottom ?>
+</div>

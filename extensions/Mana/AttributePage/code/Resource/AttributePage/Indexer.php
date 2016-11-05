@@ -204,6 +204,10 @@ class Mana_AttributePage_Resource_AttributePage_Indexer extends Mana_AttributePa
                         {$aggregate->sum($positionExpr)}
                     )
                 )",
+                'description_bottom' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_DESCRIPTION_BOTTOM)},
+                    `ap_scs`.`description_bottom`,
+                    `ap_gcs`.`description_bottom`
+                )",
                 'image' => "IF({$dbHelper->isCustom('ap_scs', Mana_AttributePage_Model_AttributePage_Abstract::DM_IMAGE)},
                     `ap_scs`.`image`,
                     `ap_gcs`.`image`

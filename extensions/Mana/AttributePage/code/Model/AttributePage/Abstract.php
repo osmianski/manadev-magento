@@ -64,6 +64,7 @@ abstract class Mana_AttributePage_Model_AttributePage_Abstract extends Mage_Core
     const DM_HIDE_EMPTY_OPTION_PAGES = 51;
     const DM_SHOW_PRODUCT_LIST = 52;
     const DM_PRODUCT_LIST_DESCRIPTION = 53;
+    const DM_DESCRIPTION_BOTTOM = 54;
 
     const MAX_ATTRIBUTE_COUNT = 5;
 

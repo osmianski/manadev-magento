@@ -11,6 +11,8 @@ $_filesHelper = $this->filesHelper();
 $_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
 $_description = $_optionPage->getData('description');
 $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
+$_descriptionBottom = $_optionPage->getData('description_bottom');
+$_descriptionBottom = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_descriptionBottom);
 ?>
 <div class="page-title category-title m-option-page-title">
     <h1><?php echo $_escapedTitle ?></h1>
@@ -23,14 +25,11 @@ $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_descr
             <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_optionPage->getData('image_width'), $_optionPage->getData('image_height')) ?> />
     </p>
 <?php endif; ?>
-<?php if ($_description && $_optionPage->getData('description_position') == 'top'): ?>
-    <div class="category-description m-option-page-description std">
-        <?php echo $_description ?>
-    </div>
-<?php endif; ?>
+<div class="category-description m-attribute-page-description top std">
+    <?php echo $_description ?>
+</div>
 <?php echo $this->getChildHtml('product_list') ?>
-<?php if ($_description && $_optionPage->getData('description_position') == 'bottom'): ?>
-    <div class="category-description m-option-page-description std">
-        <?php echo $_description ?>
-    </div>
-<?php endif; ?>
+
+<div class="category-description m-attribute-page-description bottom std">
+    <?php echo $_descriptionBottom ?>
+</div>

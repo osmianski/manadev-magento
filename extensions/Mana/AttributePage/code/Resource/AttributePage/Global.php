@@ -43,6 +43,7 @@ class Mana_AttributePage_Resource_AttributePage_Global extends Mana_AttributePag
                 'attribute_id_3' => "`ap_gcs`.`attribute_id_3`",
                 'attribute_id_4' => "`ap_gcs`.`attribute_id_4`",
                 'description_position' => "`ap_gcs`.`description_position`",
+                'description_bottom' => "`ap_gcs`.`description_bottom`",
                 'is_active' => "`ap_gcs`.`is_active`",
                 'image' => "`ap_gcs`.`image`",
                 'image_width' => "`ap_gcs`.`image_width`",

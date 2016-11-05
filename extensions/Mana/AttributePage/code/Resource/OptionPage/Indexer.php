@@ -91,6 +91,7 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 `op_gcs`.`description_position`,
                 `ap_gcs`.`option_page_description_position`
             )",
+            'description_bottom' => "`op_gcs`.`description_bottom`",
             'position' => "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
                 `op_gcs`.`position`,
                 {$aggregate->sum($aggregate->expr("COALESCE(`oX`.`sort_order`, 0)", $attrCount))}
@@ -365,6 +366,10 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                         `op_g`.`description_position`,
                         `ap_s`.`option_page_description_position`
                     )
+                )",
+                'description_bottom' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION_BOTTOM)},
+                    `op_scs`.`description_bottom`,
+                    `op_g`.`description_bottom`
                 )",
                 'position' => "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_POSITION)},
                     `op_scs`.`position`,
