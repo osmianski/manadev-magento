@@ -188,6 +188,9 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
                 if (strpos($condition, 'e.customer_group_id = ') !== false || strpos($condition, '`e`.`customer_group_id` = ') !== false) {
                     $preserved[$key] = $key;
                 }
+                if (strpos($condition, 'e.entity_id IN') !== false || strpos($condition, '`e`.`entity_id` IN') !== false) {
+                    $preserved[$key] = $key;
+                }
             }
 
         }

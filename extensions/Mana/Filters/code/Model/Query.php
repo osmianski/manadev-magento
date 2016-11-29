@@ -38,6 +38,13 @@ class Mana_Filters_Model_Query extends Varien_Object
     protected function _init() {
         //Mage::log('---', Zend_Log::DEBUG, 'performance.log');
         $this->_productCollection = $this->getLayer()->getProductCollection();
+
+        if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.9.3') &&
+            is_a($this->_productCollection, 'Mage_CatalogSearch_Model_Resource_Fulltext_Collection'))
+        {
+            $this->_productCollection->getSize();
+        }
+
         $this->_productCollectionPrototype = clone $this->_productCollection;
         $this->_selectPrototype = clone $this->_productCollection->getSelect();
     }

@@ -77,5 +77,18 @@ class ManaPro_ProductFaces_Model_Observer_Inventory {
 	public function createDropTrigger($observer) {
         Mage::getSingleton('manapro_productfaces/changeLog')->createDropTriggerAsConfigured();
 	}
-	
+
+	public function enterpriseFlatColumns($observer) {
+        $columnsObject = $observer->getEvent()->getColumns();
+        $columns = [];
+        foreach ($columnsObject->getData('columns') as $key => $column) {
+            if ($key == 'm_represented_qty') {
+                continue;
+            }
+
+            $columns[$key] = $column;
+        }
+
+        $columnsObject->setData('columns', $columns);
+	}
 }

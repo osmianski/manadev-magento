@@ -258,6 +258,14 @@
                     </manapro_productfaces>
                 </observers>
             </admin_system_config_changed_section_manapro_productfaces>
+            <enterprise_catalog_product_flat_prepare_columns>
+                <observers>
+                    <manapro_productfaces>
+                        <class>manapro_productfaces/observer_inventory</class>
+                        <method>enterpriseFlatColumns</method>
+                    </manapro_productfaces>
+                </observers>
+			</enterprise_catalog_product_flat_prepare_columns>
 		</events>
         <index>
             <indexer>
