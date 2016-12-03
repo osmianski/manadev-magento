@@ -56,7 +56,13 @@ class Mana_Twig_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function getContentRuleTwig() {
         if (!$this->_contentRuleTwig) {
-            $this->_contentRuleTwig = $twig = new Twig_Environment(new Twig_Loader_String(), array(
+            $loaders = array();
+            if (Mage::getStoreConfigFlag('mana/twig/allow_loading_from_files')) {
+                $loaders[] = new Twig_Loader_Filesystem(BP);
+            }
+            $loaders[] = new Twig_Loader_String();
+
+            $this->_contentRuleTwig = $twig = new Twig_Environment(new Twig_Loader_Chain($loaders), array(
                 'debug' => true,
                 'autoescape' => false,
             ));
