@@ -14,6 +14,8 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     const VAT_METHOD_1_ALWAYS_21 = 'v1_always_21';
     const VAT_METHOD_2_NOT_PAYER = 'v2_not_payer';
     const VAT_METHOD_3_AS_SPECIFIED_IN_RULES = 'v3_as_specified_in_rules';
+    protected $_customerLicenseCollection;
+
     protected function _vatMethod($date) {
         if ($date['date'] > '2012-05-01') {
             return self::VAT_METHOD_3_AS_SPECIFIED_IN_RULES;
@@ -50,6 +52,42 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     protected $_customerVatNumbers = array();
+
+    public function prepareDomainHistoryCollection($item_id) {
+        /** @var Local_Manadev_Resource_DomainHistory_Collection $dhCollection */
+        $dhCollection = Mage::getResourceModel('local_manadev/domainHistory_collection');
+        $dhCollection->addFieldToFilter('item_id', $item_id)->setOrder('created_at')->load();
+        return $dhCollection;
+    }
+
+    public function getDomainHistoryHtml($dhCollection) {
+        if($dhCollection->count() < 2) {
+            return "";
+        }
+
+        $html = "";
+        $displayedCount = $dhCollection->count() - 1;
+
+        $html .= "<a href='#' class='mana-multiline-show-more'>" . Mage::helper('local_manadev')->__('Show History ('.$displayedCount.')') . "</a>";
+        $html .= "<a href='#' class='mana-multiline-show-less' style='display:none;'>" . Mage::helper('local_manadev')->__('Hide History (' . $displayedCount . ')') . "</a>";
+        $html .= "<div class='mana-multiline' style='display:none;'>";
+
+        $skipFirst = true;
+        /** @var Local_Manadev_Model_DomainHistory $dh */
+        foreach($dhCollection->getItems() as $dh) {
+            if($skipFirst) {
+                $skipFirst = false;
+                continue;
+            }
+            $html .= $dh->getItemString();
+            $html .= "<br/>";
+        }
+
+        $html .= "</div>";
+
+        return $html;
+    }
+
     protected function _getCustomerVatNumber($customerId) {
         if ($customerId) {
             if (!isset($this->_customerVatNumbers[$customerId])) {
@@ -541,7 +579,12 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                             ->load($item->getProductId());
 
                     if (!$product->getIsService()) {
-                        $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/product_account', $order->getStore());
+                        if ($product->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
+                            $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/m2_product_account', $order->getStore());
+                        }
+                        else {
+                            $data['m_sales_account'] = Mage::getStoreConfig('local_manadev/accounting/product_account', $order->getStore());
+                        }
                         break;
                     }
                 }
@@ -717,5 +760,190 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
             'date' => $date->toString('y-MM-dd'),
             'timezone' => $timezone,
         );
+    }
+
+    public function createNewZipFileWithLicense($linkPurchasedItem) {
+        $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
+
+        /* @var $storage Mage_Downloadable_Helper_File */
+        $storage = Mage::helper('downloadable/file');
+        /** @var Mage_Downloadable_Model_Link $linkModel */
+        $linkModel = Mage::getModel('downloadable/link')->load($linkPurchasedItem->getLinkId());
+        $productModel = Mage::getModel('catalog/product')->load($linkPurchasedItem->getProductId());
+        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkModel->getLinkFile());
+
+        $pathinfo = pathinfo($resource);
+
+        $newZipFilename = $pathinfo['dirname'] . DS . $pathinfo['filename'] . "-" . $licenseVerificationNo . "." . $pathinfo['extension'];
+        $newLinkFile = str_replace(Mage_Downloadable_Model_Link::getBasePath(), "", $newZipFilename);
+        if (file_exists($newZipFilename)) {
+            unlink($newZipFilename);
+        }
+        if(!file_exists($newZipFilename) || $linkPurchasedItem->getData('link_file') != $newLinkFile) {
+            copy($resource, $newZipFilename);
+            $zip = new ZipArchive();
+            if ($zip->open($newZipFilename) === true) {
+                $this->_setPlatformValueIfNotSet($productModel, $zip);
+                if($productModel->getData('platform') == Local_Manadev_Model_Platform::VALUE_MAGENTO_2) {
+                    $moduleDir = "app/code/Manadev/Core/";
+                } else {
+                    $moduleDir = "app/code/local/Mana/Core/";
+                }
+                $licenseDir = $moduleDir . "license";
+                $zip->addEmptyDir($licenseDir);
+
+                $sku = $productModel->getData('sku');
+                $version = $this->_getLocalKeyModel()->getVersionFromZipFile($linkModel->getLinkFile());
+
+                $licenseText = "{$productModel->getName()}\nVersion {$version}\n";
+
+                /* @var $res Mage_Core_Model_Resource */
+                $res = Mage::getSingleton(strtolower('Core/Resource'));
+                $db = $res->getConnection('read');
+
+                $customerName = '';
+                if ($orderItemId = $linkPurchasedItem->getData('order_item_id')) {
+                    $row = $db->fetchRow($db->select()
+                        ->from(array('o' => 'sales_flat_order'), array('customer_firstname', 'customer_email'))
+                        ->joinInner(array('oi' => 'sales_flat_order_item'), "`oi`.`order_id` = `o`.`entity_id`", null)
+                        ->where("`oi`.`item_id` = ?", $orderItemId)
+                    );
+                    if ($row) {
+                        $customerName = $row['customer_firstname'];
+                    }
+                }
+                else {
+                    if ($customerId = $linkPurchasedItem->getData('m_free_customer_id')) {
+                        $customer = Mage::getModel('customer/customer')->load($customerId);
+                        $customerName = $customer->getData('firstname');
+                    }
+                }
+
+                if ($customerName) {
+                    $licenseText .= "\nLicensed to $customerName\n";
+                }
+
+                $s = "$sku|$licenseVerificationNo";
+                $r=''; for ($i=0;$i<strlen($s);$i++) $r.=($i+1==strlen($s)&&$i%2==0)?$s[$i]:($i%2==0?$s[$i+1]:$s[$i-1]);
+                $s = base64_encode(implode(array_map(function($r){return chr(ord($r)+1);},str_split($r))));
+                $licenseText .= "\n$s\n";
+
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.license", "$licenseText");
+
+                if($linkPurchasedItem->getData('m_key_public')) {
+                    $publicKey = $linkPurchasedItem->getData('m_key_public');
+                    $privateKey = $linkPurchasedItem->getData('m_key_private');
+                } else {
+                    $keys = $this->generateKeys();
+                    $publicKey = $keys['public'];
+                    $privateKey = $keys['private'];
+                }
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.public.pem", $publicKey);
+                $zip->addFromString("{$licenseDir}/{$licenseVerificationNo}.private.pem", $privateKey);
+                $zip->close();
+
+                $linkPurchasedItem->setData('m_key_public', $publicKey);
+                $linkPurchasedItem->setData('m_key_private', $privateKey);
+            }
+
+            $linkPurchasedItem->setData('link_file', $newLinkFile);
+            return true;
+        }
+
+        return false;
+    }
+
+    public function generateKeys() {
+        $configFile = Mage::getStoreConfig('local_manadev/downloads/openssl_config_file');
+        if(!$configFile) {
+            $configFile = Mage::getModuleDir(null, "Local_Manadev").DS."openssl.cnf";
+        }
+
+        $config = array(
+            "digest_alg" => "sha512",
+            "private_key_bits" => 4096,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            'config' => $configFile,
+        );
+
+        $res = openssl_pkey_new($config);
+
+        if ($res === false) {
+            $err = openssl_error_string();
+            throw new Exception("OpenSSL config file not setup properly. Make sure the value for 'System Configuration -> MANAdev -> manadev.com -> Downloads -> OpensSL Configuration File' is correct. Error:". $err);
+        }
+        // Extract the private key from $res to $privateKey
+        openssl_pkey_export($res, $privateKey, null, $config);
+
+        // Extract the public key from $res to $pubKey
+        $pubKey = openssl_pkey_get_details($res);
+        $pubKey = $pubKey["key"];
+
+        return array(
+            'public' => $pubKey,
+            'private' => $privateKey
+        );
+    }
+
+    public function getCustomerLicenseCollection(){
+        if(!$this->_customerLicenseCollection) {
+            $session = Mage::getSingleton('customer/session');
+            $purchased = Mage::getResourceModel('downloadable/link_purchased_collection')
+                ->addFieldToFilter('customer_id', $session->getCustomerId())
+                ->addOrder('created_at', 'desc');
+            $purchasedIds = array();
+            foreach ($purchased as $_item) {
+                $purchasedIds[] = $_item->getId();
+            }
+            if (empty($purchasedIds)) {
+                $purchasedIds = array(null);
+            }
+            $this->_customerLicenseCollection = Mage::getResourceModel('downloadable/link_purchased_item_collection')
+                ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
+                ->addFieldToFilter(
+                    'status',
+                    array(
+                        'in' => array(
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_PERIOD_EXPIRED,
+                            Local_Manadev_Model_Download_Status::M_LINK_STATUS_DOWNLOAD_EXPIRED
+                        )
+                    )
+                )
+                ->setOrder('item_id', 'desc');
+        }
+
+        return $this->_customerLicenseCollection;
+    }
+
+    public function getAccountUrl(){
+        return Mage::getUrl('downloadable/customer/products' , array('_secure' => true));
+    }
+
+    /**
+     * @return Local_Manadev_Model_Key
+     */
+    protected function _getLocalKeyModel() {
+        return Mage::getModel('local_manadev/key');
+    }
+
+    protected function _setPlatformValueIfNotSet($productModel, $zip) {
+        if(!$productModel->getData('platform')) {
+            $platform = Local_Manadev_Model_Platform::VALUE_MAGENTO_1;
+            if($zip->getFromName('app/code/Manadev/Core/registration.php')) {
+                $platform = Local_Manadev_Model_Platform::VALUE_MAGENTO_2;
+            }
+            $productModel->setData('platform', $platform);
+            $productModel->save();
+        }
+    }
+
+    public function getLoggedNotInLabel() {
+        return "No Account";
+    }
+
+    public function getNoOrderStr() {
+        return "No Order";
     }
 }

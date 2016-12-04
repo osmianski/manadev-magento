@@ -1,0 +1,31 @@
+#admin_panel_url {
+    width: 400px;
+}
+
+.m-form p.note {
+    width: 400px;
+    background: url(../images/note_bg.gif) 1px 6px no-repeat;
+    font-size: 11px;
+    padding: 0 0 0 13px;
+    margin: 0;
+}
+
+#contactForm, #ticketForm p.note {
+    width: 100%;
+}
+
+.m-form textarea {
+    resize: none;
+    height: 100%;
+}
+
+.m-beside-issue {
+    min-height: 1px;
+    height: 1px;
+}
+.m-beside-issue .space {
+    height: 133px;
+}
+.m-beside-issue input.input-text {
+    width: 330px;
+}

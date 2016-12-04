@@ -387,6 +387,16 @@ function ($, Container, ajax, core, expression) {
                 ._super()
                 .on('load', this, function () {
                     var self = this;
+                    // Trigger fieldChanged when "Insert Image..." is used.
+                    varienGlobalEvents.attachEventHandler('tinymceChange', function(){
+                        $.each(self.getFields(), function( fieldName ) {
+                            var field = self.getField(fieldName);
+                            // if the field is one of the watchedClasses, bind fieldChanged event
+                            if ($.inArray(field.constructor.name, watchedClasses) !== -1) {
+                                if(field) field.trigger('change');
+                            }
+                        });
+                    });
                     $.each(this.getFields(), function( fieldName ) {
                         var field = self.getField(fieldName);
                         // if the field is one of the watchedClasses, bind fieldChanged event

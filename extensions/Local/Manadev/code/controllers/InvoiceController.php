@@ -12,7 +12,7 @@ class Local_Manadev_InvoiceController extends Mage_Core_Controller_Front_Action 
             $this->_prepareDownloadResponse($invoice['filename'], $pdf->render(), 'application/pdf');
         }
         else {
-            $this->_forward('');
+            $this->_forward('noRoute');
         }
     }
 
@@ -31,9 +31,9 @@ class Local_Manadev_InvoiceController extends Mage_Core_Controller_Front_Action 
         if (!$order->getId()) {
             return false;
         }
-        if (!$order->getBillingAddress()->getCompany()) {
-            return false;
-        }
+//        if (!$order->getBillingAddress()->getCompany()) {
+//            return false;
+//        }
 
         /* @var $order Mage_Sales_Model_Order */
         foreach ($order->getInvoiceCollection() as $invoice) {

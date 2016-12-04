@@ -19,7 +19,33 @@ class Local_Manadev_Model_Observer {
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
-	}
+    }
+
+    /**
+     * Sets the license information of the order (handles event "sales_order_invoice_save_before")
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function processLicense($observer) {
+        /* @var $object Mage_Sales_Model_Order_Invoice */ $object = $observer->getEvent()->getDataObject();
+
+        // Support date will be adjusted if "Support Services" product is on the order
+        $this->_increaseSupportValidDate($object);
+        $this->_setLicenseToNotRegistered($object);
+    }
+
+    /**
+     * Revokes the license of the ordered extension (handles event "sales_order_invoice_save_before")
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function revokeLicense($observer) {
+        /* @var $object Mage_Sales_Model_Order_Invoice */ $object = $observer->getEvent()->getDataObject();
+
+        // Support date will be adjusted if "Support Services" product is on the order
+        $this->_decreaseSupportValidDate($object);
+        $this->_setLicenseToNotAvailable($object);
+    }
 	
 	/* BASED ON SNIPPET: Models/Event handler */
 	/**
@@ -32,7 +58,7 @@ class Local_Manadev_Model_Observer {
 		if (!$object->getMDate()) {
 			Mage::helper('local_manadev')->prepareDocumentForAccounting($object);
 		}
-	}
+    }
 
     /**
      * REPLACE THIS WITH DESCRIPTION (handles event "adminhtml_block_html_before")
@@ -186,9 +212,233 @@ class Local_Manadev_Model_Observer {
             ));
             $this->_getCustomerSession()->unsetData('pending_download_product_id');
         }
+
+        if($pendingDownloadLinkHash = $this->_getCustomerSession()->getData('m_pending_download_link_hash')) {
+            $block = Mage::getSingleton('core/layout')->addBlock('Local_Manadev_Block_Download', 'download');
+            $block->setData('link_hash', $pendingDownloadLinkHash);
+            Mage::getSingleton('core/layout')->getBlock('content')->insert($block);
+            $this->_getCustomerSession()->unsetData('m_pending_download_link_hash');
+        }
     }
+
+    public function setLinkStatus($observer) {
+        $order = $observer->getEvent()->getOrder();
+
+        if (!$order->getId()) {
+            //order not saved in the database
+            return $this;
+        }
+
+        $downloadableItemsId = array();
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
+                || $item->getRealProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
+            ) {
+                $downloadableItemsId[] = $item->getId();
+            }
+        }
+
+        if($downloadableItemsId) {
+            $linkPurchased = Mage::getResourceModel('downloadable/link_purchased_item_collection')
+                ->addFieldToFilter('order_item_id', array('in' => $downloadableItemsId));
+            foreach ($linkPurchased as $link) {
+                if($link->getStatus() == Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_AVAILABLE
+                    && trim($link->getData('m_registered_domain')) == ""
+                ) {
+                    $link->setStatus(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED)
+                    ->save();
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function saveDownloadableOrderItem($observer) {
+        $orderItem = $observer->getEvent()->getItem();
+        if (!$orderItem->getId()) {
+            //order not saved in the database
+            return $this;
+        }
+        $product = $orderItem->getProduct();
+        if ($product && $product->getTypeId() != Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+            return $this;
+        }
+        if (Mage::getModel('downloadable/link_purchased')->load($orderItem->getId(), 'order_item_id')->getId()) {
+            return $this;
+        }
+        if (!$product) {
+            $product = Mage::getModel('catalog/product')
+                ->setStoreId($orderItem->getOrder()->getStoreId())
+                ->load($orderItem->getProductId());
+        }
+        if ($product->getTypeId() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+            $links = $product->getTypeInstance(true)->getLinks($product);
+            if ($linkIds = $orderItem->getProductOptionByCode('links')) {
+                $linkPurchased = Mage::getModel('downloadable/link_purchased');
+                Mage::helper('core')->copyFieldset(
+                    'downloadable_sales_copy_order',
+                    'to_downloadable',
+                    $orderItem->getOrder(),
+                    $linkPurchased
+                );
+                Mage::helper('core')->copyFieldset(
+                    'downloadable_sales_copy_order_item',
+                    'to_downloadable',
+                    $orderItem,
+                    $linkPurchased
+                );
+                $linkSectionTitle = (
+                    $product->getLinksTitle()?
+                    $product->getLinksTitle():Mage::getStoreConfig(Mage_Downloadable_Model_Link::XML_PATH_LINKS_TITLE)
+                );
+                $linkPurchased->setLinkSectionTitle($linkSectionTitle)
+                    ->save();
+                foreach ($linkIds as $linkId) {
+                    for($x = 1; $x <= $orderItem->getQtyOrdered(); $x++) {
+                        if (isset($links[$linkId])) {
+                            $linkPurchasedItem = Mage::getModel('downloadable/link_purchased_item')
+                                ->setPurchasedId($linkPurchased->getId())
+                                ->setOrderItemId($orderItem->getId());
+
+                            Mage::helper('core')->copyFieldset(
+                                'downloadable_sales_copy_link',
+                                'to_purchased',
+                                $links[$linkId],
+                                $linkPurchasedItem
+                            );
+                            $linkHash = strtr(base64_encode(microtime() . $linkPurchased->getId() . $orderItem->getId()
+                                . $product->getId()), '+/=', '-_,');
+                            $numberOfDownloads = $links[$linkId]->getNumberOfDownloads()*$orderItem->getQtyOrdered();
+                            $purchased_at = date('Y-m-d', Varien_Date::toTimestamp($orderItem->getCreatedAt()));
+                            $initial_expire_date = strtotime("+6 months", strtotime($purchased_at));
+                            $initial_expire_date = date("Y-m-d", $initial_expire_date);
+
+                            $linkPurchasedItem->setLinkHash($linkHash)
+                                ->setNumberOfDownloadsBought($numberOfDownloads)
+                                ->setStatus(Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING)
+                                ->setMLicenseQtyNo($x)
+                                ->setData('m_support_last_purchased_at', $purchased_at)
+                                ->setData('m_support_valid_til', $initial_expire_date)
+                                ->setCreatedAt($orderItem->getCreatedAt())
+                                ->setUpdatedAt($orderItem->getUpdatedAt())
+                                ->save();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
 
     protected function _getCustomerSession() {
         return Mage::getSingleton('customer/session');
+    }
+
+    /**
+     * @param $object
+     */
+    protected function _increaseSupportValidDate($object) {
+        $processedLicenseIds = array();
+
+        foreach ($object->getAllItems() as $invoiceItem) {
+            $sku = Mage::getModel('catalog/product')->load($invoiceItem->getProductId())->getSku();
+            if ($sku == Mage::getStoreConfig('local_manadev/support_services_sku')) {
+                $buyRequest = $invoiceItem->getOrderItem()->getProductOptionByCode('info_buyRequest');
+                if (!isset($buyRequest['m_license'])) {
+                    continue;
+                }
+
+                $item_id = $buyRequest['m_license'];
+                /** @var Local_Manadev_Model_Downloadable_Item $item */
+                $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
+
+                // Calculate new date from the date support date is ordered (or the date when the support expires if it is still active)
+                $is_support_active = in_array(
+                    $item->getStatus(),
+                    array(
+                        Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE,
+                        Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL
+                    )
+                );
+                $is_already_processed = in_array($item_id, $processedLicenseIds);
+
+                // If support is active, add 6 months from `m_support_valid_til`. Use the order creation date otherwise.
+                $last_valid_date = $is_support_active || $is_already_processed ?
+                    $item->getData('m_support_valid_til') :
+                    date('Y-m-d', Varien_Date::toTimestamp($object->getOrder()->getCreatedAt()));
+
+                $new_date = $last_valid_date;
+
+                // Increase the support period 6 months from last valid date for each quantity of support item invoiced.
+                for ($x = 0; $x < $invoiceItem->getQty(); $x++) {
+                    $new_date = strtotime("+6 months", Varien_Date::toTimestamp($new_date));
+                    $new_date = date("Y-m-d", $new_date);
+                }
+
+                // Change `m_support_last_purchased_at` and it will automatically update `m_support_valid_til` in the model's _beforeSave() method
+                $item->setData('m_support_valid_til', $new_date);
+
+                if(!$is_already_processed) {
+                    $item->setData('m_support_last_purchased_at', $last_valid_date);
+                }
+                $item->save();
+                $processedLicenseIds[] = $item_id;
+            }
+        }
+    }
+
+    /**
+     * @param $object
+     */
+    protected function _decreaseSupportValidDate($object) {
+        foreach ($object->getAllItems() as $invoiceItem) {
+            $sku = Mage::getModel('catalog/product')->load($invoiceItem->getProductId())->getSku();
+            if ($sku == Mage::getStoreConfig('local_manadev/support_services_sku')) {
+                $buyRequest = $invoiceItem->getOrderItem()->getProductOptionByCode('info_buyRequest');
+                if (!isset($buyRequest['m_license'])) {
+                    continue;
+                }
+
+                $item_id = $buyRequest['m_license'];
+                $item = Mage::getModel('downloadable/link_purchased_item')->load($item_id);
+
+                $new_date = $item->getData('m_support_valid_til');
+                for ($x = 0; $x < $invoiceItem->getQty(); $x++) {
+                    $new_date = strtotime("-6 months", strtotime($new_date));
+                    $new_date = date("Y-m-d", $new_date);
+                }
+                $last_puchased_at = date("Y-m-d", $new_date);
+                // Change `m_support_last_purchased_at` and it will automatically update `m_support_valid_til` in the model's _beforeSave() method
+                $item->setData('m_support_valid_til', $new_date)
+                    ->setData('m_support_last_purchased_at', $last_puchased_at)
+                    ->save();
+            }
+        }
+    }
+
+    protected function _setLicenseToNotAvailable($object) {
+        $this->_setLicenseStatusOfInvoiceTo($object, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE);
+    }
+
+    protected function _setLicenseToNotRegistered($object) {
+        $this->_setLicenseStatusOfInvoiceTo($object, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED);
+    }
+
+    /**
+     * @param $object
+     */
+    protected function _setLicenseStatusOfInvoiceTo($object, $status) {
+        foreach ($object->getAllItems() as $invoiceItem) {
+            $orderItemId = $invoiceItem->getOrderItemId();
+            $licenseCollection = Mage::getResourceModel('downloadable/link_purchased_item_collection');
+            $licenseCollection->addFieldToFilter("order_item_id", array('eq' => $orderItemId));
+            foreach ($licenseCollection->getItems() as $item) {
+                $item->setData('status', $status)
+                    ->save();
+            }
+        }
     }
 }

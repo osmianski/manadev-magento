@@ -21,10 +21,17 @@ class Local_Manadev_Model_Checkout_Processing extends Mana_Checkout_Model_Proces
     }
 
     protected function _processPaymentMethod() {
-        $_POST['payment'] = array(
-            'method' => 'paypal_standard',
-            //'method' => 'checkmo',
-        );
+        if ($this->getQuote()->getGrandTotal() == 0) {
+            $_POST['payment'] = array(
+                'method' => 'free',
+            );
+        }
+        else {
+            $_POST['payment'] = array(
+                'method' => 'paypal_standard',
+                //'method' => 'checkmo',
+            );
+        }
         parent::_processPaymentMethod();
     }
     protected function _processOrder() {

@@ -1,0 +1,16 @@
+<?php
+/** @var $this Local_Manadev_Block_LicenseSelection */
+?>
+<dl class="form-list">
+    <dt><label for="m_license" class="required"><em>*</em>My Licenses</label></dt>
+    <dd>
+        <div class="input-box">
+            <select name="m_license" id="m_license">
+                <option value="">Please select one</option>
+                <?php foreach($this->getItems() as $license): ?>
+                    <option value="<?php echo $license->getId(); ?>"><?php echo $license->getFrontendLabel(); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </dd>
+</dl>

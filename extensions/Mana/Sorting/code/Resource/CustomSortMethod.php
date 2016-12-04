@@ -38,16 +38,7 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
         }
 
         $select = $collection->getSelect();
-        $tables = $select->getPart('from');
-        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
-            $select
-                    ->joinLeft(
-                        array('s' => $this->getTable('cataloginventory/stock_item')),
-                        ' s.product_id = e.entity_id ',
-                        array()
-                    );
-            $select->order("s.is_in_stock desc");
-        }
+        Mage::helper('mana_sorting')->applyOutOfStockSortingIfRequired($select);
         for($x=0;$x<=4;$x++) {
             $attribute_id = $this->sortMethodModel->getData('attribute_id_'.$x);
             $sorting_method = $this->sortMethodModel->getData('sorting_method_' . $x);
