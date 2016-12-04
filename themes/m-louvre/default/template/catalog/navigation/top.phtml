@@ -48,13 +48,13 @@
           <a href="<?php echo $this->getUrl() ?>"><?php echo $this->__('Home') ?></a>
         </li>
         <?php echo $_menu ?>
-        <li class="level0 nav-documentation level-top">
+        <li class="level0 nav-documentation level-top <?php if(Mage::helper('mana_core')->startsWith(Mage::helper('mana_core')->getRoutePath(), 'mana_content/')) : ?>active<?php endif; ?>">
             <a href="<?php echo $this->getUrl('') ?>user-guides" class="level-top">
                 <span>Documentation</span>
             </a>
         </li>
 
-        <li class="level0 nav-blog level-top">
+        <li class="level0 nav-blog level-top <?php if(Mage::helper('mana_core')->startsWith(Mage::helper('mana_core')->getRoutePath(), 'blog/')) : ?>active<?php endif; ?>">
             <a href="<?php echo $this->getUrl('') ?>blog" class="level-top">
                 <span>Blog</span>
             </a>
