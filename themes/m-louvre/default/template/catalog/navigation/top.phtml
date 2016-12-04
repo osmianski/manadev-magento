@@ -48,7 +48,17 @@
           <a href="<?php echo $this->getUrl() ?>"><?php echo $this->__('Home') ?></a>
         </li>
         <?php echo $_menu ?>
-<!--        <li><a href="<?php echo $this->getUrl() ?>blog/">Blog & Documentation</a></li>-->
+        <li class="level0 nav-documentation level-top">
+            <a href="<?php echo $this->getUrl('') ?>user-guides" class="level-top">
+                <span>Documentation</span>
+            </a>
+        </li>
+
+        <li class="level0 nav-blog level-top">
+            <a href="<?php echo $this->getUrl('') ?>blog" class="level-top">
+                <span>Blog</span>
+            </a>
+        </li>
     </ul>
 <div class="nav-border-right"></div>
 
