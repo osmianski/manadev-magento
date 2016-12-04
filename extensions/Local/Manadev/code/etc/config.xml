@@ -70,6 +70,11 @@
                     <navigation>Local_Manadev_Block_Navigation</navigation>
                 </rewrite>
 			</catalog>
+			<checkout>
+                <rewrite>
+                    <links>Local_Manadev_Block_CheckoutLinksBlock</links>
+                </rewrite>
+			</checkout>
 		</blocks>
 		<!-- BASED ON SNIPPET: Models/Model support (config.xml) -->
 		<!-- This section registers model classes to be accessible through Mage::getModel('<model type>') and through
