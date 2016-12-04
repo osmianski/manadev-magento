@@ -670,8 +670,8 @@ a.m-twitter { background-position: top right; }
 #m-header2,
 #m-header3 { margin-bottom: 20px; margin-top: 10px; float: left; line-height: 20px; }
 
-#m-header1, #m-header3 { width: 0; height: 50px; }
-#m-header2 { width: 100%; }
+#m-header1, #m-header3 {  }
+#m-header2 {  }
  
 .logo {  }
 .header-container {}

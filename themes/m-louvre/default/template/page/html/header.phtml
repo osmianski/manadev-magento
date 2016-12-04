@@ -58,20 +58,20 @@
         </div>
 
         <?php echo $this->getChildHtml('topContainer'); ?>
+        <div class="col3-set">
+            <div id="m-header1" class="col-1"><?php echo $this->getChildHtml('header1') ?></div>
+            <?php if ($this->getIsHomePage()):?>
+              <div id="m-header2" class="col-2">
+                <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+              </div>
+            <?php else:?>
+              <div id="m-header2">
+                <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+              </div>
+            <?php endif?>
 
-        <div id="m-header1"><?php echo $this->getChildHtml('header1') ?></div>
-        <?php if ($this->getIsHomePage()):?>
-          <div id="m-header2">
-            <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
-          </div>
-        <?php else:?>
-          <div id="m-header2">
-            <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
-          </div>
-        <?php endif?>
-
-        <div id="m-header3"><?php echo $this->getChildHtml('header3') ?></div>
-
+            <div id="m-header3" class="col-3"><?php echo $this->getChildHtml('header3') ?></div>
+        </div>
         <?php foreach ($this->getChildGroup('after_logo', 'getChildHtml') as $alias => $html): echo $html; endforeach; ?>
         
     </div>
