@@ -11,6 +11,9 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
     const MANA_MENU_BLOCK_SIBLING_AFTER_TEMPLATE = "mana_menu_%s_sibling_after";
     const MANA_MENU_BLOCK_SIBLING_BEFORE_TEMPLATE = "mana_menu_%s_sibling_before";
 
+    protected function _construct() {
+    }
+
     protected function _renderCategoryMenuItemHtml($category, $level = 0, $isLast = false, $isFirst = false,
         $isOutermost = false, $outermostItemClass = '', $childrenWrapClass = '', $noEventAttributes = false)
     {
