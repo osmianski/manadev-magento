@@ -64,6 +64,8 @@
                     <customer_edit_tab_orders>Local_Manadev_Block_Customer_Order_Grid</customer_edit_tab_orders>
                     <customer_grid>Local_Manadev_Block_Customer_Grid</customer_grid>
                     <customer_edit>Local_Manadev_Block_Customer_Edit</customer_edit>
+                    <cms_page_grid>Local_Manadev_Block_Adminhtml_CmsPageGrid</cms_page_grid>
+                    <cms_block_grid>Local_Manadev_Block_Adminhtml_CmsBlockGrid</cms_block_grid>
                 </rewrite>
 			</adminhtml>
 			<catalog>
