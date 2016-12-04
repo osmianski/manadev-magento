@@ -57,6 +57,7 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
         }
         if ($this->getCurrentOrder()) {
             if (!$this->_setOrder($this->_collection, $this->getCurrentOrder(), $this->getCurrentDirection())) {
+                Mage::helper('mana_sorting')->applyOutOfStockSortingIfRequired($this->_collection->getSelect());
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }
         }

@@ -46,6 +46,8 @@ examples on what kind of actions can be applied to referenced blocks.
         </reference>
 	</catalogsearch_result_index>
 	<cms_page_layered>
+		<update handle="MAP_popup"/>
+
 		<reference name="left"> <!-- find left column block -->
             <block type="mana_filters/view" name="mana.catalog.leftnav" before="-" template="catalog/layer/view.phtml"/>
 		</reference>

@@ -56,15 +56,7 @@ class Mana_Sorting_Resource_MostViewed extends Mage_Core_Model_Mysql4_Abstract i
                     "most_viewed_stats.product_id = e.entity_id",
                     null
                 );
-        if (Mage::helper('mana_sorting')->getOutOfStockOption() && !array_key_exists('s', $tables)) {
-            $select
-                    ->joinLeft(
-                        array('s' => $this->getTable('cataloginventory/stock_item')),
-                        ' s.product_id = e.entity_id ',
-                        array()
-                    );
-            $select->order("s.is_in_stock desc");
-        }
+        Mage::helper('mana_sorting')->applyOutOfStockSortingIfRequired($select);
         $direction = $direction == 'asc' ? 'desc' : 'asc';
         $select->order("most_viewed_stats.view_count {$direction}");
     }

@@ -28,9 +28,12 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
 </div>
-<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+<ul class="messages">
+    <li class="notice-msg"><ul><li><span>For any help with purchased extensions, please use "Open Support Ticket" action in My Account page, <a target="_blank" href="<?php echo $this->getUrl('downloadable/customer/products') ?>">My Licenses and Downloads</a> section.</span></li></ul></li>
+</ul>
+
+<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" class="m-form" method="post">
     <div class="fieldset">
-        <h2 class="legend"><?php echo Mage::helper('contacts')->__('Contact Information') ?></h2>
         <ul class="form-list">
             <li class="fields">
                 <div class="field">

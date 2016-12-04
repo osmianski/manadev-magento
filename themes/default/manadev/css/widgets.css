@@ -88,3 +88,6 @@
 .sidebar .widget-cms-link { display:block; margin:0 0 15px; padding:0 10px; }
 .sidebar .widget-cms-link a { background:url(../images/widgets/i_widget-link.gif) 100% 3px no-repeat; padding:0 15px 0 0; }
 /* ======================================================================================= */
+
+.cms-index-index .widget .widget-title { padding: 0; }
+.cms-index-index .widget .widget-title h2 { margin: 0 0 20px 40px; }

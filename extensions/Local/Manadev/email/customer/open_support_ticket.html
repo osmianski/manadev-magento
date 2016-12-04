@@ -1,0 +1,74 @@
+<!--@subject Support Ticket for Order No. {{var order.increment_id}} @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"var issue_details": "Issue Details",
+"htmlescape var=$order.getCustomerName()":"Customer Name",
+"htmlescape var=$order.getCustomerEmail()":"Customer Email",
+"htmlescape var=$order.getIncrementId()":"Order #"
+"htmlescape var=$purchased_item.getProductName()":"Product",
+"htmlescape var=$purchased_item.getFormattedSupportExpiry()":"Support Valid Until",
+"htmlescape var=$purchased_item.getRegisteredDomain()":"Registered URL",
+"htmlescape var=$purchased_item.getStoreInfo()":"Store Information",
+"htmlescape var=$contact_email": "Contact Email",
+"var purchased_item.getRegistrationHistoryHtml()": "Registration History",
+"var order.increment_id":"Order Id"}
+@-->
+<!--@styles
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+    <table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <!-- [ header starts here] -->
+                <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{skin url="images/logo_manadev_email.png" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a>
+                        </td>
+                    </tr>
+                    <!-- [ middle starts here] -->
+                    <tr>
+                        <td valign="top">
+                            <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0; padding:13px 18px; background:#f9f9f9;">
+                                <strong>Name:</strong> {{htmlescape var=$order.getCustomerName()}}<br/>
+                                <strong>E-mail:</strong> {{htmlescape var=$order.getCustomerEmail()}}<br/>
+                                <strong>Order #:</strong> {{htmlescape var=$order.getIncrementId()}}<br/>
+                                <strong>Product:</strong> {{htmlescape var=$purchased_item.getProductName()}}<br/>
+                                <strong>Support Valid Until:</strong> {{htmlescape var=$purchased_item.getFormattedSupportExpiry()}}<br/>
+                                <strong>Contact Email:</strong> {{htmlescape var=$contact_email}}<br/>
+                                <br/>
+                                {{if purchased_item.getRegisteredDomain()}}
+                                <strong>Registered URL:</strong> {{htmlescape var=$purchased_item.getRegisteredDomain()}}
+                                {{else}}
+                                <strong>Store Information: </strong> {{htmlescape var=$purchased_item.getStoreInfo()}}
+                                {{/if}}
+                                <br/>
+
+                                {{if purchased_item.getRegistrationHistoryHtml()}}
+                                <strong>Registration History:</strong> <br/>
+                                    {{var purchased_item.getRegistrationHistoryHtml()}}
+                                {{/if}}
+                            <p>
+                            <p style="font-size:12px; line-height:16px; margin:10px; padding: 20px 10px;">
+                                <strong>Issue Details:</strong> {{var issue_details}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;">
+                            <center><p style="font-size:12px; margin:0;"><strong>{{var store.getFrontendName()}}</strong></p></center>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>

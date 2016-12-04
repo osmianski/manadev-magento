@@ -26,12 +26,80 @@ examples on what kind of actions can be applied to referenced blocks.
         </reference>
 	</adminhtml_sales_billto_edit>
 	<adminhtml_sales_order_view>
-		<update handle="mana_admin2" />
-        <reference name="head">
-            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
-        </reference>
         <reference name="order_items">
             <action method="addColumnRender"><column>downloadable</column><block>downloadable/adminhtml_sales_items_column_downloadable_name</block><template>local/manadev/sales-item/downloadable-name-column.phtml</template></action>
         </reference>
 	</adminhtml_sales_order_view>
+	<adminhtml_license_issuedlicenses>
+        <update handle="mana_admin2"/>
+	    <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params></params></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name></action>
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="local_manadev/adminhtml_license_issuedLicensesContainer" name="container" as="container">
+				<block type="local_manadev/adminhtml_license_issuedLicensesGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+        </reference>
+    </adminhtml_license_issuedlicenses>
+    <adminhtml_license_issuedlicensesgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="local_manadev/adminhtml_license_issuedLicensesGrid" name="grid" as="grid" />
+        </block>
+    </adminhtml_license_issuedlicensesgrid>
+    <adminhtml_license_magentoinstances>
+        <update handle="mana_admin2"/>
+	    <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+        <reference name="content">
+            <block type="local_manadev/adminhtml_license_magentoInstancesContainer" name="container" as="container">
+				<block type="local_manadev/adminhtml_license_magentoInstancesGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+        </reference>
+    </adminhtml_license_magentoinstances>
+    <adminhtml_license_magentoinstancesgrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="local_manadev/adminhtml_license_magentoInstancesGrid" name="grid" as="grid" />
+        </block>
+    </adminhtml_license_magentoinstancesgrid>
+    <adminhtml_license_magentoinstancehistory>
+        <update handle="mana_admin2"/>
+	    <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+        <reference name="content">
+            <block type="local_manadev/adminhtml_license_magentoInstanceHistoryContainer" name="container" as="container">
+				<block type="local_manadev/adminhtml_license_magentoInstanceHistoryGrid" name="grid" as="grid">
+					<action method="addToParentGroup"><group>content</group></action>
+				</block>
+			</block>
+        </reference>
+    </adminhtml_license_magentoinstancehistory>
+    <adminhtml_license_magentoinstancehistorygrid>
+        <block type="adminhtml/text_list" name="root" output="toHtml">
+            <block type="local_manadev/adminhtml_license_magentoInstanceHistoryGrid" name="grid" as="grid" />
+        </block>
+    </adminhtml_license_magentoinstancehistorygrid>
+    
+    <adminhtml_customer_index>
+        <update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+    </adminhtml_customer_index>
+    <adminhtml_sales_order_index>
+        <update handle="mana_admin2" />
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/local_manadev.js</name><params/></action>
+        </reference>
+    </adminhtml_sales_order_index>
 </layout>

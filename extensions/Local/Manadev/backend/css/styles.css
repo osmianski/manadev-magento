@@ -1,0 +1,17 @@
+.grid td input.m-date {
+     width: 65%;
+     margin-left: 10px;
+}
+
+.grid td input.m-registered-domain {
+     width: 95%;
+}
+
+.grid td img.m-date-trigger {
+     cursor: pointer;
+}
+
+textarea.m-store-info {
+     width: 95%;
+     resize: none;
+}

@@ -26,48 +26,49 @@
 ?>
 <?php
 /**
- * @see Mage_Downloadable_Block_Customer_Products_List
+ * @see Local_Manadev_Block_Customer_Products_List
+ */
+/**
+ * @var $this Local_Manadev_Block_Customer_Products_List
  */
 ?>
 <?php $_items = $this->getItems(); ?>
 <div class="page-title">
-    <h1><?php echo Mage::helper('downloadable')->__('My Downloadable Products') ?></h1>
+    <h1><?php echo Mage::helper('downloadable')->__('My Licenses and Downloads') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<ul class="messages">
-  <li class="notice-msg">
-    <ul>
-      <li><span>IMPORTANT: After updating any of Layered navigation group extension please also update CMS page layout xml according to <a href="http://www.manadev.com/blog/layered-navigation-on-home-or-any-other-cms-page/" title="Layered Navigation on Home or any SMS page" >this Blog post</a></span>
-      </li>
-    </ul>
-  </li>
-</ul>
 <?php echo $this->getChildHtml('pager'); ?>
 <?php if(count($_items)): ?>
     <table class="data-table" id="my-downloadable-products-table">
-        <col width="1" />
-        <col width="1" />
-        <col />
-        <col width="1" />
-        <col width="1" />
         <thead>
             <tr>
-                <th><?php echo Mage::helper('downloadable')->__('Order #') ?></th>
-                <th><?php echo Mage::helper('downloadable')->__('Date') ?></th>
-                <th><?php echo Mage::helper('downloadable')->__('Title') ?></th>
-                <th><?php echo Mage::helper('downloadable')->__('Status') ?></th>
-                <th><span class="nobr"><?php echo Mage::helper('downloadable')->__('Remaining Downloads') ?></span></th>
+                <th style='width:100px;'>
+                    <?php echo Mage::helper('downloadable')->__('Order #') ?> <br/><br/>
+                    <?php echo Mage::helper('downloadable')->__('Date') ?>
+                </th>
+                <th>
+                    <?php echo Mage::helper('downloadable')->__('Title') ?> <br/><br/>
+                    <?php echo Mage::helper('downloadable')->__('Status') ?>
+                </th>
+                <th style='width:200px;'><?php echo Mage::helper('downloadable')->__('Registered Domain') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php $_odd = ''; ?>
             <?php foreach ($_items as $_item): ?>
                 <tr>
-                    <td><a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a></td>
-                    <td><span class="nobr"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></span></td>
-                    <td><?php echo $this->htmlEscape($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo Mage::helper('downloadable')->__('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $_item->getLinkTitle() ?></a></td>
-                    <td><em><?php echo Mage::helper('downloadable')->__(ucfirst($_item->getStatus())) ?></em></td>
-                    <td><?php echo $this->getRemainingDownloads($_item) ?></td>
+                    <td>
+                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a> <br/><br/>
+                        <?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?>
+                    </td>
+                    <td>
+                        <a href="<?php echo $this->getProductUrl($_item)?>" title="<?php echo Mage::helper('local_manadev')->__('View Product') ?>"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></a> <br/><br/>
+                        <em><?php echo $this->getStatusLabel($_item) ?></em> <br/>
+                        <?php echo $this->getAvailableActions($_item) ?>
+                    </td>
+                    <td>
+                        <?php echo $this->getRegisteredDomain($_item); ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

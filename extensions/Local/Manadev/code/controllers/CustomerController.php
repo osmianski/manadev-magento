@@ -111,6 +111,7 @@ class Local_Manadev_CustomerController extends Mage_Core_Controller_Front_Action
 	
 	                    // MANA BEGIN: just log customer in and return AJAX result
 	                    $session->setCustomerAsLoggedIn($customer);
+                        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array('success' => true)));
 	                    return;
 	                    // MANA END
 	                } else {

@@ -231,6 +231,13 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                 } else {
                     self.page++;
                 }
+
+                $(response).filter("script").each(function (e) {
+                    $.globalEval(this.innerHTML);
+                });
+
+                $(document).trigger('product-media-loaded', ProductMediaManager);
+
                 self.hideLoader();
                 layout.getPageBlock().resize();
                 if(self.page == page) {
