@@ -9,13 +9,15 @@
 /* @var $this ManaSlider_Tabbed_Block_Slider */
 /* @var $_tab Mage_Core_Block_Template */
 $_title = $this->getData('title');
+$_count = count($this->getChildGroup('tabs'));
 ?>
 <div class="widget">
     <?php if ($_title): ?>
         <div class="widget-title">
-            <h2><?php echo $this->__('New Products') ?></h2>
+            <h2><?php echo $this->__($_title) ?></h2>
         </div>
     <?php endif ?>
+    <?php if ($_count > 1) : ?>
     <div class="m-tabbed-slider mb-<?php echo $this->jsHelper()->getClientSideBlockName($this->getNameInLayout()) ?>"
         data-m-block="ManaSlider/Tabbed/Slider">
         <ul class="m-tabs">
@@ -33,4 +35,9 @@ $_title = $this->getData('title');
             <?php endforeach; ?>
         </ul>
     </div>
+    <?php else: ?>
+        <?php foreach ($this->getChildGroup('tabs') as $_tab) : ?>
+            <?php echo $_tab->toHtml() ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>

@@ -145,7 +145,7 @@ function ($, Block, json, ajax, urlTemplate, core)
             this._itemInnerWidth = this._mode == 'slide'
                 ? Math.floor(this._containerWidth / this._visibleCount - this._originalPaddingWidth)
                 : this._originalItemWidth - this._originalPaddingWidth;
-            this._itemOuterWidth = Math.floor(this._containerWidth / this._visibleCount);
+            this._itemOuterWidth = this._itemInnerWidth + this._originalPaddingWidth;
             $li.each(function () {
                 self.resizeElement ($(this));
             });

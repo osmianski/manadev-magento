@@ -52,22 +52,6 @@ class ManaSlider_Tabbed_Block_Slider extends Mage_Core_Block_Template
         $this->setTemplate('manaslider/tabbed/tabs.phtml');
     }
 
-    protected function _toHtml() {
-        /* @var $tabs Mage_Core_Block_Abstract[] */
-        $tabs = $this->getChildGroup('tabs');
-        $count = count($tabs);
-        if ($count > 1) {
-            return parent::_toHtml();
-        }
-        elseif ($count == 1) {
-            foreach ($tabs as $tab) {
-                return $tab->toHtml();
-            }
-        }
-        else {
-            return '';
-        }
-    }
     #region Dependencies
     /**
      * @return Mana_Core_Helper_Layout

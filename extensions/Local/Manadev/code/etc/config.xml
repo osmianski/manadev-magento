@@ -563,6 +563,18 @@
             </checkout_index_index>
         </allowed_actions>
     </mana_ajax>
+    <manaslider_tabbed>
+        <data_sources>
+            <magento2>
+                <source_helper>local_manadev/products::getMagento2ProductCollection</source_helper>
+                <block>manaslider_tabbed/productSlider</block>
+            </magento2>
+            <magento1>
+                <source_helper>local_manadev/products::getMagento1ProductCollection</source_helper>
+                <block>manaslider_tabbed/productSlider</block>
+            </magento1>
+        </data_sources>
+    </manaslider_tabbed>
     <default>
         <local_manadev>
             <support_services_sku>support-services</support_services_sku>

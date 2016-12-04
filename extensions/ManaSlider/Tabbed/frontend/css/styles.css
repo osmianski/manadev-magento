@@ -7,7 +7,8 @@
 
 .m-product-slider { overflow: hidden; position: relative; }
 .m-product-slider > div { overflow: hidden; margin: 0 40px; }
-.m-product-slider li.item { position: relative; padding: 10px 10px 85px;}
+.m-product-slider ul { margin: 0; }
+.m-product-slider li.item { position: relative; padding: 0 10px;}
 /* Arrows */
 /*.m-product-slider .m-prev {position: relative; float: left; background: red; height: 100px; width: 70px;}*/
 
