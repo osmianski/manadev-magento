@@ -181,7 +181,7 @@ class Local_Manadev_Block_Navigation extends Mage_Catalog_Block_Navigation
         $blockHtml = "";
 
         $url_key = Mage::getResourceModel('catalog/category')->getAttributeRawValue($category->getId(), "url_key", Mage::app()->getStore()->getId());
-        $ids = [$url_key, $category->getId()];
+        $ids = array($url_key, $category->getId());
         foreach($ids as $id) {
             if ($id) {
                 $blockId = sprintf($template, $id);
