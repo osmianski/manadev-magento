@@ -55,7 +55,7 @@
     <?php $i=0; foreach ($_productCollection as $_product): ?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?> <?php echo $_theme->getListItemClass($this, $_product) ?>">
                 <?php echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product) ?>
-                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="height: <?php echo $_theme->getHeight(155) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(155, $_theme->getHeight(155)); ?>" width="155" height="<?php echo $_theme->getHeight(155) ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image" style="height: <?php echo $_theme->getHeight(155) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(200, $_theme->getHeight(200)); ?>" width="155" height="<?php echo $_theme->getHeight(155) ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                 <?php echo Mage::helper('manaproduct_tag')->afterImage($this, $_product) ?>
                 <?php if ($_theme->isVisibleInProductList($this, 'price')): ?>
                     <?php echo $this->getPriceHtml($_product, true) ?>

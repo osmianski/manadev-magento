@@ -1033,7 +1033,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .col2-right-layout .products-grid {  }
 .col1-layout .products-grid {  }
 
-.col1-layout .products-grid li.item { margin: 0 9px; }
+.col1-layout .products-grid li.item { margin: 0 20px; }
 .col2-right-layout .products-grid li.item,
 .col2-left-layout .products-grid li.item { margin-right: 6px; margin-left: 6px; }
 
