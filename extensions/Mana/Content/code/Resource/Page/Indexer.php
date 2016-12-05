@@ -459,7 +459,6 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 $select->where('pgo.id = ?', $global_id);
             }
 
-            $sql = $select->__toString();
             $sql = $select->insertFromSelect($table, array_keys($fields));
             $db->exec($sql);
         }
