@@ -39,8 +39,19 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
 
             disableZoom();
             restoreZoom();
+
+            var scrollTop = $(window).scrollTop();
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();
+            //alert(scrollTop + ', ' + windowHeight + ', ' + documentHeight);
+            this._fakeResize = true;
+            $(window).trigger('resize');
         },
         decorateGrid: function() {
+            if (this._fakeResize) {
+                this._fakeResize = false;
+                return;
+            }
             //return;
             //alert('window: ' +  $(window).width());
             //console.log('window: ' +  $(window).width());
@@ -48,6 +59,10 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             var width = $el.width();
             var $cells = $el.find('li.item');
             if (!$cells.length) {
+                return;
+            }
+
+            if (this._cellWidth == $cells.outerWidth(true)) {
                 return;
             }
 
