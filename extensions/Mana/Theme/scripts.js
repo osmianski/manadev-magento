@@ -86,9 +86,15 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
                 }
 
                 var newWidth = Math.floor(width/columnCount - self._paddingWidth);
+                var imageWidth = newWidth > 200 ? 200 : newWidth;
+                var imageMargin = (newWidth - imageWidth) / 2;
+                if (imageMargin) {
+                    imageMargin += 'px';
+                }
                 $(cell).width(newWidth);
-                $(cell).find('.product-image').width(newWidth).height(newWidth);
-                $(cell).find('.product-image img').attr('width', newWidth).attr('height', newWidth);
+                $(cell).find('.m-image-container').css('margin-left', imageMargin);
+                $(cell).find('.product-image').width(imageWidth).height(imageWidth);
+                $(cell).find('.product-image img').attr('width', imageWidth).attr('height', imageWidth);
                 $(cell).find('.actions').width(newWidth);
                 $row.append(cell);
             });
