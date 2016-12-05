@@ -26,5 +26,8 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="addJs"><script>mana/theme.js</script></action>
         </reference>
         <block type="core/template" name="m_theme_options" />
+        <reference name="before_body_end">
+            <block type="core/template" name="scroll_to_top" template="mana/theme/scroll-to-top.phtml" />
+        </reference>
     </default>
 </layout>

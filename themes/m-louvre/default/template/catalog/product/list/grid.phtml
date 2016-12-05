@@ -46,7 +46,7 @@
     <?php
         $_toolbarTemplate = $this->getToolbarBlock()->getTemplate();
         $this->getToolbarBlock()->setTemplate(str_replace('toolbar.phtml', 'toolbar_top.phtml', $_toolbarTemplate));
-        echo $this->getToolbarHtml();
+        //echo $this->getToolbarHtml();
         $this->getToolbarBlock()->setTemplate($_toolbarTemplate);
     ?>
     <?php $_collectionSize = $_productCollection->count() ?>

@@ -18,6 +18,28 @@
 .sidebar-container .handle {width: 20px; display: inline-block; z-index: 2; cursor: pointer; background: #d7d7d7; }
 .sidebar-container.right .handle { float: left; }
 
+#scroll-to-top {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    background: #26B1ED;
+    color: white;
+    text-decoration: none;
+    margin: 0 3px 47px 0;
+}
+
+#scroll-to-top:before {
+    content: "\e648";
+    position: absolute;
+    top: 18px;
+    left: 14px;
+    font-size: 20px;
+}
+
 /*
 .sidebar-container.left .handle .icon-press {
 background: url(../images/mana_theme/i-select.png) no-repeat;

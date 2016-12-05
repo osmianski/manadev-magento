@@ -139,6 +139,7 @@ function ($, Block, json, ajax, urlTemplate, core)
                 }
                 this.$().find('.m-navigation-next').hide();
                 this.$().find('.m-navigation-prev').hide();
+                this.animate({'left': 0}, 0, true);
             }
 
             // do resize everyhting
