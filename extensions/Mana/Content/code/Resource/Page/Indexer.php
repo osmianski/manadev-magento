@@ -391,6 +391,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
     protected function _copyReferencePages($options) {
         $rawFields = array(
             'id',
+            'page_global_id',
             'is_active',
             'url_key',
             'title',
@@ -423,7 +424,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             ->joinInner(array('pg' => $globalTable), 'pg.id = ps.page_global_id', array())
             ->joinInner(array('pgcs' => $customTable), 'pgcs.id = pg.page_global_custom_settings_id', array())
             ->joinInner(array('pgo' => $globalTable), 'pgo.id = pgcs.reference_id', array())
-            ->joinInner(array('pso' => $storeTable), 'pso.page_global_id = pgo.id', array());
+            ->joinInner(array('pso' => $storeTable), 'pso.page_global_id = pgo.id AND pso.store_id = ps.store_id', array());
         $selects[$storeTable] = $select;
 
         $tables = array(
@@ -436,7 +437,10 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
             $fields = array();
             foreach ($rawFields as $key) {
                 $alias = $tables[$table];
-                if ($key != 'id') {
+                if ($key == 'page_global_id' && $alias == 'pgcs') {
+                    continue;
+                }
+                if ($key != 'id' && $key != 'page_global_id') {
                     $alias .= 'o';
                 }
                 $fields[$key] = new Zend_Db_Expr("`{$alias}`.`{$key}`");
@@ -455,6 +459,7 @@ class Mana_Content_Resource_Page_Indexer extends Mana_Content_Resource_Page_Abst
                 $select->where('pgo.id = ?', $global_id);
             }
 
+            $sql = $select->__toString();
             $sql = $select->insertFromSelect($table, array_keys($fields));
             $db->exec($sql);
         }
