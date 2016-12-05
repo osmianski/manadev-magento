@@ -9,19 +9,21 @@
 
 /* Containers of Layered Navigation */
 .mb-top-layered-navigation,
-.mb-top-layered-navigation .block-content { background: transparent; border: none; padding: 0; margin: 0; position: relative;}
+.mb-top-layered-navigation .block-content { background: transparent; border: none; padding: 0; margin: 0 0 10px; position: relative;}
 
 .mb-top-layered-navigation .block-content:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
 
 /* Titles SHOP BY and CURRENTLY SHOPPING BY */
 .mb-top-layered-navigation .block-subtitle,
-.mb-top-layered-navigation .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: bold; text-transform: uppercase; }
+.mb-top-layered-navigation .currently .block-subtitle { cursor: auto; margin: 0; padding: 0 5px 0 0; border: none; background: none; font-weight: normal !important; font-size:16px; }
 .mb-top-layered-navigation dl.m-mobile { display: none; }
 .mb-top-layered-navigation dl { float: left; }
 
 /* CURRENTLY SHOPPING BY bar */
 .mb-top-layered-navigation .currently,
 .mb-top-layered-navigation .currently ol { float: left; width: 100%; }
+.mb-top-layered-navigation .currently ol { display: none; }
+.mb-top-layered-navigation .currently { padding:0; right: 0; }
 .mb-top-layered-navigation .currently li { float: left; white-space: nowrap; margin-right: 10px; background: transparent; border: none; padding-left: 0; }
 
 .mb-top-layered-navigation #narrow-by-list { clear: both; position: relative; }
@@ -30,7 +32,7 @@
 .mb-top-layered-navigation .actions,
 .mb-top-layered-navigation .m-horizontal-actions,
 .mb-top-layered-navigation .m-subtitle-actions { position: absolute; right: 5px; top:50%; margin: -6px 0 0; }
-.mb-top-layered-navigation .actions { background: transparent; border: none; float: left; padding: 6px 10px; top:-20px; }
+.mb-top-layered-navigation .actions { background: transparent; border: none; float: left; padding: 6px 10px; top:-30px; }
 
 /* Top (as Menu) LN =================================================================================================================================== */
 
@@ -78,9 +80,10 @@
 .mb-top-layered-navigation.one-filter-column dl { padding:0; margin:0; }
 .mb-top-layered-navigation.one-filter-column dl.m-mobile { display: block; }
 .mb-top-layered-navigation.one-filter-column dl dt,
-.mb-top-layered-navigation.one-filter-column .block-subtitle { cursor: pointer; display:block; padding:5px !important; position: relative; margin:0; background: #eee; border-bottom:1px solid #ddd; border-top:1px solid #f9f9f9;}
+.mb-top-layered-navigation.one-filter-column .block-subtitle { cursor: pointer; display:block; padding: 5px 5px 7px !important; position: relative; margin:0; background: #dcdcdc; }
+.mb-top-layered-navigation.one-filter-column .block-subtitle strong { font-weight: normal; }
 .mb-top-layered-navigation.one-filter-column dl dt:hover,
-.mb-top-layered-navigation.one-filter-column .block-subtitle { background: #ddd;
+.mb-top-layered-navigation.one-filter-column .block-subtitle { background: #dcdcdc; border-radius: 5px; border-top: 1px solid #cdcdcd;
 transition: background 300ms ease-in-out;
 -moz-transition: background 300ms ease-in-out;
 -webkit-transition: background 300ms ease-in-out;
@@ -90,7 +93,8 @@ transition: background 300ms ease-in-out;
 .mb-top-layered-navigation.one-filter-column .m-filter-colors { margin:0; }
 .mb-top-layered-navigation.one-filter-column .currently { margin:0; }
 .mb-top-layered-navigation.one-filter-column .currently ol { float: left; width: auto; }
-.mb-top-layered-navigation.one-filter-column .actions { right: 20px; top:0; margin: 0; padding: 5px 10px; z-index:3; }
+.mb-top-layered-navigation.one-filter-column .actions { right: 20px; top: 0; margin: 0; padding: 0; z-index:3; }
+.mb-top-layered-navigation.one-filter-column .actions a { color: #646464; }
 
 .mb-top-layered-navigation.one-filter-column .m-expand-collapse { float: left; font-weight: normal; font-size: 11px; text-transform: none; margin-bottom: -5px; display: none; }
 .mb-top-layered-navigation.one-filter-column .m-expand-collapse .btn-expand-collapse { margin: 0; display: block; width: 11px; height: 11px; font-size: 0; line-height: 0; text-indent: -999em; overflow: hidden; }
