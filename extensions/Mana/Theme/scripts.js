@@ -13,9 +13,13 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             this._paddingWidth = 0;
         },
         _subscribeToBlockEvents: function() {
+            var self = this;
+
             return this
                 ._super()
-                .on('resize', this, this.decorateGrid);
+                .on('bind', this, function () {
+                    self.on('resize', this, this.decorateGrid);
+                })
         },
         _appleZoomFix: function () {
             var meta = document.querySelector( "meta[name=viewport]" ),
@@ -59,10 +63,6 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             var width = $el.width();
             var $cells = $el.find('li.item');
             if (!$cells.length) {
-                return;
-            }
-
-            if (this._cellWidth == $cells.outerWidth(true)) {
                 return;
             }
 
