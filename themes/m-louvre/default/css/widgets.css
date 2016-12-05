@@ -27,6 +27,7 @@
 .widget { display:inline; }
 .widget .widget-title { clear:both; margin: 10px 0; }
 .col-main .widget-title { text-align: center; background: url(../images/border.png) 0 60% repeat-x; margin: 30px 0; }
+.col-main .magento2-slider .widget-title { margin-top:0; }
 .widget .widget-title h2 { font-size: 16px; font-weight: bold;}
 .col-main .widget .widget-title h2 { display: inline; padding: 0 10px; background-color: #f0f0f0; }
 .col-main .col3-set .widget-title h2,

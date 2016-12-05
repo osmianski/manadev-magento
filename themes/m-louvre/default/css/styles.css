@@ -172,6 +172,8 @@ ul,ol         { list-style:none; }
 .col3-layout .col-wrapper .col-main { float:right; }
 
 /* Content Columns */
+.col2-set, .col3-set, .col4-set { display: flex; flex-wrap: wrap; }
+
 .col2-set .col-1 { float:left; width:49%; }
 .col2-set .col-2 { float:right; width:49%; }
 .col2-set .col-narrow { width:33% !important; }
@@ -274,7 +276,7 @@ button.button.btn-gray:hover { background: #969696; color: #fff; }
 .we-guarantee .col-4 h3:before { content: "\e71f"; }
 
 /* We Accept*/
-.we-accept { line-height: 50px; margin: 10px auto;}
+.we-accept { line-height: 50px; margin: 10px auto; white-space: nowrap; }
 .we-accept img { margin: 0 40px; }
 
 /* Quote */
@@ -284,7 +286,15 @@ button.button.btn-gray:hover { background: #969696; color: #fff; }
 .sidebar .quote div { padding: 20px 10px 30px; }
 .widget-title+.quote { position: relative; bottom: 20px; }
 .quote div p { font-style: normal; margin-top: 10px; }
-
+.header .quote { bottom: 0; background: none; font-style: italic; font-size:14px; }
+.header .quote div { background: none; padding: 0; }
+.header blockquote,
+.header .m-guest-book blockquote { border:none; margin:0; padding:0; }
+.header .guest-date,
+.header .guest-name,
+.header .guest-url { display: none; }
+.header .quote div p { margin: 0; line-height:0; }
+.guest-url a { overflow-wrap: break-word; }
 /* ======================================================================================= */
 
 
@@ -672,6 +682,9 @@ a.m-twitter { background-position: top right; }
 
 #m-header1, #m-header3 {  }
 #m-header2 {  }
+
+#m-header1 .block { margin:0; padding: 0; }
+#m-header3 p { margin: 10px 0 0; }
  
 .logo {  }
 .header-container {}
@@ -1023,6 +1036,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 
 .products-grid .product-image { display:block; margin: 0 auto 10px; position: relative; }
 .products-grid .product-name { margin:0 0 5px; clear: both; }
+.cms-home .products-grid .product-name { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .products-grid .product-name a {}
 .products-grid .price-box { margin:5px 0; clear: both; }
 .products-grid .availability { line-height:21px; }
@@ -1960,15 +1974,16 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .superfooter a { color:#646464; }
 
 /* Footer ================================================================================ */
-.footer { padding:10px; background: #d7d7d7; border-radius: 10px 10px 0 0; text-align: center;}
+.footer { padding:20px 20px 0; background: #d7d7d7; border-radius: 10px 10px 0 0; text-align: center;}
 .footer p { text-align:right; }
 .footer a { color: #646464; text-decoration: none; white-space: nowrap; }
+.footer address { padding:15px 0; border-top: 1px solid #F8FAF9; }
 .footer .col3-set .col-1,
 .footer .col3-set .col-2,
 .footer .col3-set .col-3 { width:33%; float: left; margin:0; padding:0; }
 .footer .links li { padding: 0 10px; line-height: 30px; }
 
-.footer-container .bottom-container { text-align:center; }
+.footer-container .bottom-container { text-align:center; padding: 0 0 15px; }
 /* ======================================================================================= */
 
 /* MANAdev extensions ================================================================================ */
@@ -2322,7 +2337,7 @@ ul.buttons .register {padding-bottom: 20px;}
 .featured:after  { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
 /* ======================================================================================= */
 
-.header .logo img { width: 160px; }
+.header .logo img {  }
 
 #live-demo-banner, .top-banner-container { display: none; }
 
@@ -2360,7 +2375,7 @@ ul.buttons .register {padding-bottom: 20px;}
 .block-subscribe input { width: 160px; }
 .nav-container {background: none; height:auto; }
 #nav > li, #nav > li.active { box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.5); border-radius: 5px; margin: 5px 7px; }
-
+.quick-access .forms-box { display: none; }
 }
 /* Phones landscape ===================================================================== */
 /*1 col with left sidebar*/
@@ -2425,12 +2440,6 @@ ul.buttons .register {padding-bottom: 20px;}
 .col3-set .col-2 { float:left; width:32%; margin-left:2%; }
 .col3-set .col-3 { float:right; width:32%; }
 
-.col4-set .col-1,
-.col4-set .col-2,
-.col4-set .col-3,
-.col4-set .col-4, { width:50%; }
-
-
 /* All mobile ===================================================================== */
 @media (max-width: 1014px) {
 .i-any-999 { display: inline; }
@@ -2442,7 +2451,7 @@ ul.buttons .register {padding-bottom: 20px;}
 .testimonials .col3-set .col-1, .testimonials .col3-set .col-2, .testimonials .col3-set .col-3 { width:100%; margin: 0; }
 .testimonials .block,
 .testimonials .block .block-content { padding:0; margin: 0; }
-.col-main .testimonials .widget-title { margin-top: 0; }
+.col-main .testimonials .widget-title { }
 .testimonials .quote { bottom:0; }
 
 .footer .block-subscribe .col-2 { width: 20%; }
@@ -2479,9 +2488,11 @@ h3            { font-size:16px; }
 h4            { font-size:16px; }
 h5            { font-size:16px; }
 h6            { font-size:15px; }
-
+#m-header1, #m-header3 { display:none; }
+.cms-home #m-header3 { display: block; }
+.header .form-search input { width: 170px; }
+.what-we-do .col-1, .what-we-do .col-2 { padding-bottom: 20px; }
 }
-
 .responsive-indicators { display:none; }
 
 
