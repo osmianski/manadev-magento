@@ -13,6 +13,7 @@
 (function($, window, document) {
     $(function () {
         Mana.Theme.beautifySelects();
+        Mana.Theme.scrollToTop();
     });
 
     function ManaMenuModal(ManaMenuInstance) {

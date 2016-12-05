@@ -268,6 +268,39 @@
         $(_options.uiRevealingElementSelector).click(_doBeautifySelects);
     };
 
+    Mana.Theme.scrollToTop = function() {
+        var options = {
+            threshold: 0,
+            timeout: 5000
+        };
+        var timerId = null;
+
+        function onScroll() {
+            if ($(window).scrollTop() <= options.threshold) {
+                $('#scroll-to-top').hide();
+            }
+            else {
+                $('#scroll-to-top').show();
+                if (timerId) {
+                    clearTimeout(timerId);
+                }
+                timerId = setTimeout(function() {
+                    $('#scroll-to-top').hide();
+                    clearTimeout(timerId);
+                    timerId = null;
+                }, options.timeout);
+            }
+        }
+
+        $(function() {
+            $(window).on('scroll', onScroll);
+            $('#scroll-to-top').on('click', function(e) {
+                window.scrollTo(0, 0);
+                e.preventDefault();
+            });
+        });
+    };
+
 })(jQuery, Mana);
 //endregion
 
