@@ -1003,6 +1003,7 @@ transition: all 1s ease-in;
 .sidebar .paypal-logo a { float:none; }
 
 /* Facebook */
+.block.m-fb-like-box { text-align: center; }
 .sidebar .block.m-fb-like-box,
 .sidebar .block.m-fb-like-box .block-content { padding: 0 !important; }
 .sidebar .block.m-fb-like-box.m-line .block-content { padding-bottom: 20px !important; }
