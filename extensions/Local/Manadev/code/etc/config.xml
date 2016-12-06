@@ -510,6 +510,14 @@
                     </local_manadev>
                 </observers>
             </sales_order_item_save_commit_after>
+            <catalog_controller_product_init_before>
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <method>addCategoryBreadcrumbToProduct</method>
+                    </local_manadev>
+                </observers>
+            </catalog_controller_product_init_before>
         </events>
 		<!-- INSERT HERE: layout, translate, routers -->
 	</frontend>
