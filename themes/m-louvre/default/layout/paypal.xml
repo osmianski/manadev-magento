@@ -45,6 +45,8 @@
 
     <paypal_express_review translate="label">
         <label>PayPal Express Order Review Form</label>
+        <update handle="jquery_core"/>
+        <update handle="mana_ajax"/>
         <remove name="right"/>
         <remove name="left"/>
 
@@ -52,18 +54,47 @@
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="content">
-            <block type="paypal/express_review" name="paypal.express.review" template="paypal/express/review.phtml">
-                <block type="paypal/express_review_details" name="paypal.express.review.details" as="details" template="paypal/express/review/details.phtml">
-                    <action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <block type="checkout/cart_totals" name="paypal.express.review.details.totals" as="totals" template="checkout/onepage/review/totals.phtml"/>
+            <block type="local_manadev/express_review" name="paypal.express.review" template="paypal/express/review.phtml">
+                <block type="mana_checkout/billing_address" name="mana_checkout_billing_address" as="billing_address" />
+                <block type="mana_checkout/order_review" name="mana_checkout_order_review" as="details">
+                    <block type="mana_checkout/order_info" name="mana_checkout_order_info" as="info">
+                        <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+                        <action method="addItemRender">
+                            <type>default</type>
+                            <block>mana_checkout/item_default</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>grouped</type>
+                            <block>mana_checkout/item_grouped</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>configurable</type>
+                            <block>mana_checkout/item_configurable</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>bundle</type>
+                            <block>mana_checkout/item_bundle</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <action method="addItemRender">
+                            <type>downloadable</type>
+                            <block>mana_checkout/item_downloadable</block>
+                            <template>mana/checkout/order/item.phtml</template>
+                        </action>
+                        <block type="mana_checkout/order_totals" name="mana_checkout_order_totals" as="totals" />
+                    </block>
+                    <block type="mana_checkout/terms" name="mana_checkout_terms" as="terms"/>
                 </block>
-                <block type="checkout/agreements" name="paypal.express.review.details.agreements" as="agreements" template="checkout/onepage/agreements.phtml"/>
+                <block type="mana_checkout/login" name="mana_checkout_login" as="login"/>
             </block>
         </reference>
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>js/checkout/review.js</name></action>
+			<action method="addCss"><stylesheet>css/mana_checkout.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/mana_checkout.js</name><params/></action>
         </reference>
         <block type="core/text_list" name="additional.product.info" />
     </paypal_express_review>
@@ -98,14 +129,25 @@ Available logo types can be assigned with action="setLogoType":
             </block>
         </reference>
         <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="paypal/logo" name="paypal.partner.right.logo" template="paypal/partner/logo.phtml">
+                <!--action method="setLogoType"><value>wePrefer_150x60</value></action-->
+            </block>
+        </reference>
     </catalog_product_view>
 
     <catalog_category_default>
         <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="paypal/logo" name="paypal.partner.right.logo" template="paypal/partner/logo.phtml"/>
+        </reference>
     </catalog_category_default>
 
     <catalog_category_layered>
         <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="paypal/logo" name="paypal.partner.right.logo" template="paypal/partner/logo.phtml"/>
+        </reference>
     </catalog_category_layered>
 
     <catalog_product_compare_index>
@@ -142,6 +184,9 @@ Available logo types can be assigned with action="setLogoType":
     </checkout_onepage_failure>
 
     <cms_index_index>
+        <reference name="right">
+            <block type="paypal/logo" name="paypal.partner.right.logo" template="paypal/partner/logo.phtml"/>
+        </reference>
     </cms_index_index>
 
     <default>
@@ -164,11 +209,8 @@ Available logo types can be assigned with action="setLogoType":
 
     <paypal_payflow_link_iframe>
         <block type="paypal/payflow_link_iframe" name="payflow.link.iframe" template="paypal/payflowlink/form.phtml" />
+        <block type="paypal/payflow_link_info" name="payflow.link.info" template="paypal/payflowlink/info.phtml" />
     </paypal_payflow_link_iframe>
-
-    <paypal_payflow_advanced_iframe>
-        <block type="paypal/payflow_advanced_iframe" name="payflow.advanced.iframe" template="paypal/payflowadvanced/form.phtml" />
-    </paypal_payflow_advanced_iframe>
 
     <paypal_hosted_pro_iframe>
         <block type="paypal/hosted_pro_iframe" name="hosted.pro.iframe" template="paypal/hss/form.phtml"/>

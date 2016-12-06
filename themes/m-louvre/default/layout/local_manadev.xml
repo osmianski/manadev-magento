@@ -42,6 +42,7 @@ examples on what kind of actions can be applied to referenced blocks.
 		<update handle="jquery" />
 		<reference name="product_list">
 			<block name="download.button" type="local_manadev/download_button" template="local/manadev/download/button.phtml" />
+			<block name="m_license_selection" type="local_manadev/licenseSelection" template="local/manadev/licenseSelection.phtml"/>
 		</reference>
 		<reference name="before_body_end">
 			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
@@ -71,4 +72,49 @@ examples on what kind of actions can be applied to referenced blocks.
     <checkout_onepage_index>
 		<update handle="jquery" />
     </checkout_onepage_index>
+
+	<customer_account>
+        <reference name="customer_account_navigation">
+        <action method="removeLink"><name>downloadable_products</name></action>
+        <action method="addLink" translate="label"><name>downloadable_products</name><path>downloadable/customer/products</path><label>My Licenses and Downloads</label></action>
+        </reference>
+    </customer_account>
+
+    <m_domain_registration>
+    	<reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block name="domain_registration" type="local_manadev/domain_registration" template="local/manadev/domain/registration.phtml" />
+		</reference>
+	</m_domain_registration>
+
+	<local_manadev_domain_register>
+		<update handle="m_domain_registration"/>
+	</local_manadev_domain_register>
+
+	<local_manadev_domain_modify>
+		<update handle="m_domain_registration"/>
+	</local_manadev_domain_modify>
+
+	<local_manadev_support_openticket>
+		<reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
+        </reference>
+		<reference name="content">
+			<block name="support_ticket_form" type="local_manadev/support_ticketForm" template="local/manadev/support/ticketForm.phtml" />
+		</reference>
+	</local_manadev_support_openticket>
+
+	<contacts_index_index>
+		<reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
+        </reference>
+	</contacts_index_index>
+
+	<catalog_product_view>
+		<reference name="product.info">
+			<block name="m_license_selection" type="local_manadev/licenseSelection" template="local/manadev/licenseSelection.phtml"/>
+		</reference>
+	</catalog_product_view>
 </layout>

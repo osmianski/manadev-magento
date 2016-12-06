@@ -1,0 +1,34 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Local_Manadev
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Local_Manadev_Block_Request */
+?>
+<form id="request-form" class="and-register" method="post" action="<?php echo $this->getSendUrl() ?>" enctype="multipart/form-data">
+<textarea rows="11" cols="58" id="request-description" name="description" class="required"></textarea>
+<p class="attachment-label"><?php echo $this->__('... and attach files if you have any') ?></p>
+<ul class="attachment-row">
+<li class="files">
+	<div class="file-input">
+		<input type="file" class="file" name="file[0]" />
+		<div class="pretty-file">
+			<input />
+			<div class="btn-browse"></div>
+		</div>
+	</div>
+	<div class="file-input">
+		<input type="file" class="file" name="file[1]" />
+		<div class="pretty-file">
+			<input />
+			<div class="btn-browse"></div>
+		</div>
+	</div>
+</li>
+<li class="buttons">
+<button type="button" title="<?php echo $this->__('Submit') ?>" class="button btn-cart btn-send and-register"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+</li>
+</ul>
+</form>
