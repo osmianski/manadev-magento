@@ -1,0 +1,67 @@
+<?php
+/**
+ * @category    Mana
+ * @package     Local_Manadev
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this Local_Manadev_Block_Register */
+?>
+<div id="register-dialog">
+<ul class="intro">
+<li class="register"><p><?php echo $this->__('Before continuing, please register now, its easy!') ?></p></li>
+<li class="login"><p><?php echo $this->__('Or just log in if you are already registered!') ?></p></li>
+</ul>
+<ul class="form">
+<li class="register">
+<form id="register-form" method="post" action="#">
+	<input type="hidden" name="product_id" value="<?php echo $this->getProductId() ?>" />
+	<div id="reg-details-for-register">
+	<table>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Your Name') ?></td>
+			<td class="field-value"><input type="text" id="register-name" name="customer_name" 
+				title="<?php echo $this->__('To be displayed when you logged in.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Email') ?></td>
+			<td class="field-value"><input type="text" id="register-email" name="customer_email" 
+				title="<?php echo $this->__('To be used as a login name and for communication.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Password') ?></td>
+			<td class="field-value"><input type="password" id="register-password" name="customer_password" 
+				title="<?php echo $this->__('Password should be at least 7 symbol length, containing both alphabeticand numeric characters.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Confirm Your Password') ?></td>
+			<td class="field-value"><input type="password" id="register-password-confirmed" name="customer_password_confirmed"
+				title="<?php echo $this->__('Enter your password once again.') ?>" /></td>
+		</tr>
+	</table>
+	</div>
+</form>
+</li>
+<li class="login">
+<form id="login-form" method="post" action="#">
+	<input type="hidden" name="product_id" value="<?php echo $this->getProductId() ?>" />
+	<table>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Email') ?></td>
+			<td class="field-value"><input type="text" id="login-email" name="customer_email" 
+				title="<?php echo $this->__('To be used as a login name and for communication.') ?>" /></td>
+		</tr>
+		<tr>
+			<td class="field-name"><?php echo $this->__('Password') ?></td>
+			<td class="field-value"><input type="password" id="login-password" name="customer_password" 
+				title="<?php echo $this->__('Password should be at least 7 symbol length, containing both alphabeticand numeric characters.') ?>" /></td>
+		</tr>
+	</table>
+</form>
+</li>
+</ul>
+<ul class="buttons">
+<li class="register"><button title="<?php echo $this->__('Register') ?>"><?php echo $this->__('Register') ?></button></li>
+<li class="login"><button title="<?php echo $this->__('Login') ?>"><?php echo $this->__('Login') ?></button></li>
+</ul>
+</div>

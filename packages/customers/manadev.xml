@@ -44,4 +44,24 @@
     <part name="Mana/Vat"/>
     <part name="default/manadev"/>
 
+    <part name="Mana/Theme" />
+    <part name="Mana/Widget" />
+    <part name="ManaTheme/Louvre" />
+    <part name="ManaProduct/Tag" />
+    <part name="ManaProduct/Tab" />
+    <part name="ManaProduct/Review" />
+    <part name="Mana/Social" />
+    <part name="Mana/Social" />
+    <part name="ManaPro/Guestbook" />
+    <part name="ManaSlider/Tabbed" />
+    <part name="Mana/Slider" />
+    <part name="Mana/Page" />
+    <part name="ManaPage/Sale" />
+    <part name="ManaPage/Bestseller" />
+    <part name="ManaPage/New" />
+    <part name="ManaPage/AttributeOption" />
+    <part name="ManaPro/ProductCollections" />
+    <part name="m-base/default"/>
+    <part name="m-louvre/default" />
+
 </config>
