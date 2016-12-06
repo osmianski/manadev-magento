@@ -40,32 +40,74 @@
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view <?php echo $_product->getTypeId() ?>-type <?php echo $_theme->getListItemClass($this, $_product) ?>">
-    <div class="product-essential col2-set">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
             <input type="hidden" name="related_product" id="related-products-field" value="" />
         </div>
-        <div class="product-img-box col-1 col-narrow">
-            <?php echo $this->getChildHtml('media') ?>
-        </div>
-<div class="col-2 col-wide">
         <div class="product-shop">
-            <div class="product-name">
-                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-            </div>
-
-
-            <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-
-
-
-            <?php if ($this->canEmailToFriend()): ?>
-                <span class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></span>
+        
+            <?php if ($_product->getImage() != 'no_selection' && $_product->getImage()): ?>
+                <?php echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product) ?>
+                <p class="product-image">
+                    <?php
+                        $_img = '<img id="image" src="'.$this->helper('catalog/image')->init($_product, 'image').'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+                        echo $_helper->productAttribute($_product, $_img, 'image');
+                    ?>
+                </p>
+                <?php echo Mage::helper('manaproduct_tag')->afterImage($this, $_product) ?>
             <?php endif; ?>
 
-            <?php echo $this->getChildHtml('alert_urls') ?>
+            <div id="product-header">
+                <div class="product-name">
+                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                </div>
+    
+                <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+    
+                <?php if ($this->canEmailToFriend()): ?>
+                    <span class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></span>
+                <?php endif; ?>
+    
+                <?php //echo $this->getChildHtml('product_type_data') ?>
+                <?php //echo $this->getTierPriceHtml() ?>
+                <?php //echo $this->getChildHtml('extrahint') ?>
+                <?php //echo $this->getChildHtml('alert_urls') ?>
+    
+                <?php echo $this->getPriceHtml($_product) ?>
 
+                <div class="clearer"></div>
+
+                <ul class="add-to-links demo-buttons">
+          		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getDemoFrontend(), 'demo_frontend')) : ?>
+          		    	<li>
+                            <a title="<?php echo $this->__('View live demo store') ?>" target="_blank" 
+              		          	class="button btn-frontend-demo" href="<?php echo $_url ?>">
+              		          	<span><span><?php echo $this->__('Frontend Demo') ?></span></span>
+              		        </a>
+                        </li>
+          		    <?php endif; ?>
+          		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getDemoAdmin(), 'demo_admin')) : ?>
+          		    	<li>
+              		    	<a title="<?php echo $this->__('View live demo admin') ?>" target="_blank" 
+              		          	class="button btn-admin-demo" href="<?php echo $_url ?>">
+              		          	<span><span><?php echo $this->__('Admin Demo') ?></span></span>
+              		        </a>
+                        </li>
+        		    <?php endif; ?>
+          		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getData('demo_19_frontend'), 'demo_19_frontend')) : ?>
+          		    	<li>
+              		    	<a title="<?php echo $this->__('View live demo on 1.9 responsive theme') ?>" target="_blank"
+              		          	class="button btn-responsive-demo" href="<?php echo $_url ?>">
+              		          	<span><span><?php echo $this->__('1.9 Responsive Demo') ?></span></span>
+              		        </a>
+                        </li>
+          		    <?php endif; ?>
+                </ul>
+            </div>
+            
+            <div class="clearer"></div>
+            
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
                     <h2><?php echo $this->__('Quick Overview') ?></h2>
@@ -73,10 +115,6 @@
                 </div>
             <?php endif;?>
 
-            <?php echo $this->getChildHtml('product_type_data') ?>
-
-            <?php echo $this->getTierPriceHtml() ?>
-            <?php echo $this->getChildHtml('extrahint') ?>
             <?php if (!$this->hasOptions()):?>
 
                 <div class="add-to-box">
@@ -108,7 +146,6 @@
         <?php endif;?>
         <?php echo $this->getChildHtml('related_inside_product') ?>
     <?php echo $this->getChildHtml('m_tabs') ?>
-    </div>
     </form>
     <script type="text/javascript">
     //<![CDATA[
@@ -154,7 +191,6 @@
         }.bind(productAddToCartForm);
     //]]>
     </script>
-    </div>
 
 
 </div>

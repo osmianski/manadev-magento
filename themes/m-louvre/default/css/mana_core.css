@@ -19,16 +19,18 @@
     top:45%;
     left:50%;
     width:120px;
-    margin-left:-120px;
-    padding:15px 60px;
-    background:rgba(255,255,255,0.7);
-    border:2px solid #FF6464;
-    color:#FF6464;
-    font-weight:bold;
+    height:120px;
+    margin-left:-60px;
+    background:radial-gradient(circle, white, rgba(255,255,255,0.8));
     text-align:center;
     z-index:20100;
-    border-radius: 10px;
+    border-radius: 60px;
     }
+#m-wait .loader img {
+    position: relative;
+    top: 17px;
+    left: 4px;
+}
 .m-popup {
     position: absolute;
     background: white;

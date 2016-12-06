@@ -1160,7 +1160,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 
 /* Product View ========================================================================== */
 /* Rating */
-.no-rating { margin:0 10px 0 0; float: left; }
+.no-rating { margin:0 10px 0 0; float: left; width: 100%;}
 .col3-layout .no-rating { min-width: 240px; }
 .no-rating a { color: #aaa; }
 .no-rating a:hover { color: #646464; }
@@ -1244,7 +1244,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 /* Special price */
 .special-price {}
 .special-price .price-label { font-weight:bold; white-space:nowrap; }
-.special-price .price { font-weight:bold; color: #FF6464; font-size: 18px;}
+.special-price .price { font-weight:bold; color: #FF6464; }
+.products-grid .special-price .price { font-size: 18px; }
 /*
 .ribbons-container { position: relative; float: left; }
 .special-price:before { position: absolute; top: 8px; left: -9999px; content:""; z-index: 2; width: 78px; height: 78px; background: transparent url(../images/i-special-price.png) 0 0 no-repeat; }
@@ -1471,8 +1472,41 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-view .product-shop { float:right;  }
 .col1-layout .product-view .product-shop { float:right;  }
 .col3-layout .product-view .product-shop { float:none; width:auto; }
+#product-header { float:left; }
+.product-view .m-image-container { padding: 0 20px 20px 0; }
 .product-view .product-name {}
 .col3-layout .product-view .product-name h1 { font-size: 20px; }
+.product-view .price-label { display:none; }
+.product-view .old-price,
+.product-view .special-price,
+.product-view .regular-price { float:left; font-size: 40px; }
+.product-view .special-price { margin: 0 20px;  }
+.product-view .special-price:after { content:"Hurry! While promotion lasts!"; position: relative; bottom: 8px; padding: 5px 10px; border-radius: 5px; background: #EFA5A6; color: #FAE3E3; font: 16px/1.5 "PT Sans", Calibri, sans-serif;  }
+.product-view .special-price:before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	bottom: -30px;
+	right: 50%;
+	height: 30px;
+	border-right: 60px solid #5a8f00;
+	background: #5a8f00; /* need this for webkit - bug in handling of border-radius */
+	/* css3 */
+	-webkit-border-bottom-right-radius: 80px 50px;
+	-moz-border-radius-bottomright: 80px 50px;
+	border-bottom-right-radius: 80px 50px;
+	/* using translate to avoid undesired appearance in CSS2.1-capabable but CSS3-incapable browsers */
+	-webkit-transform: translate(0, -2px);
+	-moz-transform: translate(0, -2px);
+	-ms-transform: translate(0, -2px);
+	-o-transform: translate(0, -2px);
+	transform: translate(0, -2px);
+}
+.product-view .old-price:after,
+.product-view .old-price .price { color: #b4b4b4 }
+.product-view .demo-buttons li a { text-transform: capitalize; color: white; background-color: #b4b4b4; }
+.product-view .demo-buttons li a span span:after { content: "\e62e"; margin-left: 5px; }
+.product-view .demo-buttons li a.btn-admin-demo span span:after { content: "\e602"; }
 
 .product-view .short-description { clear: both; margin-bottom: 20px; }
 
@@ -1494,7 +1528,7 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 
 
 /* Product Options */
-.product-options { padding:10px; margin:10px 0 0; border-radius: 10px 10px 0 0; background-color:#f6f6f6; }
+.product-options {  }
 
 .col3-layout .product-options { clear: both; }
 .product-options dt label { font-weight:bold; position: relative; top: 15px; }
@@ -1515,7 +1549,7 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-options ul.validation-failed { padding:0 7px; }
 .product-options p.required { padding:15px 0 0; }
 
-.product-options-bottom { padding:8px; border:5px solid #f8f8f8; border-top:0; border-radius: 0 0 10px 10px; }
+.product-options-bottom { }
 .product-options-bottom .price-box { margin:10px 0; }
 
 /* Tabs */
