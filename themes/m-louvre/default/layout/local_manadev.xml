@@ -57,6 +57,15 @@ examples on what kind of actions can be applied to referenced blocks.
 			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
 		</reference>
 	</catalog_category_layered>
+	<catalogsearch_result_index> <!-- apply the following actions to category page -->
+		<update handle="jquery" />
+		<reference name="search_result_list">
+			<block name="download.button" type="local_manadev/download_button" template="local/manadev/download/button.phtml" />
+		</reference>
+		<reference name="before_body_end">
+			<block type="local_manadev/download_dialog" template="local/manadev/download/dialog.phtml" />
+		</reference>
+	</catalogsearch_result_index>
 	<local_manadev_product_download><!--  apply the following actions to thank you page -->
 		<update handle="jquery" />
 		<reference name="before_body_end">
