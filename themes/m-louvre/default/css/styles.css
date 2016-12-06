@@ -366,9 +366,9 @@ p.control input.radio { margin-right:6px; }
 .form-list input.input-text { width: 100%; box-sizing: border-box; }
 .form-list textarea { width:254px; height:10em; }
 .form-list select { width:260px; }
-.form-list li.wide .input-box { width:535px; }
+.form-list li.wide .input-box {  }
 .form-list li.wide input.input-text { width: 470px; }
-.form-list li.wide textarea { width:529px; }
+.form-list li.wide textarea { width:100%; box-sizing: border-box; }
 .form-list li.wide select { width:535px; }
 .form-list li.additional-row { border-top:1px solid #ccc; margin-top:10px; padding-top:7px; }
 .form-list li.additional-row .btn-remove { float:right; margin:5px 0 0; }
@@ -442,7 +442,7 @@ p.control input.radio { margin-right:6px; }
 
 .buttons-set-order {}
 
-.fieldset { background: #f8f8f8;  border-radius: 10px;}
+.fieldset { background: #f8f8f8;  border-radius: 10px; padding: 20px; }
 .fieldset .legend { position:relative; color: #FF6464;}
 
 /* Form Validation */
