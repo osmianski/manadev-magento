@@ -30,12 +30,13 @@
 <?php $buttonTitle = $this->__('Add to Cart'); ?>
 <?php if($_product->isSaleable()): ?>
     <div class="add-to-cart">
-        <?php if(!$_product->isGrouped()): ?>
-            <label for="qty"><?php echo $this->__('Qty:') ?></label>
-            <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
-        <?php endif; ?>
         <?php if ($_theme->isVisibleInProductList($this, 'cart')): ?>
-            <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+            <?php if ($_product->getFinalPrice() > 0) : ?>
+                <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+            <?php else: ?>
+                <?php echo $this->getLayout()->createBlock('local_manadev/download_button')
+                    ->setTemplate('local/manadev/download/button.phtml')->setProduct($_product)->toHtml() ?>
+            <?php endif; ?>
         <?php endif; ?>
         <?php echo $this->getChildHtml('', true, true) ?>
     </div>

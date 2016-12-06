@@ -1,0 +1,69 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaProduct_Tab
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaProduct_Tab_Block_Tabs */
+?>
+<?php if ($_tabs = $this->getTabs('before')): ?>
+<div class="product-collateral">
+    <?php foreach ($_tabs as $_tab): ?>
+    <?php /* @var $_tab ManaProduct_Tab_Model_Tab */ ?>
+    <?php if ($_html = $_tab->getHtml()): ?>
+        <?php if ($_tab->getWrapCollateral()): ?>
+            <div class="box-collateral <?php echo "box-{$_tab->getCssAlias()}"?>">
+                <?php if ($_title = $_tab->getTitle()):?>
+                <h2><?php //echo $this->escapeHtml($_title); ?></h2>
+                <?php endif;?>
+                <?php echo $_html ?>
+            </div>
+        <?php else: ?>
+            <?php echo $_html ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+<?php if ($_tabs = $this->getTabs('tab')): ?>
+<div class="m-additional-data-tabs">
+<ul class="m-tabs">
+    <?php foreach ($_tabs as $_tab) : ?>
+    <?php if ($_html = $_tab->getHtml()): ?>
+        <li><a href="#m-<?php echo $_tab->getCssAlias() ?>"><?php echo $_tab->getTitle() ? $this->escapeHtml($_tab->getTitle()) : '&nbsp;' ?></a></li>
+    <?php endif; ?>
+    <?php endforeach;?>
+</ul>
+<ul class="m-tab-content">
+    <?php foreach ($_tabs as $_tab) : ?>
+    <?php if ($_html = $_tab->getHtml()): ?>
+        <li id="m-<?php echo $_tab->getCssAlias() ?>">
+            <?php echo $_html ?>
+        </li>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</ul>
+</div>
+<?php endif; ?>
+
+<?php if ($_tabs = $this->getTabs('after')): ?>
+<div class="product-collateral">
+    <?php foreach ($_tabs as $_tab): ?>
+    <?php /* @var $_tab ManaProduct_Tab_Model_Tab */ ?>
+    <?php if ($_html = $_tab->getHtml()): ?>
+        <?php if ($_tab->getWrapCollateral()): ?>
+            <div class="box-collateral <?php echo "box-{$_tab->getAlias()}"?>">
+                <?php if ($_title = $_tab->getTitle()):?>
+                <h2><?php echo $this->escapeHtml($_title); ?></h2>
+                <?php endif;?>
+                <?php echo $_html ?>
+            </div>
+        <?php else: ?>
+            <?php echo $_html ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
