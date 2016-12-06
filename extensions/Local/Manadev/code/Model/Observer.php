@@ -254,6 +254,28 @@ class Local_Manadev_Model_Observer {
         return $this;
     }
 
+    public function addCategoryBreadcrumbToProduct($observer) {
+        $params = $observer->getEvent()->getParams();
+        if ($params->getCategoryId()) {
+            return;
+        }
+        if (!($productId = (int)Mage::app()->getRequest()->getParam('id'))) {
+            return;
+        }
+
+        /* @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('catalog/product')->setEntityId($productId);
+
+        $product->getProductUrl();
+        $categoryIds = $product->getAvailableInCategories();
+        if (empty($categoryIds)) {
+            return;
+        }
+
+        $params->setCategoryId(array_pop($categoryIds));
+
+    }
+
     public function saveDownloadableOrderItem($observer) {
         $orderItem = $observer->getEvent()->getItem();
         if (!$orderItem->getId()) {
