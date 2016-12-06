@@ -21,6 +21,21 @@ class ManaPro_Guestbook_BookController  extends Mage_Core_Controller_Front_Actio
         $this->_title($this->__('Guest Book'));
         $this->_initLayoutMessages('customer/session');
         $this->_initLayoutMessages('catalog/session');
+
+        if (Mage::getStoreConfig('web/default/show_cms_breadcrumbs')
+            && ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs'))
+        ) {
+            $breadcrumbs->addCrumb('home', array(
+                'label' => Mage::helper('cms')->__('Home'),
+                'title' => Mage::helper('cms')->__('Go to Home Page'),
+                'link' => Mage::getBaseUrl()
+            ));
+            $breadcrumbs->addCrumb('guest_book', array(
+                'label' => Mage::helper('cms')->__('Guest Book'),
+                'title' => Mage::helper('cms')->__('Guest Book')
+            ));
+        }
+
         $this->renderLayout();
     }
     public function postAction() {

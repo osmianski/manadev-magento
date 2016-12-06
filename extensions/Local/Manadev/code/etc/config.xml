@@ -438,6 +438,13 @@
                     </modules>
                 </args>
             </checkout>
+            <contacts>
+                <args>
+                    <modules>
+                        <local_manadev before="Mage_Contacts">Local_Manadev_Contacts</local_manadev>
+                    </modules>
+                </args>
+            </contacts>
             <downloadable>
                 <args>
                     <modules>
