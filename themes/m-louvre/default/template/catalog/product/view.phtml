@@ -112,15 +112,14 @@
             </div>
             <div class="clearer"></div>
 
-            <div class="product-img-box">
-                <?php //echo $this->getChildHtml('media') ?>
-            </div>
-            
+
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
                     <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description')) ?></div>
                 </div>
             <?php endif;?>
+
+            <?php echo $this->getChildHtml('media') ?>
 
             <div class="add-to-box">
                 <?php if($_product->isSaleable()): ?>
@@ -155,7 +154,7 @@
                 <?php // echo $this->getChildChildHtml('container2', '', true, true) ?>
             <?php endif;?>
             <?php echo $this->getChildHtml('related_inside_product') ?>
-            <?php echo $this->getChildHtml('m_tabs') ?>
+            <?php //echo $this->getChildHtml('m_tabs') ?>
 
         </div>
 

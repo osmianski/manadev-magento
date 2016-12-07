@@ -38,12 +38,15 @@
 ?>
 <?php if (count($this->getGalleryImages()) > 0): ?>
 <div class="more-views">
-    <ul>
     <?php foreach ($this->getGalleryImages() as $_image): ?>
-        <li>
-            <a href="#" onclick="popWin('<?php echo $this->getGalleryUrl($_image) ?>', 'gallery', 'width=300,height=300,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;" title="<?php echo $this->htmlEscape($_image->getLabel()) ?>" style="height: <?php echo $_theme->getHeight(56) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(56, $_theme->getHeight(56)); ?>" width="56" height="<?php echo $_theme->getHeight(56) ?>" alt="<?php echo $this->htmlEscape($_image->getLabel()) ?>" /></a>
-        </li>
+        <a href="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile()) ?>"
+            data-sub-html="<h4><?php echo $_image->getLabel() ?></h4>"
+        >
+            <img src="<?php echo $this->helper('catalog/image')
+                    ->init($this->getProduct(), 'thumbnail', $_image->getFile())
+                    ->resize(96, 76); ?>"
+                />
+        </a>
     <?php endforeach; ?>
-    </ul>
 </div>
 <?php endif; ?>

@@ -16,4 +16,6 @@
     <sync extension-dir="js" project-dir="skin/frontend/{Extension/Name}/js"/>
 
     <sync extension-file="favicon.ico" project-file="skin/frontend/{Extension/Name}/favicon.ico"/>
+
+    <sync extension-dir="light-gallery" project-dir="skin/frontend/{Extension/Name}/light-gallery"/>
 </config>
