@@ -10,6 +10,26 @@ class Local_Manadev_Helper_Products extends Mage_Core_Helper_Abstract
         return $this->_getPlatformProductCollection(1);
     }
 
+    public function getUpsellProductCollection() {
+        $product = Mage::registry('product');
+        /* @var $product Mage_Catalog_Model_Product */
+        $collection = $product->getUpSellProductCollection()
+            ->setPositionOrder()
+            ->addStoreFilter()
+        ;
+        if (Mage::helper('catalog')->isModuleEnabled('Mage_Checkout')) {
+            Mage::getResourceSingleton('checkout/cart')->addExcludeProductFilter($collection,
+                Mage::getSingleton('checkout/session')->getQuoteId()
+            );
+
+            $this->_addProductAttributesAndPrices($collection);
+        }
+        Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
+
+        $collection->load();
+        return $collection;
+    }
+
     protected function _getPlatformProductCollection($platform) {
         $collection = $this->_getProductCollection();
 
