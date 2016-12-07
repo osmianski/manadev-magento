@@ -84,6 +84,14 @@
                 <div class="clearer"></div>
 
                 <ul class="add-to-links demo-buttons">
+          		    	<li>
+                            <?php if ($_product->getFinalPrice() > 0) : ?>
+                                <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                            <?php else: ?>
+                                <?php echo $this->getLayout()->createBlock('local_manadev/download_button')
+                                    ->setTemplate('local/manadev/download/button.phtml')->setProduct($_product)->toHtml() ?>
+                            <?php endif; ?>
+                        </li>
           		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getDemoFrontend(), 'demo_frontend')) : ?>
           		    	<li>
                             <a title="<?php echo $this->__('View live demo store') ?>" target="_blank" 
@@ -118,16 +126,10 @@
             
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
-                    <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description')) ?></div>
+                    <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?></div>
                 </div>
             <?php endif;?>
 
-            <div class="add-to-box">
-                <?php if($_product->isSaleable()): ?>
-                    <?php echo $this->getChildHtml('addtocart') ?>
-                <?php endif; ?>
-            </div>
-        
             
             <?php if (!$this->hasOptions()):?>
 

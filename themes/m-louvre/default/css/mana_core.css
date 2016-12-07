@@ -25,6 +25,7 @@
     text-align:center;
     z-index:20100;
     border-radius: 60px;
+    box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.1);
     }
 #m-wait .loader img {
     position: relative;
