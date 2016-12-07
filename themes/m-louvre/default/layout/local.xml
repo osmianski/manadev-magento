@@ -355,6 +355,7 @@
             <action method="addItem"><type>skin_js</type><name>light-gallery/js/lightgallery.js</name><params/></action>
             <action method="addItem"><type>skin_js</type><name>light-gallery/js/lg-thumbnail.min.js</name><params/></action>
             <action method="addItem"><type>skin_js</type><name>light-gallery/js/lg-fullscreen.min.js</name><params/></action>
+            <action method="addItem"><type>skin_js</type><name>light-gallery/js/lg-zoom.min.js</name><params/></action>
 
         </reference>
     </light_gallery>
