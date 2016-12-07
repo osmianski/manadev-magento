@@ -53,23 +53,6 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		return $product;
 	}
 	protected function _validateCustomerPermissions($product) {
-		try {
-			// decide if person has permission to download
-			if (!$this->_getCustomerSession()->isLoggedIn()) { // registered customers are always allowed to download freebies
-				// guest downloads are generally ok, but only through our user interface, no robots please
-				if (($permissions = $this->_getCustomerSession()->getMDownloadPermissions()) === null || 
-					!isset($permissions[$product->getId()]) || !$permissions[$product->getId()])
-				{
-					throw new Mage_Core_Exception($this->__('Guest does not have permissions to download product "%s" (%d) is not free.', $product->getName(), $product->getId()));
-				}
-			}
-		}
-		catch (Mage_Core_Exception $e) {
-			return $this->_reportFailureAndRedirect($e->getMessage(), $product->getId(), $product);
-		}
-		catch (Exception $e) {
-			throw $e;
-		} 
 		return true;
 	} 
 	/**
