@@ -14,6 +14,7 @@
     $(function () {
         Mana.Theme.beautifySelects();
         Mana.Theme.scrollToTop();
+        $(".more-views").lightGallery();
     });
 
     function ManaMenuModal(ManaMenuInstance) {
