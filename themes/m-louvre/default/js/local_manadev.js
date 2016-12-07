@@ -119,18 +119,7 @@
 					}
 				}
 
-				if ($.options("#download-dialog").customerIsLoggedIn) {
-					// if customer is already logged in, just open download page for this product
-					window.location.href = _downloadDialogOptions.downloadUrl;
-				}
-				else {
-					// if customer is not logged in, show download dialog box
-					$("#download-dialog").dialog({ 
-						title: $.__("Download Extension \"%s\"", _downloadDialogOptions.productName) // specify dialog title here
-					});
-					$("#download-dialog .extension-name").html(_downloadDialogOptions.productName);
-					$("#download-dialog").dialog("open");
-				}
+				window.location.href = _downloadDialogOptions.downloadUrl;
 			});
 			
 			// hide/show registration fields when No, thanks checkbox changes its value.
