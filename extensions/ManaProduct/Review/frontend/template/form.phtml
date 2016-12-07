@@ -7,12 +7,46 @@
  */
 
 /* @var $this ManaProduct_Review_Block_Form */
+$_columnCount = 2;
 ?>
-<div class="form-add">
-    <h2><?php echo $this->__('Write Your Own Review') ?></h2>
+<div class=col<?php echo $_columnCount?>-set>
+<div class="form-add col-1">
+    <h3><?php echo $this->__('Write Your Own Review') ?></h3>
     <?php if ($this->getAllowWriteReviewFlag()): ?>
     <form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
+        <?php echo $this->getBlockHtml('formkey'); ?>
         <fieldset>
+            <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
+                <span id="input-message-box"></span>
+                <table class="data-table" id="product-review-table">
+                    <col width="1" />
+                    <col width="1" />
+                    <col width="1" />
+                    <col width="1" />
+                    <col width="1" />
+                    <thead>
+                        <tr>
+                            <th><span class="nobr"><?php echo $this->__('1 star') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('2 stars') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('3 stars') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('4 stars') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('5 stars') ?></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->getRatings() as $_rating): ?>
+                        <tr>
+                        <?php foreach ($_rating->getOptions() as $_option): ?>
+                            <td class="value"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" /></td>
+                        <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+                <script type="text/javascript">decorateTable('product-review-table')</script>
+            <?php endif; ?>
+
             <?php echo $this->getChildHtml('form_fields_before')?>
                 <ul class="form-list">
                     <li>
@@ -35,40 +69,6 @@
                     </li>
                 </ul>
 
-            <?php if( $this->getRatings() && $this->getRatings()->getSize()): ?>
-                <h4><?php echo $this->__('How do you rate this product?') ?> <em class="required">*</em></h4>
-                <span id="input-message-box"></span>
-                <table class="data-table" id="product-review-table">
-                    <col />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <col width="1" />
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th><span class="nobr"><?php echo $this->__('1 star') ?></span></th>
-                            <th><span class="nobr"><?php echo $this->__('2 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo $this->__('3 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo $this->__('4 stars') ?></span></th>
-                            <th><span class="nobr"><?php echo $this->__('5 stars') ?></span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($this->getRatings() as $_rating): ?>
-                        <tr>
-                            <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></th>
-                        <?php foreach ($_rating->getOptions() as $_option): ?>
-                            <td class="value"><input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" /></td>
-                        <?php endforeach; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <input type="hidden" name="validate_rating" class="validate-rating" value="" />
-                <script type="text/javascript">decorateTable('product-review-table')</script>
-            <?php endif; ?>
             </fieldset>
             <div class="buttons-set">
                 <button type="submit" title="<?php echo $this->__('Submit Review') ?>" class="button"><span><span><?php echo $this->__('Submit Review') ?></span></span></button>

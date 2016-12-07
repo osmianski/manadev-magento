@@ -30,10 +30,57 @@
  * @see Mage_Catalog_Block_Product_View_Description
  */
 ?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
 <?php $_description = $this->getProduct()->getDescription(); ?>
 <?php if ($_description): ?>
     <h2><?php echo $this->__('Details') ?></h2>
+
+    <?php if ($_product->getData('type_id') == 'downloadable' ): ?>
+    <ul class="add-to-links product-buttons">
+	    <?php if ($_url = $_helper->productAttribute($_product, $_product->getUserGuideUrl(), 'user_guide_url')) : ?>
+	    	<li>
+                <a title="<?php echo $this->__('User\'s Guide') ?>" target="_blank" 
+  		          	class="button btn-user-guide" href="<?php echo Mage::getUrl() . $_url ?>">
+  		          	<span><span><?php echo $this->__('User\'s Guide') ?></span></span>
+  		        </a>
+            </li>
+	    <?php endif; ?>
+    	<li>
+	    	<a title="<?php echo $this->__('I Have a Question') ?>" 
+	          	class="button btn-product-question" href="<?php echo Mage::getUrl() . 'contacts' ?>">
+	          	<span><span><?php echo $this->__('I Have a Question') ?></span></span>
+	        </a>
+        </li>
+  	    <li>
+	    	<a title="<?php echo $this->__('I Need Support') ?>" 
+	          	class="button btn-product-support" href="<?php echo Mage::getUrl() . 'support' ?>">
+	          	<span><span><?php echo $this->__('I Need Support') ?></span></span>
+	        </a>
+        </li>
+    </ul>
+    <?php endif; ?>
+    
     <div class="std">
         <?php echo Mage::helper('markdown')->render($this->helper('catalog/output')->productAttribute($this->getProduct(), $_description, 'description')) ?>
     </div>
+    <ul class="add-to-links show-buttons">
+    	<li>
+          	<a title="<?php echo $this->__('Read More') ?>" class="button btn-show-more" href="#">
+              	<span><span><?php echo $this->__('Read More') ?></span></span>
+            </a>
+    	</li>
+    	<li>
+          	<a title="<?php echo $this->__('Show Less') ?>" class="button btn-show-less" href="#">
+              	<span><span><?php echo $this->__('Show Less') ?></span></span>
+            </a>
+    	</li>
+    </ul>
+    <script>Mana.Theme.showMoreShowLess({
+        what: '.product-view .box-description .std', 
+        minHeight: 310, 
+        moreLink: '.product-view .btn-show-more', 
+        lessLink: '.product-view .btn-show-less',
+        scrollTo: '.product-view .box-description h2' 
+    });</script>
 <?php endif; ?>

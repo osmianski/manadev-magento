@@ -344,7 +344,7 @@
     <!-- Gueat Book -->
     <manapro_guestbook_book_index translate="label" module="manapro_guestbook">
         <reference name="root">
-            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
     </manapro_guestbook_book_index>
 

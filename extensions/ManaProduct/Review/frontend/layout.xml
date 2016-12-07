@@ -32,10 +32,10 @@ examples on what kind of actions can be applied to referenced blocks.
 	        <block type="manaproduct_review/block" name="product.m_review" as="m_review"
 	        	template="manaproduct/review/block.phtml">
 	            <action method="addToParentGroup"><group>detailed_info</group></action>
-                <block type="manaproduct_review/list" name="product.m_review.list" as="m_review_list"
-                    template="manaproduct/review/list.phtml" />
                 <block type="manaproduct_review/form" name="product.m_review.form" as="m_review_form"
                     template="manaproduct/review/form.phtml" />
+                <block type="manaproduct_review/list" name="product.m_review.list" as="m_review_list"
+                    template="manaproduct/review/list.phtml" />
             </block>
         </reference>
 	</catalog_product_view>

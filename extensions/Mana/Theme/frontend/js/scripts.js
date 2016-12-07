@@ -301,6 +301,49 @@
         });
     };
 
+    Mana.Theme.showMoreShowLess = function(options) {
+        var height = $(options.what).height();
+        var shownAll = false;
+        
+        function more() {
+            shownAll = true;
+            resize();
+            return false;
+        }
+        
+        function less() {
+            shownAll = false;
+            height = $(options.what).height();
+            resize();
+            window.scrollTo(0, $(options.scrollTo).offset().top);
+            
+            return false;
+        }
+         
+        function resize() {
+            if (height <= options.minHeight) {
+                $(options.moreLink).hide();
+                $(options.lessLink).hide();
+            }
+            else {
+                if (shownAll) {
+                    $(options.what).height('auto');
+                    $(options.moreLink).hide();
+                    $(options.lessLink).show();
+                }
+                else {
+                    $(options.what).height(options.minHeight);
+                    $(options.moreLink).show();
+                    $(options.lessLink).hide();
+                }
+            }
+        }
+        
+        $(options.moreLink).on('click', more);
+        $(options.lessLink).on('click', less);
+        $(window).on('resize', resize);
+        resize();
+    }
 })(jQuery, Mana);
 //endregion
 

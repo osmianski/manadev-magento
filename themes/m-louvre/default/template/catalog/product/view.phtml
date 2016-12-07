@@ -120,6 +120,7 @@
             </div>
             <div class="clearer"></div>
 
+        </form>
 
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
@@ -129,38 +130,8 @@
 
             <?php echo $this->getChildHtml('media') ?>
 
-            <div class="add-to-box">
-                <?php if($_product->isSaleable()): ?>
-                    <?php echo $this->getChildHtml('addtocart') ?>
-                <?php endif; ?>
-            </div>
-
-
-            <?php if (!$this->hasOptions()):?>
-
-                <div class="add-to-box">
-                    <?php if($_product->isSaleable()): ?>
-                        <?php echo $this->getChildHtml('addtocart') ?>
-                    <?php endif; ?>
-                    <?php echo $this->getChildHtml('addto') ?>
-                </div>
-                <?php //echo $this->getChildHtml('extra_buttons') ?>
-            <?php elseif (!$_product->isSaleable()): ?>
-                <div class="add-to-box">
-                    <?php echo $this->getChildHtml('addto') ?>
-                </div>
-            <?php endif; ?>
-
-            <?php //echo $this->getChildHtml('other');?>
             <?php echo $this->getChildHtml('m_share_product');?>
 
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php // echo $this->getChildChildHtml('container1', '', true, true) ?>
-            <?php endif;?>
-
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php // echo $this->getChildChildHtml('container2', '', true, true) ?>
-            <?php endif;?>
             <?php echo $this->getChildHtml('related_inside_product') ?>
             <?php echo $this->getChildHtml('m_tabs') ?>
 
@@ -168,7 +139,6 @@
 
 
 
-    </form>
     <script type="text/javascript">
     //<![CDATA[
         var productAddToCartForm = new VarienForm('product_addtocart_form');

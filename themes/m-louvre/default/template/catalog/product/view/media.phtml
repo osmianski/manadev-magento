@@ -40,7 +40,7 @@
 <div class="more-views">
     <?php foreach ($this->getGalleryImages() as $_image): ?>
         <a href="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile()) ?>"
-            data-sub-html="<h4><?php echo $_image->getLabel() ?></h4>"
+            data-sub-html="<h3><?php echo $_image->getLabel() ?></h3>"
         >
             <img src="<?php echo $this->helper('catalog/image')
                     ->init($this->getProduct(), 'thumbnail', $_image->getFile())
