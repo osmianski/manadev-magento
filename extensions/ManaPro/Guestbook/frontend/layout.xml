@@ -41,8 +41,9 @@ examples on what kind of actions can be applied to referenced blocks.
             <action method="setHeaderTitle" translate="title" module="manapro_guestbook"><title>Guest Book</title></action>
         </reference>
         <reference name="content">
-            <block type="manapro_guestbook/posts" name="posts" as="posts" template="manapro/guestbook/posts.phtml"/>
+            <block type="core/template" name="title" as="title" template="manapro/guestbook/title.phtml"/>
             <block type="manapro_guestbook/form" name="form" as="form" template="manapro/guestbook/form.phtml"/>
+            <block type="manapro_guestbook/posts" name="posts" as="posts" template="manapro/guestbook/posts.phtml"/>
         </reference>
     </manapro_guestbook_book_index>
 </layout>

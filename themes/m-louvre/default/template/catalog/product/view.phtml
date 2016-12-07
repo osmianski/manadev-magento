@@ -120,8 +120,9 @@
             </div>
             <div class="clearer"></div>
 
+        </div>
         </form>
-
+        <div class="product-shop">
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
                     <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?></div>

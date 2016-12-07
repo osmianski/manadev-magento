@@ -9,14 +9,9 @@
 /* @var $core Mana_Core_Helper_Data */
 $core = Mage::helper(strtolower('Mana_Core'));
 ?>
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<div class="page-title">
-    <h1><?php echo $this->__('Guest Book') ?></h1>
-</div>
 <ul class="m-guest-book">
 <?php foreach($this->getPosts() as $post) : ?>
 <li>
-    <blockquote><?php echo nl2br($this->escapeHtml($post->getText())) ?></blockquote>
     <p>
     <?php if (Mage::getStoreConfigFlag('manapro_guestbook/date/in_frontend')) : ?>
         <span class="guest-date"><?php echo $this->escapeHtml(Mage::getSingleton('core/locale')
@@ -35,6 +30,7 @@ $core = Mage::helper(strtolower('Mana_Core'));
         , <span class="guest-url"><a target="_blank" href="<?php echo $_url ?>"><?php echo $this->escapeHtml($post->getUrl()) ?></a></span>
     <?php endif; ?>
     </p>
+    <blockquote><?php echo nl2br($this->escapeHtml($post->getText())) ?></blockquote>
 </li>
 <?php endforeach; ?>
 </ul>

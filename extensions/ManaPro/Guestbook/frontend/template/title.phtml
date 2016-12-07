@@ -1,0 +1,15 @@
+<?php 
+/**
+ * @category    Mana
+ * @package     ManaPro_Guestbook
+ * @copyright   Copyright (c) http://www.manadev.com
+ * @license     http://www.manadev.com/license  Proprietary License
+ */
+/* @var $this ManaPro_Guestbook_Block_Posts */
+/* @var $core Mana_Core_Helper_Data */
+$core = Mage::helper(strtolower('Mana_Core'));
+?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="page-title">
+    <h1><?php echo $this->__('Guest Book') ?></h1>
+</div>

@@ -281,14 +281,15 @@ button.button.btn-gray:hover { background: #969696; color: #fff; }
 .we-accept img { margin: 0 40px; }
 
 /* Quote */
-.quote { position: relative; bottom: 15px; background: transparent url(../images/quote_bottom.png) right bottom no-repeat; font-style: italic; }
+.quote { position: relative; bottom: 15px; background: transparent url(../images/quote_bottom.png) right bottom no-repeat; }
 .quote div { background: transparent url(../images/quote_top.png) 0 0 no-repeat; padding: 20px 30px 30px; }
 .sidebar .quote { bottom:0; }
 .sidebar .quote div { padding: 20px 10px 30px; }
 .widget-title+.quote { position: relative; bottom: 20px; }
 .quote div p { font-style: normal; margin-top: 10px; }
-.header .quote { bottom: 0; background: none; font-style: italic; font-size:14px; }
-.header .quote div { background: none; padding: 0; }
+.header .quote { bottom: 0; font-size:14px; }
+.header .read-more { text-align: center; position: relative; top: 20px; }
+.header .quote div { padding: 10px 5px 0; background-position: 0 0; }
 .header blockquote,
 .header .m-guest-book blockquote { border:none; margin:0; padding:0; }
 .header .guest-date,
@@ -1182,7 +1183,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .ratings .rating-links .separator { margin:0 2px; }
 .ratings dt {}
 .ratings dd {}
-.rating-box { width:69px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.png) 0 0 repeat-x; text-indent:-999em; overflow:hidden; }
+.rating-box { width:67px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.png) 0 0 repeat-x; text-indent:-999em; overflow:hidden; }
 .rating-box .rating { float:left; height:13px; background:url(../images/bkg_rating.png) 0 100% repeat-x; }
 .ratings .rating-box { float:left; margin-right:3px; }
 .ratings .amount {}
@@ -1483,7 +1484,7 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-view #product-header .special-price,
 .product-view #product-header .regular-price { float:left; font-size: 40px; }
 .product-view .special-price {  }
-.product-view #product-header .special-price:after { white-space:nowrap; content: "Hurry! While promotion lasts!"; position: relative; bottom: 8px; padding: 5px 10px; border-radius: 5px;  background: #EFA5A6;  color: #FAE3E3; font: 16px/1.5 "PT Sans", Calibri, sans-serif;  }
+.product-view #product-header .special-price:after { box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.3); white-space:nowrap; content: "Hurry! While promotion lasts!"; position: relative; bottom: 8px; padding: 5px 10px; border-radius: 5px;  background: #EFA5A6;  color: #FAE3E3; font: 16px/1.5 "PT Sans", Calibri, sans-serif;  }
 .product-view .old-price .price,
 .product-view .regular-price .price { color: #b4b4b4 }
 .product-view #product-header .old-price { margin-right: 10px; }
@@ -1519,7 +1520,7 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-view .ratings .rating-box { position: relative; top:6px; margin-bottom: 5px; }
 
 
-.product-view .short-description { clear: both; margin: 20px 0 5px; text-align: justify; }
+.product-view .short-description { clear: both; margin: 20px 0 10px; text-align: justify; }
 .product-view .more-views { margin-bottom:10px; }
 .product-view .more-views h3 { color:white; }
 .product-view .more-views a { display: inline-block; text-decoration: none; }
@@ -1621,7 +1622,7 @@ margin-left: -68px;
 .product-view .box-reviews h3 { clear: both; padding: 0 0 5px; }
 .product-view .box-reviews .review-author { color:#dcdcdc; }
 .product-view .box-reviews .review-author span { color:#646464; font-weight: bold; }
-.product-view .box-reviews .review-author small { color:#646464; }
+.product-view .box-reviews .review-author small { color:#dcdcdc; display: block; }
 .product-view .box-reviews > dl { margin-bottom:10px; padding: 10px; }
 .product-view .box-reviews dl.review-content { clear: both; overflow: hidden; }
 .product-view .box-reviews dl.review-content dt,

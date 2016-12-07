@@ -22,7 +22,7 @@
         <div class="col-<?php echo $_currentCol++; ?>">
             <h3><?php echo $this->htmlEscape($_review->getTitle()) ?></h3>
             <p class="review-author"">
-                <?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?> 
+                <?php echo $this->__('<span>%s</span>', $this->htmlEscape($_review->getNickname())) ?> 
                 <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
             </p>
 
