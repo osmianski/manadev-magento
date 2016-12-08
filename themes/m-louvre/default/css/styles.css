@@ -79,8 +79,8 @@ transition: color 0.1s ease-in-out;
 
 h1            { font-size:26px; font-weight:normal; color:#26b1ed; }
 h2            { font-size:21px; font-weight:normal; color:#26b1ed; margin-bottom: 10px;}
-h3            { font-size:18px; font-weight:normal; color:#ff6464; }
-h4            { font-size:17px; color: #26b1ed; }
+h3            { font-size:18px; font-weight:bold; color:#26b1ed; }
+h4            { font-size:17px; color: #ff6464; }
 h5            { font-size:16px; font-weight:bold; color: #646464; }
 h6            { font-size:15px; font-weight:bold; }
 
@@ -1186,7 +1186,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .rating-box { width:67px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.png) 0 0 repeat-x; text-indent:-999em; overflow:hidden; }
 .rating-box .rating { float:left; height:13px; background:url(../images/bkg_rating.png) 0 100% repeat-x; }
 .ratings .rating-box { float:left; margin-right:3px; }
-.ratings .amount {}
+.products-grid .ratings .amount { float:right; }
 
 .ratings-table th,
 .ratings-table td { font-size:11px; line-height:1.15; padding:3px 0; }

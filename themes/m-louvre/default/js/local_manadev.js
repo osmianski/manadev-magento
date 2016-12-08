@@ -110,7 +110,7 @@
 			});
 			
 			// the following is exeuted when specified DOM elements are clicked
-			$(".btn-download").click(function() {
+			$(document).on('click', ".btn-download", function() {
 				var classes = this.className.split(/\s+/);
 				for (var i = 0; i < classes.length; i++) {
 					if (classes[i].match(/^for-product-/)) {
@@ -123,7 +123,7 @@
 			});
 			
 			// hide/show registration fields when No, thanks checkbox changes its value.
-			$("#download-no-thanks").click(function() {
+			$(document).on('click', "#download-no-thanks", function() {
 				if ($(this).is(":checked")) { // hide if checked
 					$("#reg-details-for-download").slideUp({ duration: 500 });
 				}
