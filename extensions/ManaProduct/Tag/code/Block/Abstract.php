@@ -45,8 +45,20 @@ class ManaProduct_Tag_Block_Abstract extends Mage_Core_Block_Template
         }
         $sizeClasses = implode(' ', $sizeClasses);
 
-        if ($this->getProduct()->getPrice() != $this->getProduct()->getFinalPrice()) {
+        if ($this->getProduct()->getFinalPrice() <= 0.01) {
+            $result[] = 'm-tag m-free '. $sizeClasses;
+        }
+        elseif ($this->getProduct()->getPrice() != $this->getProduct()->getFinalPrice()) {
             $result[] = 'm-tag m-sale '. $sizeClasses;
+        }
+
+        $tags = explode(',', $this->getProduct()->getData('tag'));
+        if (($tagAttribute = $this->tagHelper()->getTagAttribute()) && $tagAttribute->getId()) {
+            foreach ($tagAttribute->getFrontend()->getSelectOptions() as $option) {
+                if (in_array($option['value'], $tags) && $option['label']) {
+                    $result[] = 'm-tag m-' . $option['label'] . ' '. $sizeClasses;
+                }
+            }
         }
 
         return $result;
