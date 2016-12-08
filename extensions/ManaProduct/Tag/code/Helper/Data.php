@@ -56,4 +56,18 @@ class ManaProduct_Tag_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->_sizeBasedClassXml;
 
     }
+
+    protected $_tagAttribute;
+
+    /**
+     * @return Mage_Catalog_Model_Resource_Eav_Attribute
+     */
+    public function getTagAttribute() {
+        if (!$this->_tagAttribute) {
+            $this->_tagAttribute = Mage::getModel('catalog/resource_eav_attribute');
+            $this->_tagAttribute->load('tag', 'attribute_code');
+        }
+
+        return $this->_tagAttribute;
+    }
 }
