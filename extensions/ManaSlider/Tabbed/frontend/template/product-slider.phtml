@@ -11,6 +11,7 @@
 $_products = $this->getData('data_source');
 $_sql = $_products->getSelect()->__toString();
 ?>
+<?php if (count($_products->getAllIds())) : ?>
 <div class="widget-products m-product-slider mb-<?php echo $this->jsHelper()->getClientSideBlockName($this->getNameInLayout()) ?>"
     data-m-block="ManaSlider/Tabbed/ProductSlider"
     data-ids="<?php echo $this->jsonHelper()->encodeAttribute($_products->getAllIds()) ?>"
@@ -29,3 +30,4 @@ $_sql = $_products->getSelect()->__toString();
         </ul>
     </div>
 </div>
+<?php endif; ?>

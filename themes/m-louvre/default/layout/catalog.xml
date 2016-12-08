@@ -194,12 +194,13 @@ Product view
                 </block>-->
                 <block type="manaslider_tabbed/slider" name="product.info.upsell" as="upsell_products">
                     <action method="setData"><field>xml_text</field><value><![CDATA[
-    <title>You may also be interested in the following product(s)</title>
+    <title></title>
     <css_class>related-products</css_class>
+    <keep_tabs>1</keep_tabs>
 <tabs>
         <tab1>
-            <label>You may also be interested in the following product(s)</label>
-            <title>You may also be interested in the following product(s)</title>
+            <label>Works Perfectly Together</label>
+            <title>Works Perfectly Together</title>
             <data_source>upsells</data_source>
             <ignore_new_products>1</ignore_new_products>
             <days_products_are_new>3000</days_products_are_new>
@@ -217,7 +218,7 @@ Product view
             <condition>or</condition>
             <effect_duration>50</effect_duration>
             <rotation_duration>10000000</rotation_duration>
-            <slide_count>2</slide_count>
+            <slide_count>1</slide_count>
         </tab1>
     </tabs>
                     ]]></value></action>

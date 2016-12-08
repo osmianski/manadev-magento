@@ -7,14 +7,11 @@
 
 .m-guest-book {}
 .m-guest-book blockquote {
-  font: 14px/22px normal helvetica, sans-serif;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 50px;
+  margin: 0 0 30px;
   padding-left: 15px;
   border-left: 3px solid #ccc;
 }
-.m-guest-book p { margin: 20px; }
+.m-guest-book p { margin: 20px 0 10px; }
 .m-guest-book .guest-date { color: #aaa; }
 .m-guest-book .guest-name { font-weight: bold; }
-.m-write-comment { Font-size: medium; margin-top: 50px; }
+.m-write-comment { margin-bottom: 20px; }

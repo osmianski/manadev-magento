@@ -7,44 +7,50 @@
  */
 /* @var $this ManaProduct_Review_Block_List */
 ?>
-<?php $_items = $this->getReviewsCollection()->getItems();?>
+<?php 
+    $_items = $this->getReviewsCollection()->getItems();
+    $_currentCol = 2;
+    $_columnCount = 2;
+?>
+<?php if (count($_items)):?>
+
+    <?php foreach ($_items as $_review):?>
+        <?php if ($_currentCol == 1) : ?>
+            <div class=col<?php echo $_columnCount?>-set>
+        <?php endif;?>
+
+        <div class="col-<?php echo $_currentCol++; ?>">
+            <h3><?php echo $this->htmlEscape($_review->getTitle()) ?></h3>
+            <p class="review-author"">
+                <?php echo $this->__('<span>%s</span>', $this->htmlEscape($_review->getNickname())) ?> 
+                <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
+            </p>
+
+            <?php $_votes = $_review->getRatingVotes(); ?>
+            <?php foreach ($_votes as $_vote): ?>
+                <div class="rating-box">
+                    <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
+                </div>
+            <?php endforeach; ?>
+
+            <div class="review-content">
+                <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+            </div>
+        </div>
+        
+        <?php if($_currentCol > $_columnCount) $_currentCol = 1; ?>
+    <?php endforeach; ?>
+
+
+<?php endif;?>
+
+<?php if ($_currentCol != 1) : ?>
+    <?php while($_currentCol <= $_columnCount) : ?>
+        <div class="col-<?php echo $_currentCol++; ?>"></div>
+    <?php endwhile; ?>
+<?php endif;?>
+</div>
+
 <?php if (count($_items)):?>
     <?php echo $this->getChildHtml('toolbar') ?>
-<dl class="m-bottom-shadow">
-    <?php foreach ($_items as $_review):?>
-
-            <dt><h3><?php echo $this->htmlEscape($_review->getTitle()) ?></h3>
-               <p class="review-author""><?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?> <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small></p>
-            </dt>
-            <dd>
-    <dl class="review-content">
-        <dt>
-            <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
-        </dt>
-        <dd>
-            <?php $_votes = $_review->getRatingVotes(); ?>
-            <?php if (count($_votes)): ?>
-            <table class="ratings-table">
-                <col width="1" />
-                <col />
-                <tbody>
-                    <?php foreach ($_votes as $_vote): ?>
-                    <tr>
-                        <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
-                        <td>
-                            <div class="rating-box">
-                                <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <?php endif; ?>
-        </dd>
-      </dl>
-      </dd>
-     <?php endforeach; ?>
-</dl>
-
 <?php endif;?>

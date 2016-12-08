@@ -9,15 +9,22 @@
 /* @var $this ManaSlider_Tabbed_Block_Slider */
 /* @var $_tab Mage_Core_Block_Template */
 $_title = $this->getData('title');
-$_count = count($this->getChildGroup('tabs'));
+$_count = '';
+$_html = array();
+foreach ($this->getChildGroup('tabs') as $_index => $_tab) {
+    if ($_html[$_index] = trim($_tab->toHtml())) {
+        $_count++;
+    }    
+}
 ?>
+<?php if ($_count) : ?>
 <div class="widget <?php echo $this->getData('css_class') ?>">
     <?php if ($_title): ?>
         <div class="widget-title">
             <h2><?php echo $this->__($_title) ?></h2>
         </div>
     <?php endif ?>
-    <?php if ($_count > 1) : ?>
+    <?php if ($_count > 1 || $this->getData('keep_tabs')) : ?>
     <div class="m-tabbed-slider mb-<?php echo $this->jsHelper()->getClientSideBlockName($this->getNameInLayout()) ?>"
         data-m-block="ManaSlider/Tabbed/Slider">
         <ul class="m-tabs">
@@ -28,16 +35,17 @@ $_count = count($this->getChildGroup('tabs'));
             <?php endforeach;?>
         </ul>
         <ul class="m-tab-content">
-            <?php foreach ($this->getChildGroup('tabs') as $_tab) : ?>
+            <?php foreach ($this->getChildGroup('tabs') as $_index => $_tab) : ?>
                 <li id="m-<?php echo $_tab->getData('tab_id') ?>">
-                    <?php echo $_tab->toHtml() ?>
+                    <?php echo $_html[$_index] ?>
                 </li>
             <?php endforeach; ?>
         </ul>
     </div>
     <?php else: ?>
-        <?php foreach ($this->getChildGroup('tabs') as $_tab) : ?>
-            <?php echo $_tab->toHtml() ?>
+        <?php foreach ($this->getChildGroup('tabs') as $_index => $_tab) : ?>
+            <?php echo $_html[$_index] ?>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
+<?php endif; ?>

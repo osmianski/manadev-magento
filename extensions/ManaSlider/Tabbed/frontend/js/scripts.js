@@ -112,7 +112,7 @@ function ($, Block, json, ajax, urlTemplate, core)
             }
 
             this._containerWidth = this.$().children('div').width();
-            this._visibleCount = Math.round(this._containerWidth / this._originalItemWidth);
+            this._visibleCount = Math.floor(this._containerWidth / this._originalItemWidth) || 1;
             this._mode = (this._visibleCount >= this.getCollectionIds().length) ? 'center' : 'slide';
 
             if (this._mode == 'slide') {

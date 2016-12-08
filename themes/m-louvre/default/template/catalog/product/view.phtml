@@ -84,6 +84,14 @@
                 <div class="clearer"></div>
 
                 <ul class="add-to-links demo-buttons">
+          		    	<li>
+                            <?php if ($_product->getFinalPrice() > 0) : ?>
+                                <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                            <?php else: ?>
+                                <?php echo $this->getLayout()->createBlock('local_manadev/download_button')
+                                    ->setTemplate('local/manadev/download/button.phtml')->setProduct($_product)->toHtml() ?>
+                            <?php endif; ?>
+                        </li>
           		    <?php if ($_url = $_helper->productAttribute($_product, $_product->getDemoFrontend(), 'demo_frontend')) : ?>
           		    	<li>
                             <a title="<?php echo $this->__('View live demo store') ?>" target="_blank" 
@@ -112,55 +120,26 @@
             </div>
             <div class="clearer"></div>
 
-
+        </div>
+        </form>
+        <div class="product-shop">
             <?php if ($_product->getShortDescription()):?>
                 <div class="short-description">
-                    <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description')) ?></div>
+                    <div class="std"><?php echo Mage::helper('markdown')->render($_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')) ?></div>
                 </div>
             <?php endif;?>
 
             <?php echo $this->getChildHtml('media') ?>
 
-            <div class="add-to-box">
-                <?php if($_product->isSaleable()): ?>
-                    <?php echo $this->getChildHtml('addtocart') ?>
-                <?php endif; ?>
-            </div>
-        
-            
-            <?php if (!$this->hasOptions()):?>
-
-                <div class="add-to-box">
-                    <?php if($_product->isSaleable()): ?>
-                        <?php echo $this->getChildHtml('addtocart') ?>
-                    <?php endif; ?>
-                    <?php echo $this->getChildHtml('addto') ?>
-                </div>
-                <?php //echo $this->getChildHtml('extra_buttons') ?>
-            <?php elseif (!$_product->isSaleable()): ?>
-                <div class="add-to-box">
-                    <?php echo $this->getChildHtml('addto') ?>
-                </div>
-            <?php endif; ?>
-
-            <?php //echo $this->getChildHtml('other');?>
             <?php echo $this->getChildHtml('m_share_product');?>
 
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php // echo $this->getChildChildHtml('container1', '', true, true) ?>
-            <?php endif;?>
-
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php // echo $this->getChildChildHtml('container2', '', true, true) ?>
-            <?php endif;?>
             <?php echo $this->getChildHtml('related_inside_product') ?>
-            <?php //echo $this->getChildHtml('m_tabs') ?>
+            <?php echo $this->getChildHtml('m_tabs') ?>
 
         </div>
 
 
 
-    </form>
     <script type="text/javascript">
     //<![CDATA[
         var productAddToCartForm = new VarienForm('product_addtocart_form');

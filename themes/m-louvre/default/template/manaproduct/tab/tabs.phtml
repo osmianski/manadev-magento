@@ -14,8 +14,8 @@
     <?php if ($_html = $_tab->getHtml()): ?>
         <?php if ($_tab->getWrapCollateral()): ?>
             <div class="box-collateral <?php echo "box-{$_tab->getCssAlias()}"?>">
-                <?php if ($_title = $_tab->getTitle()):?>
-                <h2><?php //echo $this->escapeHtml($_title); ?></h2>
+                <?php if (false && ($_title = $_tab->getTitle())):?>
+                <h2><?php echo $this->escapeHtml($_title); ?></h2>
                 <?php endif;?>
                 <?php echo $_html ?>
             </div>
