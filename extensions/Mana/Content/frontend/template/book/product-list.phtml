@@ -38,6 +38,7 @@ $_helper = $this->helper('catalog/output');
             <div class="actions-wrapper">
                 <button type="button" title="<?php echo $this->__('User\'s Guide') ?>" class="button btn-user-guide" onclick="setLocation('<?php echo $this->getContentPageUrl($_product) ?>')">
                     <span><span><?php echo $this->__('User\'s Guide') ?></span></span></button>
+                <a class="see-in-store" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">See in store</a>
             </div>
         </div>
     </li>

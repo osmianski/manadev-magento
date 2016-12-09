@@ -41,7 +41,7 @@
 </tr>
 <?php foreach ($this->getItems() as $_item): ?>
     <tr class="crosssell-item">
-        <td class="col-image"><a class="product-image" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" style="height: <?php echo $_theme->getHeight(75) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(75, $_theme->getHeight(75)); ?>" width="75" height="<?php echo $_theme->getHeight(75) ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a></td>
+        <td class="col-image"><a class="product-image" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" style="height: <?php echo $_theme->getHeight(50) ?>px;"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(50, $_theme->getHeight(50)); ?>" width="50" height="<?php echo $_theme->getHeight(50) ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" /></a></td>
         <td class="col-name">
             <h2 class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a></h2>
         </td>

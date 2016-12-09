@@ -1095,11 +1095,12 @@ button.btn-user-guide:after { content: "\e6b7"; }
 
 .std .mana_content ul.products-grid  { padding: 0; }
 
-.std .mana_content .products-grid li.item { width: 130px; list-style: none; padding-bottom: 64px; }
+.std .mana_content .products-grid li.item { width: 130px; list-style: none; padding-bottom: 82px; }
 
 .std .mana_content .products-grid h2  { border: none; font-size: 16px;  }
 .std .mana_content .products-grid a  { text-decoration: none; color: #646464; font-weight: normal; }
 .std .mana_content .products-grid a:hover  { text-decoration: none; }
+.std .mana_content .products-grid .actions-wrapper { padding-bottom: 15px; }
 
 
 /* View Type: List */
@@ -1755,7 +1756,7 @@ margin-left: -68px;
 .cart .totals .discount-form button { background: #dcdcdc; color:#646464; }
 .cart .totals .shipping-form button:hover,
 .cart .totals .discount-form button:hover { background: #cbcbcb; color:#535353; }
-.cart-table .product-image { display: block; }
+.cart-table .product-image { display: inline-block; }
 .cart-table input.qty { position: relative; bottom: 3px; }
 .cart-table td { padding: 7px 5px; }
 .cart .paypal-logo { position: relative; top: 5px; }
@@ -1801,6 +1802,7 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .cart .crosssell-item  td.col-price .btn-cart { float: right; position: relative; bottom: 6px; }
 .cart .crosssell-item  td.col-price,
 .cart .crosssell-item  td.col-name { font-size: 14px; }
+.cart .crosssell-item  td.col-image { text-align: center; }
 
 /* Discount Codes & Estimate Shipping and Tax Boxes */
 .cart .discount,
@@ -2199,6 +2201,7 @@ a.grey-link:hover       { text-decoration:none; }
 
 .read-more { }
 .read-more:after { content: "\e628"; }
+.see-in-store {  text-decoration: underline !important; display: inline-block; padding-top: 5px; }
 
 
 .request-row > .accepted .truncated { border-bottom: 1px dashed #bbb; margin-bottom: 5px; padding-bottom: 5px; }

@@ -39,7 +39,7 @@
                     <action method="setData"><field>xml_text</field><value><![CDATA[
     <title></title>
     <css_class>documentation-products</css_class>
-    <keep_tabs>1</keep_tabs>
+    <keep_tabs>0</keep_tabs>
 <tabs>
         <tab1>
             <label>Related Products</label>
@@ -48,11 +48,11 @@
             <ignore_new_products>1</ignore_new_products>
             <days_products_are_new>3000</days_products_are_new>
             <max_product_count>6</max_product_count>
-            <image_width>130</image_width>
-            <image_height>130</image_height>
+            <image_width>100</image_width>
+            <image_height>100</image_height>
             <is_visible_name>1</is_visible_name>
             <is_visible_rating>1</is_visible_rating>
-            <is_visible_price>1</is_visible_price>
+            <is_visible_price>0</is_visible_price>
             <is_visible_description>0</is_visible_description>
             <is_visible_read_more>0</is_visible_read_more>
             <is_visible_add_to_cart>1</is_visible_add_to_cart>
