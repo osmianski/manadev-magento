@@ -32,11 +32,6 @@
             <action method="setInterceptedLinkContainers"><css_selector>.mb-search,.mb-filter-relatedproduct,.mb-filter-tags</css_selector></action>
 		</reference>
 
-        <reference name="left">
-            <block type="mana_content/tree" name="tree" as="tree">
-                <action method="setMClientSideBlock"><params><type>Mana/Content/Tree</type></params></action>
-            </block>
-        </reference>
         <reference name="content">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
             <block type="mana_content/book_content" name="book_content" as="book_content"/>

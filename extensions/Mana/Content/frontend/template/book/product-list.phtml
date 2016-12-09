@@ -1,0 +1,38 @@
+<?php
+
+/* @var Mana_Content_Block_Book_Product_List $this */
+$_productCollection = $this->getProductCollection();
+
+/* @var $_theme Mana_Theme_Helper_Data */
+$_theme = Mage::helper('mana_theme');
+
+$_helper = $this->helper('catalog/output');
+?>
+
+<ul class="products-grid">
+<?php $i=0; foreach ($_productCollection as $_product): ?>
+    <li class="item">
+        <?php echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product) ?>
+            <a href="<?php echo $this->getContentPageUrl($_product) ?>"
+                title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"
+                class="product-image" style="height: <?php echo $_theme->getHeight(155) ?>px;">
+
+                <img src="<?php echo $this->helper('catalog/image')
+                    ->init($_product, 'small_image')
+                    ->resize(200, $_theme->getHeight(200)); ?>"
+                    width="155"
+                    height="<?php echo $_theme->getHeight(155) ?>"
+                    alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+
+            </a>
+        <?php echo Mage::helper('manaproduct_tag')->afterImage($this, $_product) ?>
+        <h2 class="product-name">
+            <a href="<?php echo $this->getContentPageUrl($_product) ?>"
+                title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
+            </a>
+        </h2>
+        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+    </li>
+<?php endforeach; ?>
+</ul>
