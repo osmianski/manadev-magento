@@ -34,9 +34,29 @@
 
         <reference name="content">
             <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-            <block type="mana_content/book_content" name="book_content" as="book_content">
-                <block type="manaslider_tabbed/slider" name="products" as="products">
-                    <action method="setData"><field>xml_text</field><value><![CDATA[
+            <block type="mana_content/book_content" name="book_content" as="book_content" />
+        </reference>
+        <reference name="breadcrumbs">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+        </reference>
+        <reference name="store_language">
+            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
+        </reference>
+
+        <remove name="left.permanent.callout" />
+        <remove name="left.newsletter"/>
+        <remove name="tags_popular"/>
+        <remove name="right.permanent.callout"/>
+        <remove name="catalog.compare.sidebar"/>
+        <remove name="right.poll"/>
+        <remove name="cart_sidebar"/>
+        <remove name="right.reports.product.viewed"/>
+        <remove name="right.reports.product.compared"/>
+    </mana_content_book_view>
+    <documentation_slider>
+        <reference name="book_content">
+            <block type="manaslider_tabbed/slider" name="products" as="products">
+                <action method="setData"><field>xml_text</field><value><![CDATA[
     <title></title>
     <css_class>documentation-products</css_class>
     <keep_tabs>0</keep_tabs>
@@ -66,25 +86,7 @@
     </tabs>
                     ]]></value></action>
 
-                </block>
-
             </block>
         </reference>
-        <reference name="breadcrumbs">
-            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-        </reference>
-        <reference name="store_language">
-            <action method="setMClientSideBlock"><params><type>Mana/Core/Block</type></params></action>
-        </reference>
-
-        <remove name="left.permanent.callout" />
-        <remove name="left.newsletter"/>
-        <remove name="tags_popular"/>
-        <remove name="right.permanent.callout"/>
-        <remove name="catalog.compare.sidebar"/>
-        <remove name="right.poll"/>
-        <remove name="cart_sidebar"/>
-        <remove name="right.reports.product.viewed"/>
-        <remove name="right.reports.product.compared"/>
-    </mana_content_book_view>
+    </documentation_slider>
 </layout>

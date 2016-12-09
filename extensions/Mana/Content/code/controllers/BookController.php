@@ -18,6 +18,10 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
 
             $this->getLayout()->getUpdate()->addHandle('default');
             $this->addActionLayoutHandles();
+            if ($bookPage->getData('level') >= 2) {
+                $this->getLayout()->getUpdate()->addHandle('documentation_slider');
+            }
+
             Mage::helper('mana_core/layout')->addRecursiveLayoutUpdates($layoutXml);
 
             $related_products = !is_null($this->getRequest()->getParam('related_products')) ? explode(",", $this->getRequest()->getParam('related_products')) : array();
