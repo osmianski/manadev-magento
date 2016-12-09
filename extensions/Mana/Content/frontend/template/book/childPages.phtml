@@ -1,8 +1,9 @@
-<ul class="<?php echo $this->getData('css_class') ?>">
+<?php $_depth = $this->hasData('depth') ? $this->getData('depth') : 1000; ?>
+<ul class="<?php echo $this->getData('css_class') ? $this->getData('css_class') : 'toc' ?>">
     <?php foreach($this->getChildPages() as $page) : ?>
         <?php
             /*@var $page Mana_Content_Model_Page_Abstract */
-            $childPages = $this->getChildPages($page);
+            $childPages = $_depth > 1 ? $this->getChildPages($page) : array();
         ?>
         <li>
             <a href="<?php echo $page->getFinalUrl(); ?>"><?php echo $page->getTitle(); ?></a>

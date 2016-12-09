@@ -1799,6 +1799,8 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .cart .crosssell-item  td.col-price { min-width: 280px; box-sizing: border-box; }
 .cart .crosssell-item  td.col-price .price-box { float: left; }
 .cart .crosssell-item  td.col-price .btn-cart { float: right; position: relative; bottom: 6px; }
+.cart .crosssell-item  td.col-price,
+.cart .crosssell-item  td.col-name { font-size: 14px; }
 
 /* Discount Codes & Estimate Shipping and Tax Boxes */
 .cart .discount,
