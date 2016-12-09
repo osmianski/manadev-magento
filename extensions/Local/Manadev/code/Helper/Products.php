@@ -49,6 +49,32 @@ class Local_Manadev_Helper_Products extends Mage_Core_Helper_Abstract
         return $collection;
     }
 
+    public function getAllProductCollection($block) {
+        $bookPage = Mage::registry('current_book_page');
+
+        $collection = Mage::getModel('catalog/product')->getCollection()
+                ->addAttributeToSort('position', 'asc')
+                ->addStoreFilter();
+
+        $collection->getSelect()->where("`e`.`type_id` = 'downloadable'");
+
+        Mage::getResourceSingleton('checkout/cart')->addExcludeProductFilter(
+            $collection,
+            Mage::getSingleton('checkout/session')->getQuoteId()
+        );
+        $this->_addProductAttributesAndPrices($collection);
+        Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
+
+        if ($block->getData('max_product_count')) {
+            $collection->getSelect()->limit($block->getData('max_product_count'), $block->getData('starting_from_product'));
+        }
+        else {
+            $collection->getSelect()->limit(null, $block->getData('starting_from_product'));
+        }
+        //$collection->load();
+        return $collection;
+    }
+
     protected function _getPlatformProductCollection($platform) {
         $collection = $this->_getProductCollection();
 

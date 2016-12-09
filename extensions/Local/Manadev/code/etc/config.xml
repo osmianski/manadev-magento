@@ -596,6 +596,10 @@
                 <source_helper>local_manadev/products::getBookProductCollection</source_helper>
                 <block>manaslider_tabbed/productSlider</block>
             </book_products>
+            <all>
+                <source_helper>local_manadev/products::getAllProductCollection</source_helper>
+                <block>manaslider_tabbed/productSlider</block>
+            </all>
         </data_sources>
     </manaslider_tabbed>
     <default>

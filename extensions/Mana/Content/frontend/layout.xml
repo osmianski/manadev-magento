@@ -44,7 +44,7 @@
         <tab1>
             <label>Related Products</label>
             <title>Related Products</title>
-            <data_source>book_products</data_source>
+            <data_source>all</data_source>
             <ignore_new_products>1</ignore_new_products>
             <days_products_are_new>3000</days_products_are_new>
             <max_product_count>6</max_product_count>
@@ -59,8 +59,8 @@
             <is_visible_add_to_wishlist>0</is_visible_add_to_wishlist>
             <is_visible_add_to_compare>0</is_visible_add_to_compare>
             <condition>or</condition>
-            <effect_duration>50</effect_duration>
-            <rotation_duration>10000000</rotation_duration>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>10000</rotation_duration>
             <slide_count>1</slide_count>
         </tab1>
     </tabs>
