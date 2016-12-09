@@ -1,9 +1,21 @@
-<ul class="<?php echo $this->getData('css_class') ? $this->getData('css_class') : 'toc' ?>">
-    <?php
-    foreach($this->getChildPages() as $page) {
+<ul class="<?php echo $this->getData('css_class') ?>">
+    <?php foreach($this->getChildPages() as $page) : ?>
+        <?php
+            /*@var $page Mana_Content_Model_Page_Abstract */
+            $childPages = $this->getChildPages($page);
         ?>
-        <li><a href="<?php echo $page->getFinalUrl(); ?>"><?php echo $page->getTitle(); ?></a></li>
-    <?php
-    }
-    ?>
+        <li>
+            <a href="<?php echo $page->getFinalUrl(); ?>"><?php echo $page->getTitle(); ?></a>
+
+            <?php if (count($childPages)) : ?>
+                <ul>
+                    <?php foreach($childPages as $childPage) : ?>
+                        <li>
+                            <a href="<?php echo $childPage->getFinalUrl(); ?>"><?php echo $childPage->getTitle(); ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
 </ul>
