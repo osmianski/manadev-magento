@@ -32,11 +32,11 @@
 
 .m-checkout .main { margin-bottom: 40px; }
 
-.m-checkout .page-title { border-bottom: 1px dashed #cfcfcf; margin-bottom: 20px; padding-bottom: 10px; }
+.m-checkout .page-title {  }
 
-.m-checkout a { text-decoration: underline; color: #e96020; }
+.m-checkout a { text-decoration: underline; color: #FF6464; }
 
-.m-checkout .validation-advice { position: relative; bottom: 10px; width: 190px; float: right; }
+.m-checkout .validation-advice { position: relative; bottom: 10px; float: right; }
 
 
 
@@ -44,39 +44,42 @@
 
 
 
-.m-checkout .column1 h2 { text-align: center; }
+.m-checkout .column1 h2 {  }
 
-.m-checkout .column1 h3 { text-align: right; font-size: 14px; padding-right: 20px; }
+.m-checkout .column1 h3 { text-align: right; font-size: 16px; font-weight: normal; padding: 0 20px 10px 0; margin-right: 5px; }
 
-.m-checkout .column1 h3.m-collapsed { background: transparent url(../images/checkout/checkbox_unchecked.png) right 1px no-repeat; }
+.m-checkout .column1 h3.m-collapsed { background: transparent url(../images/checkout/checkbox_unchecked.png) right 6px no-repeat; }
 
-.m-checkout .column1 h3.m-collapsed:hover { background: transparent url(../images/checkout/checkbox_unchecked_hover.png) right 1px no-repeat; }
+.m-checkout .column1 h3.m-collapsed:hover { background: transparent url(../images/checkout/checkbox_unchecked_hover.png) right 6px no-repeat; }
 
-.m-checkout .column1 h3.m-expanded { background: transparent url(../images/checkout/checkbox_checked.png) right 1px no-repeat; }
+.m-checkout .column1 h3.m-expanded { background: transparent url(../images/checkout/checkbox_checked.png) right 6px no-repeat; }
 
-.m-checkout .column1 h3.m-expanded:hover { background: transparent url(../images/checkout/checkbox_checked_hover.png) right 1px no-repeat; }
-
-
+.m-checkout .column1 h3.m-expanded:hover { background: transparent url(../images/checkout/checkbox_checked_hover.png) right 6px no-repeat; }
 
 
 
-.m-checkout .m-columns label { text-align: right; float: left; width: 112px; margin-right: 3px; }
 
-.m-checkout .column2 label { width: 95%; }
 
-.m-checkout .column2 .control { margin-top: 10px; }
+.m-checkout .m-columns label { text-align: right; float: left; width: 112px; margin-right: 10px; }
+
+.m-checkout .m-columns .col-1 label { display:none; }
+
+.m-checkout .column2 label { width: auto; float: right; }
+
+.m-checkout .column2 .control { overflow: hidden; }
+.m-checkout .column2 .control input.checkbox { float:right; width: 20px; height: 20px;  }
 
  
 
-.m-checkout .m-columns .form-list .field { width:350px; }
+.m-checkout .m-columns .form-list .field { width:100%; }
 
 .m-checkout .m-columns .form-list .input-box { clear:none; width: auto; }
 
-.m-checkout .m-columns .form-list li { text-align: right; margin-bottom: 0; }
+.m-checkout .m-columns .form-list li { text-align: left; margin-bottom: 0; }
 
-.m-checkout .m-columns .form-list li .input-box .input-text { width: 198px; margin-bottom: 10px; }
+.m-checkout .m-columns .form-list li .input-box .input-text { width: 100%; margin-bottom: 10px; }
 
-.m-checkout .m-columns .form-list li .input-box select { width: 204px; margin-bottom: 10px; }
+.m-checkout .m-columns .form-list li .input-box select { width: 100%; padding: 3px; margin-bottom: 10px; box-sizing: content-box; }
 
 .m-checkout .m-columns .form-list li .zip { width: 195px; }
 
@@ -90,9 +93,14 @@
 
 .m-checkout .m-columns .form-list li .region .input-box select { width: 72px; }
 
-
-
 .m-billing-address .m-collapseable { cursor: pointer; }
 
 .m-checkout .invalid {color:red; display:block; }
 .m-checkout .verified {color:green; position: relative; bottom:16px; left:233px; }
+
+.m-checkout h2 { color: #646464; font-size: 18px; }
+.m-checkout .data-table thead {  padding: 0; }
+.m-checkout .data-table thead th {  padding: 35px 5px 3px; }
+.m-checkout .login-link { position: relative; bottom: 3px; }
+.m-checkout .login-link:after,
+.checkout-index-index .m-popup.login-form--popup-container button.button:after { content: "\e631"; padding-right: 0; }

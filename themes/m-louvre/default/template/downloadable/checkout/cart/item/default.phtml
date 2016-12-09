@@ -31,8 +31,8 @@
     $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
 <tr>
-    <td><a href="<?php echo $this->getProductUrl() ?>" class="product-image" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" style="height: <?php echo $_theme->getHeight(75) ?>px;"><img src="<?php echo $this->getProductThumbnail()->resize(75, $_theme->getHeight(75)); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /></a></td>
-    <td>
+    <td class="col-image"><a href="<?php echo $this->getProductUrl() ?>" class="product-image" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" style="height: <?php echo $_theme->getHeight(75) ?>px;"><img src="<?php echo $this->getProductThumbnail()->resize(75, $_theme->getHeight(75)); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /></a></td>
+    <td class="col-name">
         <h2 class="product-name"><a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->htmlEscape($this->getProductName()) ?></a></h2>
         <?php if ($_options = $this->getOptionList()):?>
         <dl class="item-options">
@@ -52,16 +52,6 @@
             <?php endforeach; ?>
         </dl>
         <?php endif;?>
-        <!-- downloadable -->
-        <?php if ($links = $this->getLinks()): ?>
-        <dl class="item-options">
-            <dt><?php echo $this->getLinksTitle() ?></dt>
-            <?php foreach ($links as $link): ?>
-                <dd><?php echo $link->getTitle() ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <?php endif; ?>
-        <!-- EOF downloadable -->
 
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
@@ -91,7 +81,7 @@
 
 
     <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <td class="a-right">
+    <td class="a-right col-price">
         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <div class="cart-tax-total" onclick="taxToggle('eunit-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
         <?php else: ?>
@@ -134,7 +124,7 @@
     </td>
     <?php endif; ?>
     <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <td>
+    <td class="col-price2">
         <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <div class="cart-tax-total" onclick="taxToggle('unit-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
@@ -176,11 +166,11 @@
     </td>
     <?php endif; ?>
 <?php endif; ?>
-    <td class="a-center">
+    <td class="a-center col-qty">
         <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" />
     </td>
     <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <td class="a-right">
+    <td class="a-right col-total">
         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <div class="cart-tax-total" onclick="taxToggle('esubtotal-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
         <?php else: ?>
@@ -225,7 +215,7 @@
     </td>
     <?php endif; ?>
     <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-    <td>
+    <td class="col-total2">
         <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <div class="cart-tax-total" onclick="taxToggle('subtotal-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
@@ -272,5 +262,5 @@
         <?php endif; ?>
     </td>
     <?php endif; ?>
-    <td class="a-center"><a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo $this->__('Remove Item')?>" class="btn-remove btn-remove2"><?php echo $this->__('Remove Item') ?></a></td>
+    <td class="a-center col-remove"><a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo $this->__('Remove Item')?>" class="btn-remove btn-remove2"><?php echo $this->__('Remove Item') ?></a></td>
 </tr>

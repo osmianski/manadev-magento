@@ -23,4 +23,14 @@ class Mana_Checkout_Block_Billing_Address extends Mage_Checkout_Block_Onepage_Bi
 
         return $this->_address;
     }
+
+    public function getCountryOptions() {
+        $result = parent::getCountryOptions();
+        foreach ($result as $key => $option) {
+            if (!$option['value']) {
+                $result[$key]['label'] = 'Select country ...';
+            }
+        }
+        return $result;
+    }
 }

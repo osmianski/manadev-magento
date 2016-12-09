@@ -195,6 +195,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
 
                 options.$popup = $popup;
             }
+            this.lastPopupOptions = options;
             return options.$popup;
         },
         _preparePopupOptions: function(options) {
@@ -294,6 +295,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         },
         hidePopup: function () {
             this.getPageBlock().hideOverlay();
+            this.lastPopupOptions.$popup.removeClass(this.lastPopupOptions.popup['class']);
         }
     });
 });

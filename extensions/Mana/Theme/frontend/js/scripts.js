@@ -196,7 +196,7 @@
                 else {
                     width = $(this).width() - 14;
                 }
-                var height = $(this).height();
+                var height = $(this).outerHeight() - 3;
                 if (!$(this).parent().hasClass('m-select')) {
                     // fetch initial text to be displayed
                     var title = $(this).attr('title');
@@ -261,6 +261,10 @@
             });
         }
         $(document).bind('m-ajax-after', function (e, selectors) {
+            _doBeautifySelects();
+        });
+
+        $(window).on('resize', function () {
             _doBeautifySelects();
         });
 

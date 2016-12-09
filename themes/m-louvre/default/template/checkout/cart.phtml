@@ -109,6 +109,7 @@
                 <?php foreach($this->getItems() as $_item): ?>
                     <?php echo $this->getItemHtml($_item) ?>
                 <?php endforeach ?>
+                <?php echo $this->getChildHtml('crosssell') ?>
                 </tbody>
             </table>
             <script type="text/javascript">decorateTable('shopping-cart-table')</script>
@@ -128,8 +129,5 @@
         </ul>
         <?php endif; ?>
     </div>
-    </div>
-    <div>
-            <?php echo $this->getChildHtml('crosssell') ?>
     </div>
 </div>

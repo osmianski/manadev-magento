@@ -203,7 +203,7 @@
                 if (!isRequestEmpty) {
                     _updateOrderDetails();
                 }
-            }, {showWait: false, showManaCheckoutWait: true});
+            }, {showOverlay: false, showWait: false, showManaCheckoutWait: true});
         }
 
         $(function () {
@@ -265,9 +265,9 @@
         var _updatingAnimationRequests = 0;
         function _showUpdatingAnimation() {
             if (!_updatingAnimationRequests) {
-                $('#review-buttons-container')
-                    .addClass('disabled').css({opacity:0.5})
-                    .find('*').attr('disabled', 'disabled');
+                //$('#review-buttons-container')
+                //    .addClass('disabled').css({opacity:0.5})
+                //    .find('*').attr('disabled', 'disabled');
                 $('#review-updating').show();
             }
             _updatingAnimationRequests++;
@@ -277,9 +277,9 @@
             _updatingAnimationRequests--;
             if (!_updatingAnimationRequests) {
                 $('#review-updating').hide();
-                $('#review-buttons-container')
-                    .removeClass('disabled').css({opacity:1})
-                    .find('*').removeAttr('disabled');
+                //$('#review-buttons-container')
+                //    .removeClass('disabled').css({opacity:1})
+                //    .find('*').removeAttr('disabled');
             }
         }
 

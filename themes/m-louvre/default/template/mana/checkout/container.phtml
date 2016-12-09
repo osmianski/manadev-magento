@@ -14,15 +14,15 @@
 <script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
 <div class="m-checkout">
     <div class="page-title">
-        <h1><?php echo $this->__('Simple & Secure Checkout') ?></h1>
+        <h1><?php echo $this->__('Checkout') ?></h1>
     </div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form id="checkout-form" method="post" action="<?php //echo $this->getUrl('checkout/ajax/save') ?>">
-    <ul class="m-columns m-checkout-columns">
-        <li class="column1 first">
+    <ul class="m-columns m-checkout-columns col2-set">
+        <li class="column1 first col-1 col-narrow">
             <?php echo $this->getChildHtml('billing_address') ?>
         </li>
-        <li class="column2 last">
+        <li class="column2 last col-2 col-wide">
             <?php echo $this->getChildHtml('order_review') ?>
         </li>
     </ul>
