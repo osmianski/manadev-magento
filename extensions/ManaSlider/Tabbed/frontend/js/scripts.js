@@ -75,8 +75,8 @@ function ($, Block, json, ajax, urlTemplate, core)
         _subscribeToHtmlEvents: function () {
             var self = this;
 
-            function _next() { self.next(); return false; }
-            function _previous() { self.previous(); return false; }
+            function _next() { self.next(true); return false; }
+            function _previous() { self.previous(true); return false; }
             function _beginTouch(e) { self.beginTouch(e); }
             function _endTouch(e) { self.endTouch(e); }
 
@@ -216,7 +216,10 @@ function ($, Block, json, ajax, urlTemplate, core)
             }
             return this._collectionIds;
         },
-        getEffectDuration: function() {
+        getEffectDuration: function(fast) {
+            if (fast) {
+                return 100;
+            }
             if (!this._effectDuration) {
                 this._effectDuration = this.$().data('effect-duration');
             }
@@ -327,7 +330,7 @@ function ($, Block, json, ajax, urlTemplate, core)
                 this.animate({left: "+=" + (this._itemOuterWidth * missingCount)}, 0);
             }
         },
-        next: function () {
+        next: function (fast) {
             if (this._inSliding) {
                 return;
             }
@@ -355,10 +358,10 @@ function ($, Block, json, ajax, urlTemplate, core)
             //console.log("ul.left: " + this.$products().css('left') + ", slide: " + (this._itemOuterWidth * slideWidth) + ", li.left: " + $($li[this._visibleIndex]).position().left);
             //console.log('next: ' + new Error().stack);
 
-            this.animate({left: "-=" + (this._itemOuterWidth * slideWidth)}, this.getEffectDuration(), true);
+            this.animate({left: "-=" + (this._itemOuterWidth * slideWidth)}, this.getEffectDuration(fast), true);
 
         },
-        previous: function () {
+        previous: function (fast) {
             if (this._inSliding) {
                 return;
             }
@@ -381,7 +384,7 @@ function ($, Block, json, ajax, urlTemplate, core)
             }
 
             this._visibleIndex = this.getIndex(nextVisibleIndex);
-            this.animate({left: "+=" + (this._itemOuterWidth * slideWidth)},this.getEffectDuration(), true);
+            this.animate({left: "+=" + (this._itemOuterWidth * slideWidth)},this.getEffectDuration(fast), true);
         },
         animate: function(properties, duration, clearInSlidingFlsg) {
 
@@ -416,10 +419,10 @@ function ($, Block, json, ajax, urlTemplate, core)
             var distance = touchX - this._touchX;
             if (Math.abs(distance) > this.SLIDE_TOUCH_DISTANCE) {
                 if (distance > 0) {
-                    this.previous();
+                    this.previous(true);
                 }
                 else {
-                    this.next();
+                    this.next(true);
                 }
             }
         },
