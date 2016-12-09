@@ -1081,7 +1081,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .col2-left-layout .m-darkgrey .products-grid li.item { padding: 10px 11px 140px; }
 
 /* View Type: Grid on documentation */
-.mana_content {}
+.mana_content .add-to-links.links a { color: white; background-color: #26B1ED; }
+.mana_content .add-to-links.links a:hover { text-decoration: none; background-color: #25A4DB; }
+.mana_content .add-to-links.links a:after { content: "\e661"; }
+
+
+
 .mana_content .toc { column-count: 2; -moz-column-count: 2; -webkit-column-count: 2; }
 
 button.btn-user-guide { background-color: #65D183; }

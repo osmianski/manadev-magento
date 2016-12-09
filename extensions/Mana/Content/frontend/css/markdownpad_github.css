@@ -15,6 +15,7 @@
   background-color: #f8f8f8;
   padding: 20px;
   border-radius: 10px;
+  margin-top: 20px;
 }
 .std > .mana_content body>*:first-child {
   margin-top: 0 !important;
@@ -34,7 +35,7 @@
 .std > .mana_content dl,
 .std > .mana_content table,
 .std > .mana_content pre {
-  margin: 15px 0;
+  margin: 0 0 15px 0;
 }
 
 /* HEADERS
@@ -204,10 +205,10 @@
 .std > .mana_content code,
 .std > .mana_content tt {
   margin: 0 0px;
-  padding: 5px;
-  white-space: nowrap;
+  padding: 4px 5px;
   background-color: #dcdcdc;;
   border-radius: 3px;
+  overflow-wrap: break-word;
 }
 
 .std > .mana_content pre>code {
@@ -219,13 +220,15 @@
 }
 
 .std > .mana_content pre {
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
+  background-color: white;
   font-size: 13px;
   line-height: 19px;
   overflow: auto;
   padding: 6px 10px;
-  border-radius: 3px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 2px 1px 0;
+  border-color: #bfbfbf #dbdbdb;
 }
 
 .std > .mana_content pre code,
