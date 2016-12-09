@@ -42,7 +42,7 @@ class Mana_Content_Block_Book_Product_List extends Mage_Catalog_Block_Product_Ab
                     null
                 );
 
-                $collection->getSelect()->where("`e`.`user_guide_url` <> ''");
+                $collection->getSelect()->where("`e`.`user_guide_url` IS NOT NULL AND `e`.`user_guide_url` <> ''");
             }
             $this->_productCollection = $collection;
         }

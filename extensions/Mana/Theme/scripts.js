@@ -48,14 +48,14 @@ Mana.define('Mana/Theme/Grid', ['jquery', 'Mana/Core/Block'], function ($, Block
             var windowHeight = $(window).height();
             var documentHeight = $(document).height();
             //alert(scrollTop + ', ' + windowHeight + ', ' + documentHeight);
+            if (this._fakeResize) {
+                this._fakeResize = false;
+                return;
+            }            
             this._fakeResize = true;
             $(window).trigger('resize');
         },
         decorateGrid: function() {
-            if (this._fakeResize) {
-                this._fakeResize = false;
-                return;
-            }
             //return;
             //alert('window: ' +  $(window).width());
             //console.log('window: ' +  $(window).width());

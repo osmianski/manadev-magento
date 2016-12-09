@@ -7,16 +7,15 @@
 =============================================================================*/
 
 .std > .mana_content body {
-  font-family: Helvetica, arial, freesans, clean, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #333;
-  background-color: #fff;
   padding: 20px;
   max-width: 960px;
   margin: 0 auto;
 }
-
+.std .mana_content {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+}
 .std > .mana_content body>*:first-child {
   margin-top: 0 !important;
 }
@@ -47,10 +46,6 @@
 .std > .mana_content h4,
 .std > .mana_content h5,
 .std > .mana_content h6 {
-  margin: 20px 0 10px;
-  padding: 0;
-  font-weight: bold;
-  -webkit-font-smoothing: antialiased;
 }
 
 .std > .mana_content h1 tt,
@@ -69,31 +64,25 @@
 }
 
 .std > .mana_content h1 {
-  font-size: 28px;
-  color: #000;
+
 }
 
 .std > .mana_content h2 {
-  font-size: 24px;
-  border-bottom: 1px solid #ccc;
-  color: #000;
 }
 
 .std > .mana_content h3 {
-  font-size: 18px;
+    font-weight: normal;
+    color: #ff6464;
+    margin: 10px 0;
 }
 
 .std > .mana_content h4 {
-  font-size: 16px;
 }
 
 .std > .mana_content h5 {
-  font-size: 14px;
 }
 
 .std > .mana_content h6 {
-  color: #777;
-  font-size: 14px;
 }
 
 .std > .mana_content body>h2:first-child,
@@ -130,7 +119,7 @@
 =============================================================================*/
 
 .std > .mana_content a {
-  color: #4183C4;
+  color: #25A4DB;
   text-decoration: none;
 }
 
@@ -144,7 +133,10 @@
 .std > .mana_content ul,
 .std > .mana_content ol {
   padding-left: 30px;
+  color: #646464;
 }
+.std > .mana_content ul li { margin: 10px;  }
+.std > .mana_content ul.toc a { color: #646464; }
 
 .std > .mana_content ul li > :first-child,
 .std > .mana_content ol li > :first-child,
@@ -212,10 +204,9 @@
 .std > .mana_content code,
 .std > .mana_content tt {
   margin: 0 0px;
-  padding: 0px 0px;
+  padding: 5px;
   white-space: nowrap;
-  border: 1px solid #eaeaea;
-  background-color: #f8f8f8;
+  background-color: #dcdcdc;;
   border-radius: 3px;
 }
 

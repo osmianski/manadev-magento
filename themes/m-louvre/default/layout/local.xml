@@ -20,6 +20,9 @@
 
     <!-- All pages -->
     <default>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+        </reference>
         <!-- Remove Cart Sidebar show/hide in System->Configuration->Checkout->Shopping Cart Sidebar -->
         <remove name="cart_sidebar" />
 

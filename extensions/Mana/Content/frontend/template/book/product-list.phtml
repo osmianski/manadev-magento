@@ -9,6 +9,7 @@ $_theme = Mage::helper('mana_theme');
 $_helper = $this->helper('catalog/output');
 ?>
 
+<div class="category-products" data-m-block="Mana/Theme/Grid">
 <ul class="products-grid">
 <?php $i=0; foreach ($_productCollection as $_product): ?>
     <li class="item">
@@ -33,6 +34,13 @@ $_helper = $this->helper('catalog/output');
             </a>
         </h2>
         <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+        <div class="actions">
+            <div class="actions-wrapper">
+                <button type="button" title="<?php echo $this->__('User\'s Guide') ?>" class="button btn-user-guide" onclick="setLocation('<?php echo $this->getContentPageUrl($_product) ?>')">
+                    <span><span><?php echo $this->__('User\'s Guide') ?></span></span></button>
+            </div>
+        </div>
     </li>
 <?php endforeach; ?>
 </ul>
+</div>

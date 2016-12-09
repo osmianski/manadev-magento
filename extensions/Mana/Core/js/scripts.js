@@ -1851,4 +1851,3 @@ Mana.require(['jquery'], function($) {
 })(jQuery);
 //endregion
 
-//# sourceMappingURL=core.js.map

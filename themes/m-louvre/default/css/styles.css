@@ -1080,6 +1080,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80e2e2e2', e
 .col2-left-layout .m-lightgrey .products-grid li.item,
 .col2-left-layout .m-darkgrey .products-grid li.item { padding: 10px 11px 140px; }
 
+/* View Type: Grid on documentation */
+.mana_content {}
+.mana_content .toc { column-count: 2; -moz-column-count: 2; -webkit-column-count: 2; }
+
+button.btn-user-guide { background-color: #65D183; }
+button.btn-user-guide:hover { background-color: #65D183; }
+button.btn-user-guide:after { content: "\e6b7"; }
+
+.std .mana_content ul.products-grid  { padding: 0; }
+
+.std .mana_content .products-grid li.item { width: 130px; list-style: none; padding-bottom: 64px; }
+
+.std .mana_content .products-grid h2  { border: none; font-size: 16px;  }
+.std .mana_content .products-grid a  { text-decoration: none; color: #646464; font-weight: normal; }
+.std .mana_content .products-grid a:hover  { text-decoration: none; }
+
 
 /* View Type: List */
 .products-list .f-fix {  }
@@ -2674,6 +2690,8 @@ h6            { font-size:15px; }
 .m-checkout .col2-set .col-1,
 .m-checkout .col2-set .col-2 { width: 100% !important; padding:0; }
 .m-checkout .data-table thead th { padding-top: 0 !important; }
+.mana_content .toc { column-count: 1; -moz-column-count: 1; -webkit-column-count: 1; }
+
 }
 
 .responsive-indicators { display:none; }
