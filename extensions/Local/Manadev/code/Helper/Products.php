@@ -30,6 +30,25 @@ class Local_Manadev_Helper_Products extends Mage_Core_Helper_Abstract
         return $collection;
     }
 
+    public function getBookProductCollection() {
+        $bookPage = Mage::registry('current_book_page');
+
+        $collection = Mage::getModel('catalog/product')->getCollection()
+                ->joinTable(array('mprp' => 'mana_content/page_relatedProduct'), 'product_id=entity_id', array('product_id'), "{{table}}.`page_global_id` = " . $bookPage->getData('page_global_id'))
+                ->addAttributeToSort('position', 'asc')
+                ->addStoreFilter();
+
+        Mage::getResourceSingleton('checkout/cart')->addExcludeProductFilter(
+            $collection,
+            Mage::getSingleton('checkout/session')->getQuoteId()
+        );
+        $this->_addProductAttributesAndPrices($collection);
+        Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
+
+        $collection->load();
+        return $collection;
+    }
+
     protected function _getPlatformProductCollection($platform) {
         $collection = $this->_getProductCollection();
 

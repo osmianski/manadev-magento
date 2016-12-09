@@ -592,6 +592,10 @@
                 <source_helper>local_manadev/products::getUpsellProductCollection</source_helper>
                 <block>manaslider_tabbed/productSlider</block>
             </upsells>
+            <book_products>
+                <source_helper>local_manadev/products::getBookProductCollection</source_helper>
+                <block>manaslider_tabbed/productSlider</block>
+            </book_products>
         </data_sources>
     </manaslider_tabbed>
     <default>

@@ -11,6 +11,7 @@
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="std">
     <h1><?php echo $this->getTitle(); ?></h1>
+    <?php echo $this->getChildHtml('products') ?>
     <div class="mana_content">
         <?php echo $this->parseContent(); ?>
     </div>
