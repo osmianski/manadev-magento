@@ -16,10 +16,6 @@ class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
         $this->setTemplate('mana/content/book/childPages.phtml');
     }
 
-    protected function _prepareLayout() {
-        $this->loadChildPages();
-    }
-
     /**
      * @return Mana_Content_Model_Page_Abstract
      */
@@ -27,8 +23,10 @@ class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
         return Mage::registry('current_book_page');
     }
 
-    protected function loadChildPages() {
-        $bookPage = $this->getCurrentBookPage();
+    protected function loadChildPages($bookPage = null) {
+        if (!$bookPage) {
+            $bookPage = $this->getCurrentBookPage();
+        }
         $bookPage->loadChildPages();
         $childPages = $bookPage->getChildPages();
         $count = count($childPages);
@@ -41,10 +39,11 @@ class Mana_Content_Block_Book_ChildPageLinks extends Mage_Core_Block_Template {
             $id = $childPages[$x]->getId();
             $childPages[$x]->setFinalUrl(Mage::getUrl($route, array('_use_rewrite' => true, 'id' => $id)));
         }
-        $this->_childPages = $childPages;
+
+        return $childPages;
     }
 
-    public function getChildPages() {
-        return $this->_childPages;
+    public function getChildPages($bookPage = null) {
+        return $this->loadChildPages($bookPage);
     }
 }
