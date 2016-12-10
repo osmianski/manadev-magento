@@ -6,7 +6,7 @@
 /* BODY
 =============================================================================*/
 
-.std > .mana_content body {
+.mana_content body {
   padding: 20px;
   max-width: 960px;
   margin: 0 auto;
@@ -17,149 +17,149 @@
   border-radius: 10px;
   margin-top: 20px;
 }
-.std > .mana_content body>*:first-child {
+.mana_content body>*:first-child {
   margin-top: 0 !important;
 }
 
-.std > .mana_content body>*:last-child {
+.mana_content body>*:last-child {
   margin-bottom: 0 !important;
 }
 
 /* BLOCKS
 =============================================================================*/
 
-.std > .mana_content p,
-.std > .mana_content blockquote,
-.std > .mana_content ul,
-.std > .mana_content ol,
-.std > .mana_content dl,
-.std > .mana_content table,
-.std > .mana_content pre {
+.mana_content p,
+.mana_content blockquote,
+.mana_content ul,
+.mana_content ol,
+.mana_content dl,
+.mana_content table,
+.mana_content pre {
   margin: 0 0 15px 0;
 }
 
 /* HEADERS
 =============================================================================*/
 
-.std > .mana_content h1,
-.std > .mana_content h2,
-.std > .mana_content h3,
-.std > .mana_content h4,
-.std > .mana_content h5,
-.std > .mana_content h6 {
+.mana_content h1,
+.mana_content h2,
+.mana_content h3,
+.mana_content h4,
+.mana_content h5,
+.mana_content h6 {
 }
 
-.std > .mana_content h1 tt,
-.std > .mana_content h1 code,
-.std > .mana_content h2 tt,
-.std > .mana_content h2 code,
-.std > .mana_content h3 tt,
-.std > .mana_content h3 code,
-.std > .mana_content h4 tt,
-.std > .mana_content h4 code,
-.std > .mana_content h5 tt,
-.std > .mana_content h5 code,
-.std > .mana_content h6 tt,
-.std > .mana_content h6 code {
+.mana_content h1 tt,
+.mana_content h1 code,
+.mana_content h2 tt,
+.mana_content h2 code,
+.mana_content h3 tt,
+.mana_content h3 code,
+.mana_content h4 tt,
+.mana_content h4 code,
+.mana_content h5 tt,
+.mana_content h5 code,
+.mana_content h6 tt,
+.mana_content h6 code {
   font-size: inherit;
 }
 
-.std > .mana_content h1 {
+.mana_content h1 {
 
 }
 
-.std > .mana_content h2 {
+.mana_content h2 {
 }
 
-.std > .mana_content h3 {
+.mana_content h3 {
     font-weight: normal;
     color: #ff6464;
     margin: 10px 0;
 }
 
-.std > .mana_content h4 {
+.mana_content h4 {
 }
 
-.std > .mana_content h5 {
+.mana_content h5 {
 }
 
-.std > .mana_content h6 {
+.mana_content h6 {
 }
 
-.std > .mana_content body>h2:first-child,
-.std > .mana_content body>h1:first-child,
-.std > .mana_content body>h1:first-child+h2,
-.std > .mana_content body>h3:first-child,
-.std > .mana_content body>h4:first-child,
-.std > .mana_content body>h5:first-child,
-.std > .mana_content body>h6:first-child {
+.mana_content body>h2:first-child,
+.mana_content body>h1:first-child,
+.mana_content body>h1:first-child+h2,
+.mana_content body>h3:first-child,
+.mana_content body>h4:first-child,
+.mana_content body>h5:first-child,
+.mana_content body>h6:first-child {
   margin-top: 0;
   padding-top: 0;
 }
 
-.std > .mana_content a:first-child h1,
-.std > .mana_content a:first-child h2,
-.std > .mana_content a:first-child h3,
-.std > .mana_content a:first-child h4,
-.std > .mana_content a:first-child h5,
-.std > .mana_content a:first-child h6 {
+.mana_content a:first-child h1,
+.mana_content a:first-child h2,
+.mana_content a:first-child h3,
+.mana_content a:first-child h4,
+.mana_content a:first-child h5,
+.mana_content a:first-child h6 {
   margin-top: 0;
   padding-top: 0;
 }
 
-.std > .mana_content h1+p,
-.std > .mana_content h2+p,
-.std > .mana_content h3+p,
-.std > .mana_content h4+p,
-.std > .mana_content h5+p,
-.std > .mana_content h6+p {
+.mana_content h1+p,
+.mana_content h2+p,
+.mana_content h3+p,
+.mana_content h4+p,
+.mana_content h5+p,
+.mana_content h6+p {
   margin-top: 10px;
 }
 
 /* LINKS
 =============================================================================*/
 
-.std > .mana_content a {
+.mana_content a {
   color: #25A4DB;
   text-decoration: none;
 }
 
-.std > .mana_content a:hover {
+.mana_content a:hover {
   text-decoration: underline;
 }
 
 /* LISTS
 =============================================================================*/
 
-.std > .mana_content ul,
-.std > .mana_content ol {
+.mana_content ul,
+.mana_content ol {
   padding-left: 30px;
   color: #646464;
 }
-.std > .mana_content ul li { margin: 10px;  }
-.std > .mana_content ul.toc a { color: #646464; }
+.mana_content ul li { margin: 10px;  }
+.mana_content ul.toc a { color: #646464; }
 
-.std > .mana_content ul li > :first-child,
-.std > .mana_content ol li > :first-child,
-.std > .mana_content ul li ul:first-of-type,
-.std > .mana_content ol li ol:first-of-type,
-.std > .mana_content ul li ol:first-of-type,
-.std > .mana_content ol li ul:first-of-type {
+.mana_content ul li > :first-child,
+.mana_content ol li > :first-child,
+.mana_content ul li ul:first-of-type,
+.mana_content ol li ol:first-of-type,
+.mana_content ul li ol:first-of-type,
+.mana_content ol li ul:first-of-type {
   margin-top: 0px;
 }
 
-.std > .mana_content ul ul,
-.std > .mana_content ul ol,
-.std > .mana_content ol ol,
-.std > .mana_content ol ul {
+.mana_content ul ul,
+.mana_content ul ol,
+.mana_content ol ol,
+.mana_content ol ul {
   margin-bottom: 0;
 }
 
-.std > .mana_content dl {
+.mana_content dl {
   padding: 0;
 }
 
-.std > .mana_content dl dt {
+.mana_content dl dt {
   font-size: 14px;
   font-weight: bold;
   font-style: italic;
@@ -167,43 +167,43 @@
   margin: 15px 0 5px;
 }
 
-.std > .mana_content dl dt:first-child {
+.mana_content dl dt:first-child {
   padding: 0;
 }
 
-.std > .mana_content dl dt>:first-child {
+.mana_content dl dt>:first-child {
   margin-top: 0px;
 }
 
-.std > .mana_content dl dt>:last-child {
+.mana_content dl dt>:last-child {
   margin-bottom: 0px;
 }
 
-.std > .mana_content dl dd {
+.mana_content dl dd {
   margin: 0 0 15px;
   padding: 0 15px;
 }
 
-.std > .mana_content dl dd>:first-child {
+.mana_content dl dd>:first-child {
   margin-top: 0px;
 }
 
-.std > .mana_content dl dd>:last-child {
+.mana_content dl dd>:last-child {
   margin-bottom: 0px;
 }
 
 /* CODE
 =============================================================================*/
 
-.std > .mana_content pre,
-.std > .mana_content code,
-.std > .mana_content tt {
+.mana_content pre,
+.mana_content code,
+.mana_content tt {
   font-size: 12px;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
 }
 
-.std > .mana_content code,
-.std > .mana_content tt {
+.mana_content code,
+.mana_content tt {
   margin: 0 0px;
   padding: 4px 5px;
   background-color: #dcdcdc;;
@@ -211,7 +211,7 @@
   overflow-wrap: break-word;
 }
 
-.std > .mana_content pre>code {
+.mana_content pre>code {
   margin: 0;
   padding: 0;
   white-space: pre;
@@ -219,7 +219,7 @@
   background: transparent;
 }
 
-.std > .mana_content pre {
+.mana_content pre {
   background-color: white;
   font-size: 13px;
   line-height: 19px;
@@ -231,13 +231,13 @@
   border-color: #bfbfbf #dbdbdb;
 }
 
-.std > .mana_content pre code,
-.std > .mana_content pre tt {
+.mana_content pre code,
+.mana_content pre tt {
   background-color: transparent;
   border: none;
 }
 
-.std > .mana_content kbd {
+.mana_content kbd {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -258,24 +258,23 @@
 /* QUOTES
 =============================================================================*/
 
-.std > .mana_content blockquote {
+.mana_content blockquote {
   border-left: 4px solid #DDD;
   padding: 0 15px;
-  color: #777;
 }
 
-.std > .mana_content blockquote>:first-child {
+.mana_content blockquote>:first-child {
   margin-top: 0px;
 }
 
-.std > .mana_content blockquote>:last-child {
+.mana_content blockquote>:last-child {
   margin-bottom: 0px;
 }
 
 /* HORIZONTAL RULES
 =============================================================================*/
 
-.std > .mana_content hr {
+.mana_content hr {
   clear: both;
   margin: 15px 0;
   height: 0px;
@@ -289,43 +288,43 @@
 /* TABLES
 =============================================================================*/
 
-.std > .mana_content table {
+.mana_content table {
     max-width: 100%;
 }
 
-.std > .mana_content table th {
+.mana_content table th {
   font-weight: bold;
 }
 
-.std > .mana_content table th,
-.std > .mana_content table td {
+.mana_content table th,
+.mana_content table td {
   border: 1px solid #ccc;
   padding: 6px 13px;
 }
 
-.std > .mana_content table tr {
+.mana_content table tr {
   border-top: 1px solid #ccc;
   background-color: #fff;
 }
 
-.std > .mana_content table tr:nth-child(2n) {
+.mana_content table tr:nth-child(2n) {
   background-color: #f8f8f8;
 }
 
 /* IMAGES
 =============================================================================*/
 
-.std > .mana_content img {
+.mana_content img {
   max-width: 100%
 }
 
 /* UL and OL
 =============================================================================*/
 
-.std > .mana_content ul {
+.mana_content ul {
     list-style: disc;
 }
 
-.std > .mana_content ol {
+.mana_content ol {
     list-style: decimal;
 }

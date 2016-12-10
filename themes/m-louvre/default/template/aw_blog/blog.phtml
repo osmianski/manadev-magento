@@ -1,9 +1,25 @@
+<div class="post-grid">
 <?php $posts = $this->getPosts(); ?>
 <?php foreach ($posts as $post): ?>
 <div class="postWrapper">
+<div class="post-border">
      <div class="postTitle">
+		<h3>
+            <span class="day"><?php echo date('d', strtotime($post->getCreatedTime())) ?></span>
+            <span class="month"><?php echo strtoupper(date('M y', strtotime($post->getCreatedTime()))) ?></span>
+        </h3>
         <h2><a href="<?php echo $post->getAddress(); ?>" ><?php echo $post->getTitle();?></a></h2>
-		<h3><?php echo $post->getCreatedTime(); ?></h3>
+        <div class="categories-author">
+    		<?php $postCats = $post->getCats(); ?>
+    		<?php if(!empty($postCats)):?>
+    			<?php echo Mage::helper('blog')->__('Posted in'); $i = 0; ?>
+    			<?php foreach($postCats as $title=>$url): ?>
+    				<a href="<?php echo $url; ?>"><?php echo $title; ?></a><?php echo ++$i < count($postCats) ? ', ' : '' ?> 
+    			<?php endforeach;?> 
+            <?php else:?>
+            	 <?php echo Mage::helper('blog')->__('Posted');?>
+            <?php endif;?><?php echo$this->__("By");?> <strong><?php echo $post->getUser(); ?></strong>
+        </div>
     </div>
     <div class="postContent"><div class="mana_content"><?php echo Mage::helper('markdown')->render($post->getPostContent()); ?></div></div>
 	
@@ -11,17 +27,11 @@
 	<div class="tags"><?php echo $this->getTagsHtml($post) ?></div>
 	<div class="postDetails">
 		<?php if($this->getCommentsEnabled()): ?>
-		<?php echo $post->getCommentCount(); ?> <a href="<?php echo $post->getAddress(); ?>#commentBox" >Comments</a> | 
+		<?php echo $post->getCommentCount(); ?> <a href="<?php echo $post->getAddress(); ?>#commentBox" >Comments</a> 
 		<?php endif; ?>
-		<?php $postCats = $post->getCats(); ?>
-		<?php if(!empty($postCats)):?>
-			<?php echo Mage::helper('blog')->__('Posted in');?>
-			<?php foreach($postCats as $title=>$url): ?>
-				<a href="<?php echo $url; ?>"><?php echo $title; ?></a> 
-			<?php endforeach;?> 
-        <?php else:?>
-        	 <?php echo Mage::helper('blog')->__('Posted');?>
-        <?php endif;?><?php echo$this->__("By");?> <?php echo $post->getUser(); ?></div>
+    </div>
+</div>
 </div>
 <?php endforeach; ?> 
 <?php $this->getPages(); ?>
+</div>

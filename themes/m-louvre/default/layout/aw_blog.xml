@@ -20,7 +20,7 @@
  */
 -->
 <layout version="0.1.0">
-	<default>
+<!--	<default>
         <reference name="footer_links">
 			<block type="blog/blog" name="add.blog.footer">
 				<block type="blog/tags" name="blog_tags" />
@@ -40,7 +40,6 @@
 				<action method="setTemplate" ifconfig="blog/menu/left">
 					<template>aw_blog/menu.phtml</template> 
 				</action>
-				<block type="blog/tags" name="blog_tags" />
 			</block>
         </reference>
 		<reference name="top.links">
@@ -52,16 +51,53 @@
 		<reference name="head">
 			<action method="addItem"><type>skin_css</type><name>aw_blog/css/style.css</name></action>
 		</reference>
-    </default>
+    </default>      -->
 
     <blog_index_index>
         <reference name="head">
             <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
         </reference>
-        <reference name="footer" >
+        <!--<reference name="footer" >
               <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
-        </reference>
+        </reference> -->
         <reference name="content">
+            <block type="core/template" name="title" template="aw_blog/blog_title.phtml" />
+    		<!--<block type="blog/tags" name="blog_tags" />-->
+            <block type="manaslider_tabbed/slider" name="products" as="products">
+                <action method="setData"><field>xml_text</field><value><![CDATA[
+    <title></title>
+    <css_class>documentation-products</css_class>
+    <keep_tabs>0</keep_tabs>
+<tabs>
+        <tab1>
+            <label>Related Products</label>
+            <title>Related Products</title>
+            <data_source>all</data_source>
+            <ignore_new_products>1</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>6</max_product_count>
+            <image_width>100</image_width>
+            <image_height>100</image_height>
+            <is_visible_name>1</is_visible_name>
+            <is_visible_rating>1</is_visible_rating>
+            <is_visible_price>0</is_visible_price>
+            <is_visible_description>0</is_visible_description>
+            <is_visible_read_more>0</is_visible_read_more>
+            <is_visible_add_to_cart>1</is_visible_add_to_cart>
+            <is_visible_add_to_wishlist>0</is_visible_add_to_wishlist>
+            <is_visible_add_to_compare>0</is_visible_add_to_compare>
+            <condition>or</condition>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>10000</rotation_duration>
+            <slide_count>1</slide_count>
+        </tab1>
+    </tabs>
+                    ]]></value></action>
+
+            </block>
+			<block type="blog/blog" name="blog.categories">
+				<action method="setTemplate"><template>aw_blog/menu.phtml</template></action>
+			</block>
             <block type="blog/blog" name="blog" template="aw_blog/blog.phtml"/>
         </reference>
     </blog_index_index>
@@ -69,9 +105,6 @@
     <blog_index_list>
         <reference name="head">
             <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
-        </reference>
-        <reference name="footer" >
-              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
         </reference>
         <reference name="content">
             <block type="blog/blog" name="blog" template="aw_blog/blog.phtml"/>
@@ -81,26 +114,85 @@
         <reference name="head">
             <action method="addCss"><stylesheet>css/markdownpad_github.css</stylesheet></action>
         </reference>
-        <reference name="footer" >
-              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
-        </reference>
         <reference name="content">
+            <block type="manaslider_tabbed/slider" name="products" as="products">
+                <action method="setData"><field>xml_text</field><value><![CDATA[
+    <title></title>
+    <css_class>documentation-products</css_class>
+    <keep_tabs>0</keep_tabs>
+<tabs>
+        <tab1>
+            <label>Related Products</label>
+            <title>Related Products</title>
+            <data_source>all</data_source>
+            <ignore_new_products>1</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>6</max_product_count>
+            <image_width>100</image_width>
+            <image_height>100</image_height>
+            <is_visible_name>1</is_visible_name>
+            <is_visible_rating>1</is_visible_rating>
+            <is_visible_price>0</is_visible_price>
+            <is_visible_description>0</is_visible_description>
+            <is_visible_read_more>0</is_visible_read_more>
+            <is_visible_add_to_cart>1</is_visible_add_to_cart>
+            <is_visible_add_to_wishlist>0</is_visible_add_to_wishlist>
+            <is_visible_add_to_compare>0</is_visible_add_to_compare>
+            <condition>or</condition>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>10000</rotation_duration>
+            <slide_count>1</slide_count>
+        </tab1>
+    </tabs>
+                    ]]></value></action>
+
+            </block>
             <block type="blog/post" name="post" template="aw_blog/post.phtml" />
         </reference>
     </blog_post_view>
 	<blog_cat_view>
-        <reference name="footer" >
-              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
-        </reference>
         <reference name="content">
+            <block type="core/template" name="title" template="aw_blog/cat_title.phtml" />
+            <block type="manaslider_tabbed/slider" name="products" as="products">
+                <action method="setData"><field>xml_text</field><value><![CDATA[
+    <title></title>
+    <css_class>documentation-products</css_class>
+    <keep_tabs>0</keep_tabs>
+<tabs>
+        <tab1>
+            <label>Related Products</label>
+            <title>Related Products</title>
+            <data_source>all</data_source>
+            <ignore_new_products>1</ignore_new_products>
+            <days_products_are_new>3000</days_products_are_new>
+            <max_product_count>6</max_product_count>
+            <image_width>100</image_width>
+            <image_height>100</image_height>
+            <is_visible_name>1</is_visible_name>
+            <is_visible_rating>1</is_visible_rating>
+            <is_visible_price>0</is_visible_price>
+            <is_visible_description>0</is_visible_description>
+            <is_visible_read_more>0</is_visible_read_more>
+            <is_visible_add_to_cart>1</is_visible_add_to_cart>
+            <is_visible_add_to_wishlist>0</is_visible_add_to_wishlist>
+            <is_visible_add_to_compare>0</is_visible_add_to_compare>
+            <condition>or</condition>
+            <effect_duration>1000</effect_duration>
+            <rotation_duration>10000</rotation_duration>
+            <slide_count>1</slide_count>
+        </tab1>
+    </tabs>
+                    ]]></value></action>
+
+            </block>
+			<block type="blog/blog" name="blog.categories">
+				<action method="setTemplate"><template>aw_blog/menu.phtml</template></action>
+			</block>
             <block type="blog/cat" name="cat" template="aw_blog/cat.phtml" />
         </reference>
     </blog_cat_view>
 	
 	<blog_rss_index>
-        <reference name="footer" >
-              <block type="blog/blog" name="copyright.blog.footer" template="aw_blog/copyright.phtml"/>
-        </reference>
         <block type="blog/rss" output="toHtml" name="rss.blog.new"/>
     </blog_rss_index>
 </layout> 
