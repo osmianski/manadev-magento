@@ -92,7 +92,7 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
             'is_category_value' => new Zend_Db_Expr('0'),
             'schema_id' => new Zend_Db_Expr($schema->getId()),
             'book_page_id' => new Zend_Db_Expr('`cp`.`id`'),
-            'unique_key' => new Zend_Db_Expr("CONCAT(`cp`.`id`, '-', `cp`.`url_key`)"),
+            'unique_key' => new Zend_Db_Expr("CONCAT(`cp`.`id`, '-', $urlExpr)"),
             'status' => new Zend_Db_Expr("IF(`cp`.`is_active`, '" .
                     Mana_Seo_Model_Url::STATUS_ACTIVE . "', '" .
                     Mana_Seo_Model_Url::STATUS_DISABLED . "')"),
@@ -137,6 +137,7 @@ class Mana_Content_Resource_Page_UrlIndexer extends Mana_Seo_Resource_UrlIndexer
             $urlExpr = $this->_seoify("CONCAT(`msu`.`url_key`, '/', `cp`.`url_key`)", $schema);
             $customFields = array(
                 'url_key' => new Zend_Db_Expr($urlExpr),
+                'unique_key' => new Zend_Db_Expr("CONCAT(`cp`.`id`, '-', $urlExpr)"),
             );
 
             $select = $read->select()
