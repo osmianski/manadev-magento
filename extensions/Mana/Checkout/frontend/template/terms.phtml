@@ -28,7 +28,8 @@
                             $(document).on('click', '.agreement-<?php echo $_a->getId()?>', function() {
                                 layout.showPopup({
                                     content: $('.agreement-<?php echo $_a->getId()?>-text'),
-                                    popup: { 'class': 'agreement-<?php echo $_a->getId()?>-popup-container' }
+                                    popup: { 'class': 'agreement-<?php echo $_a->getId()?>-popup-container' },
+                                    widthSensitiveElements: '.agreement-popup-content'
                                 });
                                 return false;
                             });

@@ -22,7 +22,7 @@
 
 .m-checkout label.disabled, .m-checkout input.disabled, .m-checkout textarea.disabled { color: #aaaaaa; }
 
-.agreement-popup-content { width: 600px; height: 400px; overflow-y: auto; }
+.agreement-popup-content { width: 600px; height: 400px; overflow-y: auto; margin-bottom: 10px; }
 
 
 

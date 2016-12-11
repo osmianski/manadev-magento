@@ -22,7 +22,11 @@
             <script type="text/javascript">
                 Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function($, layout) {
                     $(document).on('click', '.login-link', function() {
-                        layout.showPopup({ content: $('.login-form-text'), popup: { 'class': 'login-form--popup-container' } });
+                        layout.showPopup({
+                            content: $('.login-form-text'),
+                            popup: { 'class': 'login-form--popup-container' },
+                            noHeightAdjustment: true
+                        });
                     });
                 });
             </script>

@@ -260,12 +260,57 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         });
                     }
 
-                    $popup
-                        .css("top", (($(window).height() - $popup.outerHeight()) / 2) + $(window).scrollTop() + "px")
-                        .css("left", (($(window).width() - $popup.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+                    var originalWidth = $popup.outerWidth(true), originalHeight = $popup.outerHeight(true);
 
-                    var popupHeight = $popup.height();
-                    $popup.hide().css({"height": "auto"});
+                    function _resize() {
+                        var $window = $(window);
+
+                        if (options.noHeightAdjustment) {
+                            if (originalWidth > $window.width() - 20) {
+                                $popup.width($window.width() + $popup.width() - $popup.outerWidth(true) - 20);
+                            }
+                            else {
+                                $popup.width(originalWidth + $popup.width() - $popup.outerWidth(true));
+                            }
+                        }
+                        else {
+                            if (originalWidth > $window.width() - 20 || originalHeight > $window.height() - 20) {
+                                $popup.width($window.width() + $popup.width() - $popup.outerWidth(true) - 20);
+                                $popup.height($window.height() + $popup.height() - $popup.outerHeight(true) - 20);
+                            }
+                            else {
+                                $popup.width(originalWidth + $popup.width() - $popup.outerWidth(true));
+                                $popup.height(originalHeight + $popup.height() - $popup.outerHeight(true));
+                            }
+                        }
+
+                        $popup
+                            .css("position", "fixed")
+                            .css("top", (($(window).height() - $popup.outerHeight()) / 2) + "px")
+                            .css("left", (($(window).width() - $popup.outerWidth()) / 2) + "px");
+
+                        $popup.children().each(function () {
+                            $(this).css({
+                                width: ($popup.width() + $(this).width() - $(this).outerWidth()) + "px",
+                                height: ($popup.height() + $(this).height() - $(this).outerHeight()) + "px"
+                            });
+                        });
+                        if (options.widthSensitiveElements) {
+                            $popup.find(options.widthSensitiveElements).each(function () {
+                                var $parent = $(this).parent();
+                                $(this).css({
+                                    width: ($parent.width() + $(this).width() - $(this).outerWidth(true)) + "px",
+                                    height: ($parent.height() + $(this).height() - $(this).outerHeight(true)) + "px"
+                                });
+                            });
+                        }
+
+                        return css;
+                    }
+
+                    _resize();
+
+                    $popup.hide();
 
                     var css = {
                         left: $popup.css('left'),
@@ -274,16 +319,12 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                         height: $popup.height() + "px"
                     };
 
-                    $popup.children().each(function () {
-                        $(this).css({
-                            width: ($popup.width() + $(this).width() - $(this).outerWidth()) + "px",
-                            height: ($popup.height() + $(this).height() - $(this).outerHeight()) + "px"
-                        });
-                    });
+                    $(window).on('resize', _resize);
+
                     $popup
                         .css({
-                            top: ($(window).height() / 2) + $(window).scrollTop() + "px",
-                            left: ($(window).width() / 2) + $(window).scrollLeft() + "px",
+                            top: ($(window).height() / 2) + "px",
+                            left: ($(window).width() / 2) + "px",
                             width: 0 + "px",
                             height: 0 + "px"
                         })
@@ -296,6 +337,7 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         hidePopup: function () {
             this.getPageBlock().hideOverlay();
             this.lastPopupOptions.$popup.removeClass(this.lastPopupOptions.popup['class']);
+            $(window).off('resize', this.lastPopupOptions.resizeFunc);
         }
     });
 });

@@ -46,7 +46,7 @@ function ($, Block, config)
             this._overlayFadeout = fadeout || this._defaultOverlayFadeout;
             var overlay = overlayClass ? $('<div class="m-overlay ' + overlayClass + '"></div>') : $('<div class="m-overlay"></div>');
             overlay.appendTo(this.getElement());
-            overlay.css({left:0, top:0}).width($(document).width()).height($(document).height());
+            overlay.css({position: 'fixed', left: 0, top: 0, right: 0, bottom: 0});
             return overlay;
         },
         hideOverlay: function() {
