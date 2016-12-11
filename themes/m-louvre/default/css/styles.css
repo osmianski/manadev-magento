@@ -281,8 +281,10 @@ button.button.btn-gray:hover { background: #969696; color: #fff; }
 .we-accept img { margin: 0 40px; }
 
 /* Quote */
-.quote { position: relative; bottom: 15px; background: transparent url(../images/quote_bottom.png) right bottom no-repeat; }
+.quote { background: transparent url(../images/quote_bottom.png) right bottom no-repeat; }
+
 .quote div { background: transparent url(../images/quote_top.png) 0 0 no-repeat; padding: 20px 30px 30px; }
+.quote div blockquote { border:none; padding:0; }
 .sidebar .quote { bottom:0; }
 .sidebar .quote div { padding: 20px 10px 30px; }
 .widget-title+.quote { position: relative; bottom: 20px; }
@@ -1659,6 +1661,69 @@ z-index: 12;
 margin-left: -68px;
 }
 
+
+/* Blog */
+
+.post-grid { display: flex; flex-wrap: wrap; }
+
+.postWrapper {
+	width: 33.3%;
+    box-sizing: border-box;
+    text-align: justify;
+    padding: 10px;
+}
+.postWrapper a,
+.postTitle a { text-decoration:none; overflow-wrap: break-word; }
+.postWrapper img { max-width: 100%; }
+.post-border {
+    padding: 20px;
+    background: #f8f8f8;
+    border-radius: 10px;
+}
+.blog-post-view .postWrapper { width: 100%; padding: 10px 0; }
+.menu-categories { margin: 20px 0 10px; }
+.postTitle { text-align: left; }
+.postTitle h2 { font-size: 21px; line-height: 24px; }
+.postTitle h3 { margin-right: 10px; text-shadow: 2px -2px rgba(0,0,0,0.3); color: white; background-color: #26b1ed; float:left; text-align: center; border-radius: 5px; padding: 5px 10px; }
+.postTitle h3 .day { display: block; font-size: 26px; }
+.postTitle h3 .month { font-size: 12px; font-weight: normal; display: block; }
+.categories-author { clear:both; font-size: 12px; padding-bottom: 10px; text-align: right; color: #ccc; text-shadow: 1px 1px white; }
+.categories-author a { text-shadow: none; }
+.blog-post-view .categories-author { font-size: 14px; }
+.postDetails { padding-top: 10px; }
+.menu-categories li.current a { color:#bfbfbf; }
+.menu-categories li.current a:hover { cursor:default; color:#bfbfbf; background-color: gainsboro; }
+
+.postWrapper .scrollable.code {
+	background-color: white;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: solid;
+    border-width: 2px 1px 0;
+    border-color: #bfbfbf #dbdbdb;
+    margin: 20px 0;
+
+}
+.postWrapper code {
+	margin: 0 0px;
+	padding: 2px 5px;
+	background-color: #dcdcdc;
+	border-radius: 3px;
+	overflow-wrap: break-word;
+	font-size:14px;
+}
+
+.commentContent {
+	border-left: 4px solid #ddd;
+	padding-left: 10px;
+	margin: 0 0 20px 10px;
+}
+.commentDetails { color:#ccc; text-shadow: 1px 1px white; }
+.commentDetails h4 { font-weight: normal; text-shadow: none; }
+
 /* Block: Tags */
 .product-view .box-tags h2 { color: #646464; }
 .product-view .box-tags ul { padding:0 0 20px 0; }
@@ -1667,6 +1732,7 @@ margin-left: -68px;
 .product-view .box-tags .form-add .input-box { float:left; width:260px; margin:0 5px; }
 .product-view .box-tags .form-add input.input-text { width:254px; }
 .product-view .box-tags .form-add p { clear:both; }
+
 
 /* Block: Reviews */
 .product-view .box-reviews h3 { clear: both; padding: 0 0 5px; }
@@ -2571,6 +2637,9 @@ button.btn-checkout,
 .quick-access .links li.last a { padding: 5px 0; }
 .block .block-title { padding: 5px 0; }
 .breadcrumbs { padding:0; }
+
+
+
 }
 
 
@@ -2655,6 +2724,8 @@ button.btn-checkout,
 .footer .block-subscribe .col-1,
 .footer .block-subscribe .col-3 { width: 39%; }
 
+.postWrapper { width: 50%; }
+
 
 }
 
@@ -2712,6 +2783,7 @@ h6            { font-size:15px; }
 .m-checkout .col2-set .col-2 { width: 100% !important; padding:0; }
 .m-checkout .data-table thead th { padding-top: 0 !important; }
 .mana_content .toc { column-count: 1; -moz-column-count: 1; -webkit-column-count: 1; }
+.postWrapper { width: 100%; padding: 10px 0; }
 
 }
 
