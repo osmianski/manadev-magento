@@ -63,20 +63,20 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     }
 
     public function getAvailableActions($item) {
-        $actions = '';
+        $actions = array();
         foreach($this->availableActions[$item->getStatus()] as $action) {
             switch($action) {
                 case "download":
-                    $actions .= $this->getDownloadButton($item);
+                    $actions[$action] = $this->getDownloadButton($item);
                     break;
                 case "register":
-                    $actions .= $this->getRegisterButton($item);
+                    $actions[$action] = $this->getRegisterButton($item);
                     break;
                 case "open_support_ticket":
-                    $actions .= $this->getOpenSupportTicketButton($item);
+                    $actions[$action] = $this->getOpenSupportTicketButton($item);
                     break;
                 case "prolong_support_period";
-                    $actions .= $this->getProlongSupportPeriodButton($item);
+                    $actions[$action] = $this->getProlongSupportPeriodButton($item);
                     break;
             }
         }
@@ -87,33 +87,38 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     public function getDownloadButton($item) {
         $title = Mage::helper('downloadable')->__('Start Download');
         $url = $this->getDownloadUrl($item);
-        $template = "<a class='button' href='{$url}' title='{$title}' {$this->_openNewWindow()}><span><span>Download</span></span></a>";
+        $target = '_blank';
+        $text = 'Download';
 
-        return $template;
+        return compact('title', 'url', 'target', 'text');
     }
 
     public function getRegisterButton($item) {
         $title = Mage::helper('downloadable')->__('Register And Download');
         $url = $this->getProductRegistrationUrl($item);
-        $template = "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
+        $target = '';
+        $text = $title;
 
-        return $template;
+        return compact('title', 'url', 'target', 'text');
     }
 
     public function getOpenSupportTicketButton($item) {
         $title = Mage::helper('downloadable')->__('Open Support Ticket');
         $url = $this->getUrl('actions/support/openTicket', array('id' => $item->getLinkHash(), '_secure' => true));
-        $template = "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
 
-        return $template;
+        $target = '';
+        $text = $title;
+
+        return compact('title', 'url', 'target', 'text');
     }
 
     public function getProlongSupportPeriodButton($item) {
         $title = Mage::helper('downloadable')->__('Extend Support Period');
         $url = $this->getUrl('actions/support/extend', array('id' => $item->getLinkHash(), '_secure' => true));
-        $template = "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
+        $target = '';
+        $text = $title;
 
-        return $template;
+        return compact('title', 'url', 'target', 'text');
     }
 
     /**
