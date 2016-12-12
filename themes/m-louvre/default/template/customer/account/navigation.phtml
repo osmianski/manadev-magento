@@ -25,11 +25,8 @@
  */
 ?>
 <div class="block block-account <?php echo Mage::helper('mana_theme')->getCssClass($this, 'my_account') ?>">
-    <div class="block-title">
-        <strong><span><?php echo $this->__('My Account'); ?></span></strong>
-    </div>
     <div class="block-content">
-        <ul>
+        <ul class="links add-to-links m-tabs">
             <?php $_links = $this->getLinks(); ?>
             <?php $_index = 1; ?>
             <?php $_count = count($_links); ?>

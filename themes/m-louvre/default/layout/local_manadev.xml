@@ -84,8 +84,6 @@ examples on what kind of actions can be applied to referenced blocks.
 
 	<customer_account>
         <reference name="customer_account_navigation">
-        <action method="removeLink"><name>downloadable_products</name></action>
-        <action method="addLink" translate="label"><name>downloadable_products</name><path>downloadable/customer/products</path><label>My Licenses and Downloads</label></action>
         </reference>
     </customer_account>
 
