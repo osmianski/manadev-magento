@@ -89,8 +89,8 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getDownloadUrl($item);
         $target = '_blank';
         $text = 'Download';
-
-        return compact('title', 'url', 'target', 'text');
+        $css_class = 'download';
+        return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
     public function getRegisterButton($item) {
@@ -98,18 +98,19 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getProductRegistrationUrl($item);
         $target = '';
         $text = $title;
+        $css_class = 'register';
 
-        return compact('title', 'url', 'target', 'text');
+        return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
     public function getOpenSupportTicketButton($item) {
         $title = Mage::helper('downloadable')->__('Open Support Ticket');
         $url = $this->getUrl('actions/support/openTicket', array('id' => $item->getLinkHash(), '_secure' => true));
-
         $target = '';
         $text = $title;
+        $css_class = 'support-ticket';
 
-        return compact('title', 'url', 'target', 'text');
+        return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
     public function getProlongSupportPeriodButton($item) {
@@ -117,8 +118,9 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getUrl('actions/support/extend', array('id' => $item->getLinkHash(), '_secure' => true));
         $target = '';
         $text = $title;
+        $css_class = 'prolong-support';
 
-        return compact('title', 'url', 'target', 'text');
+        return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
     /**

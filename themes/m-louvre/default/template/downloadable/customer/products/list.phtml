@@ -64,7 +64,20 @@
                     <td>
                         <a href="<?php echo $this->getProductUrl($_item)?>" title="<?php echo Mage::helper('local_manadev')->__('View Product') ?>"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></a> <br/><br/>
                         <em><?php echo $this->getStatusLabel($_item) ?></em> <br/>
-                        <?php echo $this->getAvailableActions($_item) ?>
+                        <?php if (($_actions = $this->getAvailableActions($_item)) && count($_actions)) : ?>
+                            <ul class="add-to-links license-buttons">
+                            <?php foreach ($_actions as $_action) : ?>
+                                <li>
+                                    <a title="<?php echo $_action['title'] ?>"
+                                        <?php echo $_action['target'] ? 'target="' . $_action['target'] . '"' : '' ?>
+                                        class="button <?php echo $_action['css_class'] ?>"
+                                        href="<?php echo $_action['url'] ?>">
+                                        <span><span><?php echo $_action['text'] ?></span></span>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </td>
                     <td>
                         <?php echo $this->getRegisteredDomain($_item); ?>
