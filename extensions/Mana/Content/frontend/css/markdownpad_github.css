@@ -127,6 +127,12 @@
 .mana_content a:hover {
   text-decoration: underline;
 }
+.mana_content a[href='#'] {
+}
+
+.mana_content a[href='#']:after {
+    content: "\e627";
+}
 
 /* LISTS
 =============================================================================*/
@@ -259,8 +265,12 @@
 =============================================================================*/
 
 .mana_content blockquote {
-  border-left: 4px solid #DDD;
-  padding: 0 15px;
+    border-left: 4px solid #ff6464;
+    padding: 10px;
+    background: white;
+    box-shadow: 0px -6px 10px -6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
 }
 
 .mana_content blockquote>:first-child {
