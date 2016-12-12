@@ -51,7 +51,7 @@
 			<review>
 				<rewrite>
 					<helper>Local_Manadev_Block_Review</helper>
-					<!-- INSERT HERE: individual type rewrites -->
+                    <customer_list>Local_Manadev_Block_Review_List</customer_list>
 				</rewrite>
 			</review>
 			<adminhtml>
@@ -84,6 +84,11 @@
                     <account_navigation>Local_Manadev_Block_Customer_Account_Navigation</account_navigation>
                 </rewrite>
             </customer>
+			<sales>
+                <rewrite>
+                    <order_history>Local_Manadev_Block_Sales_History</order_history>
+                </rewrite>
+            </sales>
             <downloadable>
                 <rewrite>
                     <customer_products_list>Local_Manadev_Block_Customer_Products_List</customer_products_list>
@@ -460,6 +465,13 @@
                     </modules>
                 </args>
             </customer>
+            <sales>
+                <args>
+                    <modules>
+                        <local_manadev before="Mage_Sales">Local_Manadev_FrontendSales</local_manadev>
+                    </modules>
+                </args>
+            </sales>
 		</routers>
         <events>
             <controller_action_layout_render_before_checkout_index_index>

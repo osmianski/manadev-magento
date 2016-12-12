@@ -56,6 +56,17 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $this->setItems($purchasedItems);
     }
 
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        $this->getItems()->load();
+        foreach ($this->getItems() as $item) {
+            $item->setPurchased($this->getPurchased()->getItemById($item->getPurchasedId()));
+        }
+        return $this;
+    }
+
     public function getStatusLabel($item) {
         /** @var Local_Manadev_Model_Download_Status $model */
         $model = Mage::getSingleton('local_manadev/download_status');
@@ -89,7 +100,7 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getDownloadUrl($item);
         $target = '_blank';
         $text = 'Download';
-        $css_class = 'download';
+        $css_class = 'btn-download';
         return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
@@ -98,17 +109,17 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getProductRegistrationUrl($item);
         $target = '';
         $text = $title;
-        $css_class = 'register';
+        $css_class = 'btn-register';
 
         return compact('title', 'url', 'target', 'text', 'css_class');
     }
 
     public function getOpenSupportTicketButton($item) {
-        $title = Mage::helper('downloadable')->__('Open Support Ticket');
+        $title = Mage::helper('downloadable')->__('I Need Support');
         $url = $this->getUrl('actions/support/openTicket', array('id' => $item->getLinkHash(), '_secure' => true));
         $target = '';
         $text = $title;
-        $css_class = 'support-ticket';
+        $css_class = 'btn-product-support green';
 
         return compact('title', 'url', 'target', 'text', 'css_class');
     }
@@ -118,7 +129,7 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         $url = $this->getUrl('actions/support/extend', array('id' => $item->getLinkHash(), '_secure' => true));
         $target = '';
         $text = $title;
-        $css_class = 'prolong-support';
+        $css_class = 'btn-product-support';
 
         return compact('title', 'url', 'target', 'text', 'css_class');
     }
@@ -151,10 +162,9 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
         if(!in_array($_item->getStatus(),
             array(Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE, Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_REGISTERED))
         ) {
-            $result .= "<br/>";
-            $title = Mage::helper('downloadable')->__('Modify');
+            $title = Mage::helper('downloadable')->__('Modify URL');
             $url = $this->getUrl('actions/domain/modify', array('id' => $_item->getLinkHash()));
-            $result .= "<a class='button' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a>";
+            $result .= "<ul class=\"add-to-links registration-buttons\"><li><a class='button btn-modify-url' href='{$url}' title='{$title}'><span><span>{$title}</span></span></a></li></ul>";
 
         }
 
@@ -162,7 +172,9 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     }
 
     public function getProductUrl($_item) {
-        $url = $this->getUrl('catalog/product/view', array('id'=>$_item->getProductId()));
-        return $url;
+        $additional = array();
+        $additional['_escape'] = true;
+        $product = Mage::getModel('catalog/product')->setStoreId(Mage::app()->getStore()->getId())->load($_item->getProductId());
+        return $product->getUrlModel()->getUrl($product, $additional);
     }
 }

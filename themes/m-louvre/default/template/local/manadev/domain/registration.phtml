@@ -15,20 +15,24 @@
     <div>
         <strong>Order #:</strong> <?php echo $this->getOrderNo(); ?>
     </div>
-    <br/>
     <div>
-        <strong>Please enter your Store Admin Panel URL:</strong> <br/>
-        <input id="admin_panel_url" type="text" name="domain" value="<?php echo $this->getDomain(); ?>"/>
-        <p class="note">You may only use this purchased product and get support for it on this store.</p>
-        <p class="note">The entered URL will be validated to make sure that it exists.</p>
-        <p class="note">Admin panel URL is requested instead of base URL because it is possible to use multiple domains for a magento installation, but there is only one admin panel URL.</p>
+        <h4>Please enter your Store Admin Panel URL:</h4>
+        <div class="input-box">
+            <input class="input-text" id="admin_panel_url" type="text" name="domain" value="<?php echo $this->getDomain(); ?>"/>
+        </div>
+        <blockquote class="m-lightgrey">
+            <p class="note">You may only use this purchased product and get support for it on this store.</p>
+            <p class="note">The entered URL will be validated to make sure that it exists.</p>
+            <p class="note">Admin panel URL is requested instead of base URL because it is possible to use multiple domains for a magento installation, but there is only one admin panel URL.</p>
+        </blockquote>
     </div>
-    <br/>
 
     <div>
-        <strong>In case you don't have a configured store yet, please provide your store information</strong> <br/>
-        <textarea rows="10" cols="64" name="m_store_info"><?php echo $this->getStoreInfo() ?></textarea>
-        <p class="note">For example, "The extension will be used for selling XYZ products of ABC company. I cannot provide my store admin panel URL right now because ..."</p>
+        <h4>In case you don't have a configured store yet, please provide your store information</h4>
+        <textarea rows="4" cols="64" name="m_store_info"><?php echo $this->getStoreInfo() ?></textarea>
+        <blockquote class="m-lightgrey">
+            <p class="note">For example, "The extension will be used for selling XYZ products of ABC company. I cannot provide my store admin panel URL right now because ..."</p>
+        </blockquote>
     </div>
 
     <div class="buttons-set">

@@ -14,59 +14,17 @@
         <ul class="form-list">
             <li class="fields">
                 <h2 class="legend"><?php echo Mage::helper('local_manadev')->__('Product Information') ?></h2>
-                <div class="field">
-                    <label for="customerName">Name </label>
-                    <div id="customerName" class="input-box"><?php echo $this->getCustomerName(); ?></div>
-                </div>
-                <div class="field">
-                    <label for="email">E-mail </label>
-                    <div id="orderNumber" class="input-box"><?php echo $this->getEmail(); ?></div>
-                </div>
+                <div class="field"><strong>Name: </strong><?php echo $this->getCustomerName(); ?></div>
+                <div class="field"><strong>E-mail: </strong><?php echo $this->getEmail(); ?></div>
+                <div class="field"><strong>Order #: </strong><?php echo $this->getOrderNo(); ?></div>
+                <div class="field"><strong>Product: </strong><?php echo $this->getProductName(); ?></div>
+                <div class="field"><strong>Support Valid Until: </strong><?php echo $this->getSupportValidTil(); ?></div>
+                <div class="field"><strong>Registered URL: </strong><?php echo $this->getRegisteredURL(); ?></div>
             </li>
 
             <li class="fields">
                 <div class="field">
-                    <label for="orderNumber">Order #</label>
-                    <div id="orderNumber" class="input-box"><?php echo $this->getOrderNo(); ?></div>
-                </div>
-                <div class="field">
-                    <label for="productName">Product</label>
-                    <div id="productName" class="input-box"><?php echo $this->getProductName(); ?></div>
-                </div>
-            </li>
-
-            <li class="fields">
-                <div class="field">
-                    <label for="productName">Support Valid Until</label>
-                    <div id="productName" class="input-box"><?php echo $this->getSupportValidTil(); ?></div>
-                </div>
-                <div class="field">
-                    <label for="registeredUrl">Registered URL</label>
-                    <div id="productName" class="input-box"><?php echo $this->getRegisteredURL(); ?></div>
-                </div>
-
-                <div class="field m-beside-issue">
-                    <div class="space"></div>
-                    <label for="screenshot_1"><?php echo Mage::helper('contacts')->__('Screenshot 1') ?></label>
-                    <div class="input-box">
-                        <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
-                        <br/>
-                        <p class="note">Accepts JPEG, PNG, and GIF files only.</p>
-                    </div>
-                    <label for="screenshot_2"><?php echo Mage::helper('contacts')->__('Screenshot 2') ?></label>
-                    <div class="input-box">
-                        <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
-                    </div>
-                    <label for="screenshot_3"><?php echo Mage::helper('contacts')->__('Screenshot 3') ?></label>
-                    <div class="input-box">
-                        <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
-                    </div>
-                </div>
-            </li>
-
-            <li class="wide">
-                <div class="field">
-                    <label for="contact_email" class="required"><?php echo Mage::helper('local_manadev')->__('Contact Email') ?><em>*</em></label>
+                    <label for="contact_email" class="required"><strong><?php echo Mage::helper('local_manadev')->__('Contact Email') ?><em>*</em></strong></label>
                     <div class="input-box">
                         <input name="contact_email" id="contact_email" class="input-text required-entry validate-email" type="text" value="<?php echo $this->getEmail()?>"/>
                         <p class="note">We will reply to you in this email.</p>
@@ -75,18 +33,39 @@
             </li>
 
 
-            <li class="wide">
+            <li class="fields">
                 <label for="issue_details" class="required"><strong><?php echo Mage::helper('local_manadev')->__('Issue Details') ?><em>*</em></strong></label>
                 <div class="input-box">
                     <textarea rows="10" cols="100" name="issue_details" class="input-text required-entry"><?php echo $this->getIssueDetails()?></textarea>
-                    <br/>
-                    <em>Please provide the following information on the Issue Details:</em>
-                    <p class="note">Direct link to page having the issue and specify exact steps on how to reproduce the issue.</p>
-                    <p class="note">If site is protected by .htaccess or other means, please provide corresponding credentials.</p>
-                    <p class="note">If you think that we need detailed examination on the server, please provide Magento Admin Panel and SFTP credentials.</p>
-                    <!--        <p class="note">Please provide direct link to page having the issue and describe exact steps to reproduce the issue.</p>-->
+                    <blockquote class="m-lightgrey">
+                        <p>Please provide the following information on the Issue Details:</p>
+                        <ul class="features">
+                            <li>Direct link to page having the issue and specify exact steps on how to reproduce the issue.</li>
+                            <li>If site is protected by .htaccess or other means, please provide corresponding credentials.</li>
+                            <li>If you think that we need detailed examination on the server, please provide Magento Admin Panel and SFTP credentials.</li>
+                        </ul>
+                    </blockquote>
                 </div>
             </li>
+
+            <li class="fields">
+                <div class="field attachments">
+                    <div class="space"></div>
+                    <label for="screenshot_1"><strong><?php echo Mage::helper('contacts')->__('Screenshot 1') ?></strong> (JPG, PNG, or GIF)</label>
+                    <div class="input-box">
+                        <input name="screenshot_1" id="screenshot_1" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
+                    </div>
+                    <label for="screenshot_2"><strong><?php echo Mage::helper('contacts')->__('Screenshot 2') ?></strong> (JPG, PNG, or GIF)</label>
+                    <div class="input-box">
+                        <input name="screenshot_2" id="screenshot_2" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
+                    </div>
+                    <label for="screenshot_3"><strong><?php echo Mage::helper('contacts')->__('Screenshot 3') ?></strong> (JPG, PNG, or GIF)</label>
+                    <div class="input-box">
+                        <input name="screenshot_3" id="screenshot_3" class="input-text" type="file" accept="image/png, image/jpeg, image/gif"/>
+                    </div>
+                </div>
+            </li>
+
         </ul>
     </div>
 

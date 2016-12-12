@@ -42,11 +42,11 @@
         <thead>
             <tr>
                 <th style='width:100px;'>
-                    <?php echo Mage::helper('downloadable')->__('Order #') ?> <br/><br/>
+                    <?php echo Mage::helper('downloadable')->__('Order #') ?> /
                     <?php echo Mage::helper('downloadable')->__('Date') ?>
                 </th>
                 <th>
-                    <?php echo Mage::helper('downloadable')->__('Title') ?> <br/><br/>
+                    <?php echo Mage::helper('downloadable')->__('Title') ?> /
                     <?php echo Mage::helper('downloadable')->__('Status') ?>
                 </th>
                 <th style='width:200px;'><?php echo Mage::helper('downloadable')->__('Registered Domain') ?></th>
@@ -56,14 +56,18 @@
             <?php $_odd = ''; ?>
             <?php foreach ($_items as $_item): ?>
                 <tr>
-                    <td>
-                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a> <br/><br/>
+                    <td class="col-order">
+                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a>
                         <?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?>
-                        <a href="<?php echo Mage::getUrl('actions/invoice/print', array('order_id' => $_item->getPurchased()->getOrderId())) ?>" title="Invoice">Invoice</a>
+                        <ul class="add-to-links order-buttons">
+                            <li>
+                                <a class="button btn-invoice" href="<?php echo Mage::getUrl('actions/invoice/print', array('order_id' => $_item->getPurchased()->getOrderId())) ?>" title="Invoice">Invoice</a>
+                            </li>
+                        </ul>
                     </td>
-                    <td>
-                        <a href="<?php echo $this->getProductUrl($_item)?>" title="<?php echo Mage::helper('local_manadev')->__('View Product') ?>"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></a> <br/><br/>
-                        <em><?php echo $this->getStatusLabel($_item) ?></em> <br/>
+                    <td class="col-product">
+                        <a class="product-name" href="<?php echo $this->getProductUrl($_item)?>" title="<?php echo Mage::helper('local_manadev')->__('View Product') ?>"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></a>
+                        <em><?php echo $this->getStatusLabel($_item) ?></em> 
                         <?php if (($_actions = $this->getAvailableActions($_item)) && count($_actions)) : ?>
                             <ul class="add-to-links license-buttons">
                             <?php foreach ($_actions as $_action) : ?>
@@ -79,7 +83,7 @@
                             </ul>
                         <?php endif; ?>
                     </td>
-                    <td>
+                    <td class="col-registration">
                         <?php echo $this->getRegisteredDomain($_item); ?>
                     </td>
                 </tr>
@@ -90,7 +94,3 @@
 <?php else: ?>
     <p><?php echo Mage::helper('downloadable')->__('You have not purchased any downloadable products yet.'); ?></p>
 <?php endif; ?>
-<?php echo $this->getChildHtml('pager'); ?>
-<div class="buttons-set">
-    <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
-</div>

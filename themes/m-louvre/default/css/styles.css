@@ -103,7 +103,7 @@ address       {
 }
 cite          { font-style:normal; }
 q,
-blockquote    {
+blockquote {
     quotes:none;
     border-left: 4px solid #ff6464;
     padding: 10px;
@@ -552,6 +552,7 @@ p.control input.radio { margin-right:6px; }
 
 .fieldset { background: #f8f8f8;  border-radius: 10px; padding: 20px; }
 .fieldset .legend { position:relative; color: #FF6464;}
+.customer-account-edit .fieldset {  margin-top: 20px; }
 
 /* Form Validation */
 .validation-advice { clear:both; min-height:13px; margin:3px 0 0; padding-left:17px; font-size:12px; line-height:14px; background:url(../images/validation_advice_bg.gif) 2px 1px no-repeat; color:#FF6464; }
@@ -593,13 +594,13 @@ p.note-msg:before, .note-msg ul li:before { content: "\e717"; color:#DAECF8; }
 .page-title h2 { }
 .page-title .separator { margin:0 3px; }
 .page-title .link-rss { float:right; }
-.title-buttons { text-align:right; }
+.title-buttons {  }
 .title-buttons h1,
 .title-buttons h2,
 .title-buttons h3,
 .title-buttons h4,
 .title-buttons h5,
-.title-buttons h6 { float:left; }
+.title-buttons h6 {  }
 
 .subtitle,
 .sub-title { clear:both; }
@@ -960,13 +961,32 @@ transition: all 1s ease-in;
 
 /* Block: Account */
 .block-account { margin:0; padding:0; }
-.block-account .block-title {  }
+.block-account .block-content { padding: 10px 0; }
 .block-account .current {
     color: #b6b4b4;
     text-shadow: 1px 1px white;
     font-weight: normal;
 }
 .block-account .current strong { font-weight: normal; }
+
+.my-account h4 { font-weight: normal; margin: 15px 0 5px; }
+.my-account input.input-text,
+.my-account textarea { width: 100%; box-sizing: border-box; }
+.my-account blockquote { margin: 30px 0 10px; box-shadow: none; }
+.my-account .attachments .input-box { margin-bottom: 30px; }
+.my-account .rating-box { width: 70px; }
+#my-reviews-table .rating-box { position: relative; top: 6px; }
+.sales-order-history .data-table .add-to-links { position: relative; bottom: 6px; }
+.sales-order-history .data-table .add-to-links li { float: right; }
+.sales-order-history .data-table td { padding: 15px 5px 5px; }
+.sales-order-history .data-table .order-canceled,
+.sales-order-history .data-table .order-canceled .price,
+.sales-order-history .data-table .order-canceled a { color: #ccc; }
+.sales-order-history .data-table .order-pending,
+.sales-order-history .data-table .order-pending .price,
+.sales-order-history .data-table .order-pending a { color: #ccc; }
+.sales-order-history .data-table .order-complete a { color: white; background-color: #65D183; }
+
 /* Block: Currency Switcher
 .block-currency {}
 .block-currency select { width:100%; border:1px solid #888; }*/
@@ -1644,15 +1664,27 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-view .demo-buttons li a { text-transform: capitalize; color: white; background-color: #b4b4b4; }
 .product-view .demo-buttons li a span span:after { content: "\e62e"; margin-left: 5px; }
 .product-view .demo-buttons li a.btn-admin-demo span span:after { content: "\e602"; }
+.add-to-links li a { white-space: nowrap; }
 .add-to-links li a.btn-user-guide,
 .add-to-links li a.btn-product-question,
-.add-to-links li a.btn-product-support { color: white; }
+.add-to-links li a.btn-product-support,
+.add-to-links li a.btn-download { color: white; }
 .add-to-links li a.btn-user-guide { background-color: #65D183; }
 .add-to-links li a.btn-user-guide:after { content: "\e6b7"; }
 .add-to-links li a.btn-product-question { background-color: #26B1ED; }
 .add-to-links li a.btn-product-question:after { content: "\e718"; }
 .add-to-links li a.btn-product-support { background-color: #ff6464; }
 .add-to-links li a.btn-product-support:after { content: "\e719"; }
+.add-to-links li a.btn-product-support.green { background-color: #65D183; }
+.add-to-links li a.btn-download { background-color: #26B1ED; }
+.add-to-links li a.btn-download:after,
+.add-to-links li a.btn-invoice:after { content: "\e6a7"; }
+.add-to-links li a.btn-modify-url:after { content: "\e61c"; }
+
+.my-account .add-to-links li { float: left; }
+.my-account em { display: block; }
+.my-account .product-name { font-weight: bold; text-decoration: none; }
+
 
 .add-to-links.show-buttons,
 .add-to-links.show-buttons li,
@@ -2199,9 +2231,16 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 
 .box, .box-head, { margin: 20px 0; }
 .box h4 { }
-.box { padding: 20px 0; }
-.box .box-title { background: #dbdbdb; padding: 10px; border-radius: 10px;}
-.box .box-content { padding: 10px; }
+.box {  }
+.box .box-title { }
+.box .box-content {  }
+
+.sales-order-view .order-info-box { background-color: #f8f8f8; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+.link-print:after {content: "\e681";}
+
+.add-to-links li a.link-print { color: white; background-color: #65d183; }
+.sales-order-view .order-buttons { float: right; }
+.sales-order-view .order-date { margin: 0 0 20px; }
 
 .box-head h2,
 .box h3 { margin: 0 20px 20px 0; display: inline; }
@@ -2734,8 +2773,14 @@ button.btn-checkout,
 .quick-access .links li.last a { padding: 5px 0; }
 .block .block-title { padding: 5px 0; }
 .breadcrumbs { padding:0; }
-
-
+.registration-buttons li,
+.block-account .add-to-links li,
+.license-buttons li,
+.customer-account-edit button.button { width: 100%; }
+.registration-buttons li a,
+.license-buttons li a,
+.block-account .add-to-links li a { display:block; }
+.block-account .add-to-links { text-align: center; }
 
 }
 
@@ -2881,6 +2926,19 @@ h6            { font-size:15px; }
 .m-checkout .data-table thead th { padding-top: 0 !important; }
 .mana_content .toc { column-count: 1; -moz-column-count: 1; -webkit-column-count: 1; }
 .postWrapper { width: 100%; padding: 10px 0; }
+.my-account .data-table td {  display:block; width: 100%; margin: 0; box-sizing: border-box; position: relative; }
+.my-account .data-table thead {  display:none; }
+.my-account .data-table tr {  display:block; padding: 10px; }
+.my-account .data-table .add-to-links { overflow: hidden; }
+.my-account .data-table .add-to-links li { float: right; }
+.my-account .data-table .add-to-links.order-buttons { position: absolute; top:0; right:0; }
+.sales-order-history .data-table tr { display: flex; flex-wrap: wrap; margin:0; align-content: flex-center; }
+.sales-order-history .data-table td { width: auto; }
+.sales-order-view .data-table tr { padding: 0; }
+.sales-order-view .data-table tfoot tr { text-align: right; }
+.sales-order-view .data-table tfoot tr td { display: inline-block; width: auto; }
+.sales-order-view .data-table tfoot tr td.last { min-width: 80px; }
+
 
 }
 

@@ -32,6 +32,21 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
         }
 
         $this->loadLayout();
+
+        if (Mage::getStoreConfig('web/default/show_cms_breadcrumbs')
+            && ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs'))
+        ) {
+            $breadcrumbs->addCrumb('my_licenses', array(
+                'label' => Mage::helper('cms')->__('My Licenses and Downloads'),
+                'title' => Mage::helper('cms')->__('My Licenses and Downloads'),
+                'link' => Mage::getUrl('downloadable/customer/products')
+            ));
+            $breadcrumbs->addCrumb('presale', array(
+                'label' => Mage::helper('cms')->__('Open Support Ticket'),
+                'title' => Mage::helper('cms')->__('Open Support Ticket')
+            ));
+        }
+
         $this->renderLayout();
         return $this;
     }

@@ -38,7 +38,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         return $linkPurchasedItem;
     }
 
-    protected function _init() {
+    protected function _init($breadcrumb) {
         $linkPurchasedItem = $this->_getItemModelFromRequest();
 
         if(!$linkPurchasedItem->getId()) {
@@ -64,18 +64,33 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
         Mage::register('m_purchased_item', $linkPurchasedItem);
         $this->loadLayout();
+
+        if (Mage::getStoreConfig('web/default/show_cms_breadcrumbs')
+            && ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs'))
+        ) {
+            $breadcrumbs->addCrumb('my_licenses', array(
+                'label' => Mage::helper('cms')->__('My Licenses and Downloads'),
+                'title' => Mage::helper('cms')->__('My Licenses and Downloads'),
+                'link' => Mage::getUrl('downloadable/customer/products')
+            ));
+            $breadcrumbs->addCrumb('presale', array(
+                'label' => Mage::helper('cms')->__($breadcrumb),
+                'title' => Mage::helper('cms')->__($breadcrumb)
+            ));
+        }
+
         $this->renderLayout();
         return $this;
     }
 
     public function registerAction() {
         $this->_getCustomerSession()->setData('m_start_download', true);
-        return $this->_init();
+        return $this->_init('Register and Download');
     }
 
     public function modifyAction() {
         $this->_getCustomerSession()->setData('m_start_download', false);
-        return $this->_init();
+        return $this->_init('Modify URL');
     }
 
     public function linkAction() {
