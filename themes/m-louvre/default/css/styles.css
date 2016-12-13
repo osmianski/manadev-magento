@@ -1928,6 +1928,19 @@ margin-left: -68px;
 .cms-home .subtitle {}
 .cms-index-index .subtitle {}
 
+/* CMS 404 Page Not Found */
+.cms-index-noroute .page .main { text-align: center; }
+.page .main .m-404 {
+    background: #f8f8f8;
+    border-radius: 100px;
+    width: 140px;
+    height: 140px;
+    box-shadow: 0px 0px 14px -4px rgba(0,0,0,0.3);
+    margin: 10px auto;
+}
+.page .main .m-404 img { max-width:100%; position: relative; right: 1px; top: 16px; }
+.page .main .m-404 span { font-size:40px; position: relative; top:40px; color: black; }
+.cms-index-noroute .page .main h1 { padding: 20px 0; }
 /* Sitemap */
 .page-sitemap .links { text-align:right; margin:0 8px -22px 0; }
 .page-sitemap .links a { text-decoration:none; position:relative; }
@@ -2116,6 +2129,8 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 .checkout-agreements li { margin:10px 0; }
 .checkout-agreements .agreement-content { border:1px solid #ddd; background-color:#f6f6f6; padding:5px; height:10em; overflow:auto; }
 .checkout-agreements .agree { padding:6px; }
+
+.m-thankyou h4 { padding-bottom: 20px; }
 
 /* Centinel */
 .centinel {}
@@ -2345,6 +2360,12 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 
 .footer-container .bottom-container { text-align:center; padding: 0 0 15px; }
 /* ======================================================================================= */
+
+.error-page .footer { background-color: transparent; }
+.error-page h1 { padding: 30px 0; }
+.error-page .page .main .m-404 { margin-bottom: 40px; }
+.error-page .header-container { padding: 10px 0 30px; }
+.error-page .main-container { padding-top: 20px; box-shadow: 0 -10px 6px -10px rgba(0, 0, 0, 0.3); }
 
 /* MANAdev extensions ================================================================================ */
 
@@ -2776,7 +2797,13 @@ button.btn-checkout,
 .registration-buttons li,
 .block-account .add-to-links li,
 .license-buttons li,
-.customer-account-edit button.button { width: 100%; }
+.customer-account-edit button.button,
+.m-thankyou .add-to-links li,
+.m-thankyou .add-to-links li a,
+.m-thankyou button.button { width: 100%; }
+.m-thankyou .buttons-set { padding: 0; margin: 0; }
+.m-thankyou .button, 
+.m-thankyou .add-to-links li a { margin: 0; }
 .registration-buttons li a,
 .license-buttons li a,
 .block-account .add-to-links li a { display:block; }
