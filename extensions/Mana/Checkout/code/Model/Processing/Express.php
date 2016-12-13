@@ -26,7 +26,19 @@ class Mana_Checkout_Model_Processing_Express extends Local_Manadev_Model_Checkou
             // save quote's shipping method (and additional options if provided)
             $this->_processShippingMethod();
 
-            return Mage::getSingleton('mana_checkout/processing_express_controller')->placeOrder();
+            if ($requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds()) {
+                $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
+                if ($diff = array_diff($requiredAgreements, $postedAgreements)) {
+                    throw new Mana_Checkout_Exception(
+                        $this->__('Please agree to all the terms and conditions before placing the order.')
+                    );
+                }
+            }
+
+            $controller = new Mana_Checkout_Model_Processing_Express_Controller(Mage::app()->getRequest(),
+                Mage::app()->getResponse());
+
+            return $controller->placeOrder();
         }
         catch (Exception $e) {
             // in case of any error
