@@ -41,6 +41,9 @@ class Mana_Checkout_Model_Processing_Express_Controller extends Mage_Paypal_Cont
             $session = $this->_getCheckoutSession();
             $session->clearHelperData();
 
+            Mage::dispatchEvent('checkout_type_onepage_save_order_after',
+                array('order'=> $this->_checkout->getOrder(), 'quote'=>$this->_getQuote()));
+
             // "last successful quote"
             $quoteId = $this->_getQuote()->getId();
             $session->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);

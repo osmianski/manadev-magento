@@ -2070,14 +2070,21 @@ button.btn-update:hover { background: #dcdcdc; color: #646464; }
 
 /* Mana Checkout */
 
-.checkout-index-index .m-popup { background-color: #f8f8f8; padding: 20px; border-radius: 10px;  }
-.checkout-index-index .m-popup.agreement-1-popup-container { padding: 40px 0 20px 20px; }
-.checkout-index-index .m-popup.login-form--popup-container { padding-bottom: 40px; max-width: 260px !important; }
+.checkout-index-index .m-popup,
+.paypal-express-review .m-popup { background-color: #f8f8f8; padding: 20px; border-radius: 10px;  }
+.checkout-index-index .m-popup.agreement-1-popup-container,
+.paypal-express-review .m-popup.agreement-1-popup-container { padding: 40px 0 20px 20px; }
+.checkout-index-index .m-popup.login-form--popup-container,
+ .paypal-express-review .m-popup.login-form--popup-container { padding-bottom: 40px; max-width: 260px !important; }
 
-.checkout-index-index .m-popup.agreement-1-popup-container .btn-close { position: relative; bottom: 35px; right: 7px; }
-.checkout-index-index .m-popup .btn-close { float: right; }
-.checkout-index-index .m-popup .btn-close a { text-decoration: none; font-size:0; }
-.checkout-index-index .m-popup .btn-close a:after { content: "\e646"; }
+.checkout-index-index .m-popup.agreement-1-popup-container .btn-close,
+.paypal-express-review .m-popup.agreement-1-popup-container .btn-close { position: relative; bottom: 35px; right: 7px; }
+.checkout-index-index .m-popup .btn-close,
+.paypal-express-review .m-popup .btn-close { float: right; }
+.checkout-index-index .m-popup .btn-close a,
+.paypal-express-review .m-popup .btn-close a { text-decoration: none; font-size:0; }
+.checkout-index-index .m-popup .btn-close a:after,
+.paypal-express-review .m-popup .btn-close a:after { content: "\e646"; }
 
 .cart-table .product-name a,
 #checkout-review-table .product-name { font-weight:normal; color: #646464; }
