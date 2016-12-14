@@ -270,9 +270,12 @@ iframe {  max-width: 100%; }
 .col2-set .col-narrow { width:33% !important; }
 .col2-set .col-wide { width:65% !important; }
 
-.col3-set .col-1 { float:left; width:32%; }
-.col3-set .col-2 { float:left; width:32%; margin-left:2%; }
-.col3-set .col-3 { float:right; width:32%; }
+.col3-set .col-1 { float:left; width:33.3%; padding:5px; }
+.col3-set .col-2 { float:left; width:33.3%; padding:5px; }
+.col3-set .col-3 { float:right; width:33.3%; padding:5px; box-sizing: border-box; }
+.col3-set .col-1,
+.col3-set .col-2,
+.col3-set .col-3 { float:right; width:33.3%; padding:5px; box-sizing: border-box; }
 
 .col4-set .col-1 { float:left; width:23.5%; }
 .col4-set .col-2 { float:left; width:23.5%; margin:0 2%; }
@@ -1941,6 +1944,12 @@ margin-left: -68px;
 .page .main .m-404 img { max-width:100%; position: relative; right: 1px; top: 16px; }
 .page .main .m-404 span { font-size:40px; position: relative; top:40px; color: black; }
 .cms-index-noroute .page .main h1 { padding: 20px 0; }
+
+/* CMS Support Page */
+.cms-support .main img { max-width: 100%; padding-bottom: 20px; }
+.cms-support .main ol { list-style:decimal; padding: 20px; }
+
+
 /* Sitemap */
 .page-sitemap .links { text-align:right; margin:0 8px -22px 0; }
 .page-sitemap .links a { text-decoration:none; position:relative; }
@@ -2871,9 +2880,9 @@ button.btn-checkout,
 .col2-set .col-narrow { width:33%; }
 .col2-set .col-wide { width:65%; }
 
-.col3-set .col-1 { float:left; width:32%; }
-.col3-set .col-2 { float:left; width:32%; margin-left:2%; }
-.col3-set .col-3 { float:right; width:32%; }
+.col3-set .col-1 { float:left; width:33.3%; padding:5px; }
+.col3-set .col-2 { float:left; width:33.3%;  padding:5px;}
+.col3-set .col-3 { float:right; width:33.3%;  padding:5px;}
 
 /* All mobile ===================================================================== */
 @media (max-width: 1014px) {
