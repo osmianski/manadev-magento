@@ -390,7 +390,8 @@ button.button.btn-gray:hover { background: #969696; color: #fff; }
 .header .m-guest-book blockquote { border:none; margin:0; padding:0; }
 .header .guest-date,
 .header .guest-name,
-.header .guest-url { display: none; }
+.header .guest-url, 
+.header .guest-info { display: none; }
 .header .quote div p { margin: 0; line-height:0; }
 .guest-url a { overflow-wrap: break-word; }
 /* ======================================================================================= */
@@ -1356,7 +1357,7 @@ button.btn-user-guide:after { content: "\e6b7"; }
 .ratings .rating-links .separator { margin:0 2px; }
 .ratings dt {}
 .ratings dd {}
-.rating-box { width:67px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.png) 0 0 repeat-x; text-indent:-999em; overflow:hidden; }
+.rating-box { width:70px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.png) 0 0 repeat-x; text-indent:-999em; overflow:hidden; }
 .rating-box .rating { float:left; height:13px; background:url(../images/bkg_rating.png) 0 100% repeat-x; }
 .ratings .rating-box { float:left; margin-right:3px; }
 .products-grid .ratings .amount { float:right; }

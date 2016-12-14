@@ -29,7 +29,7 @@
                         ... <a href="<?php echo $this->getReadMoreUrl($post) ?>" class="read-more" title="<?php echo $this->__('Read more') ?>"><?php echo $this->__('Read more') ?></a>
                         <?php endif; ?>
                     </blockquote>
-                    <p>
+                    <p class="guest-info">
                     <?php if (Mage::getStoreConfigFlag('manapro_guestbook/date/in_frontend')) : ?>
                         <span class="guest-date"><?php echo $this->escapeHtml(Mage::getSingleton('core/locale')
                             ->date($post->getCreatedAt(), Zend_Date::ISO_8601, null, false)

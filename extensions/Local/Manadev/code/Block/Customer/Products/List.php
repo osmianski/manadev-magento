@@ -58,8 +58,6 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
 
     protected function _prepareLayout()
     {
-        parent::_prepareLayout();
-
         $this->getItems()->load();
         foreach ($this->getItems() as $item) {
             $item->setPurchased($this->getPurchased()->getItemById($item->getPurchasedId()));
