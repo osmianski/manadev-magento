@@ -798,17 +798,18 @@ a.m-twitter { background-position: top right; }
 
 #m-header1 .block { margin:0; padding: 0; }
 #m-header3 p { margin: 10px 0 0; }
+#m-header1 a,
+#m-header2 a,
 #m-header3 a { text-decoration: none; display: inline-block; }
 
 .logo {  }
 .header-container {}
 .header { text-align: center; }
-.header h1 { font-size: 20px; color: #646464; line-height: 33px; margin: 20px 0 0; }
+.header h2 { font-size: 20px; color: #646464; line-height: 33px; margin: 20px 0 0; }
 .header h1 img {  }
 
-.header .logo { text-decoration:none !important; margin-top: 20px;}
+.header .logo { text-decoration:none !important; margin:0; padding:0; }
 .header .logo strong { position:absolute; top:-999em; left:-999em; width:0; height:0; font-size:0; line-height:0; text-indent:-999em; overflow:hidden; }
-.header h1.logo { margin:0; padding:0; }
 .header .welcome-msg { font-weight:bold; float: right; padding: 6px;}
 .header .welcome-msg .m-username{ color:#26b1ed; }
 
@@ -1930,6 +1931,15 @@ margin-left: -68px;
 /* CMS Home Page */
 .cms-home .subtitle {}
 .cms-index-index .subtitle {}
+.line-title {
+    text-align: center;
+    background: url(../images/border.png) 0 60% repeat-x;
+    margin: 30px 0;
+    color: #26b1ed;
+    font-size: 16px;
+    font-weight: bold;
+}
+.line-title mark { background-color: #f0f0f0; padding: 0 10px;     color: #26b1ed; }
 
 /* CMS 404 Page Not Found */
 .cms-index-noroute .page .main { text-align: center; }
