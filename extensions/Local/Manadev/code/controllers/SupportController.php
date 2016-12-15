@@ -178,6 +178,7 @@ class Local_Manadev_SupportController extends Mage_Core_Controller_Front_Action
                 Mage::helper('local_manadev')->__('No recipient configured on System Configuration -> manadev.com Emails -> Support Ticket -> Send Email To')
             );
         } catch (Exception $error) {
+            Mage::logException($error);
             Mage::getSingleton('customer/session')->addError(
                 Mage::helper('local_manadev')->__('Support ticket email sending failed. Please check access to the configured mail server in System Configuration -> System -> Mail Sending Settings.')
             );

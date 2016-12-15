@@ -21,38 +21,41 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                 throw new Exception("API Key '$apiKey' not allowed.");
             }
 
-            if (!($platform = $this->getRequest()->getParam('platform'))) {
-                throw new Exception('No platform');
-            }
-
-            /* @var Local_Manadev_Model_Platform $platformSource */
-            $platformSource = Mage::getModel('local_manadev/platform');
-            $platforms = $platformSource->getOptionArray();
-            if (!isset($platforms[$platform])) {
-                throw new Exception('Unknown platform');
-            }
-
             $res = Mage::getSingleton('core/resource');
             $db = $res->getConnection('read');
-
-            $select = $db->select()
-                ->from(array('a' => 'eav_attribute'), 'attribute_id')
-                ->joinInner(array('t' => 'eav_entity_type'), $db->quoteInto(
-                    "`t`.`entity_type_id` = `a`.`entity_type_id` AND `t`.`entity_type_code` = ?", 'catalog_product'), null)
-                ->where("`a`.`attribute_code` = ?", 'platform');
-
-            $platformAttributeId = $db->fetchOne($select);
-
             $select = $db->select()
                 ->from(array('e' => 'catalog_product_flat_' . Mage::app()->getStore('default')->getId()),
                     array('entity_id', 'demo_description', 'url_key'))
                 ->joinInner(array('price' => 'catalog_product_index_price'), "`price`.`entity_id` = `e`.`entity_id` AND " .
-                    "`price`.`customer_group_id` = 0", 'final_price')
-                ->joinInner(array('platform' => 'catalog_product_entity_int'),
+                    "`price`.`customer_group_id` = 0", 'final_price');
+
+            if ($productId = $this->getRequest()->getParam('product')) {
+                $select->where("`e`.`entity_id` = ?", $productId);
+            }
+            else {
+                if (!($platform = $this->getRequest()->getParam('platform'))) {
+                    throw new Exception('No platform');
+                }
+
+                /* @var Local_Manadev_Model_Platform $platformSource */
+                $platformSource = Mage::getModel('local_manadev/platform');
+                $platforms = $platformSource->getOptionArray();
+                if (!isset($platforms[$platform])) {
+                    throw new Exception('Unknown platform');
+                }
+
+                $platformAttributeId = $db->fetchOne($db->select()
+                    ->from(array('a' => 'eav_attribute'), 'attribute_id')
+                    ->joinInner(array('t' => 'eav_entity_type'), $db->quoteInto(
+                        "`t`.`entity_type_id` = `a`.`entity_type_id` AND `t`.`entity_type_code` = ?", 'catalog_product'), null)
+                    ->where("`a`.`attribute_code` = ?", 'platform'));
+
+                $select->joinInner(array('platform' => 'catalog_product_entity_int'),
                     "`platform`.`entity_id` = `e`.`entity_id` AND ".
                     $db->quoteInto("`platform`.`store_id` = ?", 0) . " AND " .
                     $db->quoteInto("`platform`.`value` = ?", $platform) . " AND " .
                     $db->quoteInto("`platform`.`attribute_id` = ?", $platformAttributeId), null);
+            }
 
             $result = array();
             foreach ($db->fetchAll($select) as $product) {
