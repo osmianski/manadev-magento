@@ -39,6 +39,13 @@ class ManaPro_Guestbook_BookController  extends Mage_Core_Controller_Front_Actio
         $this->renderLayout();
     }
     public function postAction() {
+        // spam protection
+        if (!$this->_validateFormKey()) {
+            $this->_redirectReferer();
+
+            return;
+        }
+
         $post = $this->getRequest()->getPost();
         if ( $post ) {
             $translate = Mage::getSingleton('core/translate');

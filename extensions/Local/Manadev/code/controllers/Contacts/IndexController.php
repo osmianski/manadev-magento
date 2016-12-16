@@ -28,4 +28,14 @@ class Local_Manadev_Contacts_IndexController extends Mage_Contacts_IndexControll
 
         $this->renderLayout();
     }
+
+    public function postAction() {
+        // spam protection
+        if (!$this->_validateFormKey()) {
+            $this->_redirectReferer();
+            return;
+        }
+
+        parent::postAction();
+    }
 }

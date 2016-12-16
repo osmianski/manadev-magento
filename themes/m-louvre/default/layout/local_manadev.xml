@@ -89,9 +89,6 @@ examples on what kind of actions can be applied to referenced blocks.
 
     <m_domain_registration>
         <update handle="customer_account"/>
-    	<reference name="head">
-        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
-        </reference>
 		<reference name="my.account.wrapper">
 			<block name="domain_registration" type="local_manadev/domain_registration" template="local/manadev/domain/registration.phtml" />
 		</reference>
@@ -107,19 +104,10 @@ examples on what kind of actions can be applied to referenced blocks.
 
 	<local_manadev_support_openticket>
         <update handle="customer_account"/>
-		<reference name="head">
-        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
-        </reference>
 		<reference name="my.account.wrapper">
 			<block name="support_ticket_form" type="local_manadev/support_ticketForm" template="local/manadev/support/ticketForm.phtml" />
 		</reference>
 	</local_manadev_support_openticket>
-
-	<contacts_index_index>
-		<reference name="head">
-        	<action method="addItem"><type>skin_css</type><name>css/local_manadev.css</name><params/></action>
-        </reference>
-	</contacts_index_index>
 
 	<catalog_product_view>
 		<reference name="product.info">

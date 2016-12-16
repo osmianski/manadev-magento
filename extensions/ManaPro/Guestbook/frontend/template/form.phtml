@@ -11,6 +11,7 @@
     '<a id="form-collapse-expand" href="#">'.$this->__('share').'</a>') ?></p>
 <div id="form-container" class="hidden">
 <form action="<?php echo $this->getFormAction(); ?>" id="form" method="post">
+    <?php echo $this->getBlockHtml('formkey'); ?>
     <div class="fieldset">
         <ul class="form-list">
         <?php $_open = false; ?>
