@@ -25,7 +25,7 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             $db = $res->getConnection('read');
             $select = $db->select()
                 ->from(array('e' => 'catalog_product_flat_' . Mage::app()->getStore('default')->getId()),
-                    array('entity_id', 'demo_description', 'url_key'))
+                    array('entity_id', 'demo_description', 'url_key', 'name'))
                 ->joinInner(array('price' => 'catalog_product_index_price'), "`price`.`entity_id` = `e`.`entity_id` AND " .
                     "`price`.`customer_group_id` = 0", 'final_price');
 
@@ -61,6 +61,7 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             foreach ($db->fetchAll($select) as $product) {
                 /* @var Mage_Catalog_Model_Product $product */
                 $result[$product['entity_id']] = array(
+                    'name' => $product['name'],
                     'price' => $product['final_price'],
                     'url' => Mage::getUrl(null, array('_direct' => $product['url_key'] .
                         Mage::getStoreConfig('catalog/seo/product_url_suffix'))),
