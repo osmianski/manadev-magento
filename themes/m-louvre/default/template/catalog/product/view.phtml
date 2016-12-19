@@ -72,9 +72,7 @@
                 <meta itemprop="description" content="<?php echo $_product->getData('meta_description') ?>"/>
                 <meta itemprop="image" content="<?php echo $this->helper('catalog/image')->init($_product, 'image') ?>"/>
 
-                <?php Mage::register('rating_schema', true, true); ?>
                 <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-                <?php Mage::unregister('rating_schema'); ?>
 
             <div id="product-header" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                 <?php if ($this->canEmailToFriend()): ?>
@@ -92,7 +90,7 @@
                 <meta itemprop="priceCurrency" content="EUR"/>
                 <meta itemprop="price" content="<?php echo $_product->getFinalPrice() ?>"/>
                 <section itemprop="seller" itemscope itemtype="https://schema.org/Organization">
-                    <meta itemprop="name" content="Manadev. Premium Magento Extensions and Themes"/>
+                    <meta itemprop="name" content="<?php echo Mage::getStoreConfig('local_manadev/meta/organization') ?>"/>
                 </section>
 
                 <div class="clearer"></div>

@@ -26,6 +26,6 @@
 ?>
 <div class="superfooter" itemscope itemtype="https://schema.org/WebSite">
     <?php echo $this->getChildHtml('super_links') ?>
-    <meta itemprop="name" content="Manadev. Premium Magento Extensions and Themes" />
+    <meta itemprop="name" content="<?php echo Mage::getStoreConfig('local_manadev/meta/website') ?>" />
     <meta itemprop="url" content="<?php echo Mage::getUrl() ?>" />
 </div>
