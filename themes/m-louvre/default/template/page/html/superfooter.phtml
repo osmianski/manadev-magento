@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="superfooter">
+<div class="superfooter" itemscope itemtype="https://schema.org/WebSite">
     <?php echo $this->getChildHtml('super_links') ?>
+    <meta itemprop="name" content="Manadev. Premium Magento Extensions and Themes" />
+    <meta itemprop="url" content="<?php echo Mage::getUrl() ?>" />
 </div>

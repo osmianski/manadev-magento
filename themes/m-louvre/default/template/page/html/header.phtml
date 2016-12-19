@@ -27,22 +27,11 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
-<div class="responsive-indicators">
-    <span class="i-any-409">Phones Portrait 409- | </span>
-    <span class="i-410px-589">Phone Landscape 410+ 589-| </span>
-    <span class="i-590-759">Note Landscape 590+ 759-| </span>
-    <span class="i-760px-839">Tablet Portrait and Landscape 760+ 839-| </span>
-    <span class="i-840-any">Tablet Landscape 840+ |</span>
-    <span class="i-any-999">All mobile 999- | </span>
-    <span class="i-1015-any">Default 1015+ |</span>
-    <span class="i-1190-any">Large screen 1190+ | </span>
-    <span class="i-1365-any">Large screen 1365+ |</span>
-    <span class="i-1540-any">Large screen 1540+ |</span>
-    <span class="i-1715-any">Large screen 1715+ |</span>
-    <span class="i-1890-any">Large screen 1890+ |</span>
-</div>
 <div class="header-container">
-    <div class="header">
+    <div class="header" itemscope itemtype="https://schema.org/Organization">
+        <meta itemprop="url" content="<?php echo Mage::getUrl() ?>" />
+        <meta itemprop="name" content="Manadev. Premium Magento Extensions and Themes" />
+        <meta itemprop="logo" content="<?php echo $this->getLogoSrc() ?>" />
         <div class="quick-access">
             <div class="forms-box">
                 <?php echo $this->getChildHtml('topSearch') ?>

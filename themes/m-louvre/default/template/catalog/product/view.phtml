@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+    /* @var Mage_Catalog_Block_Product_View $this */
     /* @var $_theme Mana_Theme_Helper_Data */
     $_theme = Mage::helper('mana_theme');
 
@@ -39,7 +40,7 @@
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<div class="product-view <?php echo $_product->getTypeId() ?>-type <?php echo $_theme->getListItemClass($this, $_product) ?>">
+<div itemscope itemtype="https://schema.org/Product" class="product-view <?php echo $_product->getTypeId() ?>-type <?php echo $_theme->getListItemClass($this, $_product) ?>">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
@@ -53,7 +54,7 @@
                     echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product, $_imgWidth) ?>
                 <p class="product-image">
                     <?php
-                        $_img = '<img id="image" width="' . $_imgWidth . '" height="' . $_imgWidth . '" src="' . 
+                        $_img = '<img id="image" width="' . $_imgWidth . '" height="' . $_imgWidth . '" src="' .
                             $this->helper('catalog/image')->init($_product, 'image')->resize($_imgWidth, $_imgWidth) .
                             '" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
                         echo $_helper->productAttribute($_product, $_img, 'image');
@@ -64,12 +65,18 @@
             <?php endif; ?>
 
                 <div class="product-name">
-                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                    <h1 itemprop="name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
                 </div>
-    
+                <meta itemprop="sku" content="<?php echo $_product->getSku() ?>" />
+                <meta itemprop="url" content="<?php echo Mage::helper('catalog/product')->getProductUrl($_product) ?>" />
+                <meta itemprop="description" content="<?php echo $_product->getData('meta_description') ?>"/>
+                <meta itemprop="image" content="<?php echo $this->helper('catalog/image')->init($_product, 'image') ?>"/>
+
+                <?php Mage::register('rating_schema', true, true); ?>
                 <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-    
-            <div id="product-header">
+                <?php Mage::unregister('rating_schema'); ?>
+
+            <div id="product-header" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                 <?php if ($this->canEmailToFriend()): ?>
                     <span class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></span>
                 <?php endif; ?>
@@ -80,6 +87,13 @@
                 <?php //echo $this->getChildHtml('alert_urls') ?>
     
                 <?php echo $this->getPriceHtml($_product) ?>
+                <link itemprop="availability" href="https://schema.org/InStock">
+                <link itemprop="itemCondition" href="https://schema.org/NewCondition">
+                <meta itemprop="priceCurrency" content="EUR"/>
+                <meta itemprop="price" content="<?php echo $_product->getFinalPrice() ?>"/>
+                <section itemprop="seller" itemscope itemtype="https://schema.org/Organization">
+                    <meta itemprop="name" content="Manadev. Premium Magento Extensions and Themes"/>
+                </section>
 
                 <div class="clearer"></div>
 

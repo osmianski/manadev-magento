@@ -10,7 +10,7 @@
 <?php if($this->getCount()) : ?>
     <?php foreach ($this->getLinks() as $link) : ?>
     <li>
-        <a href="<?php echo $link->getUrl() ?>" title="<?php echo $link->getTitle() ?>"
+        <a itemprop="sameAs" href="<?php echo $link->getUrl() ?>" title="<?php echo $link->getTitle() ?>"
             class="<?php echo $link->getCss() ?>"
             <?php if ($link->getOpenInNewWindow()): ?>target="_blank"<?php endif ?>
         >

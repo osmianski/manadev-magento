@@ -5,12 +5,21 @@
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
  */
+
+ /* @var ManaProduct_Review_Block_Helper $this */
 ?>
 <?php if ($this->getReviewsCount()): ?>
 <div class="ratings">
     <?php if ($this->getRatingSummary()): ?>
     <div class="rating-box">
-        <div class="rating" style="width:<?php echo $this->getRatingSummary() ?>%"></div>
+        <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"
+            class="rating" style="width:<?php echo $this->getRatingSummary() ?>%">
+            <meta itemprop="ratingValue" content="<?php echo round($this->getRatingSummary() / 100 * 5, 1) ?>" />
+            <meta itemprop="reviewCount" content="<?php echo $this->getReviewsCount() ?>" />
+            <meta itemprop="ratingCount" content="<?php echo $this->getReviewsCount() ?>" />
+            <meta itemprop="bestRating" content="5" />
+            <meta itemprop="worstRating" content="1" />
+        </div>
     </div>
     <?php endif;?>
     <p class="rating-links">
