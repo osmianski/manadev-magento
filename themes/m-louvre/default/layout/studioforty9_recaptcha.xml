@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Studioforty9_Recaptcha
+ *
+ * @category  Studioforty9
+ * @package   Studioforty9_Recaptcha
+ * @author    StudioForty9 <info@studioforty9.com>
+ * @copyright 2015 StudioForty9 (http://www.studioforty9.com)
+ * @license   https://github.com/studioforty9/recaptcha/blob/master/LICENCE BSD
+ * @version   1.5.7
+ * @link      https://github.com/studioforty9/recaptcha
+ */
+-->
+<layout version="0.1.0">
+
+    <contacts_index_index>
+        <reference name="contactForm">
+            <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+        </reference>
+    </contacts_index_index>
+
+    <review_product_list>
+        <reference name="product.review.form">
+            <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+        </reference>
+    </review_product_list>
+
+    <customer_account_login>
+        <reference name="customer_form_login">
+            <block type="core/text_list" name="form.additional.info">
+                <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+            </block>
+        </reference>  
+    </customer_account_login>
+    
+    <customer_account_forgotpassword>
+        <reference name="forgotPassword">
+            <block type="core/text_list" name="form.additional.info">
+                <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+            </block>
+        </reference>
+    </customer_account_forgotpassword>
+    
+    <customer_account_create>
+        <reference name="customer_form_register">
+            <block type="core/text_list" name="form.additional.info">
+                <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+            </block>
+        </reference>
+    </customer_account_create>
+
+    <sendfriend_product_send>
+        <reference name="sendfriend.send">
+            <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+        </reference>
+    </sendfriend_product_send>
+
+    <catalog_product_view>
+        <reference name="product.m_review.form">
+            <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+        </reference>
+    </catalog_product_view>
+
+    <manapro_guestbook_book_index>
+        <reference name="form">
+            <block type="studioforty9_recaptcha/explicit" name="studioforty9.recaptcha.explicit" template="studioforty9/recaptcha/explicit.phtml"/>
+        </reference>
+    </manapro_guestbook_book_index>
+
+</layout>

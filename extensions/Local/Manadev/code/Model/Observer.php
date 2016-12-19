@@ -276,6 +276,14 @@ class Local_Manadev_Model_Observer {
 
     }
 
+    public function addRecaptchaRoutes($observer) {
+        /* @var Studioforty9_Recaptcha_Model_Routes $routes */
+        $routes = $observer->getEvent()->getRoutes();
+
+        $routes->add('catalog_product_view', 'Manadev Reviews');
+        $routes->add('manapro_guestbook_book_index', 'Manadev_Guest Book Posts');
+    }
+
     public function saveDownloadableOrderItem($observer) {
         $orderItem = $observer->getEvent()->getItem();
         if (!$orderItem->getId()) {

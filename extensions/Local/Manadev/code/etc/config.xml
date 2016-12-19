@@ -247,6 +247,14 @@
                     </local_manadev>
                 </observers>
             </controller_action_predispatch_adminhtml_customer_group_save>
+            <studioforty9_recaptcha_routes>
+                <observers>
+                    <local_manadev>
+                        <class>local_manadev/observer</class>
+                        <method>addRecaptchaRoutes</method>
+                    </local_manadev>
+                </observers>
+            </studioforty9_recaptcha_routes>
 		</events>
 		<!-- BASED ON SNIPPET: Resources/Installation script support (config.xml) -->
 		<!-- This tells Magento to analyze sql/local_manadev_setup directory for install/upgrade scripts. 
