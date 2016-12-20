@@ -41,7 +41,7 @@ class Mana_Social_Block_Facebook_Meta extends Mage_Core_Block_Template
                 ->setType('website')
                 ->setFbUrl($url)
                 ->setSiteName(Mage::getStoreConfig('general/store_information/name'))
-                ->setDescription($_product->getShortDescription())
+                ->setDescription($_product->getMetaDescription())
                 ->setMediaUrl($mediaUrl);
         }
         else {

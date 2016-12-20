@@ -44,7 +44,18 @@ class Mana_Content_BookController extends Mage_Core_Controller_Front_Action {
 
             $head = $this->getLayout()->getBlock('head');
             if ($head) {
-                $head->setTitle($bookPage->getMetaTitle());
+                $title = '';
+                $crumbs = $bookPage->getParentPages();
+                for ($x = 0; $x < count($crumbs); $x++) {
+                    if (in_array($crumbs[$x]['meta_title'], array('General'))) {
+                        continue;
+                    }
+                    if ($title) {
+                        $title .= ' - ';
+                    }
+                    $title .= $crumbs[$x]['meta_title'];
+                }
+                $head->setTitle($title);
                 $head->setKeywords($bookPage->getMetaKeywords());
                 $head->setDescription($bookPage->getMetaDescription());
                 if($canonicalUrl = Mage::getResourceModel('mana_content/page_globalCustomSettings')->getReferencePageUrl($bookPage->getId())) {

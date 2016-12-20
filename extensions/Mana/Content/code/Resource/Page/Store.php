@@ -48,7 +48,13 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
 
     public function getChildPages($parents) {
         $ids = array();
+        $store_id = (Mage::app()->getStore()->isAdmin()) ? $this->adminHelper()->getStore()->getId(): Mage::app()->getStore()->getId();
+
         foreach ($parents as $parent) {
+            if ($parent->getStoreId()) {
+                $store_id = $parent->getStoreId();
+            }
+
             if(is_null($parent->getData('page_global_custom_settings_id'))) {
                 $db = $this->getReadConnection();
                 $select = $db->select();
@@ -62,8 +68,6 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
         }
         $select = $this->_select();
         $select->where("`ti_gcs`.`parent_id` IN (?)", $ids);
-
-        $store_id = (Mage::app()->getStore()->isAdmin()) ? $this->adminHelper()->getStore()->getId(): Mage::app()->getStore()->getId();
 
         $select->where("`mps`.`store_id` = ?", $store_id);
 
@@ -90,6 +94,7 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
             'id' => '`mps`.`id`',
             'parent_id' => '`ti_gcs`.`parent_id`',
             'title' => '`mps`.`title`',
+            'meta_title' => '`mps`.`meta_title`',
         );
         $select = $this->_select();
         $select->columns($this->dbHelper()->wrapIntoZendDbExpr($columns));
@@ -100,6 +105,7 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
         $result[] = array(
             'id' => $parent['id'],
             'title' => $parent['title'],
+            'meta_title' => $parent['meta_title'],
         );
 
         while (true == true) {
@@ -113,6 +119,7 @@ class Mana_Content_Resource_Page_Store extends Mana_Content_Resource_Page_Abstra
                 $result[] = array(
                     'id' => $parent['id'],
                     'title' => $parent['title'],
+                    'meta_title' => $parent['meta_title'],
                 );
             }
 

@@ -151,7 +151,7 @@
     <!-- Default layout, loads most of the pages -->
     <default translate="label" module="page">
         <reference name="root">
-            <action method="setTemplate"><template>page/3columns.phtml</template></action>
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
     </default>
 
@@ -274,40 +274,12 @@
         </reference>
     </contacts_index_index>
 
-    <!-- Email To Friend Page -->
-    <catalog_product_send translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-        </reference>
-    </catalog_product_send>
-
-    <!-- Sitemap Page (Common) -->
-    <catalog_seo_sitemap translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-        </reference>
-    </catalog_seo_sitemap>
-
     <!-- Catalog Seo Sitemap (Category List) -->
     <catalog_seo_sitemap_category translate="label">
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
     </catalog_seo_sitemap_category>
-
-    <!-- Catalog Seo Sitemap (Category Tree) when set in System->Configuration->Catalog->Sitemap -->
-    <catalog_seo_sitemap_category_tree translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/3columns.phtml</template></action>
-        </reference>
-    </catalog_seo_sitemap_category_tree>
-
-    <!-- Catalog Seo Sitemap (Product List) -->
-    <catalog_seo_sitemap_product translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-        </reference>
-    </catalog_seo_sitemap_product>
 
     <!-- Quick Search Results Page -->
     <catalogsearch_result_index translate="label">
@@ -323,26 +295,12 @@
         </reference>
     </catalogsearch_advanced_index>
 
-    <!-- Advanced search results -->
-    <catalogsearch_advanced_result translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/3columns.phtml</template></action>
-        </reference>
-    </catalogsearch_advanced_result>
-
     <!-- Popular Search Terms Page -->
     <catalog_seo_searchterm_popular translate="label">
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
     </catalog_seo_searchterm_popular>
-
-    <!-- Tag List Page -->
-    <tag_list_index translate="label">
-        <reference name="root">
-            <action method="setTemplate"><template>page/3columns.phtml</template></action>
-        </reference>
-    </tag_list_index>
 
     <!-- Gueat Book -->
     <manapro_guestbook_book_index translate="label" module="manapro_guestbook">

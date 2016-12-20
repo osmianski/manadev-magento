@@ -40,6 +40,9 @@ class Mana_Sitemap_Rewrite_Sitemap extends Mage_Sitemap_Model_Sitemap {
         // invoke sitemap generators for all MANAdev extensions
         Mage::helper('mana_sitemap')->generateManadevSitemapEntries($io, $baseUrl, $storeId, $date);
 
+        $this->io = $io;
+        Mage::dispatchEvent('sitemap_add_xml_block_to_the_end', array('sitemap_object' => $this));
+
         $io->streamWrite('</urlset>');
         $io->streamClose();
 
@@ -47,5 +50,10 @@ class Mana_Sitemap_Rewrite_Sitemap extends Mage_Sitemap_Model_Sitemap {
         $this->save();
 
         return $this;
+    }
+
+    protected $io;
+    public function sitemapFileAddLine($xml) {
+        $this->io->streamWrite($xml);
     }
 }

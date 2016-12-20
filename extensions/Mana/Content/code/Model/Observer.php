@@ -40,4 +40,42 @@ class Mana_Content_Model_Observer {
     public function markUpdatableHtml($observer) {}
     public function ajaxCmsIndex($observer) {}
     public function ajaxCmsPage($observer) {}
+
+    public function addToSitemap($observer) {
+        $sitemapObject = $observer->getSitemapObject();
+
+        /* @var Mana_Content_Resource_Page_Store_Collection $collection */
+        $collection = Mage::getResourceModel("mana_content/page_store_collection");
+        $collection->addFieldToFilter('store_id', $sitemapObject->getStoreId());
+        $collection->addFieldToFilter('main_table.is_active', 1);
+        $collection->addOrder('position', Varien_Data_Collection_Db::SORT_ORDER_ASC);
+
+        $db = $collection->getConnection();
+        $schema = $this->seoHelper()->getActiveSchema($sitemapObject->getStoreId());
+
+        $collection->getSelect()
+            ->joinInner(array('url' => 'm_seo_url'),
+                "`url`.`book_page_id` = `main_table`.`id` AND `url`.`status` = 'active' AND " .
+                $db->quoteInto("`url`.`type` = ? AND", 'book_page') .
+                $db->quoteInto("`url`.`schema_id` = ?", $schema->getId()), null)
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns(new Zend_Db_Expr($db->quoteInto("CONCAT(`url`.`final_url_key`, ?)", '')));
+
+        $baseUrl = Mage::app()->getStore($sitemapObject->getStoreId())->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+
+        foreach($db->fetchCol($collection->getSelect()) as $url) {
+            $xml = sprintf('<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+                htmlspecialchars($baseUrl . $url),
+                Mage::getSingleton('core/date')->gmtDate('Y-m-d'),
+                'weekly',
+                1.0
+            );
+
+            $sitemapObject->sitemapFileAddLine($xml);
+        }
+    }
+
+    public function seoHelper() {
+        return Mage::helper('mana_seo');
+    }
 }

@@ -72,6 +72,7 @@ Default layout, loads most of the pages
             </block>
 
             <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />
+            <block type="page/html_cookieNotice" name="cookie_notice" as="cookie_notice" template="page/html/cookienotice.phtml" />
 
             <block type="page/html_header" name="header" as="header">
                 <block type="page/template_links" name="top.links" as="topLinks"/>

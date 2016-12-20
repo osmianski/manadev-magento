@@ -80,6 +80,14 @@
                     </mana_content>
                 </observers>
             </m_ajax_options>
+            <sitemap_add_xml_block_to_the_end>
+                <observers>
+                    <mana_content>
+                        <class>mana_content/observer</class>
+                        <method>addToSitemap</method>
+                    </mana_content>
+                </observers>
+            </sitemap_add_xml_block_to_the_end>
         </events>
     </global>
     <adminhtml>
