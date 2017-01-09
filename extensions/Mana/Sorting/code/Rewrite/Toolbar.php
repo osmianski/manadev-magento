@@ -23,10 +23,16 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
             }
         }
 
-        foreach ($availableSortBys as $sortBy) {
-            if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
-                $orders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
+        if (count($availableSortBys) > 0) {
+            $newOrders = array();
+            foreach ($availableSortBys as $sortBy) {
+                if ($this->sortingHelper()->isManaSortingOption($sortBy)) {
+                    $newOrders[$sortBy] = $this->sortingHelper()->getManaSortingOptionLabel($sortBy);
+                } else {
+                    $newOrders[$sortBy] = $orders[$sortBy];
+                }
             }
+            $orders = $newOrders;
         }
 
         parent::setAvailableOrders($orders);
