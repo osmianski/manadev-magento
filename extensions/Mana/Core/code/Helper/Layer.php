@@ -75,7 +75,9 @@ class Mana_Core_Helper_Layer extends Mage_Core_Helper_Abstract {
         if ($this->_mode) {
             return $this->_mode;
         }
-        elseif (in_array(Mage::helper('mana_core')->getRoutePath(), array('catalogsearch/result/index', 'manapro_filterajax/search/index'))) {
+        elseif (in_array(Mage::helper('mana_core')->getRoutePath(), array(
+            'catalogsearch/result/index', 'manapro_filterajax/search/index', 'autocomplete/result/index')))
+        {
             return 'search';
         }
         else {

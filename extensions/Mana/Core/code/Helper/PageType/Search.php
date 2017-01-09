@@ -37,4 +37,9 @@ class Mana_Core_Helper_PageType_Search extends Mana_Core_Helper_PageType  {
     public function getPageTypeId() {
         return 'search';
     }
+
+    public function matchRoute($route) {
+        return parent::matchRoute($route) || $route == 'autocomplete/result/index';
+    }
+
 }
