@@ -277,7 +277,7 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
                     $.globalEval(this.innerHTML);
                 });
 
-                if (typeof ProductMediaManager != 'undefined') {
+                if (typeof ProductMediaManager != 'undefined' && typeof ConfigurableMediaImages != 'undefined') {
                     $(document).trigger('product-media-loaded', ProductMediaManager);
                 }
 
