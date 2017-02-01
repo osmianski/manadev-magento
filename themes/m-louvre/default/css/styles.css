@@ -693,6 +693,7 @@ p.note-msg:before, .note-msg ul li:before { content: "\e717"; color:#DAECF8; }
 }
 .data-table td.value {}
 
+
 /* Shopping cart total summary row expandable to details */
 tr.summary-total { cursor:pointer; }
 tr.summary-total td {}
@@ -2993,6 +2994,9 @@ h6            { font-size:15px; }
 .sales-order-view .data-table tfoot tr td { display: inline-block; width: auto; }
 .sales-order-view .data-table tfoot tr td.last { min-width: 80px; }
 
+.cookie-table thead { display:none; }
+.cookie-table tr { display:block; clear:both; overflow: hidden; }
+.cookie-table td { display:block; float: left; margin: 0; }
 
 }
 
@@ -3119,3 +3123,5 @@ h6            { font-size:15px; }
     padding-top: 35px;
     box-sizing: border-box;
 }
+
+.notice-cookie { background-color: #f6f6f6; border-radius: 0 0 10px 10px; padding-bottom: 10px; margin-bottom: 10px; }
