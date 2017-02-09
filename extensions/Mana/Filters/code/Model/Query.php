@@ -42,7 +42,21 @@ class Mana_Filters_Model_Query extends Varien_Object
         if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.9.3') &&
             is_a($this->_productCollection, 'Mage_CatalogSearch_Model_Resource_Fulltext_Collection'))
         {
-            $this->_productCollection->getSize();
+            $class = new ReflectionClass($this->_productCollection);
+            $isSearchFiltersApplied = $class->getProperty('_isSearchFiltersApplied');
+            $applySearchFilters = $class->getMethod('_applySearchFilters');
+
+            if (method_exists($isSearchFiltersApplied, 'setAccessible')) {
+                $isSearchFiltersApplied->setAccessible(true);
+                $applySearchFilters->setAccessible(true);
+
+                if (!$isSearchFiltersApplied->getValue($this->_productCollection)) {
+                    $applySearchFilters->invoke($this->_productCollection);
+                }
+            }
+            else {
+                $this->_productCollection->getSize();
+            }
         }
 
         $this->_productCollectionPrototype = clone $this->_productCollection;
