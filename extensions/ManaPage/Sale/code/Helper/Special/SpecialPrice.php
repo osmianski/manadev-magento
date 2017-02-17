@@ -13,13 +13,15 @@ class ManaPage_Sale_Helper_Special_SpecialPrice extends Mana_Page_Helper_Special
     public function join($select, $xml) {
         $this->eavHelper()->joinAttribute($select, 'special_from_date');
         $this->eavHelper()->joinAttribute($select, 'special_to_date');
+        $this->eavHelper()->joinAttribute($select, 'special_price');
     }
 
     public function where($xml) {
         $from = $this->eavHelper()->attributeValue('special_from_date');
         $to = $this->eavHelper()->attributeValue('special_to_date');
+        $price = $this->eavHelper()->attributeValue('special_price');
         $today = "'" . Mage::app()->getLocale()->date()->toString(Varien_Date::DATE_INTERNAL_FORMAT) . "'";
 
-        return "$from <= $today AND ($today <= $to OR $to IS NULL)";
+        return "$price IS NOT NULL AND $from <= $today AND ($today <= $to OR $to IS NULL)";
     }
 }
