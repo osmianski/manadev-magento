@@ -43,6 +43,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </recover_scroll_progress_on_back>
+                        <pages_with_scroll_position_recovery translate="label comment">
+                            <label>Number of product list pages on which recovery of product lst is enabled</label>
+                            <comment>Leave this setting empty or 0 to recover product list scrolling position on all pages</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pages_with_scroll_position_recovery>
                     </fields>
                 </infinitescrolling>
             </groups>

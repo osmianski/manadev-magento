@@ -29,7 +29,15 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                         return false;
                     }
                 });
-                location.hash = "index=" + index + "&page=" + Engine.page;
+
+                var pageCount = Engine.getNumberOfPagesWithScrollPositionRecovery();
+                var pageSize = Engine.limit;
+                if (!pageCount || index < pageCount * pageSize) {
+                    location.hash = "index=" + index + "&page=" + Engine.page;
+                }
+                else {
+                    location.hash = 'index=0&page=0';
+                }
             });
 
             var currentUrl = location.href;

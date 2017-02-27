@@ -119,6 +119,9 @@ function ($, Block, ajax, urlTemplate, layout, config, json) {
         getEffectDuration: function() {
             return this.$().data('effect-duration');
         },
+        getNumberOfPagesWithScrollPositionRecovery: function () {
+            return this.$().data('pages-with-scroll-position-recovery');
+        },
 
         // endregion
 

@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_InfiniteScrolling>
-            <version>17.01.2611</version>
+            <version>17.02.2712</version>
         </Mana_InfiniteScrolling>
     </modules>
     <global>
@@ -63,6 +63,7 @@
                 <pages_per_show_more>5</pages_per_show_more>
                 <effect_duration>300</effect_duration>
                 <recover_scroll_progress_on_back>1</recover_scroll_progress_on_back>
+                <pages_with_scroll_position_recovery>5</pages_with_scroll_position_recovery>
             </infinitescrolling>
         </mana_infinitescrolling>
     </default>
