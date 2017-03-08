@@ -142,7 +142,7 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             $collection = Mage::getResourceModel('mana_sorting/method_collection');
         } else {
             $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
-            $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+            $collection->addFieldToFilter('store_id', $this->adminHelper()->getStore()->getId());
         }
         $collection->filterActive();
         return $collection;
