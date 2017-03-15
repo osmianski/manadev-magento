@@ -150,7 +150,7 @@ class Mana_Filters_Model_Solr_Price extends Mana_Filters_Model_Filter_Price
         $intervalParams = $this->getInterval();
         $intervalParams = $intervalParams ? ($intervalParams[0] . '-' . $intervalParams[1]) : '';
         $uniquePart = strtoupper(md5(serialize(
-            $searchParams . '_' . $this->getCurrencyRate() . '_' . $intervalParams . '_' . $this->isApplied()
+            json_encode($searchParams) . '_' . $this->getCurrencyRate() . '_' . $intervalParams . '_' . $this->isApplied()
         )));
         $cacheKey = 'PRICE_SEPARATORS_' . $this->getLayer()->getStateKey() . '_' . $uniquePart;
 
