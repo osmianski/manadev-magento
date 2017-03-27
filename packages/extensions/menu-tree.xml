@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_menu-tree</name>
+    <name>menu-tree</name>
     <part name="Mana/Core"/>
     <part name="Mana/Menu"/>
 </config>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_cms-pro</name>
+    <name>cms-pro</name>
     <part name="Mana/Core"/>
     <part name="Mana/Db"/>
     <part name="Mana/Admin"/>

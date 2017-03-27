@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev-super-product-name</name>
+    <name>super-product-name</name>
     <part name="Mana/Core"/>
     <part name="ManaPro/SuperProductName"/>
 </config>

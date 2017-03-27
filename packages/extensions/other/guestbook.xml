@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_guestbook</name>
+    <name>guest-book</name>
     <part name="Mana/Admin" />
     <part name="Mana/Core"/>
     <part name="Mana/Db"/>

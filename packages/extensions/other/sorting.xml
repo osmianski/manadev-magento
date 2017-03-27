@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_sorting</name>
+    <name>advanced-sorting</name>
     <part name="Mana/Core"/>
     <part name="Mana/Db"/>
     <part name="Mana/Admin"/>

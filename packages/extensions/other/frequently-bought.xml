@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <name>extensions/manadev_frequently-bought-together</name>
+    <name>frequently-bought-together</name>
     <part name="Mana/Core"/>
     <part name="Mana/ProductLists"/>
     <part name="ManaPro/ProductPlusProduct"/>
