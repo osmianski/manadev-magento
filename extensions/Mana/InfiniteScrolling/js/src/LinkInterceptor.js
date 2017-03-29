@@ -103,7 +103,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                             }
 
                         }, 100); // timeout to load the images
-                }, true);
+                });
             }
         }
     });
