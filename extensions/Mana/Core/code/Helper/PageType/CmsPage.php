@@ -42,7 +42,7 @@ class Mana_Core_Helper_PageType_CmsPage extends Mana_Core_Helper_PageType  {
             'meta_title' => $page->getData('title'),
             'meta_description' => $page->getData('meta_description'),
             'meta_keywords' => $page->getData('meta_keywords'),
-            'title' => $page->getData('title'),
+            'title' => $page->getData('content_heading'),
             'description' => $page->getData('content'),
         );
         return array_merge(parent::getPageContent(), $result);
