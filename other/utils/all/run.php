@@ -1,4 +1,4 @@
-<?php if(in_array($_SERVER['REMOTE_ADDR'], array('78.60.93.251', '127.0.0.1')) || strpos($_SERVER['REMOTE_ADDR'], '192.168.') === 0) : ?>
+<?php if(in_array($_SERVER['REMOTE_ADDR'], array('78.61.240.87', '127.0.0.1')) || strpos($_SERVER['REMOTE_ADDR'], '192.168.') === 0) : ?>
 	<?php 
 	$workPath = dirname(__FILE__);
 	if (!($mageLocalXml = simplexml_load_string(file_get_contents($workPath.'/app/etc/local.xml')))) {
