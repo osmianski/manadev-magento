@@ -18,7 +18,7 @@ ManaPro.filterSuperSlider = function(id, o) {
 
     function _parse(stringValue) {
         if (typeof stringValue != 'undefined') {
-            stringValue = stringValue.replace(/,([^,]*)$/, '.$1');
+            stringValue = stringValue.toString().replace(/,([^,]*)$/, '.$1');
         }
         return parseFloat(stringValue);
     }
