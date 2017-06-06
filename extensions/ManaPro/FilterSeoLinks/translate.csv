@@ -39,4 +39,6 @@
 " and "," and "
 " Applied filters: "," Applied filters: "
 " (Page {$page})"," (Page {$page})"
+"Sorting Applied","Sorting Applied"
+"Product per Page Limit Applied","Product per Page Limit Applied"
 "",""

@@ -12,7 +12,7 @@
 		<ManaPro_FilterSeoLinks>
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-		    <version>15.12.02.13</version>
+		    <version>17.06.0608</version>
 		</ManaPro_FilterSeoLinks>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -287,6 +287,14 @@
                 <title>Second and further pages</title>
                 <model>manapro_filterseolinks/noindex_page</model>
             </page>
+            <sort_by translate="title" module="manapro_filterseolinks">
+                <title>Sorting Applied</title>
+                <model>manapro_filterseolinks/noindex_sortBy</model>
+            </sort_by>
+            <show translate="title" module="manapro_filterseolinks">
+                <title>Product per Page Limit Applied</title>
+                <model>manapro_filterseolinks/noindex_show</model>
+            </show>
         </noindex>
         <follow>
             <empty translate="title" module="manapro_filterseolinks">
@@ -329,6 +337,14 @@
                 <title>Second and further pages</title>
                 <model>manapro_filterseolinks/follow_page</model>
             </page>
+            <sort_by translate="title" module="manapro_filterseolinks">
+                <title>Sorting Applied</title>
+                <model>manapro_filterseolinks/follow_sortBy</model>
+            </sort_by>
+            <show translate="title" module="manapro_filterseolinks">
+                <title>Product per Page Limit Applied</title>
+                <model>manapro_filterseolinks/follow_show</model>
+            </show>
         </follow>
 	</manapro_filterseolinks>
 </config>
