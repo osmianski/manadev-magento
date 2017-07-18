@@ -226,7 +226,9 @@ class ManaPro_ProductFaces_Model_Item extends Mage_CatalogInventory_Model_Stock_
                 if($item->getParentItem()) {
                     $itemQty = $item->getParentItem()->getData('qty') ;
                 }
-                $productId = Mage::getModel('catalog/product')->getIdBySku($item->getSku());
+                $productId = $item->getProductId()
+                    ? $item->getProductId()
+                    : Mage::getModel('catalog/product')->getIdBySku($item->getSku());
                 $representedProductId = $linkResource->getRepresentedProductId($productId);
 
                 foreach ($linkResource->getRepresentingProductsAndOptions($representedProductId) as $data) {

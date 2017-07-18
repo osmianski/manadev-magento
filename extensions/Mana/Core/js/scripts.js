@@ -1068,6 +1068,12 @@ function ($, layout, json, core, config, undefined)
             if (window.setLocation) {
                 this._oldSetLocation = window.setLocation;
                 window.setLocation = function (url, element) {
+                    if (!element && arguments.callee.caller && arguments.callee.caller.arguments &&
+                        arguments.callee.caller.arguments[0] &&
+                        arguments.callee.caller.arguments[0] instanceof Event)
+                    {
+                        element = arguments.callee.caller.arguments[0].target;
+                    }
                     self._callInterceptionCallback(url, element);
                 };
             }

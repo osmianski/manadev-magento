@@ -42,7 +42,6 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
 
             var currentUrl = location.href;
 
-
             var hash = currentUrl.split("#")[1];
             if (hash) {
                 var rawDataArr = hash.split("&");
@@ -53,6 +52,10 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
 
                     data[key] = value;
                 });
+
+                if (data.page <= 1) {
+                    return;
+                }
 
                 var showMoreButton = $("#m-show-more");
                 if (showMoreButton) {
