@@ -51,6 +51,7 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
             ),
         ));
         $this->getResponse()->appendBody($json);
+        $this->log("Requested repo key '$key'");
     }
 
     public function fileAction() {
@@ -89,7 +90,8 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
         $zip->close();
         $this->removeDir($dir);
         $this->sendFile($filename);
-
+        $this->increaseCounter($repo);
+        $this->log("Latest version downloaded for repo key '$key'");
     }
 
     protected function getRepo($key) {
@@ -310,6 +312,15 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
         }
 
         return array_keys($result);
+    }
+
+    /**
+     * @param Local_Manadev_Model_Composer_Repo $repo
+     */
+    protected function increaseCounter($repo) {
+        foreach ($repo->getExtensions() as $extension) {
+            $this->getDownloadableItemResource()->increaseCounterForExtension($extension);
+        }
     }
 
     /**

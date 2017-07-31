@@ -15,6 +15,7 @@ class Local_Manadev_Resource_Downloadable_Item extends Mage_Downloadable_Model_R
         // customer_firstname
         return $db->fetchAll($db->select()
             ->from(array('di' => $this->getMainTable()), array(
+                'item_id',
                 'product_id',
                 'status',
                 'm_license_verification_no',
@@ -38,6 +39,14 @@ class Local_Manadev_Resource_Downloadable_Item extends Mage_Downloadable_Model_R
                 'name' => new Zend_Db_Expr("`name`.`value`"),
             ))
         );
+    }
+
+    public function increaseCounterForExtension($extension) {
+        $db = $this->_getWriteAdapter();
+
+        $db->query("UPDATE `{$this->getMainTable()}` " .
+            "SET `number_of_downloads_used` = `number_of_downloads_used` + 1 " .
+            $db->quoteInto("WHERE `item_id` = ?", $extension->getData('item_id')));
     }
 
     public function upgradeAggregateByLicenseVerificationNos($licenseVerificationNos = array()) {
