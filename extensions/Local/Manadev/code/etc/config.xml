@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>16.10.0514</version>
+		    <version>17.07.3115</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -126,6 +126,7 @@
 					<license_module><table>m_license_module</table></license_module>
 					<license_extension><table>m_license_extension</table></license_extension>
 					<license_store><table>m_license_store</table></license_store>
+					<composer_repo><table>m_composer_repo</table></composer_repo>
 				</entities>
 			</local_manadev_resources>
 			<!-- BASED ON SNIPPET: Models/Rewrite support (config.xml) -->
@@ -625,6 +626,12 @@
     <default>
         <local_manadev>
             <support_services_sku>support-services</support_services_sku>
+            <downloads>
+                <composer>1</composer>
+                <composer_log>1</composer_log>
+                <platform_1_dir>../distro/magento-extensions</platform_1_dir>
+                <platform_2_dir>../distro/magento2-products</platform_2_dir>
+            </downloads>
         </local_manadev>
 		<local_manadev_emails>
 			<new_request_to_customer>

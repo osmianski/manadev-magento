@@ -12,6 +12,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
     const XML_PATH_EMAIL_SENDER = 'local_manadev_emails/domain_confirmation/identity';
     const XML_PATH_EMAIL_TEMPLATE = 'local_manadev_emails/domain_confirmation/template';
     const XML_PATH_ENABLED = 'local_manadev_emails/domain_confirmation/enabled';
+    const XML_PATH_BLACKLIST = 'local_manadev/downloads/blacklist';
 
     /**
      * Check customer authentication
@@ -154,6 +155,22 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         if($is_newly_registered) {
             // If store info set for the first time, no need for confirmation.
             $linkPurchasedItem->updateStoreInfoFromPending(false);
+        }
+
+        if ($linkPurchasedItem->getData('order_item_id')) {
+            $orderItem = Mage::getModel('sales/order_item');
+            $orderItem->load($linkPurchasedItem->getData('order_item_id'));
+            $order = Mage::getModel('sales/order');
+            $order->load($orderItem->getData('order_id'));
+
+            foreach (array_filter(array_map('trim', explode("\n", Mage::getStoreConfig(self::XML_PATH_BLACKLIST)))) as $pattern) {
+
+                if (preg_match($pattern, $order->getData('customer_email'))) {
+                    $status = Local_Manadev_Model_Download_Status::M_LINK_STATUS_NOT_AVAILABLE;
+                    $this->_getCustomerSession()->setData('m_start_download', false);
+                    break;
+                }
+            }
         }
 
         $linkPurchasedItem

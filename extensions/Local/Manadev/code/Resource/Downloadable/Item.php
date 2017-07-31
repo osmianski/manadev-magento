@@ -6,6 +6,40 @@
  */
 class Local_Manadev_Resource_Downloadable_Item extends Mage_Downloadable_Model_Resource_Link_Purchased_Item
 {
+    public function getItemsByComposerRepoId($repoId) {
+        $db = $this->getReadConnection();
+
+        $platformAttr = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'platform');
+        $nameAttr = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', 'name');
+
+        // customer_firstname
+        return $db->fetchAll($db->select()
+            ->from(array('di' => $this->getMainTable()), array(
+                'product_id',
+                'status',
+                'm_license_verification_no',
+                'm_key_public',
+                'm_key_private',
+            ))
+            ->join(array('p' => $this->getTable('catalog/product')),
+                "`p`.`entity_id` = `di`.`product_id`", 'sku')
+            ->join(array('pl' => $this->getTable('catalog/product').'_int'),
+                "`pl`.`entity_id` = `p`.`entity_id` AND `pl`.`store_id` = 0 AND `pl`.`attribute_id` = ". $platformAttr->getId(), null)
+            ->join(array('name' => $this->getTable('catalog/product').'_varchar'),
+                "`name`.`entity_id` = `p`.`entity_id` AND `name`.`store_id` = 0 AND `name`.`attribute_id` = ". $nameAttr->getId(), null)
+            ->join(array('oi' => 'sales_flat_order_item'), "`oi`.`item_id` = `di`.`order_item_id`", null)
+            ->join(array('o' => 'sales_flat_order'), "`oi`.`order_id` = `o`.`entity_id`", array(
+                'customer_firstname',
+                'customer_email',
+            ))
+            ->where("`di`.`composer_repo_id` = ?", $repoId)
+            ->columns(array(
+                'platform' => new Zend_Db_Expr("`pl`.`value`"),
+                'name' => new Zend_Db_Expr("`name`.`value`"),
+            ))
+        );
+    }
+
     public function upgradeAggregateByLicenseVerificationNos($licenseVerificationNos = array()) {
         $licenseVerificationNos = array_filter($licenseVerificationNos);
         foreach($licenseVerificationNos as $licenseVerificationNo) {
