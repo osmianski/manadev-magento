@@ -8,6 +8,7 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
 {
     const XML_PATH_ENABLED = 'local_manadev/downloads/composer';
     const XML_PATH_LOGGING_ENABLED = 'local_manadev/downloads/composer_log';
+    const XML_PATH_USER_AGENT_PATTERN = 'local_manadev/downloads/composer_user_agent';
 
     public function preDispatch() {
         parent::preDispatch();
@@ -18,6 +19,13 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
     }
 
     public function repoAction() {
+        if (($pattern = Mage::getStoreConfig(self::XML_PATH_USER_AGENT_PATTERN)) &&
+            !preg_match($pattern, $this->getRequest()->getHeader('User-Agent')))
+        {
+            return $this->renderErrorResponse("Tried to access composer repo not from composer, but from '" .
+                $this->getRequest()->getHeader('User-Agent') . "'");
+        }
+
         if (!($key = Mage::app()->getRequest()->getParam('key'))) {
             return $this->renderErrorResponse('Tried to access composer repo without specifying a key');
         }
@@ -55,6 +63,13 @@ class Local_Manadev_ComposerController extends Mage_Core_Controller_Front_Action
     }
 
     public function fileAction() {
+        if (($pattern = Mage::getStoreConfig(self::XML_PATH_USER_AGENT_PATTERN)) &&
+            !preg_match($pattern, $this->getRequest()->getHeader('User-Agent')))
+        {
+            return $this->renderErrorResponse("Tried to access composer repo not from composer, but from '" .
+                $this->getRequest()->getHeader('User-Agent') . "'");
+        }
+
         if (!($key = Mage::app()->getRequest()->getParam('key'))) {
             return $this->renderErrorResponse('Tried to access composer repo without specifying a key');
         }

@@ -629,6 +629,7 @@
             <downloads>
                 <composer>1</composer>
                 <composer_log>1</composer_log>
+                <composer_user_agent>/^Composer\//</composer_user_agent>
                 <platform_1_dir>../distro/magento-extensions</platform_1_dir>
                 <platform_2_dir>../distro/magento2-products</platform_2_dir>
             </downloads>
