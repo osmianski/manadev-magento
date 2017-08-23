@@ -143,4 +143,18 @@ class ManaPro_ProductFaces_Helper_Data extends Mage_Core_Helper_Abstract {
     	}
 		return $this->_attributesForQuickEdit;
 	}
+
+	public function logQtyChanges($message) {
+        if (!Mage::getStoreConfigFlag('manapro_productfaces/developer/log_qty_changes')) {
+            return;
+        }
+
+        try {
+            throw new Exception();
+        }
+        catch (Exception $e) {
+            $message = "\n\n$message\n\n{$e->getTraceAsString()}";
+        }
+        Mage::log($message, Zend_Log::DEBUG, 'm_qty_changes.log');
+	}
 }

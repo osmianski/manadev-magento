@@ -40,6 +40,7 @@ class ManaPro_ProductFaces_Resource_Stock extends Mage_CatalogInventory_Model_My
         $this->_getWriteAdapter()->beginTransaction();
         $this->_getWriteAdapter()->multi_query($query);
         $this->_getWriteAdapter()->multi_query($entitySql);
+        Mage::helper('manapro_productfaces')->logQtyChanges("$query\n\n$entitySql");
 
         $inventoryResource = Mage::getResourceSingleton('manapro_productfaces/inventory');
         $inventoryResource->updateTextQties(array_keys($productQtys));

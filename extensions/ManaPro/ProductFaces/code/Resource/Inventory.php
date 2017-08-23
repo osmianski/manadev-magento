@@ -418,7 +418,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
             	//Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
             }
 	        $this->_getWriteAdapter()->multi_query($entitySql);
-	        $this->updateTextQties($productIds);
+            Mage::helper('manapro_productfaces')->logQtyChanges("$sql\n\n$entitySql");
+            $this->updateTextQties($productIds);
 	        Mage::getResourceSingleton('manapro_productfaces/changeLog')->deleteProductIdFromChangeLog($productId);
         	if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
@@ -467,7 +468,8 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 	        		$this->_getWriteAdapter()->multi_query($entitySql);
                     $this->updateTextQties($productIds);
                 }
-			}
+                Mage::helper('manapro_productfaces')->logQtyChanges("$sql\n\n$entitySql");
+            }
 			if ($requireTransaction) $this->_getWriteAdapter()->commit();
         }
         catch (Exception $e) {
@@ -597,6 +599,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
                               SET e.m_represented_qty = i.qty
                               WHERE i.product_id = e.entity_id AND i.product_id  = $productId";
             $this->_getWriteAdapter()->multi_query($entitySql);
+            Mage::helper('manapro_productfaces')->logQtyChanges("$sql\n\n$entitySql");
             $this->updateTextQties(array($productId => $productId));
             Mage::getResourceSingleton('manapro_productfaces/changeLog')->deleteProductIdFromChangeLog($productId);
 
@@ -620,6 +623,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
                 SET e.m_represented_qty = i.qty
                 WHERE i.product_id = e.entity_id";
         $this->_getWriteAdapter()->multi_query($sql);
+        Mage::helper('manapro_productfaces')->logQtyChanges("$sql");
         $this->updateTextQties();
 
         if ($productIds = $link->getAllRepresentingProductIds()) {
@@ -628,6 +632,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
 			SET `m_represented_qty` = 0, {$this->isInStockUpdate("`qty` > `min_qty`")}, `m_represents` = 0
 			WHERE `product_id` IN ($productIds)";
             $this->_getWriteAdapter()->multi_query($sql);
+            Mage::helper('manapro_productfaces')->logQtyChanges("$sql");
         }
 		try {
         	if ($productIds = $link->getAllRepresentedProductIds()) {
@@ -692,6 +697,7 @@ class ManaPro_ProductFaces_Resource_Inventory extends Mage_CatalogInventory_Mode
         $selectSql = $select->__toString();
         $sql = $select->insertFromSelect($this->coreHelper()->getAttributeTable($attribute, 'catalog_product_entity'), array_keys($fields));
 
+        Mage::helper('manapro_productfaces')->logQtyChanges("$sql");
         // run the statement
         $db->exec($sql);
 
