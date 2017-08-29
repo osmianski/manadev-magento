@@ -18,10 +18,10 @@ class ManaPro_FilterContent_Helper_Block_OptionPage_Title extends ManaPro_Filter
         /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
         $optionPage = Mage::registry('current_option_page');
 
-        $oldTitle = $optionPage->getData('title');
+        $oldTitle = $optionPage->getData('heading');
         if ($newTitle = $this->rendererHelper()->get('title')) {
             $block->setData($this->helper()->getOriginalContentKey($key), $oldTitle);
-            $optionPage->setData('title', $newTitle);
+            $optionPage->setData('heading', $newTitle);
         }
     }
 
@@ -35,7 +35,7 @@ class ManaPro_FilterContent_Helper_Block_OptionPage_Title extends ManaPro_Filter
             /* @var $optionPage Mana_AttributePage_Model_OptionPage_Store */
             $optionPage = Mage::registry('current_option_page');
 
-            $optionPage->setData('title', $oldTitle);
+            $optionPage->setData('heading', $oldTitle);
             $block->unsetData($this->helper()->getOriginalContentKey($key));
         }
     }

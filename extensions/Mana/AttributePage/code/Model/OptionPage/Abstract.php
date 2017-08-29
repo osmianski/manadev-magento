@@ -47,6 +47,8 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_SHOW_PRODUCT_IMAGE = 34;
     const DM_DESCRIPTION_BOTTOM = 35;
 
+    const DM_HEADING = 36;
+
     public function validate() {
         $t = Mage::helper('mana_attributepage');
         $errors = array();

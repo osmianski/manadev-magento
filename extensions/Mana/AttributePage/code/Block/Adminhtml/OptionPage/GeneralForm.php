@@ -75,6 +75,17 @@ class Mana_AttributePage_Block_Adminhtml_OptionPage_GeneralForm extends Mana_Att
             'default_store_label' => $this->__('Use Option Labels'),
         ));
 
+        $this->addField($fieldset, 'heading', 'text', array(
+            'label' => $this->__('Heading'),
+            'title' => $this->__('Heading'),
+            'name' => 'heading',
+            'required' => true,
+
+            'default_bit_no' => Mana_AttributePage_Model_OptionPage_Abstract::DM_HEADING,
+            'default_label' => $this->__('Use Title'),
+            'default_store_label' => $this->__('Same For All Stores'),
+        ));
+
         $this->addField($fieldset, 'description', 'wysiwyg', array(
             'name'      => 'description',
             'label'     => $this->__('Description'),

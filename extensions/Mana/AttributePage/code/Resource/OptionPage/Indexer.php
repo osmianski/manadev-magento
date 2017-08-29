@@ -217,6 +217,11 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                 {$aggregate->glue($titleExpr, ',')}
             )",
         );
+        $fields['heading'] =
+            "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_HEADING)},
+                `op_gcs`.`heading`,
+                {$fields['title']}
+            )";
         $fields['description'] =
             "IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION)},
                 `op_gcs`.`description`,
@@ -589,6 +594,14 @@ class Mana_AttributePage_Resource_OptionPage_Indexer extends Mana_AttributePage_
                     )
                 )",
             );
+            $fields['heading'] =
+                "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_HEADING)},
+                    `op_scs`.`heading`,
+                    IF({$dbHelper->isCustom('op_gcs', Mana_AttributePage_Model_OptionPage_Abstract::DM_HEADING)},
+                        `op_g`.`heading`,
+                        {$fields['title']}
+                    )
+                )";
             $fields['description'] =
                 "IF({$dbHelper->isCustom('op_scs', Mana_AttributePage_Model_OptionPage_Abstract::DM_DESCRIPTION)},
                     `op_scs`.`description`,

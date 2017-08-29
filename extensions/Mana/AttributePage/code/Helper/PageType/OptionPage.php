@@ -87,7 +87,7 @@ class Mana_AttributePage_Helper_PageType_OptionPage extends Mana_Core_Helper_Pag
         $optionPage = Mage::registry('current_option_page');
 
         $result = array(
-            'title' => $optionPage->getData('title'),
+            'title' => $optionPage->getData('heading'),
             'description' => $optionPage->getData('description'),
         );
         if ($title = $optionPage->getData('meta_title')) {

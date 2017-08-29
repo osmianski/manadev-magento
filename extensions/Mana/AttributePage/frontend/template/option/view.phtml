@@ -8,7 +8,7 @@
 /* @var $this Mana_AttributePage_Block_Option_View */
 $_optionPage = $this->getOptionPage();
 $_filesHelper = $this->filesHelper();
-$_escapedTitle = $this->escapeHtml($_optionPage->getData('title'));
+$_escapedTitle = $this->escapeHtml($_optionPage->getData('heading'));
 $_description = $_optionPage->getData('description');
 $_description = Mage::helper('cms')->getBlockTemplateProcessor()->filter($_description);
 $_descriptionBottom = $_optionPage->getData('description_bottom');
