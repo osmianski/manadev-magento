@@ -48,6 +48,7 @@ abstract class Mana_AttributePage_Model_OptionPage_Abstract extends Mage_Core_Mo
     const DM_DESCRIPTION_BOTTOM = 35;
 
     const DM_HEADING = 36;
+    const DM_CUSTOM1 = 37;
 
     public function validate() {
         $t = Mage::helper('mana_attributepage');
