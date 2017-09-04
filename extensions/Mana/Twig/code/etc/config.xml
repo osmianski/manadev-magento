@@ -8,7 +8,7 @@
 <config>
     <modules>
         <Mana_Twig>
-            <version>16.12.0310</version>
+            <version>17.09.0408</version>
         </Mana_Twig>
     </modules>
     <global>

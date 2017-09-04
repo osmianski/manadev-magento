@@ -68,6 +68,9 @@ class Mana_Twig_Helper_Data extends Mage_Core_Helper_Abstract {
             ));
             $twig->addExtension(new Twig_Extension_Debug());
             $twig->addFunction('remove', new Twig_Function_Function(array(Mage::helper('mana_twig/functions'), 'remove')));
+            $twig->addFunction('filters_are', new Twig_Function_Function(
+                array(Mage::helper('mana_twig/functions'), 'filters_are'),
+                array('needs_context' => true)));
         }
 
         return $this->_contentRuleTwig;
