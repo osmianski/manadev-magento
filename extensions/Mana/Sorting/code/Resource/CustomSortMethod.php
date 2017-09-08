@@ -14,7 +14,7 @@ class Mana_Sorting_Resource_CustomSortMethod extends Mage_Core_Model_Mysql4_Abst
     protected $sortMethodModel;
 
     public function setCustomSortMethodId($id) {
-        $this->sortMethodModel->load($id, 'method_id');
+        $this->sortMethodModel->load($id);
     }
 
     /**

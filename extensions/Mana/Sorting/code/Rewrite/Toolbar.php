@@ -101,7 +101,7 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
      */
     protected function _setOrder($collection, $order, $direction) {
         $xmls = $this->sortingHelper()->getSortingMethodXmls();
-        $customMethods = $this->sortingHelper()->getCustomSortMethodCollection()->addFieldToFilter('url_key', $order);
+        $customMethods = $this->sortingHelper()->getCustomSortMethodCollection()->addUrlKeyFilter($order);
         if (isset($xmls[$order])) {
             /* @var $resource Mana_Sorting_ResourceInterface */
             $resource = Mage::getResourceSingleton((string)$xmls[$order]->resource);

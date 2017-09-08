@@ -98,9 +98,7 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
                 return (string)$xml->label;
             }
         }
-        $collection = $this->getCustomSortMethodCollection();
-        $filter = $collection->getConnection()->quoteInto("url_key = ?", $sortingOptionCode);
-        $collection->getSelect()->where("$filter OR method_id = (SELECT id FROM {$collection->getTable('mana_sorting/method')} WHERE $filter)");
+        $collection = $this->getCustomSortMethodCollection()->addUrlKeyFilter($sortingOptionCode);
         if($collection->count() > 0) {
             return $collection->getFirstItem()->getData('title');
         }
@@ -113,9 +111,7 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
                 return true;
             }
         }
-        $collection = $this->getCustomSortMethodCollection();
-        $filter = $collection->getConnection()->quoteInto("url_key = ?", $sortingOptionCode);
-        $collection->getSelect()->where("$filter OR method_id = (SELECT id FROM {$collection->getTable('mana_sorting/method')} WHERE $filter)");
+        $collection = $this->getCustomSortMethodCollection()->addUrlKeyFilter($sortingOptionCode);
         if($collection->count() > 0) {
             return true;
         }
