@@ -99,7 +99,8 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             }
         }
         $collection = $this->getCustomSortMethodCollection();
-        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        $filter = $collection->getConnection()->quoteInto("url_key = ?", $sortingOptionCode);
+        $collection->getSelect()->where("$filter OR method_id = (SELECT id FROM {$collection->getTable('mana_sorting/method')} WHERE $filter)");
         if($collection->count() > 0) {
             return $collection->getFirstItem()->getData('title');
         }
@@ -113,7 +114,8 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
             }
         }
         $collection = $this->getCustomSortMethodCollection();
-        $collection->addFieldToFilter('url_key', $sortingOptionCode);
+        $filter = $collection->getConnection()->quoteInto("url_key = ?", $sortingOptionCode);
+        $collection->getSelect()->where("$filter OR method_id = (SELECT id FROM {$collection->getTable('mana_sorting/method')} WHERE $filter)");
         if($collection->count() > 0) {
             return true;
         }
@@ -138,7 +140,11 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return Mana_Sorting_Resource_Method_Collection|Mana_Sorting_Resource_Method_Store_Collection
      */
     public function getCustomSortMethodCollection() {
-        if($this->adminHelper()->isGlobal()) {
+        if (!$this->coreHelper()->inAdmin()) {
+            $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
+            $collection->addFieldToFilter('store_id', Mage::app()->getStore()->getId());
+        }
+        elseif($this->adminHelper()->isGlobal()) {
             $collection = Mage::getResourceModel('mana_sorting/method_collection');
         } else {
             $collection = Mage::getResourceModel('mana_sorting/method_store_collection');
