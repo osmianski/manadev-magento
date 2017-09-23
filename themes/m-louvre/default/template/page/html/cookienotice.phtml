@@ -34,8 +34,7 @@
     <div class="notice-inner">
         <div class="notice-text"><?php echo $this->getCookieRestrictionBlockContent(); ?></div>
         <div class="actions">
-            <button class="button" onclick="allowSaveCookie()"><span><span><?php echo $this->__('Allow');?></span></span></button>
-            <button class="button" onclick="dontAllowSaveCookie()"><span><span><?php echo $this->__('Don\'t Allow');?></span></span></button>
+            <button class="button" onclick="allowSaveCookie()"><span><span><?php echo $this->__('OK, I got it');?></span></span></button>
         </div>
     </div>
 </div>
@@ -51,11 +50,6 @@
         } else {
             window.location.href = '<?php echo Mage::getUrl('cms/index/noCookies')?>';
         }
-    }
-    function dontAllowSaveCookie() {
-        Mage.Cookies.set('dont_allow_cookies', '1',
-            new Date(new Date().getTime() + <?php echo Mage::helper('core/cookie')->getCookieRestrictionLifetime() ?> * 1000));
-        window.location.reload();
     }
     $('notice-cookie-block').show();
     /* ]]> */
