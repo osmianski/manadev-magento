@@ -36,7 +36,7 @@ Mana.require(['jquery', 'singleton:Mana/Core/Layout'], function ($, layout) {
                     location.hash = "index=" + index + "&page=" + Engine.page;
                 }
                 else {
-                    location.hash = 'index=0&page=0';
+                    location.hash = '';
                 }
             });
 
