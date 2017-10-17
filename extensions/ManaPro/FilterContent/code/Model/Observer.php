@@ -73,7 +73,7 @@ class ManaPro_FilterContent_Model_Observer {
                 $head->setData('description', $description);
             }
             if (($robots = $this->rendererHelper()->get('meta_robots')) !== false) {
-                $head->setData('robots', $robots);
+                $head->setData('robots', trim($robots));
             }
         }
     }
