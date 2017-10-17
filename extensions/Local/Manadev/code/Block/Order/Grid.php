@@ -80,45 +80,45 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
             'width' => '300px',
         ), 'billing_name');
 
-        $this->addColumnAfter(
-            'license_numbers',
-            array(
-                'header' => $this->__('License Numbers'),
-                'index' => 'license_numbers',
-                'filter_index' => 'ml.license_numbers',
-                'width' => '50',
-                'align' => 'center',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
-            ),
-            'download_status'
-        );
-
-        $this->addColumnAfter(
-            'magento_ids',
-            array(
-                'header' => $this->__('Magento IDs'),
-                'index' => 'magento_ids',
-                'filter_index' => 'ml.magento_ids',
-                'width' => '120',
-                'align' => 'center',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
-            ),
-            'license_numbers'
-        );
-
-        $this->addColumnAfter(
-            'remote_ips',
-            array(
-                'header' => $this->__('Magento IPs'),
-                'index' => 'remote_ips',
-                'filter_index' => 'ml.remote_ips',
-                'width' => '50',
-                'align' => 'center',
-                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
-            ),
-            'magento_ids'
-        );
-
+//        $this->addColumnAfter(
+//            'license_numbers',
+//            array(
+//                'header' => $this->__('License Numbers'),
+//                'index' => 'license_numbers',
+//                'filter_index' => 'ml.license_numbers',
+//                'width' => '50',
+//                'align' => 'center',
+//                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+//            ),
+//            'download_status'
+//        );
+//
+//        $this->addColumnAfter(
+//            'magento_ids',
+//            array(
+//                'header' => $this->__('Magento IDs'),
+//                'index' => 'magento_ids',
+//                'filter_index' => 'ml.magento_ids',
+//                'width' => '120',
+//                'align' => 'center',
+//                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+//            ),
+//            'license_numbers'
+//        );
+//
+//        $this->addColumnAfter(
+//            'remote_ips',
+//            array(
+//                'header' => $this->__('Magento IPs'),
+//                'index' => 'remote_ips',
+//                'filter_index' => 'ml.remote_ips',
+//                'width' => '50',
+//                'align' => 'center',
+//                'renderer' => 'local_manadev/adminhtml_renderer_multiline',
+//            ),
+//            'magento_ids'
+//        );
+//
 
         parent::_prepareColumns();
 
@@ -139,25 +139,25 @@ class Local_Manadev_Block_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Gr
         $resource->addEmailsToCollection($collection);
 
 
-        $collection->getSelect()
-            ->joinLeft(array('ml' => new Zend_Db_Expr("(
-                SELECT dlp.order_id,
-                    GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers,
-                    GROUP_CONCAT(DISTINCT lr.magento_id SEPARATOR '|') as magento_ids,
-                    GROUP_CONCAT(DISTINCT lr.remote_ip SEPARATOR '|') as remote_ips
-                FROM " . $collection->getTable('downloadable/link_purchased') . " dlp
-                INNER JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.purchased_id = dlp.purchased_id
-                LEFT JOIN " . $collection->getTable('local_manadev/license_extension') . " le ON le.license_verification_no = dlpi.m_license_verification_no
-                LEFT JOIN (
-                    SELECT lr.id, lr.magento_id, lr.remote_ip
-                    FROM " . $collection->getTable('local_manadev/license_request') . " lr
-                    INNER JOIN (
-                        SELECT magento_id, id, MAX(created_at) AS created_at FROM " . $collection->getTable('local_manadev/license_request') . " GROUP BY magento_id
-                    ) as tmp ON tmp.id = lr.id
-                ) lr ON lr.id = le.request_id
-                GROUP BY dlp.order_id
-
-            )")), "`ml`.`order_id` = `main_table`.`entity_id`", array('order_id', 'license_numbers', 'magento_ids', 'remote_ips'));
+//        $collection->getSelect()
+//            ->joinLeft(array('ml' => new Zend_Db_Expr("(
+//                SELECT dlp.order_id,
+//                    GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers,
+//                    GROUP_CONCAT(DISTINCT lr.magento_id SEPARATOR '|') as magento_ids,
+//                    GROUP_CONCAT(DISTINCT lr.remote_ip SEPARATOR '|') as remote_ips
+//                FROM " . $collection->getTable('downloadable/link_purchased') . " dlp
+//                INNER JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.purchased_id = dlp.purchased_id
+//                LEFT JOIN " . $collection->getTable('local_manadev/license_extension') . " le ON le.license_verification_no = dlpi.m_license_verification_no
+//                LEFT JOIN (
+//                    SELECT lr.id, lr.magento_id, lr.remote_ip
+//                    FROM " . $collection->getTable('local_manadev/license_request') . " lr
+//                    INNER JOIN (
+//                        SELECT magento_id, id, MAX(created_at) AS created_at FROM " . $collection->getTable('local_manadev/license_request') . " GROUP BY magento_id
+//                    ) as tmp ON tmp.id = lr.id
+//                ) lr ON lr.id = le.request_id
+//                GROUP BY dlp.order_id
+//
+//            )")), "`ml`.`order_id` = `main_table`.`entity_id`", array('order_id', 'license_numbers', 'magento_ids', 'remote_ips'));
 
         $this->setCollection($collection);
         return $this->_basePrepareCollection();
