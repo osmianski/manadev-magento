@@ -29,7 +29,7 @@ class Mana_Core_Helper_PageType_Search extends Mana_Core_Helper_PageType  {
             'meta_title' => Mage::helper('catalogsearch')->__("Search results for: '%s'",
                 Mage::helper('catalogsearch')->getEscapedQueryText()),
             'title' => Mage::helper('catalogsearch')->__("Search results for: '%s'",
-                Mage::helper('catalogsearch')->getQueryText()),
+                Mage::helper('catalogsearch')->getEscapedQueryText()),
         );
         return array_merge(parent::getPageContent(), $result);
     }
