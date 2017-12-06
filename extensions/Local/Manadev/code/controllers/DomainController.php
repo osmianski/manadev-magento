@@ -221,7 +221,7 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
 
     protected function getPage($url) {
         $useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
-        $timeout = 120;
+        $timeout = 30;
         $cookie_file = BP . '/var/cookies/' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
 
         $ch = curl_init($url);
