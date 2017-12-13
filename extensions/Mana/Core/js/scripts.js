@@ -1059,7 +1059,7 @@ function ($, layout, json, core, config, undefined)
                         self._internalCallInterceptionCallback(url, self._lastAjaxActionSource);
                     }
                     else {
-                        self._oldSetLocation(url, self._lastAjaxActionSource);
+                        self._oldSetLocation(decodeURIComponent(url), self._lastAjaxActionSource);
                     }
                 });
             }

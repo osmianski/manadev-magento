@@ -58,7 +58,10 @@ class Mana_Filters_Model_Solr_Price extends Mana_Filters_Model_Filter_Price
         $result = array();
         if (!empty($facets)) {
             foreach ($facets as $key => $value) {
-                preg_match('/TO ([\d\.]+)\]$/', $key, $rangeKey);
+                if (!preg_match('/TO ([\d\.]+)\]$/', $key, $rangeKey)) {
+                    continue;
+                }
+
                 $rangeKey = $rangeKey[1] * $this->getCurrencyRate() / $this->getPriceRange();
                 $rangeKey = round($rangeKey);
                 if ($value > 0) {
