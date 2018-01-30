@@ -271,7 +271,8 @@ function ($, layout, json, core, config, undefined)
                 }
             }
             else {
-                this._oldSetLocation(url, element);
+                //this._oldSetLocation(url, element);
+                window.location.href = url;
             }
             return false;
         },
