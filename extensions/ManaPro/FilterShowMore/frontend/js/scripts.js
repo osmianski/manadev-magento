@@ -229,8 +229,8 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
                         sortedItems.push(value);
                     });
                     sortedItems.sort(function(a, b) {
-                        if (a.position < b.position) return -1;
-                        if (a.position > b.position) return 1;
+                        if (parseInt(a.position) < parseInt(b.position)) return -1;
+                        if (parseInt(a.position) > parseInt(b.position)) return 1;
 
                         if (parseInt(a.id) < parseInt(b.id)) return -1;
                         if (parseInt(a.id) > parseInt(b.id)) return 1;
