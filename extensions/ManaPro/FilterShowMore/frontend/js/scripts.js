@@ -35,9 +35,7 @@ function ($, Block, urlTemplate, json, ajax, layout, core, undefined)
             return decodeURIComponent(urlTemplate.decodeAttribute(this.$().data('popup-url')));
         },
         getTargetUrl: function () {
-            if (this._targetUrl === undefined) {
-                this._targetUrl = urlTemplate.decodeAttribute(this.$().data('target-url'));
-            }
+            this._targetUrl = urlTemplate.decodeAttribute(this.$().data('target-url'));
             return this._targetUrl;
         },
         getSpecialUrl: function () {
