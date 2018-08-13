@@ -123,6 +123,10 @@ function($, ajax, config, layout, undefined)
                     ConfigurableSwatchesList.init();
                 }
 
+                if (typeof ProductMediaManager !== 'undefined' && typeof ConfigurableMediaImages !== 'undefined') {
+                    $(document).trigger('product-media-loaded', ProductMediaManager);
+                }
+
                 if (isProductListToolbarClicked && config.getData('layeredNavigation.ajax.scrollToTop')) {
                     var offset = -1;
                     $.each(response.blocks, function (blockName) {
