@@ -144,7 +144,7 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
             'min_value' => new Zend_Db_Expr('MIN(decimal_index.value)'),
             'max_value' => new Zend_Db_Expr('MAX(decimal_index.value)'),
         ));
-        Mage::helper('mana_filters')->resetProductCollectionWhereClause($select);
+        $this->helper()->resetProductCollectionWhereClause($select);
 
         $result     = $connection->fetchRow($select);
         return array($result['min_value'], $result['max_value']);
@@ -152,5 +152,12 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
 
     public function getRange($index, $range) {
     	return array('from' => $range * ($index - 1), 'to' => $range * $index);
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data|Mage_Core_Helper_Abstract
+     */
+    protected function helper() {
+        return Mage::helper('mana_filters');
     }
 }

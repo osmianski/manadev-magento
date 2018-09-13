@@ -118,7 +118,7 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
             ));
             $select->group($rangeExpr)->order($rangeExpr);
 
-            Mage::helper('mana_filters')->resetProductCollectionWhereClause($select);
+            $this->helper()->resetProductCollectionWhereClause($select);
             $select->where("{$table}.min_price > 0");
 
 //Mage::log($select->__toString(), Zend_Log::DEBUG, 'price.log' );
@@ -246,7 +246,7 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
         $subSelect = '';
 
         $values = array();
-        foreach (Mage::helper('mana_filters')->getFilterOptionsCollection() as $filter) {
+        foreach ($this->helper()->getFilterOptionsCollection() as $filter) {
             if ($filter->getType() == 'attribute' && ($param = $request->getParam($filter->getCode()))) {
                 $values = array_merge($values, Mage::helper('mana_core')->sanitizeNumber($param, array('_')));
             }
@@ -364,6 +364,13 @@ class Mana_Filters_Resource_Filter_Price extends Mage_Catalog_Model_Resource_Eav
             return $result;
 
         }
+    }
+
+    /**
+     * @return Mana_Filters_Helper_Data|Mage_Core_Helper_Abstract
+     */
+    protected function helper() {
+        return Mage::helper('mana_filters');
     }
 
 }

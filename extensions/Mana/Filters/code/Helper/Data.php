@@ -175,6 +175,14 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         }
         return $filters;
     }
+
+    /**
+     * Removes price filter from WHERE clause. As price filter expression may differ a lot (tax, weee,
+     * super products and customizations via catalog_prepare_price_select event), this method removes all
+     * conditions from where except those which are known NOT to be a price filter
+     *
+     * @param \Varien_Db_Select $select
+     */
     public function resetProductCollectionWhereClause($select) {
         $preserved = new Varien_Object(array('preserved' => array()));
         $where = $select->getPart(Zend_Db_Select::WHERE);
@@ -183,20 +191,28 @@ class Mana_Filters_Helper_Data extends Mana_Core_Helper_Layer {
         if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7')) {
             foreach ($where as $key => $condition) {
                 if (strpos($condition, 'e.website_id = ') !== false || strpos($condition, '`e`.`website_id` = ') !== false) {
+                    // keep standard website filter based on current store
                     $preserved[$key] = $key;
                 }
                 elseif (strpos($condition, 'e.customer_group_id = ') !== false || strpos($condition, '`e`.`customer_group_id` = ') !== false) {
+                    // keep standard logged in customer filter
                     $preserved[$key] = $key;
                 }
                 elseif (strpos($condition, 'e.entity_id IN') !== false || strpos($condition, '`e`.`entity_id` IN') !== false) {
+                    // keep product ID filters widely used in Shop By Special extension
                     $preserved[$key] = $key;
                 }
                 elseif (strpos($condition, 'tmp_table.id IS NOT NULL') !== false) {
+                    // keep WHERE clauses specific to quick search SELECT statements
+                    $preserved[$key] = $key;
+                }
+                elseif (strpos($condition, '_idx.value') !== false) {
+                    // keep applied decimal filters
                     $preserved[$key] = $key;
                 }
             }
-
         }
+
         foreach ($where as $key => $condition) {
             if (!in_array($key, $preserved)) {
                 unset($where[$key]);
