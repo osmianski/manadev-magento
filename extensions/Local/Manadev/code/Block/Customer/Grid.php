@@ -49,28 +49,28 @@ class Local_Manadev_Block_Customer_Grid extends Mage_Adminhtml_Block_Customer_Gr
 
         $this->_addNameToSelect($collection);
 
-        $collection->getSelect()
-        ->joinLeft(array('ml' => new Zend_Db_Expr("(
-            SELECT dlp.customer_id,
-                GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers,
-                GROUP_CONCAT(DISTINCT dlp.order_increment_id SEPARATOR '|') as order_numbers,
-                GROUP_CONCAT(DISTINCT lr.magento_id SEPARATOR '|') as magento_ids,
-                GROUP_CONCAT(DISTINCT lr.remote_ip SEPARATOR '|') as remote_ips
-            FROM " . $collection->getTable('downloadable/link_purchased') . " dlp
-            INNER JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.purchased_id = dlp.purchased_id
-            LEFT JOIN " . $collection->getTable('local_manadev/license_extension') . " le ON le.license_verification_no = dlpi.m_license_verification_no
-            LEFT JOIN (
-                SELECT lr.id, lr.magento_id, lr.remote_ip
-                FROM " . $collection->getTable('local_manadev/license_request') . " lr
-                INNER JOIN (
-                    SELECT magento_id, id, MAX(created_at) AS created_at FROM " . $collection->getTable('local_manadev/license_request') . " GROUP BY magento_id
-                ) as tmp ON tmp.id = lr.id
-            ) lr ON lr.id = le.request_id
-            GROUP BY dlp.customer_id
-
-        )")), "`ml`.`customer_id` = `e`.`entity_id`", array('customer_id', 'license_numbers', 'order_numbers', 'magento_ids', 'remote_ips'));
-
-        $sql = (string)$collection->getSelect();
+//        $collection->getSelect()
+//        ->joinLeft(array('ml' => new Zend_Db_Expr("(
+//            SELECT dlp.customer_id,
+//                GROUP_CONCAT(DISTINCT dlpi.m_license_no SEPARATOR '|') as license_numbers,
+//                GROUP_CONCAT(DISTINCT dlp.order_increment_id SEPARATOR '|') as order_numbers,
+//                GROUP_CONCAT(DISTINCT lr.magento_id SEPARATOR '|') as magento_ids,
+//                GROUP_CONCAT(DISTINCT lr.remote_ip SEPARATOR '|') as remote_ips
+//            FROM " . $collection->getTable('downloadable/link_purchased') . " dlp
+//            INNER JOIN " . $collection->getTable('downloadable/link_purchased_item') . " dlpi ON dlpi.purchased_id = dlp.purchased_id
+//            LEFT JOIN " . $collection->getTable('local_manadev/license_extension') . " le ON le.license_verification_no = dlpi.m_license_verification_no
+//            LEFT JOIN (
+//                SELECT lr.id, lr.magento_id, lr.remote_ip
+//                FROM " . $collection->getTable('local_manadev/license_request') . " lr
+//                INNER JOIN (
+//                    SELECT magento_id, id, MAX(created_at) AS created_at FROM " . $collection->getTable('local_manadev/license_request') . " GROUP BY magento_id
+//                ) as tmp ON tmp.id = lr.id
+//            ) lr ON lr.id = le.request_id
+//            GROUP BY dlp.customer_id
+//
+//        )")), "`ml`.`customer_id` = `e`.`entity_id`", array('customer_id', 'license_numbers', 'order_numbers', 'magento_ids', 'remote_ips'));
+//
+//        $sql = (string)$collection->getSelect();
         $this->setCollection($collection);
 
 
