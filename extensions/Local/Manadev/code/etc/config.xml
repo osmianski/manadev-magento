@@ -188,6 +188,11 @@
                     <link_purchased_item>Local_Manadev_Resource_Downloadable_Item</link_purchased_item>
                 </rewrite>
             </downloadable_resource>
+            <admin>
+                <rewrite>
+                    <session>Local_Manadev_Model_AdminSession</session>
+                </rewrite>
+            </admin>
 			<!-- INSERT HERE: rewrites, ... -->
 		</models>
 		<!-- BASED ON SNIPPET: New Models/Event support (config.xml) -->
