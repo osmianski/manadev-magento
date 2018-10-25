@@ -182,7 +182,8 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
      */
 	protected function _processCaseIf($instruction, &$globalVars, &$locals) {
 	    foreach ($globalVars['_values'] as $index => $value) {
-	        if ((string)$instruction['filter_code'] == $value->_obj->getFilter()->getFilterOptions()->getCode() &&
+	        if ($value->_obj->getFilter()->getFilterOptions() &&
+	            (string)$instruction['filter_code'] == $value->_obj->getFilter()->getFilterOptions()->getCode() &&
 	            (string)$instruction['value_label'] == Mage::helper('core')->stripTags($value->_obj->getLabel()))
 	        {
 	            if (isset($instruction['as'])) {
@@ -289,6 +290,10 @@ class ManaPro_FilterSeoLinks_Model_Observer extends Mage_Core_Helper_Abstract {
             $filters = array();
             $filterValues = array();
             foreach ($globalVars['_values'] as $value) {
+                if (!$value->_obj->getFilter()->getFilterOptions()) {
+                    continue;
+                }
+
                 $code = $value->_obj->getFilter()->getFilterOptions()->getCode();
                 if (!isset($filters[$code])) {
                     $filters[$code] = array(
