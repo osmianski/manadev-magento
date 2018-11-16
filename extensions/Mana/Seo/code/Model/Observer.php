@@ -79,6 +79,16 @@ class Mana_Seo_Model_Observer {
                                 $query[$key] = null;
                             }
                         }
+                        elseif ($key == 'order') {
+                            if (!$schema->getCanonicalSorting()) {
+                                $query[$key] = null;
+                            }
+                        }
+                        elseif ($key == 'dir') {
+                            if (!$schema->getCanonicalSorting()) {
+                                $query[$key] = null;
+                            }
+                        }
                         elseif ($key == 'q') {
                             // keep search query
                         }

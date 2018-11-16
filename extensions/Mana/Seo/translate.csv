@@ -100,7 +100,7 @@
 "Remove Canonical URL on Second and Further Pages","Remove Canonical URL on Second and Further Pages"
 "This setting defines canonical URL behavior on page/2, page/3, ... pages. It only has effect if '%s' setting is used.","This setting defines canonical URL behavior on page/2, page/3, ... pages. It only has effect if '%s' setting is used."
 "Canonical URL Contains Page Parameter","Canonical URL Contains Page Parameter"
-"",""
+"Canonical URL Contains Sorting Parameters","Canonical URL Contains Sorting Parameters"
 "",""
 "",""
 "",""

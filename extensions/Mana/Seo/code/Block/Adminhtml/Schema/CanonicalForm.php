@@ -97,6 +97,13 @@ class Mana_Seo_Block_Adminhtml_Schema_CanonicalForm extends Mana_Admin_Block_V2_
                 'required' => true,
             ));
 
+            $this->addField($fieldset, 'canonical_sorting', 'select', array(
+                'options' => $this->getYesNoSourceModel()->getOptionArray(),
+                'label' => $this->__('Canonical URL Contains Sorting Parameters'),
+                'name' => 'canonical_sorting',
+                'required' => true,
+            ));
+
         }
 
         if ($this->coreHelper()->isManadevSeoLayeredNavigationInstalled()) {
