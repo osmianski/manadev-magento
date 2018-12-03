@@ -132,6 +132,19 @@ class Mana_Sorting_Helper_Data extends Mage_Core_Helper_Abstract {
         return Mage::getSingleton('catalog/layer')->getCurrentCategory();
     }
 
+    public function translateUrlKey($urlKey) {
+        /* @var Mage_Core_Model_Resource $res */
+        $res = Mage::getSingleton('core/resource');
+        $db = $res->getConnection('read');
+        $select = $db->select()->from(array('store_sorting' => $res->getTableName('mana_sorting/method_store')), null)
+            ->joinInner(array('global_sorting' => $res->getTableName('mana_sorting/method')),
+                "`store_sorting`.`method_id` = `global_sorting`.`id`", null)
+            ->where("`store_sorting`.`store_id` = ?", Mage::app()->getStore()->getId())
+            ->where("`global_sorting`.`url_key` = ?", $urlKey)
+            ->columns("store_sorting.url_key");
+        return $db->fetchOne($select);
+    }
+
     /**
      * @return Mana_Sorting_Resource_Method_Collection|Mana_Sorting_Resource_Method_Store_Collection
      */

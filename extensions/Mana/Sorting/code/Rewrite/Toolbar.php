@@ -59,6 +59,11 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
                 $defaultSortBy = Mage::getSingleton('catalog/config')->getProductListDefaultSortBy();
             }
         }
+        if (!isset($this->_availableOrder[$defaultSortBy])) {
+            // default order is global URL key - translate it to URL key of this store
+            $defaultSortBy = $this->sortingHelper()->translateUrlKey($defaultSortBy);
+        }
+
         return parent::setDefaultOrder($defaultSortBy);
     }
 
