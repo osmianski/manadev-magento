@@ -26,5 +26,5 @@
     <sync extension-dir="backend/images" project-dir="skin/adminhtml/default/default/images/{extension_name}"/>
 
     <!-- Magento class rewrites (specific only to this module) -->
-    <sync extension-file="rewrite/Mage_Core_Block_Template.php" project-file="app/code/local/Mage/Core/Block/Template.php"/>
+    <!--<sync extension-file="rewrite/Mage_Core_Block_Template.php" project-file="app/code/local/Mage/Core/Block/Template.php"/>-->
 </config>

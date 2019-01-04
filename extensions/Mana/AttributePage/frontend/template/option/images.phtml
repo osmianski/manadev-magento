@@ -8,22 +8,20 @@
 /* @var $this Mana_AttributePage_Block_Option_Images */
 $i = -1;
 $collection = $this->getCollection();
-$_count = count($collection);
-$_filesHelper = $this->filesHelper();
 ?>
-<?php if($_count) :?>
+<?php if(count($collection)) :?>
     <ul class="m-option-featured-list">
         <?php foreach ($collection as $_optionPage) : $i++;?>
-            <?php if (($_imgUrl = $_optionPage->getData('featured_image')) && $_filesHelper->shouldRenderImage($_imgUrl)): ?>
-            <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
+            <?php if ($_imgUrl = $this->getImageUrl($_optionPage)): ?>
+                <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
                 <li class="category-image m-featured-image">
-
                         <a href="<?php echo $_optionPage->getUrl() ?>">
-                        <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
-                            <?php echo $_filesHelper->renderImageAttributes($_imgUrl, $_optionPage->getData('featured_image_width'), $_optionPage->getData('featured_image_height')) ?>  >
+                            <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
+                                <?php echo $this->filesHelper()->renderImageAttributes($_imgUrl,
+                                    $this->getImageWidth($_optionPage), $this->getImageHeight($_optionPage)) ?>  >
                         </a>
                 </li>
-        <?php endif; ?>
+            <?php endif; ?>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
