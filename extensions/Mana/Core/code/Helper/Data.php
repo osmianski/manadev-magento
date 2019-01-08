@@ -349,6 +349,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
     public function getIniByteValue($setting) {
         $val = trim(ini_get($setting));
         $last = strtolower($val[strlen($val)-1]);
+        $val = intval($val);
         switch($last) {
             case 'g': $val *= 1024;
             case 'm': $val *= 1024;

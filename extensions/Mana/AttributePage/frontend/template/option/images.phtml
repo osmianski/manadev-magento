@@ -12,16 +12,18 @@ $collection = $this->getCollection();
 <?php if(count($collection)) :?>
     <ul class="m-option-featured-list">
         <?php foreach ($collection as $_optionPage) : $i++;?>
-            <?php if ($_imgUrl = $this->getImageUrl($_optionPage)): ?>
-                <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
-                <li class="category-image m-featured-image">
-                        <a href="<?php echo $_optionPage->getUrl() ?>">
-                            <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
-                                <?php echo $this->filesHelper()->renderImageAttributes($_imgUrl,
-                                    $this->getImageWidth($_optionPage), $this->getImageHeight($_optionPage)) ?>  >
-                        </a>
-                </li>
-            <?php endif; ?>
+            <?php $_escapedTitle = $this->escapeHtml($_optionPage->getData('title')); ?>
+            <li class="category-image m-featured-image">
+                <a href="<?php echo $_optionPage->getUrl() ?>">
+                    <?php if ($_imgUrl = $this->getImageUrl($_optionPage)): ?>
+                        <img alt="<?php echo $_escapedTitle ?>" title="<?php echo $_escapedTitle ?>"
+                            <?php echo $this->filesHelper()->renderImageAttributes($_imgUrl,
+                                $this->getImageWidth($_optionPage), $this->getImageHeight($_optionPage)) ?>  >
+                    <?php else: ?>
+                        <?php echo $_escapedTitle ?>
+                    <?php endif; ?>
+                </a>
+            </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>

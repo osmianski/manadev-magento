@@ -9,6 +9,7 @@ class Mana_AttributePage_Block_Option_CurrentCategory extends Mana_AttributePage
         /* @var Mana_AttributePage_Resource_OptionPage_Store_Collection $collection */
         $collection = $this->createOptionPageCollection()
             ->addStoreFilter(Mage::app()->getStore()->getId())
+            ->addFeaturedFilter()
             ->setOrder('position', 'ASC');
 
         return $this->addCategoryFilterToCollection($collection);
