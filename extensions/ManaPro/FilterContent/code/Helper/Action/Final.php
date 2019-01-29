@@ -26,6 +26,7 @@ class ManaPro_FilterContent_Helper_Action_Final extends Mage_Core_Helper_Abstrac
                 'meta_keywords' => Mage::getStoreConfig('mana_filtercontent/final/meta_keywords'),
                 'meta_description' => Mage::getStoreConfig('mana_filtercontent/final/meta_description'),
                 'meta_robots' => Mage::getStoreConfig('mana_filtercontent/final/meta_robots'),
+                'canonical_url' => Mage::getStoreConfig('mana_filtercontent/final/canonical_url'),
 
                 'title' => Mage::getStoreConfig('mana_filtercontent/final/title'),
                 'subtitle' => Mage::getStoreConfig('mana_filtercontent/final/subtitle'),

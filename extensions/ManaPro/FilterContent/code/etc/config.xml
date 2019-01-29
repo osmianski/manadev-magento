@@ -8,7 +8,7 @@
 <config>
     <modules>
         <ManaPro_FilterContent>
-            <version>17.10.1713</version>
+            <version>19.01.2920</version>
         </ManaPro_FilterContent>
     </modules>
     <global>
@@ -203,6 +203,11 @@
                 <instruction>replace</instruction>
                 <is_space_sensitive>1</is_space_sensitive>
             </meta_robots>
+            <canonical_url>
+                <sort_order>650</sort_order>
+                <instruction>replace</instruction>
+                <is_space_sensitive>1</is_space_sensitive>
+            </canonical_url>
 
             <!-- Content rendered from theme template and from CMS content -->
             <title>
@@ -315,6 +320,7 @@ and separators in between#}
 {% endif %}]]></subtitle>
                 <description>{{ description }}</description>
                 <meta_robots>{{ meta_robots }}</meta_robots>
+                <canonical_url>{{ canonical_url }}</canonical_url>
             </final>
         </mana_filtercontent>
     </default>

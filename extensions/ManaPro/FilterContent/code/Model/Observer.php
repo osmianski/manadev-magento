@@ -75,6 +75,10 @@ class ManaPro_FilterContent_Model_Observer {
             if (($robots = $this->rendererHelper()->get('meta_robots')) !== false) {
                 $head->setData('robots', trim($robots));
             }
+            if (($canonicalUrl = $this->rendererHelper()->get('canonical_url')) !== false) {
+                $this->_removeHeadItemsByType($head, 'link_rel', 'rel="canonical"');
+                $head->addLinkRel('canonical', $canonicalUrl);
+            }
         }
     }
 
@@ -360,6 +364,31 @@ class ManaPro_FilterContent_Model_Observer {
                 break;
         }
     }
+
+    /**
+     * @param Mage_Page_Block_Html_Head $head
+     * @param string $type
+     * @param bool|string $params
+     */
+    protected function _removeHeadItemsByType($head, $type, $params = false) {
+        $data = $head->getData();
+        $data = isset($data['items']) ? $data['items'] : array();
+        foreach (array_keys($data) as $key) {
+            if ($this->coreHelper()->startsWith($key, $type.'/')) {
+                if ($params) {
+                    if (isset($data[$key]['params'])) {
+                        if ($params == $data[$key]['params']) {
+                            unset($data[$key]);
+                        }
+                    }
+                }
+                else {
+                    unset($data[$key]);
+                }
+            }
+        }
+        $head->setData('items', $data);
+	}
 
     #region Dependencies
     /**
