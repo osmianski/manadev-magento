@@ -344,34 +344,34 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
                 throw new Exception;
             }
 
-            $isResponseValid = $this->_getHeaders($url);
-
-            if (!$isResponseValid) {
-                throw new Exception;
-            }
-
-            $contents = $this->getPage($url);
-
-            if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
-                if ($this->domainLoggingEnabled) {
-                    Mage::log("Login form not found", Zend_Log::DEBUG, 'domain_validation.log');
-                    //Mage::log($contents, Zend_Log::DEBUG, 'domain_validation.log');
-                }
-                // Retry with original url and append `/admin`
-                $url = $postDomain . "admin/";
-                $isResponseValid = $this->_getHeaders($url);
-
-                if (!$isResponseValid) {
-                    throw new Exception;
-                }
-
-                $contents = $this->getPage($url);
-                if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
-                    throw new Exception;
-                } else {
-                    $postDomain .= "admin/";
-                }
-            }
+//            $isResponseValid = $this->_getHeaders($url);
+//
+//            if (!$isResponseValid) {
+//                throw new Exception;
+//            }
+//
+//            $contents = $this->getPage($url);
+//
+//            if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+//                if ($this->domainLoggingEnabled) {
+//                    Mage::log("Login form not found", Zend_Log::DEBUG, 'domain_validation.log');
+//                    //Mage::log($contents, Zend_Log::DEBUG, 'domain_validation.log');
+//                }
+//                // Retry with original url and append `/admin`
+//                $url = $postDomain . "admin/";
+//                $isResponseValid = $this->_getHeaders($url);
+//
+//                if (!$isResponseValid) {
+//                    throw new Exception;
+//                }
+//
+//                $contents = $this->getPage($url);
+//                if (strpos($contents, "name=\"login[username]\"") === false || strpos($contents, "name=\"login[password]\"") === false) {
+//                    throw new Exception;
+//                } else {
+//                    $postDomain .= "admin/";
+//                }
+//            }
         } catch(Exception $e) {
             if ($this->domainLoggingEnabled) {
                 Mage::log("Invalid domain: $postDomain", Zend_Log::DEBUG, 'domain_validation.log');
