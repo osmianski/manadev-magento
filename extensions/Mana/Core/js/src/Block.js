@@ -29,6 +29,7 @@ function($, core, layout, json, undefined) {
         },
         setElement:function (value) {
             this._element = value;
+            this._element.m_block = this;
             return this;
         },
         addChild:function (child) {

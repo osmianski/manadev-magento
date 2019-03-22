@@ -590,7 +590,9 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
         endGeneratingBlocks: function (vars) {
             var parentBlock = vars.parentBlock, namedBlocks = vars.namedBlocks;
             var self = this;
-            this._collectBlockTypes(parentBlock ? parentBlock.getElement() : document, function (blockTypes) {
+            var $elements = $(parentBlock ? parentBlock.getElement() : document)
+                .find('.m-block, [class^=mb-], [data-m-block]');
+            this._collectBlockTypes($elements, function (blockTypes) {
                 if (!self._pageBlock) {
                     var body = document.body, $body = $(body);
                     var typeName = $body.attr('data-m-block');
@@ -604,7 +606,11 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                     parentBlock = self.getPageBlock();
                 }
 
-                self._generateBlocksInElement(parentBlock.getElement(), parentBlock, blockTypes, namedBlocks);
+                $elements.each(function (index) {
+                    var block = self._findParentBlock($elements, index, parentBlock);
+                    self._createBlockFromElement(this, block, blockTypes, namedBlocks);
+                });
+
                 $.each(namedBlocks, function (id, namedBlock) {
                     namedBlock.parent.removeChild(namedBlock.child);
                 });
@@ -615,12 +621,31 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
                 var a = 1;
             });
         },
-        _collectBlockTypes: function (element, callback) {
+
+        _findParentBlock: function($elements, index, parentBlock) {
+            for (var i = index - 1; i >= 0; i--) {
+                if ($.contains($elements[i], $elements[index])) {
+                    return $elements[i].m_block;
+                }
+            }
+
+            return parentBlock;
+        },
+
+        _collectBlockTypes: function ($elements, callback) {
+            var layout = this;
             var blockTypeNames = ['Mana/Core/PageBlock'];
-            this._collectBlockTypesInElement(element, blockTypeNames);
+            $elements.each(function () {
+                var blockInfo = layout._getElementBlockInfo(this);
+                if (blockInfo) {
+                    if (blockTypeNames.indexOf(blockInfo.typeName) == -1) {
+                        blockTypeNames.push(blockInfo.typeName);
+                    }
+                }
+            });
+
             Mana.requireOptional(blockTypeNames, function () {
                 var blockTypeValues = arguments;
-                ;
                 var blockTypes = {};
                 $.each(blockTypeNames, function (key, value) {
                     blockTypes[value] = blockTypeValues[key];
@@ -632,18 +657,6 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
 //                    }
                 });
                 callback(blockTypes);
-            });
-        },
-        _collectBlockTypesInElement: function (element, blockTypeNames) {
-            var layout = this;
-            $(element).children().each(function () {
-                var blockInfo = layout._getElementBlockInfo(this);
-                if (blockInfo) {
-                    if (blockTypeNames.indexOf(blockInfo.typeName) == -1) {
-                        blockTypeNames.push(blockInfo.typeName);
-                    }
-                }
-                layout._collectBlockTypesInElement(this, blockTypeNames);
             });
         },
         _removeAnonymousBlocks: function (parentBlock) {
@@ -673,13 +686,6 @@ Mana.define('Mana/Core/Layout', ['jquery', 'singleton:Mana/Core'], function ($, 
             }
 
             return null;
-        },
-        _generateBlocksInElement: function (element, block, blockTypes, namedBlocks) {
-            var layout = this;
-            $(element).children().each(function () {
-                var childBlock = layout._createBlockFromElement(this, block, blockTypes, namedBlocks);
-                layout._generateBlocksInElement(this, childBlock || block, blockTypes, namedBlocks);
-            });
         },
         _createBlockFromElement: function (element, parent, blockTypes, namedBlocks) {
             var blockInfo = this._getElementBlockInfo(element);
@@ -1188,6 +1194,7 @@ function($, core, layout, json, undefined) {
         },
         setElement:function (value) {
             this._element = value;
+            this._element.m_block = this;
             return this;
         },
         addChild:function (child) {
