@@ -184,7 +184,9 @@ class ManaPro_FilterContent_Block_Adminhtml_Filter_ContentForm  extends Mana_Adm
 
             $this->getForm()->addValues($initialValues);
             foreach (array_keys($initialValues) as $field) {
-                $this->getForm()->getElement($field)->setData('dirty', 1);
+                if ($field_ = $this->getForm()->getElement($field)) {
+                    $field_->setData('dirty', 1);
+                }
             }
         }
 
