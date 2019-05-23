@@ -122,8 +122,10 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
     public function updateAction(){
         try {
             $params = $this->getRequest()->getParams();
-            Mage::log('', Zend_Log::DEBUG, 'license_request.log');
-            Mage::log($_SERVER['REMOTE_ADDR'] . ' request: ' . json_encode($params), Zend_Log::DEBUG, 'license_request.log');
+            if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                Mage::log('', Zend_Log::DEBUG, 'license_request.log');
+                Mage::log($_SERVER['REMOTE_ADDR'] . ' request: ' . json_encode($params), Zend_Log::DEBUG, 'license_request.log');
+            }
 
             /** @var Local_Manadev_Resource_License_Request_Log $logResource */
             $logResource = Mage::getResourceModel('local_manadev/license_request_log');
@@ -233,15 +235,21 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             );
             if($newMagentoId ) {
                 $result['id'] = $magento_id;
-                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID (newly assigned): ' . $magento_id .
-                    ', '. $params['admin'], Zend_Log::DEBUG, 'license_request.log');
+                if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                    Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID (newly assigned): ' . $magento_id .
+                        ', '. $params['admin'], Zend_Log::DEBUG, 'license_request.log');
+                }
             }
             else {
-                Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID: ' . $magento_id .
-                    ', ' . $params['admin'], Zend_Log::DEBUG, 'license_request.log');
+                if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                    Mage::log($_SERVER['REMOTE_ADDR'] . ' Magento ID: ' . $magento_id .
+                        ', ' . $params['admin'], Zend_Log::DEBUG, 'license_request.log');
+                }
             }
 
-            Mage::log($_SERVER['REMOTE_ADDR'] . ' response: ' . json_encode($result), Zend_Log::DEBUG, 'license_request.log');
+            if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                Mage::log($_SERVER['REMOTE_ADDR'] . ' response: ' . json_encode($result), Zend_Log::DEBUG, 'license_request.log');
+            }
             $s = json_encode($result);
             $r=''; for ($i=0;$i<strlen($s);$i++) $r.=($i+1==strlen($s)&&$i%2==0)?$s[$i]:($i%2==0?$s[$i+1]:$s[$i-1]);
             echo base64_encode(implode(array_map(function($r){return chr(ord($r)+1);},str_split($r))));
@@ -291,18 +299,22 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             if (!$itemModel->getId()) {
                 $licenseNo = '';
                 if (!$isFree) {
-                    Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
-                        '. Reason: License record not found by verification no: ' . $extension['license_verification_no'],
-                        Zend_Log::DEBUG, 'license_request.log');
+                    if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                        Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
+                            '. Reason: License record not found by verification no: ' . $extension['license_verification_no'],
+                            Zend_Log::DEBUG, 'license_request.log');
+                    }
                 }
             }
             elseif ($itemModel->getData("status") == $notAvailable) {
                 $licenseNo = '';
 
                 if (!$isFree) {
-                    Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
-                        '. Reason: License status is Not Available, verification no: ' . $extension['license_verification_no'],
-                        Zend_Log::DEBUG, 'license_request.log');
+                    if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                        Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
+                            '. Reason: License status is Not Available, verification no: ' . $extension['license_verification_no'],
+                            Zend_Log::DEBUG, 'license_request.log');
+                    }
                 }
             }
             else {
@@ -319,14 +331,18 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
                     $licenseNo = '';
                     if (!$isFree) {
                         if ($code) {
-                            Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
-                                '. Reason: License issues for another extension: ' . $code,
-                                Zend_Log::DEBUG, 'license_request.log');
+                            if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                                Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
+                                    '. Reason: License issues for another extension: ' . $code,
+                                    Zend_Log::DEBUG, 'license_request.log');
+                            }
                         }
                         else {
-                            Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
-                                '. Reason: extension not found by SKU.',
-                                Zend_Log::DEBUG, 'license_request.log');
+                            if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                                Mage::log($_SERVER['REMOTE_ADDR'] . ' Extension disabled: ' . $extension['code'] .
+                                    '. Reason: extension not found by SKU.',
+                                    Zend_Log::DEBUG, 'license_request.log');
+                            }
                         }
                     }
                 }
