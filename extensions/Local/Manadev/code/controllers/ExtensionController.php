@@ -255,11 +255,13 @@ class Local_Manadev_ExtensionController extends Mage_Core_Controller_Front_Actio
             header("Status: 503 Service Unavailable", true, 503);
             echo '503 Service Unavailable';
 
-            Mage::log($e->getMessage(), Zend_Log::DEBUG, 'manadev-license-exception.log');
-            Mage::log($e->getTraceAsString(), Zend_Log::DEBUG, 'manadev-license-exception.log');
+            if (Mage::getStoreConfigFlag('local_manadev/licensing/log')) {
+                Mage::log($e->getMessage(), Zend_Log::DEBUG, 'manadev-license-exception.log');
+                Mage::log($e->getTraceAsString(), Zend_Log::DEBUG, 'manadev-license-exception.log');
 
-            if(isset($params)) {
-                Mage::log(json_encode($params), Zend_Log::DEBUG, 'manadev-license-exception.log');
+                if(isset($params)) {
+                    Mage::log(json_encode($params), Zend_Log::DEBUG, 'manadev-license-exception.log');
+                }
             }
 
             exit();

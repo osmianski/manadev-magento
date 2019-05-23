@@ -28,7 +28,7 @@ foreach ($_products->getItems() as $_product): $i++; ?>
     <li class="item item-<?php echo $i - 1; ?>" style="width: <?php echo $img_width ?>px;">
         <?php echo Mage::helper('manaproduct_tag')->beforeImage($this, $_product, $img_width, $img_height) ?>
         <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>" class="product-image"><img
-                src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($img_width, $img_height) ?>" width="<?php echo $img_width ?>" height="<?php echo $$img_height ?>"
+                src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($img_width, $img_height) ?>" width="<?php echo $img_width ?>" height="<?php echo $img_height ?>"
                 alt="<?php echo $this->stripTags($_product->getName(), null, true) ?>"/></a>
         <?php echo Mage::helper('manaproduct_tag')->afterImage($this, $_product, $img_width, $img_height) ?>
         <?php if ($is_visible_name): ?>

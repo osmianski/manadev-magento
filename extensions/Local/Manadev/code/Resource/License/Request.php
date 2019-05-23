@@ -18,8 +18,8 @@ class Local_Manadev_Resource_License_Request extends Mage_Core_Model_Mysql4_Abst
         $prefix = "M";
         $salt = "r2RKKMBx6ZUmPQQ8";
 
-        $x = json_encode(ksort($requestModel->getModules())) . '|' .
-            json_encode(array_multisort($requestModel->getStores())) . '|' .
+        $x = json_encode(true) . '|' .
+            json_encode(true) . '|' .
             $requestModel->getData('admin_url') . '|' .
             $requestModel->getData('remote_ip') . '|' .
             $requestModel->getData('base_dir') . '|' .
