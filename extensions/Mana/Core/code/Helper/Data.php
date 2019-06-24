@@ -485,7 +485,7 @@ class Mana_Core_Helper_Data extends Mage_Core_Helper_Abstract {
             }
         }
         else {
-            return is_numeric($input) ? $input : null;
+            return preg_match('/^\\d+$/', $input) ? $input : null;
         }
     }
     public function sanitizeRequestNumberParam($paramName, $separators = array()) {
