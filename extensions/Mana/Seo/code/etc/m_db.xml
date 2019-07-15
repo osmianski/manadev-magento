@@ -57,7 +57,7 @@
                         </symbols>
                         <status><type>varchar(10)</type><default_value>obsolete</default_value><no>7</no><indexed /></status>
                         <name><type>varchar(80)</type><no>8</no></name>
-                        <redirect_parameter_order><type>tinyint</type><no>12</no><default_value>1</default_value></redirect_parameter_order>
+                        <redirect_parameter_order><type>tinyint</type><no>9</no><default_value>1</default_value></redirect_parameter_order>
                         <include_filter_name><type>tinyint</type><no>10</no><default_value>0</default_value><affects_url/></include_filter_name>
                         <redirect_to_subcategory><type>tinyint</type><no>11</no><default_value>1</default_value></redirect_to_subcategory>
                         <price_separator><type>varchar(10)</type><no>12</no><affects_url/></price_separator>
