@@ -75,29 +75,6 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
         );
 
         $this->addColumn(
-            'actual_admin_panel_url',
-            array(
-                'header' => $this->__('Actual Admin Panel URL'),
-                'index' => 'actual_admin_panel_url',
-                'width' => '100px',
-                'align' => 'left',
-                'link' => array('link' => "{{actual_admin_panel_url}}"),
-                'renderer' => 'local_manadev/adminhtml_renderer_link',
-            )
-        );
-
-        $this->addColumn(
-            'actual_frontend_urls',
-            array(
-                'header' => $this->__('Actual Frontend URL'),
-                'index' => 'actual_frontend_urls',
-                'width' => '100px',
-                'align' => 'left',
-                'renderer' => 'local_manadev/adminhtml_renderer_linkMultiline'
-            )
-        );
-
-        $this->addColumn(
             'used_on_magento_ids',
             array(
                 'header' => $this->__('Used On Magento IDs'),
@@ -214,26 +191,6 @@ class Local_Manadev_Block_Adminhtml_License_IssuedLicensesGrid extends Mana_Admi
                 '`ce`.`entity_id` = `cefn`.`entity_id` AND `cefn`.`attribute_id` = '.$fn->getAttributeId(), array())
             ->joinLeft(array('celn' => $collection->getTable('customer/entity').'_varchar'),
                 '`ce`.`entity_id` = `celn`.`entity_id` AND `celn`.`attribute_id` = '.$ln->getAttributeId(), array())
-            ->joinLeft(array('mlr' => new Zend_Db_Expr("(
-                SELECT license_verification_no, actual_admin_panel_url, agg_frontend_urls AS actual_frontend_urls
-                FROM (
-                        SELECT mlr.id, mlr.magento_id, mlr.`admin_url` AS actual_admin_panel_url, 
-                            mle.license_verification_no, mlr.agg_frontend_urls, mlr.`remote_ip`
-                        FROM ". $collection->getTable('local_manadev/license_request') ." mlr
-                        INNER JOIN (
-                                SELECT magento_id, MAX(created_at) as created_at 
-                                FROM ". $collection->getTable('local_manadev/license_request') ." 
-                                GROUP BY magento_id
-                            ) 
-                            mlrl ON mlr.`magento_id` = mlrl.`magento_id` AND `mlr`.`created_at` = `mlrl`.`created_at`
-                        INNER JOIN ". $collection->getTable('local_manadev/license_extension') ." mle 
-                            ON mlr.id = mle.request_id
-                        WHERE TRIM(license_verification_no) <> '' AND mle.license_verification_no IS NOT NULL
-                    ) AS tmp
-                GROUP BY license_verification_no
-                )")), '`mlr`.`license_verification_no` = `main_table`.`m_license_verification_no`',
-                array('actual_admin_panel_url', 'actual_frontend_urls'))
-            // Coalesce so that free licenses without orders will be displayed
             ->where('COALESCE(`o`.`status`, "complete") = "complete"')
             ->columns($columns);
 
