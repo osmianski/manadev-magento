@@ -187,9 +187,8 @@ class Mana_Db_Helper_Formula extends Mage_Core_Helper_Abstract {
         else {
             $result = array();
         }
-        if ($nullId !== false) {
-            $result[''] = '';
-        }
+
+        $result[''] = '';
         return $result;
     }
 
