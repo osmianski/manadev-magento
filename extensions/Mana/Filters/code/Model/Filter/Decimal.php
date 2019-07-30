@@ -485,6 +485,18 @@ class Mana_Filters_Model_Filter_Decimal
         return true;
     }
 
+    public function getCurrencyRate()
+    {
+        $rate = $this->_getData('currency_rate');
+        if (is_null($rate)) {
+            $rate = Mage::app()->getStore($this->getStoreId())->getCurrentCurrencyRate();
+        }
+        if (!$rate) {
+            $rate = 1;
+        }
+        return $rate;
+    }
+
     #region Dependencies
 
     /**

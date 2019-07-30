@@ -267,6 +267,7 @@ class Mana_Filters_Model_Filter_Price
      * This method locates resource type which should do all dirty job with the database. In this override, we
      * instruct Magento to take our resource type, not standard.
      * @see Mage_Catalog_Model_Layer_Filter_Price::_getResource()
+     * @return ManaPro_FilterSuperSlider_Resource_Price|Mage_Catalog_Model_Resource_Layer_Filter_Price
      */
     protected function _getResource()
     {

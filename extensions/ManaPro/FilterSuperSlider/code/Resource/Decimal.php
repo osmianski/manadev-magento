@@ -20,7 +20,8 @@ class ManaPro_FilterSuperSlider_Resource_Decimal extends Mana_Filters_Resource_F
         $select     = $this->_getSelect($filter);
         $adapter    = $this->_getReadAdapter();
 
-        $rangeExpr  = new Zend_Db_Expr("decimal_index.value");
+        $expr = $this->_getDecimalExpression($filter, $select, 'decimal_index');
+        $rangeExpr  = new Zend_Db_Expr($expr);
         $select->columns(array('value' => 'decimal_index.value'));
         $select->group('value');
         $select->order('value');
