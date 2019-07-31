@@ -167,7 +167,11 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
             $this->_preparedExpressions[$key] = $this->_getDecimalAdditionalExpression($filter, $select, $tableAlias);
         }
 
-        return "({$tableAlias}.value{$this->_preparedExpressions[$key]}) * {$filter->getCurrencyRate()}";
+        if (!$this->_preparedExpressions[$key]) {
+            return "({$tableAlias}.value";
+        }
+
+        return "({$tableAlias}.value {$this->_preparedExpressions[$key]}) * {$filter->getCurrencyRate()}";
     }
 
     /**
@@ -195,11 +199,7 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
         Mage::dispatchEvent('catalog_prepare_price_select', $eventArgs);
 
         $result = implode('', $response->getData('additional_calculations'));
-        $result = $this->_replacePriceExpr($result, $tableAlias);
-        if ($result) {
-            $result = " $result";
-        }
-        return $result;
+        return $this->_replacePriceExpr($result, $tableAlias);
     }
 
     /**
