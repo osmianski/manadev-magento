@@ -168,7 +168,7 @@ class Mana_Filters_Resource_Filter_Decimal extends Mage_Catalog_Model_Resource_E
         }
 
         if (!$this->_preparedExpressions[$key]) {
-            return "({$tableAlias}.value";
+            return "{$tableAlias}.value";
         }
 
         return "({$tableAlias}.value {$this->_preparedExpressions[$key]}) * {$filter->getCurrencyRate()}";
