@@ -2941,10 +2941,12 @@ button.btn-checkout,
 	.product-view .main-image .m-tag.m-sale,
 	.product-view .m-tag.m-magento2,
 	.product-view .m-tag.m-popular,
+    .product-view .m-tag.m-enterprise,
 	.product-view .m-tag.m-seo { width: 40px; height: 40px; background-size: 40px 40px; }
 	.product-view .main-image .m-tag.m-sale { top: -2px; left: -1px; }
 	.product-view .m-tag.m-magento2 { bottom: 9px; left: -1px; }
-	.product-view .m-tag.m-popular { top: -2px; right: -1px; }
+	.product-view .m-tag.m-popular,
+    .product-view .m-tag.m-enterprise { top: -2px; right: -1px; }
 	.product-view .m-tag.m-seo { bottom: 9px; right: -1px; }
 }
 /* Phones ===================================================================== */
