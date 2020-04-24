@@ -11,7 +11,7 @@
         <ManaPro_FilterAttributes>
             <!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table.  -->
-            <version>16.07.2716</version>
+            <version>20.04.2115</version>
         </ManaPro_FilterAttributes>
     </modules>
     <!-- This section contains module settings which are merged into global configuration during each page load, 
@@ -74,6 +74,7 @@
                     <types>
                         <sync_value><resource>manapro_filterattributes/syncValue</resource></sync_value>
                         <stock_status><resource>manapro_filterattributes/stockStatus</resource></stock_status>
+                        <stock_availability><resource>manapro_filterattributes/stockAvailability</resource></stock_availability>
                         <rating><resource>manapro_filterattributes/rating</resource></rating>
                     </types>
                 </manapro_filterattributes>

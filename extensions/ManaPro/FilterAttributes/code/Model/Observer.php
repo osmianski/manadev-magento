@@ -31,6 +31,9 @@ class ManaPro_FilterAttributes_Model_Observer {
         Mage::getResourceSingleton('manapro_filterattributes/stockStatus')->process(
             $this,
             $options);
+        Mage::getResourceSingleton('manapro_filterattributes/stockAvailability')->process(
+            $this,
+            $options);
     }
 
     /**
