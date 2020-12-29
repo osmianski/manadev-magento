@@ -3,6 +3,8 @@
 /**
  * @copyright   Copyright (c) http://www.manadev.com
  * @license     http://www.manadev.com/license  Proprietary License
+ *
+ * @method Local_Manadev_Resource_Downloadable_Item _getResource()
  */
 class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link_Purchased_Item
 {
@@ -168,6 +170,9 @@ class Local_Manadev_Model_Downloadable_Item extends Mage_Downloadable_Model_Link
             $this->getIndexerSingleton()->processEntityAction($this, static::ENTITY,
                 Mage_Index_Model_Event::TYPE_SAVE);
         }
+
+        $this->_getResource()->afterSaveCommit($this);
+
         return $this;
     }
 

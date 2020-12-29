@@ -79,7 +79,7 @@ class Local_Manadev_Resource_Downloadable_Item extends Mage_Downloadable_Model_R
         }
     }
 
-    protected function _afterSave(Mage_Core_Model_Abstract $object) {
+    public function afterSaveCommit(Mage_Core_Model_Abstract $object) {
         $this->upgradeAggregateByLicenseVerificationNos(array($object->getData('m_license_verification_no')));
         return parent::_afterSave($object);
     }
