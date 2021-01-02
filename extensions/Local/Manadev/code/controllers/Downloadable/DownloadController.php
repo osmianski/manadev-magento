@@ -15,13 +15,13 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
         }
 
         // MANAdev start
+        /* @var Mage_Downloadable_Model_Link_Purchased_Item $linkPurchasedItem */
 
-        if ($linkPurchasedItem->getId()) {
-            if (Mage::helper('local_manadev')->createNewZipFileWithLicense($linkPurchasedItem)) {
-                $linkPurchasedItem->save();
-            }
+        $branch = Mage::app()->getRequest()->getParam('branch') ?: 'master';
+
+        if ($filename = Mage::helper('local_manadev')->createNewZipFileWithLicense($linkPurchasedItem, $branch)) {
+            $linkPurchasedItem->save();
         }
-
         // MANAdev end
 
         if (!Mage::helper('downloadable')->getIsShareable($linkPurchasedItem)) {
@@ -53,10 +53,6 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
 
         // MANAdev start
 
-//        if ($status == Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_AVAILABLE
-//            && ($downloadsLeft || $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
-//        ) {
-
         Mage::register("m_link_purchased_item", $linkPurchasedItem);
         $availableStatuses = array(
             Local_Manadev_Model_Download_Status::M_LINK_STATUS_AVAILABLE_TIL,
@@ -66,19 +62,21 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
         if (in_array($status, $availableStatuses)
             && ($downloadsLeft || $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
         ) {
+            if ($linkPurchasedItem->getLinkType() == Mage_Downloadable_Helper_Download::LINK_TYPE_URL) {
+                // we don't sell URLs, we only sell files
+                $this->_getCustomerSession()->addNotice(
+                    Mage::helper('downloadable')->__(
+                        "Downloadable URL is not available."));
+                return $this->_redirect('*/customer/products');
+            }
+
+            $resource = Mage::helper('downloadable/file')->getFilePath(
+                Mage_Downloadable_Model_Link::getBasePath(),
+                $filename
+            );
+            $resourceType = Mage_Downloadable_Helper_Download::LINK_TYPE_FILE;
         // MANAdev end
 
-            $resource = '';
-            $resourceType = '';
-            if ($linkPurchasedItem->getLinkType() == Mage_Downloadable_Helper_Download::LINK_TYPE_URL) {
-                $resource = $linkPurchasedItem->getLinkUrl();
-                $resourceType = Mage_Downloadable_Helper_Download::LINK_TYPE_URL;
-            } elseif ($linkPurchasedItem->getLinkType() == Mage_Downloadable_Helper_Download::LINK_TYPE_FILE) {
-                $resource = Mage::helper('downloadable/file')->getFilePath(
-                    Mage_Downloadable_Model_Link::getBasePath(), $linkPurchasedItem->getLinkFile()
-                );
-                $resourceType = Mage_Downloadable_Helper_Download::LINK_TYPE_FILE;
-            }
             try {
                 $this->_processDownload($resource, $resourceType);
                 $linkPurchasedItem->setNumberOfDownloadsUsed($linkPurchasedItem->getNumberOfDownloadsUsed() + 1);

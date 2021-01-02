@@ -72,12 +72,29 @@
                             <ul class="add-to-links license-buttons">
                             <?php foreach ($_actions as $_action) : ?>
                                 <li>
-                                    <a title="<?php echo $_action['title'] ?>"
-                                        <?php echo $_action['target'] ? 'target="' . $_action['target'] . '"' : '' ?>
-                                        class="button <?php echo $_action['css_class'] ?>"
-                                        href="<?php echo $_action['url'] ?>">
-                                        <span><span><?php echo $_action['text'] ?></span></span>
-                                    </a>
+                                    <?php if (isset($_action['items'])) :?>
+                                        <button class="button m-download-menu-button <?php echo $_action['css_class'] ?>">
+                                            <span><span><?php echo $_action['text'] ?></span></span>
+                                        </button>
+                                        <ul class="m-download-menu">
+                                            <?php foreach ($_action['items'] as $_actionItem): ?>
+                                                <li>
+                                                    <a title="<?php echo $_actionItem['text'] ?>"
+                                                        <?php echo $_actionItem['target'] ? 'target="' . $_actionItem['target'] . '"' : '' ?>
+                                                        href="<?php echo $_actionItem['url'] ?>">
+                                                        <span><span><?php echo $_actionItem['text'] ?></span></span>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php else: ?>
+                                        <a title="<?php echo $_action['title'] ?>"
+                                            <?php echo $_action['target'] ? 'target="' . $_action['target'] . '"' : '' ?>
+                                            class="button <?php echo $_action['css_class'] ?>"
+                                            href="<?php echo $_action['url'] ?>">
+                                            <span><span><?php echo $_action['text'] ?></span></span>
+                                        </a>
+                                    <?php endif; ?>
                                 </li>
                             <?php endforeach; ?>
                             </ul>

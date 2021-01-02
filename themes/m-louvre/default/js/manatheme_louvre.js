@@ -11,12 +11,45 @@
 //			would not interfere with other global variables.
 //		b.	we use jQuery $ notation in not conflicting way (along with prototype, ext, etc.)
 (function($, window, document) {
+    function initDownloadMenus() {
+        $('.m-download-menu-button').each(function() {
+            initDownloadMenu($(this), $(this).next('.m-download-menu'));
+        });
+    }
+
+    function initDownloadMenu($button, $menu) {
+        $button.click(function(e) {
+            $(document.body).append($menu);
+            var buttonOffset = $button.offset();
+            $menu.css({
+                top: (buttonOffset.top + $button.outerHeight()) + "px",
+                left: buttonOffset.left + "px"
+            });
+            $menu.show();
+            e.stopPropagation();
+        });
+
+        document.on('click', function (e) {
+            if (!$menu.is(':visible')) {
+                return;
+            }
+
+            // if ($.contains($menu[0], e.target)) {
+            //     return;
+            // }
+            //
+            $menu.hide();
+        });
+    }
+
     $(function () {
         Mana.Theme.beautifySelects();
         Mana.Theme.scrollToTop();
         if ($(document).lightGallery) {
             $(".more-views").lightGallery();
         }
+
+        initDownloadMenus();
     });
 
     // function ManaMenuModal(ManaMenuInstance) {

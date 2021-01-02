@@ -762,7 +762,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         );
     }
 
-    public function createNewZipFileWithLicense($linkPurchasedItem) {
+    public function createNewZipFileWithLicense($linkPurchasedItem, $branch) {
         $licenseVerificationNo = $linkPurchasedItem->getData('m_license_verification_no');
 
         /* @var $storage Mage_Downloadable_Helper_File */
@@ -770,7 +770,16 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
         /** @var Mage_Downloadable_Model_Link $linkModel */
         $linkModel = Mage::getModel('downloadable/link')->load($linkPurchasedItem->getLinkId());
         $productModel = Mage::getModel('catalog/product')->load($linkPurchasedItem->getProductId());
-        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkModel->getLinkFile());
+
+        if (!($prefix = $this->getBranchColumnPrefix($branch))) {
+            return false;
+        }
+
+        if (!($filename = $linkModel->getData("{$prefix}_file"))) {
+            return false;
+        }
+
+        $resource = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $filename);
 
         $pathinfo = pathinfo($resource);
 
@@ -793,7 +802,7 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $zip->addEmptyDir($licenseDir);
 
                 $sku = $productModel->getData('sku');
-                $version = $this->_getLocalKeyModel()->getVersionFromZipFile($linkModel->getLinkFile());
+                $version = $this->_getLocalKeyModel()->getVersionFromZipFile($filename);
 
                 $licenseText = "{$productModel->getName()}\nVersion {$version}\n";
 
@@ -846,11 +855,52 @@ class Local_Manadev_Helper_Data extends Mage_Core_Helper_Abstract {
                 $linkPurchasedItem->setData('m_key_private', $privateKey);
             }
 
-            $linkPurchasedItem->setData('link_file', $newLinkFile);
-            return true;
+            return $newLinkFile;
         }
 
         return false;
+    }
+
+    protected $_downloadConfig;
+
+    public function getBranchConfig() {
+        if (!isset($this->_downloadConfig)) {
+            $this->_downloadConfig = include dirname(__DIR__) . "/config.php";
+        }
+        return $this->_downloadConfig;
+    }
+
+    public function getBranchColumnPrefix($branch) {
+        $config = $this->getBranchConfig();
+        return $config['columns'][$branch] ?? null;
+    }
+
+    public function getProductBranchLabels($productIdOrSku) {
+        $config = $this->getBranchConfig();
+
+        if (is_numeric($productIdOrSku)) {
+            /* @var Mage_Catalog_Model_Product $model */
+            $model = Mage::getModel('catalog/product');
+            $model->load($productIdOrSku);
+            $productIdOrSku = $model->getSku();
+        }
+
+        $labels = $config['products'][$productIdOrSku] ?? array();
+
+        if (isset($config['defaults'])) {
+            $labels = array_merge($config['defaults'], $labels);
+        }
+
+        return $labels;
+    }
+
+    public function getProductBranchLabel($productIdOrSku, $branch) {
+        if (!$this->getBranchColumnPrefix($branch)) {
+            return null;
+        }
+
+        $labels = $this->getProductBranchLabels($productIdOrSku);
+        return $labels[$branch] ?? null;
     }
 
     public function generateKeys() {

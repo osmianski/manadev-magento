@@ -1500,7 +1500,7 @@ button.btn-user-guide:after { content: "\e6b7"; }
 .add-to-links li {  }
 .add-to-links li a{ color:#646464; text-decoration: none; margin: 2px; padding: 5px 10px; background: gainsboro;  border-radius: 5px; display: inline-block; }
 
-.add-to-links li a:hover { color:#535353; background-color: #cbcbcb; }
+.add-to-links li a:hover, .add-to-links li button:hover { color:#535353; background-color: #cbcbcb; }
 .in-wishlist .add-to-links li a.link-wishlist,
 .in-compare .add-to-links li a.link-compare { color: #dcdcdc; background-color: #969696;}
 .product-view.in-wishlist .add-to-links li a.link-wishlist,
@@ -1670,11 +1670,11 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .product-view .demo-buttons li a { text-transform: capitalize; color: white; background-color: #b4b4b4; }
 .product-view .demo-buttons li a span span:after { content: "\e62e"; margin-left: 5px; }
 .product-view .demo-buttons li a.btn-admin-demo span span:after { content: "\e602"; }
-.add-to-links li a { white-space: nowrap; }
+.add-to-links li a, .add-to-links li button { white-space: nowrap; }
 .add-to-links li a.btn-user-guide,
 .add-to-links li a.btn-product-question,
 .add-to-links li a.btn-product-support,
-.add-to-links li a.btn-download { color: white; }
+.add-to-links li .btn-download { color: white; }
 .add-to-links li a.btn-user-guide { background-color: #65D183; }
 .add-to-links li a.btn-user-guide:after { content: "\e6b7"; }
 .add-to-links li a.btn-product-question { background-color: #26B1ED; }
@@ -1682,8 +1682,8 @@ box-shadow: 0px -3px 5px -2px rgba(0, 0, 0, 0.5); }
 .add-to-links li a.btn-product-support { background-color: #ff6464; }
 .add-to-links li a.btn-product-support:after { content: "\e719"; }
 .add-to-links li a.btn-product-support.green { background-color: #65D183; }
-.add-to-links li a.btn-download { background-color: #26B1ED; }
-.add-to-links li a.btn-download:after,
+.add-to-links li .btn-download { background-color: #26B1ED; }
+.add-to-links li .btn-download:after,
 .add-to-links li a.btn-invoice:after { content: "\e6a7"; }
 .add-to-links li a.btn-modify-url:after { content: "\e61c"; }
 
@@ -3127,3 +3127,27 @@ h6            { font-size:15px; }
 }
 
 .notice-cookie { background-color: #f6f6f6; border-radius: 0 0 10px 10px; padding-bottom: 10px; margin-bottom: 10px; }
+
+.m-download-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+
+.m-download-menu li {
+    padding: 5px 10px;
+}
+.m-download-menu li:hover {
+    background: #f0f2f9;
+}
+
+.m-download-menu a,
+.m-download-menu a:hover,
+.m-download-menu a:visited
+{
+    text-decoration: none;
+    color: #333333;
+}

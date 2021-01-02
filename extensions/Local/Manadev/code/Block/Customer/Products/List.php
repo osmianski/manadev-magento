@@ -94,12 +94,48 @@ class Local_Manadev_Block_Customer_Products_List extends Mage_Downloadable_Block
     }
 
     public function getDownloadButton($item) {
-        $title = Mage::helper('downloadable')->__('Start Download');
-        $url = $this->getDownloadUrl($item);
-        $target = '_blank';
+        /* @var Local_Manadev_Helper_Data $helper */
+        $helper = Mage::helper('local_manadev');
+        if (empty($labels = $helper->getProductBranchLabels($item->getProductId()))) {
+            return null;
+        }
+
+        if (count($labels) == 1) {
+            $title = Mage::helper('downloadable')->__('Start Download');
+            $url = $this->getDownloadUrl($item);
+            $target = '_blank';
+            $text = 'Download';
+            $css_class = 'btn-download';
+
+            return compact('title', 'url', 'target', 'text', 'css_class');
+        }
+
         $text = 'Download';
         $css_class = 'btn-download';
-        return compact('title', 'url', 'target', 'text', 'css_class');
+        $items = array();
+        foreach ($labels as $branch => $label) {
+            $items[] = array(
+                'url' => $this->getBranchDownloadUrl($item, $branch),
+                'text' => $label,
+                'target' => '_blank',
+            );
+        }
+        return compact('title', 'text', 'css_class', 'items');
+    }
+
+    public function getBranchDownloadUrl($item, $branch)
+    {
+        return $this->getUrl('*/download/link', array_merge(
+            array(
+                'id' => $item->getLinkHash(),
+                '_secure' => true,
+            ),
+            $branch != 'master'
+                ? array(
+                    '_query' => array('branch' => $branch),
+                )
+                : array()
+        ));
     }
 
     public function getRegisterButton($item) {
