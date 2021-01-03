@@ -9,6 +9,7 @@
     <h1><?php echo Mage::helper('local_manadev')->__('Product Registration') ?></h1>
 </div>
 <form action="<?php echo $this->getFormAction(); ?>" id="domainForm" class="m-form" method="post">
+    <input type="hidden" name="branch" id="branch">
     <div>
         <strong>Product:</strong> <?php echo $this->getProductName(); ?>
     </div>
@@ -36,6 +37,25 @@
     </div>
 
     <div class="buttons-set">
-        <button type="submit" title="<?php echo $this->getSubmitButtonLabel() ?>" class="button"><span><span><?php echo $this->getSubmitButtonLabel() ?></span></span></button>
+        <?php if(Mage::getSingleton('customer/session')->getData('m_start_download')): ?>
+            <?php if($labels = $this->getProductBranchLabels()):?>
+                <button class="button m-download-menu-button"><span><span>Register and Download</span></span></button>
+                <ul class="m-download-menu">
+                    <?php foreach ($labels as $branch => $label): ?>
+                        <li>
+                            <a title="<?php echo $label ?>"
+                                data-branch="<?php echo $branch ?>"
+                                href="#">
+                                <span><span><?php echo $label ?></span></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <button type="submit" class="button"><span><span>Register and Download</span></span></button>
+            <?php endif; ?>
+        <?php else: ?>
+            <button type="submit" class="button"><span><span>Save Changes</span></span></button>
+        <?php endif; ?>
     </div>
 </form>

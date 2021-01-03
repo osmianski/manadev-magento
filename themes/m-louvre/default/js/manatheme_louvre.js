@@ -27,6 +27,17 @@
             });
             $menu.show();
             e.stopPropagation();
+            e.preventDefault();
+        });
+
+        $menu.on('click', 'a', function(e) {
+            if ($(document.body).hasClass('local-manadev-domain-register')) {
+                $('#branch').val($(e.currentTarget).data('branch'));
+                domainForm.submit();
+
+                e.preventDefault();
+                return;
+            }
         });
 
         document.on('click', function (e) {

@@ -215,9 +215,15 @@ class Local_Manadev_Model_Observer {
 
         if($pendingDownloadLinkHash = $this->_getCustomerSession()->getData('m_pending_download_link_hash')) {
             $block = Mage::getSingleton('core/layout')->addBlock('Local_Manadev_Block_Download', 'download');
-            $block->setData('link_hash', $pendingDownloadLinkHash);
+            $block
+                ->setData('link_hash', $pendingDownloadLinkHash)
+                ->setData('branch', $this->_getCustomerSession()->getData('m_branch'));
+
             Mage::getSingleton('core/layout')->getBlock('content')->insert($block);
-            $this->_getCustomerSession()->unsetData('m_pending_download_link_hash');
+
+            $this->_getCustomerSession()
+                ->unsetData('m_pending_download_link_hash')
+                ->unsetData('m_branch');
         }
     }
 

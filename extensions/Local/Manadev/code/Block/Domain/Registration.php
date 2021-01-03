@@ -63,4 +63,21 @@ class Local_Manadev_Block_Domain_Registration extends Mage_Core_Block_Template
             return Mage::helper('local_manadev')->__('Save Changes');
         }
     }
+
+    public function getProductBranchLabels() {
+        /* @var Local_Manadev_Helper_Data $helper */
+        $helper = Mage::helper('local_manadev');
+
+        if (empty($labels = $helper->getProductBranchLabels(
+            $this->_getPurchasedItem()->getProductId())))
+        {
+            return null;
+        }
+
+        if (count($labels) == 1) {
+            return null;
+        }
+
+        return $labels;
+    }
 }

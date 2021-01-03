@@ -17,7 +17,7 @@ class Local_Manadev_Downloadable_DownloadController extends Mage_Downloadable_Do
         // MANAdev start
         /* @var Mage_Downloadable_Model_Link_Purchased_Item $linkPurchasedItem */
 
-        $branch = Mage::app()->getRequest()->getParam('branch') ?: 'master';
+        $branch = $this->getRequest()->getParam('branch') ?: 'master';
 
         if ($filename = Mage::helper('local_manadev')->createNewZipFileWithLicense($linkPurchasedItem, $branch)) {
             $linkPurchasedItem->save();

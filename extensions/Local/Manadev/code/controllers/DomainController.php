@@ -139,8 +139,6 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
             return $this;
         }
 
-        $this->_getHelper()->createNewZipFileWithLicense($linkPurchasedItem);
-
         $platform = Mage::getResourceModel('catalog/product')->getAttributeRawValue($linkPurchasedItem->getData('product_id'), 'platform', 0);
 
         // Magento 2 only uses 'available_til'
@@ -181,7 +179,6 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         $dhResource = Mage::getResourceModel('local_manadev/domainHistory');
         $dhResource->insertHistory($linkPurchasedItem->getId(), $domain, $storeInfo);
 
-
         /* @var $product Mage_Catalog_Model_Product */ $product = Mage::getModel(strtolower('catalog/product'));
         $productId = $linkPurchasedItem->getData('product_id');
         $product->load($productId);
@@ -189,9 +186,11 @@ class Local_Manadev_DomainController extends Mage_Core_Controller_Front_Action
         if (!$product->getId()) throw new Mage_Core_Exception($this->__('Product %d does not exist', $productId));
 
         if($this->_getCustomerSession()->getData('m_start_download')) {
+            $branch = $this->getRequest()->getParam('branch') ?: 'master';
             $this->_getCustomerSession()
                 ->addSuccess('Thank you for registering your domain. Your product download shall start automatically.')
-                ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash());
+                ->setData('m_pending_download_link_hash', $linkPurchasedItem->getLinkHash())
+                ->setData('m_branch', $branch);
         } else {
             // If it is disabled, then just update store info automatically
             $domain_registration_confirm_enabled = Mage::getStoreConfig(self::XML_PATH_ENABLED);
