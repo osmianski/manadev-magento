@@ -76,6 +76,18 @@ class Local_Manadev_Block_Download_Button extends Mage_Core_Block_Template {
 	public function getDownloadUrl() {
 		return $this->getUrl('actions/product/download', array('id' => $this->getProductId()));
 	}
+	public function getBranchDownloadUrl($branch) {
+        return $this->getUrl('actions/product/download', array_merge(
+            array(
+                'id' => $this->getProductId(),
+            ),
+            $branch != 'master'
+                ? array(
+                    '_query' => array('branch' => $branch),
+                )
+                : array()
+        ));
+	}
 	public function getGuestUrl() {
 		return $this->getUrl('actions/product/allowGuestDownload', array('id' => $this->getProductId()));
 	}
@@ -97,13 +109,30 @@ class Local_Manadev_Block_Download_Button extends Mage_Core_Block_Template {
 		}
 	} 
 	
-	protected function _afterToHtml($html) {
-		/* @var $js Mana_Core_Helper_Js */ $js = Mage::helper('mana_core/js');
-		$html .= $js->optionsToHtml(".btn-download for-product-".$this->getProductId(), array(
-			'productName' => $this->getProductName(),
-			'downloadUrl' => $this->getDownloadUrl(),
-			'guestUrl' => $this->getGuestUrl(),
-		));
-		return $html;
-	}
+//	protected function _afterToHtml($html) {
+//		/* @var $js Mana_Core_Helper_Js */ $js = Mage::helper('mana_core/js');
+//		$html .= $js->optionsToHtml(".btn-download for-product-".$this->getProductId(), array(
+//			'productName' => $this->getProductName(),
+//			'downloadUrl' => $this->getDownloadUrl(),
+//			'guestUrl' => $this->getGuestUrl(),
+//		));
+//		return $html;
+//	}
+
+    public function getProductBranchLabels() {
+        /* @var Local_Manadev_Helper_Data $helper */
+        $helper = Mage::helper('local_manadev');
+
+        if (empty($labels = $helper->getProductBranchLabels(
+            $this->getProductId())))
+        {
+            return null;
+        }
+
+        if (count($labels) == 1) {
+            return null;
+        }
+
+        return $labels;
+    }
 }

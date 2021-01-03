@@ -208,9 +208,14 @@ class Local_Manadev_Model_Observer {
         if ($pendingDownloadProductId = $this->_getCustomerSession()->getData('pending_download_product_id')) {
             /* @var $js Mana_Core_Helper_Js */ $js = Mage::helper('mana_core/js');
             $js->options("#download-initiator", array(
-                'fileUrl' => Mage::getUrl('actions/product/file', array('_direct' => 'actions/product/file/id/'. $pendingDownloadProductId.'.zip')),
+                'fileUrl' => Mage::getUrl('actions/product/file', array(
+                    '_direct' => 'actions/product/file/id/'. $pendingDownloadProductId.'.zip?branch=' .
+                        $this->_getCustomerSession()->getData('branch')
+                )),
             ));
-            $this->_getCustomerSession()->unsetData('pending_download_product_id');
+            $this->_getCustomerSession()
+                ->unsetData('pending_download_product_id')
+                ->unsetData('branch');
         }
 
         if($pendingDownloadLinkHash = $this->_getCustomerSession()->getData('m_pending_download_link_hash')) {

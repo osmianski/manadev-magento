@@ -110,17 +110,17 @@
 			});
 			
 			// the following is exeuted when specified DOM elements are clicked
-			$(document).on('click', ".btn-download", function() {
-				var classes = this.className.split(/\s+/);
-				for (var i = 0; i < classes.length; i++) {
-					if (classes[i].match(/^for-product-/)) {
-						_downloadDialogOptions = $.options(".btn-download " + classes[i]);
-						break;
-					}
-				}
-
-				window.location.href = _downloadDialogOptions.downloadUrl;
-			});
+			// $(document).on('click', ".btn-download", function() {
+			// 	var classes = this.className.split(/\s+/);
+			// 	for (var i = 0; i < classes.length; i++) {
+			// 		if (classes[i].match(/^for-product-/)) {
+			// 			_downloadDialogOptions = $.options(".btn-download " + classes[i]);
+			// 			break;
+			// 		}
+			// 	}
+			//
+			// 	window.location.href = _downloadDialogOptions.downloadUrl;
+			// });
 			
 			// hide/show registration fields when No, thanks checkbox changes its value.
 			$(document).on('click', "#download-no-thanks", function() {

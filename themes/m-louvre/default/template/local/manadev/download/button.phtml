@@ -7,8 +7,27 @@
  */
 /* @var $this Local_Manadev_Block_Download_Button */
 ?>
-<button type="button" title="<?php echo $this->__('Download') ?>" 
-	class="button btn-cart btn-download for-product-<?php echo $this->getProduct()->getId() ?>">
-	<span><span><?php echo $this->__('Download') ?></span></span>
-</button>
-		        
+<ul class="add-to-links">
+<li>
+<?php if($labels = $this->getProductBranchLabels()):?>
+    <button class="button btn-download m-download-menu-button">
+        <span><span><?php echo $this->__('Download') ?></span></span>
+    </button>
+    <ul class="m-download-menu">
+        <?php foreach ($labels as $branch => $label): ?>
+            <li>
+                <a title="<?php echo $label ?>"
+                    href="<?php echo $this->getBranchDownloadUrl($branch) ?>">
+                    <span><span><?php echo $label ?></span></span>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <a class="button btn-download" title="<?php echo $this->__('Download') ?>"
+        href="<?php echo $this->getDownloadUrl() ?>">
+        <span><span><?php echo $this->__('Download') ?></span></span>
+    </a>
+<?php endif; ?>
+</li>
+</ul>

@@ -106,7 +106,8 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 		if ($installationInstructionUrl = $product->getData('installation_instruction_url')) {
 			$this->_getCustomerSession()
 				->addSuccess('Thank you for you interest in our products. Please find detailed installation instructions below.')
-				->setData('pending_download_product_id', $product->getId());
+				->setData('pending_download_product_id', $product->getId())
+				->setData('branch', $this->getRequest()->getParam('branch') ?: 'master');
 			$this->_redirect('', array('_direct' => ltrim($installationInstructionUrl, '/')));
 			return;
 		}
@@ -161,13 +162,15 @@ class Local_Manadev_ProductController extends Mage_Core_Controller_Front_Action 
 
 		/** @var Local_Manadev_Helper_Data $helper */
 		$helper = Mage::helper('local_manadev');
-		if($helper->createNewZipFileWithLicense($linkPurchasedItem)) {
-			$linkPurchasedItem->save();
-		}
 
+        $branch = $this->getRequest()->getParam('branch') ?: 'master';
+
+        if ($zipFilename = $helper->createNewZipFileWithLicense($linkPurchasedItem, $branch)) {
+            $linkPurchasedItem->save();
+        }
 
 		/* @var $storage Mage_Downloadable_Helper_File */ $storage = Mage::helper('downloadable/file');
-		$resource  = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $linkPurchasedItem->getLinkFile());
+		$resource  = $storage->getFilePath(Mage_Downloadable_Model_Link::getBasePath(), $zipFilename);
 		
 		// prepare headers - in other words, tell browser that this will be not page but file, tell its size, type,
 		// tell not to cache results
