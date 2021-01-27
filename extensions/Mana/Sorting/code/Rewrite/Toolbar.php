@@ -41,6 +41,8 @@ class Mana_Sorting_Rewrite_Toolbar extends Mage_Catalog_Block_Product_List_Toolb
         if(count($availableSortBys) == 0) {
             $this->_addOrders();
         }
+
+        return $this;
     }
 
     public function setDefaultOrder($field) {
