@@ -5,6 +5,10 @@ include_once 'app/code/core/Mage/Contacts/controllers/IndexController.php';
 class Local_Manadev_Contacts_IndexController extends Mage_Contacts_IndexController
 {
     public function indexAction() {
+        if (!$this->_getSession()->authenticate($this)) {
+            $this->setFlag('', 'no-dispatch', true);
+        }
+
         $this->loadLayout();
         $this->getLayout()->getBlock('contactForm')
             ->setFormAction(Mage::getUrl('*/*/post', array('_secure' => $this->getRequest()->isSecure())));
@@ -37,5 +41,15 @@ class Local_Manadev_Contacts_IndexController extends Mage_Contacts_IndexControll
         }
 
         parent::postAction();
+    }
+
+    /**
+     * Retrieve customer session model object
+     *
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getSession()
+    {
+        return Mage::getSingleton('customer/session');
     }
 }

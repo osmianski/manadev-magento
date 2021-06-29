@@ -63,5 +63,10 @@ return array(
             'master' => 'Download for Magento 2.4',
             'magento23' => 'Download for Magento 2.2 - 2.3',
         ),
+        'shop-by-brand-magento-2' => array(
+            // Git branch <-> download button label
+            'master' => 'Download for Magento 2.4',
+            'magento23' => 'Download for Magento 2.2 - 2.3',
+        ),
     ),
 );
