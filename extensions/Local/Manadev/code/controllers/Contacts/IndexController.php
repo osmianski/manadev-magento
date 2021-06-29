@@ -40,6 +40,10 @@ class Local_Manadev_Contacts_IndexController extends Mage_Contacts_IndexControll
             return;
         }
 
+        if (!$this->_getSession()->authenticate($this)) {
+            $this->setFlag('', 'no-dispatch', true);
+        }
+
         parent::postAction();
     }
 
