@@ -13,7 +13,7 @@
 		  	<!-- This version number identifies version of database tables specific to this extension. It is written to
 		  	core_resource table. Typically, this first 3 numbers equal to Git release number on which database changed, 
 		  	the last number used only the were more than one change in database structure during the same release.  -->
-		    <version>20.01.0313</version>
+		    <version>22.04.1414</version>
 		</Local_Manadev>
 	</modules>
 	<!-- This section contains module settings which are merged into global configuration during each page load, 
